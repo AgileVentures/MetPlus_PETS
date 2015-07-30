@@ -1,5 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'Check model restrictions' do
+    subject { FactoryGirl.build(:user) }
+    describe 'Email check' do
+      it { should validate_uniqueness_of(:email) }
+      it { should validate_presence_of(:email) }
+      it { should_not allow_value('asd', 'asd@asd', 'asdasdadaosijaosdmaosdinausdnaosndasd')
+                          .for(:email) }
+    end
+    describe 'Password check' do
+      subject { FactoryGirl.build(:user, password: '') }
+      it {should validate_presence_of(:password) }
+      it {should have_secure_password }
+    end
+  end
 end
