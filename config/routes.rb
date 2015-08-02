@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   get 'landing/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -15,7 +16,15 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-
+  resources :user do
+    #member do
+    #  get 'new'
+    #  post 'create'
+    #  get 'edit'
+    #  get 'show'
+    #end
+  end
+  resources :jobseeker, controller: 'user'
   # Example resource route with options:
   #   resources :products do
   #     member do

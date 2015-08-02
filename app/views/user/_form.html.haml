@@ -1,0 +1,30 @@
+.bamm
+  = user
+  = form_for(user, :url => url) do |f|
+    .form_field
+      = f.label :first_name
+      = f.text_field :first_name
+    .form_field
+      = f.label :last_name
+      = f.text_field :last_name
+    .form_field
+      = f.label :email
+      = f.text_field :email
+    .form_field
+      = f.label :password
+      = f.password_field :password
+    .form_field
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation
+    - if user.instance_of? JobSeeker
+      .form_field
+        = f.label :job_search_status
+        = select_tag :job_seeker_status,
+          options_from_collection_for_select(JobSeekerStatus.all,
+                                             'id',
+                                             'value',
+                                             user.job_seeker_status_id)
+    - if new
+      = f.submit "Register"
+    - else
+      = f.submit "Save"
