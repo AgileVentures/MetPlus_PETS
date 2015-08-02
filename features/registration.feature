@@ -9,9 +9,8 @@ Feature: User Registration
       | test@email.com | password |
 
   Scenario: Register successful
-    Given I am on the homepage
-    When I go to the registration page
-    And I fill in the fields
+    Given I go to the registration page
+    When I fill in the fields
       | First name | John |
       | Last Name  | Doe  |
       | Email      | johndoe@place.com |
