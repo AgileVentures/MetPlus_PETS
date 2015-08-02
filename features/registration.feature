@@ -3,7 +3,12 @@ Feature: User Registration
   I want to register to the website
   In order to check jobs
 
-  Scenario: Register
+  Background: Users creation
+    Given I have the following Job Seekers
+      | email          | password |
+      | test@email.com | password |
+
+  Scenario: Register successful
     Given I am on the homepage
     When I go to the registration page
     And I fill in the fields
