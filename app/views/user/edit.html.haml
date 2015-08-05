@@ -1,2 +1,3 @@
-%h2 Registration form
-= render partial: 'form', locals: {new: false, user: @user}
+%h2 Update information
+= render partial: 'form', locals: {new: false, user: @user, url: @url}
+= yield

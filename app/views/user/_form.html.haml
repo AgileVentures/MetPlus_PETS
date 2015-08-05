@@ -1,5 +1,9 @@
-.bamm
-  = user
+.form_div
+  - if user.errors != nil
+    .form_errors
+      %h3 Errors
+      = user.errors.each do |field, error|
+        = "#{field}: #{error}"
   = form_for(user, :url => url) do |f|
     .form_field
       = f.label :first_name
