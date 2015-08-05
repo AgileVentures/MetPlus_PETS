@@ -1,33 +1,33 @@
 .form_div
-  - if user.errors != nil
-    .form_errors
-      %h3 Errors
-      = user.errors.each do |field, error|
-        = "#{field}: #{error}"
-  = form_for(user, :url => url) do |f|
+  = form_for(@user, :remote=> true, :url => @url, html: {role: :form, 'data-model' => @params_key}) do |f|
     .form_field
       = f.label :first_name
       = f.text_field :first_name
+      .help-block
     .form_field
       = f.label :last_name
       = f.text_field :last_name
+      .help-block
     .form_field
       = f.label :email
       = f.text_field :email
+      .help-block
     .form_field
       = f.label :password
       = f.password_field :password
+      .help-block
     .form_field
       = f.label :password_confirmation
       = f.password_field :password_confirmation
-    - if user.instance_of? JobSeeker
+      .help-block
+    - if @user.instance_of? JobSeeker
       .form_field
         = f.label :job_search_status
         = select_tag :job_seeker_status,
           options_from_collection_for_select(JobSeekerStatus.all,
                                              'id',
                                              'value',
-                                             user.job_seeker_status_id)
+                                             @user.job_seeker_status_id)
     - if new
       = f.submit "Register"
     - else

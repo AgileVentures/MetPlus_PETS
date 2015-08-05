@@ -1,7 +1,7 @@
-When(/^I go to the (\w+) page$/) do |page|
+When(/^I go to the "(.+)" page$/) do |page|
   case page
-    when 'registration'
-      visit user_registration_path
+    when 'JobSeeker Registration'
+      visit new_jobseeker_path
     when 'homepage'
       visit root_path
   end
