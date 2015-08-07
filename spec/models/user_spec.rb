@@ -13,6 +13,13 @@ RSpec.describe User, type: :model do
       subject { FactoryGirl.build(:user, password: '') }
       it {should validate_presence_of(:password) }
       it {should have_secure_password }
+      it {should validate_confirmation_of(:password)}
+    end
+  end
+  describe 'Activation token' do
+    describe 'Should be created automatically' do
+      subject {FactoryGirl.create(:user)}
+      it {expect(subject.activation_token).not_to eq nil}
     end
   end
 end
