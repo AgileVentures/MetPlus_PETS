@@ -2,20 +2,21 @@
   = form_for(@user, :remote=> true, :url => @url, html: {role: :form, 'data-model' => @params_key}) do |f|
     .form_field
       = f.label :first_name
-      = f.text_field :first_name
+      = f.text_field :first_name, :placeholder => 'John'
       .help-block
     .form_field
       = f.label :last_name
-      = f.text_field :last_name
+      = f.text_field :last_name, :placeholder => 'Doe'
       .help-block
     .form_field
       = f.label :email
-      = f.text_field :email
+      = f.text_field :email, :placeholder => 'johndoe@mail.com'
       .help-block
     .form_field
       = f.label :password
       = f.password_field :password
       .help-block
+        %p The password must have at least 8 characters
     .form_field
       = f.label :password_confirmation
       = f.password_field :password_confirmation
