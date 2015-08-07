@@ -14,6 +14,25 @@ RSpec.describe Company, type: :model do
                           .for(:ein)}
       it { should allow_value('12-3456789', '123456789')
                       .for(:ein)}
+      it { validate_presence_of :ein}
+    end
+    describe 'Email' do
+      it { should_not allow_value('asd', 'john@company')
+                          .for(:email)}
+      it { should allow_value('johndoe@company.com')
+                      .for(:email)}
+    end
+  end
+
+  describe 'Address' do
+    subject { FactoryGirl.build(:company) }
+    describe 'creation' do
+      it {
+        addr = FactoryGirl.build :address
+        subject.addresses << addr
+        subject.save!
+        expect(Company.find_by_name('My company').addresses.length).to be 1
+      }
     end
   end
 end
