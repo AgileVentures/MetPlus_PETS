@@ -22,6 +22,14 @@ RSpec.describe Company, type: :model do
       it { should allow_value('johndoe@company.com')
                       .for(:email)}
     end
+    describe 'Website' do
+      it { should_not allow_value('asd', 'ftp://company.com', 'http:', 'http://', 'https', 'https:', 'https://',
+                                  'http://place.com###Bammm')
+                          .for(:website)}
+      it { should allow_value('http://company.com', 'https://company.com', 'http://w.company.com/info',
+                              'https://comp.com:10/test/1/wasd', 'http://company.com/')
+                      .for(:website)}
+    end
   end
 
   describe 'Address' do
