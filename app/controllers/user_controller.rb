@@ -6,19 +6,15 @@ class UserController < ApplicationController
   def create
     getUser
     puts params
-    @user = @userClass.new
+    @user = @user_class.new
     @user.update_attributes filter_params
     respond_to do |format|
       if @user.save
-        format.html { redirect_to root_path}
+        format.html {redirect_to root_path}
+        format.all { render :nothing => true, status: :ok }
       else
-        puts 'Failed.......'
-        @user.errors.each do |field, value|
-          puts "#{field} -> #{value}"
-        end
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
-        # added:
         format.js   { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -36,7 +32,7 @@ class UserController < ApplicationController
       when /jobseeker/
         @user = JobSeeker.new
         @url = jobseeker_index_path
-        @userClass = JobSeeker
+        @user_class = JobSeeker
         @params_key = :job_seeker
     end
   end
