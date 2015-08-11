@@ -19,7 +19,7 @@
             = render 'user/login'
           %li{:id => 'register-button'}
             %div{:id => 'stuff'}
-              = link_to 'Register', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs'
+              = link_to 'New User', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs'
         - else
           %li
             = "Hello, #{link_to current_user.first_name, user_path(current_user)}"

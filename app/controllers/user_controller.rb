@@ -10,6 +10,7 @@ class UserController < ApplicationController
     @user.update_attributes filter_params
     respond_to do |format|
       if @user.save
+        flash[:success] = 'Registration successful, you will receive one email to active your account!'
         format.html {redirect_to root_path}
         format.all { render :nothing => true, status: :ok }
       else

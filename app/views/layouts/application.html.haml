@@ -11,8 +11,12 @@
   %body
     = render partial: 'layouts/menu'
     %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center; display:none;"}
-
-    %div{:class => 'content container'}
+    %div{:class => 'content container', :id => 'messages'}
+      %div{:class => 'row'}
+        %div{:class => 'container'}
+          - flash.each do |key, value|
+            %div{:class => "alert alert-#{key}"}
+              = value
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'

@@ -18,7 +18,7 @@ Feature: User Registration
       | Password confirmation | 12345678|
     And I press "Register"
     Then I should see "Registration successful"
-    And I should see "activation email"
+    And I should see "email to active your account"
   @javascript
   Scenario: Register error(missing email and password)
     Given I go to the "JobSeeker Registration" page

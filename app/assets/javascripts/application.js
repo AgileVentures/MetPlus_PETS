@@ -25,4 +25,7 @@ function ajaxLoadingScreen(formName) {
 }
 
 $(document).ready(function() {
+    setTimeout(function(){
+        $('#messages').remove();
+    }, 5000);
 });
