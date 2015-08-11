@@ -1,0 +1,6 @@
+= form_for User.new do |f|
+  .form_field
+    = f.text_field :email, :placeholder => 'Email Address'
+  .form_field
+    = f.text_field :password, :placeholder => 'Password'
+  = f.submit 'Login'
