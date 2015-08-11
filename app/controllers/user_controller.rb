@@ -11,8 +11,8 @@ class UserController < ApplicationController
     respond_to do |format|
       if @user.save
         flash[:success] = 'Registration successful, you will receive one email to active your account!'
-        format.html {redirect_to root_path}
-        format.all { render :nothing => true, status: :ok }
+        #format.html {redirect_to root_path}
+        format.all { render json: {:url => root_path}, status: :ok }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }

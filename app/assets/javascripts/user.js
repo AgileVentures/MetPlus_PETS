@@ -7,6 +7,9 @@ $(document).ready(function(){
         $(event.data).render_form_errors( $.parseJSON(jqxhr.responseText) );
     });
     ajaxLoadingScreen('form#new_job_seeker');
+    $(document).bind('ajaxSuccess', 'form#new_job_seeker', function(event, jqxhr, settings, exception){
+        location.href = $.parseJSON(jqxhr.responseText)["url"];
+    });
 });
 
 (function($) {
