@@ -11,5 +11,8 @@
   %body
     = render partial: 'layouts/menu'
     %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center;"}
-    = yield
+
+    %div{:class => 'content container'}
+      %div{:class => 'row'}
+        = yield
     = render 'layouts/footer'
