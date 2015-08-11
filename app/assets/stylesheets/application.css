@@ -28,3 +28,31 @@
 #loading {
     position: absolute; width: 100%; height: 100%;
 }
+
+#login_form {
+    padding-top: 12px;
+}
+.navbar {
+    background: #0C7BA1;
+}
+.navbar-default .navbar-nav > .active > a {
+    background: #08617f;
+    color: #FFFFFF;
+}
+.navbar-default .navbar-nav li> a:hover {
+    background: #12aee2;
+}
+
+.navbar-default .navbar-nav > .active > a:hover {
+    background: #12aee2;
+}
+.navbar-default .navbar-nav li>a{
+    color: #FFFFFF;
+}
+#stuff{
+    padding-top: 16px;
+    padding-left: 1px;
+}
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}

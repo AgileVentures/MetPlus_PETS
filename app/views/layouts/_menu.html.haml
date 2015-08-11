@@ -1,7 +1,7 @@
-%nav{:class => 'navbar navbar-default navbar-fixed-top'}
+%nav{:class => 'menu navbar navbar-default navbar-fixed-top'}
   %div{:class => 'container'}
     %div{:class => 'navbar-header'}
-      %a{:class => 'nav-brand', :href => '#'} MetPlus
+      %a{:class => 'navbar-brand', :href => '#'} MetPlus
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
         %li{:class => 'active'}
@@ -14,12 +14,13 @@
           %a{:href => '#'} Contact
         %li
       %ul{:class => 'nav navbar-nav navbar-right'}
-        = if logged_in?
+        - if !logged_in?
           %li
             = render 'user/login'
           %li
-            = link_to 'Register', new_jobseeker_path
-        = else
+            %div{:id => 'stuff'}
+              = link_to 'Register', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs'
+        - else
           %li
             = "Hello, #{link_to current_user.first_name, user_path(current_user)}"
           %li

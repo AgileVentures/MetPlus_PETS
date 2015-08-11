@@ -26,6 +26,9 @@ class UserController < ApplicationController
   def show
   end
 
+  def login
+  end
+
   private
   def getUser
     case request.original_fullpath

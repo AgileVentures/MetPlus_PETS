@@ -22,4 +22,5 @@ $(document).ready(function() {
     $(document).ajaxComplete(function () {
         $('#loading').hide();
     });
+    $('#loading').hide();
 });

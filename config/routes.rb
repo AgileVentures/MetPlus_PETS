@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   #   resources :products
   resources :main
   resources :user do
+    collection do
+      post 'login'
+    end
     #member do
     #  get 'new'
     #  post 'create'
