@@ -15,12 +15,14 @@
 //= require turbolinks
 //= require_tree .
 
-$(document).ready(function() {
-    $(document).ajaxStart(function () {
+function ajaxLoadingScreen(formName) {
+    $(document).bind('ajaxStart', formName, function(){
         $('#loading').show();
     });
-    $(document).ajaxComplete(function () {
+    $(document).bind('ajaxComplete', formName, function(){
         $('#loading').hide();
     });
-    $('#loading').hide();
+}
+
+$(document).ready(function() {
 });

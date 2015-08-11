@@ -6,7 +6,7 @@ $(document).ready(function(){
         // note: jqxhr.responseJSON undefined, parsing responseText instead
         $(event.data).render_form_errors( $.parseJSON(jqxhr.responseText) );
     });
-
+    ajaxLoadingScreen('form#new_job_seeker');
 });
 
 (function($) {

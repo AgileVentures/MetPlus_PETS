@@ -10,7 +10,7 @@
     = javascript_include_tag "application", 'data-turbolinks-track' => true
   %body
     = render partial: 'layouts/menu'
-    %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center;"}
+    %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center; display:none;"}
 
     %div{:class => 'content container'}
       %div{:class => 'row'}
