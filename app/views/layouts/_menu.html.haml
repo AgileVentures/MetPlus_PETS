@@ -4,20 +4,20 @@
       %a{:class => 'navbar-brand', :href => '#'} MetPlus
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
-        %li{:class => 'active'}
+        %li{:class => 'menu-item'}
           %a{:href => root_path} Home
-        %li
+        %li{:class => 'menu-item'}
           %a{:href => '#'} Jobs
-        %li
+        %li{:class => 'menu-item'}
           %a{:href => '#'} About
-        %li
+        %li{:class => 'menu-item'}
           %a{:href => '#'} Contact
         %li
       %ul{:class => 'nav navbar-nav navbar-right'}
         - if !logged_in?
           %li
             = render 'user/login'
-          %li
+          %li{:id => 'register-button'}
             %div{:id => 'stuff'}
               = link_to 'Register', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs'
         - else
