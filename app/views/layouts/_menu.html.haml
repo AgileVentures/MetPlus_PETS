@@ -16,10 +16,11 @@
       %ul{:class => 'nav navbar-nav navbar-right'}
         - if !logged_in?
           %li
-            = render 'user/login'
+            %div{:class => 'button-menu'}
+              = link_to 'Log In', login_user_index_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
           %li{:id => 'register-button'}
-            %div{:id => 'stuff'}
-              = link_to 'New User', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs'
+            %div{:class => 'button-menu'}
+              = link_to 'Register', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
         - else
           %li
             = "Hello, #{link_to current_user.first_name, user_path(current_user)}"

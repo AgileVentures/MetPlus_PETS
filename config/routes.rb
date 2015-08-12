@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :user do
     collection do
       post 'login'
+      get 'login'
     end
     #member do
     #  get 'new'

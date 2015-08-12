@@ -1,11 +1,14 @@
 class UserController < ApplicationController
   def new
     getUser
+    respond_to do |format|
+      format.html {render partial: 'new', layout: 'modal'}
+    end
   end
 
   def create
     getUser
-    puts params
+    sleep 5.seconds
     @user = @user_class.new
     @user.update_attributes filter_params
     respond_to do |format|
@@ -28,6 +31,12 @@ class UserController < ApplicationController
   end
 
   def login
+    respond_to do |format|
+      format.html do
+        @modal_title = 'Login'
+        render partial: 'login', layout: 'modal'
+      end
+    end
   end
 
   private
