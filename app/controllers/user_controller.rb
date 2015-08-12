@@ -8,7 +8,6 @@ class UserController < ApplicationController
 
   def create
     getUser
-    sleep 5.seconds
     @user = @user_class.new
     @user.update_attributes filter_params
     respond_to do |format|
