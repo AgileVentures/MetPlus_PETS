@@ -30,6 +30,8 @@
                                              'value',
                                              @user.job_seeker_status_id)
     - if new
-      = f.submit "Register"
+      = button_tag 'Register', class: 'btn btn-primary submit-button', type: 'submit',
+                  :data => {:disable_with => 'Register'}
     - else
-      = f.submit "Save"
+      = button_tag 'Save', class: 'btn btn-primary submit-button', type: 'submit',
+                  :data => {:disable_with => 'Save'}

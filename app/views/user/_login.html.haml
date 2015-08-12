@@ -1,4 +1,11 @@
 = form_for User.new, :url => login_user_index_path, :html => {:class => 'login_form', :id => 'login_form'} do |f|
-  = f.text_field :email, :placeholder => 'Email Address'
-  = f.text_field :password, :placeholder => 'Account Password'
-  = f.submit 'Login', :class => 'btn btn-default btn-xs'
+  .form_field
+    = f.label :email
+    %br
+    = f.text_field :email, :placeholder => 'Email Address'
+  .form_field
+    = f.label :password
+    %br
+    = f.text_field :password, :placeholder => 'Account Password'
+  = button_tag 'Login', class: 'btn btn-primary submit-button', type: 'submit',
+    :data => {:disable_with => 'Login'}
