@@ -56,4 +56,4 @@ Feature: User Registration
       | Password   | 12345678            |
       | Password confirmation | 12345678|
     And I press "Register"
-    Then I should see "is not formatted properly" between "Email" and "Password"
+    Then I should see "is not formatted properly" between "Email" and "Password" 
