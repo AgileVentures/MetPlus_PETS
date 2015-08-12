@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     collection do
       post 'login'
       get 'login'
+      get 'activate'
+      get 'recover'
     end
     #member do
     #  get 'new'

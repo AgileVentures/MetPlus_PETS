@@ -8,8 +8,10 @@ Feature: User Registration
       | email          | password | password_confirmation |
       | test@email.com | password | password              |
 
+  @javascript
   Scenario: Register successful
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name            | John |
       | Last name             | Doe  |
@@ -21,7 +23,8 @@ Feature: User Registration
     And I should see "email to active your account"
   @javascript
   Scenario: Register error(missing email and password)
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name | John |
       | Last name  | Doe  |
@@ -32,7 +35,8 @@ Feature: User Registration
     And I should see "is too short \(minimum is 8 characters\)" between "Password" and "Password confirmation"
   @javascript
   Scenario: Register error(password mismatch)
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name | John |
       | Last name  | Doe  |
@@ -43,7 +47,8 @@ Feature: User Registration
     Then I should see "doesn't match Password" between "Password confirmation" and "Job search status"
   @javascript
   Scenario: Register error(invalid email)
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name | John |
       | Last name  | Doe  |

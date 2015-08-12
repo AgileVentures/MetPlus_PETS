@@ -20,7 +20,7 @@
               = link_to 'Log In', login_user_index_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
           %li{:id => 'register-button'}
             %div{:class => 'button-menu'}
-              = link_to 'Register', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
+              = link_to 'New user', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
         - else
           %li
             = "Hello, #{link_to current_user.first_name, user_path(current_user)}"
