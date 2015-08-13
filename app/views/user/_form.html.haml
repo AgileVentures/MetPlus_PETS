@@ -30,8 +30,8 @@
                                              'value',
                                              @user.job_seeker_status_id)
     - if new
-      = button_tag 'Register', class: 'btn btn-primary submit-button', type: 'submit',
-                  :data => {:disable_with => 'Register'}
+      = button_tag 'Register', class: 'btn btn-primary submit-button right', type: 'submit', autocomplete: 'off',
+                  :data => {:disable_with => "<i class='fa fa-cog fa-spin'></i> Registering...".html_safe}
     - else
-      = button_tag 'Save', class: 'btn btn-primary submit-button', type: 'submit',
-                  :data => {:disable_with => 'Save'}
+      = button_tag 'Save', class: 'btn btn-primary submit-button right', type: 'submit',autocomplete: 'off',
+                  :data => {:disable_with => "<i class='fa fa-cog fa-spin'></i> Saving...".html_safe}

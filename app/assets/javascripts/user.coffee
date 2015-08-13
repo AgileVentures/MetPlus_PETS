@@ -3,16 +3,7 @@
 #
 $ ->
   $(document).bind('ajaxError', 'form#new_job_seeker', ( (event, jqxhr, settings, exception) ->
-    console.log($.parseJSON(jqxhr.responseText))
     $(event.data).render_form_errors( $.parseJSON(jqxhr.responseText) )
-    $(event.data).find('.submit-button').html($(event.data).find('.submit-button').prop('data-value'))
-    console.log($(event.data).find('.submit-button'))
-  ))
-  $(document).bind('ajaxError', 'form#new_job_seeker', ( (event, jqxhr, settings, exception) ->
-    console.log($.parseJSON(jqxhr.responseText))
-    $(event.data).render_form_errors( $.parseJSON(jqxhr.responseText) )
-    $(event.data).find('.submit-button').html($(event.data).find('.submit-button').prop('data-value'))
-    console.log($(event.data).find('.submit-button'))
   ))
   $(document).bind('ajaxSuccess', 'form#new_job_seeker', ( (event, jqxhr, settings, exception) ->
     location.href = $.parseJSON(jqxhr.responseText)["url"]))
@@ -20,6 +11,7 @@ $ ->
 
 $.fn.render_form_errors = (errors) ->
   $form = this;
+  $.rails.enableFormElements($($.rails.formSubmitSelector));
   this.clear_previous_errors()
   model = this.data('model')
   $.each(errors, ((field, messages) ->
