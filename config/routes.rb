@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     collection do
       post 'login'
       get 'login'
-      get 'activate'
+      get 'activate/:activation_token' => 'users#activate', as: :activate
       get 'recover'
     end
     #member do

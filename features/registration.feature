@@ -7,6 +7,7 @@ Feature: User Registration
     Given I have the following Job Seekers
       | email          | password | password_confirmation |
       | test@email.com | password | password              |
+    Given no emails have been sent
 
   @javascript
   Scenario: Register successful
@@ -21,6 +22,7 @@ Feature: User Registration
     And I press "Register"
     Then I should see "Registration successful"
     And I should see "email to active your account"
+    And "johndoe@place.com" should receive an email
   @javascript
   Scenario: Register error(missing email and password)
     Given I go to the "homepage" page
@@ -45,6 +47,7 @@ Feature: User Registration
       | Password confirmation | 1234567|
     And I press "Register"
     Then I should see "doesn't match Password" between "Password confirmation" and "Job search status"
+    And "johndoe@place.com" should receive no email
   @javascript
   Scenario: Register error(invalid email)
     Given I go to the "homepage" page

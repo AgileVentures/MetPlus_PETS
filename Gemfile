@@ -65,6 +65,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'shoulda-matchers', :require => false
+  gem 'email_spec'
 end
 
 group :production do
