@@ -7,7 +7,7 @@ RSpec.describe 'JobSeeker', :type => :request do
   describe "GET #new" do
     it "returns http success" do
       get @url + 'new'
-      expect(response).to render_template(:new)
+      expect(response).to render_template(:_new)
       expect(response).to have_http_status(:success)
     end
   end
@@ -19,7 +19,7 @@ RSpec.describe 'JobSeeker', :type => :request do
                                 :email => 'john@doe.com',
                                 :password => '12345678',
                                 :password_confirmation => '12345678'}}
-      expect(response).to redirect_to(root_path)
+      expect(response).to have_http_status(200)
     end
     describe 'Errors' do
       describe 'Missing parameters' do

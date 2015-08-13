@@ -15,4 +15,9 @@ class Job < ActiveRecord::Base
 
   has_many :required_skills, -> { where job_skills: { required: true } }, through: :job_skills, class_name: 'Skill', source: :skill
   has_many :nice_to_have_skills, -> { where job_skills: { required: false } }, through: :job_skills, class_name: 'Skill', source: :skill
+
+
+  def short_description
+    "#{self.description[0..30]}#{'...' if self.description.length > 30}"
+  end
 end

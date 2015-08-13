@@ -7,9 +7,12 @@ Feature: User Registration
     Given I have the following Job Seekers
       | email          | password | password_confirmation |
       | test@email.com | password | password              |
+    Given no emails have been sent
 
+  @javascript
   Scenario: Register successful
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name            | John |
       | Last name             | Doe  |
@@ -18,10 +21,12 @@ Feature: User Registration
       | Password confirmation | 12345678|
     And I press "Register"
     Then I should see "Registration successful"
-    And I should see "activation email"
+    And I should see "email to active your account"
+    And "johndoe@place.com" should receive an email
   @javascript
   Scenario: Register error(missing email and password)
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name | John |
       | Last name  | Doe  |
@@ -32,7 +37,8 @@ Feature: User Registration
     And I should see "is too short \(minimum is 8 characters\)" between "Password" and "Password confirmation"
   @javascript
   Scenario: Register error(password mismatch)
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name | John |
       | Last name  | Doe  |
@@ -41,9 +47,11 @@ Feature: User Registration
       | Password confirmation | 1234567|
     And I press "Register"
     Then I should see "doesn't match Password" between "Password confirmation" and "Job search status"
+    And "johndoe@place.com" should receive no email
   @javascript
   Scenario: Register error(invalid email)
-    Given I go to the "JobSeeker Registration" page
+    Given I go to the "homepage" page
+    And I press "New user"
     When I fill in the fields
       | First name | John |
       | Last name  | Doe  |

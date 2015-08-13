@@ -1,0 +1,30 @@
+%nav{:class => 'menu navbar navbar-default navbar-fixed-top'}
+  %div{:class => 'container'}
+    %div{:class => 'navbar-header'}
+      %a{:class => 'navbar-brand', :href => '#'} MetPlus
+    %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
+      %ul{:class => 'nav navbar-nav'}
+        %li{:class => 'menu-item'}
+          %a{:href => root_path} Home
+        %li{:class => 'menu-item'}
+          %a{:href => '#'} Jobs
+        %li{:class => 'menu-item'}
+          %a{:href => '#'} About
+        %li{:class => 'menu-item'}
+          %a{:href => '#'} Contact
+        %li
+      %ul{:class => 'nav navbar-nav navbar-right'}
+        - if !logged_in?
+          %li
+            %div{:class => 'button-menu'}
+              = link_to 'Log In', login_user_index_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
+          %li{:id => 'register-button'}
+            %div{:class => 'button-menu'}
+              = link_to 'New user', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
+        - else
+          %li
+            = "Hello, #{link_to current_user.first_name, user_path(current_user)}"
+          %li
+            = link_to 'Logout', root_path
+
+

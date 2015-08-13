@@ -9,9 +9,19 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
-  before_create :generate_activation_token
+  after_create :after_creation
+
+  def activated?
+    self.activation_token == nil
+  end
+
   private
     def generate_activation_token
-      self.activation_token = (0...16).map { (65 + rand(26)).chr }.join
+      self.activation_token = self.id.to_s + (0...16).map { (65 + rand(26)).chr }.join
+      save
+    end
+    def after_creation
+      generate_activation_token
+      UserMailer.activation(self).deliver_now
     end
 end
