@@ -1,17 +1,20 @@
 class UserController < ApplicationController
   def new
     getUser
+    respond_to do |format|
+      format.html {render partial: 'new', layout: 'modal'}
+    end
   end
 
   def create
     getUser
-    puts params
     @user = @user_class.new
     @user.update_attributes filter_params
     respond_to do |format|
       if @user.save
-        format.html {redirect_to root_path}
-        format.all { render :nothing => true, status: :ok }
+        flash[:success] = 'Registration successful, you will receive one email to active your account!'
+        #format.html {redirect_to root_path}
+        format.all { render json: {:url => root_path}, status: :ok }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -24,6 +27,15 @@ class UserController < ApplicationController
   end
 
   def show
+  end
+
+  def login
+    respond_to do |format|
+      format.html do
+        @modal_title = 'Login'
+        render partial: 'login', layout: 'modal'
+      end
+    end
   end
 
   private

@@ -9,7 +9,6 @@ end
 def search_text text
   wait_until do
     if text.is_a? Regexp
-      puts "Searching regex"
       expect(page.text).to match text
     else
       expect(page).to have_content text

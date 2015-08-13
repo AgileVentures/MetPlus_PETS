@@ -1,0 +1,12 @@
+= form_for User.new, :url => login_user_index_path, :html => {:class => 'login_form', :id => 'login_form'} do |f|
+  .form_field
+    = f.label :email
+    %br
+    = f.text_field :email, :placeholder => 'Email Address'
+  .form_field
+    = f.label :password
+    %br
+    = f.text_field :password, :placeholder => 'Account Password'
+  = button_tag 'Login', class: 'btn btn-primary submit-button', type: 'submit',autocomplete: 'off',
+                  :data => {:disable_with => "<i class='fa fa-cog fa-spin'></i> Login...".html_safe}
+%a{href: recover_user_index_path, class: 'btn btn-primary'} Forgot password
