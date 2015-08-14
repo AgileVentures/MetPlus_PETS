@@ -19,7 +19,7 @@ Feature: User Registration
       | Email                 | test@email.com  |
       | Password              | password1|
     And I press "Login"
-    Then I should see "Hello tester"
+    Then I should see "Hello, tester"
 
   @javascript
   Scenario: Invalid password
