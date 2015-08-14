@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
                     :uniqueness => true,
                     :presence => true
 
-  validates :password, :length => {minimum: 8}
+  validates :password, :length => {minimum: 8}, :if => :password
 
   has_secure_password
 

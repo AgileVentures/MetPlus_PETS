@@ -1,18 +1,21 @@
 class SessionController < ApplicationController
-  def new
-  end
 
   def create
-    user = User.login(params[:email], params[:password])
-    # If the user exists AND the password entered is correct.
-    if user
-      # Save the user id inside the browser cookie. This is how we keep the user
-      # logged in when they navigate around our website.
+    email = params[:user][:email]
+    password = params[:user][:password]
+    begin
+      user = User.login!(email, password)
       session[:user_id] = user.id
-      redirect_to root_path
-    else
-      # If user's login doesn't work, send them back to the login form.
-      redirect_to root_path
+    rescue Exceptions::User::AuthenticationError => e
+      flash[:errors] = e.to_s
+    end
+    respond_to do |format|
+      format.html {redirect_to root_path}
+      if session[:user_id] != nil
+        format.json {render :json => {url: root_path}, status: :ok}
+      else
+        format.json {render :json => {errors: flash[:errors]}, status: :unauthorized}
+      end
     end
   end
 
