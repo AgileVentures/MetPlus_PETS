@@ -23,7 +23,8 @@
               = link_to 'New user', new_jobseeker_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
         - else
           %li
-            = "Hello, #{link_to current_user.first_name, user_path(current_user)}"
+            Hello,
+            = link_to current_user.first_name, user_path(current_user)
           %li
             = link_to 'Logout', root_path
 
