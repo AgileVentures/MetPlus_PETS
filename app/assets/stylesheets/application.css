@@ -100,3 +100,13 @@
     border-radius: 25px;
     padding: 5px;
 }
+
+
+.navbar-default .navbar-text{
+    position: relative;
+    display: block;
+    color: white;
+}
+.navbar-default .navbar-text > a {
+    color: green;
+}

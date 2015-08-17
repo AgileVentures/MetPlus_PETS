@@ -1,5 +1,7 @@
-== README File
-MetPlus
+Metplus
+==========================
+Version 3, 29 June 2007
+==========================
 Employment tracking application
 Copyright (C) 2015 MetPlus
 

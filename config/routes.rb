@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
 
+  post '/login' => 'session#create'
+
+  get '/logout' => 'session#destroy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -21,8 +24,10 @@ Rails.application.routes.draw do
     collection do
       post 'login'
       get 'login'
-      get 'activate/:activation_token' => 'users#activate', as: :activate
       get 'recover'
+    end
+    member do
+      get 'activate' => 'user#activate', as: :activate
     end
     #member do
     #  get 'new'
