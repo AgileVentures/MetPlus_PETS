@@ -12,7 +12,7 @@ RSpec.describe 'JobSeeker', :type => :request do
     end
   end
 
-  describe "Create user action" do
+  describe "POST #create" do
     it "returns http success" do
       post @url, {:job_seeker => {:first_name => 'john',
                                 :last_name=>'doe',
@@ -44,5 +44,22 @@ RSpec.describe 'JobSeeker', :type => :request do
       expect(response).to have_http_status(:success)
     end
   end
-
+end
+RSpec.describe 'User', :type => :request do
+  describe 'GET #activate' do
+    subject {FactoryGirl.create(:user)}
+    it 'returns http success' do
+      get "/user/#{subject.activation_token}/activate/"
+      user = User.find_by_email(subject.email)
+      expect(response).to redirect_to(root_path)
+      expect(user.activated?).to be true
+    end
+    describe 'Errors' do
+      it 'Invalid activation token' do
+        get '/user/1234/activate/'
+        expect(response).to redirect_to(root_path)
+        expect(subject.activated?).to be false
+      end
+    end
+  end
 end

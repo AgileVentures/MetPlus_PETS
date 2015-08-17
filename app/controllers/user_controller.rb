@@ -23,6 +23,26 @@ class UserController < ApplicationController
     end
   end
 
+  def activate
+    respond_to do |format|
+      if params[:id] != nil
+        user = User.find_by_activation_token(params[:id])
+        if user == nil
+          flash[:error] = 'Unable to find user using that activation code!'
+        else
+          puts "found user"
+          if user.activate(user.activation_token)
+            flash[:success] = 'User activated. You can proceed to the login page to enter the application!'
+          else
+            flash[:error] = 'Unable to activate user with the given activation token!'
+          end
+        end
+      end
+      format.html {redirect_to root_path}
+      format.js {render :js => "window.location.href='"+root_path+"'"}
+    end
+  end
+
   def edit
   end
 

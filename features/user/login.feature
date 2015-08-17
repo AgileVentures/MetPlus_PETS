@@ -8,6 +8,7 @@ Feature: User Registration
       |first_name | email          | password | password_confirmation |
       |tester     | test@email.com | password1 | password1              |
       |John       | johndoe@mail.fi| password1 | password1              |
+      |Tom        | tom@mail.fi| password1 | password1              |
     Given no emails have been sent
     Given I activate user "test@email.com"
 
