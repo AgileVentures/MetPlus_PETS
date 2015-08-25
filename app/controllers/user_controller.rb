@@ -30,7 +30,6 @@ class UserController < ApplicationController
         if user == nil
           flash[:error] = 'Unable to find user using that activation code!'
         else
-          puts "found user"
           if user.activate(user.activation_token)
             flash[:success] = 'User activated. You can proceed to the login page to enter the application!'
           else

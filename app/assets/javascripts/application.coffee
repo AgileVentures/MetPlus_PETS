@@ -20,7 +20,6 @@
   $(document).bind('ajaxStart', formName, ( (event, jqxhr, settings, exception) ->
     $('#loading').show()
     $(formName).find('.submit-button').attr('disabled', 'true')
-    console.log($(event.data))
   ))
   $(document).bind('ajaxComplete', formName, ( ->
     $('#loading').hide() ))
