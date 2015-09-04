@@ -5,7 +5,7 @@
 
 %div
   To be able to enter, please
-  = link_to 'press here', activate_user_index_url(@user.activation_token)
+  = link_to 'press here', activate_user_url(@user.activation_token)
 %div
   If the address above do not work, please use this url
-  = activate_user_index_url(@user.activation_token)
+  = activate_user_url(@user.activation_token)

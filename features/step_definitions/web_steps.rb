@@ -1,7 +1,7 @@
 def wait_until
   require "timeout"
   #Timeout.timeout(Capybara.default_wait_time) do
-  Timeout.timeout(5) do
+  Timeout.timeout(10) do
     sleep(0.1) until value = yield
     value
   end
@@ -9,7 +9,7 @@ end
 def search_text text
   wait_until do
     if text.is_a? Regexp
-      expect(page.text).to match text
+      expect(page).to have_content text
     else
       expect(page).to have_content text
     end

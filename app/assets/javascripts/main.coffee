@@ -8,8 +8,13 @@ $ ->
   $("#login_button").click ->
     ajaxRequest($(this), modalLaunch, alertMe)
     false
+  $("#logout_button").click ->
+    ajaxRequest($(this), pageReload, alertMe)
+    false
 
-
+pageReload = (data) ->
+  $('#loading').hide();
+  window.location.reload()
 ajaxRequest = (link, onSuccess, onError) ->
   url = link.attr('href')
   $.ajax

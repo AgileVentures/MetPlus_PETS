@@ -34,7 +34,6 @@ Feature: User Registration
     Then I should see "can't be blank" between "Email" and "Password"
     And I should see "is not formatted properly" between "Email" and "Password"
     And I should see "can't be blank" between "Password" and "Password confirmation"
-    And I should see "is too short \(minimum is 8 characters\)" between "Password" and "Password confirmation"
   @javascript
   Scenario: Register error(password mismatch)
     Given I go to the "homepage" page
