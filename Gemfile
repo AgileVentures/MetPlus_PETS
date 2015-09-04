@@ -66,6 +66,7 @@ group :test do
   gem 'shoulda-matchers', :require => false
   gem 'email_spec'
   gem 'poltergeist'
+  gem "codeclimate-test-reporter"
 end
 
 group :production do
