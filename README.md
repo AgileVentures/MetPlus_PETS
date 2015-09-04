@@ -1,19 +1,13 @@
 Metplus
 ==========================
-Version 3, 29 June 2007
+MetPlus is a non-profit that aim to help the people of Detroit, and hopefully Michigan, to find a job that suits them. The vision of the client is to create one application(PETS) that would allow the users to find the a job and for companies to find employers.
+
 ==========================
-Employment tracking application
-Copyright (C) 2015 MetPlus
+Public Employment Tracking System – P.E.T.S.
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+The PETS system is a web platform where the Job Seekers and the Companies can find each other. The platform will try to match all the skills of the Job Seekers and the skills needed by the Companies creating a pool of possible Jobs or Candidates.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+==========================
+ - Travis C. I. [![Build Status](https://travis-ci.org/AgileVentures/MetPlus_PETS.svg?branch=master)](https://travis-ci.org/AgileVentures/MetPlus_PETS) / [![Build Status](https://travis-ci.org/AgileVentures/MetPlus_PETS.svg?branch=development)](https://travis-ci.org/AgileVentures/MetPlus_PETS)
+ - Code Climate [![Code Climate](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/gpa.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS)
+ - Test Coverage [![Test Coverage](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/coverage.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/coverage)
