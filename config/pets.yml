@@ -5,22 +5,27 @@ default: &default
 development:
   <<: *default
   cruncher:
+    ssl: true
     host: localhost
     port: 8443
     user: user
     password: password
+    verify_ssl: false
 
 test: &test
   <<: *default
   cruncher:
+    ssl: true
     host: localhost
     port: 8443
     user: user
     password: password
+    verify_ssl: false
 
 production:
   <<: *default
   cruncher:
+    ssl: true
     host: <%=ENV['CRUNCHER_HOST']%>
     port: <%=ENV['CRUNCHER_PORT']%>
     user: <%=ENV['CRUNCHER_USER']%>

@@ -37,6 +37,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'active_record-acts_as'
 
+gem 'rest-client'
+
 group :development do
   gem 'haml-rails'
 end
