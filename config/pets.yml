@@ -1,0 +1,30 @@
+# PETS configuration file
+#
+default: &default
+
+development:
+  <<: *default
+  cruncher:
+    host: localhost
+    port: 8443
+    user: user
+    password: password
+
+test: &test
+  <<: *default
+  cruncher:
+    host: localhost
+    port: 8443
+    user: user
+    password: password
+
+production:
+  <<: *default
+  cruncher:
+    host: <%=ENV['CRUNCHER_HOST']%>
+    port: <%=ENV['CRUNCHER_PORT']%>
+    user: <%=ENV['CRUNCHER_USER']%>
+    password: <%=ENV['CRUNCHER_PASSWORD']%>
+
+cucumber:
+  <<: *test
