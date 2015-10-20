@@ -1,9 +1,0 @@
-%div{:id => 'modal', :class => 'modal-popup'}
-  %header{:class => 'popupHeader'}
-    %span{:class => 'header_title'}
-      = @modal_title
-    %span{:class => 'modal_close'}
-      %button{:class => 'close', 'data-dismiss' => 'modal', 'aria-label' => 'Close'}
-        %span{'aria-hidden' => 'true'} &times;
-  %section{:class => 'popupBody'}
-    = yield
