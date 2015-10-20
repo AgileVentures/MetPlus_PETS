@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Address, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
+      expect(FactoryGirl.create(:address)).to be_valid
     end
   end
   
