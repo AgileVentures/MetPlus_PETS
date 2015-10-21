@@ -12,7 +12,6 @@ describe JobSeeker, type: :model do
 	end
 
 	it "is belongs to jobseeeker status" do 
-		pending "need to create jobseeker model"
 	    is_expected.to belong_to :job_seeker_status 
 	end
 
