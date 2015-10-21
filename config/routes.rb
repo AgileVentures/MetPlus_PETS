@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-
+=begin
   post '/login' => 'session#create'
 
   get '/logout' => 'session#destroy'
@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     #end
   end
   resources :jobseeker, controller: 'user'
+=end
   # Example resource route with options:
   #   resources :products do
   #     member do
