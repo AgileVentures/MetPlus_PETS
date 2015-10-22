@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe JobSeeker, type: :model do
+
 	let(:salem){FactoryGirl.build(:job_seeker, :year_of_birth => "0/12/1983")}
 	let(:sam) {FactoryGirl.build(:job_seeker, :year_of_birth => "12/12/1983")}
 	let(:fatuma){FactoryGirl.build(:job_seeker, :year_of_birth => "12/2/1978")}
@@ -28,9 +29,10 @@ describe JobSeeker, type: :model do
 		it {expect(omar).to_not be_valid}
 	end
 
-	it "is belongs to jobseeeker status with valid attributes" do 
+	it "is belongs to jobseeeker status,  with valid attributes" do 
 		sam.save
-		@job_seeker_status = JobSeekerStatus.create!(:value => "Active", :description => "A"*244)
+		@job_seeker_status = JobSeekerStatus.create!(:value => "Not looking for job" \
+			, :description => "A"*244)
 		# byebug
     	sam.job_seeker_status = @job_seeker_status
 		is_expected.to belong_to :job_seeker_status
@@ -38,7 +40,7 @@ describe JobSeeker, type: :model do
 	    
 	end
 
-	it "is belongs to jobseeeker status with invalid attributes" do 
+	it "is belongs to jobseeeker status with,  invalid attributes" do 
 		ali.save 
 		@job_seeker_status = JobSeekerStatus.new(:value => "", :description => "A"*244)
 		@job_seeker_status.save 
@@ -46,5 +48,18 @@ describe JobSeeker, type: :model do
 		is_expected.to belong_to :job_seeker_status
 	    expect(ali.job_seeker_status.id).to  be_nil 
 	end
+
+
+	# describe "#acting_as?" do
+	#     it "returns true for supermodel class and name" do
+	#       expect(JobSeeker.acting_as? :user).to be true
+	#       expect(JobSeeker.acting_as? User).to  be true
+	#     end
+
+	#     it "returns false for anything other than supermodel" do
+	#       expect(JobSeeker.acting_as? :model).to be false
+	#       expect(JobSeeker.acting_as? String).to be false
+	#     end
+ # 	end
 
 end

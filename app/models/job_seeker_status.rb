@@ -6,6 +6,7 @@ class JobSeekerStatus < ActiveRecord::Base
 				too_long: "Description too long", 
 				too_short: "Description too short, at least 10 words." 
 	STATUS_VALUES = ['Not looking for job', 'Active looking for work', 'Employed']
+	#suggestion for Status_values=[Inactive, active, employed]
 	validates_inclusion_of :value, :in => STATUS_VALUES, 
 				:message => "must be one of: #{STATUS_VALUES.join(', ')}"
 

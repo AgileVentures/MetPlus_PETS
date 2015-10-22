@@ -3,13 +3,13 @@ require 'rails_helper'
 describe JobSeekerStatus, type: :model do
 
 	 let(:salem){FactoryGirl.build(:job_seeker_status, 
-	 	      :description => "R"*254, :value => "Active")}
+	 	      :description => "R"*254, :value => "Active looking for work")}
 	 let(:sam){FactoryGirl.build(:job_seeker_status, 
-	 	      :description => "RoR"*10, :value => "Inactive")}
+	 	      :description => "RoR"*10, :value => "Employed")}
 	 let(:ali){FactoryGirl.build(:job_seeker_status, 
-	 	      :description => "RoR"*2, :value => "Active")}
+	 	      :description => "RoR"*2, :value => "Active looking for work")}
 	 let(:sam){FactoryGirl.build(:job_seeker_status, 
-	 	      :description => "RoR"*10, :value => "Inactive")}
+	 	      :description => "RoR"*10, :value => "Not looking for job")}
 	 let(:fatuma){FactoryGirl.build(:job_seeker_status, 
 	 	      :description => "RoR"*10, :value => "")}
 		
