@@ -2,11 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   
-   describe 'Fixtures' do
-      it 'should have a valid factory' do
-        expect(FactoryGirl.create(:user)).to be_valid
-   end
-  end
+   
    
    describe 'Database schema' do
     it { is_expected.to have_db_column :id }
@@ -17,26 +13,44 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column :actable_id }
     it { is_expected.to have_db_column :actable_type }
   end
-    
-  describe 'Validations' do
-    it { is_expected.to validate_presence_of :email }
-    it { is_expected.to validate_presence_of :first_name }
-    it { is_expected.to validate_presence_of :last_name  }
-    it 'validates correct phone  format' do
-      
-      expect(FactoryGirl.build(:user, phone: '123-456-7890')).to be_valid
-      expect(FactoryGirl.build(:user, phone: '12345')).to_not be_valid
-      expect(FactoryGirl.build(:user, phone: '123-3455')).to_not be_valid
-      
-    end
-  end
-  
-  describe 'Class methods' do
-  end
-  
-  describe 'Instance methods' do
-  end
 
+    describe 'check model restrictions' do 
+     describe 'Email check' do
+       subject {FactoryGirl.build(:user)}
+       it { should validate_uniqueness_of(:email)}
+       it { should validate_presence_of(:email)}
+       it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email)}
+                            
+                    
+
+     end
+     describe 'FirstName check' do
+       subject {FactoryGirl.build(:user)}
+       it { is_expected.to validate_presence_of :first_name }
+       
+     end
+     describe 'LastName check' do
+       subject {FactoryGirl.build(:user)}
+       it { is_expected.to validate_presence_of :last_name }
+       
+     end
+    describe 'Phone' do
+       subject {FactoryGirl.build(:user)}
+         it { should_not allow_value('asd', '123456', '123 123 12345', '123    1231 1234', '1123 123 1234', ' 123 123 1234')
+.for(:phone)}
+it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234', '1231231234', '+1 (123) 1231234')
+.for(:phone)}
+end
+       
+
+       
+     
+ end
+
+   
+    
+  
+  
 
 end
 
