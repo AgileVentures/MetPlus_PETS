@@ -1,8 +1,10 @@
 FactoryGirl.define do
   factory :address do
-    full_address 'At my place'
-    zipcode 1
-    state 'MI'
-    city 'place'
+    street "MyString"
+    city "MyString"
+    zipcode "01746"
+    location_id 1
+    location_type "MyString"
   end
+
 end

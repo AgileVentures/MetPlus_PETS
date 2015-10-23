@@ -23,7 +23,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of :first_name }
     it { is_expected.to validate_presence_of :last_name  }
     it 'validates correct phone  format' do
-      
+      expect(FactoryGirl.build(:user, phone: '0234567898')).to be_valid
       expect(FactoryGirl.build(:user, phone: '123-456-7890')).to be_valid
       expect(FactoryGirl.build(:user, phone: '12345')).to_not be_valid
       expect(FactoryGirl.build(:user, phone: '123-3455')).to_not be_valid
