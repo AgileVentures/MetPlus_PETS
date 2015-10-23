@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :user do
-    email "MyString"
-first_name "MyString"
-last_name "MyString"
-phone '123-345-4589'
+    email 'johndoe@place.com'
+first_name 'John'
+last_name "Doe"
+phone 'Mystring'
   end
 
 end
