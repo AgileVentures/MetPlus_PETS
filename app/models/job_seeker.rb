@@ -6,6 +6,7 @@ class JobSeeker < ActiveRecord::Base
 	has_and_belongs_to_many :agency_people, :join_table => "agencies_seekers" 
 
 	validates_presence_of :year_of_birth 
-	validates_format_of :year_of_birth, with: /\A\d{2}\/\d{2}\/\d{4}\z/
+	validates_format_of :year_of_birth, with: /\A\d{2}\/\d{2}\/\d{4}\z/,
+	 :message => "should be in form DD/MM/YYYY"
 
 end

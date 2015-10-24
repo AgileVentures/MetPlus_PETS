@@ -8,6 +8,12 @@ describe JobSeeker, type: :model do
 	let(:ali) {FactoryGirl.build(:job_seeker, :year_of_birth => "12/01/1983")}
 	let(:omar) {FactoryGirl.build(:job_seeker, :year_of_birth => "12/12/192")}
 	
+    
+    #note: I didn't bother to test :id here, you should know the reason.
+    it "should have table column names: year_of_birth and job_seeker_status_id" do
+		is_expected.to have_db_column :year_of_birth
+		is_expected.to have_db_column :job_seeker_status_id  
+	end
 
 	it "should not be blank" do 
 		is_expected.to validate_presence_of(:year_of_birth) 
@@ -19,7 +25,7 @@ describe JobSeeker, type: :model do
 	end
 
 	context "with valid attributes" do 
-		it { expect(sam).to be_valid }
+		it {expect(sam).to be_valid  }
 		it {expect(ali).to be_valid  }
 	end
 
@@ -31,8 +37,8 @@ describe JobSeeker, type: :model do
 
 	it "is belongs to jobseeeker status,  with valid attributes" do 
 		sam.save
-		@job_seeker_status = JobSeekerStatus.create!(:value => "Not looking for job" \
-			, :description => "A"*244)
+		@job_seeker_status = JobSeekerStatus.create!(:value => "Employed not looking for job",
+		 :description => "A"*244)
 		# byebug
     	sam.job_seeker_status = @job_seeker_status
 		is_expected.to belong_to :job_seeker_status
@@ -49,7 +55,7 @@ describe JobSeeker, type: :model do
 	    expect(ali.job_seeker_status.id).to  be_nil 
 	end
 
-
+	#ONCE THE USER MODEL COMPLETE, UNCOMMENT THIS PART.
 	# describe "#acting_as?" do
 	#     it "returns true for supermodel class and name" do
 	#       expect(JobSeeker.acting_as? :user).to be true
