@@ -37,4 +37,5 @@ describe JobSeeker, type: :model do
 		it {expect(john).to_not be_valid}
 	end
 
+
 end
