@@ -39,8 +39,9 @@
 #     job4.nice_to_have_skills << skill4
 #     job4.save
 # end
-
-
+#incase rerun comes in.
+JobSeekerStatus.delete_all 
+puts "Creating staus value..."
 
 ['Unemployed actively looking for job', 'Employed actively looking for job', 'Employed not looking for job'].each do |status|
         JobSeekerStatus.find_or_create_by(:value => status)

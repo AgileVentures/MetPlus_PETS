@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
    actable
-   validates:email,:email => true,
+   validates :email,:email => true,
             :uniqueness => true,
             :presence => true
    validates_presence_of :first_name
