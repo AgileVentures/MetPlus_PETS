@@ -1,5 +1,5 @@
 class JobSeeker < ActiveRecord::Base
-  acts_as :person 
+  acts_as :user
   belongs_to :job_seeker_status
   #has_one    :resume 
   has_one	   :address, as: :location

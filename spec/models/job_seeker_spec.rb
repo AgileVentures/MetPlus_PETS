@@ -2,18 +2,37 @@ require 'rails_helper'
 
 describe JobSeeker, type: :model do
 
-	let(:salem){FactoryGirl.build(:job_seeker, :year_of_birth => "983",  :resume => "myresum")}
-	let(:sam) {FactoryGirl.build(:job_seeker, :year_of_birth => "1915",  :resume=> "resume")}
-	let(:fatuma){FactoryGirl.build(:job_seeker, :year_of_birth => "1911",:resume=> "resume")}
-	let(:ali) {FactoryGirl.build(:job_seeker, :year_of_birth => "1983",  :resume=> "resume")}
-	let(:omar) {FactoryGirl.build(:job_seeker, :year_of_birth => "1192", :resume => "resume")}
-	let(:john) {FactoryGirl.build(:job_seeker, :year_of_birth => "2016", :resume => "resume")}
+	let(:salem){FactoryGirl.build(:job_seeker, :year_of_birth => "983",  :resume => "myresum",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "619-232-2345")}
+	let(:sam) {FactoryGirl.build(:job_seeker, :year_of_birth => "1915",  :resume=> "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "619-232-2345")}
+	let(:fatuma){FactoryGirl.build(:job_seeker, :year_of_birth => "1911",:resume=> "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "619-232-2345")}
+	let(:ali) {FactoryGirl.build(:job_seeker, :year_of_birth => "1983",  :resume=> "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "619-232-2345")}
+	let(:omar) {FactoryGirl.build(:job_seeker, :year_of_birth => "1192", :resume => "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "619-232-2345")}
+	let(:john) {FactoryGirl.build(:job_seeker, :year_of_birth => "2016", :resume => "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "(619)-232-2345")}
+
+	let(:james) {FactoryGirl.build(:job_seeker, :year_of_birth => "2016", :resume => "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "(61)-232-2345")} 
+	let(:kay) {FactoryGirl.build(:job_seeker, :year_of_birth => "2016", :resume => "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "(619)-22-2345")} 
+	let(:jay) {FactoryGirl.build(:job_seeker, :year_of_birth => "2016", :resume => "resume",
+		:first_name => "salem", :last_name=> "Abdu", :phone => "(619)-232-234")}
 	
     
     it "should have table column names: year_of_birth and job_seeker_status_id" do
 		is_expected.to have_db_column :year_of_birth
 		is_expected.to have_db_column :job_seeker_status_id  
 		is_expected.to have_db_column :resume
+	end
+
+	context "should be invalide phone numbers" do 
+		it {expect(james).to_not be_valid}
+		it {expect(kay).to_not be_valid}
+		it {expect(jay).to_not be_valid}
 	end
 
 	it "should not be blank" do 
