@@ -20,5 +20,6 @@ class JobSeeker < ActiveRecord::Base
   	  	         self.year_of_birth = year.to_s : errors.add(:year_of_birth, 
   	  	         	 "should be between #{Date.today.year}-#{Date.today.year-YEARS}")
   	  end
+      
   	end
 end
