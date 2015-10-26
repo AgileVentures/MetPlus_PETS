@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :skill do
-    name 'Cook in line'
-    description 'Be able to cook in line'
+    name "MyText"
+description "MyText"
   end
 
 end

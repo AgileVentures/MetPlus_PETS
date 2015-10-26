@@ -1,12 +1,10 @@
 class CreateAddresses < ActiveRecord::Migration
   def change
     create_table :addresses do |t|
-      t.integer :addressable_id
-      t.string :addressable_type
-      t.string :full_address
-      t.integer :zipcode
-      t.string :state
+      t.string :street
       t.string :city
+      t.string :zipcode
+      t.references :location, polymorphic: true, index: true
 
       t.timestamps null: false
     end

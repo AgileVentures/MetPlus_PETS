@@ -16,3 +16,7 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore editor temporary files
+*~
+*.swp

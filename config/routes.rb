@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
 
 
-  post '/login' => 'session#create'
+#  post '/login' => 'session#create'
 
-  get '/logout' => 'session#destroy'
+#  get '/logout' => 'session#destroy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'main#index'
+#  root 'main#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  
+=begin
   resources :main
   resources :user do
     collection do
@@ -37,6 +39,7 @@ Rails.application.routes.draw do
     #end
   end
   resources :jobseeker, controller: 'user'
+=end
   # Example resource route with options:
   #   resources :products do
   #     member do
