@@ -6,9 +6,13 @@ RSpec.describe JobCategory, type: :model do
    describe 'Associations' do
 
      
-     xit { is_expected.to have_many :jobs }
+     xit { is_expected.to have_many :job_specialities }
+     xit { is_expected.to have_many(:agency_people).through(:job_specialities)}
      xit { is_expected.to has_and_belongs_to_many(:skills)}
+     it { is_expected.to have_many :jobs }
      
+
+   
    end
 
    describe 'Database schema' do
