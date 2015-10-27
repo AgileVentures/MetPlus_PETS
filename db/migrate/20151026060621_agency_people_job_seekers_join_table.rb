@@ -4,6 +4,7 @@ class AgencyPeopleJobSeekersJoinTable < ActiveRecord::Migration
     		t.integer :agency_person_id 
     		t.integer :job_seeker_id 
     end
-   	 # add_index :seekers_agency_people, [:agency_person_id, :job_seeker_id]
+   	  add_index :seekers_agency_people, :job_seeker_id
+   	  add_index :seekers_agency_people, :agency_person_id
   end
 end
