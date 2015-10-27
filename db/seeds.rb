@@ -42,7 +42,7 @@
 #incase rerun comes in.
 JobSeekerStatus.delete_all 
 
-['Unemployed actively looking for job', 'Employed actively looking for job', 'Employed not looking for job'].each do |status|
+['Unemployedlooking', 'Employedlooking ', 'Employednotlooking'].each do |status|
         JobSeekerStatus.find_or_create_by(:value => status)
 end
 
