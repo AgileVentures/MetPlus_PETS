@@ -6,7 +6,5 @@ class JobSeeker < ActiveRecord::Base
   has_and_belongs_to_many :agency_people, :join_table => "agencies_seekers" 
   validates_presence_of :year_of_birth, :resume
   validate :year_of_birth  
-
-
   
 end
