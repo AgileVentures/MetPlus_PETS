@@ -16,6 +16,6 @@ describe JobSeekerStatus, type: :model do
 
 	it{ is_expected.to validate_length_of(:description).is_at_most(255)}
     it{ is_expected.to validate_length_of(:description).is_at_least(10)}
-	#it {expect(JobSeekerStatus.select(:value).map(&:value)).to include('Unemployedlooking', 'Employedlooking ', 'Employednotlooking')}
+	
 end
 
