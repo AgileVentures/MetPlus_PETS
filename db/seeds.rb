@@ -40,9 +40,10 @@
 #     job4.save
 # end
 #incase rerun comes in.
-JobSeekerStatus.delete_all 
+# JobSeekerStatus.delete_all 
 
 ['Unemployedlooking', 'Employedlooking ', 'Employednotlooking'].each do |status|
+	    
         JobSeekerStatus.find_or_create_by(:value => status)
 end
 

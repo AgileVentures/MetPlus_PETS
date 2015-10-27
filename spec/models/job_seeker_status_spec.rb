@@ -16,15 +16,6 @@ describe JobSeekerStatus, type: :model do
 
 	it{ is_expected.to validate_length_of(:description).is_at_most(255)}
     it{ is_expected.to validate_length_of(:description).is_at_least(10)}
-	
-
-	context "status values" do 
-		it "should include all STATUS_VALUES" do 
-			JobSeekerStatus.all.each  do |js_status|
-			STATUS_VALUES.include(js_status.value)
-		    end
-		end
-	end
-	
+	#it {expect(JobSeekerStatus.select(:value).map(&:value)).to include('Unemployedlooking', 'Employedlooking ', 'Employednotlooking')}
 end
 
