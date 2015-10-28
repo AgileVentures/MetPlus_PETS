@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  
-   
-   
+
    describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :first_name }
@@ -13,7 +11,14 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column :actable_type }
    end
 
-   describe 'check model restrictions' do 
+   describe 'check model restrictions' do
+
+    describe 'Email check' do
+       subject {FactoryGirl.build(:user)}
+       it { should validate_uniqueness_of(:email)}
+       it { should validate_presence_of(:email)}
+       it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email)}
+    end 
 
      describe 'FirstName check' do
        subject {FactoryGirl.build(:user)}
@@ -24,7 +29,6 @@ RSpec.describe User, type: :model do
      describe 'LastName check' do
        subject {FactoryGirl.build(:user)}
        it { is_expected.to validate_presence_of :last_name }
-       
      end
 
      describe 'Phone number format check' do
@@ -34,17 +38,8 @@ RSpec.describe User, type: :model do
        it { should allow_value('123 123 1234', '(123) 123 1234', '(123)-123 1234', '1231231234', '(123) 1231234').for(:phone)}
 
      end
-       
-
-       
-     
+  
    end
-
-   
-    
-  
-  
-
 end
 
 
