@@ -8,7 +8,7 @@ RSpec.describe Skill, type: :model do
   end
 
   describe 'Associations' do
-
+    xit { is_expected.to have_and_belong_to_many :job_categories }
   end
 
   describe 'Database schema' do
