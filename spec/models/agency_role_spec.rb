@@ -18,11 +18,12 @@ RSpec.describe AgencyRole, type: :model do
 
   describe 'Validations' do
     it { is_expected.to validate_presence_of :role }
+    it { is_expected.to validate_length_of(:role).is_at_most(40) }
   end
 
   describe 'Agency Role' do
     it 'is valid with all required fields' do
-      expect(AgencyRole.new(role: 1)).to be_valid
+      expect(AgencyRole.new(role: 'JobDeveloper')).to be_valid
     end
     it 'is invalid without an agency role' do
       agency_role = AgencyRole.new()

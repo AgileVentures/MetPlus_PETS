@@ -11,8 +11,7 @@ RSpec.describe AgencyPerson, type: :model do
     it { is_expected.to belong_to :agency }
     it { is_expected.to belong_to :address }
     it { is_expected.to have_and_belong_to_many :agency_roles }
-    xit { is_expected.to have_and_belong_to_many :job_specialities }
-    xit { is_expected.to have_many(:job_categories).through(:job_specialities) }
+    xit { is_expected.to have_many(:job_categories) }
   end
 
   describe 'Database schema' do
