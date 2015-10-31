@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :last_name
       t.string :phone
       t.actable
-
+      
       t.timestamps null: false
     end
   end
