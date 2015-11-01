@@ -36,13 +36,13 @@ describe CompanyPerson, type: :model do
 
  context "#acting_as?" do
         it "returns true for supermodel class and name" do
-          expect(JobSeeker.acting_as? :user).to be true
-          expect(JobSeeker.acting_as? User).to  be true
+          expect(CompanyPerson.acting_as? :user).to be true
+          expect(CompanyPerson.acting_as? User).to  be true
         end
 
         it "returns false for anything other than supermodel" do
-          expect(JobSeeker.acting_as? :model).to be false
-          expect(JobSeeker.acting_as? String).to be false
+          expect(CompanyPerson.acting_as? :model).to be false
+          expect(CompanyPerson.acting_as? String).to be false
         end
   end
 
