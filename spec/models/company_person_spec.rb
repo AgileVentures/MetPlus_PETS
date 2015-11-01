@@ -6,6 +6,7 @@ describe CompanyPerson, type: :model do
     it { is_expected.to have_db_column :address_id}
    end
 
+
    describe 'check model restrictions' do 
 
      describe 'Email check' do
@@ -33,6 +34,10 @@ describe CompanyPerson, type: :model do
      end
        
  end
+
+ xit ", remove once company role model exists" do 
+  is_expected.to have_and_belong_to_many :company_roles 
+end
 
  context "#acting_as?" do
         it "returns true for supermodel class and name" do
