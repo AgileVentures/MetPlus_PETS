@@ -53,5 +53,14 @@ JobSeekerStatus.delete_all
         end
 end
 
+SkillLevel.create(name: 'Beginner', 
+            description: 'Entry level or minimal proficiency')
+SkillLevel.create(name: 'Intermediate', 
+            description: 'Proficient in some aspects, requires supervision')
+SkillLevel.create(name: 'Advanced', 
+            description: 'Proficient in all aspects, requires little supervision')
+SkillLevel.create(name: 'Expert', 
+            description: 'Proficient in all aspects, able to work indepently')
+
 
 
