@@ -1,6 +1,5 @@
 class JobCategory < ActiveRecord::Base
- has_many :job_specialities
- has_many :agency_poeple, through: :job_specialities
+ has_and_belongs_to_many :agencypeople, class_name: "AgencyPerson",join_table => job_specialities
  has_many :jobs
  has_and_belongs_to_many:skills
 
