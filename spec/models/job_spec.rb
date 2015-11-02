@@ -10,7 +10,7 @@ RSpec.describe Job, type: :model do
   describe 'Associations' do
     xit { is_expected.to belong_to :company }
     xit { is_expected.to belong_to :company_person }
-    it  { is_expected.to have_one  :address }
+     it  { is_expected.to have_one  :address }
     xit { is_expected.to belong_to :job_category }
     it { is_expected.to have_many :job_skills }
     it { is_expected.to have_many(:skills).through(:job_skills) }

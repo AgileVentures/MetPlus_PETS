@@ -6,6 +6,6 @@ class AgencyPerson < ActiveRecord::Base
   has_and_belongs_to_many :agency_roles
   has_and_belongs_to_many :job_categories, join_table: :job_specialities
   has_and_belongs_to_many :job_seekers, join_table: :seekers_agency_people
-  
+
   validates_presence_of :agency_id
 end
