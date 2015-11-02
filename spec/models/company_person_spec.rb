@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 describe CompanyPerson, type: :model do
+
+   xit 'should have a valid factory, remove once company model is merged' do
+      expect(FactoryGirl.build(:company_person)).to be_valid
+   end
+
    describe 'Database schema' do
     it { is_expected.to have_db_column :company_id}
     it { is_expected.to have_db_column :address_id}
