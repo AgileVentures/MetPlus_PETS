@@ -4,9 +4,7 @@ RSpec.describe JobCategory, type: :model do
 
    
    describe 'Associations' do
-
-     
-     
+    
      it { is_expected.to have_and_belong_to_many :skills }
      it { is_expected.to have_many :jobs }
      xit{ is_expected.to have_many_and_belong_to(:agency_people).join_table(:job_specialities)}
