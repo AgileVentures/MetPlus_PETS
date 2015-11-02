@@ -61,6 +61,10 @@ SkillLevel.create(name: 'Advanced',
             description: 'Proficient in all aspects, requires little supervision')
 SkillLevel.create(name: 'Expert', 
             description: 'Proficient in all aspects, able to work indepently')
+            
+AgencyRole.create(role: 'Job Developer')
+AgencyRole.create(role: 'Case Manager')
+AgencyRole.create(role: 'Agency Manager')
 
 
 
