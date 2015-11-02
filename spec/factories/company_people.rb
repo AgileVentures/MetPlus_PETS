@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :company_person do
-    company nil
-    address nil
-    company_roles ""
+    company 
+    address 
+    company_roles "Case Manager"
   end
 
 end
