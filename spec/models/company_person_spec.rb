@@ -40,9 +40,9 @@ describe CompanyPerson, type: :model do
        
  end
 
- xit ", remove once company role model exists" do 
-  is_expected.to have_and_belong_to_many :company_roles 
-end
+ 
+  it{ is_expected.to have_and_belong_to_many :company_roles } 
+
 
  context "#acting_as?" do
         it "returns true for supermodel class and name" do
