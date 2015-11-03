@@ -54,7 +54,7 @@ JobSeekerStatus.delete_all
 end
 
 ['Company Manager', 'Human Resources'].each do |role|
-    CompanyRole.find_or_create_by(:role => role)
+        CompanyRole.find_or_create_by(:role => role)
 end
 
 #in case of seeding multiple times
