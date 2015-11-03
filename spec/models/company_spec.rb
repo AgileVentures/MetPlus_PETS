@@ -32,7 +32,6 @@ RSpec.describe Company, type: :model do
     it { is_expected.to validate_length_of(:website).is_at_most(200) }
   end
 
- 
 end
 
 
