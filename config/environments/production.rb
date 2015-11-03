@@ -78,5 +78,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :sendmail
+  #this will take care of devise setup default url in production
   config.action_mailer.default_url_options = { :host => 'metplus.org' }
 end
