@@ -32,21 +32,6 @@ RSpec.describe User, type: :model do
 
    describe 'check model restrictions' do
 
-
-    describe 'Password check' do
-      subject { FactoryGirl.build(:user, password: '') }
-      it {should validate_presence_of(:password) }
-      it {should validate_confirmation_of(:password)}
-    end
-
-    describe 'Email check' do
-       subject {FactoryGirl.build(:user)}
-       it { should validate_uniqueness_of(:email)}
-       it { should validate_presence_of(:email)   }
-       it { should allow_value('salemamba@gmail.com', "jj101@yahoo.com", 'sama@g343.com').for(:email)}
-       it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email)}
-    end 
-
      describe 'FirstName check' do
        subject {FactoryGirl.build(:user)}
        it { is_expected.to validate_presence_of :first_name }
