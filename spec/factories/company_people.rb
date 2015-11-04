@@ -1,11 +1,8 @@
 FactoryGirl.define do
   factory :company_person do
-    company 
-    address 
-    first_name 'John'
-    last_name "Doe"
-	phone '(123) 123 1234'
-    company_roles "Case Manager"
+    company_id 1 # change to factory reference when available
+    address
+    user
   end
 
 end

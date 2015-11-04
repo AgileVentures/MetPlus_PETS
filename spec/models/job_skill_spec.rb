@@ -10,7 +10,7 @@ RSpec.describe JobSkill, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :job }
     it { is_expected.to belong_to :skill }
-    xit { is_expected.to belong_to :skill_level }
+    it { is_expected.to belong_to :skill_level }
   end
   
   describe 'Database schema' do
@@ -29,17 +29,13 @@ RSpec.describe JobSkill, type: :model do
     it { is_expected.to validate_inclusion_of(:required).
               in_array([true, false]) }
     it { is_expected.to validate_numericality_of(:min_years).
-              only_integer }
+            is_greater_than_or_equal_to(0) }
     it { is_expected.to validate_numericality_of(:min_years).
-              is_greater_than_or_equal_to(0) }
-    it { is_expected.to validate_numericality_of(:min_years).
-                        is_less_than_or_equal_to(15) }
+            is_less_than_or_equal_to(15) }
     it { is_expected.to validate_numericality_of(:max_years).
-                                  only_integer }
+            is_greater_than_or_equal_to(0) }
     it { is_expected.to validate_numericality_of(:max_years).
-                                  is_greater_than_or_equal_to(0) }
-    it { is_expected.to validate_numericality_of(:max_years).
-                                            is_less_than_or_equal_to(50) }
+            is_less_than_or_equal_to(50) }
   end
   
   describe 'Job Skill' do
