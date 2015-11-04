@@ -67,7 +67,7 @@ end
 group :test do
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
-  gem 'shoulda-matchers', :require => false
+  gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers', require: false
   gem 'email_spec'
   gem 'poltergeist'
   gem "codeclimate-test-reporter"

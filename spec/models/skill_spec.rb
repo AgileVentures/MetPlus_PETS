@@ -8,7 +8,14 @@ RSpec.describe Skill, type: :model do
   end
 
   describe 'Associations' do
-    xit { is_expected.to have_and_belong_to_many :job_categories }
+    it { is_expected.to have_and_belong_to_many :job_categories }
+    it { is_expected.to have_many :job_skills }
+    it { is_expected.to have_many(:jobs).through(:job_skills) }
+  end
+  
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of :name }
+    it { is_expected.to validate_presence_of :description }
   end
 
   describe 'Database schema' do
