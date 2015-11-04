@@ -8,7 +8,4 @@ FactoryGirl.define do
     job_category_id 1
   end
   
-  # replace the id's for 'belongs_to' associations above with actual factory references
-  # as the associated models are defined (company, company_person, job_category)
-
 end
