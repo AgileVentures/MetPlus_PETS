@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/thoughtbot/shoulda-matchers
+  revision: 15091726fe359818b95aa4a11133c72960fd2d7c
+  specs:
+    shoulda-matchers (3.0.1)
+      activesupport (>= 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -205,8 +212,6 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     sexp_processor (4.6.0)
-    shoulda-matchers (2.8.0)
-      activesupport (>= 3.0.0)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -267,7 +272,7 @@ DEPENDENCIES
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
-  shoulda-matchers
+  shoulda-matchers!
   spring
   sqlite3
   turbolinks
