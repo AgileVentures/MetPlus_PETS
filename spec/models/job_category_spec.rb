@@ -7,7 +7,8 @@ RSpec.describe JobCategory, type: :model do
     
      it { is_expected.to have_and_belong_to_many :skills }
      it { is_expected.to have_many :jobs }
-     it { is_expected.to have_and_belong_to_many(:agency_people)}
+     it { is_expected.to have_and_belong_to_many(:agency_people).
+               join_table('job_specialities') }
        
    end
 
