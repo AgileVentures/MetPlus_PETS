@@ -6,19 +6,31 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :first_name }
     it { is_expected.to have_db_column :last_name }
+    it { is_expected.to have_db_column :email }
     it { is_expected.to have_db_column :phone }
     it { is_expected.to have_db_column :actable_id }
     it { is_expected.to have_db_column :actable_type }
+    
+    it { is_expected.to have_db_column :encrypted_password}
+    it { is_expected.to have_db_column :reset_password_token}
+    it { is_expected.to have_db_column :reset_password_sent_at}
+    it { is_expected.to have_db_column :remember_created_at}
+    it { is_expected.to have_db_column :sign_in_count}
+
+    it { is_expected.to have_db_column :current_sign_in_at}
+    it { is_expected.to have_db_column :last_sign_in_at}
+    it { is_expected.to have_db_column :confirmation_token}
+    it { is_expected.to have_db_column :current_sign_in_ip }
+    it { is_expected.to have_db_column :last_sign_in_ip}
+    it { is_expected.to have_db_column :confirmation_token}
+
+    it { is_expected.to have_db_column :confirmed_at }
+    it { is_expected.to have_db_column :confirmation_sent_at}
+    it { is_expected.to have_db_column :unconfirmed_email}
+   
    end
 
    describe 'check model restrictions' do
-
-    describe 'Email check' do
-       subject {FactoryGirl.build(:user)}
-       it { should validate_uniqueness_of(:email)}
-       it { should validate_presence_of(:email)}
-       it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email)}
-    end 
 
      describe 'FirstName check' do
        subject {FactoryGirl.build(:user)}
