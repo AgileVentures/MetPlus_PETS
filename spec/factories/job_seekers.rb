@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :job_seeker do
-  		email 'johndoe@place.com'
+		email 'johndoe@place.com'
     	first_name 'John'
     	last_name "Doe"
     	phone '(123) 123 1234'
