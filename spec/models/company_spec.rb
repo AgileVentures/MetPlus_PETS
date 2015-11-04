@@ -11,6 +11,8 @@ RSpec.describe Company, type: :model do
   describe 'Associations' do
     it { is_expected.to have_many :company_people }
     it { is_expected.to have_many :addresses }
+    it { is_expected.to have_many :jobs }
+    it {is_expected.to have_and_belong_to_many :agencies }
    end
 
    describe 'Database schema' do
