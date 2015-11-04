@@ -11,10 +11,10 @@ RSpec.describe AgencyPerson, type: :model do
     it { is_expected.to belong_to :agency }
     it { is_expected.to belong_to :address }
     it { is_expected.to have_and_belong_to_many :agency_roles }
-    xit { is_expected.to have_many(:job_categories).
-            join_table(:job_specialities)}
+    it { is_expected.to have_and_belong_to_many(:job_categories).
+            join_table('job_specialities')}
     xit { is_expected.to have_and_belong_to_many(:job_seekers).
-            join_table(:seekers_agency_people) }
+            join_table('seekers_agency_people') }
   end
 
   describe 'Database schema' do

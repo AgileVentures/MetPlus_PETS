@@ -2,10 +2,6 @@ require 'rails_helper'
 
 describe JobSeeker, type: :model do
 
-	it 'should have a valid factory' do
-	expect(FactoryGirl.build(:job_seeker)).to be_valid
-	end
-
 	it {is_expected.to have_db_column :year_of_birth} 
 	it {is_expected.to have_db_column :job_seeker_status_id } 
 	it {is_expected.to have_db_column :resume } 
