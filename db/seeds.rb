@@ -39,7 +39,7 @@
 #     job4.nice_to_have_skills << skill4
 #     job4.save
 # end
-#incase rerun comes in.
+#incase rerun comes in. not necessary
 JobSeekerStatus.delete_all 
 
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
@@ -52,6 +52,13 @@ JobSeekerStatus.delete_all
         	JobSeekerStatus.find_or_create_by(:value => status, description: "A jobseeker with a job and not looking for a job for now.")
         end
 end
+
+['Company Manager', 'Human Resources'].each do |role|
+        CompanyRole.find_or_create_by(:role => role)
+end
+
+#in case of seeding multiple times
+SkillLevel.delete_all
 
 SkillLevel.create(name: 'Beginner', 
             description: 'Entry level or minimal proficiency')

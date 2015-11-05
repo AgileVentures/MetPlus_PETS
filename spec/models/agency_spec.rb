@@ -8,7 +8,7 @@ RSpec.describe Agency, type: :model do
   end
   
   describe 'Associations' do
-    xit { is_expected.to have_many :agency_people }
+    it { is_expected.to have_many :agency_people }
     it { is_expected.to have_many :addresses }
     xit { is_expected.to have_and_belong_to_many :companies }
   end
