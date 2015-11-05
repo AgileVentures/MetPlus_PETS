@@ -48,7 +48,7 @@ RSpec.describe Company, type: :model do
 
 
      describe 'Website' do
-        subject {FactoryGirl.build(:company)}
+       subject {FactoryGirl.build(:company)}
        it { should_not allow_value('asd', 'ftp://company.com', 'http:','http://','https',  'https:', 'https://','http://place.com###Bammm').for(:website)}
        it { should allow_value('http://company.com', 'https://company.com','http://w.company.com/info','https://comp.com:10/test/1/wasd','http://company.com/').for(:website)}
 
