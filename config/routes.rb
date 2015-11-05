@@ -1,15 +1,21 @@
 Rails.application.routes.draw do
 
+  # devise_for :users
 
-  devise_for :users
-#  post '/login' => 'session#create'
 
-#  get '/logout' => 'session#destroy'
+  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
+                                     :sign_in => 'login' }
+  
 
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
+   devise_scope :user do
+     #match  "/new"     => 'devise/registrations#new',   via: 'get'
+     match  '/login'   =>  'devise/sessions#new',       via: 'get'
+     match  '/logout'  => 'devise/sessions#destroy',    via: 'get'
+  end
+
+
+ 
   root 'main#index'
 
   # Example of regular route:
