@@ -23,6 +23,6 @@ SMTP_USERNAME: 'mail-user-name'
 SMTP_PASSWORD: 'mail-password'
 SMTP_DOMAIN:  'localhost:3000'
 SMTP_ADDRESS: 'smtp.gmail.com'
-SMTP_PORT:    587
+SMTP_PORT:    '587'
 
 
