@@ -22,9 +22,9 @@
               %td
                 = job.company.name
               %td
-                = job.short_description
+                = job.description
               %td
-                - if logged_in?
+                - if signed_in?
                   Some information
                 - else
                   You need to login for more information
