@@ -39,6 +39,35 @@
 #     job4.nice_to_have_skills << skill4
 #     job4.save
 # end
+
+# User.find_or_create_by(email: 'salemamba@gmail.com') do |user|
+#     user.first_name = "salem"
+#     user.last_name  = 'amba', 
+#     user.password = 'secret123',
+#     user.password_confirmation = 'secret123', 
+#     user.phone ='619-316-8971',
+#     user.confirmed_at = DateTime.now
+# end
+
+
+Job.delete_all 
+Company.delete_all
+
+cp1 = Company.create(:ein => '12-2123244', :phone=> '721-234-4646',  email: 'casemanager@gmail.com',  website: 'http://www.wallmart.com', :name=> 'Walmart')
+cp2 = Company.create(:ein => '13-1244445', :phone=>  '721-234-1010', email: 'casemanager2@gmail.com', website: 'http://www.target.com',   :name=> 'Target')
+cp3 = Company.create(:ein => '12-1252445', :phone=> '865-234-4646', email:  'casemanager3@gmail.com', website: 'http://www.Food4less.com',:name=> 'Food4less')
+cp4 = Company.create(:ein => '15-1342447', :phone=> '971-234-4646', email:  'casemanager4@gmail.com', website: 'http://www.macy.com',     :name=> 'Macy')
+
+
+Job.create(:title => 'Software Developer', :description => 'Looking for a software developer intern.', :company_id => cp1.id,
+            :company_person_id => '1', :job_category_id => '1' )
+Job.create(:title => 'Cashier', :description => 'Looking for well qualified cashier with 5 years experience', :company_id => cp2.id,
+            :company_person_id => '2', :job_category_id => '2' )
+Job.create(:title => 'Driver', :description => 'Looking for a truck driver with class A license', :company_id => cp3.id,
+            :company_person_id => '3', :job_category_id => '3' )
+Job.create(:title => 'Security Personel', :description => 'If you have Security Guard license, and love to work  third shift, than call us.', :company_id => cp4.id,
+            :company_person_id => '4', :job_category_id => '4' )
+
 #incase rerun comes in. not necessary
 JobSeekerStatus.delete_all 
 
