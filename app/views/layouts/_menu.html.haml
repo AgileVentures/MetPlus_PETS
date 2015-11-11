@@ -5,8 +5,6 @@
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
         %li{:class => 'menu-item'}
-          %a{:href => root_path} Home
-        %li{:class => 'menu-item'}
           %a{:href => '#'} Jobs
         %li{:class => 'menu-item'}
           %a{:href => '#'} About
@@ -27,6 +25,5 @@
               Hello,
               = link_to current_user.first_name, edit_user_registration_path(current_user)
           %li
-            = link_to 'Logout', logout_path, method: :delete, id: 'logout_button'
-
-
+            %div{:class => 'button-menu'}
+              = link_to 'Log out', logout_path, :role => 'button', method: :delete, :class => 'btn btn-default btn-xs', :id => 'logout_button'
