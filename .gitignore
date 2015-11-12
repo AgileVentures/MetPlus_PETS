@@ -16,3 +16,14 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore editor temporary files
+*~
+*.swp
+
+# Ignore application configuration
+/config/application.yml
+
+
+# Ignore Editor files
+.idea/*

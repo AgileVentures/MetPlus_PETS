@@ -1,23 +1,21 @@
 class Job < ActiveRecord::Base
-
-  validates :employer, :presence => true
-  validates :company, :presence => true
-  validates :title, length: {in: 1..150},
-                    :presence => true
-  validates :description, :presence => true,
-                          length: {minimum: 20}
-
-  belongs_to :employer
   belongs_to :company
-
-  has_many :job_skills
-  has_many :skills, :through => :job_skills
-
-  has_many :required_skills, -> { where job_skills: { required: true } }, through: :job_skills, class_name: 'Skill', source: :skill
-  has_many :nice_to_have_skills, -> { where job_skills: { required: false } }, through: :job_skills, class_name: 'Skill', source: :skill
-
-
-  def short_description
-    "#{self.description[0..30]}#{'...' if self.description.length > 30}"
-  end
+  belongs_to :company_person
+  has_one    :address, as: :location
+  belongs_to :job_category
+  has_many   :job_skills
+  has_many   :skills, through: :job_skills
+  has_many   :required_skills, -> {where job_skills: {required: true}},
+                through: :job_skills, class_name: 'Skill', source: :skill
+  has_many   :nice_to_have_skills, -> {where job_skills: {required: false}},
+                through: :job_skills, class_name: 'Skill', source: :skill
+  has_many   :skill_levels, through: :job_skills
+  
+  validates_presence_of :title
+  validates_length_of   :title, maximum: 100
+  validates_presence_of :description
+  validates_length_of   :description, maximum: 10000
+  validates_presence_of :company_id
+  validates_presence_of :job_category_id
+  validates_presence_of :company_person_id
 end

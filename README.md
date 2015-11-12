@@ -20,3 +20,4 @@ See the whole wiki: <a href="https://github.com/AgileVentures/MetPlus_PETS/wiki"
  - Travis C. I. [![Build Status](https://travis-ci.org/AgileVentures/MetPlus_PETS.svg?branch=master)](https://travis-ci.org/AgileVentures/MetPlus_PETS) / [![Build Status](https://travis-ci.org/AgileVentures/MetPlus_PETS.svg?branch=development)](https://travis-ci.org/AgileVentures/MetPlus_PETS)
  - Code Climate [![Code Climate](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/gpa.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS)
  - Test Coverage [![Test Coverage](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/coverage.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/coverage)
+ - Waffle [![Stories in Progress](https://badge.waffle.io/AgileVentures/MetPlus_tracker.png?label=in%20progress&title=In%20Progress)](http://waffle.io/AgileVentures/MetPlus_tracker)

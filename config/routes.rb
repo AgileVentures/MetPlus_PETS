@@ -1,9 +1,19 @@
 Rails.application.routes.draw do
 
 
-  post '/login' => 'session#create'
+devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
+                                     :sign_in => 'login' }
+  
 
-  get '/logout' => 'session#destroy'
+
+   devise_scope :user do
+     #match  "/new"     => 'devise/registrations#new',   via: 'get'
+     match  '/login'   =>  'devise/sessions#new',       via: 'get'
+     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
+  end
+#  post '/login' => 'session#create'
+
+#  get '/logout' => 'session#destroy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -19,6 +29,8 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  
+=begin
   resources :main
   resources :user do
     collection do
@@ -37,6 +49,7 @@ Rails.application.routes.draw do
     #end
   end
   resources :jobseeker, controller: 'user'
+=end
   # Example resource route with options:
   #   resources :products do
   #     member do

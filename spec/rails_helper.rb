@@ -5,9 +5,11 @@ require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
 require 'capybara/poltergeist'
+require 'devise'
 Capybara.javascript_driver = :poltergeist
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -52,4 +54,15 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+#Make the devise controller to spec/controller 
+RSpec.configure do |config| 
+  config.include Devise::TestHelpers, :type => :controllers
 end

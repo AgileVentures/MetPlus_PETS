@@ -1,48 +1,50 @@
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
-  before(:all) {
-    @company = FactoryGirl.create(:company)
-    @employer = FactoryGirl.create(:employer, :company => @company)
-    FactoryGirl.create(:skill, :name => 'Software developer')
-    FactoryGirl.create(:skill, :name => 'Handyman')
-    FactoryGirl.create(:skill, :name => 'English Teacher')
-    FactoryGirl.create(:skill, :name => 'Dean')
-  }
-  after(:all) {
-    DatabaseCleaner.clean_with(:truncation)
-  }
-  describe 'Check model restrictions' do
-    subject { FactoryGirl.build(:job) }
-    describe 'Employer' do
-      it { should validate_presence_of(:employer)}
-      it { should belong_to(:employer)}
-    end
-    describe 'Company' do
-      it { should validate_presence_of(:company) }
-      it { should belong_to(:company)}
-    end
-    describe 'Title' do
-      it {should validate_presence_of(:title) }
-      it {should validate_length_of(:title)}
-    end
-    describe 'Description' do
-      it {should validate_presence_of(:description) }
-      it {should validate_length_of(:description)}
+  describe 'Fixtures' do
+    it 'should have a valid factory' do
+      expect(FactoryGirl.build(:job)).to be_valid
     end
   end
-  describe 'Job creation' do
-    subject { FactoryGirl.build(:job) }
-    describe 'Check skills' do
-      it 'Check required skills' do
-        subject.required_skills << Skill.find_by_name('Handyman')
-        subject.nice_to_have_skills << Skill.find_by_name('Dean')
-        subject.save
-        subject = Job.all.first
-
-        expect(subject.required_skills.first).to eq(Skill.find_by_name 'Handyman')
-        expect(subject.nice_to_have_skills.first).to eq(Skill.find_by_name 'Dean')
-      end
-    end
+  
+  describe 'Associations' do
+    it { is_expected.to belong_to :company }
+    it { is_expected.to belong_to :company_person }
+    it  { is_expected.to have_one  :address }
+    it { is_expected.to belong_to :job_category }
+    it { is_expected.to have_many :job_skills }
+    it { is_expected.to have_many(:skills).through(:job_skills) }
+    it { is_expected.to have_many(:required_skills).through(:job_skills).
+          conditions(job_skills: {required: true}).
+          source(:skill).class_name('Skill') }
+    it { is_expected.to have_many(:nice_to_have_skills).
+          through(:job_skills).conditions(job_skills: {required: false}).
+          source(:skill).class_name('Skill')}
+    it { is_expected.to have_many(:skill_levels).through(:job_skills) }
+  end
+  
+  describe 'Database schema' do
+    it { is_expected.to have_db_column :id }
+    it { is_expected.to have_db_column :title }
+    it { is_expected.to have_db_column :description }
+    it { is_expected.to have_db_column :company_id }
+    it { is_expected.to have_db_column :company_person_id }
+    it { is_expected.to have_db_column :job_category_id }
+  end
+  
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of :title }
+    it { is_expected.to validate_length_of(:title).is_at_most(100) }
+    it { is_expected.to validate_presence_of :description }
+    it { is_expected.to validate_length_of(:description).is_at_most(10000) }
+    it { is_expected.to validate_presence_of :company_id }
+    it { is_expected.to validate_presence_of :company_person_id }
+    it { is_expected.to validate_presence_of :job_category_id }
+  end
+  
+  describe 'Class methods' do
+  end
+  
+  describe 'Instance methods' do
   end
 end
