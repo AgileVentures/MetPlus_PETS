@@ -13,27 +13,35 @@ class User < ActiveRecord::Base
   
 
   def is_job_seeker?
-      self.role == 'job_seeker'
+      if user.actable_type ="JobSeeker"
+         return true
+       end
   end
 
   def is_job_developer?
-      self.role == 'job_developer'
+      if user.actable_type = "JobDeveloper"
+         return true
+      end
   end
   
   def is_case_manager?
-      self.role == 'case_manager'
+      if user.actable_type = 'CaseManager'
+         return true
+      end
   end
 
   def is_agency_admin?
-      self.role == 'agency_admin'
+      if user.actable_type = 'Agencyadmin'
+         return true
+      end
   end
   
   def is_employer?
-      self.role == 'employer'
+     
   end
   
   def is_admin?
-      self.role == 'admin'
+     
   end
 
   
