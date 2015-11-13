@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-
+  describe 'Fixtures' do
+    it 'should have a valid factory' do
+      expect(FactoryGirl.create(:user)).to be_valid
+    end
+  end
+  
    describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :first_name }
@@ -51,6 +56,48 @@ RSpec.describe User, type: :model do
 
      end
   
+   end
+   
+   describe 'roles determination' do
+     before :each do
+       @job_seeker = FactoryGirl.create(:job_seeker)
+       @jd_role = FactoryGirl.create(:agency_role, role: 'Job Developer')
+       @am_role = FactoryGirl.create(:agency_role, role: 'Agency Manager')
+       @cm_role = FactoryGirl.create(:agency_role, role: 'Case Manager')
+       @aa_role = FactoryGirl.create(:agency_role, role: 'Agency Admin')
+       
+       @job_developer = FactoryGirl.build(:agency_person)
+       @job_developer.agency_roles << @jd_role
+       @job_developer.save
+       
+       @case_manager = FactoryGirl.create(:agency_person)
+       @case_manager.agency_roles << @cm_role
+       @case_manager.save
+
+       @agency_admin = FactoryGirl.create(:agency_person)
+       @agency_admin.agency_roles << @aa_role
+       @agency_admin.save
+                  
+       @agency_manager = FactoryGirl.build(:agency_person)
+       @agency_manager.agency_roles << [@am_role, @aa_role]       
+       @agency_manager.save
+     end
+     it 'job seeker' do
+       expect(User.is_job_seeker?(@job_seeker.user)).to be true
+     end
+     it 'job developer' do
+       expect(User.is_job_developer?(@job_developer.user)).to be true
+     end
+     it 'case manager' do
+       expect(User.is_case_manager?(@case_manager.user)).to be true
+     end
+     it 'agency admin' do
+       expect(User.is_agency_admin?(@agency_admin.user)).to be true
+     end
+     it 'agency manager (also agency_admin role)' do
+       expect(User.is_agency_manager?(@agency_manager.user)).to be true
+       expect(User.is_agency_admin?(@agency_manager.user)).to be true
+     end
    end
 end
 
