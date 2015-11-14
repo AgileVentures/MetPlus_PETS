@@ -62,7 +62,7 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-#Make the devise controller to spec/controller 
+#Make the devise controllers and views available to spec 
 RSpec.configure do |config| 
   config.include Devise::TestHelpers, :type => :controllers
 end
