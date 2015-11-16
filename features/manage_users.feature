@@ -7,8 +7,8 @@ So that I can edit my profiles
 #@focus
 Scenario Outline: Show edit link as salem
 	Given the following user records:
-		| email               | password | password_confirmation | first_name | last_name | phone          | confirmed_at                       |  
-		| salemamba@gmail.com | secret1234   | secret1234                | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |  
+		| email               | password   | password_confirmation | first_name | last_name | phone          | confirmed_at                      |  
+		| salemamba@gmail.com | secret1234 | secret1234            | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |  
 	Given I am logged in as "<email>" with password "secret1234"
 	And   I visit profile for "salem"
 	Then  I should see "Edit User"
