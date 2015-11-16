@@ -21,7 +21,7 @@ Scenario Outline: Show edit link as salem
 		| Last name             | Doe           |  
 		| Phone                 | 714-123-1234  |  
 
-    And   I press "Update"
+	And   I press "Update"
 	Then  I should see "Your account has been updated successfully."
 	And   I should verify the change of first_name "Jon", last_name "Doe" and phone "714-123-1234"
 
