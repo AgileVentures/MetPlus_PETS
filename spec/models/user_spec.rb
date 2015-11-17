@@ -99,6 +99,32 @@ RSpec.describe User, type: :model do
        expect(User.is_agency_admin?(@agency_manager.user)).to be true
      end
    end
+   
+   describe 'company roles determination' do
+     before :each do
+      @ce_role = FactoryGirl.create(:company_role, role: 'Employee')
+      @ca_role = FactoryGirl.create(:company_role, role: 'Company Admin')
+              
+      @employee = FactoryGirl.build(:company_person)
+      @employee.company_roles << @ce_role
+      @employee.save
+
+      @company_admin = FactoryGirl.build(:company_person)
+      @company_admin.company_roles << @ca_role
+      @company_admin.save
+                  
+      end
+      it 'company admin' do
+       expect(User.is_company_admin?(@company_admin.user)).to be true
+       end
+      it ' employee' do
+       expect(User.is_employee?(@employee.user)).to be true
+       end
+       
+     end   
+
+
+
 end
 
 
