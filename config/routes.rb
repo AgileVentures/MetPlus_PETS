@@ -1,15 +1,13 @@
 Rails.application.routes.draw do
 
 
-devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
+  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
                                      :sign_in => 'login' }
   
-
-
    devise_scope :user do
      #match  "/new"     => 'devise/registrations#new',   via: 'get'
-     match  '/login'   =>  'devise/sessions#new',       via: 'get'
-     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
+     match  '/login'      =>  'devise/sessions#new',       via: 'get'
+     match  '/logout'     => 'devise/sessions#destroy',    via: 'delete'
   end
 #  post '/login' => 'session#create'
 
