@@ -21,6 +21,9 @@ class Agency < ActiveRecord::Base
   end
   
   def self.this_agency(logged_in_user)
+    raise RunTimeError, 'Logged in user in not an agency person' unless
+            logged_in_user.actable.is_a? AgencyPerson
+            
     @@this_agency = @@this_agency || 
           Agency.find(logged_in_user.actable.agency_id)
   end
