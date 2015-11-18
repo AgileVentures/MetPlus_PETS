@@ -75,7 +75,6 @@ group :test do
   gem 'email_spec'
   gem 'poltergeist'
   gem "codeclimate-test-reporter"
-  gem 'selenium-webdriver'
 end
 
 group :production do
