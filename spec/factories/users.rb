@@ -3,6 +3,7 @@
 FactoryGirl.define do
 	sequence :email do |n|
 		"unique#{n}@gmail.com"
+
 	end
 
 	factory :user do
@@ -14,5 +15,4 @@ FactoryGirl.define do
 		phone '(123) 123 1234'
 		confirmed_at Date.today
 	end
-
 end
