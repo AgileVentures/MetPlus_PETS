@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) << :last_name    
     devise_parameter_sanitizer.for(:sign_up) << :phone
       
-    ["first_name","last_name", "phone"].each{ |field|
-      devise_parameter_sanitizer.for(:account_update)<<field.to_sym 
+    [:first_name,:last_name, :phone].each{ |field|
+      devise_parameter_sanitizer.for(:account_update)<<field  
     }
   
   end
