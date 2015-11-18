@@ -19,6 +19,8 @@ RSpec.describe Agency, type: :model do
     it { is_expected.to have_db_column :website }
     it { is_expected.to have_db_column :phone }
     it { is_expected.to have_db_column :email }
+    it { is_expected.to have_db_column :fax }
+    it { is_expected.to have_db_column :description }
   end
   
   describe 'Validations' do
