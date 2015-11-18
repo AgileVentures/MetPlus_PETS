@@ -31,3 +31,19 @@ end
 Then(/^I wait for (\d+) seconds$/) do |seconds|
   sleep seconds.to_i.seconds
 end
+
+When(/^I fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
+  fill_in field, with: value
+end
+
+When(/^I click the "([^"]*)" link$/) do |link|
+  click_link link
+end
+
+When(/^I click "([^"]*)" button$/) do |button|
+  click_button button
+end
+
+And(/^show me the page$/) do
+  save_and_open_page
+end

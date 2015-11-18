@@ -64,6 +64,8 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  
+  gem 'launchy'
 end
 
 group :test do
@@ -73,6 +75,7 @@ group :test do
   gem 'email_spec'
   gem 'poltergeist'
   gem "codeclimate-test-reporter"
+  gem 'selenium-webdriver'
 end
 
 group :production do

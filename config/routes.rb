@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  get 'agency_admin/home'
+
 devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
                                      :sign_in => 'login' }
   
@@ -20,6 +22,8 @@ devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
 
   # You can have the root of your site routed with "root"
   root 'main#index'
+  
+  get 'agency_admin/home'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -9,4 +9,46 @@ class Agency < ActiveRecord::Base
   validates :phone, :phone => true
   validates :email, :email => true
   validates :website, :website => true
+  validates :fax, :phone => true
+  
+  @@agency_admin = nil
+  @@agency_manager = nil
+  @@this_agency = nil
+    
+  def self.agency_admin(logged_in_user)
+    @@agency_admin = @@agency_admin || 
+          find_user_with_role(logged_in_user, :AA)
+  end
+  
+  def self.this_agency(logged_in_user)
+    @@this_agency = @@this_agency || 
+          Agency.find(logged_in_user.actable.agency_id)
+  end
+  
+  def self.agency_manager(logged_in_user)
+    @@agency_manager = @@agency_manager || 
+          find_user_with_role(logged_in_user, :AM)
+  end
+  
+  private
+  
+  def self.find_user_with_role(logged_in_user, role)
+    return nil if not logged_in_user
+    
+    count = 0
+    user = nil
+    this_agency(logged_in_user).agency_people.each do |ap|
+      ap.agency_roles.each do |ar|
+        if ar.role == AgencyRole::ROLE[role]
+          user = ap
+          count += 1
+        end
+      end
+    end
+    return user if count == 1
+    raise RunTimeError, 
+      "More than one #{Agency.Person::ROLE[role]}" if count >1
+    nil
+  end
+  
 end

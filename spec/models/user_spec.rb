@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
+  describe 'Fixtures' do
+    it 'should have a valid factory' do
+      expect(FactoryGirl.create(:user)).to be_valid
+      end
+  end
+  
    describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :first_name }

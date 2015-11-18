@@ -1,17 +1,44 @@
 require 'rails_helper'
 
 describe CompanyRole, type: :model do
+  describe 'Fixtures' do
+    it 'should have a valid factory' do
+      expect(FactoryGirl.build(:company_role)).to be_valid
+    end
+  end
+  
+  describe 'Associations' do
+    it { is_expected.to have_and_belong_to_many(:company_people).
+              join_table('company_people_roles')} 
+  end
 
-	FactoryGirl.create(:company_role, role: 'Human Resources')
-	FactoryGirl.create(:company_role, role: 'Company Manager')
-
-	it{ is_expected.to have_db_column :role } 
-	it{is_expected.to validate_presence_of(:role) }
-	it{ is_expected.to have_and_belong_to_many(:company_people).
-          join_table('company_people_roles')} 
+  describe 'Database schema' do
+    it { is_expected.to have_db_column :id }
+    it { is_expected.to have_db_column :role }
+  end
+  
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of :role }
+    it { is_expected.to validate_length_of(:role).is_at_most(40) }
+    it { is_expected.to validate_inclusion_of(:role).in_array(CompanyRole::ROLE.values)}
+  end
+  
+  describe 'Company Role' do
+    it 'is valid with all required fields' do
+      expect(CompanyRole.new(role: CompanyRole::ROLE[:EC])).to be_valid
+    end
+    it 'is invalid without an agency role' do
+      agency_role = AgencyRole.new()
+      agency_role.valid?
+      expect(agency_role.errors[:role]).to include("can't be blank")
+    end
+  end
+  
+	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EC])
+	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EA])
 
 	describe CompanyRole.select(:role).map(&:role) do 
-		it{should include('Human Resources', 'Company Manager')}
+		it {should include(CompanyRole::ROLE[:EC], CompanyRole::ROLE[:EA])}
 	end
 
 end

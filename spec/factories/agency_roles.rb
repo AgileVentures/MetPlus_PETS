@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :agency_role do
-    role "MyString"
+    role AgencyRole::ROLE[:JD]
   end
 
 end
