@@ -1,11 +1,14 @@
 %div{:class => 'container'}
   %div{:class => 'row'}
-    %h3 List of job opportunities
+    %h3 
+      %sapn{id: 'fw' } List of job opportunities
+      %span{id: 'pr', class: 'pull-right'}
+        Are you hiring?#{link_to " Become a hiring partner!", '#'}
   %div{:class => 'row'}
     %div{:class => 'panel panel-default'}
       %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
         %thead
-          %tr
+          %tr{class: 'text-center'}
             %td
               Title
             %td
@@ -28,3 +31,9 @@
                   Some information
                 - else
                   You need to login for more information
+    %div
+      For employers...
+    %br
+    %br
+    %div 
+      For jobseekers...
