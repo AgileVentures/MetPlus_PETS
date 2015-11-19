@@ -6,7 +6,6 @@ class AgencyRole < ActiveRecord::Base
   
   ROLE = {JD: 'Job Developer',
           CM: 'Case Manager',
-          AM: 'Agency Manager',
           AA: 'Agency Admin'}
           
   validates :role, inclusion: ROLE.values

@@ -9,7 +9,7 @@ Background: seed data added to database
   Given the following agency roles exist:
   | role  |
   | AA    |
-  | AM    |
+  | CM    |
   
   Given the following agencies exist:
   | name    | website     | phone        | email                  |
@@ -18,7 +18,7 @@ Background: seed data added to database
   Given the following agency people exist:
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
-  | MetPlus | AM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+  | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
   
   Given the following agency addresses exist:
   | agency  | city    | street              | zipcode |
@@ -31,7 +31,7 @@ Scenario: login as agency admin
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
   And I should see "Admin"
-  
+
 Scenario: go to main admin page
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
@@ -41,3 +41,9 @@ Scenario: go to main admin page
   And I should see "Agency Branches"
   And I should see "Agency Personnel"
   And I should see "Auto Drive"
+
+Scenario: non-admin does not see 'admin' in menu
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should not see "Admin"

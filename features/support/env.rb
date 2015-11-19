@@ -79,7 +79,7 @@ else
     #debug:       true
     )
   end
-  Capybara.default_driver    = :poltergeist
+  # Capybara.default_driver    = :poltergeist
   Capybara.javascript_driver = :poltergeist
 end
 

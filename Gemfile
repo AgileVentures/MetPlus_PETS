@@ -65,7 +65,6 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   
-  gem 'launchy'
 end
 
 group :test do
@@ -74,7 +73,9 @@ group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers', require: false
   gem 'email_spec'
   gem 'poltergeist'
-  gem "codeclimate-test-reporter"
+  gem 'codeclimate-test-reporter'
+  gem 'launchy'
+  gem 'selenium-webdriver' # Enables running cuke tests with browser (see env.rb)
 end
 
 group :production do

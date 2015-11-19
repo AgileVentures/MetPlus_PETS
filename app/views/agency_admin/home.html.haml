@@ -4,7 +4,7 @@
   %div{class: 'div_align_left', id: 'bold_text'}
     Name:
     %br
-    Manager:
+    Administrator:
     %br
     Website:
     %br
@@ -18,7 +18,7 @@
   %div{class: 'div_align_right'}
     = @agency.name
     %br
-    = "#{@agency_manager.first_name} #{@agency_manager.last_name}"
+    = "#{@agency_admin.first_name} #{@agency_admin.last_name}"
     %br
     = @agency.website
     %br

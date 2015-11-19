@@ -12,25 +12,25 @@ class Agency < ActiveRecord::Base
   validates :fax, :phone => true
   
   @@agency_admin = nil
-  @@agency_manager = nil
   @@this_agency = nil
-    
+  
+  # For the following methods, 'logged_in_user' can be either an
+  # AgencyPerson object, or the User object associated with an AgencyPerson
+  # In either case, this object needs to represent:
+  #   an AgencyPerson object (directly or via user.actable), and,
+  #   that person must be logged in
+  
   def self.agency_admin(logged_in_user)
     @@agency_admin = @@agency_admin || 
           find_user_with_role(logged_in_user, :AA)
   end
   
   def self.this_agency(logged_in_user)
-    raise RunTimeError, 'Logged in user in not an agency person' unless
+    raise RunTimeError, 'Logged in user is not an agency person' unless
             logged_in_user.actable.is_a? AgencyPerson
             
     @@this_agency = @@this_agency || 
           Agency.find(logged_in_user.actable.agency_id)
-  end
-  
-  def self.agency_manager(logged_in_user)
-    @@agency_manager = @@agency_manager || 
-          find_user_with_role(logged_in_user, :AM)
   end
   
   private

@@ -119,7 +119,7 @@ agency_person.save!
 agency_person = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts', 
                       agency_id: agency.id, email: 'chet@metplus.org', 
                       password: 'qwerty123', confirmed_at: Time.now)
-agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AM])
+agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
 

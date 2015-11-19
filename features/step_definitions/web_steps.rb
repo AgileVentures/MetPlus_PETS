@@ -15,8 +15,12 @@ def search_text text
     end
   end
 end
-Then(/^I should see "([^"]*)"$/) do |text|
-  search_text text
+Then(/^I should( not)? see "([^"]*)"$/) do |not_see, string|
+  unless not_see
+    expect(page.body).to have_text string
+  else
+    expect(page.body).to_not have_text string
+  end
 end
 
 And(/^I press "([^"]*)"$/) do |name|
