@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
       person = CompanyPerson.find user.actable_id 
       person.company_roles.each do |ca|
        return true if ca.role == "Company Admin" 
-      end
+       end
     end
     
     def self.is_employee?(user)

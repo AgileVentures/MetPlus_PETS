@@ -84,19 +84,25 @@ RSpec.describe User, type: :model do
      end
      it 'job seeker' do
        expect(User.is_job_seeker?(@job_seeker.user)).to be true
+       expect(User.is_job_seeker?(@job_developer.user)).not_to be true
      end
      it 'job developer' do
        expect(User.is_job_developer?(@job_developer.user)).to be true
+       expect(User.is_job_developer?(@job_seeker.user)).not_to be true
      end
      it 'case manager' do
        expect(User.is_case_manager?(@case_manager.user)).to be true
+       expect(User.is_case_manager?(@job_seeker.user)).not_to be true
      end
      it 'agency admin' do
        expect(User.is_agency_admin?(@agency_admin.user)).to be true
+       expect(User.is_agency_admin?(@case_manager.user)).not_to be true
      end
      it 'agency manager (also agency_admin role)' do
        expect(User.is_agency_manager?(@agency_manager.user)).to be true
        expect(User.is_agency_admin?(@agency_manager.user)).to be true
+       expect(User.is_agency_manager?(@job_developer.user)).not_to be true
+       expect(User.is_agency_admin?(@case_manager.user)).not_to be true
      end
    end
    
@@ -114,15 +120,20 @@ RSpec.describe User, type: :model do
       @company_admin.save
                   
       end
+      
       it 'company admin' do
-       expect(User.is_company_admin?(@company_admin.user)).to be true
+         expect(User.is_company_admin?(@company_admin.user)).to be true
+         expect(User.is_company_admin?(@employee.user)).not_to be true
+            
+      end
+           
+       it 'employee' do
+         expect(User.is_employee?(@employee.user)).to be true
+         expect(User.is_employee?(@company_admin.user)).not_to be true
+        
        end
-      it ' employee' do
-       expect(User.is_employee?(@employee.user)).to be true
-       end
-       
-     end   
-
+         
+   end
 
 
 end
