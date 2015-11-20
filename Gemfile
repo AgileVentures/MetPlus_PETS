@@ -29,12 +29,15 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-
 gem 'devise'
 
 gem 'figaro'
 
+<<<<<<< HEAD
 gem 'cancancan', '~>1.10'
+=======
+gem 'cancancan', '~> 1.10'
+>>>>>>> user-auth
 
 
 # Use Unicorn as the app server
