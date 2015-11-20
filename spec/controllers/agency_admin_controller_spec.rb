@@ -35,28 +35,28 @@ RSpec.describe AgencyAdminController, type: :controller do
     
     it 'this agency - from agency admin' do
       sign_in @agency_admin
-      expect(Agency.this_agency(@agency_admin)).to eq @agency
+      expect(Agency.this_agency(subject.current_user)).to eq @agency
     end
     it 'this agency - from case manager' do
       sign_in @case_manager
-      expect(Agency.this_agency(@case_manager)).to eq @agency
+      expect(Agency.this_agency(subject.current_user)).to eq @agency
     end
     it 'this agency - from job developer' do
       sign_in @job_developer
-      expect(Agency.this_agency(@job_developer)).to eq @agency
+      expect(Agency.this_agency(subject.current_user)).to eq @agency
     end
     
     it 'agency manager - from agency admin' do
       sign_in @agency_admin
-      expect(Agency.agency_admin(@agency_admin)).to eq @agency_admin
+      expect(Agency.agency_admin(subject.current_user)).to eq @agency_admin
     end
     it 'agency manager - from case manager' do
       sign_in @case_manager
-      expect(Agency.agency_admin(@case_manager)).to eq @agency_admin
+      expect(Agency.agency_admin(subject.current_user)).to eq @agency_admin
     end
     it 'agency manager - from job developer' do
       sign_in @job_developer
-      expect(Agency.agency_admin(@job_developer)).to eq @agency_admin
+      expect(Agency.agency_admin(subject.current_user)).to eq @agency_admin
     end
 
   end
