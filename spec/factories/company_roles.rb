@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :company_role do
-		role "Human Resources"
+   role "My string"
   end
 
 end
