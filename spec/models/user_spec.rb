@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-<<<<<<< HEAD
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
@@ -63,10 +62,9 @@ RSpec.describe User, type: :model do
    describe 'roles determination' do
      before :each do
        @job_seeker = FactoryGirl.create(:job_seeker)
-       @jd_role = FactoryGirl.create(:agency_role, role: 'Job Developer')
-       @am_role = FactoryGirl.create(:agency_role, role: 'Agency Manager')
-       @cm_role = FactoryGirl.create(:agency_role, role: 'Case Manager')
-       @aa_role = FactoryGirl.create(:agency_role, role: 'Agency Admin')
+       @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
+       @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+       @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
        
        @job_developer = FactoryGirl.build(:agency_person)
        @job_developer.agency_roles << @jd_role
@@ -79,79 +77,63 @@ RSpec.describe User, type: :model do
        @agency_admin = FactoryGirl.create(:agency_person)
        @agency_admin.agency_roles << @aa_role
        @agency_admin.save
-                  
-       @agency_manager = FactoryGirl.build(:agency_person)
-       @agency_manager.agency_roles << [@am_role, @aa_role]       
-       @agency_manager.save
+       
+       @cm_and_jd = FactoryGirl.create(:agency_person)
+       @cm_and_jd.agency_roles << [@cm_role, @jd_role]
+       @cm_and_jd.save
      end
      it 'job seeker' do
        expect(User.is_job_seeker?(@job_seeker.user)).to be true
        expect(User.is_job_seeker?(@job_developer.user)).not_to be true
        expect(User.is_job_seeker?(@case_manager.user)).not_to be true
        expect(User.is_job_seeker?(@agency_admin.user)).not_to be true
-       expect(User.is_job_seeker?(@agency_manager.user)).not_to be true
      end
      it 'job developer' do
        expect(User.is_job_developer?(@job_developer.user)).to be true
        expect(User.is_job_developer?(@job_seeker.user)).not_to be true
        expect(User.is_job_developer?(@case_manager.user)).not_to be true
        expect(User.is_job_developer?(@agency_admin.user)).not_to be true
-       expect(User.is_job_developer?(@agency_manager.user)).not_to be true
      end
      it 'case manager' do
        expect(User.is_case_manager?(@case_manager.user)).to be true
        expect(User.is_case_manager?(@job_seeker.user)).not_to be true
        expect(User.is_case_manager?(@job_developer.user)).not_to be true
        expect(User.is_case_manager?(@agency_admin.user)).not_to be true
-       expect(User.is_case_manager?(@agency_manager.user)).not_to be true
-
      end
      it 'agency admin' do
        expect(User.is_agency_admin?(@agency_admin.user)).to be true
        expect(User.is_agency_admin?(@case_manager.user)).not_to be true
        expect(User.is_agency_admin?(@job_developer.user)).not_to be true
        expect(User.is_agency_admin?(@job_seeker.user)).not_to be true
-       expect(User.is_agency_admin?(@agency_manager.user)).to be true
      end
-     it 'agency manager (also agency_admin role)' do
-       expect(User.is_agency_manager?(@agency_manager.user)).to be true
-       expect(User.is_agency_admin?(@agency_manager.user)).to be true
-       expect(User.is_agency_manager?(@job_developer.user)).not_to be true
-       expect(User.is_agency_admin?(@case_manager.user)).not_to be true
-       expect(User.is_agency_admin?(@job_seeker.user)).not_to be true
+     it 'case manager is also a job developer' do
+       expect(User.is_case_manager?(@cm_and_jd.user)).to be true
+       expect(User.is_job_developer?(@cm_and_jd.user)).to be true
      end
    end
    
    describe 'company roles determination' do
      before :each do
-      @ce_role = FactoryGirl.create(:company_role, role: 'Employee')
-      @ca_role = FactoryGirl.create(:company_role, role: 'Company Admin')
+      @ec_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EC])
+      @ea_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EA])
               
-      @employee = FactoryGirl.build(:company_person)
-      @employee.company_roles << @ce_role
-      @employee.save
+      @company_contact = FactoryGirl.build(:company_person)
+      @company_contact.company_roles << @ec_role
+      @company_contact.save
 
       @company_admin = FactoryGirl.build(:company_person)
-      @company_admin.company_roles << @ca_role
-      @company_admin.save
-                  
-      end
-      
-      it 'company admin' do
-         expect(User.is_company_admin?(@company_admin.user)).to be true
-         expect(User.is_company_admin?(@employee.user)).not_to be true
-            
-      end
-           
-       it 'employee' do
-         expect(User.is_employee?(@employee.user)).to be true
-         expect(User.is_employee?(@company_admin.user)).not_to be true
-        
-       end
-         
-   end
-
-
+      @company_admin.company_roles << @ea_role
+      @company_admin.save       
+    end
+    it 'company admin' do
+      expect(User.is_company_admin?(@company_admin.user)).to be true
+      expect(User.is_company_admin?(@company_contact.user)).not_to be true
+    end
+    it 'company contact' do
+      expect(User.is_company_contact?(@company_contact.user)).to be true
+      expect(User.is_company_contact?(@company_admin.user)).not_to be true
+    end
+  end
 end
 
 
