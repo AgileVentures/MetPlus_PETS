@@ -1,8 +1,8 @@
-When(/^I go to the "(.+)" page$/) do |page|
+When(/^I go to the (.+) page$/) do |page|
   case page
     when 'JobSeeker Registration'
       visit new_jobseeker_path
-    when 'homepage'
+    when 'home'
       visit root_path
     when /activation for user '.+'/
       user = page.match(/'(.+)'/)
@@ -14,6 +14,6 @@ When(/^I go to the "(.+)" page$/) do |page|
   end
 end
 
-Given(/I am on the (\w+)$/) do |page|
+Given(/I am on the (\w+) page$/) do |page|
   step "I go to the #{page} page"
 end
