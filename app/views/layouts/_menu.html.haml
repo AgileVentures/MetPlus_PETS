@@ -10,7 +10,10 @@
           %a{:href => '#'} About
         %li{:class => 'menu-item'}
           %a{:href => '#'} Contact
-        %li
+        %li{:class => 'menu-item'}
+          - if current_user_agency_admin?
+            = link_to('Admin', agency_admin_home_path)
+
       %ul{:class => 'nav navbar-nav navbar-right'}
         - if !user_signed_in?
           %li

@@ -15,8 +15,12 @@ def search_text text
     end
   end
 end
-Then(/^I should see "([^"]*)"$/) do |text|
-  search_text text
+Then(/^I should( not)? see "([^"]*)"$/) do |not_see, string|
+  unless not_see
+    expect(page.body).to have_text string
+  else
+    expect(page.body).to_not have_text string
+  end
 end
 
 And(/^I press "([^"]*)"$/) do |name|
@@ -30,4 +34,20 @@ end
 
 Then(/^I wait for (\d+) seconds$/) do |seconds|
   sleep seconds.to_i.seconds
+end
+
+When(/^I fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
+  fill_in field, with: value
+end
+
+When(/^I click the "([^"]*)" link$/) do |link|
+  click_link link
+end
+
+When(/^I click "([^"]*)" button$/) do |button|
+  click_button button
+end
+
+And(/^show me the page$/) do
+  save_and_open_page
 end
