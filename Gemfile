@@ -35,6 +35,7 @@ gem 'devise'
 gem 'figaro'
 
 
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

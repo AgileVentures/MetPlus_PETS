@@ -80,17 +80,15 @@
     background: #12aee2;
     color: #fff;
 }
-
-h3 span{
-    margin-bottom: 40px;
-}
-#fw{
+#list_header{
+    margin: 25px 0 25px 0;
     font-weight: 300;
 }
-span#pr{
-    font-size: .6em;
-    text-decoration: none;
+
+#hir_header{
+    margin: 25px 0 25px 0;
 }
+
 .content {
     padding-top: 50px;
 }
