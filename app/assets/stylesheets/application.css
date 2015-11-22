@@ -27,25 +27,6 @@
     border-radius: 10px;
 }
 
-
-/*.btn-default {
-  color: #fff;
-  background-color: #286090;
-  border-color: #286090;
-}
-.btn-default:focus,
-.btn-default.focus {
-  color: #fff;
-  background-color: #0C7BA1;
-  border-color: #0C7BA1;
-}
-.btn-default:hover {
-  color: #fff;
-  background-color: #0C7BA1;
-  border-color: #0C7BA1;
-}*/
-
-
 #loading {
     position: absolute; width: 100%; height: 100%;
 }
@@ -53,35 +34,17 @@
 #login_form {
     padding-top: 12px;
 }
-.navbar {
-    background: #0C7BA1;
+
+.col-md-8.col-lg-8{
+   padding-left:  0;
 }
-.navbar-default .navbar-nav > .active > a {
-    background: #08617f;
-    color: #FFFFFF;
-}
-.navbar-default .navbar-nav li > a:hover {
-    background: #12aee2;
-    color: #fff;
+.col-md-4.col-lg-4 {
+    padding-right: 0;
 }
 
-.navbar-default .navbar-nav li > a{
-    color: #FFFFFF;
-}
-.button-menu{
-    padding-top: 16px;
-    padding-left: 1px;
-}
-.navbar-default .navbar-brand {
-    color: #FFFFFF;
-
-}
-.navbar-header.navbar-header a:hover {
-    background: #12aee2;
-    color: #fff;
-}
 #list_header{
-    margin: 25px 0 25px 0;
+    margin-top: 25px;
+    margin-bottom: 25px;
     font-weight: 300;
 }
 
@@ -89,8 +52,25 @@
     margin: 25px 0 25px 0;
 }
 
+.navbar {
+    background: #0C7BA1;
+}
+
+.navbar-default .navbar-nav li > a{
+    color: #FFFFFF;
+}
+
 .content {
     padding-top: 50px;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+
+.button-menu{
+    padding-top: 16px;
+    padding-left: 1px;
 }
 
 .footer {
@@ -101,43 +81,27 @@
     height: 20px;
     background-color: #f5f5f5;
 }
-.modal-popup {
-    display: none;
-    background: #0C7BA1;
-    padding: 10px;
-    border: 2px solid #ddd;
-    float: inherit;
-    font-size: 1.2em;
-    position: fixed; /* or absolute */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 99999;
-    box-shadow: 0px 0px 20px #999;
-    /* CSS3 */
-    -moz-box-shadow: 0px 0px 20px #999;
-    /* Firefox */
-    -webkit-box-shadow: 0px 0px 20px #999;
-    /* Safari, Chrome */
-    border-radius: 5px 5px 5px 5px;
-    -moz-border-radius: 5px;
-    /* Firefox */
-    -webkit-border-radius: 5px;
-    /* Safari, Chrome */;
-
+.navbar-default .navbar-text > a {
+    color: yellow;
 }
-.form_div {
-    background: #fcf9f9;
-    border-radius: 25px;
-    padding: 5px;
-}
-
-
 .navbar-default .navbar-text{
     position: relative;
     display: block;
     color: white;
 }
-.navbar-default .navbar-text > a {
-    color: yellow;
+
+.navbar-default .navbar-nav li > a:hover {
+    background: #12aee2;
+    color: #fff;
+}
+
+.navbar-default .navbar-header a:hover {
+    background: #12aee2;
+    color: #fff;
+}
+
+.form_div {
+    background: #fcf9f9;
+    border-radius: 25px;
+    padding: 5px;
 }
