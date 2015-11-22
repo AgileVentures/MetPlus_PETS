@@ -1,5 +1,5 @@
 class AgencyPerson < ActiveRecord::Base
-  acts_as :user, validates_actable: false
+  acts_as :user
   
   belongs_to :agency
   belongs_to :address
