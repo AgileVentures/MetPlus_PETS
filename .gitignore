@@ -27,3 +27,6 @@
 
 # Ignore Editor files
 .idea/*
+
+
+.DS_Store
