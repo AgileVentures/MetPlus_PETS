@@ -48,6 +48,13 @@ When(/^I click "([^"]*)" button$/) do |button|
   click_button button
 end
 
+When(/^I fill in the fields:$/) do |table|
+  # table is a table.hashes.keys # => [:First name, :John]
+  table.raw.each do |field, value|
+    fill_in field, :with => value
+  end
+end
+
 And(/^show me the page$/) do
   save_and_open_page
 end
