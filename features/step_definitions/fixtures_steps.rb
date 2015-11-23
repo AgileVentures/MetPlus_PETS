@@ -1,3 +1,10 @@
+Given(/^the following (.+) records:$/) do |factory, table|
+  table.hashes.each do |hash|
+    FactoryGirl.create(factory, hash)
+  end
+
+end
+
 Given(/^the following agency roles exist:$/) do |table|
   table.hashes.each do |hash|
     hash['role'] = AgencyRole::ROLE[hash['role'].to_sym]
