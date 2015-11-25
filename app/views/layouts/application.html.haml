@@ -19,6 +19,13 @@
           - flash.each do |key, value|
             %div{:class => "alert #{flash_to_css key}"}
               = value
+      - if @model_errors && @model_errors.any?
+        %div{id: 'errors_explanation'}
+          %h4= pluralize(@model_errors.count, 'error') + |
+               " prevented this record from being saved:" |
+          %ul
+            - @model_errors.full_messages.each do |msg|
+              %li= msg
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'

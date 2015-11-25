@@ -105,3 +105,39 @@
     border-radius: 25px;
     padding: 5px;
 }
+
+.navbar-default .navbar-text{
+    position: relative;
+    display: block;
+    color: white;
+}
+.navbar-default .navbar-text > a {
+    color: yellow;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errors_explanation {
+  background: red;
+  margin: 1em 0;
+  padding: 4px;
+}
+
+label { 
+  display: inline-block; 
+  float: left;
+  clear: left;
+  /*width: 200px;*/
+  width: 15%;
+  text-align: right; 
+}
+
+input, textarea {
+  display: inline-block;
+  margin-left: 10px;
+  /*float: left;*/
+}

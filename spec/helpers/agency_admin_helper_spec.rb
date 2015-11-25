@@ -1,15 +1,11 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the AgencyAdminHelper. For example:
-#
-# describe AgencyAdminHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe AgencyAdminHelper, type: :helper do
-  # pending "add some examples to (or delete) #{__FILE__}"
+  context 'person_full_name(person)' do
+    it 'returns full name of person' do
+      agency_person = FactoryGirl.build(:agency_person)
+      expect(person_full_name(agency_person)).
+          to eq "#{agency_person.first_name} #{agency_person.last_name}"
+    end
+  end
 end

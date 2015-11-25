@@ -2,10 +2,33 @@ require 'rails_helper'
 
 RSpec.describe AgencyAdminController, type: :controller do
 
-  context 'Routing' do
+  describe "GET #home" do
     it 'routes GET /agency_admin/home to agency_admin#home' do
       expect(get: '/agency_admin/home').to route_to(
             controller: 'agency_admin', action: 'home')
+    end
+    context 'controller actions and helper' do
+      before(:each) do
+        @agency = FactoryGirl.create(:agency)
+        @agency_admin = FactoryGirl.build(:agency_person, agency: @agency)
+        @agency_admin.agency_roles << 
+              FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+        @agency_admin.save!
+        sign_in @agency_admin
+        get :home
+      end
+      it 'assigns @agency for view' do
+        expect(assigns(:agency)).to eq @agency
+      end
+      it 'assigns @agency_admin for view' do
+        expect(assigns(:agency_admin)).to eq @agency_admin
+      end
+      it 'renders home template' do
+        expect(response).to render_template('home')
+      end
+      it "returns success" do
+        expect(response).to have_http_status(:success)
+      end
     end
   end
   

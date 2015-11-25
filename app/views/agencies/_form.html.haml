@@ -1,0 +1,24 @@
+= button_to 'Cancel', agency_admin_home_path, method: :get 
+
+%div{class: 'form_div'}
+  = form_tag agency_path(agency), :method => :put do
+
+    = label :agency, :name, 'Name'
+    = text_field :agency, :name, size: 30
+    %br
+    = label :agency, :website, 'Website'
+    = text_field :agency, :website, size: 30
+    %br
+    = label :agency, :phone, 'Phone'
+    = phone_field :agency, :phone, size: 30
+    %br
+    = label :agency, :fax, 'Fax'
+    = phone_field :agency, :fax, size: 30
+    %br
+    = label :agency, :email, 'Email'
+    = email_field :agency, :email, size: 30
+    %br
+    = label :agency, :description, 'Description'
+    = text_area :agency, :description, cols: 80, rows: 10
+    %br
+    = submit_tag 'Update Agency'
