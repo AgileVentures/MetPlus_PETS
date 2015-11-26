@@ -102,8 +102,8 @@
 
 .form_div {
     background: #fcf9f9;
-    border-radius: 25px;
     padding: 5px;
+    overflow: hidden;
 }
 
 .navbar-default .navbar-text{
@@ -125,6 +125,10 @@
   background: red;
   margin: 1em 0;
   padding: 4px;
+}
+
+.form_button {
+  float: right;
 }
 
 label { 

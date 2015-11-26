@@ -1,6 +1,5 @@
-= button_to 'Cancel', agency_admin_home_path, method: :get 
-
 %div{class: 'form_div'}
+  = button_to 'Cancel', agency_admin_home_path, method: :get, class: 'form_button'
   = form_tag agency_path(agency), :method => :put do
 
     = label :agency, :name, 'Name'
@@ -19,6 +18,6 @@
     = email_field :agency, :email, size: 30
     %br
     = label :agency, :description, 'Description'
-    = text_area :agency, :description, cols: 80, rows: 10
-    %br
-    = submit_tag 'Update Agency'
+    = text_area :agency, :description, cols: 90, rows: 5
+    
+    = submit_tag 'Update Agency', class: 'form_button'
