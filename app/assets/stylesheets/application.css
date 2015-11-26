@@ -35,8 +35,15 @@
     padding-top: 12px;
 }
 
+/*homepage css*/
 .col-md-8.col-lg-8{
    padding-left:  0;
+}
+.col-xs-4{
+    padding-left: 0;
+}
+.col-xs-8{
+    padding-right: 0;
 }
 .col-md-4.col-lg-4 {
     padding-right: 0;
@@ -105,3 +112,73 @@
     border-radius: 25px;
     padding: 5px;
 }
+/*end of homepage css*/
+
+/*session#new css*/
+.fa.fa-lg.fa-long-arrow-right{
+    color: #fff;
+    padding-top: 6px;
+   
+}
+.button-group > label{
+    padding-left: 10px;
+    font-weight: 0;
+}
+.checkbox-inline{
+    margin-top: 2px;
+}
+.button-group{
+    padding-bottom: 10px;
+}
+.button-group label{
+     color: #666;
+     font-family: "ArialMT","Arial";
+}
+.fa.fa-minus{
+    font-size: 10px;
+    color:#666;
+}
+.col-xs-6 {
+    top: 80px;
+}
+#user_remember_me{
+    margin-left: 10px;
+    margin-top: -2px;
+
+}
+.form-group label{
+    font-family: "ArialMT", "Arial";
+    font-weight: 400;
+    font-size: 13px;
+    line-height: normal;
+}
+
+.form-control#user_email{
+    width: 82%;
+}
+#pas_forgot{
+    margin-left: 10px;
+    font-size: 1em;
+}
+.jumbotron p{
+    font-size: 1em;
+    
+}
+.form-control#user_password{
+    width: 42%;
+    display: inline;
+    padding-right: 20px;
+}
+.btn.btn-primary{
+    width: 140px;
+    line-height: 25px;
+}
+.jumbotron h2#login-text {
+   font-family:  "Arial-BoldMT","Arial Bold","Arial";
+   font-weight: 700;
+   font-style: normal;
+   font-size: 32px;
+   color: #666;
+   position: relative;
+}
+/*end of session#new css*/

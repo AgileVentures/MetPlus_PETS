@@ -16,17 +16,17 @@
 #= require_self
 #= require_tree .
 
-@ajaxLoadingScreen = (formName) ->
-  $(document).bind('ajaxStart', formName, ( (event, jqxhr, settings, exception) ->
-    $('#loading').show()
-    $(formName).find('.submit-button').attr('disabled', 'true')
-  ))
-  $(document).bind('ajaxComplete', formName, ( ->
-    $('#loading').hide() ))
+# @ajaxLoadingScreen = (formName) ->
+#   $(document).bind('ajaxStart', formName, ( (event, jqxhr, settings, exception) ->
+#     $('#loading').show()
+#     $(formName).find('.submit-button').attr('disabled', 'true')
+#   ))
+#   $(document).bind('ajaxComplete', formName, ( ->
+#     $('#loading').hide() ))
 
-@postponeMessageRemoval = (timeout) ->
-  setTimeout ( -> $('#messages').remove()),timeout
+# @postponeMessageRemoval = (timeout) ->
+#   setTimeout ( -> $('#messages').remove()),timeout
 
-$ ->
-  postponeMessageRemoval(5000)
+# $ ->
+#   postponeMessageRemoval(5000)
 
