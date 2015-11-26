@@ -51,12 +51,12 @@
 
 #list_header{
     margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 12px;
     font-weight: 300;
 }
 
 #hir_header{
-    margin: 25px 0 25px 0;
+    margin: 25px 0 12px 0;
 }
 
 .navbar {
@@ -159,6 +159,9 @@
 #pas_forgot{
     margin-left: 10px;
     font-size: 1em;
+}
+.jumbotron {
+    padding-top: 40px;
 }
 .jumbotron p{
     font-size: 1em;
