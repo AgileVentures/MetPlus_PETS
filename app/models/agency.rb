@@ -1,7 +1,6 @@
 class Agency < ActiveRecord::Base
   has_many :agency_people
   has_many :branches
-  has_many :addresses, through: :branches
   has_and_belongs_to_many :companies
   
   validates_presence_of :name, :website, :phone, :email

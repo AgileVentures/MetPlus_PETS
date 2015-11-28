@@ -10,7 +10,6 @@ RSpec.describe Agency, type: :model do
   describe 'Associations' do
     it { is_expected.to have_many :agency_people }
     it { is_expected.to have_many :branches }
-    it { is_expected.to have_many(:addresses).through(:branches) }
     it { is_expected.to have_and_belong_to_many :companies }
   end
   
