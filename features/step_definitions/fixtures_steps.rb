@@ -35,11 +35,12 @@ Given(/^the following agency people exist:$/) do |table|
   end
 end
 
-Given(/^the following agency addresses exist:$/) do |table|
+Given(/^the following agency branches exist:$/) do |table|
   table.hashes.each do |hash|
     agency_name = hash.delete 'agency'
     agency = Agency.find_by_name(agency_name)
-    agency.addresses << Address.create!(hash)
-    agency.save
+    branch_code = hash.delete 'code'
+    branch = Branch.create(code: branch_code, agency: agency)
+    branch.address = Address.create!(hash)
   end
 end

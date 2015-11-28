@@ -104,30 +104,42 @@ CompanyRole::ROLE.each_value do |company_role|
   CompanyRole.create(role: company_role)
 end
 
-# Create a default agency, agency admin user and agency manager
+# Create a default agency, agency branches, agency admin and agency manager
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
           phone: '111 222 3333', fax: '333 444 5555',
           email: 'pets_admin@metplus.org',
           description: 'Michigan Employment & Training Plus, (MET|PLUS) is a 501 (c) 3, Vocational Training non-profit organization that strives to assist Michigan jobseekers with invaluable training and job development that will put them on a career path to success.')
 
+branch = Branch.create(code: '001', agency: agency)
+branch.address = Address.create!(city: 'Detroit', 
+            street: '123 Main Street', zipcode: 48201)
+            
+branch = Branch.create(code: '002', agency: agency)
+branch.address = Address.create!(city: 'Detroit', 
+            street: '456 Sullivan Street', zipcode: 48204)
+            
+branch = Branch.create(code: '003', agency: agency)
+branch.address = Address.create!(city: 'Detroit', 
+            street: '3 Auto Drive', zipcode: 48206)
+
 agency_person = AgencyPerson.new(first_name: 'John', last_name: 'Smith', 
                       agency_id: agency.id, email: 'pets_admin@metplus.org', 
-                      password: 'qwerty123', confirmed_at: Time.now)
+                      password: 'qwerty123', confirmed_at: Time.now,
+                      branch_id: agency.branches[0].id)
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
 agency_person.save!
 
 agency_person = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts', 
                       agency_id: agency.id, email: 'chet@metplus.org', 
-                      password: 'qwerty123', confirmed_at: Time.now)
+                      password: 'qwerty123', confirmed_at: Time.now,
+                      branch_id: agency.branches[1].id)
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
 
-# Create some agency branch addresses
-agency.addresses << Address.create!(city: 'Detroit', 
-            street: '123 Main Street', zipcode: 48201)
-agency.addresses << Address.create!(city: 'Detroit', 
-            street: '456 Sullivan Street', zipcode: 48204)
-agency.addresses << Address.create!(city: 'Detroit', 
-            street: '3 Auto Drive', zipcode: 48206)
-agency.save!
+agency_person = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe', 
+                      agency_id: agency.id, email: 'jane@metplus.org', 
+                      password: 'qwerty123', confirmed_at: Time.now,
+                      branch_id: agency.branches[2].id)
+agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+agency_person.save!

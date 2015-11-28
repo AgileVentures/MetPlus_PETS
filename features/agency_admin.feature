@@ -20,11 +20,11 @@ Background: seed data added to database
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
   
-  Given the following agency addresses exist:
-  | agency  | city    | street              | zipcode |
-  | MetPlus | Detroit | 123 Main Street     | 48201   |
-  | MetPlus | Detroit | 456 Sullivan Street | 48204   |
-  | MetPlus | Detroit | 3 Auto Drive        | 48206   |
+  Given the following agency branches exist:
+  | agency  | city    | street              | zipcode | code |
+  | MetPlus | Detroit | 123 Main Street     | 48201   | 001  |
+  | MetPlus | Detroit | 456 Sullivan Street | 48204   | 002  |
+  | MetPlus | Detroit | 3 Auto Drive        | 48206   | 003  |
 
 Scenario: login as agency admin
   Given I am on the home page
