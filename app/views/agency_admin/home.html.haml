@@ -16,30 +16,10 @@
   
 %h3 Agency Branches
 
-%div{:class => 'row'}
-  %div{:class => 'panel panel-default'}
-    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
-      %thead
-        %tr
-          %td
-            Code
-          %td
-            City
-          %td
-            Street
-          %td
-            Zipcode
-      %tbody
-        - @agency.branches.each do |branch|
-          %tr
-            %td
-              = branch.code
-            %td
-              = branch.address.city
-            %td
-              = branch.address.street
-            %td
-              = branch.address.zipcode
+- if @agency.branches.empty? 
+  There are no branches
+- else
+  = render partial: 'branches/branches', object: @agency.branches 
                   
 %h3 Agency Personnel
 
@@ -63,5 +43,3 @@
               = person.last_name
             %td
               = person.agency_roles.pluck(:role).join(', ')
-
-= button_to 'Edit' #, movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'

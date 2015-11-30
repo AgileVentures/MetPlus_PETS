@@ -83,3 +83,9 @@ Scenario: errors for edit agency information
   And I should see "Phone can't be blank"
   And I should see "Phone incorrect format"
   And I should see "Website is not a valid website address"
+  
+Scenario: edit agency information
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  And I click the "Admin" link
+  Then I click the "Edit Branches" link
