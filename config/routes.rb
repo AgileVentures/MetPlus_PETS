@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
   end
   
-  resources :agencies, path: 'admin/agencies', only: [:edit, :update]
+  resources :agencies, path: '/admin/agencies', only: [:edit, :update]
   
   root 'main#index'
   

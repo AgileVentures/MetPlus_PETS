@@ -32,7 +32,7 @@ RSpec.describe AgenciesController, type: :controller do
         expect(response).to have_http_status 302
       end
       it 'sets flash message' do
-        expect(flash[:notice]).to eq "Agency was successfully updated."
+        expect(flash[:success]).to eq "Agency was successfully updated."
       end
       it 'redirects to agency admin home' do
         expect(response).to redirect_to(agency_admin_home_path)

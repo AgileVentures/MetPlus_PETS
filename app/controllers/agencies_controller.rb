@@ -9,7 +9,7 @@ class AgenciesController < ApplicationController
     @agency.assign_attributes(agency_params)
     if @agency.valid?
       @agency.save
-      flash[:notice] = "Agency was successfully updated."
+      flash[:success] = "Agency was successfully updated."
       redirect_to agency_admin_home_path
     else
       @model_errors = @agency.errors
