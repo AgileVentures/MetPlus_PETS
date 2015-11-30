@@ -1,34 +1,18 @@
 %h2 PETS Administration
 %h3 Agency Information
+
+= render partial: 'agencies/agency', object: @agency
+    
 %div{:class => 'container'}
   %div{class: 'div_align_left', id: 'bold_text'}
-    Name:
     %br
-    Administrator:
+    Agency Admin:
+    = @agency_admin.full_name
+    
+%div{:class => 'container'}
+  %div{class: 'div_align_right', id: 'bold_text'}
     %br
-    Website:
-    %br
-    Phone:
-    %br
-    Fax:
-    %br
-    Email:
-    %br
-    Description:
-  %div{class: 'div_align_right'}
-    = @agency.name
-    %br
-    = "#{@agency_admin.first_name} #{@agency_admin.last_name}"
-    %br
-    = @agency.website
-    %br
-    = @agency.phone
-    %br
-    = @agency.fax
-    %br
-    = @agency.email
-    %br
-    = truncate(@agency.description, length: 300)
+    = link_to 'Edit Agency', edit_agency_path(@agency)
   
 %h3 Agency Branches
 
@@ -75,3 +59,5 @@
               = person.last_name
             %td
               = person.agency_roles.pluck(:role).join(', ')
+
+= button_to 'Edit' #, movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'

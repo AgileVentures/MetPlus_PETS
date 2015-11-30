@@ -109,8 +109,48 @@
 
 .form_div {
     background: #fcf9f9;
-    border-radius: 25px;
     padding: 5px;
+    overflow: hidden;
+}
+
+.navbar-default .navbar-text{
+    position: relative;
+    display: block;
+    color: white;
+}
+.navbar-default .navbar-text > a {
+    color: yellow;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errors_explanation {
+  background: red;
+  margin: 1em 0;
+  padding: 4px;
+}
+
+.form_button {
+  float: right;
+}
+
+label { 
+  display: inline-block; 
+  float: left;
+  clear: left;
+  /*width: 200px;*/
+  width: 15%;
+  text-align: right; 
+}
+
+input, textarea {
+  display: inline-block;
+  margin-left: 10px;
+  /*float: left;*/
 }
 /*end of homepage css*/
 

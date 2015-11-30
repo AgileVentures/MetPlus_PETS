@@ -37,5 +37,9 @@ class User < ActiveRecord::Base
       return false unless user.actable_type == "CompanyPerson"
       user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EC]
     end
+    
+    def full_name
+      "#{first_name} #{last_name}"
+    end
 
 end
