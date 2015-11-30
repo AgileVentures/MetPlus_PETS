@@ -38,8 +38,8 @@ class User < ActiveRecord::Base
       user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EC]
     end
     
-    def self.full_name(person)
-      "#{person.first_name} #{person.last_name}"
+    def full_name
+      "#{first_name} #{last_name}"
     end
 
 end

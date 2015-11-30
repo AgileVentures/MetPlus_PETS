@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
                                      :sign_in => 'login' }                                
   devise_scope :user do
-    match  '/login'   =>  'devise/sessions#new',       via: 'get'
+    match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
   end
   
@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   
   root 'main#index'
   
-  get 'agency_admin/home'
+  get 'agency_admin/home', path: '/admin/agency_admin/home'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

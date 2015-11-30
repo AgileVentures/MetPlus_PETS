@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe AgencyAdminController, type: :controller do
 
   describe "GET #home" do
-    it 'routes GET /agency_admin/home to agency_admin#home' do
-      expect(get: '/agency_admin/home').to route_to(
+    it 'routes GET /admin/agency_home/ to agency_admin#home' do
+      expect(get: '/admin/agency_admin/home').to route_to(
             controller: 'agency_admin', action: 'home')
     end
     context 'controller actions and helper' do
