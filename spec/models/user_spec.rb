@@ -134,6 +134,13 @@ RSpec.describe User, type: :model do
       expect(User.is_company_contact?(@company_admin.user)).not_to be true
     end
   end
+  describe '.full_name(person)' do
+    it 'returns full name of user' do
+      agency_person = FactoryGirl.build(:agency_person)
+      expect(User.full_name(agency_person)).
+          to eq "#{agency_person.first_name} #{agency_person.last_name}"
+    end
+  end
 end
 
 
