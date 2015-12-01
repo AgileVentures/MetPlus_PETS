@@ -22,20 +22,24 @@
       %thead
         %tr
           %td
+            Code
+          %td
             City
           %td
             Street
           %td
             Zipcode
       %tbody
-        - @agency.addresses.each do |address|
+        - @agency.branches.each do |branch|
           %tr
             %td
-              = address.city
+              = branch.code
             %td
-              = address.street
+              = branch.address.city
             %td
-              = address.zipcode
+              = branch.address.street
+            %td
+              = branch.address.zipcode
                   
 %h3 Agency Personnel
 
