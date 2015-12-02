@@ -32,48 +32,50 @@ RSpec.describe Branch, type: :model do
   describe 'Branch' do
     it 'is valid with all required fields' do
       expect(Branch.new(code: '123', agency: FactoryGirl.create(:agency))).
-      to be_valid
+                            to be_valid
     end
     context 'is invalid' do
-      before(:each) do
-        @branch = Branch.new
-        @branch.valid?
-      end
+      
+      let(:branch)  { FactoryGirl.build(:branch, code: nil, agency: nil) }
+      
       it 'without a code or agency' do
-        @branch.valid?
-        expect(@branch).to_not be_valid
-        expect(@branch.errors[:code]).to include("can't be blank")
-        expect(@branch.errors[:agency_id]).to include("can't be blank")
+        branch.valid?
+        expect(branch).to_not be_valid
+        expect(branch.errors[:code]).to include("can't be blank")
+        expect(branch.errors[:agency_id]).to include("can't be blank")
       end
       it 'with a code that exceeds max length' do
-        @branch.code = '123456789'
-        @branch.valid?
-        expect(@branch).to_not be_valid
-        expect(@branch.errors[:code]).
+        branch.code = '123456789'
+        branch.valid?
+        expect(branch).to_not be_valid
+        expect(branch.errors[:code]).
                     to include("is too long (maximum is 8 characters)")
       end
       it 'with a non-unique code' do
         FactoryGirl.create(:branch, code: '999', agency_id: 1)
-        @branch.code = '999'
-        @branch.agency_id = 1
-        @branch.valid?
-        expect(@branch).to_not be_valid
-        expect(@branch.errors[:code]).to include("has already been taken")
+        branch.code = '999'
+        branch.agency_id = 1
+        branch.valid?
+        expect(branch).to_not be_valid
+        expect(branch.errors[:code]).to include("has already been taken")
       end
     end
   end
+  
   describe 'When branch is destroyed' do
+    
+    let(:person1) { FactoryGirl.create(:agency_person) }
+    let(:branch)  { person1.branch }
+    let(:person2) { FactoryGirl.create(:agency_person, branch: branch) }
+    
     it 'associated address is destroyed' do
-      branch = FactoryGirl.create(:branch)
       address = branch.address
       expect(address).to_not be nil
       branch.destroy
       expect {Address.find(address.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
+    
     it 'associated agency_people are nullified' do
-      person1 = FactoryGirl.create(:agency_person)
-      branch = person1.branch
-      person2 = FactoryGirl.create(:agency_person, branch: branch)
       expect(branch.agency_people).to match_array([person1, person2])
       branch.destroy
       expect(AgencyPerson.find(person1.id).branch).to be nil
