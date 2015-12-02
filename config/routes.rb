@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
     resources :branches, only: [:create, :new]
   end
+
   resources :branches, path: '/admin/branches', 
                        only: [:show, :edit, :update, :destroy]
   

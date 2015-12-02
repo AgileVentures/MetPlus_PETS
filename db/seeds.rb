@@ -122,6 +122,9 @@ branch = Branch.create(code: '003', agency: agency)
 branch.address = Address.create!(city: 'Detroit', 
             street: '3 Auto Drive', zipcode: 48206)
 
+# branch without address or people - for testing purposes
+branch = Branch.create(code: '004', agency: agency)
+
 agency_person = AgencyPerson.new(first_name: 'John', last_name: 'Smith', 
                       agency_id: agency.id, email: 'pets_admin@metplus.org', 
                       password: 'qwerty123', confirmed_at: Time.now,

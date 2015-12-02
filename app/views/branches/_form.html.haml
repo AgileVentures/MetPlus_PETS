@@ -1,0 +1,20 @@
+%div{class: 'form_div'}
+  = form_for branch, url: url, method: method do |branch_form|
+
+    = label :branch, :code, 'Branch Code'
+    = branch_form.text_field :code, size: 8
+    %br
+    %br
+    %ul
+      = branch_form.fields_for :address do |address_form|
+      
+        = address_form.label      :street
+        = address_form.text_field :street
+        %br
+        = address_form.label      :city
+        = address_form.text_field :city
+        %br
+        = address_form.label      :zipcode
+        = address_form.text_field :zipcode
+    
+    = submit_tag submit, class: 'form_button'

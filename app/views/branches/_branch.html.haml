@@ -1,0 +1,45 @@
+= button_to 'Edit Branch', edit_branch_path(branch), method: :get, class: 'form_button'
+      
+%div{:class => 'container'}
+  %div{class: 'div_align_left', id: 'bold_text'}
+    Agency:
+    %br
+    Branch Code:
+    %br
+    Address:
+  %div{class: 'div_align_right'}
+    = branch.agency.name
+    %br
+    = branch.code
+    %br
+    = single_line_address(branch.address)
+
+%h4 People at this Branch
+
+- if branch.agency_people.empty?
+  There are no people assigned to this branch.
+- else
+  %div{:class => 'row'}
+    %div{:class => 'panel panel-default'}
+      %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
+        %thead
+          %tr
+            %td
+              First Name
+            %td
+              Last Name
+            %td
+              Role(s)
+        %tbody
+          - branch.agency_people.each do |person|
+            %tr
+              %td
+                = person.first_name
+              %td
+                -# link_to AgencyPerson 'show' instance here when that is available
+                = person.last_name
+              %td
+                = person.agency_roles.pluck(:role).join(', ')
+                
+= button_to 'Delete Branch', branch_path(branch), method: :delete,            | 
+      data: {confirm: "Delete branch #{branch.code}?"}, class: 'form_button'   |

@@ -33,8 +33,7 @@ Scenario: login as agency admin
   And I should see "Admin"
 
 Scenario: go to main admin page
-  Given I am on the home page
-  And I login as "aa@metplus.org" with password "qwerty123"
+  Given I am logged in as agency admin
   And I click the "Admin" link
   Then I should see "PETS Administration"
   And I should see "Agency Information"
@@ -49,8 +48,7 @@ Scenario: non-admin does not see 'admin' in menu
   And I should not see "Admin"
   
 Scenario: edit agency information
-  Given I am on the home page
-  And I login as "aa@metplus.org" with password "qwerty123"
+  Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Edit Agency" link
   Then I should see "MetPlus"
@@ -60,8 +58,7 @@ Scenario: edit agency information
   And I should see "MetPlus Two"
   
 Scenario: cancel edit agency information
-  Given I am on the home page
-  And I login as "aa@metplus.org" with password "qwerty123"
+  Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Edit Agency" link
   Then I should see "MetPlus"
@@ -71,8 +68,7 @@ Scenario: cancel edit agency information
   And I should not see "MetPlus Two"
   
 Scenario: errors for edit agency information
-  Given I am on the home page
-  And I login as "aa@metplus.org" with password "qwerty123"
+  Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Edit Agency" link
   Then I should see "MetPlus"
@@ -83,3 +79,40 @@ Scenario: errors for edit agency information
   And I should see "Phone can't be blank"
   And I should see "Phone incorrect format"
   And I should see "Website is not a valid website address"
+  
+Scenario: edit branch
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  Then I should see "Agency Branches"
+  And I click the "001" link
+  Then I should see "Branch Code:"
+  And I should see "001"
+  Then I click the "Edit Branch" button
+  Then I should see "Edit Branch"
+  And I fill in "Branch Code" with "004"
+  And I click the "Update" button
+  Then I should see "Branch was successfully updated."
+
+Scenario: cancel edit branch
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "001" link
+  Then I click the "Edit Branch" button
+  Then I should see "Edit Branch"
+  And I fill in "Branch Code" with "004"
+  Then I click the "Cancel" button
+  Then I should see "Agency Branch"
+  And I should not see "004"
+
+Scenario: error for edit branch
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "001" link
+  Then I click the "Edit Branch" button
+  And I fill in "Branch Code" with "002"
+  And I fill in "Zipcode" with "1234567"
+  And I click the "Update" button
+  Then I should see "2 errors prevented this record from being saved:"
+  And I should see "Code has already been taken"
+  And I should see "Address zipcode should be in form of 12345 or 12345-1234"
+
