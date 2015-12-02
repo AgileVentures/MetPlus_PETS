@@ -44,7 +44,7 @@ When(/^I click the "([^"]*)" link$/) do |link|
   click_link link
 end
 
-When(/^I click "([^"]*)" button$/) do |button|
+When(/^I click(?: the)? "([^"]*)" button$/) do |button|
   click_button button
 end
 

@@ -17,6 +17,8 @@ class AgenciesController < ApplicationController
     end
   end
   
+  private
+  
   def agency_params
     params.require(:agency).permit(:name, :website, :phone, :fax,
                                    :email, :description)

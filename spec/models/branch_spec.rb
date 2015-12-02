@@ -62,5 +62,23 @@ RSpec.describe Branch, type: :model do
       end
     end
   end
+  describe 'When branch is destroyed' do
+    it 'associated address is destroyed' do
+      branch = FactoryGirl.create(:branch)
+      address = branch.address
+      expect(address).to_not be nil
+      branch.destroy
+      expect {Address.find(address.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+    it 'associated agency_people are nullified' do
+      person1 = FactoryGirl.create(:agency_person)
+      branch = person1.branch
+      person2 = FactoryGirl.create(:agency_person, branch: branch)
+      expect(branch.agency_people).to match_array([person1, person2])
+      branch.destroy
+      expect(AgencyPerson.find(person1.id).branch).to be nil
+      expect(AgencyPerson.find(person2.id).branch).to be nil
+    end
+  end
   
 end

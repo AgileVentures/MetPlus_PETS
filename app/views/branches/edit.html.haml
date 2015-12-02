@@ -1,2 +1,8 @@
-%h1 Branches#edit
-%p Find me in app/views/branches/edit.html.haml
+%h2 Edit Branch
+      
+%div{class: 'form_div'}
+  = button_to 'Cancel', branch_path(@branch), method: :get, class: 'form_button'
+  
+= render partial: 'form', locals: {branch: @branch, method: :patch, |
+                submit: 'Update', url: branch_path(@branch)}
+
