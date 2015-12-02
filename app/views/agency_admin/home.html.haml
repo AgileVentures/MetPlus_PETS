@@ -20,6 +20,8 @@
   There are no branches
 - else
   = render partial: 'branches/branches', object: @agency.branches 
+  
+= button_to 'Create Branch', new_agency_branch_path(@agency.id), method: :get #, class: 'form_button'
                   
 %h3 Agency Personnel
 
