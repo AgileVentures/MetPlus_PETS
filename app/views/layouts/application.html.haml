@@ -19,6 +19,7 @@
           - flash.each do |key, value|
             %div{:class => "alert #{flash_to_css key}"}
               = value
+              %a{href: "#", class: "close", "data-dismiss" =>  "alert",  "aria-label" => "close"} &times;
       -# The following 'if' statement will display model validation errors in the view.
       -# To use this, set the variable @model_errors equal to the errors collection of
       -# your model.  For instance, if your model is Agency and your model instance has
@@ -35,3 +36,4 @@
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'
+
