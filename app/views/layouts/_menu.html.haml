@@ -17,7 +17,7 @@
       %ul{:class => 'nav navbar-nav navbar-right'}
         - if !user_signed_in?
           %li
-            -if !(params[:controller]=='devise/sessions' && params[:action]=='new') 
+            -if !(params[:controller]=='devise/sessions' && params[:action]=='new' || params[:action]== 'create') 
               %div{:class => 'button-menu'}
                 = link_to 'Log In', login_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
           %li{:id => 'register-button'}
