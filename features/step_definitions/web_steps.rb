@@ -58,3 +58,15 @@ end
 And(/^show me the page$/) do
   save_and_open_page
 end
+
+When(/^I confirm the popup dialog$/) do
+  page.accept_confirm # clicks the 'OK' button
+  
+  # If wish to confirm the text of the dialog box, this will work:
+  #   box = page.driver.browser.switch_to.alert
+  #   expect(box.text).to eq '<expected text here .....'
+  # The box can be accepted:
+  #   box.accept
+  # Or dismissed:
+  #   box.dismiss
+end

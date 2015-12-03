@@ -115,4 +115,26 @@ Scenario: error for edit branch
   Then I should see "2 errors prevented this record from being saved:"
   And I should see "Code has already been taken"
   And I should see "Address zipcode should be in form of 12345 or 12345-1234"
+  
+Scenario: new agency branch
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "Create Branch" button
+  Then I fill in "Branch Code" with "004"
+  And I fill in "Street" with "10 Ford Way"
+  And I fill in "City" with "Detroit"
+  And I fill in "Zipcode" with "48208"
+  And I click the "Create" button
+  Then I should see "Branch was successfully created."
+  And I should see "004"
+
+@selenium
+Scenario: delete agency branch
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "003" link
+  Then I click the "Delete Branch" button
+  And I confirm the popup dialog
+  Then I should see "Branch '003' deleted."
+  
 
