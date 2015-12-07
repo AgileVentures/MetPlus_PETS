@@ -9,7 +9,7 @@ RSpec.describe Agency, type: :model do
   
   describe 'Associations' do
     it { is_expected.to have_many :agency_people }
-    it { is_expected.to have_many :addresses }
+    it { is_expected.to have_many :branches }
     it { is_expected.to have_and_belong_to_many :companies }
   end
   
@@ -19,6 +19,8 @@ RSpec.describe Agency, type: :model do
     it { is_expected.to have_db_column :website }
     it { is_expected.to have_db_column :phone }
     it { is_expected.to have_db_column :email }
+    it { is_expected.to have_db_column :fax }
+    it { is_expected.to have_db_column :description }
   end
   
   describe 'Validations' do

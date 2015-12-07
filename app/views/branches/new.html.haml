@@ -1,0 +1,7 @@
+%h2 Create Branch
+
+%div{class: 'form_div'}
+  = button_to 'Cancel', agency_admin_home_path, method: :get, class: 'form_button'
+      
+= render partial: 'form', locals: {branch: @branch, method: :post, |
+                  submit: 'Create', url: agency_branches_path(@agency)}

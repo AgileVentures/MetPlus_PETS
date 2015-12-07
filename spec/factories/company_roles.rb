@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :company_role do
-		role "Human Resources"
+		role CompanyRole::ROLE[:EC]
   end
 
 end

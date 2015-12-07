@@ -1,9 +1,9 @@
 module ApplicationHelper
   def flash_to_css key
     case key
-      when 'success'
+      when 'notice'
         'alert-success'
-      when 'error'
+      when 'alert'
         'alert-danger'
       when 'info'
         'alert-info'

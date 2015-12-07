@@ -9,7 +9,7 @@ RSpec.describe AgencyPerson, type: :model do
 
   describe 'Associations' do
     it { is_expected.to belong_to :agency }
-    it { is_expected.to belong_to :address }
+    it { is_expected.to belong_to :branch }
     it { is_expected.to have_and_belong_to_many :agency_roles }
     it { is_expected.to have_and_belong_to_many(:job_categories).
             join_table('job_specialities')}
@@ -20,7 +20,7 @@ RSpec.describe AgencyPerson, type: :model do
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :agency_id }
-    it { is_expected.to have_db_column :address_id }
+    it { is_expected.to have_db_column :branch_id }
   end
 
   describe 'Validations' do
@@ -29,7 +29,9 @@ RSpec.describe AgencyPerson, type: :model do
 
   describe 'Agency Person' do
     it 'is valid with all required fields' do
-      expect(AgencyPerson.new(agency_id: 1)).to be_valid
+      expect(AgencyPerson.new(agency_id: 1, 
+          email: 'agencyperson2@gmail.com', first_name: 'Agency', 
+          last_name: 'Person', password: 'qwerty123')).to be_valid
     end
     it 'is invalid without an agency association' do
       agency = AgencyPerson.new()
