@@ -1,23 +1,36 @@
-%div{class: 'form_div'}
-  = button_to 'Cancel', agency_admin_home_path, method: :get, class: 'form_button'
-  = form_tag agency_path(agency), :method => :put do
+= form_tag agency_path(agency), :method => :put, class: 'form-horizontal' do
+  .form-group
+    = label :agency, :name, 'Name', class: 'control-label col-sm-2'
+    .col-sm-6
+      = text_field :agency, :name, size: 30, class: 'form-control'
+      
+  .form-group
+    = label :agency, :website, 'Website', class: 'control-label col-sm-2'
+    .col-sm-6
+      = text_field :agency, :website, size: 30, class: 'form-control'
+      
+  .form-group
+    = label :agency, :phone, 'Phone', class: 'control-label col-sm-2'
+    .col-sm-6
+      = phone_field :agency, :phone, size: 30, class: 'form-control'
+      
+  .form-group
+    = label :agency, :fax, 'Fax', class: 'control-label col-sm-2'
+    .col-sm-6
+      = phone_field :agency, :fax, size: 30, class: 'form-control'
+      
+  .form-group
+    = label :agency, :email, 'Email', class: 'control-label col-sm-2'
+    .col-sm-6
+      = email_field :agency, :email, size: 30, class: 'form-control'
+  
+  .form-group
+    = label :agency, :description, 'Description', class: 'control-label col-sm-2'
+    .col-sm-8
+      = text_area :agency, :description, cols: 90, rows: 5, class: 'form-control'
 
-    = label :agency, :name, 'Name'
-    = text_field :agency, :name, size: 30
-    %br
-    = label :agency, :website, 'Website'
-    = text_field :agency, :website, size: 30
-    %br
-    = label :agency, :phone, 'Phone'
-    = phone_field :agency, :phone, size: 30
-    %br
-    = label :agency, :fax, 'Fax'
-    = phone_field :agency, :fax, size: 30
-    %br
-    = label :agency, :email, 'Email'
-    = email_field :agency, :email, size: 30
-    %br
-    = label :agency, :description, 'Description'
-    = text_area :agency, :description, cols: 90, rows: 5
-    %br
-    = submit_tag 'Update Agency', class: 'form_button'
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      = submit_tag 'Update Agency', class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-1
+      = link_to 'Cancel', agency_admin_home_path, class: 'btn btn-danger'

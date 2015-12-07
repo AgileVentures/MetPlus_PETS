@@ -9,9 +9,13 @@ Rails.application.routes.draw do
   
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
     resources :branches, only: [:create, :new]
+    resources :agency_people, only: [:create, :new]
   end
 
   resources :branches, path: '/admin/branches', 
+                       only: [:show, :edit, :update, :destroy]
+                       
+  resources :agency_people, path: '/admin/agency_people', 
                        only: [:show, :edit, :update, :destroy]
   
   root 'main#index'

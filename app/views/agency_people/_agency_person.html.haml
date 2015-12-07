@@ -1,0 +1,66 @@
+%div{:class => 'container'}
+  %div{class: 'div_align_left', id: 'bold_text'}
+    Agency:
+    %br
+    Branch
+    %br
+    First Name:
+    %br
+    Last Name:
+  %div{class: 'div_align_right'}
+    = agency_person.agency.name
+    %br
+    = agency_person.branch ? agency_person.branch.code : 'Not Assigned' 
+    %br
+    = agency_person.first_name
+    %br
+    = agency_person.last_name
+
+%h4 
+  = "#{agency_person.first_name} has these roles:"
+
+- if agency_person.agency_roles.empty?
+  There are no roles assigned to this person.
+- else
+  %div{:class => 'row'}
+    %div{:class => 'panel panel-default'}
+      %ul
+        - agency_person.agency_roles.each do |role|
+          %li
+            = role.role
+%h4 
+  = "#{agency_person.first_name} focuses on these job categories:"
+
+- if agency_person.job_categories.empty?
+  There are no job categories assigned to this person.
+- else
+  %div{:class => 'row'}
+    %div{:class => 'panel panel-default'}
+      %ul
+        - agency_person.job_categories.each do |category|
+          %li
+            = category.name
+%br
+%br
+%h4 
+  = "#{agency_person.first_name} is the primary Job Developer for these people:"
+
+- if agency_person.job_seekers.empty?
+  There are no job seekers assigned to this person.
+- else
+  %div{:class => 'row'}
+    %div{:class => 'panel panel-default'}
+      %ul
+        - agency_person.job_seeker.each do |seeker|
+          %li
+            = seeker.full_name(true)
+            
+%br
+%br
+%div{class: 'row'}
+  .col-sm-2
+    = button_to 'Edit Person', edit_agency_person_path(agency_person), |
+            method: :get, class: 'btn btn-primary'    |
+  .col-sm-2.col-sm-offset-1
+    = button_to 'Delete Person', agency_person_path(agency_person), method: :delete, | 
+      data: {confirm: "Delete this person?"}, class: 'btn btn-danger'   |

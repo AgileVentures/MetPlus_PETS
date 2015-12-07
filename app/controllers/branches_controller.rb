@@ -10,7 +10,7 @@ class BranchesController < ApplicationController
     @agency.branches << @branch
     if @branch.valid?
       @branch.save
-      flash[:success] = "Branch was successfully created."
+      flash[:notice] = "Branch was successfully created."
       redirect_to agency_admin_home_path
     else
       @model_errors = @branch.errors
@@ -34,7 +34,7 @@ class BranchesController < ApplicationController
     @branch.assign_attributes(branch_params)
     if @branch.valid?
       @branch.save
-      flash[:success] = "Branch was successfully updated."
+      flash[:notice] = "Branch was successfully updated."
       redirect_to branch_path(@branch)
     else
       @model_errors = @branch.errors
@@ -45,7 +45,7 @@ class BranchesController < ApplicationController
   def destroy
     branch = Branch.find(params[:id])
     branch.destroy
-    flash[:success] = "Branch '#{branch.code}' deleted."
+    flash[:notice] = "Branch '#{branch.code}' deleted."
     redirect_to agency_admin_home_path
   end
   

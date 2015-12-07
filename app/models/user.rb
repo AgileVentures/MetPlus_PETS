@@ -38,7 +38,8 @@ class User < ActiveRecord::Base
       user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EC]
     end
     
-    def full_name
+    def full_name(last_name_first=false)
+      return "#{last_name}, #{first_name}" if last_name_first
       "#{first_name} #{last_name}"
     end
 

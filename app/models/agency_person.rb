@@ -8,4 +8,13 @@ class AgencyPerson < ActiveRecord::Base
   has_and_belongs_to_many :job_seekers, join_table: 'seekers_agency_people'
 
   validates_presence_of :agency_id
+  
+  def agency_role_ids
+    agency_roles.pluck(:id)
+  end
+  
+  def job_category_ids
+    job_categories.pluck(:id)
+  end
+  
 end

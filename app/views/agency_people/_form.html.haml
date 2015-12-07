@@ -1,0 +1,53 @@
+= form_for agency_person, url: url, method: method,            |
+          html: {class: 'form-horizontal'} do |person_form|    |
+  .form-group
+    = person_form.label :first_name, 'First Name', class: 'control-label col-sm-2'
+    .col-sm-2
+      = person_form.text_field :first_name, class: 'form-control'
+  .form-group
+    = person_form.label :last_name, 'Last Name', class: 'control-label col-sm-2'
+    .col-sm-2
+      = person_form.text_field :last_name, class: 'form-control'
+      
+  -# branch assignment (belongs_to)
+  .form-group
+    = person_form.label :branch_id, 'Branch', class: 'control-label col-sm-2'
+    .col-sm-2
+      = person_form.collection_select(:branch_id, Branch.all, :id, :code, |
+            {include_blank: true}, class: 'form-control')     |
+            
+  -# agency_roles assignment  (has_and_belongs_to_many)
+  .form-group
+    = person_form.label :agency_roles, 'Roles', class: 'control-label col-sm-2'
+    .col-sm-8
+      = person_form.collection_check_boxes(:agency_role_ids,        |
+                          AgencyRole.all, :id, :role) do |box|   |
+        = box.label(class: 'checkbox-inline') do
+          = box.check_box
+          = box.object.role
+          %br
+          
+        
+  -# job_categories  (has_and_belongs_to_many)
+  .form-group
+    = person_form.label :job_categories, 'Job Categories', class: 'control-label col-sm-2'
+    .col-sm-8
+      = person_form.collection_check_boxes(:job_category_ids,        |
+                          JobCategory.all, :id, :name) do |box|   |
+        = box.label(class: 'checkbox col-sm-8 normal-label') do
+          = box.check_box
+          = box.object.name #, class: 'nested-checkbox-label'
+          %br
+    
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      = submit_tag submit, method: :patch, class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-1
+      = link_to 'Cancel', cancel_url, class: 'btn btn-danger'
+      
+
+
+
+
+
+-# job_seekers

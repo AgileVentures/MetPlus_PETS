@@ -1,47 +1,33 @@
 %h2 PETS Administration
-%h3 Agency Information
 
 = render partial: 'agencies/agency', object: @agency
     
 %div{:class => 'container'}
-  %div{class: 'div_align_left', id: 'bold_text'}
-    %br
-    Agency Admin:
-    = @agency_admin.full_name
-    
-%div{:class => 'container'}
-  %div{class: 'div_align_right', id: 'bold_text'}
-    %br
-    = link_to 'Edit Agency', edit_agency_path(@agency)
-  
-%h3 Agency Branches
+  %br
+  Agency Admin:
+  = @agency_admin.full_name
+
+  .col-sm-2.col-sm-offset-8
+    = button_to 'Edit Agency', edit_agency_path(@agency), |
+          method: :get, class: 'btn btn-primary'          |
 
 - if @agency.branches.empty? 
   There are no branches
 - else
   = render partial: 'branches/branches', object: @agency.branches 
   
-= button_to 'Create Branch', new_agency_branch_path(@agency.id), method: :get #, class: 'form_button'
-                  
-%h3 Agency Personnel
+%div{:class => 'container'}
+  .col-sm-2.col-sm-offset-8
+    = button_to 'Create Branch', new_agency_branch_path(@agency.id), |
+          method: :get, class: 'btn btn-primary'                   |
 
-%div{:class => 'row'}
-  %div{:class => 'panel panel-default'}
-    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
-      %thead
-        %tr
-          %td
-            First Name
-          %td
-            Last Name
-          %td
-            Role(s)
-      %tbody
-        - @agency.agency_people.each do |person|
-          %tr
-            %td
-              = person.first_name
-            %td
-              = person.last_name
-            %td
-              = person.agency_roles.pluck(:role).join(', ')
+
+- if @agency.agency_people.empty? 
+  There are no people
+- else
+  = render partial: 'agency_people/agency_people', object: @agency.agency_people 
+  
+%div{:class => 'container'}
+  .col-sm-2.col-sm-offset-8
+    = button_to 'Create Person', new_agency_agency_person_path(@agency.id), |
+          method: :get, class: 'btn btn-primary'                   |

@@ -146,3 +146,17 @@ agency_person = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                       branch_id: agency.branches[2].id)
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
+
+# Job Categories
+JobCategory.create(name: 'SW Developer - RoR', 
+            description: 'Ruby on Rails backend developer')
+JobCategory.create(name: 'SW Developer - JS', 
+            description:  'Javascript frontend developer')
+JobCategory.create(name: 'SW Developer - Java', 
+            description: 'Java backend developer')
+JobCategory.create(name: 'SW Project Manager - Agile', 
+            description: 'Manages Agile SW development projects')
+JobCategory.create(name: 'SW Project Manager - Waterfall', 
+            description: 'Manages SW development projects using waterfall SDLC')
+JobCategory.create(name: 'Product Manager - SaaS', 
+            description: 'Manages SaaS product development and commecialization')
