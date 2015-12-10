@@ -32,7 +32,7 @@ RSpec.describe Agency, type: :model do
     it { is_expected.to validate_presence_of :email }
   end
   
-  describe 'Agency' do
+  describe 'Agency model' do
     it 'is valid with all required fields' do
       expect(Agency.new(name: 'Agency', website: 'myurl.com',
                         phone: '000-123-4567', email: 'agency@mail.com')).to be_valid
@@ -45,6 +45,40 @@ RSpec.describe Agency, type: :model do
       expect(agency.errors[:phone]).to include("can't be blank")
       expect(agency.errors[:email]).to include("can't be blank")
     end
-    
   end
+  
+  describe 'Agency management' do
+    let(:agency) { FactoryGirl.create(:agency) }
+    let!(:aa_person1) do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryGirl.create(:agency_role, 
+                                      role: AgencyRole::ROLE[:AA])
+      $person.save
+      $person
+    end
+    let!(:aa_person2) do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryGirl.create(:agency_role, 
+                                      role: AgencyRole::ROLE[:AA])
+      $person.save
+      $person
+    end
+    let(:jd_person) do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryGirl.create(:agency_role, 
+                                      role: AgencyRole::ROLE[:JD])
+      $person.save
+      $person
+    end
+    
+    it 'identifies agency admins' do
+      expect(Agency.agency_admins(jd_person)).to eq [aa_person1, aa_person2]
+    end
+    
+    it 'identifies agency' do
+      expect(Agency.this_agency(jd_person)).to eq agency
+      expect(Agency.this_agency(aa_person1)).to eq agency
+    end
+  end
+  
 end

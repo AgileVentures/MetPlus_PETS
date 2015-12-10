@@ -25,6 +25,15 @@ RSpec.describe AgencyPerson, type: :model do
 
   describe 'Validations' do
     it { is_expected.to validate_presence_of :agency_id }
+    it 'invalidates removing admin role for sole agency admin' do
+      person = FactoryGirl.create(:agency_person)
+      role = AgencyRole.create(role: AgencyRole::ROLE[:AA])
+      person.agency_roles << role
+      expect(person).to be_valid
+      person.agency_roles.delete(role)
+      person.save
+      expect(person).to_not be_valid
+    end
   end
 
   describe 'Agency Person' do
@@ -39,4 +48,44 @@ RSpec.describe AgencyPerson, type: :model do
       expect(agency.errors[:agency_id]).to include("can't be blank")
     end
   end
+  
+  describe 'Agency Admin checks' do
+    let(:agency) { FactoryGirl.create(:agency) }
+    let!(:aa_person)   do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryGirl.create(:agency_role, 
+                                      role: AgencyRole::ROLE[:AA])
+      $person.save
+      $person
+    end
+    let(:aa_person2)   do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryGirl.create(:agency_role, 
+                                      role: AgencyRole::ROLE[:AA])
+      $person.save
+      $person
+    end
+    let(:jd_person)   do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryGirl.create(:agency_role, 
+                                      role: AgencyRole::ROLE[:JD])
+      $person.save
+      $person
+    end
+    
+    it 'confirms sole agency admin' do
+      expect(aa_person.sole_agency_admin?).to be true
+      expect(aa_person.other_agency_admin?).to be false
+    end
+    it 'confirms not sole agency admin if not admin' do
+      expect(jd_person.sole_agency_admin?).to be false
+      expect(jd_person.other_agency_admin?).to be true
+    end
+    it 'confirms not sole agency admin if another admin' do
+      expect(aa_person2.sole_agency_admin?).to be false
+      expect(aa_person2.other_agency_admin?).to be true
+    end
+    
+  end
+
 end

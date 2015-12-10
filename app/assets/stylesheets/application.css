@@ -131,31 +131,10 @@
 #login_form {
     padding-top: 12px;
 }
-/*STILL WANT TO USE
-  LABEL AND INPUT
-  BELOW IT IS GOOD
-  IDEA TO ASSIGN
-  AN ID SO THAT
-  WOULDN'T BREAK
-  THE REEST OF 
-  LABELS AND INPUTS 
-  AND PUT COMMENT
-  WHERE THE CSS
-  APPLIES
-  note: #putidhere
-  is a placeholder
-*/
 
 .normal-label { 
   font-weight: normal;
 }
-/*
-input, textarea {
-  display: inline-block;
-  margin-left: 10px;
-  float: left;
-}
-*/
 
 /*session#new css*/
 .fa.fa-lg.fa-long-arrow-right{

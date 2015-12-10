@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
   
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
-    resources :branches, only: [:create, :new]
+    resources :branches,      only: [:create, :new]
     resources :agency_people, only: [:create, :new]
   end
 

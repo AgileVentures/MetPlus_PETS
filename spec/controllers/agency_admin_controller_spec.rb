@@ -21,7 +21,7 @@ RSpec.describe AgencyAdminController, type: :controller do
         expect(assigns(:agency)).to eq @agency
       end
       it 'assigns @agency_admin for view' do
-        expect(assigns(:agency_admin)).to eq @agency_admin
+        expect(assigns(:agency_admins)).to eq [@agency_admin]
       end
       it 'renders home template' do
         expect(response).to render_template('home')
@@ -71,15 +71,15 @@ RSpec.describe AgencyAdminController, type: :controller do
     
     it 'agency manager - from agency admin' do
       sign_in @agency_admin
-      expect(Agency.agency_admin(subject.current_user)).to eq @agency_admin
+      expect(Agency.agency_admins(subject.current_user)).to eq [@agency_admin]
     end
     it 'agency manager - from case manager' do
       sign_in @case_manager
-      expect(Agency.agency_admin(subject.current_user)).to eq @agency_admin
+      expect(Agency.agency_admins(subject.current_user)).to eq [@agency_admin]
     end
     it 'agency manager - from job developer' do
       sign_in @job_developer
-      expect(Agency.agency_admin(subject.current_user)).to eq @agency_admin
+      expect(Agency.agency_admins(subject.current_user)).to eq [@agency_admin]
     end
 
   end

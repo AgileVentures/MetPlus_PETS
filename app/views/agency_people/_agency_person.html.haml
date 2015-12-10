@@ -40,8 +40,6 @@
         - agency_person.job_categories.each do |category|
           %li
             = category.name
-%br
-%br
 %h4 
   = "#{agency_person.first_name} is the primary Job Developer for these people:"
 
@@ -51,9 +49,9 @@
   %div{:class => 'row'}
     %div{:class => 'panel panel-default'}
       %ul
-        - agency_person.job_seeker.each do |seeker|
+        - agency_person.job_seekers.each do |seeker|
           %li
-            = seeker.full_name(true)
+            = seeker.full_name
             
 %br
 %br

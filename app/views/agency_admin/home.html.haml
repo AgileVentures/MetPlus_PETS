@@ -4,8 +4,10 @@
     
 %div{:class => 'container'}
   %br
-  Agency Admin:
-  = @agency_admin.full_name
+  Agency Admins:
+  - @agency_admins.each do |aa|
+    = aa.full_name(last_name_first: false)
+    = ', ' if aa != @agency_admins.last
 
   .col-sm-2.col-sm-offset-8
     = button_to 'Edit Agency', edit_agency_path(@agency), |
@@ -18,7 +20,7 @@
   
 %div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
-    = button_to 'Create Branch', new_agency_branch_path(@agency.id), |
+    = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
           method: :get, class: 'btn btn-primary'                   |
 
 
@@ -29,5 +31,5 @@
   
 %div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
-    = button_to 'Create Person', new_agency_agency_person_path(@agency.id), |
+    = button_to 'Add Person', new_agency_agency_person_path(@agency.id), |
           method: :get, class: 'btn btn-primary'                   |

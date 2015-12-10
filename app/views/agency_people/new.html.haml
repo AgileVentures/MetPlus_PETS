@@ -1,2 +1,5 @@
-%h1 AgencyPeople#new
-%p Find me in app/views/agency_people/new.html.haml
+%h2 Add Agency Person
+      
+= render partial: 'form', locals: {agency_person: @agency_person, method: :post, |
+          submit: 'Add Person', url: agency_agency_people_path(@agency),     |
+          cancel_url: agency_admin_home_path}                                    |
