@@ -18,12 +18,12 @@
           - if disable_agency_admin?(agency_person, box.text)
             = box.check_box(disabled: true)
             = box.text
-            <input type='hidden' name='agency_person[agency_role_ids][]' |
-                 value='#{box.value}'/>  |
+            = hidden_field(:agency_person, :agency_role_ids,        |
+                    multiple: true, value: "#{box.value}", id: nil)          |
           - else
             = box.check_box
             = box.text
-          -# NOTE: the insertion of the 'hidden' input above is to overcome a
+          -# NOTE: the insertion of the 'hidden_field' input above is to overcome a
           -# behavior of Rails (and/or HTML): the value of any disabled
           -# form control is NOT included in the params hash.  The checkbox for
           -# agency admin role is disabled if this (person) is the sole agency
@@ -61,7 +61,7 @@
           
   .form-group
     .col-sm-2.col-sm-offset-2
-      = submit_tag submit, method: :patch, class: 'btn btn-primary'
+      = submit_tag submit, method: method, class: 'btn btn-primary'
     .col-sm-2.col-sm-offset-1
       = link_to 'Cancel', cancel_url, class: 'btn btn-danger'
       

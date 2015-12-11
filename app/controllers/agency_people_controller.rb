@@ -34,8 +34,7 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency_person.assign_attributes(agency_person_params)
     
-    if @agency_person.valid?
-      @agency_person.save
+    if @agency_person.save
       flash[:notice] = "Agency person was successfully updated."
       redirect_to agency_person_path(@agency_person)
     else
