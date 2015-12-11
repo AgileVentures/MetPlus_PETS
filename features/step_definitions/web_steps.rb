@@ -60,7 +60,9 @@ And(/^show me the page$/) do
 end
 
 When(/^I confirm the popup dialog$/) do
-  page.accept_confirm # clicks the 'OK' button
+  #page.accept_confirm # clicks the 'OK' button
+  box = page.driver.browser.switch_to.alert
+  box.accept
   
   # If wish to confirm the text of the dialog box, this will work:
   #   box = page.driver.browser.switch_to.alert
