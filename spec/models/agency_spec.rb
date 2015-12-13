@@ -72,7 +72,7 @@ RSpec.describe Agency, type: :model do
     end
     
     it 'identifies agency admins' do
-      expect(Agency.agency_admins(jd_person)).to eq [aa_person1, aa_person2]
+      expect(Agency.agency_admins(agency)).to eq [aa_person1, aa_person2]
     end
     
     it 'identifies agency' do

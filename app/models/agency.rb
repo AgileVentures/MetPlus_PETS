@@ -17,26 +17,24 @@ class Agency < ActiveRecord::Base
   #   an AgencyPerson object (directly or via user.actable), and,
   #   that person must be logged in
   
-  def self.agency_admins(logged_in_user)
-    find_users_with_role(logged_in_user, AgencyRole::ROLE[:AA])
+  def self.agency_admins(agency)
+    find_users_with_role(agency, AgencyRole::ROLE[:AA])
   end
   
-  def self.this_agency(logged_in_user)
+  def self.this_agency(user)
     raise RuntimeError, 'Logged in user is not an agency person' unless
-            logged_in_user.actable.is_a? AgencyPerson
+            user.actable.is_a? AgencyPerson
             
-    Agency.find(logged_in_user.actable.agency_id)
+    user.actable.agency
   end
   
   private
   
-  def self.find_users_with_role(logged_in_user, role)
-    return nil if not logged_in_user
-    
+  def self.find_users_with_role(agency, role)
     users = []
-    this_agency(logged_in_user).agency_people.each do |ap|
-      users << ap if ap.agency_roles && 
-                     ap.agency_roles.pluck(:role).include?(role)
+    agency.agency_people.each do |ap|
+                users << ap if ap.agency_roles && 
+                               ap.agency_roles.pluck(:role).include?(role)
     end
     users
   end

@@ -41,16 +41,17 @@ RSpec.describe AgencyPeopleController, type: :controller do
     
     let(:aa_person) do
       $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role, 
-                                      role: AgencyRole::ROLE[:AA])
+      $person.agency_roles << aa_role
       $person.save
       $person
     end
     
     context 'valid attributes' do
       before(:each) do
+        person_hash = aa_person.attributes.merge(aa_person.user.attributes)
+        person_hash[:agency_role_ids] = [aa_role.id.to_s]
         patch :update, id: aa_person,
-            agency_person: aa_person.attributes.merge(aa_person.user.attributes)
+            agency_person: person_hash
       end
       it 'assigns @agency_person for updating' do
         expect(assigns(:agency_person)).to eq aa_person

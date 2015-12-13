@@ -75,15 +75,12 @@ RSpec.describe AgencyPerson, type: :model do
     
     it 'confirms sole agency admin' do
       expect(aa_person.sole_agency_admin?).to be true
-      expect(aa_person.other_agency_admin?).to be false
     end
     it 'confirms not sole agency admin if not admin' do
       expect(jd_person.sole_agency_admin?).to be false
-      expect(jd_person.other_agency_admin?).to be true
     end
     it 'confirms not sole agency admin if another admin' do
       expect(aa_person2.sole_agency_admin?).to be false
-      expect(aa_person2.other_agency_admin?).to be true
     end
     
   end
