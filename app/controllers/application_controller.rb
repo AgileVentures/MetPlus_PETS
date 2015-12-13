@@ -17,6 +17,17 @@ class ApplicationController < ActionController::Base
     [:first_name,:last_name, :phone].each{ |field|
       devise_parameter_sanitizer.for(:account_update)<<field  
     }
+  end
   
+  # for Devise Invitable module
+  def after_invite_path_for(user)
+    case user.actable.class
+    when AgencyPerson
+      agency_admin_home_path
+    when CompanyPerson
+      company_admin_home_path
+    else
+      super
+    end
   end
 end
