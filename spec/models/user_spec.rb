@@ -114,8 +114,8 @@ RSpec.describe User, type: :model do
    
    describe 'company roles determination' do
      before :each do
-      @ec_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EC])
-      @ea_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EA])
+      @ec_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
+      @ea_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
               
       @company_contact = FactoryGirl.build(:company_person)
       @company_contact.company_roles << @ec_role
