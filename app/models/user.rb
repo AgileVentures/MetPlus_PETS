@@ -30,12 +30,12 @@ class User < ActiveRecord::Base
     
     def self.is_company_admin?(user)
       return false unless user.actable_type == "CompanyPerson"
-      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EA]
+      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
     end
     
     def self.is_company_contact?(user)
       return false unless user.actable_type == "CompanyPerson"
-      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EC]
+      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CC]
     end
     
     def full_name(order={:last_name_first => true})
