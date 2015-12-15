@@ -66,4 +66,5 @@ class CompanyPeopleController < ApplicationController
                           company_role_ids:)
 >>>>>>> form work
   end
+
 end
