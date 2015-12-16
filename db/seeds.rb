@@ -72,14 +72,17 @@ Job.create(:title => 'Security Personel', :description => 'If you have Security 
 JobSeekerStatus.delete_all 
 
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
-	    case status 
-	    when 'Unemployedlooking'
-            JobSeekerStatus.find_or_create_by(:value => status, description: "A jobseeker Without any work and looking for a job.")
-        when 'Employedlooking'
-        	JobSeekerStatus.find_or_create_by(:value => status, description: "A jobseeker with a job and looking for a job.")
-        when 'Employednotlooking'
-        	JobSeekerStatus.find_or_create_by(:value => status, description: "A jobseeker with a job and not looking for a job for now.")
-        end
+  case status 
+	when 'Unemployedlooking'
+    @jss1 = JobSeekerStatus.find_or_create_by(:value => status, 
+              description: "A jobseeker Without any work and looking for a job.")
+  when 'Employedlooking'
+    @jss2 = JobSeekerStatus.find_or_create_by(:value => status, 
+              description: "A jobseeker with a job and looking for a job.")
+  when 'Employednotlooking'
+    @jss3 = JobSeekerStatus.find_or_create_by(:value => status, 
+              description: "A jobseeker with a job and not looking for a job for now.")
+  end
 end
 
 #in case of seeding multiple times
@@ -146,3 +149,33 @@ agency_person = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                       branch_id: agency.branches[2].id)
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
+
+# Job Categories
+JobCategory.create(name: 'SW Developer - RoR', 
+            description: 'Ruby on Rails backend developer')
+JobCategory.create(name: 'SW Developer - JS', 
+            description:  'Javascript frontend developer')
+JobCategory.create(name: 'SW Developer - Java', 
+            description: 'Java backend developer')
+JobCategory.create(name: 'SW Project Manager - Agile', 
+            description: 'Manages Agile SW development projects')
+JobCategory.create(name: 'SW Project Manager - Waterfall', 
+            description: 'Manages SW development projects using waterfall SDLC')
+JobCategory.create(name: 'Product Manager - SaaS', 
+            description: 'Manages SaaS product development and commecialization')
+            
+# Job Seekers
+JobSeeker.create(first_name: 'Tom', last_name: 'Seeker', 
+                      email: 'tom@gmail.com', password: 'qwerty123', 
+              year_of_birth: '1980', resume: 'text',
+          job_seeker_status: @jss1, confirmed_at: Time.now)
+                      
+JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey', 
+                      email: 'mary@gmail.com', password: 'qwerty123', 
+              year_of_birth: '1970', resume: 'text',
+          job_seeker_status: @jss2, confirmed_at: Time.now)
+                      
+JobSeeker.create(first_name: 'Frank', last_name: 'Williams', 
+                      email: 'frank@gmail.com', password: 'qwerty123', 
+              year_of_birth: '1970', resume: 'text',
+          job_seeker_status: @jss3, confirmed_at: Time.now)

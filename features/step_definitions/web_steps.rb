@@ -60,7 +60,9 @@ And(/^show me the page$/) do
 end
 
 When(/^I confirm the popup dialog$/) do
-  page.accept_confirm # clicks the 'OK' button
+  #page.accept_confirm # clicks the 'OK' button
+  box = page.driver.browser.switch_to.alert
+  box.accept
   
   # If wish to confirm the text of the dialog box, this will work:
   #   box = page.driver.browser.switch_to.alert
@@ -69,4 +71,16 @@ When(/^I confirm the popup dialog$/) do
   #   box.accept
   # Or dismissed:
   #   box.dismiss
+end
+
+When(/^I select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
+  find(:select, list).find(:option, item).select_option
+end
+
+And(/^I check "([^"]*)"$/) do |item|
+  check(item)
+end
+
+And(/^the selection "([^"]*)" should be disabled$/) do |item|
+  expect(has_field?(item, disabled: true)).to be true
 end

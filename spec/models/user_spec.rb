@@ -138,6 +138,8 @@ RSpec.describe User, type: :model do
     it 'returns full name of user' do
       agency_person = FactoryGirl.build(:agency_person)
       expect(agency_person.full_name).
+          to eq "#{agency_person.last_name}, #{agency_person.first_name}"
+      expect(agency_person.full_name(last_name_first: false)).
           to eq "#{agency_person.first_name} #{agency_person.last_name}"
     end
   end

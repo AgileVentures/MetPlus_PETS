@@ -131,35 +131,10 @@
 #login_form {
     padding-top: 12px;
 }
-/*STILL WANT TO USE
-  LABEL AND INPUT
-  BELOW IT IS GOOD
-  IDEA TO ASSIGN
-  AN ID SO THAT
-  WOULDN'T BREAK
-  THE REEST OF 
-  LABELS AND INPUTS 
-  AND PUT COMMENT
-  WHERE THE CSS
-  APPLIES
-  note: #putidhere
-  is a placeholder
-*/
-label#putidhere { 
-  display: inline-block; 
-  float: left;
-  clear: left;
-  /*width: 200px;*/
-  width: 15%;
-  text-align: right; 
-}
 
-input#putidhere, textarea#idhere {
-  display: inline-block;
-  margin-left: 10px;
-  float: left;
+.normal-label { 
+  font-weight: normal;
 }
-
 
 /*session#new css*/
 .fa.fa-lg.fa-long-arrow-right{
@@ -195,12 +170,14 @@ input#putidhere, textarea#idhere {
     margin-top: -2px;
 
 }
+/*
 .form-group label{
     font-family: "ArialMT", "Arial";
     font-weight: 400;
     font-size: 13px;
     line-height: normal;
 }
+*/
 
 .form-control#user_email{
     width: 82%;
