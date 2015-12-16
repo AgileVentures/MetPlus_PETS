@@ -9,6 +9,11 @@ class AgencyPerson < ActiveRecord::Base
 
   validates_presence_of :agency_id
   
+  STATUS = { IVT: 'Invited',
+             ACT: 'Active' }
+          
+  validates :status, inclusion: STATUS.values
+  
   validate :not_removing_sole_agency_admin, on: :update
   
   def not_removing_sole_agency_admin

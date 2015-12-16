@@ -11,12 +11,6 @@ class Agency < ActiveRecord::Base
   validates :website, :website => true
   validates :fax, :phone => true, allow_blank: true
   
-  # For the following methods, 'logged_in_user' can be either an
-  # AgencyPerson object, or the User object associated with an AgencyPerson
-  # In either case, this object needs to represent:
-  #   an AgencyPerson object (directly or via user.actable), and,
-  #   that person must be logged in
-  
   def self.agency_admins(agency)
     find_users_with_role(agency, AgencyRole::ROLE[:AA])
   end
