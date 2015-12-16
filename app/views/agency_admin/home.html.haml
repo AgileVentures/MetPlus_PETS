@@ -31,5 +31,7 @@
   
 %div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
-    = button_to 'Invite Person', new_user_invitation_path(@agency.id), |
-          method: :get, class: 'btn btn-primary'                   |
+    = link_to 'Invite Person',     |
+          new_user_invitation_path(person_type: 'AgencyPerson',   |
+              agency_id: @agency.id),                             |
+          method: :get, class: 'btn btn-primary'                  |

@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
-                                     :sign_in => 'login' } #,
-                     # :controllers => { :invitations => 'people/invitations' }                                
+                                     :sign_in => 'login' },
+                     :controllers => { :invitations => 'people_invitations' }                                
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
