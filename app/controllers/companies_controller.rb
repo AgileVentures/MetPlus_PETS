@@ -22,5 +22,4 @@ class CompaniesController < ApplicationController
                                 :password, :password_confirmation],
     addresses_attributes: [:id, :street, :city, :zipcode])
   end
-
 end
