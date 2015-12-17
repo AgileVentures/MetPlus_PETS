@@ -1,5 +1,6 @@
 %h1 Companies#new
 %h2 Sign up
+
 = form_for(@company) do |f|
     = f.label :name, 'Company Name'
     = f.text_field :name, size: 30
@@ -22,4 +23,3 @@
     %br
     .actions
     = f.submit "Sign up"
-  
