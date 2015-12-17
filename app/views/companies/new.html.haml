@@ -1,33 +1,25 @@
 %h1 Companies#new
 %h2 Sign up
 = form_for(@company) do |f|
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  .field
-    = f.label :first_name
-    %br/
-    = f.text_field :first_name
-  .field
-    = f.label :last_name
-    %br/
-    = f.text_field :last_name
-  .field
-    = f.label :phone
-    %br/
-    = f.text_field :phone
-  .field
-    = f.label :password
-    - if @minimum_password_length
-      %em
-        (#{@minimum_password_length} characters minimum)
-    %br/
-    = f.password_field :password, autocomplete: "off"
-  .field
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
-  .actions
+    = f.label :name, 'Company Name'
+    = f.text_field :name, size: 30
+    %br
+    = f.label  :email, 'Email'
+    = f.email_field  :email, size: 30
+    %br
+    = f.label  :phone, 'Company Phone Number'
+    = f.phone_field  :phone, size: 30
+    %br
+    = f.label  :website, 'Company Website'
+    = f.text_field  :website, size: 30
+    %br
+    = f.label  :ein, 'Employer ID Number'
+    = f.number_field  :ein, size: 10
+    %br
+    = f.label  :description, 'Description'
+    = f.text_area  :description, cols: 90, rows: 5
+    %br
+    %br
+    .actions
     = f.submit "Sign up"
-= render "devise/shared/links"
+    end
