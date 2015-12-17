@@ -11,15 +11,15 @@ class CompaniesController < ApplicationController
       redirect_to root_path
     else
       render 'new'
-      flash.notice = "Oopsie!"
+      flash.notice = @company.errors
     end
   end
 
   private
-
   def company_params
-   	params.require(:company).permit(:name, :email, :phone,
+    params.require(:company).permit(:name, :email, :phone,
    	:website, :ein, :description)
- 	end
+
+  end
 
 end
