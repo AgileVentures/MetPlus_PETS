@@ -172,3 +172,8 @@ Scenario: cannot remove sole agency admin
   And I should see "Agency Admin"
   And the selection "Agency Admin" should be disabled
   
+Scenario: invite new agency admin
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  Then I click the "Invite Person" link
+  And I should see "Send invitation"
