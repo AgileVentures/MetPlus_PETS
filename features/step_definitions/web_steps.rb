@@ -62,6 +62,7 @@ end
 When(/^I confirm the popup dialog$/) do
   #page.accept_confirm # clicks the 'OK' button
   box = page.driver.browser.switch_to.alert
+  expect(box.text).not_to be_empty
   box.accept
   
   # If wish to confirm the text of the dialog box, this will work:

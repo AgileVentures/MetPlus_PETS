@@ -42,21 +42,22 @@
   .form-group
     = person_form.label :job_categories, 'Job Categories', class: 'control-label col-sm-2'
     .col-sm-8
-      = person_form.collection_check_boxes(:job_category_ids,        |
-                          JobCategory.all, :id, :name) do |box|   |
+      = person_form.collection_check_boxes(:job_category_ids,         |
+                              JobCategory.all, :id, :name) do |box|   |
         = box.label(class: 'checkbox col-sm-8 normal-label') do
           = box.check_box
           = box.text
           
   -# job_seekers  (has_and_belongs_to_many)
   -# NEED TO ACCOMODATE SCROLLING DUE TO LARGE NUMBER OF JOB_SEEKERS
+  -# NEED TO RESOLVE JOB SEEKER<>AGENCY PERSON ASSOCIATIONS QUESTION
   .form-group
     = person_form.label :job_seekers, 'Job Seekers', {class: 'control-label col-sm-2', |
               'data-toggle' => 'tooltip', 'data-placement' => 'top',  |
               title: "Must have 'Job Developer' role"}    |
     .col-sm-8
-      = person_form.collection_check_boxes(:job_seeker_ids,        |
-                          JobSeeker.all, :id, :full_name) do |box|   |
+      = person_form.collection_check_boxes(:job_seeker_ids,           |
+                           JobSeeker.all, :id, :full_name) do |box|   |
         = box.label(class: 'checkbox col-sm-8 normal-label') do
           = box.check_box
           = box.text
