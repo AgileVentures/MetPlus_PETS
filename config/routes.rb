@@ -17,7 +17,9 @@ Rails.application.routes.draw do
 
   resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
+
   resources :companies
+
   root 'main#index'
 
   get 'agency_admin/home', path: '/admin/agency_admin/home'
