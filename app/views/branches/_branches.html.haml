@@ -1,0 +1,31 @@
+%h3 Agency Branches
+
+%div{:class => 'row'}
+  %div{:class => 'panel panel-default'}
+    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
+      %thead
+        %tr
+          %td
+            Code
+          %td
+            City
+          %td
+            Street
+          %td
+            Zipcode
+      %tbody
+        - branches.each do |branch|
+          %tr
+            %td
+              = link_to "#{branch.code}", branch_path(branch)
+            - if branch.address
+              %td
+                = branch.address.city
+              %td
+                = branch.address.street
+              %td
+                = branch.address.zipcode
+            - else
+              %td
+              %td
+              %td

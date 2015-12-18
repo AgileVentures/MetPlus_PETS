@@ -1,6 +1,6 @@
 class Agency < ActiveRecord::Base
   has_many :agency_people
-  has_many :addresses, as: :location
+  has_many :branches
   has_and_belongs_to_many :companies
   
   validates_presence_of :name, :website, :phone, :email
@@ -9,4 +9,34 @@ class Agency < ActiveRecord::Base
   validates :phone, :phone => true
   validates :email, :email => true
   validates :website, :website => true
+  validates :fax, :phone => true, allow_blank: true
+  
+  # For the following methods, 'logged_in_user' can be either an
+  # AgencyPerson object, or the User object associated with an AgencyPerson
+  # In either case, this object needs to represent:
+  #   an AgencyPerson object (directly or via user.actable), and,
+  #   that person must be logged in
+  
+  def self.agency_admins(agency)
+    find_users_with_role(agency, AgencyRole::ROLE[:AA])
+  end
+  
+  def self.this_agency(user)
+    raise RuntimeError, 'Logged in user is not an agency person' unless
+            user.actable.is_a? AgencyPerson
+            
+    user.actable.agency
+  end
+  
+  private
+  
+  def self.find_users_with_role(agency, role)
+    users = []
+    agency.agency_people.each do |ap|
+                users << ap if ap.agency_roles && 
+                               ap.agency_roles.pluck(:role).include?(role)
+    end
+    users
+  end
+  
 end

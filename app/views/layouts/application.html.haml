@@ -4,12 +4,12 @@
     %meta(charset="utf-8")
     %title  MetPlus
     = csrf_meta_tags
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css'
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'
     = stylesheet_link_tag "application", :media => "all", 'data-turbolinks-track' => true
     = javascript_include_tag "application", 'data-turbolinks-track' => true
-    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'
+    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
   %body
     = render partial: 'layouts/menu'
     %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center; display:none;"}
@@ -19,6 +19,21 @@
           - flash.each do |key, value|
             %div{:class => "alert #{flash_to_css key}"}
               = value
+              %a{href: "#", class: "close", "data-dismiss" =>  "alert",  "aria-label" => "close"} &times;
+      -# The following 'if' statement will display model validation errors in the view.
+      -# To use this, set the variable @model_errors equal to the errors collection of
+      -# your model.  For instance, if your model is Agency and your model instance has
+      -# validation errors (perhaps by calling the 'valid?' method) then this line in the
+      -# controller would work:
+      -#     @model_errors = @agency.errors
+      - if @model_errors && @model_errors.any?
+        %div{id: 'errors_explanation'}
+          %h4= pluralize(@model_errors.count, 'error') + |
+               " prevented this record from being saved:" |
+          %ul
+            - @model_errors.full_messages.each do |msg|
+              %li= msg
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'
+

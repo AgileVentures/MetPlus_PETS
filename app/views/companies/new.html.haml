@@ -1,6 +1,6 @@
 %h1 Companies#new
 %h2 Sign up
-
+%div{class: 'form_div'}
 = form_for(@company) do |f|
     = f.label :name, 'Company Name'
     = f.text_field :name, size: 30
