@@ -13,6 +13,7 @@ class CompaniesController < ApplicationController
     if @company.save
       flash.notice = "Success!"
       redirect_to root_path
+      # associate with an agency, either MetPlus or agencies.first
     else
       render 'new'
       flash.notice = @company.errors

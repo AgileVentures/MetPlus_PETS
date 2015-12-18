@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
 
-  resources :companies
+  resources :companies, only: [:create, :new]
 
   root 'main#index'
 
