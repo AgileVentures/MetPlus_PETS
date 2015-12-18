@@ -1,31 +1,32 @@
-= form_tag :method => :put, class: 'form-horizontal' do
-  .form-group
-    = label :company, :name, 'Company Name', class: 'control-label col-sm-2'
-    .col-sm-6
-      = text_field :company, :name, size: 30, class: 'form-control'
+%div{:class => 'container'}
+  = form_tag :method => :put, class: 'form-horizontal' do
+    .form-group
+      = label :company, :name, 'Company Name', class: 'control-label col-sm-2'
+      .col-sm-6
+        = text_field :company, :name, size: 30, class: 'form-control'
 
-  .form-group
-    = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
-    .col-sm-6
-      = text_field :company, :website, size: 30, class: 'form-control'
+    .form-group
+      = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
+      .col-sm-6
+        = text_field :company, :website, size: 30, class: 'form-control'
 
-  .form-group
-    = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
-    .col-sm-6
-      = phone_field :company, :phone, size: 30, class: 'form-control'
+    .form-group
+      = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
+      .col-sm-6
+        = phone_field :company, :phone, size: 30, class: 'form-control'
 
-  .form-group
-    = label :company, :email, 'Email', class: 'control-label col-sm-2'
-    .col-sm-6
-      = email_field :company, :email, size: 30, class: 'form-control'
+    .form-group
+      = label :company, :email, 'Email', class: 'control-label col-sm-2'
+      .col-sm-6
+        = email_field :company, :email, size: 30, class: 'form-control'
 
-  .form-group
-    = label :company, :description, 'Description', class: 'control-label col-sm-2'
-    .col-sm-8
-      = text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
+    .form-group
+      = label :company, :description, 'Description', class: 'control-label col-sm-2'
+      .col-sm-8
+        = text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
 
-  .form-group
-    .col-sm-2.col-sm-offset-2
-      = submit_tag 'Submit', class: 'btn btn-primary'
-    .col-sm-2.col-sm-offset-1
-      = link_to 'Cancel', class: 'btn btn-danger'
+    .form-group
+      .col-sm-2.col-sm-offset-2
+        = submit_tag 'Submit', class: 'btn btn-primary'
+      .col-sm-2.col-sm-offset-1
+        = link_to 'Cancel', class: 'btn btn-danger'
