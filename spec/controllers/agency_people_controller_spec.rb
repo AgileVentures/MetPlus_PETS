@@ -86,75 +86,22 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
     end
   end
-  
-  describe "POST #create" do
-    
-    let(:agency)   { FactoryGirl.create(:agency) }
-    let(:person)   { FactoryGirl.build(:agency_person, agency: agency) }
-    let(:person2)  { FactoryGirl.build(:agency_person, agency: agency) }
-    
-    context 'valid attributes' do
-      before(:each) do
-        post :create, agency_id: agency, 
-                      agency_person: person.attributes.merge(person.user.attributes)
-      end
-      xit 'assigns @agency for person association' do
-        expect(assigns(:agency)).to eq agency
-      end
-      xit 'sets flash message' do
-        expect(flash[:notice]).to eq "Person was successfully created."
-      end
-      xit "returns redirect status" do
-        expect(response).to have_http_status(:redirect)
-      end
-      xit 'redirects to agency_admin home' do
-        expect(response).to redirect_to(agency_admin_home_path)
-      end
-    end
-    
-    context 'invalid attributes' do
-      before(:each) do
-        post :create, agency_id: agency, 
-                      agency_person: person2.attributes.merge(person1.user.attributes)
-      end
-      xit 'assigns @agency for person association' do
-        expect(assigns(:agency)).to eq agency
-      end
-      xit 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).
-                 to eq person2.errors.full_messages
-      end
-      xit 'renders new template' do
-        expect(response).to render_template('new')
-      end
-      xit "returns http success" do
-        expect(response).to have_http_status(:success)
-      end
-    end
-  end
-
-  describe "GET #new" do
-    
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
-    
-    before(:each) do
-      sign_in agency_admin
-      get :new, agency_id: agency
-    end
-    xit 'assigns @agency for person creation' do
-      expect(assigns(:agency)).to eq agency
-    end
-    xit "returns http success" do
-      get :new, agency_id: agency
-      expect(response).to have_http_status(:success)
-    end
-  end
 
   describe "GET #destroy" do
-    xit "returns http success" do
-      get :destroy
-      expect(response).to have_http_status(:success)
+    
+    let(:person) { FactoryGirl.create(:agency_person) }
+    
+    before(:each) do
+      get :destroy, id: person.id
+    end
+    
+    it 'sets flash message' do
+      expect(flash[:notice]).
+        to eq "Person '#{person.full_name(last_name_first: false)}' deleted."
+    end
+        
+    it "returns http success" do
+      expect(response).to have_http_status(:redirect)
     end
   end
 

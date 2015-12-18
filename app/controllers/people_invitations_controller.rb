@@ -1,14 +1,8 @@
 class PeopleInvitationsController < Devise::InvitationsController
   def new
     session[:person_type] = params[:person_type]
-    session[:agency_id]   = params[:agency_id]
+    session[:org_id]      = params[:org_id]
     super
-  end
-
-  def edit
-  end
-
-  def update
   end
   
   private
@@ -20,30 +14,34 @@ class PeopleInvitationsController < Devise::InvitationsController
 		if user.errors.empty?
       case session[:person_type]
       when 'AgencyPerson'
-				agency_person = AgencyPerson.new 
-        agency_person.user = user
-        agency_person.agency_id = session[:agency_id]
-				agency_person.status = AgencyPerson::STATUS[:IVT]
-				agency_person.save
-        store_location_for user, edit_agency_person_path(agency_person.id)
-			end
+				person = AgencyPerson.new 
+        person.user = user
+        person.agency_id = session[:org_id]
+				person.status = AgencyPerson::STATUS[:IVT]
+				person.save
+        store_location_for user, edit_agency_person_path(person.id)
+      when 'CompanyPerson'
+        # logic here
+      end 
       session[:person_type] = nil
-      session[:agency_id]   = nil
+      session[:org_id]      = nil
 		end
 		user
 	end
   
-=begin
-  def after_invite_path_for(user_inviter)
-    debugger
-    case user.actable
+  # this is called when accepting invitation
+  # should return an instance of resource class (User)
+  def accept_resource
+    user = resource_class.accept_invitation!(update_resource_params)
+    case (person = user.actable)
     when AgencyPerson
-      edit_agency_person_path(user.actable.id)
+      person.status = AgencyPerson::STATUS[:ACT]
+      person.save
+      store_location_for user, agency_home_path(person.agency_id)
     when CompanyPerson
-      company_admin_home_path(user.actable.id)
-    else
-      super
+      # logic here
     end
+    user
   end
-=end
+
 end
