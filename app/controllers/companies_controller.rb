@@ -11,9 +11,9 @@ class CompaniesController < ApplicationController
   def create
     @company = Company.new(company_params)
     if @company.save
+      # associate with an agency, either MetPlus or Agency.first
       flash.notice = "Success!"
       redirect_to root_path
-      # associate with an agency, either MetPlus or agencies.first
     else
       render 'new'
       flash.notice = @company.errors
