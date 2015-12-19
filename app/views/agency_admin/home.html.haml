@@ -1,17 +1,11 @@
 %h2 PETS Administration
 
 = render partial: 'agencies/agency', object: @agency
-    
-%div{:class => 'container'}
-  %br
-  Agency Admins:
-  - @agency_admins.each do |aa|
-    = aa.full_name(last_name_first: false)
-    = ', ' if aa != @agency_admins.last
 
+%div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
     = button_to 'Edit Agency', edit_agency_path(@agency), |
-          method: :get, class: 'btn btn-primary'          |
+            method: :get, class: 'btn btn-primary'        |
 
 - if @agency.branches.empty? 
   There are no branches
@@ -21,7 +15,7 @@
 %div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
     = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
-          method: :get, class: 'btn btn-primary'                   |
+          method: :get, class: 'btn btn-primary'                  |
 
 
 - if @agency.agency_people.empty? 
@@ -35,3 +29,5 @@
           new_user_invitation_path(person_type: 'AgencyPerson',   |
                  org_id: @agency.id),                             |
           method: :get, class: 'btn btn-primary'                  |
+%br/
+%br/

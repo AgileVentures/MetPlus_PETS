@@ -27,7 +27,7 @@
       -# controller would work:
       -#     @model_errors = @agency.errors
       - if @model_errors && @model_errors.any?
-        %div{id: 'errors_explanation'}
+        %div{class: 'errors_explanation'}
           %h4= pluralize(@model_errors.count, 'error') + |
                " prevented this record from being saved:" |
           %ul
