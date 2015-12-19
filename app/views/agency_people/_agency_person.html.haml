@@ -7,6 +7,10 @@
     First Name:
     %br
     Last Name:
+    %br
+    Email:
+    %br
+    Status:
   %div{class: 'div_align_right'}
     = agency_person.agency.name
     %br
@@ -15,6 +19,10 @@
     = agency_person.first_name
     %br
     = agency_person.last_name
+    %br
+    = mail_to agency_person.email
+    %br
+    = agency_person.status if agency_person.status
 
 %h4 
   = "#{agency_person.first_name} has these roles:"

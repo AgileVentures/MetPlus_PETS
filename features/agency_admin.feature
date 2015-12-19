@@ -177,3 +177,8 @@ Scenario: invite new agency admin
   And I click the "Admin" link
   Then I click the "Invite Person" link
   And I should see "Send invitation"
+  And I fill in "Email" with "adam@metplus.org"
+  And I fill in "First name" with "Adam"
+  And I fill in "Last name" with "Powell"
+  And I click the "Send an invitation" button
+  And I should see "An invitation email has been sent to adam@metplus.org."
