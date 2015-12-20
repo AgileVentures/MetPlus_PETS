@@ -172,7 +172,7 @@ Scenario: cannot remove sole agency admin
   And I should see "Agency Admin"
   And the selection "Agency Admin" should be disabled
   
-Scenario: invite new agency admin
+Scenario: invite (and reinvite) new agency admin
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Invite Person" link
@@ -181,4 +181,9 @@ Scenario: invite new agency admin
   And I fill in "First name" with "Adam"
   And I fill in "Last name" with "Powell"
   And I click the "Send an invitation" button
+  And I should see "An invitation email has been sent to adam@metplus.org."
+  And I should see "Edit Agency Person: Adam Powell"
+  And I click the "Cancel" link
+  Then I should see "Agency Person"
+  And I click the "invite again" link
   And I should see "An invitation email has been sent to adam@metplus.org."

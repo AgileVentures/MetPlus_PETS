@@ -14,12 +14,18 @@ class PeopleInvitationsController < Devise::InvitationsController
 		if user.errors.empty?
       case session[:person_type]
       when 'AgencyPerson'
-				person = AgencyPerson.new 
-        person.user = user
-        person.agency_id = session[:org_id]
-				person.status = AgencyPerson::STATUS[:IVT]
-				person.save
-        store_location_for user, edit_agency_person_path(person.id)
+        if (person = user.actable)
+          # If agency_person is already associated with this user, this means
+          # that another invitation was sent to a previously-invited person.
+          store_location_for user, agency_person_path(person)
+        else
+				  person = AgencyPerson.new 
+          person.user = user
+          person.agency_id = session[:org_id]
+				  person.status = AgencyPerson::STATUS[:IVT]
+				  person.save
+          store_location_for user, edit_agency_person_path(person.id)
+        end
       when 'CompanyPerson'
         # logic here
       end 
