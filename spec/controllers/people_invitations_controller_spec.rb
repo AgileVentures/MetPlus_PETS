@@ -58,7 +58,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
         expect(flash[:notice]).
             to eq "An invitation email has been sent to #{user_hash[:email]}."
       end
-      it 'redirect to agency_admin home' do
+      it 'redirects as specified' do
         expect(response).
             to render_template(@controller.after_invite_path_for(agency_admin))
       end
@@ -66,6 +66,27 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       it 'resets session hash values to nil' do
         expect(session[:person_type]).to be nil
         expect(session[:org_id]).to be nil
+      end
+    end
+    
+    context 'reinviting a user' do
+      
+      let(:agency)        { FactoryGirl.create(:agency) }
+      let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
+      let!(:user_hash)    { FactoryGirl.attributes_for(:user) }
+      
+      it 'creates user once upon initial invite' do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in agency_admin
+        expect { 4.times {post :create, user: user_hash } }.
+                        to change(User, :count).by(+1)
+      end
+      
+      it 'resends invitation to same user' do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in agency_admin
+        expect { 4.times {post :create, user: user_hash } }.
+                        to change(all_emails, :count).by(+4)
       end
     end
     

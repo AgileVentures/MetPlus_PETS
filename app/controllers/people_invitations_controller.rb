@@ -7,28 +7,31 @@ class PeopleInvitationsController < Devise::InvitationsController
   
   private
   
-	# this is called when creating invitation
+	# this is called when creating or resending an invitation
   # should return an instance of resource class (User)
 	def invite_resource(&block)
 		user = resource_class.invite!(invite_params, current_inviter, &block)
 		if user.errors.empty?
-      case session[:person_type]
-      when 'AgencyPerson'
-        if (person = user.actable)
-          # If agency_person is already associated with this user, this means
-          # that another invitation was sent to a previously-invited person.
-          store_location_for user, agency_person_path(person)
-        else
+      if (person = user.actable)
+        # If a person is already associated with this user, this means
+        # that another invitation was sent to that previously-invited person.
+        redirect_path = (person.class == AgencyPerson ? 
+                  agency_person_path(person.id) : company_person_path(person.id) )
+        store_location_for user, redirect_path
+      else
+        # Otherwise, this is a first invitation for this user - associate a person
+        case session[:person_type]
+        when 'AgencyPerson'
 				  person = AgencyPerson.new 
           person.user = user
           person.agency_id = session[:org_id]
 				  person.status = AgencyPerson::STATUS[:IVT]
 				  person.save
           store_location_for user, edit_agency_person_path(person.id)
-        end
-      when 'CompanyPerson'
-        # logic here
-      end 
+        when 'CompanyPerson'
+          # logic here
+        end 
+      end
       session[:person_type] = nil
       session[:org_id]      = nil
     else
