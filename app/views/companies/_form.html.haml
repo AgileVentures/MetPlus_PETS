@@ -1,25 +1,30 @@
 %h2 Employer Registration
-= form_tag companies_path, method: :post, class: 'form-horizontal' do
+= form_for company, url: companies_path, method: :post, html: {class: 'form-horizontal'} do |f|
   .form-group
     = label :company, :name, 'Company Name', class: 'control-label col-sm-2'
     .col-sm-6
-      = text_field :company, :name, size: 30, class: 'form-control'
+      = f.text_field :name, size: 30, class: 'form-control'
 
-  .form-group
-    = label :address, :street, 'Company Address', class: 'control-label col-sm-2'
-    .col-sm-6
-      = text_field :address, :street, size: 30, class: 'form-control'
+  = f.fields_for :address do |address_f|
+    .form-group
+      = address_f.label :street, 'Company Address', class: 'control-label col-sm-2'
+      .col-sm-6
+        = address_f.text_field :street, class: 'form-control'
 
-  .form-group
-    = label :address, :city, 'City', class: 'control-label col-sm-2'
-    .col-sm-3
-      = text_field :address, :city, size: 30, class: 'form-control'
-    = label :address, :state, 'State', class: 'control-label col-sm-2'
-    .col-sm-1
-      = text_field :address, :state, size: 2, class: 'form-control'
-    = label :address, :zipcode, 'Zip', class: 'control-label col-sm-2'
-    .col-sm-2
-      = text_field :address, :zipcode, size: 10, class: 'form-control'
+    .form-group
+      = address_f.label :city, 'City', class: 'control-label col-sm-2'
+      .col-sm-3
+        = address_f.text_field :city, size: 30, class: 'form-control'
+
+    .form-group
+      = address_f.label :state, 'State', class: 'control-label col-sm-2'
+      .col-sm-1
+        = address_f.text_field :state, size: 2, class: 'form-control'
+
+    .form-group
+      = address_f.label :zipcode, 'Zip', class: 'control-label col-sm-2'
+      .col-sm-2
+        = address_f.text_field :zipcode, size: 10, class: 'form-control'
 
   .form-group
     = label :company, :email, 'Email', class: 'control-label col-sm-2'
@@ -32,19 +37,18 @@
   .form-group
     = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
     .col-sm-4
-      = text_field :company, :website, size: 30, class: 'form-control'
+      = f.text_field :website, size: 30, class: 'form-control'
 
     = label :company, :ein, 'Employer Identification Number', class: 'control-label col-sm-2'
     .col-sm-4
-      = text_field :company, :ein, size: 30, class: 'form-control'
+      = f.text_field :ein, size: 30, class: 'form-control'
 
   .form-group
     = label :company, :description, 'Description', class: 'control-label col-sm-2'
     .col-sm-8
-      = text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
+      = text_area :description, cols: 90, rows: 5, class: 'form-control'
 
   .form-group
     .col-sm-2.col-sm-offset-2
-      = submit_tag 'Submit', class: 'btn btn-primary'
+      = submit_tag 'Submit', method: :post, class: 'btn btn-primary'
     .col-sm-2.col-sm-offset-1
-      = link_to 'Cancel', class: 'btn btn-danger'
