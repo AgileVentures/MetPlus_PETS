@@ -172,7 +172,7 @@ Scenario: cannot remove sole agency admin
   And I should see "Agency Admin"
   And the selection "Agency Admin" should be disabled
   
-Scenario: invite (and reinvite) new agency admin
+Scenario: invite (and reinvite) new agency person
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Invite Person" link
@@ -187,3 +187,27 @@ Scenario: invite (and reinvite) new agency admin
   Then I should see "Agency Person"
   And I click the "invite again" link
   And I should see "An invitation email has been sent to adam@metplus.org."
+  Then "adam@metplus.org" should receive 2 emails with subject "Invitation instructions"
+  When "adam@metplus.org" opens the email
+  Then they should see "MetPlus has invited you confirm your account in PETS" in the email body
+  
+Scenario: agency person accepts invitation in email
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  Then I click the "Invite Person" link
+  And I fill in "Email" with "adam@metplus.org"
+  And I fill in "First name" with "Adam"
+  And I fill in "Last name" with "Powell"
+  And I click the "Send an invitation" button
+  And I should see "An invitation email has been sent to adam@metplus.org."
+  And I log out
+  Then "adam@metplus.org" should receive 1 email with subject "Invitation instructions"
+  When "adam@metplus.org" opens the email
+  Then they should see "Accept invitation" in the email body
+  And "adam@metplus.org" follows "Accept invitation" in the email
+  Then they should see "Set your password"
+  And they fill in "Password" with "qwerty123"
+  And they fill in "Password confirmation" with "qwerty123"
+  And they click the "Set my password" button
+  Then they should see "Your password was set successfully. You are now signed in."
+  
