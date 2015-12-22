@@ -46,9 +46,10 @@
   .form-group
     = label :company, :description, 'Description', class: 'control-label col-sm-2'
     .col-sm-8
-      = text_area :description, cols: 90, rows: 5, class: 'form-control'
+      = text_area :description, class: 'form-control'
 
   .form-group
     .col-sm-2.col-sm-offset-2
       = submit_tag 'Submit', method: :post, class: 'btn btn-primary'
-    .col-sm-2.col-sm-offset-1
+    .col-sm-2.col-sm-offset-2
+      = link_to 'Cancel', root_path, class: 'btn btn-danger'

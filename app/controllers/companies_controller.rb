@@ -10,13 +10,13 @@ class CompaniesController < ApplicationController
 
   def create
     @company = Company.new(company_params)
+    @company.agencies << Agency.first
     if @company.save
-      @company.agencies << Agency.first
       flash.notice = "Success!"
-      redirect_to root_path
+      render 'confirmation'
     else
       render 'new'
-      flash.notice = @company.errors
+      @model_errors = @company.errors
     end
   end
 
