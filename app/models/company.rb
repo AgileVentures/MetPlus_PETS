@@ -8,7 +8,7 @@ class Company < ActiveRecord::Base
   validates :ein,   :ein_number => true
   validates :phone, :phone => true
   validates :email, :email => true
-  validates :website, :url => true
+  validates :website, :website => true
   validates_presence_of :name
     
 end
