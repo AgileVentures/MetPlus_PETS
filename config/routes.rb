@@ -19,6 +19,7 @@ Rails.application.routes.draw do
                        only: [:show, :edit, :update, :destroy]
 
   resources :companies, only: [:create, :new]
+  resources :company_people, only: [:create, :new]
 
   root 'main#index'
 
