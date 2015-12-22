@@ -152,7 +152,7 @@ Scenario: edit agency person
   And I should see "002"
   And I should see "Agency Admin"
   
-Scenario: cancel agency person branch
+Scenario: cancel agency person edit
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Jones, Jane" link
@@ -162,6 +162,15 @@ Scenario: cancel agency person branch
   Then I click the "Cancel" link
   Then I should see "Jane Jones"
   And I should not see "002"
+
+@selenium
+Scenario: delete agency person
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "Jones, Jane" link
+  Then I click the "Delete Person" button
+  And I confirm the popup dialog
+  Then I should see "Person 'Jane Jones' deleted."
   
 Scenario: cannot remove sole agency admin
   Given I am logged in as agency admin
