@@ -15,7 +15,7 @@ def search_text text
     end
   end
 end
-Then(/^I should( not)? see "([^"]*)"$/) do |not_see, string|
+Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   unless not_see
     expect(page.body).to have_text string
   else
@@ -36,19 +36,19 @@ Then(/^I wait for (\d+) seconds$/) do |seconds|
   sleep seconds.to_i.seconds
 end
 
-When(/^I fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
+When(/^(?:I|they) fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
   fill_in field, with: value
 end
 
-When(/^I click the "([^"]*)" link$/) do |link|
+When(/^(?:I|they) click the "([^"]*)" link$/) do |link|
   click_link link
 end
 
-When(/^I click(?: the)? "([^"]*)" button$/) do |button|
+When(/^(?:I|they) click(?: the)? "([^"]*)" button$/) do |button|
   click_button button
 end
 
-When(/^I fill in the fields:$/) do |table|
+When(/^(?:I|they) fill in the fields:$/) do |table|
   # table is a table.hashes.keys # => [:First name, :John]
   table.raw.each do |field, value|
     fill_in field, :with => value
@@ -59,7 +59,7 @@ And(/^show me the page$/) do
   save_and_open_page
 end
 
-When(/^I confirm the popup dialog$/) do
+When(/^(?:I|they) confirm the popup dialog$/) do
   #page.accept_confirm # clicks the 'OK' button
   box = page.driver.browser.switch_to.alert
   expect(box.text).not_to be_empty
@@ -74,11 +74,11 @@ When(/^I confirm the popup dialog$/) do
   #   box.dismiss
 end
 
-When(/^I select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
+When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
   find(:select, list).find(:option, item).select_option
 end
 
-And(/^I check "([^"]*)"$/) do |item|
+And(/^(?:I|they) check "([^"]*)"$/) do |item|
   check(item)
 end
 
