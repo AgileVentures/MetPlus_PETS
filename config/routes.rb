@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+ 
+
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
                                      :sign_in => 'login' },
                      :controllers => { :invitations => 'people_invitations' }                                
@@ -25,7 +27,9 @@ Rails.application.routes.draw do
   
   get 'agency/home', path: '/agency/:id'
   
-  # The priority is based upon order of creation: first created -> highest priority.
+  resources :job_seekers 
+    
+   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
