@@ -13,7 +13,7 @@ class AgencyPerson < ActiveRecord::Base
              ACT:   'Active',
              INACT: 'Inactive' }
           
-  # validates :status, inclusion: STATUS.values
+  validates :status, inclusion: STATUS.values
   
   validate :not_removing_sole_agency_admin, on: :update
   
