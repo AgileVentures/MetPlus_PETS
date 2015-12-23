@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+ 
+
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
                                      :sign_in => 'login' }                                
   devise_scope :user do
@@ -17,6 +19,19 @@ Rails.application.routes.draw do
   root 'main#index'
   
   get 'agency_admin/home', path: '/admin/agency_admin/home'
+
+ 
+
+  resources :job_seekers #, path: '/job_seekers/'  
+                          #only: [:show, :edit, :update, :destroy]
+ 
+  
+  
+ 
+  
+  #path: '/jobseeker',
+                        #only: [:create, :new]
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
