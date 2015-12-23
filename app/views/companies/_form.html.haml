@@ -6,7 +6,7 @@
     .col-sm-6
       = f.text_field :name, size: 30, class: 'form-control'
 
-  = f.fields_for :address do |address_f|
+  = f.fields_for :addresses do |address_f|
     .form-group
       = address_f.label :street, 'Company Address', class: 'control-label col-sm-2'
       .col-sm-6
@@ -16,11 +16,6 @@
       = address_f.label :city, 'City', class: 'control-label col-sm-2'
       .col-sm-3
         = address_f.text_field :city, size: 30, class: 'form-control'
-
-    .form-group
-      = address_f.label :state, 'State', class: 'control-label col-sm-2'
-      .col-sm-1
-        = address_f.text_field :state, size: 2, class: 'form-control'
 
     .form-group
       = address_f.label :zipcode, 'Zip', class: 'control-label col-sm-2'
@@ -47,32 +42,8 @@
 
   .form-group
     = label :company, :description, 'Description', class: 'control-label col-sm-2'
-    .col-sm-8
-      = text_area :description, class: 'form-control'
-
-
-
-    %h3 Company Contact
-
-  = f.fields_for :company_person url: {action: create} do |company_person_f|
-    .form-group
-      = company_person_f.label :first_name, 'First Name', class: 'control-label col-sm-2'
-      .col-sm-4
-        = company_person_f.text_field :first_name, class: 'form-control'
-
-    .form-group
-      = company_person_f.label :last_name, 'Last Name', class: 'control-label col-sm-2'
-      .col-sm-4
-        = company_person_f.text_field :last_name, class: 'form-control'
-
-    .form-group
-      = company_person_f.label :phone, 'Phone', class: 'control-label col-sm-2'
-      .col-sm-3
-        = company_person_f.phone_field :phone, size: 30, class: 'form-control'
-
-    .form-group
-      = company_person_f.label :email, 'Email', class: 'control-label col-sm-2'
-      .col-sm-2
+    .col-sm-10
+      =text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
 
 
   .form-group

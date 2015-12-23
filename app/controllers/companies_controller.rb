@@ -2,6 +2,7 @@ class CompaniesController < ApplicationController
 
   def new
     @company = Company.new
+    @company.addresses.build
   end
 
   def show
@@ -9,7 +10,8 @@ class CompaniesController < ApplicationController
   end
 
   def create
-    @company = Company.new(company_params)
+    @company = Company.new
+    @company.assign_attributes(company_params)
     @company.agencies << Agency.first
     if @company.save
       flash.notice = "Success!"
@@ -23,7 +25,8 @@ class CompaniesController < ApplicationController
   private
   def company_params
     params.require(:company).permit(:name, :email, :phone,
-   	:website, :ein, :description)
+    :website, :ein, :description,
+    addresses_attributes: [:id, :street, :city, :zipcode])
 
   end
 
