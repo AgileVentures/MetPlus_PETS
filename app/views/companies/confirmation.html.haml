@@ -2,4 +2,9 @@
 Thank you for giving us your information! A representative will be in touch with your contact person soon.
 
 = render @company
-= @company.addresses[0]
+= @company.addresses[0].street
+%br
+= @company.addresses[0].city
+%br
+= @company.addresses[0].zipcode
+%br
