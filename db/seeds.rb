@@ -146,3 +146,10 @@ agency_person = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                       branch_id: agency.branches[2].id)
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
+
+jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+"1990", confirmed_at: Time.now)
+
+
+
+
