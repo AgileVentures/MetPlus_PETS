@@ -172,6 +172,7 @@ agency_cm_and_jd.save!
 agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                       agency_id: agency.id, email: 'jane@metplus.org',
                       password: 'qwerty123', confirmed_at: Time.now,
+
                       branch_id: agency.branches[2].id,
                       status: AgencyPerson::STATUS[:ACT])
 agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
@@ -193,3 +194,12 @@ JobCategory.create(name: 'SW Project Manager - Waterfall',
             description: 'Manages SW development projects using waterfall SDLC')
 JobCategory.create(name: 'Product Manager - SaaS',
             description: 'Manages SaaS product development and commecialization')
+                      
+
+jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+"1990", confirmed_at: Time.now)
+
+
+
+
+
