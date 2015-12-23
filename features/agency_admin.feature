@@ -50,7 +50,7 @@ Scenario: non-admin does not see 'admin' in menu
 Scenario: edit agency information
   Given I am logged in as agency admin
   And I click the "Admin" link
-  Then I click the "Edit Agency" link
+  Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
   And I click "Update Agency" button
@@ -60,17 +60,17 @@ Scenario: edit agency information
 Scenario: cancel edit agency information
   Given I am logged in as agency admin
   And I click the "Admin" link
-  Then I click the "Edit Agency" link
+  Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
-  And I click "Cancel" button
+  And I click the "Cancel" link
   Then I should not see "Agency was successfully updated."
   And I should not see "MetPlus Two"
   
 Scenario: errors for edit agency information
   Given I am logged in as agency admin
   And I click the "Admin" link
-  Then I click the "Edit Agency" link
+  Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Phone" with ""
   And I fill in "Website" with "nodomain"
@@ -100,7 +100,7 @@ Scenario: cancel edit branch
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "004"
-  Then I click the "Cancel" button
+  Then I click the "Cancel" link
   Then I should see "Agency Branch"
   And I should not see "004"
 
@@ -119,7 +119,7 @@ Scenario: error for edit branch
 Scenario: new agency branch
   Given I am logged in as agency admin
   And I click the "Admin" link
-  And I click the "Create Branch" button
+  And I click the "Add Branch" button
   Then I fill in "Branch Code" with "004"
   And I fill in "Street" with "10 Ford Way"
   And I fill in "City" with "Detroit"
@@ -137,4 +137,38 @@ Scenario: delete agency branch
   And I confirm the popup dialog
   Then I should see "Branch '003' deleted."
   
-
+Scenario: edit agency person
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  Then I should see "Agency Personnel"
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I select "002" in select list "Branch"
+  And I check "Agency Admin"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Jane Jones"
+  And I should see "002"
+  And I should see "Agency Admin"
+  
+Scenario: cancel agency person branch
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I select "002" in select list "Branch"
+  Then I click the "Cancel" link
+  Then I should see "Jane Jones"
+  And I should not see "002"
+  
+Scenario: cannot remove sole agency admin
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  And I click the "Smith, John" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: John Smith"
+  And I should see "Agency Admin"
+  And the selection "Agency Admin" should be disabled
+  
