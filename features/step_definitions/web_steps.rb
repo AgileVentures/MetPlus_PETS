@@ -59,19 +59,14 @@ And(/^show me the page$/) do
   save_and_open_page
 end
 
-When(/^(?:I|they) confirm the popup dialog$/) do
-  #page.accept_confirm # clicks the 'OK' button
-  box = page.driver.browser.switch_to.alert
-  expect(box.text).not_to be_empty
-  box.accept
+When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
+  accept_confirm do
+    click_button button_text
+  end
   
   # If wish to confirm the text of the dialog box, this will work:
-  #   box = page.driver.browser.switch_to.alert
-  #   expect(box.text).to eq '<expected text here .....'
-  # The box can be accepted:
-  #   box.accept
-  # Or dismissed:
-  #   box.dismiss
+  #   message = click_button 'Delete Person'
+  #   expect(message).to eq 'Delete Person'
 end
 
 When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|

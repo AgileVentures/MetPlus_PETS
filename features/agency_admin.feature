@@ -133,8 +133,7 @@ Scenario: delete agency branch
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "003" link
-  Then I click the "Delete Branch" button
-  And I confirm the popup dialog
+  Then I click and accept the "Delete Branch" button
   Then I should see "Branch '003' deleted."
   
 Scenario: edit agency person
@@ -168,8 +167,7 @@ Scenario: delete agency person
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Jones, Jane" link
-  Then I click the "Delete Person" button
-  And I confirm the popup dialog
+  Then I click and accept the "Delete Person" button
   Then I should see "Person 'Jane Jones' deleted."
   
 Scenario: cannot remove sole agency admin

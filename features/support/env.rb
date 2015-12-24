@@ -60,7 +60,7 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
-Capybara.default_wait_time = 5 # seconds
+Capybara.default_wait_time = 5
 
 if ENV['IN_BROWSER']
   # On demand: non-headless tests via Selenium/WebDriver
