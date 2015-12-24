@@ -96,7 +96,8 @@ RSpec.describe JobSeekersController, type: :controller do
      end
   end
  end
-  
+ 
+
   describe "GET #edit" do
     before(:each) do
       @jobseeker = FactoryGirl.create(:job_seeker)
