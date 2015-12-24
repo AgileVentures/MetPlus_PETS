@@ -1,0 +1,24 @@
+%div{:class => 'container'}
+	%div{class: 'div_align_left', id: 'bold_text'}
+		%br
+		First Name:
+		%br
+		Last Name:
+		%br
+		Email:
+		%br
+		Phone:
+		%br
+		Year of Birth:
+	%div{class: 'div_align_right'}
+		%br
+		= @jobseeker.first_name
+		%br
+		= @jobseeker.last_name
+		%br
+		= @jobseeker.email
+		%br
+		= @jobseeker.phone
+		%br
+		= @jobseeker.year_of_birth
+
