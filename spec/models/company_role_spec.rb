@@ -25,7 +25,7 @@ describe CompanyRole, type: :model do
   
   describe 'Company Role' do
     it 'is valid with all required fields' do
-      expect(CompanyRole.new(role: CompanyRole::ROLE[:EC])).to be_valid
+      expect(CompanyRole.new(role: CompanyRole::ROLE[:CC])).to be_valid
     end
     it 'is invalid without an agency role' do
       agency_role = AgencyRole.new()
@@ -34,11 +34,11 @@ describe CompanyRole, type: :model do
     end
   end
   
-	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EC])
-	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:EA])
+	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
+	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
 
 	describe CompanyRole.select(:role).map(&:role) do 
-		it {should include(CompanyRole::ROLE[:EC], CompanyRole::ROLE[:EA])}
+		it {should include(CompanyRole::ROLE[:CC], CompanyRole::ROLE[:CA])}
 	end
 
 end

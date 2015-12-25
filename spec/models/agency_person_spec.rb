@@ -34,6 +34,7 @@ RSpec.describe AgencyPerson, type: :model do
       person.save
       expect(person).to_not be_valid
     end
+    it { is_expected.to validate_inclusion_of(:status).in_array(AgencyPerson::STATUS.values)}
   end
 
   describe 'Agency Person' do

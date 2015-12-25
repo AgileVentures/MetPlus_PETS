@@ -17,6 +17,5 @@ class ApplicationController < ActionController::Base
     [:first_name,:last_name, :phone].each{ |field|
       devise_parameter_sanitizer.for(:account_update)<<field  
     }
-  
   end
 end
