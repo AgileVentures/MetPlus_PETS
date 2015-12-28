@@ -7,8 +7,7 @@ class AgenciesController < ApplicationController
   def update
     @agency = Agency.find(params[:id])
     @agency.assign_attributes(agency_params)
-    if @agency.valid?
-      @agency.save
+    if @agency.save
       flash[:notice] = "Agency was successfully updated."
       redirect_to agency_admin_home_path
     else

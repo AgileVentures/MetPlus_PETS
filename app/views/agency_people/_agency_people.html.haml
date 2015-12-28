@@ -9,6 +9,8 @@
             Name
           %td
             Role(s)
+          %td
+            Status
       %tbody
         - agency_people.each do |person|
           %tr
@@ -16,3 +18,5 @@
               = link_to person.full_name, agency_person_path(person)
             %td
               = person.agency_roles.pluck(:role).join(', ')
+            %td
+              = person.status if person.status

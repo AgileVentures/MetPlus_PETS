@@ -4,8 +4,8 @@ class CompanyRole < ActiveRecord::Base
 	has_and_belongs_to_many :company_people, 
 	                        join_table: 'company_people_roles'
 	
-  ROLE = {EC: 'Employer Contact',
-          EA: 'Employer Admin'}
+  ROLE = {CC: 'Company Contact',
+          CA: 'Company Admin'}
           
   validates :role, inclusion: ROLE.values
 end

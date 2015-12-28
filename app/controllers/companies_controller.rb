@@ -11,7 +11,6 @@ class CompaniesController < ApplicationController
   end
 
   def create
-    debugger
     @company = Company.new
     @company.assign_attributes(company_params)
     @company.agencies << Agency.first
@@ -19,9 +18,8 @@ class CompaniesController < ApplicationController
       flash.notice = "Success!"
       render 'confirmation'
     else
-      render 'new'
       @model_errors = @company.errors
-      flash.notice = @company.errors
+      render 'new'
     end
   end
 

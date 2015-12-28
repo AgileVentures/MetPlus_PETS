@@ -71,12 +71,12 @@
     .form-group
       = company_person_f.label :password, 'Password', class: 'control-label col-sm-2'
       .col-sm-2
-      = company_person_f.password_field :password, size: 30, class: 'form-control'
+      = company_person_f.password_field :password
 
     .form-group
-      = company_person_f.label :password_confirmation, 'Password Confirmation', class: 'control-label col-sm-2'
+      = company_person_f.label :password_confirmation, 'Password Confirmation'
       .col-sm-2
-      = company_person_f.password_field :password_confirmation, size: 30, class: 'form-control'
+      = company_person_f.password_field :password_confirmation
 
   .form-group
     .col-sm-2.col-sm-offset-2
