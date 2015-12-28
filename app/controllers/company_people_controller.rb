@@ -6,8 +6,8 @@ class CompanyPeopleController < ApplicationController
   end
 
   def create
-    # THIS CODE IS NOT READY FOR TESTING
-    @company = Company.find(params[:company_id])
+  #  @company = Company.find(params[:company_id])
+    debugger
     @company_person = CompanyPerson.new
     @company_person.assign_attributes(company_person_params)
     @company.company_people << @company_person
@@ -47,7 +47,7 @@ class CompanyPeopleController < ApplicationController
   private
 
   def company_person_params
-    params.require(:company_person).permit(:first_name, :last_name, :phone, :email
+    params.require(:company_person).permit(:first_name, :last_name, :phone, :email, :password, :password_confirmation,
                           company_role_ids:)
   end
 end

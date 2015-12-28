@@ -3,6 +3,7 @@ class CompaniesController < ApplicationController
   def new
     @company = Company.new
     @company.addresses.build
+    @company.company_people.build
   end
 
   def show
@@ -10,6 +11,7 @@ class CompaniesController < ApplicationController
   end
 
   def create
+    debugger
     @company = Company.new
     @company.assign_attributes(company_params)
     @company.agencies << Agency.first
@@ -19,6 +21,7 @@ class CompaniesController < ApplicationController
     else
       render 'new'
       @model_errors = @company.errors
+      flash.notice = @company.errors
     end
   end
 
@@ -26,8 +29,8 @@ class CompaniesController < ApplicationController
   def company_params
     params.require(:company).permit(:name, :email, :phone,
     :website, :ein, :description,
+    {company_people_attributes: [:id, :first_name, :last_name, :phone, :email, :password, :password_confirmation]},
     addresses_attributes: [:id, :street, :city, :zipcode])
-
   end
 
 end
