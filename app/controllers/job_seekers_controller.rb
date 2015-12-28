@@ -28,6 +28,7 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
 
     if @jobseeker.update_attributes(jobseeker_params)
+
       sign_in :user, @jobseeker.user, bypass: true
       flash[:notice] = "Jobseeker was updated successfully."
       redirect_to root_path
