@@ -30,7 +30,7 @@
               Hello,
               -if current_user.actable_type == 'JobSeeker' 
                 = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
-              -else current_user
+              -else 
                 = link_to current_user.first_name, edit_user_registration_path(current_user)
               
               
