@@ -21,7 +21,6 @@ Scenario: new Js Registration
   And I fill in "Password Confirmation" with "password"
   And I fill in "Year Of Birth" with "1990"
   Then I click the "Create Job seeker" button 
-  Then I wait for 30 seconds 
   Then I should see "A message with a confirmation and link has been sent  to your email address. Please follow the link to activate your account."
 
 
