@@ -44,3 +44,16 @@ Given(/^the following agency branches exist:$/) do |table|
     branch.address = Address.create!(hash)
   end
 end
+Given(/^the following jobseeker exist:$/) do |table|
+  table.hashes.each do |hash|
+    jobseeker = hash.delete 'jobseeker'
+    hash['actable_type'] = 'JobSeeker'
+    hash['password_confirmation'] = hash['password']
+    hash['confirmed_at'] = Time.now
+    jobseeker = JobSeeker.new(hash)
+    jobseeker.save
+  end
+end
+
+
+
