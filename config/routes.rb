@@ -21,18 +21,9 @@ Rails.application.routes.draw do
   get 'agency_admin/home', path: '/admin/agency_admin/home'
 
  
-
-  resources :job_seekers #, path: '/job_seekers/'  
-                          #only: [:show, :edit, :update, :destroy]
+  resources :job_seekers 
  
   
-  
- 
-  
-  #path: '/jobseeker',
-                        #only: [:create, :new]
-  
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
