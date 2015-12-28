@@ -8,9 +8,10 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.new(jobseeker_params)
     if @jobseeker.save
        flash[:notice] = "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
-    redirect_to root_path
+       redirect_to root_path
     else
-     render 'new'
+       @model_errors = @jobseeker.errors
+       render 'new'
     end
     
   end
@@ -26,7 +27,6 @@ class JobSeekersController < ApplicationController
   
     if @jobseeker.update_attributes(jobseeker_params)
       current_user = @jobseeker.user
-      sign_in :user, current_user
       flash[:notice] = "Jobseeker was updated successfully."
       redirect_to root_path
     else
@@ -48,7 +48,8 @@ class JobSeekersController < ApplicationController
 
   def destroy
     @jobseeker = Jobseeker.find(params[:id])
-    @jobseeker.destrory
+    @jobseeker.destroy
+    flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
   end
 
