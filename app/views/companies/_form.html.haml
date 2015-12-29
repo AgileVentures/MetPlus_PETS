@@ -78,6 +78,11 @@
       .col-sm-2
       = company_person_f.password_field :password_confirmation
 
+    .form-group
+      = company_person_f.label :title, 'Title', class: 'control-label col-sm-2'
+      .col-sm-4
+        = company_person_f.text_field :title, class: 'form-control'
+
   .form-group
     .col-sm-2.col-sm-offset-2
       = submit_tag 'Submit', method: :post, class: 'btn btn-primary'
