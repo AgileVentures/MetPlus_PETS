@@ -11,6 +11,7 @@ class CompaniesController < ApplicationController
   end
 
   def create
+    debugger
     @company = Company.new
     @company.assign_attributes(company_params)
     @company.agencies << Agency.first

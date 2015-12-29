@@ -13,4 +13,10 @@ class Company < ActiveRecord::Base
   validates :website, :website => true
   validates_presence_of :name
 
+  STATUS = { PND:   'Pending', # Company has registered but not yet approved
+             ACT:   'Active',
+             INACT: 'Inactive' }
+
+  validates :status, inclusion: STATUS.values
+
 end
