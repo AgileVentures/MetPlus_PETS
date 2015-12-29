@@ -15,11 +15,17 @@ class Company < ActiveRecord::Base
   validates :email, :email => true
   validates :website, :website => true
   validates_presence_of :name
+<<<<<<< HEAD
 
+=======
+>>>>>>> new company_person is working
   STATUS = { PND:   'Pending', # Company has registered but not yet approved
              ACT:   'Active',
              INACT: 'Inactive' }
 
   validates :status, inclusion: STATUS.values
+<<<<<<< HEAD
 
+=======
+>>>>>>> new company_person is working
 end
