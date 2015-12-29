@@ -27,6 +27,7 @@ class JobSeekersController < ApplicationController
   
     if @jobseeker.update_attributes(jobseeker_params)
       current_user = @jobseeker.user
+      sign_in :user, current_user
       flash[:notice] = "Jobseeker was updated successfully."
       redirect_to root_path
     else
