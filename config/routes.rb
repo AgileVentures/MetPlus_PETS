@@ -3,17 +3,22 @@ Rails.application.routes.draw do
  
 
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
-                                     :sign_in => 'login' }                                
+                                     :sign_in => 'login' },
+                     :controllers => { :invitations => 'people_invitations' }                                
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
   end
   
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
-    resources :branches, only: [:create, :new]
+    resources :branches,      only: [:create, :new]
+    resources :agency_people, only: [:create, :new]
   end
 
   resources :branches, path: '/admin/branches', 
+                       only: [:show, :edit, :update, :destroy]
+                       
+  resources :agency_people, path: '/admin/agency_people', 
                        only: [:show, :edit, :update, :destroy]
   
   root 'main#index'
@@ -22,7 +27,9 @@ Rails.application.routes.draw do
 
  
   resources :job_seekers 
- 
+   
+  get 'agency/home', path: '/agency/:id'
+
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

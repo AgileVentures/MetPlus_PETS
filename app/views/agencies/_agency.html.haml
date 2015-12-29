@@ -1,25 +1,38 @@
-%div{:class => 'container'}
-  %div{class: 'div_align_left', id: 'bold_text'}
-    Name:
-    %br
-    Website:
-    %br
-    Phone:
-    %br
-    Fax:
-    %br
-    Email:
-    %br
-    Description:
-  %div{class: 'div_align_right'}
+%h3 Agency Information
+.row
+  .col-sm-2.text-right
+    %strong Name:
+  .col-sm-8
     = agency.name
-    %br
+.row
+  .col-sm-2.text-right
+    %strong Website:
+  .col-sm-8
     = @agency.website
-    %br
+.row
+  .col-sm-2.text-right
+    %strong Phone:
+  .col-sm-8
     = @agency.phone
-    %br
+.row
+  .col-sm-2.text-right
+    %strong Fax:
+  .col-sm-8
     = @agency.fax
-    %br
+.row
+  .col-sm-2.text-right
+    %strong Email:
+  .col-sm-8
     = @agency.email
-    %br
+.row
+  .col-sm-2.text-right
+    %strong Description:
+  .col-sm-8
     = truncate(@agency.description, length: 300)
+.row
+  .col-sm-2.text-right
+    %strong Agency Admin(s):
+  .col-sm-8
+    - @agency_admins.each do |aa|
+      = aa.full_name(last_name_first: false)
+      = ', ' if aa != @agency_admins.last

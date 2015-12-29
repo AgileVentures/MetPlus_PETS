@@ -1,20 +1,27 @@
-%div{class: 'form_div'}
-  = form_for branch, url: url, method: method do |branch_form|
-
-    = label :branch, :code, 'Branch Code'
-    = branch_form.text_field :code, size: 8
-    %br
-    %br
-    %ul
-      = branch_form.fields_for :address do |address_form|
+= form_for branch, url: url, method: method, html: {class: 'form-horizontal'} do |branch_form|
+  .form-group
+    = label :branch, :code, 'Branch Code', class: 'control-label col-sm-2'
+    .col-sm-2
+      = branch_form.text_field :code, size: 8, class: 'form-control'
       
-        = address_form.label      :street
-        = address_form.text_field :street
-        %br
-        = address_form.label      :city
-        = address_form.text_field :city
-        %br
-        = address_form.label      :zipcode
-        = address_form.text_field :zipcode
-    
-    = submit_tag submit, class: 'form_button'
+  = branch_form.fields_for :address do |address_form|
+    .form-group
+      = address_form.label :street, class: 'control-label col-sm-2 col-sm-offset-1'
+      .col-sm-3
+        = address_form.text_field :street, class: 'form-control'
+
+    .form-group
+      = address_form.label      :city, class: 'control-label col-sm-2 col-sm-offset-1'
+      .col-sm-3
+        = address_form.text_field :city, class: 'form-control'
+
+    .form-group
+      = address_form.label      :zipcode, class: 'control-label col-sm-2 col-sm-offset-1'
+      .col-sm-2
+        = address_form.text_field :zipcode, class: 'form-control'
+
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      = submit_tag submit, method: :patch, class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-1
+      = link_to 'Cancel', cancel_url, class: 'btn btn-danger'

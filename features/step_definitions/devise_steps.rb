@@ -9,3 +9,8 @@ Given(/^I am logged in as agency admin$/) do
   step %{I am on the home page}
   step %{I login as "aa@metplus.org" with password "qwerty123"}
 end
+
+Then(/^I log(?: ?)out$/) do
+  step %{I click the "Log out" link}
+end
+  

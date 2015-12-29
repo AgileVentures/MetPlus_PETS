@@ -4,12 +4,12 @@
     %meta(charset="utf-8")
     %title  MetPlus
     = csrf_meta_tags
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css'
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'
     = stylesheet_link_tag "application", :media => "all", 'data-turbolinks-track' => true
     = javascript_include_tag "application", 'data-turbolinks-track' => true
-    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'
+    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
   %body
     = render partial: 'layouts/menu'
     %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center; display:none;"}
@@ -27,7 +27,7 @@
       -# controller would work:
       -#     @model_errors = @agency.errors
       - if @model_errors && @model_errors.any?
-        %div{id: 'errors_explanation'}
+        %div{class: 'errors_explanation'}
           %h4= pluralize(@model_errors.count, 'error') + |
                " prevented this record from being saved:" |
           %ul
@@ -36,4 +36,7 @@
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'
+    
+%script
+  $(document).ready(function(){$('[data-toggle="tooltip"]').tooltip(); });
 

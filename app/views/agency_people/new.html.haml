@@ -1,0 +1,5 @@
+%h2 Add Agency Person
+      
+= render partial: 'form', locals: {agency_person: @agency_person, method: :post, |
+          submit: 'Add Person', url: agency_agency_people_path(@agency),     |
+          cancel_url: agency_admin_home_path}                                    |

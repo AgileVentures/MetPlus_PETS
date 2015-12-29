@@ -32,7 +32,7 @@ RSpec.describe BranchesController, type: :controller do
         expect(assigns(:agency)).to eq agency
       end
       it 'sets flash message' do
-        expect(flash[:success]).to eq "Branch was successfully created."
+        expect(flash[:notice]).to eq "Branch was successfully created."
       end
       it "returns redirect status" do
         expect(response).to have_http_status(:redirect)
@@ -117,7 +117,7 @@ RSpec.describe BranchesController, type: :controller do
         expect(assigns(:branch)).to eq branch1
       end
       it 'sets flash message' do
-        expect(flash[:success]).to eq "Branch was successfully updated."
+        expect(flash[:notice]).to eq "Branch was successfully updated."
       end
       it 'returns redirect status' do
         expect(response).to have_http_status(:redirect)
@@ -159,7 +159,7 @@ RSpec.describe BranchesController, type: :controller do
       delete :destroy, id: branch
     end
     it 'sets flash message' do
-      expect(flash[:success]).to eq "Branch '#{branch.code}' deleted."
+      expect(flash[:notice]).to eq "Branch '#{branch.code}' deleted."
     end
     it "returns redirect status" do
       expect(response).to have_http_status(:redirect)
