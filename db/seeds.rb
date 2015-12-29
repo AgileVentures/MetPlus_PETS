@@ -175,11 +175,18 @@ agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
 
                       branch_id: agency.branches[2].id,
                       status: AgencyPerson::STATUS[:ACT])
+
 agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_jd.save!
 agency_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
                           job_seeker: js3)
+
+
+jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+"1990", confirmed_at: Time.now)
+
+
 
 # Job Categories
 JobCategory.create(name: 'SW Developer - RoR',
@@ -196,10 +203,22 @@ JobCategory.create(name: 'Product Manager - SaaS',
             description: 'Manages SaaS product development and commecialization')
                       
 
+
 jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
 "1990", confirmed_at: Time.now)
 
 
+
+
+JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey', 
+                      email: 'mary@gmail.com', password: 'qwerty123', 
+              year_of_birth: '1970', resume: 'text',
+          job_seeker_status: @jss2, confirmed_at: Time.now)
+                      
+JobSeeker.create(first_name: 'Frank', last_name: 'Williams', 
+                      email: 'frank@gmail.com', password: 'qwerty123', 
+              year_of_birth: '1970', resume: 'text',
+          job_seeker_status: @jss3, confirmed_at: Time.now)
 
 
 
