@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable,:validatable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :confirmable,
          :validatable
    actable
@@ -30,12 +30,12 @@ class User < ActiveRecord::Base
     
     def self.is_company_admin?(user)
       return false unless user.actable_type == "CompanyPerson"
-      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EA]
+      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
     end
     
     def self.is_company_contact?(user)
       return false unless user.actable_type == "CompanyPerson"
-      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:EC]
+      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CC]
     end
     
     def full_name(order={:last_name_first => true})

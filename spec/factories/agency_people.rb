@@ -3,6 +3,7 @@ FactoryGirl.define do
     agency
     branch
     user
+    status AgencyPerson::STATUS[:ACT]
   end
 
 end
