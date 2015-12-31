@@ -11,7 +11,7 @@ RSpec.describe AgencyAdminController, type: :controller do
       before(:each) do
         @agency = FactoryGirl.create(:agency)
         @agency_admin = FactoryGirl.build(:agency_person, agency: @agency)
-        @agency_admin.agency_roles << 
+        @agency_admin.agency_roles <<
               FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
         @agency_admin.save!
         sign_in @agency_admin
@@ -31,7 +31,7 @@ RSpec.describe AgencyAdminController, type: :controller do
       end
     end
   end
-  
+
   describe 'Determine from signed-in user:' do
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -42,20 +42,20 @@ RSpec.describe AgencyAdminController, type: :controller do
                               role: AgencyRole::ROLE[:CM])
       @job_developer_role = FactoryGirl.create(:agency_role,
                               role: AgencyRole::ROLE[:JD])
-      
+
       @agency_admin = FactoryGirl.build(:agency_person, agency: @agency)
       @agency_admin.agency_roles << @agency_admin_role
       @agency_admin.save!
-      
+
       @case_manager = FactoryGirl.build(:agency_person, agency: @agency)
       @case_manager.agency_roles << @case_manager_role
       @case_manager.save!
-      
+
       @job_developer = FactoryGirl.build(:agency_person, agency: @agency)
       @job_developer.agency_roles << @job_developer_role
       @job_developer.save!
     end
-    
+
     it 'this agency - from agency admin' do
       sign_in @agency_admin
       expect(Agency.this_agency(subject.current_user)).to eq @agency
@@ -68,7 +68,7 @@ RSpec.describe AgencyAdminController, type: :controller do
       sign_in @job_developer
       expect(Agency.this_agency(subject.current_user)).to eq @agency
     end
-    
+
     it 'agency manager - from agency admin' do
       sign_in @agency_admin
       expect(Agency.agency_admins(@agency)).to eq [@agency_admin]
