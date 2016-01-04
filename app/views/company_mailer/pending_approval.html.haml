@@ -1,0 +1,18 @@
+%p
+  Hello #{@company_person.first_name} #{@company_person.last_name},
+%p
+  This message is from the administrator of the PETS system for
+  the jobs agency:
+  %strong
+    #{@agency.name}.
+%p
+  Thank you for registering #{@company.name} in PETS.
+%p
+  We will review your registration request.  When your registration is approved,
+  you will receive an email notifying you of that approval, with instructions
+  for accessing your PETS account.
+%p
+  In the meantime, if you have any questions or concerns please contact the
+  the PETS administrator at:
+  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',            |
+         subject: "Registration request for #{@agency.name}")   |

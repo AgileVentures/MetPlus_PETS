@@ -22,6 +22,32 @@ Rails.application.routes.draw do
   resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
 
+
+  # ----------------------- Company Registration ------------------------------
+
+  # Only agency admin can edit, destroy and approve company registration
+  resources :company_registrations, path: 'admin/company_registrations',
+                                only: [:edit, :update, :destroy, :show] do
+    patch 'approve', on: :member, as: :approve
+  end
+  # Any PETS user can create a company registration request
+  resources :company_registrations, only: [:new, :create]
+
+  # ----------------------- Company Registration ------------------------------
+
+  # ----------------------- Company -------------------------------------------
+
+  # Company admin (and agency admin) can edit a company
+  resources :companies, path: 'company_admin/companies',
+                                only: [:edit, :update, :show]
+
+  # Only the agency admin can delete a company
+  resources :companies, path: 'admin/companies',
+                                only: [:destroy, :list]
+  # ----------------------- Company -------------------------------------------
+
+  resources :company_people, only: [:create, :new]
+
   root 'main#index'
 
   get 'agency_admin/home', path: '/admin/agency_admin/home'

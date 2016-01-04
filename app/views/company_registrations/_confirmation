@@ -1,0 +1,4 @@
+%h2 Thank You
+Thank you for giving us your information! A representative will be in touch with your contact person soon.
+
+= render @company, partial: 'company_registration'
