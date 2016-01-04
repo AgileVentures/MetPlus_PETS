@@ -1,10 +1,10 @@
+
 class CompaniesController < ApplicationController
 
   def show
     @company = Company.find(params[:id])
   end
 
-<<<<<<< HEAD
   def destroy
     company = Company.find(params[:id])
     company.destroy
@@ -13,20 +13,6 @@ class CompaniesController < ApplicationController
   end
 
   def update
-=======
-  def show
-    @company = Company.find(company_params[:id])
-  end
-
-  def create
-    if @company.save
-      flash.notice = "Success!"
-      redirect_to root_path
-    else
-      render 'new'
-      flash.notice = @company.errors
-    end
->>>>>>> still more routes
   end
 
   private

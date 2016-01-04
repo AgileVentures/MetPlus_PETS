@@ -39,7 +39,6 @@ class JobSeekersController < ApplicationController
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
-
   end
 
   def destroy
@@ -51,7 +50,11 @@ class JobSeekersController < ApplicationController
 
   private
    def jobseeker_params
-     params.require(:job_seeker).permit(:first_name,:last_name,:email,:phone,:password,:password_confirmation,:year_of_birth,:resume)
+     params.require(:job_seeker).permit(:first_name,
+            :last_name, :email, :phone,
+            :password,
+            :password_confirmation,
+            :year_of_birth,
+            :resume)
    end
-
 end
