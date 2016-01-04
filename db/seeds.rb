@@ -125,9 +125,6 @@ branch = Branch.create(code: '003', agency: agency)
 branch.address = Address.create!(city: 'Detroit',
             street: '3 Auto Drive', zipcode: 48206)
 
-# branch without address or people - for testing purposes
-branch = Branch.create(code: '004', agency: agency)
-
 # Job Seekers
 js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                       email: 'tom@gmail.com', password: 'qwerty123',

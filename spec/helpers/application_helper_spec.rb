@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BranchesHelper, type: :helper do
+RSpec.describe ApplicationHelper, type: :helper do
   context 'single_line_address method' do
     it 'returns string for address' do
       address = FactoryGirl.build(:address)

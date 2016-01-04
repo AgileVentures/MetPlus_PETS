@@ -1,0 +1,47 @@
+%h3 Company Registration Information
+.row
+  .col-sm-2.text-right
+    %strong Name:
+  .col-sm-8
+    = company.name
+.row
+  .col-sm-2.text-right
+    %strong Website:
+  .col-sm-8
+    = company.website
+.row
+  .col-sm-2.text-right
+    %strong Name:
+  .col-sm-8
+    = company.name
+.row
+  .col-sm-2.text-right
+    %strong Email:
+  .col-sm-8
+    = company.email
+.row
+  .col-sm-2.text-right
+    %strong Description:
+  .col-sm-8
+    = truncate(company.description, length: 300)
+.row
+  .col-sm-2.text-right
+    %strong Status:
+  .col-sm-8
+    = company.status
+    - if company.status == Company::STATUS[:PND]
+      = link_to 'Approve Registration',                                    |
+          approve_company_registration_path(company), method: :patch,      |
+          class: 'btn btn-success btn-xs'                                  |
+%br/
+%br/
+.row
+  .col-sm-2
+    = button_to 'Edit Registration',                    |
+            edit_company_registration_path(company),    |
+              method: :get, class: 'btn btn-primary'    |
+  .col-sm-2.col-sm-offset-1
+    = button_to 'Delete Registration', company_registration_path(company),  |
+                  method: :delete,                                          |
+                  data: {confirm: "Delete company #{company.name}?"},       |
+                  class: 'btn btn-danger'                                   |
