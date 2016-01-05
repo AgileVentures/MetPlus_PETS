@@ -34,7 +34,7 @@ class CompanyRegistrationsController < ApplicationController
     @company.agencies << Agency.first
 
     if @company.save
-      flash.notice = "Success!" # need more informative message
+      flash.notice = "You have successfully registered your company! An agency representative will be contacting you shortly!" # need more informative message
       CompanyMailer.pending_approval(@company,
                                      @company.company_people[0]).deliver_now
       render :confirmation
