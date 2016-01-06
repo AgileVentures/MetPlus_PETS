@@ -18,8 +18,6 @@ class JobSeekersController < ApplicationController
 
   def edit
     @jobseeker = JobSeeker.find(params[:id])
-   
-   
   end
  
   def update
@@ -37,13 +35,11 @@ class JobSeekersController < ApplicationController
 
   def index
     @jobseeker = JobSeeker.all
-    
   end
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
      
-   
   end
 
   def destroy
