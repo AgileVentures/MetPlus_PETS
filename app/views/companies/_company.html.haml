@@ -1,0 +1,27 @@
+%h3 Agency Information
+
+%div{:class => 'container'}
+  %div{class: 'div_align_left', id: 'bold_text'}
+    Name:
+    %br
+    Website:
+    %br
+    Phone:
+    %br
+    Fax:
+    %br
+    Email:
+    %br
+    Description:
+  %div{class: 'div_align_right'}
+    = agency.name
+    %br
+    = @agency.website
+    %br
+    = @agency.phone
+    %br
+    = @agency.fax
+    %br
+    = @agency.email
+    %br
+    = truncate(@agency.description, length: 300)

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
+
+  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
                                      :sign_in => 'login' },
                      :controllers => { :invitations => 'people_invitations' }
   devise_scope :user do
