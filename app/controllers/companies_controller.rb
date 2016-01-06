@@ -4,6 +4,10 @@ class CompaniesController < ApplicationController
     @company = Company.new
   end
 
+  def show
+    @company = Company.find(company_params[:id])
+  end
+
   def create
     @company = Company.new(company_params)
     if @company.save

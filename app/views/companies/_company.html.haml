@@ -1,4 +1,4 @@
-%h3 Agency Information
+%h3 company Information
 
 %div{:class => 'container'}
   %div{class: 'div_align_left', id: 'bold_text'}
@@ -14,14 +14,14 @@
     %br
     Description:
   %div{class: 'div_align_right'}
-    = agency.name
+    = company.name
     %br
-    = @agency.website
+    = @company.website
     %br
-    = @agency.phone
+    = @company.phone
     %br
-    = @agency.fax
+    = @company.fax
     %br
-    = @agency.email
+    = @company.email
     %br
-    = truncate(@agency.description, length: 300)
+    = truncate(@company.description, length: 300)
