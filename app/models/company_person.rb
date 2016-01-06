@@ -6,7 +6,7 @@ class CompanyPerson < ActiveRecord::Base
                           join_table: 'company_people_roles',
                           autosave: false
 
-#  validates_presence_of :company_id
+  # validates_presence_of :company
 
   STATUS = { PND:   'Pending', # Company has registered but not yet approved
              IVT:   'Invited', # Company approved, invite sent to confirm account
