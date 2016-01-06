@@ -1,10 +1,12 @@
-%h3 Company 'Show' view - coming soon
+%h3 Company 
 
 %div{:class => 'container'}
   %div{class: 'div_align_left', id: 'bold_text'}
     Company:
     %br
     EIN:
+    %br
+    Address:
     %br
     Phone Number:
     %br
@@ -17,6 +19,8 @@
     = company.name
     %br
     = company.ein
+    %br
+    = single_line_address(@company.addresses[0])
     %br
     = company.phone
     %br
