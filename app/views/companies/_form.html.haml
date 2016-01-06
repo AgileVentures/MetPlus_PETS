@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-= form_tag companies_path, method: :post, class: 'form-horizontal' do
-=======
 %h2 Employer Registration
 %p Thank you for your interest in MetPlus! [brief promotional message about the mission goes here] Please information about your organization and a means of contact using the form below.
 = form_for company, url: companies_path, method: :post, html: {class: 'form-horizontal'} do |f|
->>>>>>> form work
   .form-group
     = label :company, :name, 'Company Name', class: 'control-label col-sm-2'
     .col-sm-6
@@ -21,13 +17,10 @@
       = text_field :company, :ein, size: 30, class: 'form-control'
 
   .form-group
-<<<<<<< HEAD
-=======
     = label :company, :email, 'Email', class: 'control-label col-sm-2'
     .col-sm-4
       = email_field :company, :email, size: 30, class: 'form-control'
 
->>>>>>> form work
     = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
     .col-sm-6
       = phone_field :company, :phone, size: 30, class: 'form-control'
@@ -41,8 +34,6 @@
     = label :company, :description, 'Description', class: 'control-label col-sm-2'
     .col-sm-8
       = text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
-
-
 
     %h3 Company Contact
 
@@ -65,7 +56,6 @@
     .form-group
       = company_person_f.label :email, 'Email', class: 'control-label col-sm-2'
       .col-sm-2
-
 
     .form-group
       = company_person_f.label :title, 'Title', class: 'control-label col-sm-2'
