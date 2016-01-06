@@ -1,27 +1,58 @@
-%h3 company Information
+%h3 Company
 
 %div{:class => 'container'}
   %div{class: 'div_align_left', id: 'bold_text'}
-    Name:
+    Company:
+    %br
+    EIN:
+    %br
+    Address:
+    %br
+    Phone Number:
     %br
     Website:
     %br
-    Phone:
-    %br
-    Fax:
-    %br
-    Email:
-    %br
     Description:
+    %br
+
   %div{class: 'div_align_right'}
     = company.name
     %br
-    = @company.website
+    = company.ein
     %br
-    = @company.phone
+    = single_line_address(@company.addresses[0])
     %br
-    = @company.fax
+    = company.phone
     %br
-    = @company.email
+    = company.website
     %br
-    = truncate(@company.description, length: 300)
+    = company.description
+
+%h4 People at this company
+
+- if company.company_people.empty?
+  There are no people assigned to this company.
+- else
+  %div{:class => 'row'}
+    %div{:class => 'panel panel-default'}
+      %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
+        %thead
+          %tr
+            %td
+              First Name
+            %td
+              Last Name
+            %td
+              Title:
+        %tbody
+          - company.company_people.each do |person|
+            %tr
+              %td
+                = person.first_name
+              %td
+                -# link_to AgencyPerson 'show' instance here when that is available
+                = person.last_name
+              %td
+                = person.company_roles.first
+%br
+%br
