@@ -3,23 +3,24 @@ Feature: agency admin logs in and performs admin functions
   As an agency admin
   I want to login to PETS
   And perform various administrative functions
-    
+
 Background: seed data added to database
 
   Given the following agency roles exist:
   | role  |
   | AA    |
   | CM    |
-  
+  | JD    |
+
   Given the following agencies exist:
   | name    | website     | phone        | email                  | fax          |
   | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
-  
+
   Given the following agency people exist:
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
-  
+
   Given the following agency branches exist:
   | agency  | city    | street              | zipcode | code |
   | MetPlus | Detroit | 123 Main Street     | 48201   | 001  |
@@ -46,7 +47,7 @@ Scenario: non-admin does not see 'admin' in menu
   And I login as "jane@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
   And I should not see "Admin"
-  
+
 Scenario: edit agency information
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -56,7 +57,7 @@ Scenario: edit agency information
   And I click "Update Agency" button
   Then I should see "Agency was successfully updated."
   And I should see "MetPlus Two"
-  
+
 Scenario: cancel edit agency information
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -66,7 +67,7 @@ Scenario: cancel edit agency information
   And I click the "Cancel" link
   Then I should not see "Agency was successfully updated."
   And I should not see "MetPlus Two"
-  
+
 Scenario: errors for edit agency information
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -79,7 +80,7 @@ Scenario: errors for edit agency information
   And I should see "Phone can't be blank"
   And I should see "Phone incorrect format"
   And I should see "Website is not a valid website address"
-  
+
 Scenario: edit branch
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -115,7 +116,7 @@ Scenario: error for edit branch
   Then I should see "2 errors prevented this record from being saved:"
   And I should see "Code has already been taken"
   And I should see "Address zipcode should be in form of 12345 or 12345-1234"
-  
+
 Scenario: new agency branch
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -135,7 +136,7 @@ Scenario: delete agency branch
   And I click the "003" link
   Then I click and accept the "Delete Branch" button
   Then I should see "Branch '003' deleted."
-  
+
 Scenario: edit agency person
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -150,7 +151,7 @@ Scenario: edit agency person
   And I should see "Jane Jones"
   And I should see "002"
   And I should see "Agency Admin"
-  
+
 Scenario: cancel agency person edit
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -169,7 +170,7 @@ Scenario: delete agency person
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
   Then I should see "Person 'Jane Jones' deleted."
-  
+
 Scenario: cannot remove sole agency admin
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -178,7 +179,7 @@ Scenario: cannot remove sole agency admin
   And I should see "Edit Agency Person: John Smith"
   And I should see "Agency Admin"
   And the selection "Agency Admin" should be disabled
-  
+
 Scenario: invite (and reinvite) new agency person
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -197,7 +198,7 @@ Scenario: invite (and reinvite) new agency person
   Then "adam@metplus.org" should receive 2 emails with subject "Invitation instructions"
   When "adam@metplus.org" opens the email
   Then they should see "MetPlus has invited you confirm your account in PETS" in the email body
-  
+
 Scenario: agency person accepts invitation in email
   Given I am logged in as agency admin
   And I click the "Admin" link
@@ -217,4 +218,3 @@ Scenario: agency person accepts invitation in email
   And they fill in "Password confirmation" with "qwerty123"
   And they click the "Set my password" button
   Then they should see "Your password was set successfully. You are now signed in."
-  

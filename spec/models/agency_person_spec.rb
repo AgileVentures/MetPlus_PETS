@@ -13,8 +13,7 @@ RSpec.describe AgencyPerson, type: :model do
     it { is_expected.to have_and_belong_to_many :agency_roles }
     it { is_expected.to have_and_belong_to_many(:job_categories).
             join_table('job_specialities')}
-    it { is_expected.to have_and_belong_to_many(:job_seekers).
-            join_table('seekers_agency_people') }
+    it { is_expected.to have_many(:job_seekers).through(:agency_relations) }
   end
 
   describe 'Database schema' do
