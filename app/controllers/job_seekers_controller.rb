@@ -7,11 +7,11 @@ class JobSeekersController < ApplicationController
   def create
     @jobseeker = JobSeeker.new(jobseeker_params)
     if @jobseeker.save
-       flash[:notice] = "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
-       redirect_to root_path
+      flash[:notice] = "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
+      redirect_to root_path
     else
-       @model_errors = @jobseeker.errors
-       render 'new'
+      @model_errors = @jobseeker.errors
+      render 'new'
     end
     
   end
@@ -24,10 +24,8 @@ class JobSeekersController < ApplicationController
  
   def update
     @jobseeker = JobSeeker.find(params[:id])
-  
     if @jobseeker.update_attributes(jobseeker_params)
-      current_user = @jobseeker.user
-      sign_in :user, current_user
+      sign_in :user, @jobseeker.user, bypass: true
       flash[:notice] = "Jobseeker was updated successfully."
       redirect_to root_path
     else
