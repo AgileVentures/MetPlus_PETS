@@ -131,14 +131,16 @@ branch = Branch.create(code: '004', agency: agency)
 agency_person = AgencyPerson.new(first_name: 'John', last_name: 'Smith', 
                       agency_id: agency.id, email: 'pets_admin@metplus.org', 
                       password: 'qwerty123', confirmed_at: Time.now,
-                      branch_id: agency.branches[0].id)
+                      branch_id: agency.branches[0].id,
+                      status: AgencyPerson::STATUS[:ACT])
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
 agency_person.save!
 
 agency_person = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts', 
                       agency_id: agency.id, email: 'chet@metplus.org', 
                       password: 'qwerty123', confirmed_at: Time.now,
-                      branch_id: agency.branches[1].id)
+                      branch_id: agency.branches[1].id,
+                      status: AgencyPerson::STATUS[:ACT])
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
@@ -146,9 +148,15 @@ agency_person.save!
 agency_person = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe', 
                       agency_id: agency.id, email: 'jane@metplus.org', 
                       password: 'qwerty123', confirmed_at: Time.now,
-                      branch_id: agency.branches[2].id)
+                      branch_id: agency.branches[2].id,
+                      status: AgencyPerson::STATUS[:ACT])
 agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
 agency_person.save!
+
+
+jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+"1990", confirmed_at: Time.now)
+
 
 # Job Categories
 JobCategory.create(name: 'SW Developer - RoR', 
@@ -179,3 +187,5 @@ JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                       email: 'frank@gmail.com', password: 'qwerty123', 
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss3, confirmed_at: Time.now)
+
+
