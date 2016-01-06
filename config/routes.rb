@@ -3,10 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
                                      :sign_in => 'login' },
                      :controllers => { :invitations => 'people_invitations' }
-<<<<<<< HEAD
 
-=======
->>>>>>> new company_person is working
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
@@ -16,6 +13,8 @@ Rails.application.routes.draw do
     resources :branches,      only: [:create, :new]
     resources :agency_people, only: [:create, :new]
   end
+
+  resources :companies
 
   resources :branches, path: '/admin/branches',
                        only: [:show, :edit, :update, :destroy]
