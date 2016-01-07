@@ -5,7 +5,7 @@
     %p{id: 'account-link'}
       Log In to your account
       %i{class: "fa fa-minus fa-4x fa-rotate-90"}  
-      #{link_to 'Register as jobseeker', 'job_seekers/new'} 
+      #{link_to 'Register as jobseeker', new_job_seeker_path} 
       %i{class: "fa fa-minus fa-rotate-90"}  
       #{link_to 'Register as employer', '#'}
     = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
