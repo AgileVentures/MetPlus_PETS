@@ -19,7 +19,7 @@
         = address_f.text_field :city, size: 30, class: 'form-control'
 
     .form-group
-      = address_f.label :zipcode, 'Zip', class: 'control-label col-sm-2'
+      = address_f.label :zipcode, 'Zip Code', class: 'control-label col-sm-2'
       .col-sm-2
         = address_f.text_field :zipcode, size: 10, class: 'form-control'
 
@@ -65,12 +65,20 @@
         = company_person_f.text_field :last_name, class: 'form-control'
 
     .form-group
+<<<<<<< .merge_file_v0VYJV
       = company_person_f.label :phone, 'Phone', class: 'control-label col-sm-2'
+=======
+      = company_person_f.label :phone, 'Contact Phone', class: 'control-label col-sm-2'
+>>>>>>> .merge_file_m6mr7I
       .col-sm-3
         = company_person_f.phone_field :phone, size: 30, class: 'form-control'
 
     .form-group
+<<<<<<< .merge_file_v0VYJV
       = company_person_f.label :email, 'Email', class: 'control-label col-sm-2'
+=======
+      = company_person_f.label :email, 'Contact Email', class: 'control-label col-sm-2'
+>>>>>>> .merge_file_m6mr7I
       .col-sm-2
         = company_person_f.email_field :email, size: 30, class: 'form-control'
 

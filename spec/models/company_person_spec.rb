@@ -16,7 +16,6 @@ describe CompanyPerson, type: :model do
   end
 
   describe 'Validations' do
-    # it { is_expected.to validate_presence_of :company_id }
     it { is_expected.to validate_inclusion_of(:status).
             in_array(CompanyPerson::STATUS.values)}
   end

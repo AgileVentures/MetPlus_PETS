@@ -14,7 +14,7 @@ class CompaniesController < ApplicationController
 
   def update
   end
-
+ 
   private
   def company_params
     params.require(:company).permit(:name, :email, :phone,

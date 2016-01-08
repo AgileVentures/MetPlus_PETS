@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
                                      :sign_in => 'login' },
                      :controllers => { :invitations => 'people_invitations' }
@@ -14,14 +13,11 @@ Rails.application.routes.draw do
     resources :agency_people, only: [:create, :new]
   end
 
-  resources :companies
-
   resources :branches, path: '/admin/branches',
                        only: [:show, :edit, :update, :destroy]
 
   resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
-
 
   # ----------------------- Company Registration ------------------------------
 
@@ -54,6 +50,7 @@ Rails.application.routes.draw do
 
   get 'agency/home', path: '/agency/:id'
 
+  # ----------------------- end of customizations ------------------------------
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
