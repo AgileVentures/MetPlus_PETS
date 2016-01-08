@@ -72,15 +72,9 @@ class CompanyRegistrationsController < ApplicationController
   def company_params
     params.require(:company).permit(:name, :email, :phone,
     :website, :ein, :description,
-<<<<<<< .merge_file_zNfyGO
-    company_people_attributes: [:id, :first_name, :last_name, :phone, :email,
-                                :password, :password_confirmation],
-    addresses_attributes: [:id, :street, :city, :zipcode])
-=======
     company_people_attributes: [:first_name, :last_name, :phone, :email,
                                 :password, :password_confirmation],
     addresses_attributes: [:street, :city, :zipcode])
->>>>>>> .merge_file_VlQaUc
   end
 
 end
