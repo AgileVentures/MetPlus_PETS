@@ -69,7 +69,6 @@ class CreateDatabase < ActiveRecord::Migration
       t.string :phone
       t.string :email
       t.string :website
-      t.string :description
 
       t.timestamps null: false
     end
