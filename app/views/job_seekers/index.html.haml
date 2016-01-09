@@ -1,0 +1,18 @@
+%h1 Job Seekers
+%br
+%table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
+	%tr
+		%th First Name
+		%th Last Name
+		%th Email
+		%th Phone
+		%th Year of Birth
+	- @jobseeker.each do |js|
+		%tr
+			%td=js.first_name
+			%td=js.last_name
+			%td=js.email
+			%td=js.phone
+			%td=js.year_of_birth
+
+
