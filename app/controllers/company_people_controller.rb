@@ -1,20 +1,16 @@
 class CompanyPeopleController < ApplicationController
   def new
-    # THIS CODE IS NOT READY FOR TESTING
     @company = company.this_company(current_user)
     @company_person = CompanyPerson.new
   end
 
   def create
-  #  @company = Company.find(params[:company_id])
     debugger
     @company_person = CompanyPerson.new
     @company_person.assign_attributes(company_person_params)
     @company.company_people << @company_person
     if @company_person.valid?
       @company_person.save
-      # need to resolve flash notice in Company and render confirmation
-      # flash[:notice] = "Person was successfully created."
     else
       @model_errors = @company_person.errors
       render :new
@@ -34,7 +30,6 @@ class CompanyPeopleController < ApplicationController
     @company_person.assign_attributes(company_person_params)
 
     if @company_person.save
-      #whatif company saves but companyPerson doesn't?
     else
       @model_errors = @company_person.errors
       render :edit
