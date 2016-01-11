@@ -7,27 +7,30 @@
     = button_to 'Edit Agency', edit_agency_path(@agency), |
             method: :get, class: 'btn btn-primary'        |
 
-- if @agency.branches.empty? 
+- if @agency.branches.empty?
   There are no branches
 - else
-  = render partial: 'branches/branches', object: @agency.branches 
-  
+  = render partial: 'branches/branches', object: @agency.branches
+
 %div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
     = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
           method: :get, class: 'btn btn-primary'                  |
 
 
-- if @agency.agency_people.empty? 
+- if @agency.agency_people.empty?
   There are no people
 - else
-  = render partial: 'agency_people/agency_people', object: @agency.agency_people 
-  
+  = render partial: 'agency_people/agency_people', object: @agency.agency_people
+
 %div{:class => 'container'}
   .col-sm-2.col-sm-offset-8
     = link_to 'Invite Person',     |
           new_user_invitation_path(person_type: 'AgencyPerson',   |
                  org_id: @agency.id),                             |
           method: :get, class: 'btn btn-primary'                  |
-%br/
-%br/
+
+- if @agency.companies.empty?
+  There are no companies
+- else
+  = render partial: 'companies/companies', object: @agency.companies
