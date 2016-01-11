@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-class CompaniesController < ApplicationController
-=======
-
 class CompaniesController < ApplicationController
 
   def show
@@ -17,7 +13,7 @@ class CompaniesController < ApplicationController
 
   def update
   end
- 
+
   private
   def company_params
     params.require(:company).permit(:name, :email, :phone,
@@ -27,5 +23,4 @@ class CompaniesController < ApplicationController
     addresses_attributes: [:id, :street, :city, :zipcode])
   end
 
->>>>>>> 046b2346dd578d4756310fe19bea4ea2d0445b5b
 end

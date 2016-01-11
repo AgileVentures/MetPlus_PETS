@@ -1,15 +1,4 @@
 class Company < ActiveRecord::Base
-<<<<<<< HEAD
-  has_many :company_people
-  accepts_nested_attributes_for :company_people
-  
-  has_many :jobs
-  
-  has_many :addresses, as: :location
-  accepts_nested_attributes_for :addresses
-  
-=======
-
   has_many :company_people, dependent: :destroy
     accepts_nested_attributes_for :company_people
   has_many :jobs
@@ -17,7 +6,6 @@ class Company < ActiveRecord::Base
   has_many :addresses, as: :location, dependent: :destroy
     accepts_nested_attributes_for :addresses
 
->>>>>>> 046b2346dd578d4756310fe19bea4ea2d0445b5b
   has_and_belongs_to_many :agencies
 
 
@@ -32,5 +20,5 @@ class Company < ActiveRecord::Base
              INACT: 'Inactive' }
 
   validates :status, inclusion: STATUS.values
- 
+
 end
