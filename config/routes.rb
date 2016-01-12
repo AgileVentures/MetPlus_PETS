@@ -24,10 +24,11 @@ Rails.application.routes.draw do
 
   # ----------------------- Company Registration ------------------------------
 
-  # Only agency admin can edit, destroy and approve company registration
+  # Only agency admin can edit, destroy and approve/deny company registration
   resources :company_registrations, path: 'admin/company_registrations',
                                 only: [:edit, :update, :destroy, :show] do
     patch 'approve', on: :member, as: :approve
+    patch 'deny',    on: :member, as: :deny
   end
   # Any PETS user can create a company registration request
   resources :company_registrations, only: [:new, :create]

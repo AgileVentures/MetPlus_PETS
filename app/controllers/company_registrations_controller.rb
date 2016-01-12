@@ -68,6 +68,22 @@ class CompanyRegistrationsController < ApplicationController
 
   end
 
+  def deny
+    # Deny the company's registration request.
+    company = Company.find(params[:id])
+    company_person = company.company_people[0]
+
+    company.status = Company::STATUS[:DENY]
+    company.save
+    
+    render :partial => 'company_status',
+           :locals => {company: company} if request.xhr?
+
+    # Send notice of registration denial
+    CompanyMailer.registration_denied(company,
+                  company_person, params[:email_text]).deliver_now
+  end
+
   private
   def company_params
     params.require(:company).permit(:name, :email, :phone,

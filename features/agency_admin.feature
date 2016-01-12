@@ -4,7 +4,7 @@ Feature: agency admin logs in and performs admin functions
   I want to login to PETS
   And perform various administrative functions
 
-Background: seed data added to database
+Background: seed data added to database and log in as agency admim
 
   Given the following agency roles exist:
   | role  |
@@ -27,30 +27,14 @@ Background: seed data added to database
   | MetPlus | Detroit | 456 Sullivan Street | 48204   | 002  |
   | MetPlus | Detroit | 3 Auto Drive        | 48206   | 003  |
 
-Scenario: login as agency admin
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
   And I should see "Admin"
-
-Scenario: go to main admin page
-  Given I am logged in as agency admin
   And I click the "Admin" link
   Then I should see "PETS Administration"
-  And I should see "Agency Information"
-  And I should see "Agency Branches"
-  And I should see "Agency Personnel"
-  And I should see "Auto Drive"
-
-Scenario: non-admin does not see 'admin' in menu
-  Given I am on the home page
-  And I login as "jane@metplus.org" with password "qwerty123"
-  Then I should see "Signed in successfully."
-  And I should not see "Admin"
 
 Scenario: edit agency information
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
@@ -59,8 +43,6 @@ Scenario: edit agency information
   And I should see "MetPlus Two"
 
 Scenario: cancel edit agency information
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
@@ -69,8 +51,6 @@ Scenario: cancel edit agency information
   And I should not see "MetPlus Two"
 
 Scenario: errors for edit agency information
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Phone" with ""
@@ -82,8 +62,6 @@ Scenario: errors for edit agency information
   And I should see "Website is not a valid website address"
 
 Scenario: edit branch
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I should see "Agency Branches"
   And I click the "001" link
   Then I should see "Branch Code:"
@@ -95,8 +73,6 @@ Scenario: edit branch
   Then I should see "Branch was successfully updated."
 
 Scenario: cancel edit branch
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "001" link
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
@@ -106,8 +82,6 @@ Scenario: cancel edit branch
   And I should not see "004"
 
 Scenario: error for edit branch
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "001" link
   Then I click the "Edit Branch" button
   And I fill in "Branch Code" with "002"
@@ -118,8 +92,6 @@ Scenario: error for edit branch
   And I should see "Address zipcode should be in form of 12345 or 12345-1234"
 
 Scenario: new agency branch
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "Add Branch" button
   Then I fill in "Branch Code" with "004"
   And I fill in "Street" with "10 Ford Way"
@@ -131,15 +103,11 @@ Scenario: new agency branch
 
 @selenium
 Scenario: delete agency branch
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "003" link
   Then I click and accept the "Delete Branch" button
   Then I should see "Branch '003' deleted."
 
 Scenario: edit agency person
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I should see "Agency Personnel"
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
@@ -153,8 +121,6 @@ Scenario: edit agency person
   And I should see "Agency Admin"
 
 Scenario: cancel agency person edit
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: Jane Jones"
@@ -165,15 +131,11 @@ Scenario: cancel agency person edit
 
 @selenium
 Scenario: delete agency person
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
   Then I should see "Person 'Jane Jones' deleted."
 
 Scenario: cannot remove sole agency admin
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   And I click the "Smith, John" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: John Smith"
@@ -181,8 +143,6 @@ Scenario: cannot remove sole agency admin
   And the selection "Agency Admin" should be disabled
 
 Scenario: invite (and reinvite) new agency person
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I click the "Invite Person" link
   And I should see "Send invitation"
   And I fill in "Email" with "adam@metplus.org"
@@ -200,8 +160,6 @@ Scenario: invite (and reinvite) new agency person
   Then they should see "MetPlus has invited you confirm your account in PETS" in the email body
 
 Scenario: agency person accepts invitation in email
-  Given I am logged in as agency admin
-  And I click the "Admin" link
   Then I click the "Invite Person" link
   And I fill in "Email" with "adam@metplus.org"
   And I fill in "First name" with "Adam"
@@ -218,3 +176,10 @@ Scenario: agency person accepts invitation in email
   And they fill in "Password confirmation" with "qwerty123"
   And they click the "Set my password" button
   Then they should see "Your password was set successfully. You are now signed in."
+
+Scenario: non-admin does not see 'admin' in menu
+  Given I log out
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should not see "Admin"
