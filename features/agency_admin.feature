@@ -32,9 +32,9 @@ Background: seed data added to database and log in as agency admim
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
-  Then I should see "PETS Administration"
 
 Scenario: edit agency information
+  Then I should see "PETS Administration"
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"

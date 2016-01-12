@@ -1,32 +1,34 @@
 %h3 Company Information
 
-%div{:class => 'container'}
-  %div{class: 'div_align_left', id: 'bold_text'}
-    Company:
-    %br
-    EIN:
-    %br
-    Address:
-    %br
-    Phone Number:
-    %br
-    Website:
-    %br
-    Description:
-    %br
-
-  %div{class: 'div_align_right'}
-    = company.name
-    %br
-    = company.ein
-    %br
-    = single_line_address(@company.addresses[0])
-    %br
-    = company.phone
-    %br
+.row
+  .col-sm-2.text-right
+    %strong Name:
+  .col-sm-8
+.row
+  .col-sm-2.text-right
+    %strong Website:
+  .col-sm-8
     = company.website
-    %br
-    = company.description
+.row
+  .col-sm-2.text-right
+    %strong Name:
+  .col-sm-8
+    = company.name
+.row
+  .col-sm-2.text-right
+    %strong Email:
+  .col-sm-8
+    = company.email
+.row
+  .col-sm-2.text-right
+    %strong Description:
+  .col-sm-8
+    = truncate(company.description, length: 300)
+.row
+  .col-sm-2.text-right
+    %strong Status:
+  .col-sm-8#company_status
+    = render :partial => 'companies/company_status', :locals => {company: company}
 
 %h4 People at this company
 

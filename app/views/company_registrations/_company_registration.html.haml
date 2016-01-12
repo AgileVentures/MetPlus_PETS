@@ -1,34 +1,7 @@
 %h3 Company Registration Information
-.row
-  .col-sm-2.text-right
-    %strong Name:
-  .col-sm-8
-    = company.name
-.row
-  .col-sm-2.text-right
-    %strong Website:
-  .col-sm-8
-    = company.website
-.row
-  .col-sm-2.text-right
-    %strong Name:
-  .col-sm-8
-    = company.name
-.row
-  .col-sm-2.text-right
-    %strong Email:
-  .col-sm-8
-    = company.email
-.row
-  .col-sm-2.text-right
-    %strong Description:
-  .col-sm-8
-    = truncate(company.description, length: 300)
-.row
-  .col-sm-2.text-right
-    %strong Status:
-  .col-sm-8#company_status
-    = render :partial => 'company_status', :locals => {company: company}
+
+= render :partial => 'companies/company', :locals => {company: company}
+
 %br/
 %br/
 .row

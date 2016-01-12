@@ -81,6 +81,6 @@ Scenario: company registration rejection
   Then I should see "Explanation for registration denial"
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  Then I should see "Registration Denied"
   And I wait for 3 seconds
+  Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"

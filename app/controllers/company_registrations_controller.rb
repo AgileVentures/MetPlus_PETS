@@ -75,8 +75,8 @@ class CompanyRegistrationsController < ApplicationController
 
     company.status = Company::STATUS[:DENY]
     company.save
-    
-    render :partial => 'company_status',
+
+    render :partial => 'companies/company_status',
            :locals => {company: company} if request.xhr?
 
     # Send notice of registration denial
