@@ -39,3 +39,4 @@ Scenario: edit Js Registration
   And I fill in "Password Confirmation" with "password"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
+
