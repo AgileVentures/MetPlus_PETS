@@ -23,7 +23,13 @@ class JobSeekersController < ApplicationController
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
-    if @jobseeker.update_attributes(jobseeker_params)
+    
+    person_params = jobseeker_params
+    if person_params['password'] =='' 
+       person_params.delete('password')
+       person_params.delete('password_confirmation')
+    end
+    if @jobseeker.update_attributes(person_params)
        sign_in :user, @jobseeker.user, bypass: true
        flash[:notice] = "Jobseeker was updated successfully."
        redirect_to root_path
@@ -56,5 +62,6 @@ class JobSeekersController < ApplicationController
             :password_confirmation,
             :year_of_birth,
             :resume)
+
    end
 end
