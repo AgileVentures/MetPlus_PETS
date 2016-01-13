@@ -63,8 +63,9 @@ RSpec.describe JobSeekersController, type: :controller do
                
    context "valid attributes" do
      before(:each) do
-       @jobseeker =  FactoryGirl.create(:job_seeker) 
+       @jobseeker =  FactoryGirl.create(:job_seeker)
        patch :update, id: @jobseeker,job_seeker: FactoryGirl.attributes_for(:job_seeker)
+      
      end
       
      it 'sets flash message' do
