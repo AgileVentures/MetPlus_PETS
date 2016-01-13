@@ -40,7 +40,7 @@ Scenario: edit Js Registration
   Then I click the "Update Job seeker" button 
   Then I wait for 10 seconds
   Then I should see "Jobseeker was updated successfully."
-     
+
 
 
 
