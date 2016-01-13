@@ -41,7 +41,17 @@ Scenario: edit Js Registration
   Then I wait for 10 seconds
   Then I should see "Jobseeker was updated successfully."
 
-
+Scenario: edit Js Registration without password
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully"
+  When I click the "vijaya" link
+  And I fill in "First Name" with "vijaya1" 
+  And I fill in "Password" with ""
+  And I fill in "Password Confirmation" with ""
+  Then I click the "Update Job seeker" button 
+  #Then I wait for 10 seconds
+  Then I should see "Jobseeker was updated successfully."
 
 
     
