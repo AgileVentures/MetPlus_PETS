@@ -50,7 +50,6 @@ Scenario: edit Js Registration without password
   And I fill in "Password" with ""
   And I fill in "Password Confirmation" with ""
   Then I click the "Update Job seeker" button 
-  #Then I wait for 10 seconds
   Then I should see "Jobseeker was updated successfully."
 
 
