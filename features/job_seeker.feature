@@ -48,7 +48,7 @@ Scenario: edit Js Registration without password change
   And I fill in "First Name" with "vijaya1" 
   Then I click the "Update Job seeker" button 
   Then I should see "Jobseeker was updated successfully."
-     
+
 
     
   
