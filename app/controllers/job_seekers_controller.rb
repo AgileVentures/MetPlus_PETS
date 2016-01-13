@@ -1,9 +1,9 @@
 class JobSeekersController < ApplicationController
-  
+
   def new
     @jobseeker = JobSeeker.new
   end
-  
+
   def create
     @jobseeker = JobSeeker.new(jobseeker_params)
     if @jobseeker.save
@@ -13,13 +13,13 @@ class JobSeekersController < ApplicationController
       @model_errors = @jobseeker.errors
       render 'new'
     end
-    
+
   end
 
   def edit
     @jobseeker = JobSeeker.find(params[:id])
   end
- 
+
   def update
     @jobseeker = JobSeeker.find(params[:id])
 
@@ -39,7 +39,7 @@ class JobSeekersController < ApplicationController
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
-     
+
   end
 
   def destroy
@@ -49,9 +49,9 @@ class JobSeekersController < ApplicationController
     redirect_to root_path
   end
 
-  private 
+  private
    def jobseeker_params
      params.require(:job_seeker).permit(:first_name,:last_name,:email,:phone,:password,:password_confirmation,:year_of_birth,:resume)
    end
- 
+
 end

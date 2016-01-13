@@ -1,36 +1,61 @@
 Rails.application.routes.draw do
 
- 
-
-  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
+  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
                                      :sign_in => 'login' },
-                     :controllers => { :invitations => 'people_invitations' }                                
+                     :controllers => { :invitations => 'people_invitations' }
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
   end
-  
+
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
     resources :branches,      only: [:create, :new]
     resources :agency_people, only: [:create, :new]
   end
 
-  resources :branches, path: '/admin/branches', 
+  resources :branches, path: '/admin/branches',
                        only: [:show, :edit, :update, :destroy]
-                       
-  resources :agency_people, path: '/admin/agency_people', 
+
+  resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
-  
+
+  # ----------------------- Company Registration ------------------------------
+
+  # Only agency admin can edit, destroy and approve company registration
+  resources :company_registrations, path: 'admin/company_registrations',
+                                only: [:edit, :update, :destroy, :show] do
+    patch 'approve', on: :member, as: :approve
+  end
+  # Any PETS user can create a company registration request
+  resources :company_registrations, only: [:new, :create]
+
+  # ----------------------- Company Registration ------------------------------
+
+  # ----------------------- Company -------------------------------------------
+
+  # Company admin (and agency admin) can edit a company
+  resources :companies, path: 'company_admin/companies',
+                                only: [:edit, :update, :show]
+
+  # Only the agency admin can delete a company
+  resources :companies, path: 'admin/companies',
+                                only: [:destroy, :list]
+  # ----------------------- Company -------------------------------------------
+
+  resources :company_people, only: [:create, :new]
+
   root 'main#index'
-  
+
   get 'agency_admin/home', path: '/admin/agency_admin/home'
-  
+
   get 'agency/home', path: '/agency/:id'
-  
-  resources :job_seekers 
-    
+
+  resources :job_seekers
+
    # The priority is based upon order of creation: first created -> highest priority.
 
+  # ----------------------- end of customizations ------------------------------
+  # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
@@ -43,7 +68,7 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  
+
 =begin
   resources :main
   resources :user do
