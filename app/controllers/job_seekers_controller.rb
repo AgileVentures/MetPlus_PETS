@@ -22,14 +22,13 @@ class JobSeekersController < ApplicationController
  
   def update
     @jobseeker = JobSeeker.find(params[:id])
-
     if @jobseeker.update_attributes(jobseeker_params)
-      sign_in :user, @jobseeker.user, bypass: true
-      flash[:notice] = "Jobseeker was updated successfully."
-      redirect_to root_path
+       sign_in :user, @jobseeker.user, bypass: true
+       flash[:notice] = "Jobseeker was updated successfully."
+       redirect_to root_path
     else
-      @model_errors = @jobseeker.errors
-      render 'edit'
+       @model_errors = @jobseeker.errors
+       render 'edit'
     end
   end
 
@@ -51,7 +50,7 @@ class JobSeekersController < ApplicationController
 
   private 
    def jobseeker_params
-     params.require(:job_seeker).permit(:first_name,:last_name,:email,:phone,:password,:password_confirmation,:year_of_birth,:resume)
+     params.require(:job_seeker).permit(:first_name,:last_name,:email,:phone,:password,:password_confirmation,:year_of_birth,:job_seeker_status_id,:resume)
    end
  
 end
