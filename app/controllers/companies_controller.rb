@@ -1,3 +1,4 @@
+
 class CompaniesController < ApplicationController
 
   def show
@@ -22,5 +23,4 @@ class CompaniesController < ApplicationController
                                 :password, :password_confirmation],
     addresses_attributes: [:id, :street, :city, :zipcode])
   end
-
 end

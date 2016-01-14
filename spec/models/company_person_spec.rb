@@ -36,11 +36,6 @@ describe CompanyPerson, type: :model do
         '123 1231 1234', '1123 123 1234', ' 123 123 1234').for(:phone)}
     it { should allow_value('+1 123 123 1234', '123 123 1234',
         '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:phone)}
-    xit 'is invalid without a company association' do
-      person = CompanyPerson.new()
-      person.valid?
-      expect(person.errors[:company_id]).to include("can't be blank")
-    end
   end
 
   context "#acting_as?" do

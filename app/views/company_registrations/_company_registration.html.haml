@@ -1,38 +1,7 @@
 %h3 Company Registration Information
-.row
-  .col-sm-2.text-right
-    %strong Name:
-  .col-sm-8
-    = company.name
-.row
-  .col-sm-2.text-right
-    %strong Website:
-  .col-sm-8
-    = company.website
-.row
-  .col-sm-2.text-right
-    %strong Name:
-  .col-sm-8
-    = company.name
-.row
-  .col-sm-2.text-right
-    %strong Email:
-  .col-sm-8
-    = company.email
-.row
-  .col-sm-2.text-right
-    %strong Description:
-  .col-sm-8
-    = truncate(company.description, length: 300)
-.row
-  .col-sm-2.text-right
-    %strong Status:
-  .col-sm-8
-    = company.status
-    - if company.status == Company::STATUS[:PND]
-      = link_to 'Approve Registration',                                    |
-          approve_company_registration_path(company), method: :patch,      |
-          class: 'btn btn-success btn-xs'                                  |
+
+= render :partial => 'companies/company', :locals => {company: company}
+
 %br/
 %br/
 .row
@@ -45,3 +14,31 @@
                   method: :delete,                                          |
                   data: {confirm: "Delete company #{company.name}?"},       |
                   class: 'btn btn-danger'                                   |
+
+.modal.fade#deny_registration(tabindex='-1' role='dialog')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        %button(type='button' class='close' data-dismiss='modal')
+          %span(aria-hidden='true') &times;
+        %h4.modal-title Explanation for registration denial
+      .modal-body
+        %p
+          The company contact (who requested the registration) will receive an email
+          explaining the reason for denying the registration.  Please enter the
+          explanation below.
+          %br/
+          %br/
+          (If you would prefer
+          %u not
+          to have an email sent to the company contact, dismiss this box and
+          click the 'Delete Registration' button.)
+        %label(for='message_text' class='control-label') Explanation:
+        %textarea(class='form-control' id='message_text')
+      .modal-footer
+        %button(type='button' class='btn btn-default'
+                                 data-dismiss='modal') Cancel
+        %button(type='button' class='btn btn-primary'
+                id='send_button' data-dismiss='modal') Send email
+%script
+  $(RegistrationDeny.setup);

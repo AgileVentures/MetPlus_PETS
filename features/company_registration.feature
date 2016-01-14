@@ -52,8 +52,8 @@ Scenario: company registration approval
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
-  Then I should see "Pending"
-  And I click the "Approve Registration" link
+  Then I should see "Pending Registration"
+  And I click the "Approve" link
   Then I should see "Company contact has been notified of registration approval."
   Then "hughjobs@widgets.com" should receive an email with subject "Registration approved"
   When "hughjobs@widgets.com" opens the email with subject "Registration approved"
@@ -67,8 +67,20 @@ Scenario: company registration delete
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
-  And I should see "Pending"
+  And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
   Then I should see "Registration for 'Widgets, Inc.' deleted."
 
+@selenium
 Scenario: company registration rejection
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  Then I click the "Widgets, Inc." link
+  And I should see "Pending Registration"
+  And I click the "Deny" button
+  Then I should see "Explanation for registration denial"
+  And I fill in "Explanation:" with "We are not accepting additional partners at this time."
+  And I click the "Send email" button
+  And I wait for 3 seconds
+  Then I should see "Registration Denied"
+  Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"

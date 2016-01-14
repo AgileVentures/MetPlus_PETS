@@ -19,5 +19,11 @@ module ApplicationHelper
       'No Address'
     end
   end
-  
+
+  def text_modal_button(button_text, target_div_id)
+    haml_tag('button', button_text,
+              class: 'btn btn-warning btn-xs',
+              data: {toggle: 'modal', target: "\##{target_div_id}"} )
+  end
+
 end

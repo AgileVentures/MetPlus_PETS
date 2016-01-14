@@ -5,6 +5,7 @@ FactoryGirl.define do
     phone  '123 123 1234'
     email   'contact@widgets.com'
     website 'http://www.widgets-r-us.com'
+    status  Company::STATUS[:PND]
   end
 
 end

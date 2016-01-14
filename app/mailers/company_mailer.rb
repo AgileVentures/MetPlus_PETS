@@ -13,12 +13,17 @@ class CompanyMailer < ApplicationMailer
     send_company_mail(company, company_person)
   end
 
+  def registration_denied(company, company_person, email_text)
+    send_company_mail(company, company_person, email_text)
+  end
+
   private
 
-  def send_company_mail(company, company_person)
+  def send_company_mail(company, company_person, email_text=nil)
     @company_person = company_person
     @company = company
     @agency  = company.agencies[0]
+    @email_text = email_text
     mail to: company_person.email
   end
 end

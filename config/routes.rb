@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
                                      :sign_in => 'login' },
                      :controllers => { :invitations => 'people_invitations' }
+
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
     resources :agency_people, only: [:create, :new]
   end
 
+  resources :companies
+
   resources :branches, path: '/admin/branches',
                        only: [:show, :edit, :update, :destroy]
 
@@ -21,10 +24,11 @@ Rails.application.routes.draw do
 
   # ----------------------- Company Registration ------------------------------
 
-  # Only agency admin can edit, destroy and approve company registration
+  # Only agency admin can edit, destroy and approve/deny company registration
   resources :company_registrations, path: 'admin/company_registrations',
                                 only: [:edit, :update, :destroy, :show] do
     patch 'approve', on: :member, as: :approve
+    patch 'deny',    on: :member, as: :deny
   end
   # Any PETS user can create a company registration request
   resources :company_registrations, only: [:new, :create]

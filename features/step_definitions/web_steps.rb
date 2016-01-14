@@ -63,7 +63,7 @@ When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
   accept_confirm do
     click_button button_text
   end
-  
+
   # If wish to confirm the text of the dialog box, this will work:
   #   message = click_button 'Delete Person'
   #   expect(message).to eq 'Delete Person'
@@ -79,4 +79,8 @@ end
 
 And(/^the selection "([^"]*)" should be disabled$/) do |item|
   expect(has_field?(item, disabled: true)).to be true
+end
+
+When /^I reload the page$/ do
+  visit current_path
 end

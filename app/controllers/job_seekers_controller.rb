@@ -7,7 +7,8 @@ class JobSeekersController < ApplicationController
   def create
     @jobseeker = JobSeeker.new(jobseeker_params)
     if @jobseeker.save
-       flash[:notice] = "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
+      flash[:notice] = "A message with a confirmation and link has been sent to your email address. " +
+                       "Please follow the link to activate your account."
       redirect_to root_path
     else
       @model_errors = @jobseeker.errors
@@ -39,7 +40,6 @@ class JobSeekersController < ApplicationController
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
-
   end
 
   def destroy
@@ -51,7 +51,11 @@ class JobSeekersController < ApplicationController
 
   private
    def jobseeker_params
-     params.require(:job_seeker).permit(:first_name,:last_name,:email,:phone,:password,:password_confirmation,:year_of_birth,:resume)
+     params.require(:job_seeker).permit(:first_name,
+            :last_name, :email, :phone,
+            :password,
+            :password_confirmation,
+            :year_of_birth,
+            :resume)
    end
-
 end

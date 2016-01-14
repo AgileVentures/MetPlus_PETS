@@ -1,6 +1,7 @@
 class Company < ActiveRecord::Base
   has_many :company_people, dependent: :destroy
     accepts_nested_attributes_for :company_people
+
   has_many :jobs
 
   has_many :addresses, as: :location, dependent: :destroy
@@ -15,9 +16,10 @@ class Company < ActiveRecord::Base
   validates :website, :website => true
   validates_presence_of :name
 
-  STATUS = { PND:   'Pending', # Company has registered but not yet approved
+  STATUS = { PND:   'Pending Registration', # Company has registered but not yet approved
              ACT:   'Active',
-             INACT: 'Inactive' }
+             INACT: 'Inactive',
+             DENY:  'Registration Denied'}
 
   validates :status, inclusion: STATUS.values
 
