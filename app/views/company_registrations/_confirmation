@@ -1,9 +1,0 @@
-%h2 Thank You
-Thank you for giving us your information! A representative will be in touch with your contact person soon.
-
-<<<<<<< HEAD:app/views/company_registrations/_confirmation
-= render @company, partial: 'company_registration'
-=======
-= render @company
-= render @company_person
->>>>>>> form work:app/views/companies/confirmation.html.haml
