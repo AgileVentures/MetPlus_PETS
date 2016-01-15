@@ -21,6 +21,9 @@
 *~
 *.swp
 
+# Ignore certain hidden files
+.byebug_history
+
 # Ignore application configuration
 /config/application.yml
 
