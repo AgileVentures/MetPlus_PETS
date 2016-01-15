@@ -49,12 +49,12 @@ class CompanyRegistrationsController < ApplicationController
     # There should be only one CompanyPerson associated with the company -
     # this is the 'company contact' included in the registration request.
     company = Company.find(params[:id])
-    company_person = company.company_people[0]
-
     company.status          = Company::STATUS[:ACT]
+    company.save
+
+    company_person = company.company_people[0]
     company_person.status   = CompanyPerson::STATUS[:ACT]
     company_person.approved = true
-    company.save
     company_person.save
 
     # Send notice of registration acceptance (CompanyMailer)
@@ -64,7 +64,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_registration_path(company)
+    redirect_to company_path(company.id)
 
   end
 

@@ -1,19 +1,11 @@
 class CompanyPeopleController < ApplicationController
 
-  def new
-    @company = company.this_company(current_user)
-    @company_person = CompanyPerson.new
-  end
-
-  def create
-  end
-
   def show
-    @company_person = companyPerson.find(params[:id])
+    @company_person = CompanyPerson.find(params[:id])
   end
 
   def edit
-    @company_person = companyPerson.find(params[:id])
+    @company_person = CompanyPerson.find(params[:id])
   end
 
   def update

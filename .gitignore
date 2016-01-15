@@ -21,7 +21,7 @@
 *~
 *.swp
 
-# Ignore certain hidden files
+# Ignore byebug history
 .byebug_history
 
 # Ignore application configuration
