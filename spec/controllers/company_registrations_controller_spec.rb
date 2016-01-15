@@ -3,7 +3,14 @@ require 'rails_helper'
 RSpec.describe CompanyRegistrationsController, type: :controller do
 
   describe "GET #show" do
-    let(:company_person)  { FactoryGirl.create(:company_person) }
+    let(:company_person) do
+      $cp = FactoryGirl.create(:company_person)
+      $cp.company_roles << FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])
+      $cp.save
+      $cp
+    end
+
     let!(:company) do
       $comp = FactoryGirl.build(:company)
       $comp.company_people << company_person
@@ -26,7 +33,13 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    let(:company_person)  { FactoryGirl.create(:company_person) }
+    let(:company_person) do
+      $cp = FactoryGirl.create(:company_person)
+      $cp.company_roles << FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])
+      $cp.save
+      $cp
+    end
     let!(:company) do
       $comp = FactoryGirl.build(:company)
       $comp.company_people << company_person
