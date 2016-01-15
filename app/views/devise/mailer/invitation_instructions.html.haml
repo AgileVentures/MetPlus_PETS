@@ -5,5 +5,3 @@
                   inviter.actable.agency.name : inviter.actable.company.name))        |
 %p= link_to t("devise.mailer.invitation_instructions.accept"), accept_invitation_url(@resource, :invitation_token => @token)
 %p= t("devise.mailer.invitation_instructions.ignore").html_safe
-= @resource.inspect
-
