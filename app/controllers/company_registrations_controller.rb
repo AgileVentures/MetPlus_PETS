@@ -44,6 +44,31 @@ class CompanyRegistrationsController < ApplicationController
     end
   end
 
+  def edit
+    @company = Company.find(params[:id])
+    @company.build_address unless @company.addresses
+  end
+
+  def update
+    @company = Company.find(params[:id])
+
+    reg_params = company_params
+    if reg_params[:company_people_attributes][:password].empty?
+      reg_params = reg_params[:company_people_attributes][:password].delete
+      reg_params =
+          reg_params[:company_people_attributes][:password_confirmation].delete
+    end
+    @company.assign_attributes(reg_params)
+
+    if @company.save
+      flash[:notice] = "Registration was successfully updated."
+      redirect_to agency_admin_home_path
+    else
+      @model_errors = @company.errors
+      render :edit
+    end
+  end
+
   def approve
     # Approve the company's registration request.
     # There should be only one CompanyPerson associated with the company -
@@ -88,9 +113,9 @@ class CompanyRegistrationsController < ApplicationController
   def company_params
     params.require(:company).permit(:name, :email, :phone,
     :website, :ein, :description,
-    company_people_attributes: [:first_name, :last_name, :phone, :email,
+    company_people_attributes: [:id, :first_name, :last_name, :phone, :email,
                                 :password, :password_confirmation],
-    addresses_attributes: [:street, :city, :zipcode])
+    addresses_attributes: [:id, :street, :city, :zipcode])
   end
 
 end
