@@ -13,29 +13,29 @@
 
     .form-group
       = address_f.label :city, 'City', class: 'control-label col-sm-2'
-      .col-sm-3
+      .col-sm-6
         = address_f.text_field :city, size: 30, class: 'form-control'
 
     .form-group
       = address_f.label :zipcode, 'Zipcode', class: 'control-label col-sm-2'
-      .col-sm-2
+      .col-sm-4
         = address_f.text_field :zipcode, size: 10, class: 'form-control'
 
   .form-group
     = label :company, :email, 'Email', class: 'control-label col-sm-2'
-    .col-sm-4
+    .col-sm-5
       = email_field :company, :email, size: 30, class: 'form-control'
 
-    = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
+    = label :company, :phone, 'Phone', class: 'control-label col-sm-1'
     .col-sm-4
       = phone_field :company, :phone, size: 30, class: 'form-control'
 
   .form-group
     = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
-    .col-sm-4
+    .col-sm-5
       = f.text_field :website, size: 30, class: 'form-control'
 
-    = label :company, :ein, 'Employer Identification Number', class: 'control-label col-sm-2'
+    = label :company, :ein, 'Employer Identification Number', class: 'control-label col-sm-1'
     .col-sm-4
       = f.text_field :ein, size: 30, class: 'form-control'
 
@@ -64,22 +64,22 @@
 
     .form-group
       = company_person_f.label :phone, 'Contact Phone', class: 'control-label col-sm-2'
-      .col-sm-3
+      .col-sm-6
         = company_person_f.phone_field :phone, size: 30, class: 'form-control'
 
     .form-group
       = company_person_f.label :email, 'Contact Email', class: 'control-label col-sm-2'
-      .col-sm-2
+      .col-sm-6
         = company_person_f.email_field :email, size: 30, class: 'form-control'
 
     .form-group
       = company_person_f.label :password, 'Password', class: 'control-label col-sm-2'
-      .col-sm-2
+      .col-sm-6
         = company_person_f.password_field :password, size: 30, class: 'form-control'
 
     .form-group
       = company_person_f.label :password_confirmation, 'Password Confirmation', class: 'control-label col-sm-2'
-      .col-sm-2
+      .col-sm-6
         = company_person_f.password_field :password_confirmation, size: 30, class: 'form-control'
 
   .form-group
