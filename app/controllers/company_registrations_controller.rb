@@ -31,6 +31,9 @@ class CompanyRegistrationsController < ApplicationController
     @company.status                   = Company::STATUS[:PND]
     @company.company_people[0].status = CompanyPerson::STATUS[:PND]
 
+    @company.company_people[0].company_roles <<
+                    CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+
     @company.agencies << Agency.first
 
     if @company.save
@@ -53,10 +56,9 @@ class CompanyRegistrationsController < ApplicationController
     @company = Company.find(params[:id])
 
     reg_params = company_params
-    if reg_params[:company_people_attributes][:password].empty?
-      reg_params = reg_params[:company_people_attributes][:password].delete
-      reg_params =
-          reg_params[:company_people_attributes][:password_confirmation].delete
+    if reg_params[:company_people_attributes]['0'][:password].empty?
+      reg_params[:company_people_attributes]['0'].delete :password
+      reg_params[:company_people_attributes]['0'].delete :password_confirmation
     end
     @company.assign_attributes(reg_params)
 
@@ -113,8 +115,9 @@ class CompanyRegistrationsController < ApplicationController
   def company_params
     params.require(:company).permit(:name, :email, :phone,
     :website, :ein, :description,
-    company_people_attributes: [:id, :first_name, :last_name, :phone, :email,
-                                :password, :password_confirmation],
+    company_people_attributes: [:id, :first_name, :last_name,
+                        :phone, :email, :title,
+                        :password, :password_confirmation],
     addresses_attributes: [:id, :street, :city, :zipcode])
   end
 
