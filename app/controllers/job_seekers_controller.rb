@@ -22,9 +22,8 @@ class JobSeekersController < ApplicationController
  
   def update
     @jobseeker = JobSeeker.find(params[:id])
-    
     person_params = jobseeker_params
-    if person_params['password'] =='' 
+    if person_params['password'].to_s.length == 0 
        person_params.delete('password')
        person_params.delete('password_confirmation')
     end
