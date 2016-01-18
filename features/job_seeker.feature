@@ -47,11 +47,9 @@ Scenario: edit Js Registration without password
   Then I should see "Signed in successfully"
   When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1" 
-  And I fill in "Password" with ""
-  And I fill in "Password Confirmation" with ""
   Then I click the "Update Job seeker" button 
   Then I should see "Jobseeker was updated successfully."
-
+     
 
     
   
