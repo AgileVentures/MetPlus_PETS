@@ -17,25 +17,21 @@
 		=js.text_field :phone, class:'form-control'
 	%div{class: 'label-group'}
 		=js.label :password,'Password',class:'col-sm-2 control-label text-right'
-	
 	%div{class: 'form-group'}
 		=js.password_field :password ,class:'form-control'
-	
 	%div{class: 'label-group'}
 		=js.label :password_confirmation,'Password Confirmation',class:'col-sm-2 control-label text-right'
 	%div{class: 'form-group'}
 		=js.password_field :password_confirmation, class:'form-control'
-	
 	%div{class: 'label-group'}
 		=js.label :year_of_birth,'Year Of Birth',class:'col-sm-2 control-label text-right'
 	%div{class: 'form-group'}
 		=js.text_field :year_of_birth, class:'form-control'
-	
 	%div{class: 'label-group'}
 		=js.label :resume,'Resume',class:'col-sm-2 control-label text-right'
 	%div{class: 'form-group'}
 		=js.file_field :resume
-          
+         
 	%div{class: 'button-group'}
 		=js.submit class:'col-sm-6 col-sm-offset-2 btn btn-primary'
 	
