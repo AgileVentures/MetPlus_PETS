@@ -40,7 +40,7 @@ Scenario: edit Js Registration
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
-Scenario: edit Js Registration without password
+Scenario: edit Js Registration without password change
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully"
