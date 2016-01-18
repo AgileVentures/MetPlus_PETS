@@ -40,14 +40,14 @@
 #     job4.save
 # end
 
-# User.find_or_create_by(email: 'salemamba@gmail.com') do |user|
-#     user.first_name = "salem"
-#     user.last_name  = 'amba'
-#     user.password = 'secret123'
-#     user.password_confirmation = 'secret123'
-#     user.phone ='619-316-8971'
-#     user.confirmed_at = DateTime.now
-# end
+User.find_or_create_by(email: 'salemamba@gmail.com') do |user|
+    user.first_name = "salem"
+    user.last_name  = 'amba'
+    user.password = 'secret123'
+    user.password_confirmation = 'secret123'
+    user.phone ='619-316-8971'
+    user.confirmed_at = DateTime.now
+end
 
 
 Job.delete_all
