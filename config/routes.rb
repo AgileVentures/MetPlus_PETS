@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
                                      :sign_in => 'login' },
-                     :controllers => { :invitations => 'people_invitations' }
+                     :controllers => { :invitations => 'people_invitations' },
+                     :controllers => {sessions: 'users/sessions'}
+
+  # devise_for :users, controllers: {
+  #       sessions: 'users/sessions'
+  #     }
 
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
