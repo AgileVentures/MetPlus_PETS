@@ -87,10 +87,7 @@ RSpec.describe JobSeekersController, type: :controller do
         patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@jobseeker
         @jobseeker.reload
         @user.reload
-        #@jobseeker.first_name.should eq("John")
         
-        #@jobseeker.last_name.should eq("Smith")
-        #@jobseeker.year_of_birth.should eq("1980")
       end
      it 'sets a firstname' do
         expect(@jobseeker.first_name).to eq ("John")
