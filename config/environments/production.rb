@@ -80,7 +80,9 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp 
   #this will take care of devise setup default url in production
-  config.action_mailer.default_url_options = { :host => 'metplus.org' }
+  host = 'secret-savannah-8218.herokuapp.com'
+  # config.action_mailer.default_url_options = { :host => 'metplus.org' }
+  config.action_mailer.default_url_options = { host: host }
 
   ActionMailer::Base.smtp_settings = {
      :address        => 'smtp.sendgrid.net',
