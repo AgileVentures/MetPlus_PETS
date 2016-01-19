@@ -40,7 +40,7 @@
 #     job4.save
 # end
 
-User.find_or_create_by(email: 'salemamba@gmail.com') do |user|
+User.find_or_create_by(email: 'salemamba1@gmail.com') do |user|
     user.first_name = "salem"
     user.last_name  = 'amba'
     user.password = 'secret123'
