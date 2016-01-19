@@ -9,7 +9,8 @@ class CompanyPerson < ActiveRecord::Base
   STATUS = { PND:   'Pending', # Company has registered but not yet approved
              IVT:   'Invited', # Company approved, invite sent to confirm account
              ACT:   'Active',
-             INACT: 'Inactive' }
+             INACT: 'Inactive',
+             DENY:  'Registration Denied'} # Company registration denied
 
   validates :status, inclusion: STATUS.values
 

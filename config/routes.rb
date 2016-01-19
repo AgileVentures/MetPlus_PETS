@@ -9,19 +9,23 @@ Rails.application.routes.draw do
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
   end
 
+  # ----------------------- Agency Branches ----------------------------------
+  # Agency admin can create a branch within the agency
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
     resources :branches,      only: [:create, :new]
   end
-
-  resources :companies
-
+  # Agency admin can edit and delete a branch
   resources :branches, path: '/admin/branches',
                        only: [:show, :edit, :update, :destroy]
+  # --------------------------------------------------------------------------
 
+  # ----------------------- Agency People ------------------------------------
+  # Agency admin can edit and delete an agency person
   resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
+  # --------------------------------------------------------------------------
 
-  # ----------------------- Company Registration ------------------------------
+  # ----------------------- Company Registration -----------------------------
   # Only agency admin can edit, destroy and approve/deny company registration
   resources :company_registrations, path: 'admin/company_registrations',
                                 only: [:edit, :update, :destroy, :show] do
@@ -30,26 +34,22 @@ Rails.application.routes.draw do
   end
   # Any PETS visitor can create a company registration request
   resources :company_registrations, only: [:new, :create]
-  # ----------------------- Company Registration ------------------------------
+  # --------------------------------------------------------------------------
 
-  # ----------------------- Company -------------------------------------------
+  # ----------------------- Company ------------------------------------------
   # Company admin (and agency admin) can edit a company
   resources :companies, path: 'company_admin/companies',
                                 only: [:edit, :update, :show]
-
   # Only the agency admin can delete a company
   resources :companies, path: 'admin/companies',
                                 only: [:destroy, :list]
-  # ----------------------- Company -------------------------------------------
+  # --------------------------------------------------------------------------
 
-  # ----------------------- Company People ------------------------------------
-  # Company person can see their information (e.g. company roles)
-  resources :company_people, only: [:show]
-
+  # ----------------------- Company People -----------------------------------
   # Company admin (and agency admin) can edit and delete a company person
-  resources :company_people, path: 'company_admin/company_people',
-                             only: [:edit, :update, :destroy, :list]
-  # ----------------------- Company People ------------------------------------
+  resources :company_people, path: '/company_admin/company_people',
+                       only: [:show, :edit, :update, :destroy]
+  # --------------------------------------------------------------------------
 
   root 'main#index'
 

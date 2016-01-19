@@ -2,7 +2,16 @@ class PeopleInvitationsController < Devise::InvitationsController
   def new
     session[:person_type] = params[:person_type]
     session[:org_id]      = params[:org_id]
-    super
+
+    self.resource = resource_class.new
+    case params[:person_type]
+    when 'AgencyPerson'
+      @agency_name = Agency.find(params[:org_id]).name
+      render :new_agency_person
+    when 'CompanyPerson'
+      @company_name = Company.find(params[:org_id]).name
+      render :new_company_person
+    end
   end
 
   private
@@ -13,8 +22,8 @@ class PeopleInvitationsController < Devise::InvitationsController
     user = resource_class.invite!(invite_params, current_inviter, &block)
     if user.errors.empty?
       if (person = user.actable)
-        # If a person is already associated with this user, this means
-        # that another invitation was sent to that previously-invited person.
+        # If a person is already associated with this user, this means that
+        # another invitation is being sent to that previously-invited person.
         redirect_path = (person.class == AgencyPerson ?
                   agency_person_path(person.id) : company_person_path(person.id) )
         store_location_for user, redirect_path

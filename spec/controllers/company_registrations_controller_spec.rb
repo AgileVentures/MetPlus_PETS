@@ -59,6 +59,33 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
   end
 
+  describe 'DELETE registration also deletes associated objects' do
+    let(:company_person) do
+      $cp = FactoryGirl.create(:company_person)
+      $cp.company_roles << FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])
+      $cp.save
+      $cp
+    end
+    let(:address1) { FactoryGirl.create(:address) }
+    let(:address2) { FactoryGirl.create(:address, city: 'Detroit') }
+    let!(:company) do
+      $comp = FactoryGirl.build(:company)
+      $comp.company_people << company_person
+      $comp.addresses << address1 << address2
+      $comp.save
+      $comp
+    end
+    it ' delete company person(s)' do
+      expect { delete :destroy, id: company }.
+          to change(CompanyPerson, :count).by(-1)
+    end
+    it ' delete company address(s)' do
+      expect { delete :destroy, id: company }.
+          to change(Address, :count).by(-2)
+    end
+  end
+
   describe "POST #create" do
 
     let!(:agency)   { FactoryGirl.create(:agency) }
@@ -71,6 +98,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                 [FactoryGirl.attributes_for(:address)]
       $params
     end
+
+    let!(:company_role) { FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])}
 
     context 'valid attributes' do
       before(:each) do
@@ -88,7 +118,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                             to eq CompanyPerson::STATUS[:PND]
       end
       it 'sets flash message' do
-        expect(flash[:notice]).to match "You have successfully registered your company!"
+        expect(flash[:notice]).to match "Thank you for your registration request."
       end
       it 'renders confirmation view' do
         expect(response).to render_template(:confirmation)
@@ -133,18 +163,23 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                 [FactoryGirl.attributes_for(:address)]
       $params
     end
+
+    # controller :create action requires a 'CA' role to be present in the DB
+    let!(:company_role) { FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])}
+
     before(:each) do
       post :create, company: registration_params
     end
 
     it 'sends registration-approved and account-confirm emails' do
-      expect { post :approve,
+      expect { patch :approve,
           id: Company.find_by_name(registration_params[:name]) }.
                     to change(all_emails, :count).by(+2)
     end
     context 'after approval' do
       before(:each) do
-        post :approve, id: Company.find_by_name(registration_params[:name])
+        patch :approve, id: Company.find_by_name(registration_params[:name])
       end
       it 'sets flash message' do
         expect(flash[:notice]).to eq "Company contact has been notified of registration approval."
@@ -152,6 +187,89 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       it "returns redirect status" do
         expect(response).to have_http_status(:redirect)
       end
+    end
+  end
+
+  describe "PATCH #deny" do
+    let!(:agency)   { FactoryGirl.create(:agency) }
+
+    let!(:registration_params) do
+      $params = FactoryGirl.attributes_for(:company)
+      $params[:company_people_attributes] =
+                [FactoryGirl.attributes_for(:user)]
+      $params[:addresses_attributes] =
+                [FactoryGirl.attributes_for(:address)]
+      $params
+    end
+
+    # controller :create action requires a 'CA' role to be present in the DB
+    let!(:company_role) { FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])}
+
+    before(:each) do
+      post :create, company: registration_params
+    end
+
+    it 'sends registration-denied email' do
+      expect { xhr :patch, :deny,
+          id: Company.find_by_name(registration_params[:name]) }.
+                    to change(all_emails, :count).by(+1)
+    end
+    context 'after denial' do
+      before(:each) do
+        xhr :patch, :approve, id: Company.find_by_name(registration_params[:name])
+      end
+      it "returns redirect status" do
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+  end
+
+  describe "PATCH #update" do
+    let!(:agency)   { FactoryGirl.create(:agency) }
+
+    let!(:registration_params) do
+      $params = FactoryGirl.attributes_for(:company)
+      $params[:company_people_attributes] =
+                [FactoryGirl.attributes_for(:user)]
+      $params[:addresses_attributes] =
+                [FactoryGirl.attributes_for(:address)]
+      $params
+    end
+    let!(:prior_name) { registration_params[:name] }
+
+    let!(:company_role) { FactoryGirl.create(:company_role,
+                                role: CompanyRole::ROLE[:CA])}
+
+    before(:each) do
+      post :create, company: registration_params
+    end
+
+    it 'updates person and address but does not add person or address' do
+      # Change registration data for update
+      company = Company.find_by_name(prior_name)
+
+      registration_params = FactoryGirl.attributes_for(:company,
+                                      name: 'Sprockets Corporation')
+
+      registration_params[:company_people_attributes] =
+                {'0' => FactoryGirl.attributes_for(:user,
+                    first_name: 'Fred', last_name: 'Flintstone')}
+      registration_params[:company_people_attributes]['0'][:id] =
+                    company.company_people[0].id
+
+      registration_params[:addresses_attributes] =
+                {'0' => FactoryGirl.attributes_for(:address,
+                    city: 'Boston')}
+      registration_params[:addresses_attributes]['0'][:id] =
+                    company.addresses[0].id
+
+      expect { patch :update, company: registration_params,
+          id: company.id }.
+                    to_not change(CompanyPerson, :count)
+      expect { patch :update, company: registration_params,
+          id: company.id }.
+                    to_not change(Address, :count)
     end
   end
 

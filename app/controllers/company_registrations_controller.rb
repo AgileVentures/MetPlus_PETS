@@ -37,7 +37,8 @@ class CompanyRegistrationsController < ApplicationController
     @company.agencies << Agency.first
 
     if @company.save
-      flash.notice = "You have successfully registered your company! An agency representative will be contacting you shortly!" # need more informative message
+      flash.notice = "Thank you for your registration request. " +
+         " We will review your request and get back to you shortly."
       CompanyMailer.pending_approval(@company,
                                      @company.company_people[0]).deliver_now
       render :confirmation
@@ -60,9 +61,8 @@ class CompanyRegistrationsController < ApplicationController
       reg_params[:company_people_attributes]['0'].delete :password
       reg_params[:company_people_attributes]['0'].delete :password_confirmation
     end
-    @company.assign_attributes(reg_params)
 
-    if @company.save
+    if @company.update_attributes(reg_params)
       flash[:notice] = "Registration was successfully updated."
       redirect_to agency_admin_home_path
     else
@@ -100,7 +100,8 @@ class CompanyRegistrationsController < ApplicationController
     company = Company.find(params[:id])
     company_person = company.company_people[0]
 
-    company.status = Company::STATUS[:DENY]
+    company.status                   = Company::STATUS[:DENY]
+    company.company_people[0].status = CompanyPerson::STATUS[:DENY]
     company.save
 
     render :partial => 'companies/company_status',
