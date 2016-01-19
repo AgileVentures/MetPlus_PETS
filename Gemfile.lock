@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/thoughtbot/shoulda-matchers
-  revision: 15f53cd50b7680b093cca0491be67e8ce71c8650
+  revision: a4b18fcc3830d4b461ee1318e70aca20fa05a1db
   specs:
     shoulda-matchers (3.1.0)
       activesupport (>= 4.0.0)
@@ -54,7 +54,8 @@ GEM
     builder (3.2.2)
     byebug (8.2.1)
     cancancan (1.13.1)
-    capybara (2.5.0)
+    capybara (2.6.0)
+      addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -87,7 +88,7 @@ GEM
       rails (>= 3, < 5)
     database_cleaner (1.5.1)
     debug_inspector (0.0.2)
-    devise (3.5.3)
+    devise (3.5.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
