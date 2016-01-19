@@ -63,10 +63,11 @@ RSpec.describe JobSeekersController, type: :controller do
                
    context "valid attributes" do
      before(:each) do
-       @jobseeker =  FactoryGirl.create(:job_seeker) 
+       @jobseeker =  FactoryGirl.create(:job_seeker)
        patch :update, id: @jobseeker,job_seeker: FactoryGirl.attributes_for(:job_seeker)
-     end
       
+     end
+            
      it 'sets flash message' do
         expect(flash[:notice]).to eq "Jobseeker was updated successfully."
      end
@@ -77,7 +78,38 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(response).to redirect_to(root_path)
      end
     end
-   
+    
+    context "valid attributes without password change" do
+      before(:each) do
+        @jobseeker =  FactoryGirl.create(:job_seeker)
+        @user =  FactoryGirl.create(:user)
+        @jobseeker.valid? 
+        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@jobseeker
+        @jobseeker.reload
+        @user.reload
+        
+      end
+     it 'sets a firstname' do
+        expect(@jobseeker.first_name).to eq ("John")
+     end
+     it 'sets a lastname' do
+        expect(@jobseeker.last_name).to eq ("Smith")
+     end
+     it 'sets a yearofbirth' do
+        expect(@jobseeker.year_of_birth).to eq ("1980")
+     end
+     it 'sets flash message' do
+        expect(flash[:notice]).to eq "Jobseeker was updated successfully."
+     end
+     it 'returns redirect status' do
+        expect(response).to have_http_status(:redirect)
+     end
+     it 'redirects to mainpage' do
+       expect(response).to redirect_to(root_path)
+     end
+    end
+
+       
    context 'invalid attributes' do
      before(:each) do
        @jobseeker = FactoryGirl.create(:job_seeker)
@@ -110,8 +142,6 @@ RSpec.describe JobSeekersController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-
-  
 
   describe "GET #index" do
     it "renders the index template" do
