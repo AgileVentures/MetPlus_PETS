@@ -101,7 +101,7 @@ Scenario: new agency branch
   Then I should see "Branch was successfully created."
   And I should see "004"
 
-@selenium
+@javascript
 Scenario: delete agency branch
   And I click the "003" link
   Then I click and accept the "Delete Branch" button
@@ -130,7 +130,7 @@ Scenario: cancel agency person edit
   Then I should see "Jane Jones"
   And I should not see "002"
 
-@selenium
+@javascript
 Scenario: delete agency person
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
