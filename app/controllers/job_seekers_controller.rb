@@ -23,7 +23,7 @@ class JobSeekersController < ApplicationController
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
-<<<<<<< HEAD
+
     person_params = jobseeker_params
     if person_params['password'].to_s.length == 0 
        person_params.delete('password')
@@ -31,9 +31,6 @@ class JobSeekersController < ApplicationController
     end
     
     if @jobseeker.update_attributes(person_params)
-=======
-    if @jobseeker.update_attributes(jobseeker_params)
->>>>>>> Add status field info
        sign_in :user, @jobseeker.user, bypass: true
        flash[:notice] = "Jobseeker was updated successfully."
        redirect_to root_path
