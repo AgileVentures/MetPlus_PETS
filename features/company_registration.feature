@@ -25,6 +25,7 @@ Background: seed data added to database
 
   Given I am on the home page
   And I click the "Become a hiring partner!" link
+  And I wait for 1 seconds
   Then I should see "Company Registration"
   And I fill in the fields:
   | Company Name                   | Widgets, Inc.       |
@@ -73,7 +74,6 @@ Scenario: company registration delete
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
-  And I wait for 2 seconds
   Then I should see "Registration for 'Widgets, Inc.' deleted."
 
 @selenium
