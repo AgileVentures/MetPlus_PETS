@@ -217,10 +217,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
     context 'after denial' do
       before(:each) do
-        xhr :patch, :approve, id: Company.find_by_name(registration_params[:name])
+        xhr :patch, :deny, id: Company.find_by_name(registration_params[:name])
       end
-      it "returns redirect status" do
-        expect(response).to have_http_status(:redirect)
+      it "returns success status" do
+        expect(response).to have_http_status(:success)
       end
     end
   end
