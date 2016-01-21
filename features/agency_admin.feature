@@ -105,6 +105,7 @@ Scenario: new agency branch
 Scenario: delete agency branch
   And I click the "003" link
   Then I click and accept the "Delete Branch" button
+  And I wait for 3 seconds
   Then I should see "Branch '003' deleted."
 
 Scenario: edit agency person
@@ -133,6 +134,7 @@ Scenario: cancel agency person edit
 Scenario: delete agency person
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
+  And I wait for 3 seconds
   Then I should see "Person 'Jane Jones' deleted."
 
 Scenario: cannot remove sole agency admin

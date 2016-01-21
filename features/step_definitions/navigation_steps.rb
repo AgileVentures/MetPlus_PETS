@@ -21,3 +21,4 @@ Given(/^I am on the Jobseeker Registration page$/) do
   visit "/job_seekers/new"
 end
 
+
