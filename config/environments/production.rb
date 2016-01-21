@@ -1,5 +1,4 @@
-Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
+# Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -47,7 +46,6 @@ Rails.application.configure do
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :debug
-  
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -74,29 +72,13 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.delivery_method = :smtp 
+  config.action_mailer.delivery_method = :sendmail
   #this will take care of devise setup default url in production
-  host = 'secret-savannah-8218.herokuapp.com'
-  # config.action_mailer.default_url_options = { :host => 'metplus.org' }
-  config.action_mailer.default_url_options = { host: host }
-
-  ActionMailer::Base.smtp_settings = {
-     :address        => 'smtp.sendgrid.net',
-     :port           => '587',
-     :authentication => :plain,
-     :user_name      => ENV['SENDGRID_USERNAME'],
-     :password       => ENV['SENDGRID_PASSWORD'],
-     :domain         => 'heroku.com',
-     :enable_starttls_auto => true
-   }
-
-end
-
+  config.action_mailer.default_url_options = { :host => 'metplus.org' }
 
 
 
