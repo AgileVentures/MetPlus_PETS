@@ -1,7 +1,9 @@
 When(/^I go to the (.+) page$/) do |page|
   case page
-    when 'JobSeeker Registration'
-      visit new_jobseeker_path
+    when 'Company Registration'
+      visit new_company_registration_path 
+    when 'Jobseeker Registration'
+      visit new_job_seeker_path
     when 'home'
       visit root_path
     when /activation for user '.+'/
@@ -14,10 +16,11 @@ When(/^I go to the (.+) page$/) do |page|
   end
 end
 
-Given(/I am on the (\w+) page$/) do |page|
+Given(/I am on the (.+) page$/) do |page|
   step "I go to the #{page} page"
 end
-Given(/^I am on the Jobseeker Registration page$/) do
-  visit "/job_seekers/new"
+
+Then(/^I should be on the (.+) page$/) do |page|
+  step "I go to the #{page} page"
 end
 
