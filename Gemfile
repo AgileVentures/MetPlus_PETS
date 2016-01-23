@@ -38,7 +38,7 @@ gem 'figaro'
 
 gem 'cancancan', '~> 1.10'
 
-
+gem 'nokogiri', '~> 1.6', '>= 1.6.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'

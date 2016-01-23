@@ -25,7 +25,7 @@ class CompanyPeopleController < ApplicationController
   private
 
   def company_person_params
-    params.require(:company_person).permit(:first_name, :last_name, :phone,
+    params.require(:company_person).permit(:title, :first_name, :last_name, :phone,
                 :email, :password, :password_confirmation, company_role_ids: [])
   end
 

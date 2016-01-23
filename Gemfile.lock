@@ -291,6 +291,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   launchy
+  nokogiri (~> 1.6, >= 1.6.7)
   pg
   poltergeist
   rails (= 4.2.3)
@@ -305,3 +306,6 @@ DEPENDENCIES
   turbolinks
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
+
+BUNDLED WITH
+   1.11.2
