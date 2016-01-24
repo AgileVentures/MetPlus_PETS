@@ -60,13 +60,12 @@ And(/^show me the page$/) do
 end
 
 When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
-  accept_confirm do
+  # accept_confirm(wait: 8) do
+  #   click_button button_text
+  # end
+  page.driver.accept_modal(:confirm, wait: 8) do
     click_button button_text
   end
-
-  # If wish to confirm the text of the dialog box, this will work:
-  #   message = click_button 'Delete Person'
-  #   expect(message).to eq 'Delete Person'
 end
 
 When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|

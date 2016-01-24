@@ -43,7 +43,7 @@ class AgencyPeopleController < ApplicationController
         # If the :agency_admin error key was set by the model this means that
         # the agency person being edited is the sole agency admin (AA), and that
         # role was unchecked in the edit view. Removing the sole AA is not allowed.
-        # In this case, reset the AA role and add a flash message.
+        # In this case, reset the AA role.
 
         @agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
       end

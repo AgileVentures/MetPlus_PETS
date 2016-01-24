@@ -31,10 +31,14 @@ class CompanyRegistrationsController < ApplicationController
     @company.status                   = Company::STATUS[:PND]
     @company.company_people[0].status = CompanyPerson::STATUS[:PND]
 
+    @company.company_people[0].company_roles <<
+                    CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+
     @company.agencies << Agency.first
 
     if @company.save
-      flash.notice = "You have successfully registered your company! An agency representative will be contacting you shortly!" # need more informative message
+      flash.notice = "Thank you for your registration request. " +
+         " We will review your request and get back to you shortly."
       CompanyMailer.pending_approval(@company,
                                      @company.company_people[0]).deliver_now
       render :confirmation
@@ -44,17 +48,40 @@ class CompanyRegistrationsController < ApplicationController
     end
   end
 
+  def edit
+    @company = Company.find(params[:id])
+    @company.build_address unless @company.addresses
+  end
+
+  def update
+    @company = Company.find(params[:id])
+
+    reg_params = company_params
+    if reg_params[:company_people_attributes]['0'][:password].empty?
+      reg_params[:company_people_attributes]['0'].delete :password
+      reg_params[:company_people_attributes]['0'].delete :password_confirmation
+    end
+
+    if @company.update_attributes(reg_params)
+      flash[:notice] = "Registration was successfully updated."
+      redirect_to agency_admin_home_path
+    else
+      @model_errors = @company.errors
+      render :edit
+    end
+  end
+
   def approve
     # Approve the company's registration request.
     # There should be only one CompanyPerson associated with the company -
     # this is the 'company contact' included in the registration request.
     company = Company.find(params[:id])
-    company_person = company.company_people[0]
-
     company.status          = Company::STATUS[:ACT]
+    company.save
+
+    company_person = company.company_people[0]
     company_person.status   = CompanyPerson::STATUS[:ACT]
     company_person.approved = true
-    company.save
     company_person.save
 
     # Send notice of registration acceptance (CompanyMailer)
@@ -64,7 +91,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_registration_path(company)
+    redirect_to company_path(company.id)
 
   end
 
@@ -73,7 +100,8 @@ class CompanyRegistrationsController < ApplicationController
     company = Company.find(params[:id])
     company_person = company.company_people[0]
 
-    company.status = Company::STATUS[:DENY]
+    company.status                   = Company::STATUS[:DENY]
+    company.company_people[0].status = CompanyPerson::STATUS[:DENY]
     company.save
 
     render :partial => 'companies/company_status',
@@ -88,9 +116,10 @@ class CompanyRegistrationsController < ApplicationController
   def company_params
     params.require(:company).permit(:name, :email, :phone,
     :website, :ein, :description,
-    company_people_attributes: [:first_name, :last_name, :phone, :email,
-                                :password, :password_confirmation],
-    addresses_attributes: [:street, :city, :zipcode])
+    company_people_attributes: [:id, :first_name, :last_name,
+                        :phone, :email, :title,
+                        :password, :password_confirmation],
+    addresses_attributes: [:id, :street, :city, :zipcode])
   end
 
 end
