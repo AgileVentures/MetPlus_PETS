@@ -67,16 +67,16 @@ Scenario: company registration approval
   When "hughjobs@widgets.com" opens the email with subject "Confirmation instructions"
   Then they should see "You can confirm your account email through the link below:" in the email body
 
-# @selenium
-# Scenario: company registration delete
-#   Given I am logged in as agency admin
-#   And I click the "Admin" link
-#   Then I click the "Widgets, Inc." link
-#   And I should see "Pending Registration"
-#   Then I click and accept the "Delete Registration" button
-#   Then I should see "Registration for 'Widgets, Inc.' deleted."
+@javascript
+Scenario: company registration delete
+  Given I am logged in as agency admin
+  And I click the "Admin" link
+  Then I click the "Widgets, Inc." link
+  And I should see "Pending Registration"
+  Then I click and accept the "Delete Registration" button
+  Then I should see "Registration for 'Widgets, Inc.' deleted."
 
-@selenium
+@javascript
 Scenario: company registration rejection
   Given I am logged in as agency admin
   And I click the "Admin" link
