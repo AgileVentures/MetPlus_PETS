@@ -39,11 +39,14 @@ RSpec.describe CompanyPeopleController, type: :controller do
          @companyperson =  FactoryGirl.create(:company_person)
          @user =  FactoryGirl.create(:user)
          @companyperson.valid?
-         patch :update, company_person:FactoryGirl.attributes_for(:company_person, year_of_birth: '1980').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@companyperson
+         patch :update, company_person:FactoryGirl.attributes_for(:company_person, title: 'Line Manager').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@companyperson
          @companyperson.reload
          @user.reload
 
        end
+      it 'sets a title' do
+        expect(@companyperson.title).to eq ("Line Manager")
+      end
       it 'sets a firstname' do
          expect(@companyperson.first_name).to eq ("John")
       end
