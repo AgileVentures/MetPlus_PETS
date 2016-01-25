@@ -28,6 +28,7 @@ class JobSeekersController < ApplicationController
        person_params.delete('password')
        person_params.delete('password_confirmation')
     end
+    
     if @jobseeker.update_attributes(person_params)
        sign_in :user, @jobseeker.user, bypass: true
        flash[:notice] = "Jobseeker was updated successfully."
