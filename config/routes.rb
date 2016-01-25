@@ -46,7 +46,7 @@ Rails.application.routes.draw do
                                 only: [:destroy, :list]
   # ----------------------- Company -------------------------------------------
 
-  resources :company_people, only: [:create, :new]
+  resources :company_people, only: [:create, :new, :edit, :update]
 
   root 'main#index'
 
