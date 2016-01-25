@@ -11,6 +11,8 @@ class Company < ActiveRecord::Base
 
 
   validates :ein,   :ein_number => true
+  validates_uniqueness_of :ein, case_sensitive: false,
+                  message: 'has already been registered'
   validates :phone, :phone => true
   validates :email, :email => true
   validates :website, :website => true

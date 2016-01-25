@@ -89,3 +89,28 @@ Scenario: company registration rejection
   And I wait for 3 seconds
   Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
+
+Scenario: duplicate EIN for Company
+  Given I am on the home page
+  And I click the "Become a hiring partner!" link
+  And I wait for 1 seconds
+  Then I should see "Company Registration"
+  And I fill in the fields:
+  | Company Name                   | Widgets, Inc.       |
+  | Company Address                | 12 Main Street      |
+  | City                           | Detroit             |
+  | Zipcode                        | 02034               |
+  | Email                          | contact@widgets.com |
+  | Phone                          | 222-333-4567        |
+  | Company Website                | www.widgets.com     |
+  | Employer Identification Number | 12-3456789          |
+  | Description                    | Widgets are us!     |
+  | Title                          | HR Director         |
+  | First Name                     | Hugh                |
+  | Last Name                      | Jobs                |
+  | Contact Phone                  | 555-555-1212        |
+  | Contact Email                  | hughjobs@widgets.com|
+  | Password                       | qwerty123           |
+  | Password Confirmation          | qwerty123           |
+  And I click the "Create" button
+  Then I should see "Ein has already been registered"
