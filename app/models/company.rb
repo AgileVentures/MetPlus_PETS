@@ -11,6 +11,8 @@ class Company < ActiveRecord::Base
 
 
   validates :ein,   :ein_number => true
+  validates_uniqueness_of :ein, case_sensitive: false,
+                  message: 'has already been registered'
   validates :phone, :phone => true
   validates :email, :email => true
   validates :website, :website => true
@@ -22,5 +24,33 @@ class Company < ActiveRecord::Base
              DENY:  'Registration Denied'}
 
   validates :status, inclusion: STATUS.values
+
+  def self.company_admins(company)
+    find_users_with_role(company, CompanyRole::ROLE[:CA])
+  end
+
+  def sole_company_admin?
+    # Is this person even an admin?
+    return false unless company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
+
+    not other_company_admin?
+  end
+
+  def other_company_admin?
+    admins = Company.company_admins(company)
+
+    (admins.count > 1) || (admins.count == 1 && !admins.include?(self))
+  end
+
+  private
+
+  def self.find_users_with_role(company, role)
+    users = []
+    company.company_people.each do |cp|
+                users << cp if cp.company_roles &&
+                               cp.company_roles.pluck(:role).include?(role)
+    end
+    users
+  end
 
 end

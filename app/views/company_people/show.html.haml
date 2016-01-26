@@ -1,25 +1,3 @@
-%div{:class => 'container'}
-	%div{class: 'div_align_left', id: 'bold_text'}
-		%br
-		Title:
-		%br
-		First Name:
-		%br
-		Last Name:
-		%br
-		Email:
-		%br
-		Phone:
-		%br
-	%div{class: 'div_align_right'}
-		%br
-		= @company_person.title
-		%br
-		= @company_person.first_name
-		%br
-		= @company_person.last_name
-		%br
-		= @company_person.email
-		%br
-		= @company_person.phone
-		%br
+%h3 Company Person
+
+= render @company_person
