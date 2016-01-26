@@ -35,4 +35,27 @@ RSpec.describe CompaniesController, type: :controller do
     end
   end
 
+  describe "PATCH #update" do
+
+    before(:each) do
+      @company = FactoryGirl.create(:company)
+    end
+
+    context 'valid attributes' do
+      it 'locates the requested company' do
+        patch :update, id: @company, company: attributes_for(:company)
+        expect(assigns(:company)).to eq(@company)
+      end
+
+      it 'changes the company attributes' do
+        patch :update, id: @company, company: attributes_for(:company,
+          email: 'info@widgets.com')
+        @company.reload
+        expect(@company.email).to eq('info@widgets.com')
+      end
+
+    end
+
+  end
+
 end

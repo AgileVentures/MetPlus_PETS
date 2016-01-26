@@ -1,9 +1,6 @@
 %h3 Company Information
 
-.row
-  .col-sm-2.text-right
-    %strong Name:
-  .col-sm-8
+
 .row
   .col-sm-2.text-right
     %strong Website:
@@ -50,7 +47,7 @@
           - company.company_people.each do |person|
             %tr
               %td
-                = person.first_name
+                = link_to person.full_name, company_person_path(person)
               %td
                 -# link_to AgencyPerson 'show' instance here when that is available
                 = person.last_name
