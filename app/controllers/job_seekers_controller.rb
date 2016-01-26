@@ -61,7 +61,7 @@ class JobSeekersController < ApplicationController
             :password,
             :password_confirmation,
             :year_of_birth,
-            :jobseeker_status_id,
+            :job_seeker_status_id,
             :resume)
 
    end
