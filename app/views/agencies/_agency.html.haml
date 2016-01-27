@@ -1,38 +1,44 @@
-%h3 Agency Information
-.row
-  .col-sm-2.text-right
-    %strong Name:
-  .col-sm-8
-    = agency.name
-.row
-  .col-sm-2.text-right
-    %strong Website:
-  .col-sm-8
-    = @agency.website
-.row
-  .col-sm-2.text-right
-    %strong Phone:
-  .col-sm-8
-    = @agency.phone
-.row
-  .col-sm-2.text-right
-    %strong Fax:
-  .col-sm-8
-    = @agency.fax
-.row
-  .col-sm-2.text-right
-    %strong Email:
-  .col-sm-8
-    = @agency.email
-.row
-  .col-sm-2.text-right
-    %strong Description:
-  .col-sm-8
-    = truncate(@agency.description, length: 300)
-.row
-  .col-sm-2.text-right
-    %strong Agency Admin(s):
-  .col-sm-8
-    - @agency_admins.each do |aa|
-      = aa.full_name(last_name_first: false)
-      = ', ' if aa != @agency_admins.last
+
+.col-sm-3
+  %h4 Agency Information
+
+.col-sm-9
+  %table{:class => 'table table-hover'}
+    %tbody
+      %tr
+        %td
+          %strong Name
+        %td
+          = agency.name
+      %tr
+        %td
+          %strong Website
+        %td
+          = @agency.website
+      %tr
+        %td
+          %strong Phone
+        %td
+          = @agency.phone
+      %tr
+        %td
+          %strong Fax
+        %td
+          = @agency.fax
+      %tr
+        %td
+          %strong Email
+        %td
+          = @agency.email
+      %tr
+        %td
+          %strong Description
+        %td
+          = @agency.description
+      %tr
+        %td
+          %strong Agency Admin(s)
+        %td
+          - @agency_admins.each do |aa|
+            = aa.full_name(last_name_first: false)
+            = ', ' if aa != @agency_admins.last

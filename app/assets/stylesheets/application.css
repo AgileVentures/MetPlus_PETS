@@ -14,10 +14,6 @@
  *= require_self
  */
 
- 
-
-
-
 /*homepage css*/
 .col-md-8.col-lg-8{
    padding-left:  0;
@@ -42,6 +38,18 @@
     margin: 25px 0 12px 0;
 }
 
+/* this is for a button associated with a table above it. It is set close
+   to the table. See agency admin home view for example. */
+#table_action_button {
+  margin-bottom: 30px;
+  margin-top: -10px;
+}
+
+.row-no-margin {
+   margin-left: 0px;
+   margin-right: 0px;
+} 
+
 .navbar {
     background: #0C7BA1;
 }
@@ -64,13 +72,13 @@
 }
 
 
-.footer {
+/*.footer {
     position: fixed;
     bottom: 0px;
     width: 100%;
     height: 20px;
     background-color: #f5f5f5;
-}
+}*/
 
 .navbar-default .navbar-text > a {
     color: yellow;
@@ -109,7 +117,7 @@
 
 
 /*PLEASE PUT COMMENT
-  WHERE EXACTLY 
+  WHERE EXACTLY
   CSS APLLIES
   TO
 */
@@ -133,7 +141,7 @@
     padding-top: 12px;
 }
 
-.normal-label { 
+.normal-label {
   font-weight: normal;
 }
 
@@ -142,7 +150,7 @@
     color: #fff;
     padding-top: 6px;
     position: absolute;
-   
+
 }
 .button-group > label{
     padding-left: 10px;
@@ -171,14 +179,6 @@
     margin-top: -2px;
 
 }
-/*
-.form-group label{
-    font-family: "ArialMT", "Arial";
-    font-weight: 400;
-    font-size: 13px;
-    line-height: normal;
-}
-*/
 
 .form-control#user_email{
     width: 82%;
@@ -192,7 +192,7 @@
 }
 .jumbotron p{
     font-size: 1em;
-    
+
 }
 .form-control#user_password{
     width: 42%;
@@ -200,11 +200,11 @@
     padding-right: 20px;
 }
 
-.btn.btn-primary{
+/*.btn.btn-primary{
     width: 140px;
     height: 39px;
     line-height: 25px;
-}
+}*/
 .jumbotron h2#login-text {
    font-family:  "Arial-BoldMT","Arial Bold","Arial";
    font-weight: 700;
@@ -220,4 +220,3 @@
     display: inline;
     padding-right: 20px;
 }
-

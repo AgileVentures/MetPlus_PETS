@@ -1,22 +1,26 @@
-%h3 Agency Personnel
+.col-sm-3
+  %h4 Agency People
 
-%div{:class => 'row'}
-  %div{:class => 'panel panel-default'}
-    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
-      %thead
-        %tr
-          %td
-            Name
-          %td
-            Role(s)
-          %td
-            Status
-      %tbody
-        - agency_people.each do |person|
+.col-sm-9
+  - if agency_people.empty?
+    %h4 There are no agency people.
+  - else
+    #people_table.collapse.in
+      %table{:class => 'table table-bordered'}
+        %thead
           %tr
             %td
-              = link_to person.full_name, agency_person_path(person)
+              %strong Name
             %td
-              = person.agency_roles.pluck(:role).join(', ')
+              %strong Role(s)
             %td
-              = person.status if person.status
+              %strong Status
+        %tbody
+          - agency_people.each do |person|
+            %tr
+              %td
+                = link_to person.full_name, agency_person_path(person)
+              %td
+                = person.agency_roles.pluck(:role).join(', ')
+              %td
+                = person.status if person.status
