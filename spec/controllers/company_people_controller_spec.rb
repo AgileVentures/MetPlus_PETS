@@ -1,26 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe CompanyPeopleController, type: :controller do
-  describe "GET #edit" do
+  describe "GET #edit_profile" do
     before(:each) do
       @companyperson = FactoryGirl.create(:company_person)
-      get :edit, id: @companyperson
+      get :edit_profile, id: @companyperson
     end
 
-    it "renders edit template" do
-      expect(response).to render_template 'edit'
+    it "renders edit_profile template" do
+      expect(response).to render_template 'edit_profile'
     end
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "PATCH #update" do
+  describe "PATCH #update_profile" do
 
     context "valid attributes" do
       before(:each) do
         @companyperson = FactoryGirl.create(:company_person)
-        patch :update, id: @companyperson, company_person: FactoryGirl.attributes_for(:company_person)
+        patch :update_profile, id: @companyperson, company_person: FactoryGirl.attributes_for(:company_person)
 
       end
 
@@ -39,7 +39,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
          @companyperson =  FactoryGirl.create(:company_person)
          @user =  FactoryGirl.create(:user)
          @companyperson.valid?
-         patch :update, company_person:FactoryGirl.attributes_for(:company_person, title: 'Line Manager').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@companyperson
+         patch :update_profile, company_person:FactoryGirl.attributes_for(:company_person, title: 'Line Manager').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@companyperson
          @companyperson.reload
          @user.reload
 
@@ -63,6 +63,5 @@ RSpec.describe CompanyPeopleController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
      end
-
   end
 end

@@ -8,6 +8,11 @@ class CompanyPeopleController < ApplicationController
     @company_person = CompanyPerson.find(params[:id])
   end
 
+  def edit_profile
+    @company_person = CompanyPerson.find(params[:id])
+  end
+
+
   def update_profile
     @company_person = CompanyPerson.find(params[:id])
     person_params = company_person_params
@@ -38,7 +43,7 @@ class CompanyPeopleController < ApplicationController
         # role was unchecked in the edit view. Removing the sole CA is not allowed.
         # In this case, reset the CA role.
 
-        @company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+#        @company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
       end
       @model_errors = @company_person.errors
       render :edit
