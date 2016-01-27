@@ -48,7 +48,7 @@
 .row-no-margin {
    margin-left: 0px;
    margin-right: 0px;
-} 
+}
 
 .navbar {
     background: #0C7BA1;
@@ -71,14 +71,23 @@
     padding-left: 1px;
 }
 
-
-/*.footer {
-    position: fixed;
+/* next three settings are to anchor the footer at the bottom of each page */
+/* See:   http://stackoverflow.com/questions/21933356/
+    sticky-bootstrap-footer-overlaping-content-of-page */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 20px;
+}
+.footer {
+    position: absolute;
     bottom: 0px;
     width: 100%;
     height: 20px;
     background-color: #f5f5f5;
-}*/
+}
 
 .navbar-default .navbar-text > a {
     color: yellow;
@@ -200,11 +209,11 @@
     padding-right: 20px;
 }
 
-/*.btn.btn-primary{
+#login-button {
     width: 140px;
     height: 39px;
     line-height: 25px;
-}*/
+}
 .jumbotron h2#login-text {
    font-family:  "Arial-BoldMT","Arial Bold","Arial";
    font-weight: 700;
