@@ -226,3 +226,7 @@ JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                       email: 'frank@gmail.com', password: 'qwerty123', 
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss3, confirmed_at: Time.now)
+
+
+
+# Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.
