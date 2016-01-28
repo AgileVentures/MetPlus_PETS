@@ -50,12 +50,10 @@ Rails.application.routes.draw do
   resources :company_people, path: '/company_admin/company_people',
                        only: [:create, :show, :edit, :update, :destroy]
 
-
   resources :company_people do
      get 'edit_profile', on: :member, as: :edit_profile
      patch 'update_profile', on: :member, as: :update_profile
-   end
-
+  end
   # --------------------------------------------------------------------------
 
   root 'main#index'

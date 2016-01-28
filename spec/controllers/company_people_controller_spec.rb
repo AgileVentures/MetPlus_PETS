@@ -39,8 +39,11 @@ RSpec.describe CompanyPeopleController, type: :controller do
      end
      context "valid attributes without password change" do
        before(:each) do
-         @companyperson =  FactoryGirl.create(:company_person)
+         @companyperson =  FactoryGirl.build(:company_person)
          @user =  FactoryGirl.create(:user)
+         @companyperson.company_roles <<
+             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+         @companyperson.save
          @companyperson.valid?
          patch :update_profile, company_person:FactoryGirl.attributes_for(:company_person, title: 'Line Manager').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),id:@companyperson
          @companyperson.reload
