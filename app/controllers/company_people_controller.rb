@@ -26,7 +26,7 @@ class CompanyPeopleController < ApplicationController
       redirect_to root_path
     else
       @model_errors = @company_person.errors
-      render :edit
+      render :edit_profile
     end
   end
 
@@ -43,7 +43,7 @@ class CompanyPeopleController < ApplicationController
         # role was unchecked in the edit view. Removing the sole CA is not allowed.
         # In this case, reset the CA role.
 
-#        @company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+        @company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
       end
       @model_errors = @company_person.errors
       render :edit

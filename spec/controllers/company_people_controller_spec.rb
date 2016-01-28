@@ -19,8 +19,11 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     context "valid attributes" do
       before(:each) do
-        @companyperson = FactoryGirl.create(:company_person)
-        patch :update_profile, id: @companyperson, company_person: FactoryGirl.attributes_for(:company_person)
+        @companyperson = FactoryGirl.build(:company_person)
+        @companyperson.company_roles <<
+            FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+        @companyperson.save
+        patch :update_profile, id: @companyperson, company_person: FactoryGirl.attributes_for(:user)
 
       end
 
