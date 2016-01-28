@@ -79,6 +79,5 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :sendmail
   #this will take care of devise setup default url in production
-  host = 'evening-cove-51018.herokuapp.com'
-  config.action_mailer.default_url_options = { :host => host}
+  config.action_mailer.default_url_options = { :host => 'metplus.org' }
 end 
