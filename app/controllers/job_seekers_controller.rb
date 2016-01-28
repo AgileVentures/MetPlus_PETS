@@ -39,7 +39,7 @@ class JobSeekersController < ApplicationController
        render 'edit'
     end
   end
-
+  
   def index
     @jobseeker = JobSeeker.all
   end
