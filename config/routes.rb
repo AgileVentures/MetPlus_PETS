@@ -4,7 +4,6 @@ Rails.application.routes.draw do
                                      :sign_in => 'login' },
                      :controllers => { :invitations => 'people_invitations' }
 
-
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
