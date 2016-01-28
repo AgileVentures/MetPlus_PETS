@@ -39,7 +39,6 @@
 #     job4.nice_to_have_skills << skill4
 #     job4.save
 # end
-
 # User.find_or_create_by(email: 'salemamba1@gmail.com') do |user|
 #     user.first_name = "salem"
 #     user.last_name  = 'amba'
