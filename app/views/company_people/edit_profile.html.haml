@@ -1,7 +1,11 @@
-%h2
-  = "Edit Company Person: #{@company_person.full_name(last_name_first: false)}"
+= form_for :company_person @company_person, method: patch, url: update_company_person_path(@company_person)  do |f|
+    .form-group
+      = label :@company_person, :firstname, 'First Name', class: 'control-label col-sm-2'
+      .col-sm-6
+        = f.text_field :firstname, size: 30, class: 'form-control'
 
-= render partial: 'form',                                                  |
-              locals: {company_person: @company_person, method: :patch,    |
-              submit: 'Update', url: update_profile_company_person_path(@company_person), |
-          cancel_url: company_person_path(@company_person)}                |
+    .form-group
+      .col-sm-2.col-sm-offset-2
+        = submit_tag submit, method: :post, class: 'btn btn-primary'
+      .col-sm-2.col-sm-offset-2
+        = link_to 'Cancel', root_path, class: 'btn btn-danger'
