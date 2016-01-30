@@ -45,9 +45,8 @@
   margin-top: -10px;
 }
 
-.row-no-margin {
-   margin-left: 0px;
-   margin-right: 0px;
+.margin-top {
+   margin-top: 20px;
 }
 
 .navbar {
@@ -223,9 +222,3 @@ body {
    position: relative;
 }
 /*end of session#new css*/
-
-.form-control{
-    width: 42%;
-    display: inline;
-    padding-right: 20px;
-}
