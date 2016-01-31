@@ -114,3 +114,34 @@ Scenario: duplicate EIN for Company
   | Password Confirmation          | qwerty123           |
   And I click the "Create" button
   Then I should see "Ein has already been registered"
+
+Scenario: edit Company Registration: change contact email
+  Given I am logged in as agency admin
+  And a clear email queue
+  And I click the "Admin" link
+  Then I click the "Widgets, Inc." link
+  Then I should see "Pending Registration"
+  And I click the "Edit Registration" button
+  And I should see "Edit Company Registration"
+  Then I fill in "Company Name" with "Gizmos, Inc."
+  And I fill in "Contact Email" with "hughjobs@gizmos.com"
+  And I click the "Update" button
+  Then I should see "Registration was successfully updated."
+  Then "hughjobs@widgets.com" should have no emails
+  And "hughjobs@gizmos.com" should receive 1 email with subject "Pending approval"
+  Then "hughjobs@gizmos.com" opens the email
+  And they should see "Thank you for registering Gizmos, Inc. in PETS." in the email body
+
+Scenario: edit Company Registration: change contact password
+  Given I am logged in as agency admin
+  And a clear email queue
+  And I click the "Admin" link
+  Then I click the "Widgets, Inc." link
+  Then I should see "Pending Registration"
+  And I click the "Edit Registration" button
+  And I should see "Edit Company Registration"
+  Then I fill in "Password" with "abcd1234"
+  Then I fill in "Password Confirmation" with "abcd1234"
+  And I click the "Update" button
+  Then I should see "Registration was successfully updated."
+  Then "hughjobs@widgets.com" should have no emails 
