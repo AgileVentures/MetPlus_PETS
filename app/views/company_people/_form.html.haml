@@ -1,33 +1,37 @@
-= form_for @company_person do |cp|
-	%div{class: 'label-group'}
-		=cp.label :title, 'Title',autofocus: true,class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :title,class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :first_name, 'First Name',autofocus: true,class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :first_name,class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :last_name, 'Last Name', class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :last_name,class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :email,'Email',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :email, class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :phone,'Phone',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :phone, class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :password,'Password',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.password_field :password ,class:'form-control'
+= form_for company_person, url: url, method: method,           |
+          html: {class: 'form-horizontal'} do |person_form|    |
 
-	%div{class: 'label-group'}
-		=cp.label :password_confirmation,'Password Confirmation',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.password_field :password_confirmation, class:'form-control'
+  -# company_roles assignment  (has_and_belongs_to_many)
+  .form-group
+    = person_form.label :company_roles, 'Roles', class: 'control-label col-sm-2'
+    .col-sm-8
+      = person_form.collection_check_boxes(:company_role_ids,        |
+                             CompanyRole.all, :id, :role) do |box|   |
+        = box.label(class: 'checkbox disabled col-sm-8 normal-label') do
+          - if disable_company_admin?(company_person, box.text)
+            = box.check_box(disabled: true)
+            = box.text
+            = hidden_field(:company_person, :company_role_ids,        |
+                    multiple: true, value: "#{box.value}", id: nil)   |
+          - else
+            = box.check_box
+            = box.text
+          -# NOTE: the insertion of the 'hidden_field' input above is to overcome a
+          -# behavior of Rails (and/or HTML): the value of any disabled
+          -# form control is NOT included in the params hash.  The checkbox for
+          -# company admin role is disabled if this (person) is the sole company
+          -# admin (so the user cannot remove that role from this person).
+          -# However, the controller does not receive the role id in the list of
+          -# role id's sent in the params, and thus it appears that the
+          -# company admin checkbox has been unset.  This causes a model
+          -# validation error when no such error has been caused by the user.
+          -# This fix is described here:
+          -# http://stackoverflow.com/questions/4727974/
+          -# how-to-post-submit-an-input-checkbox-that-is-disabled
+          -# (see the second solution listed)
 
-	%div{class: 'button-group'}
-		=cp.submit 'Update', class:'col-sm-6 col-sm-offset-2 btn btn-primary'
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      = submit_tag submit, method: method, class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-1
+      = link_to 'Cancel', cancel_url, class: 'btn btn-danger'
