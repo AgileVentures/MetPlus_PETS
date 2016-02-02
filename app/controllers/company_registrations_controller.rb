@@ -62,8 +62,23 @@ class CompanyRegistrationsController < ApplicationController
       reg_params[:company_people_attributes]['0'].delete :password_confirmation
     end
 
+    changed_email = (@company.company_people[0].email !=
+            reg_params[:company_people_attributes]['0'][:email])
+
+    # Do not create a new email confirmation token and
+    # do not send an email confirmation email
+    # (If config.reconfirmable = true in Devise initializer file, the default
+    # behavior will be to create a new token and send confirmation email.)
+    @company.company_people[0].user.skip_reconfirmation!
+
     if @company.update_attributes(reg_params)
       flash[:notice] = "Registration was successfully updated."
+      # Send pending-approval email to company contact if the contact
+      # email address was changed
+      if changed_email
+        CompanyMailer.pending_approval(@company,
+                                @company.company_people[0]).deliver_now
+      end
       redirect_to agency_admin_home_path
     else
       @model_errors = @company.errors
