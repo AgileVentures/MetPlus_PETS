@@ -33,6 +33,24 @@ Background: seed data added to database and log in as agency admim
   And I should see "Admin"
   And I click the "Admin" link
 
+@javascript
+Scenario: toggle data tables
+  And I wait 1 second
+  And I should see "123 Main Street"
+  Then I click the "Hide Branches" link
+  And I wait 1 second
+  Then "123 Main Street" should not be visible
+  Then I click the "Show Branches" link
+  And I wait 1 second
+  Then "123 Main Street" should be visible
+  And I should see "Smith, John"
+  Then I click the "Hide People" link
+  And I wait 1 second
+  Then "Smith, John" should not be visible
+  Then I click the "Show People" link
+  And I wait 1 second
+  Then "Smith, John" should be visible
+
 Scenario: edit agency information
   Then I should see "PETS Administration"
   Then I click the "Edit Agency" button

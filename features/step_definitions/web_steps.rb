@@ -23,6 +23,14 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^"([^"]*)" should( not)? be visible$/) do |string, not_see|
+  unless not_see
+    expect(has_text?(:visible, string)).to be true
+  else
+    expect(has_text?(:visible, string)).to be false
+  end
+end
+
 And(/^I press "([^"]*)"$/) do |name|
   click_on name
 end

@@ -3,9 +3,9 @@
 
 .col-sm-9
   - if companies.empty?
-    %h4 There are no companies.
+    %h5 There are no companies.
   - else
-    #companies_table.collapse.in
+    #companies_table
       %table{:class => 'table table-bordered'}
         %thead
           %tr
