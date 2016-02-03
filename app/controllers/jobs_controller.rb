@@ -1,13 +1,34 @@
 class JobsController < ApplicationController
-  def index
-  end
+	before_action :find_job,	only: [:show, :edit, :update]
 
-  def new
-  end
+	def index
+	end	
 
-  def show
-  end
+	def new
+		@job = Job.new 
+	end
 
-  def edit
-  end
+	def create
+	end
+
+	def show
+	end
+
+	def edit
+	end
+
+	def update
+	end
+
+
+	private 
+		def find_job
+			@job = Job.find(params[:id])
+		end
+
+		def job_params
+			params.require(:job).permit()
+		end
+
+
 end
