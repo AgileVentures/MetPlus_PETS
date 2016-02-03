@@ -293,7 +293,6 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   launchy
-  nokogiri (~> 1.6, >= 1.6.7)
   pg
   poltergeist
   puma
