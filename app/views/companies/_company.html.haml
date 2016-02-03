@@ -23,7 +23,7 @@
     %strong Status:
   .col-sm-8#company_status
     = render :partial => 'companies/company_status', :locals => {company: company}
--.row.margin-top
+
 .row.margin-top
   = render partial: 'company_people/company_people',    |
       object: @company.company_people,                  |

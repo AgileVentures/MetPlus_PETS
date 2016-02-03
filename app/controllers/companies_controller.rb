@@ -6,8 +6,8 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
-    @company = Company.find(params[:id])
-    @company.destroy
+    company = Company.find(params[:id])
+    company.destroy
     flash[:notice] = "Company '#{company.name}' deleted."
     redirect_to root_path
   end
