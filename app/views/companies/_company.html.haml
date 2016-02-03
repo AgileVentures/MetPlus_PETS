@@ -23,12 +23,8 @@
     %strong Status:
   .col-sm-8#company_status
     = render :partial => 'companies/company_status', :locals => {company: company}
-
-%h4 People at this company
-
-- if company.company_people.empty?
-  There are no people assigned to this company.
-- else
+-.row.margin-top
+.row.margin-top
   = render partial: 'company_people/company_people',    |
-            object: @company.company_people,            |
-            locals: {company_status: @company.status}   |
+      object: @company.company_people,                  |
+      locals: {company_status: @company.status}         |

@@ -1,3 +1,6 @@
+%h2 Update Your Profile
+%br
+
 = form_for @company_person, url: update_profile_company_person_path(@company_person) do |cp|
 	%div{class: 'label-group'}
 		=cp.label :title, 'Title',autofocus: true,class:'col-sm-2 control-label text-right'
@@ -23,6 +26,7 @@
 		=cp.label :password,'Password',class:'col-sm-2 control-label text-right'
 	%div{class: 'form-group'}
 		=cp.password_field :password ,class:'form-control'
+		%i (leave blank if you don't want to change it)
 
 	%div{class: 'label-group'}
 		=cp.label :password_confirmation,'Password Confirmation',class:'col-sm-2 control-label text-right'
