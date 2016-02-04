@@ -8,9 +8,30 @@ class CompanyPeopleController < ApplicationController
     @company_person = CompanyPerson.find(params[:id])
   end
 
+  def edit_profile
+    @company_person = CompanyPerson.find(params[:id])
+  end
+
+
+  def update_profile
+    @company_person = CompanyPerson.find(params[:id])
+    person_params = company_person_params
+    if person_params['password'].to_s.length == 0
+       person_params.delete('password')
+       person_params.delete('password_confirmation')
+    end
+    if @company_person.update_attributes(person_params)
+      sign_in :user, @company_person.user, bypass: true
+      flash[:notice] = "Your profile was updated successfully."
+      redirect_to root_path
+    else
+      @model_errors = @company_person.errors
+      render :edit_profile
+    end
+  end
+
   def update
     @company_person = CompanyPerson.find(params[:id])
-
     if @company_person.update_attributes(company_person_params)
       flash[:notice] = "Company person was successfully updated."
       redirect_to company_person_path(@company_person)
@@ -43,6 +64,7 @@ class CompanyPeopleController < ApplicationController
   private
 
   def company_person_params
-    params.require(:company_person).permit(company_role_ids: [])
+    params.require(:company_person).permit(:title, :first_name, :last_name, :phone,
+                :email, :password, :password_confirmation, company_role_ids: [])
   end
 end

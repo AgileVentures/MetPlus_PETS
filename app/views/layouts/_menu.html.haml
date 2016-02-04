@@ -17,23 +17,25 @@
       %ul{:class => 'nav navbar-nav navbar-right'}
         - if !user_signed_in?
           %li
-            -if !(params[:controller]=='devise/sessions' && params[:action]=='new' || params[:action]== 'create') 
+            -if !(params[:controller]=='devise/sessions' && params[:action]=='new' || params[:action]== 'create')
               %div{:class => 'button-menu'}
                 = link_to 'Log In', login_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
           %li{:id => 'register-button'}
-            -if !(params[:controller]=='devise/registrations' && params[:action]=='new') 
+            -if !(params[:controller]=='devise/registrations' && params[:action]=='new')
               %div{:class => 'button-menu'}
                 = link_to 'New user', new_user_registration_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
         - else
           %li
             %div{:class => 'navbar-text'}
               Hello,
-              -if current_user.actable_type == 'JobSeeker' 
+              -if current_user.actable_type == 'JobSeeker'
                 = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
-              -else 
+              -elsif current_user.actable_type == 'CompanyPerson'
+                = link_to current_user.first_name, edit_profile_company_person_path(current_user.actable_id)
+              -else
                 = link_to current_user.first_name, edit_user_registration_path(current_user)
-              
-              
+
+
           %li
             %div{:class => 'button-menu'}
               = link_to 'Log out', logout_path, :role => 'button', method: :delete, :class => 'btn btn-default btn-xs', :id => 'logout_button'

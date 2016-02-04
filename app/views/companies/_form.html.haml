@@ -1,20 +1,26 @@
-%h2 Employer Registration
-%p Thank you for your interest in MetPlus! [brief promotional message about the mission goes here] Please information about your organization and a means of contact using the form below.
-= form_for company, url: companies_path, method: :post, html: {class: 'form-horizontal'} do |f|
+%h2 Edit company
+= form_for company, url: company_path, method: :patch,         |
+                              html: {class: 'form-horizontal'} do |f|       |
   .form-group
     = label :company, :name, 'Company Name', class: 'control-label col-sm-2'
     .col-sm-6
-      = text_field :company, :name, size: 30, class: 'form-control'
+      = f.text_field :name, size: 30, class: 'form-control'
 
-  .form-group
-    = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
-    .col-sm-6
-      = text_field :company, :website, size: 30, class: 'form-control'
+  = f.fields_for :addresses do |address_f|
+    .form-group
+      = address_f.label :street, 'Company Address', class: 'control-label col-sm-2'
+      .col-sm-6
+        = address_f.text_field :street, class: 'form-control'
 
-  .form-group
-    = label :company, :ein, 'Employer Identification Number', class: 'control-label col-sm-2'
-    .col-sm-6
-      = text_field :company, :ein, size: 30, class: 'form-control'
+    .form-group
+      = address_f.label :city, 'City', class: 'control-label col-sm-2'
+      .col-sm-3
+        = address_f.text_field :city, size: 30, class: 'form-control'
+
+    .form-group
+      = address_f.label :zipcode, 'Zipcode', class: 'control-label col-sm-2'
+      .col-sm-2
+        = address_f.text_field :zipcode, size: 10, class: 'form-control'
 
   .form-group
     = label :company, :email, 'Email', class: 'control-label col-sm-2'
@@ -22,48 +28,26 @@
       = email_field :company, :email, size: 30, class: 'form-control'
 
     = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
-    .col-sm-6
+    .col-sm-4
       = phone_field :company, :phone, size: 30, class: 'form-control'
 
   .form-group
-    = label :company, :email, 'Email', class: 'control-label col-sm-2'
-    .col-sm-6
-      = email_field :company, :email, size: 30, class: 'form-control'
+    = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
+    .col-sm-4
+      = f.text_field :website, size: 30, class: 'form-control'
+
+    = label :company, :ein, 'Employer Identification Number', class: 'control-label col-sm-2'
+    .col-sm-4
+      = f.text_field :ein, size: 30, class: 'form-control'
 
   .form-group
     = label :company, :description, 'Description', class: 'control-label col-sm-2'
-    .col-sm-8
-      = text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
+    .col-sm-10
+      =text_area :company, :description, cols: 90, rows: 5, class: 'form-control'
 
-    %h3 Company Contact
-
-  = f.fields_for :company_person url: {action: create} do |company_person_f|
-    .form-group
-      = company_person_f.label :first_name, 'First Name', class: 'control-label col-sm-2'
-      .col-sm-4
-        = company_person_f.text_field :first_name, class: 'form-control'
-
-    .form-group
-      = company_person_f.label :last_name, 'Last Name', class: 'control-label col-sm-2'
-      .col-sm-4
-        = company_person_f.text_field :last_name, class: 'form-control'
-
-    .form-group
-      = company_person_f.label :phone, 'Phone', class: 'control-label col-sm-2'
-      .col-sm-3
-        = company_person_f.phone_field :phone, size: 30, class: 'form-control'
-
-    .form-group
-      = company_person_f.label :email, 'Email', class: 'control-label col-sm-2'
-      .col-sm-2
-
-    .form-group
-      = company_person_f.label :title, 'Title', class: 'control-label col-sm-2'
-      .col-sm-4
-        = company_person_f.text_field :title, class: 'form-control'
 
   .form-group
     .col-sm-2.col-sm-offset-2
-      = submit_tag 'Submit', class: 'btn btn-primary'
-    .col-sm-2.col-sm-offset-1
-      = link_to 'Cancel', class: 'btn btn-danger'
+      = submit_tag 'Submit', method: :patch, class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-2
+      = link_to 'Cancel', root_path, class: 'btn btn-danger'

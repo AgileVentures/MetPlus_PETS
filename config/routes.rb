@@ -49,6 +49,11 @@ Rails.application.routes.draw do
   # Company admin (and agency admin) can edit and delete a company person
   resources :company_people, path: '/company_admin/company_people',
                        only: [:show, :edit, :update, :destroy]
+
+  resources :company_people do
+     get 'edit_profile', on: :member, as: :edit_profile
+     patch 'update_profile', on: :member, as: :update_profile
+  end
   # --------------------------------------------------------------------------
 
   root 'main#index'
