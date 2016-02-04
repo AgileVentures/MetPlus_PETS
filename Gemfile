@@ -52,6 +52,7 @@ gem 'faker' #To generate fake data for seeding
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jquery-turbolinks' #will solve reload problems with javascript 
+gem 'bootstrap-sass'
 
 group :development do
   gem 'haml-rails'

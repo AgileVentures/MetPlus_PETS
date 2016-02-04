@@ -48,9 +48,15 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.4.0)
     arel (6.0.3)
+    autoprefixer-rails (6.0.3)
+      execjs
+      json
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-sass (3.3.5.1)
+      autoprefixer-rails (>= 5.0.0.1)
+      sass (>= 3.3.0)
     bootstrap-will_paginate (0.0.10)
       will_paginate
     builder (3.2.2)
@@ -285,6 +291,7 @@ PLATFORMS
 DEPENDENCIES
   active_record-acts_as
   bcrypt (~> 3.1.7)
+  bootstrap-sass
   bootstrap-will_paginate
   byebug
   cancancan (~> 1.10)
