@@ -2,6 +2,7 @@ class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update]
 
 	def index
+		@jobs = Job.paginate(:page => params[:page], :per_page => 20)
 	end	
 
 	def new
@@ -11,8 +12,8 @@ class JobsController < ApplicationController
 	def create
 		@job = Job.new(job_params)
 		if @job.save 
-			flash[:success]="The Job is successfully created."
-			redirect_to @job 
+			flash[:notice] = "The Job has been created successfully."
+			redirect_to jobs_url  
 		else
 			render :new 
 		end
@@ -25,6 +26,12 @@ class JobsController < ApplicationController
 	end
 
 	def update
+		if @job.update_attributes(job_params)
+			flash[:info] = "The job has been updated job successfully."
+			redirect_to @job 
+		else
+			render :edit 
+		end
 	end
 
 	private 
