@@ -129,17 +129,17 @@ body {
   CSS APLLIES
   TO
 */
-.field_with_errors {
+/*.field_with_errors {
   padding: 2px;
   background-color: red;
   display: table;
-}
+}*/
 
-.errors_explanation {
+/*.errors_explanation {
   background: red;
   margin: 1em 0;
   padding: 4px;
-}
+}*/
 
 .form_button {
   float: right;

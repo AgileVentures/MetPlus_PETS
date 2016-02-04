@@ -1,8 +1,8 @@
 - if object.errors.any?
-	.container{class: "col-sm-7 col-sm-offset-2 "}
+	#error-explanation
 		%div{class: "alert alert-danger " }
 			The form contains  
 			= pluralize(object.errors.count, 'error')
-			%ul
-				= list_of object.errors.full_messages.each do |msg|
-					#{msg}
+		%ul
+			= list_of object.errors.full_messages.each do |msg|
+				#{msg}
