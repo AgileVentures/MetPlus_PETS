@@ -132,8 +132,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context "valid attributes" do
       before(:each) do
         @agency_person = FactoryGirl.build(:agency_person)
-        @agency_person.company_roles <<
-            FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+#        @agency_person.company_roles <<
+#            FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
         @agency_person.save
         patch :update_profile, id: @agency_person, agency_person: FactoryGirl.attributes_for(:user)
 
@@ -153,11 +153,11 @@ RSpec.describe AgencyPeopleController, type: :controller do
        before(:each) do
          @agency_person =  FactoryGirl.build(:agency_person)
          @user =  FactoryGirl.create(:user)
-         @agency_person.company_roles <<
-             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+#         @agency_person.company_roles <<
+#             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
          @agency_person.save
          @agency_person.valid?
-         patch :update_profile, agency_person:FactoryGirl.attributes_for(:agency_person, title: 'Line Manager', password: nil, password_confirmation: nil).
+         patch :update_profile, agency_person:FactoryGirl.attributes_for(:agency_person, password: nil, password_confirmation: nil).
            merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),
            id:@agency_person
          @agency_person.reload

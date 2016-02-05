@@ -60,6 +60,14 @@ class AgencyPeopleController < ApplicationController
     end
   end
 
+  def edit_profile
+    person = AgencyPerson.find(params[:id])
+  end
+
+  def update_profile
+    person = AgencyPerson.find(params[:id])
+  end
+
   def destroy
     person = AgencyPerson.find(params[:id])
     if person.user != current_user
