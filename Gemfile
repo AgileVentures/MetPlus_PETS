@@ -53,6 +53,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jquery-turbolinks' #will solve reload problems with javascript 
 gem 'bootstrap-sass'
+# gem 'sass-mediaqueries-rails'
 
 group :development do
   gem 'haml-rails'

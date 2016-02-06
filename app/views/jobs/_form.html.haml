@@ -9,16 +9,15 @@
 	=f.label :jobId,"Job id", class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
 		=f.text_field :jobId, class: "form-control" 
+		
 .form-group 
 	=f.label :shift, class: "col-sm-3 control-label text-right"
 	-opts = ['morning', 'day', 'evening']
-	%div{class: "col-sm-6"}
+	%div{class: "col-sm-5"}
 		=f.collection_select :shift, opts, :to_s, :to_s, {prompt: true}, class: "form-control" 
+	=f.label :fulltime, class: "control-label"
+	=f.check_box :fulltime
 .form-group 
 	=f.label :description, class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
 		=f.text_area :description, size: "40x10", class: "form-control" 
-.form-group
-	=f.label :fulltime, class: "col-sm-3 control-label"
-	%span{class: "col-sm-6"}
-		=f.check_box :fulltime, class: "checkbox-control"

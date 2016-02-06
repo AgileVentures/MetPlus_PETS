@@ -1,6 +1,37 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 $light-blue: #12aee2;
+$white: #fff;
+
+
+/* xs < 768 */
+@media screen and (max-width: 767px) {
+    body {
+        font-size: 0.9em;
+    }
+}
+
+/* sm */
+@media screen and (min-width: 768px) {
+    body {
+        font-size: 0.9em;
+    }
+}
+
+/* md */
+@media screen and (min-width: 992px) {
+    body {
+        font-size: 1.2em;
+    }
+}
+
+/* lg */
+@media screen and (min-width: 1200px) {
+    body {
+        font-size: 1.3em;
+    }
+}
+
 
 .btn.btn-primary.btn-block#edit-job-submit{
 	background: $light-blue;
@@ -13,6 +44,24 @@ $light-blue: #12aee2;
 }
 .page-header#edit-job-header {
 	border-bottom: 2px solid $light-blue;
+}
+.well#jobs-well-lg{
+	background: $light-blue;
+	color: $white;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 5px;
+	min-height:0px !important;
+	margin-bottom: 5px;
+}
+#list-header{
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-weight: 300;
+}
+
+#hire-header{
+    margin: 25px 0 12px 0;
 }
 #error-explanation {
   color: red;

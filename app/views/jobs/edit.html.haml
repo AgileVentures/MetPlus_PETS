@@ -9,8 +9,8 @@
 				= f.submit "Update", class: "btn btn-primary btn-block", id: "edit-job-submit"
 %div{class: "btn-group btn-group-justified col-sm-offset-3 col-sm-6", role: "group"} 
 	%div{class: "btn-group", role: "group"}
-		= link_to "Cancel", '#'
+		= link_to "Cancel", job_path(@job)
 		| 
-		= link_to "jobs", '#'
+		= link_to "jobs", jobs_path 
 	
 

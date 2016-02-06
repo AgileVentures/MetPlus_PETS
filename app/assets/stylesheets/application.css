@@ -88,6 +88,35 @@ body {
     background-color: #f5f5f5;
 }
 
+/* xs < 768 */
+@media screen and (max-width: 767px) {
+    body {
+        font-size: 0.9em;
+    }
+}
+
+/* sm */
+@media screen and (min-width: 768px) {
+    body {
+        font-size: 1em;
+    }
+}
+
+/* md */
+@media screen and (min-width: 992px) {
+    body {
+        font-size: 1.2em;
+    }
+}
+
+/* lg */
+@media screen and (min-width: 1200px) {
+    body {
+        font-size: 1.3em;
+    }
+}
+
+
 .navbar-default .navbar-text > a {
     color: yellow;
 }
@@ -123,23 +152,6 @@ body {
 }
 /*end of homepage css*/
 
-
-/*PLEASE PUT COMMENT
-  WHERE EXACTLY
-  CSS APLLIES
-  TO
-*/
-/*.field_with_errors {
-  padding: 2px;
-  background-color: red;
-  display: table;
-}*/
-
-/*.errors_explanation {
-  background: red;
-  margin: 1em 0;
-  padding: 4px;
-}*/
 
 .form_button {
   float: right;

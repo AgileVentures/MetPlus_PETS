@@ -228,4 +228,14 @@ JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
 
 
 
-# Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.
+60.times do |n|
+  title = Faker::Hacker.adjective 
+  description = Faker::Lorem.paragraph(3,false, 4 )
+  shift = ["day", "evening", "morning"]
+  fulltime =  n%2==0 ? "Yes" : "No"
+
+  Job.create!(title: name,
+             description: description,
+             shift: shift,
+             fulltime: fulltime) 
+end
