@@ -3,5 +3,5 @@
 %h5=job.company.name 
 %small
 	= "#{time_ago_in_words(job.created_at, )} ago"
-	=link_to "delete", job_path(job), method: :delete, class: "pull-right btn btn-primary btn-xs"
-	=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs"
+	=link_to "delete", job_path(job), method: :delete, class: "pull-right btn btn-primary btn-xs", id: "jobs-delete-link"
+	=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", id: "jobs-edit-link"
