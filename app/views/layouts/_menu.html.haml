@@ -28,10 +28,13 @@
           %li
             %div{:class => 'navbar-text'}
               Hello,
-              -if current_user.actable_type == 'JobSeeker' 
-                = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
-              -else 
-                = link_to current_user.first_name, edit_user_registration_path(current_user)
+              / -if current_user.actable_type == 'JobSeeker' 
+              /   = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
+              / -else 
+              /   = link_to current_user.first_name, edit_user_registration_path(current_user)
+
+              =link_to current_user.first_name.capitalize,  {controller: current_user.actable_type.underscore.pluralize,action: 'edit', id: current_user.actable_id} if !current_user.actable_type.nil?
+              =link_to current_user.first_name.capitalize, edit_user_registration_path(current_user) if current_user.actable_type.nil? 
               
               
           %li
