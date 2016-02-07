@@ -11,6 +11,7 @@
 # about supported directives.
 
 #= require jquery2
+#= require bootstrap-sprockets
 #= require jquery_ujs
 #= require turbolinks
 #= require_self

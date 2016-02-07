@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe JobsController, type: :controller do
   
   describe "Route => index" do
-    it { should route(:get, "/jobs")
+    it { should route(:get, "/")
+    # it { should route(:get, "/jobs")
               .to(action: :index) }
   end
 
