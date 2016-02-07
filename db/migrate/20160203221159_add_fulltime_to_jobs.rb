@@ -1,5 +1,5 @@
 class AddFulltimeToJobs < ActiveRecord::Migration
   def change
-    add_column :jobs, :fulltime, :boolean
+    add_column :jobs, :fulltime, :boolean, default: nil 
   end
 end

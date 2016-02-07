@@ -48,12 +48,13 @@ gem 'cancancan', '~> 1.10'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
-gem 'faker' #To generate fake data for seeding
+gem 'ffaker' #To generate fake data for seeding
+gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jquery-turbolinks' #will solve reload problems with javascript 
 gem 'bootstrap-sass'
-# gem 'sass-mediaqueries-rails'
+
 
 group :development do
   gem 'haml-rails'

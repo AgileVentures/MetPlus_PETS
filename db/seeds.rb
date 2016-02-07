@@ -1,4 +1,6 @@
 
+require 'ffaker'
+
 # case Rails.env
 #   when "development"
 #     comp1 = FactoryGirl.create(:company, :name => 'Company 1', :email => 'info@company1.com')
@@ -39,14 +41,14 @@
 #     job4.nice_to_have_skills << skill4
 #     job4.save
 # end
-User.find_or_create_by(email: 'salemamba1@gmail.com') do |user|
-    user.first_name = "salem"
-    user.last_name  = 'amba'
-    user.password = 'secret123'
-    user.password_confirmation = 'secret123'
-    user.phone ='619-316-8971'
-    user.confirmed_at = DateTime.now
-end
+# User.find_or_create_by(email: 'salemamba1@gmail.com') do |user|
+#     user.first_name = "salem"
+#     user.last_name  = 'amba'
+#     user.password = 'secret123'
+#     user.password_confirmation = 'secret123'
+#     user.phone ='619-316-8971'
+#     user.confirmed_at = DateTime.now
+# end
 
 #incase rerun comes in. not necessary
 JobSeekerStatus.delete_all
@@ -55,48 +57,9 @@ Company.delete_all
 Address.delete_all
 CompanyPerson.delete_all
 JobCategory.delete_all
+SkillLevel.delete_all
 
-cp1 = Company.create(:ein => '12-2123244', :phone=> '721-234-4646',  email: 'casemanager@gmail.com',  website: 'http://www.wallmart.com', :name=> 'Walmart')
-cp2 = Company.create(:ein => '13-1244445', :phone=>  '721-234-1010', email: 'casemanager2@gmail.com', website: 'http://www.target.com',   :name=> 'Target')
-cp3 = Company.create(:ein => '12-1252445', :phone=> '865-234-4646', email:  'casemanager3@gmail.com', website: 'http://www.Food4less.com',:name=> 'Food4less')
-cp4 = Company.create(:ein => '15-1342447', :phone=> '971-234-4646', email:  'casemanager4@gmail.com', website: 'http://www.macy.com',     :name=> 'Macy')
-
-address1 = Address.create(:street => "1234 East Maripos Avenu", city: "San Diego", zipcode: "92105")
-address2 = Address.create(:street => "1234 East Main Street", city: "Los Angeles", zipcode: "92108")
-address1.update_attribute(:location, cp1)
-address2.update_attribute(:location, cp2)
-
-cperson = CompanyPerson.create(company_id: cp1.id, address_id: address1.id, status: "Active", title: "General Manager",
-          email: "example@gmail.com", :password => "secrete", first_name: "salem", :last_name => "Ali", confirmed_at: DateTime.now)
-cperson2 = CompanyPerson.create(company_id: cp2.id, address_id: address2.id, status: "Active", title: "Day Manager",
-            email: "example1@gmail.com", :password => "secrete", first_name: "Kalem", :last_name => "Kli", confirmed_at: DateTime.now)
-
-
-# Job Categories
-jcategory = JobCategory.create(name: 'SW Developer - RoR',
-            description: 'Ruby on Rails backend developer')
-jcategory1 = JobCategory.create(name: 'SW Developer - JS',
-            description:  'Javascript frontend developer')
-jcategory2 = JobCategory.create(name: 'SW Developer - Java',
-            description: 'Java backend developer')
-jcategory3 = JobCategory.create(name: 'SW Project Manager - Agile',
-            description: 'Manages Agile SW development projects')
-Jjcategory4 = JobCategory.create(name: 'SW Project Manager - Waterfall',
-            description: 'Manages SW development projects using waterfall SDLC')
-jcategory5 = JobCategory.create(name: 'Product Manager - SaaS',
-            description: 'Manages SaaS product development and commecialization')
-
-Job.create(:title => 'Software Developer', :description => 'Looking for a software developer intern.', :company_id => cp1.id,
-            :company_person_id => cperson.id, :job_category_id =>jcategory1.id  )
-Job.create(:title => 'Cashier', :description => 'Looking for well qualified cashier with 5 years experience', :company_id => cp2.id,
-            :company_person_id => cperson2.id, :job_category_id => jcategory.id )
-Job.create(:title => 'Driver', :description => 'Looking for a truck driver with class A license', :company_id => cp3.id,
-            :company_person_id => cperson.id, :job_category_id => jcategory.id )
-Job.create(:title => 'Security Personel', :description => 'If you have Security Guard license, and love to work  third shift, than call us.', :company_id => cp4.id,
-            :company_person_id => cperson.id, :job_category_id => jcategory1.id)
-
-
-
+#JobSeekerStatus 
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
   case status
   when 'Unemployedlooking'
@@ -111,9 +74,7 @@ Job.create(:title => 'Security Personel', :description => 'If you have Security 
   end
 end
 
-#in case of seeding multiple times
-SkillLevel.delete_all
-
+#SkillLevel 
 SkillLevel.create(name: 'Beginner',
             description: 'Entry level or minimal proficiency')
 SkillLevel.create(name: 'Intermediate',
@@ -122,16 +83,83 @@ SkillLevel.create(name: 'Advanced',
             description: 'Proficient in all aspects, requires little supervision')
 SkillLevel.create(name: 'Expert',
             description: 'Proficient in all aspects, able to work indepently')
-
-# Create all agency roles - this should stay in production version of this file
+#AgencyRole
 AgencyRole::ROLE.each_value do |agency_role|
   AgencyRole.create(role: agency_role)
 end
-
-# Create all company roles - - this should stay in production version of this file
+#CompanyRole 
 CompanyRole::ROLE.each_value do |company_role|
   CompanyRole.create(role: company_role)
 end
+
+#Company 
+80.times do |n|
+  ein = Faker::Company.ein
+  phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2].join}-#{(1..9).to_a.shuffle[0..3].join}" 
+  email =Faker::Internet.email 
+  website = Faker::Internet.url 
+  name = Faker::Company.name 
+  Company.create!(ein: ein,
+                  phone: phone,
+                  email: email,
+                  website: website,
+                  name: name)
+end
+
+companies = Company.all.to_a 
+#Address
+80.times do |n| 
+  street = Faker::Address.street_address 
+  city = Faker::Address.city 
+  zipcode = Faker::Address.zip_code 
+  Address.create(street: street, city: city, zipcode: zipcode, location: companies.pop)
+end
+
+#JobCategory 
+80.times do |n|
+  name = FFaker::Job.title 
+  description = FFaker::Lorem.sentence 
+  JobCategory.create(name: name, description: description)
+end
+
+companies = Company.all.to_a
+addresses = Address.all.to_a 
+#CompanyPerson
+80.times do |n|
+  title = FFaker::Job.title 
+  email = FFaker::Internet.email 
+  password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
+  first_name = FFaker::Name.first_name
+  last_name = FFaker::Name.last_name 
+  confirmed_at = DateTime.now 
+  CompanyPerson.create(title: title, email: email, password: password, 
+                      status: "Active", first_name: first_name, last_name: last_name,
+                       confirmed_at: confirmed_at, company_id: companies.pop.id, 
+                       address_id: addresses.pop.id )
+end
+
+r = Random.new 
+jobcategories = JobCategory.all.to_a 
+companypeople = CompanyPerson.all.to_a 
+companies = Company.all.to_a 
+#job
+80.times do |n|
+  title = FFaker::Job.title 
+  description = Faker::Lorem.paragraph(3,false, 4 )
+  shift = ["day", "evening", "morning"][r.rand(3)]
+  fulltime =  [false, true][r.rand(2)]
+  jobId = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join 
+
+  Job.create!(title: title,
+             description: description,
+             shift: shift,
+             jobId: jobId,
+             fulltime: fulltime,
+             company_id: companies.pop.id,
+             company_person_id: companypeople.pop.id,
+             job_category_id: jobcategories.pop.id) 
+end
+
 
 # Create a default agency, agency branches, agency admin and agency manager
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
@@ -226,16 +254,3 @@ JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss3, confirmed_at: Time.now)
 
-
-
-60.times do |n|
-  title = Faker::Hacker.adjective 
-  description = Faker::Lorem.paragraph(3,false, 4 )
-  shift = ["day", "evening", "morning"]
-  fulltime =  n%2==0 ? "Yes" : "No"
-
-  Job.create!(title: name,
-             description: description,
-             shift: shift,
-             fulltime: fulltime) 
-end
