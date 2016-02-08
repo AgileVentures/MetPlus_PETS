@@ -112,12 +112,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe "GET #edit_profile" do
-    @agency_person = FactoryGirl.create(:agency_person)
+    let(:person)  { FactoryGirl.create(:agency_person) }
 
-    before(:each) { get :edit_profile, id: @agency_person }
+    before(:each) { get :edit_profile, id: person }
 
     it 'assigns @agency_person for form' do
-      expect(assigns(:agency_person)).to eq @agency_person
+      expect(assigns(:agency_person)).to eq person
     end
     it 'renders edit_profile template' do
       expect(response).to render_template('edit_profile')
