@@ -11,7 +11,7 @@
 			%h4{id: 'list-header'} List of job opportunities
 		%div{class: 'col-xs-8 lead text-right'}
 			%h5{id: 'hire-header'} 
-				Are you hiring? Become a hiring partner!
+				#{link_to 'Are you hiring? Become a hiring partner!', new_company_registration_path} 
 
 -@jobs.each do |job|
 	%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}

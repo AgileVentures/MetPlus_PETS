@@ -3,7 +3,42 @@
 
 $light-blue: #12aee2;
 $white: #fff;
+.pull-right#job-show-links-id{
+		margin-top: 80px;
+		a{
+			text-decoration: underline;
+		}
+	
+}
+.panel.panel-default#show-panel-id{
+	margin-bottom: 0px;
+	.panel-heading#panel-heading-show-id{
+		background: $light-blue;
+		color: $white;
+	}
 
+}
+.panel.panel-default#panel-default-id{
+     margin-bottom: 0px;
+     height: 78px;
+     border:0px;
+
+     .panel-footer{
+     	 height: 78px;
+     	 background-color: $light-blue;
+     	 margin-bottom: 0px;
+
+     }
+ }
+
+.row.text-center#footer-text-color{
+	color: $white;
+	margin-top: 20px;
+	a{
+		color: $white;
+		text-decoration: underline;
+	}
+}
 
 .btn.btn-primary.btn-xs#jobs-delete-link{
 	margin-left: 7px;
@@ -47,6 +82,9 @@ $white: #fff;
 
 #hire-header{
     margin: 25px 0 12px 0;
+    a{
+    	color: $white;
+    }
 }
 #error-explanation {
   color: red;

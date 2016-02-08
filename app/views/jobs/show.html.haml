@@ -1,1 +1,43 @@
 -provide(:title, @job.title)
+
+%div{class: "col-sm-offset-3 col-sm-6"}
+	%div{class: "pull-right", id: "job-show-links-id"}
+		=link_to "Delete", '#'
+		|
+		=link_to "Edit Job", edit_job_path(@job)
+		|
+		=link_to "Return To Jobs", jobs_path 
+		|
+		=link_to "Send this job to a friend", '#'
+	.clearfix
+	%div{class: "panel panel-default", id: "show-panel-id"}  
+		%div{class: "panel-heading", id: "panel-heading-show-id" }
+			%h4=@job.title 
+	%table{class: "table table-bordered"} 
+		%tbody 
+			%tr
+				%td Job category:
+				%td=@job.job_category.name 
+			%tr 
+				%td Full time: 
+				%td=@job.fulltime ? "Yes" : "No"
+			%tr 
+				%td Job ID: 
+				%td=@job.jobId 
+			%tr 
+				%td Shift: 
+				%td=@job.shift 
+			%tr 
+				%td Contact information: 
+				%td
+					Contact: John King
+					%br
+					Email: #{mail_to('Salem@gmail.com')} 
+			%tr 
+				%td Job Details: 
+				%td=@job.description
+
+
+		
+
+
