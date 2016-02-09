@@ -127,73 +127,62 @@ RSpec.describe AgencyPeopleController, type: :controller do
     end
   end
 
-#   describe "PATCH #update_profile" do
-#
-#     let(:aa_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
-#     let!(:jd_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD]) }
-#     let!(:cm_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM]) }
-#
-#     let(:agency)  { FactoryGirl.create(:agency) }
-#
-#     let(:aa_person) do
-#       $person = FactoryGirl.build(:agency_person, agency: agency)
-#       $person.agency_roles << aa_role
-#       $person.save
-#       $person
-#     end
-#
-#     context 'valid attributes' do
-#       before(:each) do
-#         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
-#         person_hash[:agency_role_ids] = [aa_role.id.to_s]
-#         person_hash[:as_jd_job_seeker_ids] = []
-#         person_hash[:as_cm_job_seeker_ids] = []
-#         patch :update_profile, id: aa_person,
-#             agency_person: person_hash
-#       end
-#
-#
-#       it 'sets flash message' do
-#          expect(flash[:notice]).to eq "Your profile was updated successfully."
-#       end
-#       it 'returns redirect status' do
-#          expect(response).to have_http_status(:redirect)
-#       end
-#       it 'redirects to mainpage' do
-#          expect(response).to redirect_to(root_path)
-#       end
-#      end
-#      context "valid attributes without password change" do
-#        before(:each) do
-#          @agency_person =  FactoryGirl.build(:agency_person, agency: @agency)
-#          @user =  FactoryGirl.create(:user)
-# #         @agency_person.company_roles <<
-# #             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
-#          @agency_person.save
-#          @agency_person.valid?
-#          patch :update_profile, agency_person:FactoryGirl.attributes_for(:agency_person, password: nil, password_confirmation: nil).
-#            merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')),
-#            id:@agency_person
-#          @agency_person.reload
-#          @user.reload
-#
-#        end
-#       it 'sets a firstname' do
-#          expect(@agency_person.first_name).to eq ("John")
-#       end
-#       it 'sets a lastname' do
-#          expect(@agency_person.last_name).to eq ("Smith")
-#       end
-#       it 'sets flash message' do
-#          expect(flash[:notice]).to eq "Your profile was updated successfully."
-#       end
-#       it 'returns redirect status' do
-#          expect(response).to have_http_status(:redirect)
-#       end
-#       it 'redirects to mainpage' do
-#         expect(response).to redirect_to(root_path)
-#       end
-#     end
-#   end
+  describe "PATCH #update_profile" do
+
+    let(:aa_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
+    let(:agency)  { FactoryGirl.create(:agency) }
+
+    let(:aa_person) do
+      $person = FactoryGirl.build(:agency_person, agency: agency)
+      $person.agency_roles << aa_role
+      $person.save
+      $person
+    end
+
+    context 'valid attributes' do
+      before(:each) do
+        person_hash = aa_person.attributes.merge(aa_person.user.attributes)
+        patch :update_profile, id: aa_person,
+            agency_person: person_hash
+      end
+
+
+      it 'sets flash message' do
+         expect(flash[:notice]).to eq "Your profile was updated successfully."
+      end
+      it 'returns redirect status' do
+         expect(response).to have_http_status(:redirect)
+      end
+      it 'redirects to mainpage' do
+         expect(response).to redirect_to(root_path)
+      end
+     end
+     context "valid attributes without password change" do
+       before(:each) do
+         patch :update_profile,
+           agency_person:FactoryGirl.attributes_for(:agency_person,
+           password: nil, password_confirmation: nil).
+           merge(FactoryGirl.attributes_for(:user, first_name:'John',
+           last_name:'Smith',phone:'780-890-8976')),
+           id: aa_person
+         aa_person.reload
+       end
+      it 'sets a firstname' do
+         expect(aa_person.first_name).to eq ("John")
+      end
+      it 'sets a lastname' do
+         expect(aa_person.last_name).to eq ("Smith")
+      end
+      it 'sets flash message' do
+         expect(flash[:notice]).to eq "Your profile was updated successfully."
+      end
+      it 'returns redirect status' do
+         expect(response).to have_http_status(:redirect)
+      end
+      it 'redirects to mainpage' do
+        expect(response).to redirect_to(root_path)
+      end
+    end
+  end
 
 end
