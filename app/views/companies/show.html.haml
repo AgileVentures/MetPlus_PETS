@@ -1,0 +1,10 @@
+%h3 Company Information
+
+= render partial: 'company', locals: {company: @company}
+
+- if @company.status == Company::STATUS[:ACT]
+  .col-sm-2.col-sm-offset-8
+    = link_to 'Invite Person',                                    |
+          new_user_invitation_path(person_type: 'CompanyPerson',  |
+                 org_id: @company.id),                            |
+          method: :get, class: 'btn btn-primary'                  |
