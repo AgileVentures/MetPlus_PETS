@@ -1,0 +1,19 @@
+#myModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content#job-delete-modal-id
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+        %h4#myModalLabel.modal-title.text-center
+          =current_user.first_name if !current_user.nil? 
+      .modal-body.text-center
+        %p
+          Are you sure you want to delete the following job: 
+          %ul{class: "list-unstyled"}
+            %li job title: #{job.title}
+            %li job id: #{job.jobId}
+
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+        / %button.btn.btn-danger{:type => "button"} Save changes
+        =link_to "Delete", job_path(job), method: :delete, class: "btn btn-danger"

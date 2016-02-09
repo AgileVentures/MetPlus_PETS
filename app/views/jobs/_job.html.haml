@@ -3,5 +3,7 @@
 %h5=job.company.name 
 %small
 	= "#{time_ago_in_words(job.created_at, )} ago"
-	=link_to "delete", job_path(job), method: :delete, class: "pull-right btn btn-primary btn-xs", id: "jobs-delete-link"
+	=render partial: 'modal', locals: {job: job}
+	%button.btn.btn-primary.btn-xs.pull-right#jobs-delete-link{"data-target" => "#myModal", "data-toggle" => "modal", :type => "button"}
+		delete
 	=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs",id: "jobs-edit-link"
