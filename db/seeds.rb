@@ -160,12 +160,44 @@ companies = Company.all.to_a
              job_category_id: jobcategories.pop.id) 
 end
 
+#jobseeker 
+jobseekerstatus = JobSeekerStatus.all.to_a
+200.times do |n|
+  email = FFaker::Internet.email 
+  password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
+  first_name = FFaker::Name.first_name
+  last_name = FFaker::Name.last_name 
+  year_of_birth = 2016 - r.rand(100)
+  resume = FFaker::Lorem.word 
+  job_seeker_status = jobseekerstatus[r.rand(3)] 
+
+  JobSeeker.create(first_name: first_name,
+                   last_name: last_name,
+                   email: email,
+                   password: password,
+                   year_of_birth: year_of_birth,
+                   job_seeker_status: job_seeker_status,
+                   resume: resume,
+                   confirmed_at: DateTime.now)
+end
 
 # Create a default agency, agency branches, agency admin and agency manager
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
           phone: '111 222 3333', fax: '333 444 5555',
           email: 'pets_admin@metplus.org',
           description: 'Michigan Employment & Training Plus, (MET|PLUS) is a 501 (c) 3, Vocational Training non-profit organization that strives to assist Michigan jobseekers with invaluable training and job development that will put them on a career path to success.')
+
+#agency 
+addresses = Address.all.to_a 
+50.times do |n|
+  code = Faker::Code.ean.split(//).shuffle[1..3].join 
+  angency = agency
+  Branch.create(:code => code,
+                agency: angency,
+                address: addresses.pop)
+end
+
+
 
 branch = Branch.create(code: '001', agency: agency)
 branch.address = Address.create!(city: 'Detroit',
