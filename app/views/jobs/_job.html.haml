@@ -6,4 +6,4 @@
 	=render partial: 'modal', locals: {job: job}
 	%button.btn.btn-primary.btn-xs.pull-right#jobs-delete-link{"data-target" => "#myModal", "data-toggle" => "modal", :type => "button"}
 		delete
-	=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs",id: "jobs-edit-link"
+	=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", id: "jobs-edit-link"

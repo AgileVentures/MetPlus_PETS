@@ -1,13 +1,14 @@
 When(/^I go to the (.+) page$/) do |page|
   case page
-    when 'jobs new'
-      visit new_job_path 
+    when 'jobs'
+      visit jobs_path 
     when 'Company Registration'
       visit new_company_registration_path 
     when 'Jobseeker Registration'
       visit new_job_seeker_path
     when 'home'
       visit root_path
+
     when /activation for user '.+'/
       user = page.match(/'(.+)'/)
       if user[1] =~ /@/
