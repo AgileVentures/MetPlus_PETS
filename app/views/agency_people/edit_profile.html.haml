@@ -2,7 +2,7 @@
 %br
 
 = form_for @agency_person, url: update_profile_agency_person_path(@agency_person) do |ap|
-		=ap.label :first_name, 'First Name',autofocus: true,class:'col-sm-2 control-label text-right'
+	=ap.label :first_name, 'First Name',autofocus: true,class:'col-sm-2 control-label text-right'
 	%div{class: 'form-group'}
 		=ap.text_field :first_name,class:'form-control'
 	%div{class: 'label-group'}
