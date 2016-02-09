@@ -4,8 +4,9 @@ RSpec.describe JobsController, type: :controller do
   
   describe "Route => index" do
     it { should route(:get, "/")
+      .to(action: :index) }
     # it { should route(:get, "/jobs")
-              .to(action: :index) }
+              
   end
 
   describe "Route => new" do

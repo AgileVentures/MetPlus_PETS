@@ -3,6 +3,17 @@
 
 $light-blue: #12aee2;
 $white: #fff;
+
+.col-sm-offset-3.col-sm-6#edit-job-links-id{
+	margin-bottom: 50px;
+
+}
+
+.col-sm-offset-3.col-sm-6#new-job-links-id{
+	margin-bottom: 50px;
+
+}
+
 .pull-right#job-show-links-id{
 		margin-top: 80px;
 		a{
@@ -55,12 +66,16 @@ $white: #fff;
 }
 .btn.btn-primary.btn-block#new-job-submit{
 	background: $light-blue;
+	
 }
 .page-header#new-job-header {
 	border-bottom: 2px solid $light-blue;
+	margin-bottom: 70px;
+
 }
 .page-header#edit-job-header {
 	border-bottom: 2px solid $light-blue;
+	margin-bottom: 70px;
 }
 
 .well#jobs-well-lg{

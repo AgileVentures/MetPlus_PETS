@@ -7,7 +7,7 @@
 		.form-group
 			%div{class: "col-sm-offset-3 col-sm-6"}
 				= f.submit "Update", class: "btn btn-primary btn-block", id: "edit-job-submit"
-%div{class: "col-sm-offset-3 col-sm-6"} 
+%div{class: "col-sm-offset-3 col-sm-6",  id: "edit-job-links-id"} 
 
 	= link_to "Cancel", job_path(@job)
 	| 

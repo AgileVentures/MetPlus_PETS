@@ -93,7 +93,7 @@ CompanyRole::ROLE.each_value do |company_role|
 end
 
 #Company 
-80.times do |n|
+200.times do |n|
   ein = Faker::Company.ein
   phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2].join}-#{(1..9).to_a.shuffle[0..3].join}" 
   email =Faker::Internet.email 
@@ -108,7 +108,7 @@ end
 
 companies = Company.all.to_a 
 #Address
-80.times do |n| 
+200.times do |n| 
   street = Faker::Address.street_address 
   city = Faker::Address.city 
   zipcode = Faker::Address.zip_code 
@@ -116,7 +116,7 @@ companies = Company.all.to_a
 end
 
 #JobCategory 
-80.times do |n|
+200.times do |n|
   name = FFaker::Job.title 
   description = FFaker::Lorem.sentence 
   JobCategory.create(name: name, description: description)
@@ -125,7 +125,7 @@ end
 companies = Company.all.to_a
 addresses = Address.all.to_a 
 #CompanyPerson
-80.times do |n|
+200.times do |n|
   title = FFaker::Job.title 
   email = FFaker::Internet.email 
   password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
@@ -143,7 +143,7 @@ jobcategories = JobCategory.all.to_a
 companypeople = CompanyPerson.all.to_a 
 companies = Company.all.to_a 
 #job
-80.times do |n|
+200.times do |n|
   title = FFaker::Job.title 
   description = Faker::Lorem.paragraph(3,false, 4 )
   shift = ["day", "evening", "morning"][r.rand(3)]
