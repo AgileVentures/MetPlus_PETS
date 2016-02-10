@@ -49,7 +49,7 @@ class JobSeekersController < ApplicationController
   end
 
   def destroy
-    @jobseeker = Jobseeker.find(params[:id])
+    @jobseeker = JobSeeker.find(params[:id])
     @jobseeker.destroy
     flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
