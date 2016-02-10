@@ -10,6 +10,7 @@
     = stylesheet_link_tag "application", :media => "all", 'data-turbolinks-track' => true
     = javascript_include_tag "application", 'data-turbolinks-track' => true
     = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
+    = javascript_include_tag '//js.pusher.com/3.0/pusher.min.js'
   %body
     = render partial: 'layouts/menu'
     %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center; display:none;"}
