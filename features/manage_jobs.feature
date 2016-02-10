@@ -10,13 +10,13 @@ background: job has been added to database
 
 Scenario: Updating Job successfully	
 	Given I am on the jobs page 	
-	Then I click the "edit" button 
+	When I click the "edit" button  
     And  I fill in the fields: 
 		| Title                  | cashier|  
 		| Job id                 | KARK12 |  
 		| Description            | Atleast two years work experience|  
-	And I select "day" in select list "Shift"
-	And I check  "job_fulltime" 
+	And  I select "day" in select list "Shift"
+	Then I check  "Fulltime" 
 	And   I press "Update"
 	Then  I should see "The job has been updated successfully."
 	And   I should verify the change of title "cashier", shift "day" and jobId "KRT123"

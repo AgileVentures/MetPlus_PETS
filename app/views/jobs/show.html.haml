@@ -1,7 +1,7 @@
 -provide(:title, @job.title)
 %div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
-		=link_to "Delete", '#'
+		=link_to "Delete", job_path(@job), method: :delete, data: {confirm: "Are you sure to delete this job"}
 		|
 		=link_to "Edit Job", edit_job_path(@job)
 		|
@@ -14,6 +14,17 @@
 			%h4=@job.company.name
 	%table{class: "table table-bordered"} 
 		%tbody 
+			%tr
+				%td Job title:
+				%td=@job.title
+			%tr
+				%td Location:
+				%td
+					=@job.address.street 
+					%br
+					#{@job.address.city}, 
+					%br  
+					=@job.address.zipcode 
 			%tr
 				%td Job category:
 				%td=@job.job_category.name 

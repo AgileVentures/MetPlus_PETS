@@ -2,11 +2,11 @@ class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
 
 	def index
-		@jobs = Job.paginate(:page => params[:page], :per_page => 32)
+		@jobs = Job.paginate(:page => params[:page], :per_page => 32).includes(:company)
 	end	
 
 	def new
-		@job = Job.new 
+		@job = Job.new
 	end
 
 	def create

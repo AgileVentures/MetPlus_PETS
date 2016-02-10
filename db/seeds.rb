@@ -160,6 +160,7 @@ companies = Company.all.to_a
              job_category_id: jobcategories.pop.id) 
 end
 
+
 #jobseeker 
 jobseekerstatus = JobSeekerStatus.all.to_a
 200.times do |n|
@@ -180,6 +181,11 @@ jobseekerstatus = JobSeekerStatus.all.to_a
                    resume: resume,
                    confirmed_at: DateTime.now)
 end
+
+Job.all.to_a.each_with_index do |job, index|
+  job.address = Address.all.to_a[index]
+end
+
 
 # Create a default agency, agency branches, agency admin and agency manager
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',

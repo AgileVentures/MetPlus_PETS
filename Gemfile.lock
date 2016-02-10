@@ -60,6 +60,9 @@ GEM
     bootstrap-will_paginate (0.0.10)
       will_paginate
     builder (3.2.2)
+    bullet (4.14.10)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
     byebug (8.2.1)
     cancancan (1.13.1)
     capybara (2.5.0)
@@ -271,6 +274,7 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    uniform_notifier (1.9.0)
     warden (1.2.4)
       rack (>= 1.0)
     web-console (2.2.1)
@@ -294,6 +298,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootstrap-sass
   bootstrap-will_paginate
+  bullet
   byebug
   cancancan (~> 1.10)
   codeclimate-test-reporter

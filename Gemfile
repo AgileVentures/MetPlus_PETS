@@ -56,8 +56,11 @@ gem 'jquery-turbolinks' #will solve reload problems with javascript
 gem 'bootstrap-sass'
 
 
+
 group :development do
   gem 'haml-rails'
+  gem 'bullet'
+
 end
 
 group :development, :test do
