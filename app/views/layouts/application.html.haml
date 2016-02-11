@@ -2,7 +2,7 @@
 %html(lang="en")
   %head
     %meta(charset="utf-8")
-    %title  MetPlus
+    %title= full_title(yield(:title))
     = csrf_meta_tags
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
@@ -12,7 +12,6 @@
     = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
   %body
     = render partial: 'layouts/menu'
-    %div{:id => 'loading', :style => "background: url('#{asset_path 'spinner.gif'}') no-repeat center center; display:none;"}
     %div{:class => 'content container'}
       %div{:class => 'row', :id => 'messages'}
         %div{:class => 'container'}
@@ -35,6 +34,7 @@
               %li= msg
       %div{:class => 'row'}
         = yield
+      / = debug(params) if Rails.env.development? 
     = render 'layouts/footer'
 
 %script

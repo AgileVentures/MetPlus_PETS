@@ -1,4 +1,4 @@
-Given(/^the following (.+) records:$/) do |factory, table|
+ Given(/^the following (.+) records:$/) do |factory, table|
   table.hashes.each do |hash|
     FactoryGirl.create(factory, hash)
   end
@@ -94,3 +94,6 @@ Given(/^the following jobseeker exist:$/) do |table|
     jobseeker.save
   end
 end
+
+
+
