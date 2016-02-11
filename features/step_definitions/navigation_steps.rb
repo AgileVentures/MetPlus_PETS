@@ -1,7 +1,8 @@
 When(/^I go to the (.+) page$/) do |page|
   case page
-    when 'jobs'
-      visit jobs_path 
+    
+    when 'jobs/new'
+      visit new_job_path  
     when 'Company Registration'
       visit new_company_registration_path 
     when 'Jobseeker Registration'

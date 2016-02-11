@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   root 'main#index'
-  # root 'jobs#index'
+
 
   get 'agency_admin/home', path: '/admin/agency_admin/home'
 
