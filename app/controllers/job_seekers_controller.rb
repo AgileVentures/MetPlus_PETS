@@ -23,6 +23,7 @@ class JobSeekersController < ApplicationController
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
+
     person_params = jobseeker_params
     if person_params['password'].to_s.length == 0 
        person_params.delete('password')
@@ -38,7 +39,7 @@ class JobSeekersController < ApplicationController
        render 'edit'
     end
   end
-
+  
   def index
     @jobseeker = JobSeeker.all
   end
@@ -48,7 +49,7 @@ class JobSeekersController < ApplicationController
   end
 
   def destroy
-    @jobseeker = Jobseeker.find(params[:id])
+    @jobseeker = JobSeeker.find(params[:id])
     @jobseeker.destroy
     flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
@@ -61,6 +62,7 @@ class JobSeekersController < ApplicationController
             :password,
             :password_confirmation,
             :year_of_birth,
+            :job_seeker_status_id,
             :resume)
 
    end

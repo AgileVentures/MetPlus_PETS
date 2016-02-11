@@ -60,6 +60,28 @@ class AgencyPeopleController < ApplicationController
     end
   end
 
+  def edit_profile
+    @agency_person = AgencyPerson.find(params[:id])
+  end
+
+  def update_profile
+    @agency_person = AgencyPerson.find(params[:id])
+    person_params = agency_person_params
+    if person_params['password'].to_s.length == 0
+       person_params.delete('password')
+       person_params.delete('password_confirmation')
+    end
+    if @agency_person.update_attributes(person_params)
+      sign_in :user, @agency_person.user, bypass: true
+      flash[:notice] = "Your profile was updated successfully."
+      redirect_to root_path
+    else
+      @model_errors = @agency_person.errors
+      render :edit_profile
+    end
+
+  end
+
   def destroy
     person = AgencyPerson.find(params[:id])
     if person.user != current_user
@@ -74,7 +96,7 @@ class AgencyPeopleController < ApplicationController
   private
 
   def agency_person_params
-    params.require(:agency_person).permit(:first_name, :last_name, :branch_id,
+    params.require(:agency_person).permit(:first_name, :last_name, :branch_id, :phone,
                           agency_role_ids: [], job_category_ids: [],
                           as_jd_job_seeker_ids: [],
                           as_cm_job_seeker_ids: [])

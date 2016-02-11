@@ -77,6 +77,13 @@ Given(/^the following agency branches exist:$/) do |table|
     branch.address = Address.create!(hash)
   end
 end
+
+Given(/^the following jobseekerstatus values exist:$/) do |table|
+  table.hashes.each do |hash|
+    JobSeekerStatus.create!(hash)
+  end
+end
+
 Given(/^the following jobseeker exist:$/) do |table|
   table.hashes.each do |hash|
     jobseeker = hash.delete 'jobseeker'
