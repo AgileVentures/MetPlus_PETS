@@ -13,7 +13,7 @@ class JobsController < ApplicationController
 	def create
 		@job = Job.new(job_params)
 		if @job.save 
-			flash[:notice] = "A job has been created successfully."
+			flash[:notice] = "#{@job.title} has been created successfully."
 			redirect_to jobs_url  
 		else
 			render :new 
@@ -28,7 +28,7 @@ class JobsController < ApplicationController
 
 	def update
 		if @job.update_attributes(job_params)
-			flash[:info] = "The job has been updated successfully."
+			flash[:info] = "#{@job.title} has been updated successfully."
 			redirect_to @job 
 		else
 			render :edit 
@@ -37,7 +37,7 @@ class JobsController < ApplicationController
 
 	def destroy
 		@job.destroy
-		flash[:alert] = "The job has been deleted successfully."
+		flash[:alert] = "#{@job.title} has been deleted successfully."
 		redirect_to jobs_url 
 	end
 
