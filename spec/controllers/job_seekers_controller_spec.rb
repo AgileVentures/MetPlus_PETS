@@ -45,8 +45,7 @@ RSpec.describe JobSeekersController, type: :controller do
        @user.assign_attributes(first_name:'John',last_name:'Smith',phone:'890-789-9087')
        @jobseekerstatus.assign_attributes(description:'MyText')
        @jobseeker.valid?
-       jobseeker1_hash = 
-                  FactoryGirl.attributes_for(:job_seeker, year_of_birth: '198').merge(FactoryGirl.attributes_for(:user,first_name:'John',last_name:'Smith', phone:'890-789-9087')).merge(FactoryGirl.attributes_for(:job_seeker_status, description:'MyText'))
+       jobseeker1_hash = FactoryGirl.attributes_for(:job_seeker, year_of_birth: '198').merge(FactoryGirl.attributes_for(:user,first_name:'John',last_name:'Smith', phone:'890-789-9087')).merge(FactoryGirl.attributes_for(:job_seeker_status, value=nil, description:'MyText'))
        post :create, job_seeker: jobseeker1_hash 
         
      end
@@ -68,8 +67,9 @@ RSpec.describe JobSeekersController, type: :controller do
      before(:each) do
        @jobseeker =  FactoryGirl.create(:job_seeker)
        @jobseekerstatus =  FactoryGirl.create(:job_seeker_status)
+
        patch :update, id: @jobseeker,job_seeker: FactoryGirl.attributes_for(:job_seeker).merge(FactoryGirl.attributes_for(:job_seeker_status))
-      
+
      end
             
      it 'sets flash message' do
@@ -89,7 +89,9 @@ RSpec.describe JobSeekersController, type: :controller do
         @user =  FactoryGirl.create(:user)
         @jobseekerstatus =  FactoryGirl.create(:job_seeker_status)
         @jobseeker.valid? 
-        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980').merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',phone:'780-890-8976')).merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id:@jobseeker
+        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980').
+merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',password:nil,password_confirmation:nil,phone:'780-890-8976')).
+merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id:@jobseeker
         @jobseeker.reload
         @user.reload
         @jobseekerstatus.reload

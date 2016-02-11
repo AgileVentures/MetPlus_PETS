@@ -4,7 +4,7 @@
   -# branch assignment (belongs_to)
   .form-group
     = person_form.label :branch_id, 'Branch', class: 'control-label col-sm-2'
-    .col-sm-2
+    .col-sm-4
       = person_form.collection_select(:branch_id, Branch.all, :id, :code, |
             {include_blank: true}, class: 'form-control')     |
 

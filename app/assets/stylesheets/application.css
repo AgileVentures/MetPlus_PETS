@@ -14,10 +14,6 @@
  *= require_self
  */
 
- 
-
-
-
 /*homepage css*/
 .col-md-8.col-lg-8{
    padding-left:  0;
@@ -42,6 +38,17 @@
     margin: 25px 0 12px 0;
 }
 
+/* this is for a button associated with a table above it. It is set close
+   to the table. See agency admin home view for example. */
+#table_action_button {
+  margin-bottom: 30px;
+  margin-top: -10px;
+}
+
+.margin-top {
+   margin-top: 20px;
+}
+
 .navbar {
     background: #0C7BA1;
 }
@@ -63,9 +70,18 @@
     padding-left: 1px;
 }
 
-
+/* next three settings are to anchor the footer at the bottom of each page */
+/* See:   http://stackoverflow.com/questions/21933356/
+    sticky-bootstrap-footer-overlaping-content-of-page */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 20px;
+}
 .footer {
-    position: fixed;
+    position: absolute;
     bottom: 0px;
     width: 100%;
     height: 20px;
@@ -109,7 +125,7 @@
 
 
 /*PLEASE PUT COMMENT
-  WHERE EXACTLY 
+  WHERE EXACTLY
   CSS APLLIES
   TO
 */
@@ -133,7 +149,7 @@
     padding-top: 12px;
 }
 
-.normal-label { 
+.normal-label {
   font-weight: normal;
 }
 
@@ -142,7 +158,7 @@
     color: #fff;
     padding-top: 6px;
     position: absolute;
-   
+
 }
 .button-group > label{
     padding-left: 10px;
@@ -171,14 +187,6 @@
     margin-top: -2px;
 
 }
-/*
-.form-group label{
-    font-family: "ArialMT", "Arial";
-    font-weight: 400;
-    font-size: 13px;
-    line-height: normal;
-}
-*/
 
 .form-control#user_email{
     width: 82%;
@@ -192,7 +200,7 @@
 }
 .jumbotron p{
     font-size: 1em;
-    
+
 }
 .form-control#user_password{
     width: 42%;
@@ -200,7 +208,7 @@
     padding-right: 20px;
 }
 
-.btn.btn-primary{
+#login-button {
     width: 140px;
     height: 39px;
     line-height: 25px;
@@ -214,10 +222,3 @@
    position: relative;
 }
 /*end of session#new css*/
-
-.form-control{
-    width: 42%;
-    display: inline;
-    padding-right: 20px;
-}
-

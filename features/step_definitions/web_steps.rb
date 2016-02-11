@@ -23,6 +23,14 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^"([^"]*)" should( not)? be visible$/) do |string, not_see|
+  unless not_see
+    expect(has_text?(:visible, string)).to be true
+  else
+    expect(has_text?(:visible, string)).to be false
+  end
+end
+
 And(/^I press "([^"]*)"$/) do |name|
   click_on name
 end
@@ -32,7 +40,7 @@ Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, f
   search_text regex
 end
 
-Then(/^I wait for (\d+) seconds$/) do |seconds|
+Then(/^I wait(?: for)? (\d+) second(?:s)?$/) do |seconds|
   sleep seconds.to_i.seconds
 end
 
@@ -60,13 +68,12 @@ And(/^show me the page$/) do
 end
 
 When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
-  accept_confirm do
+  # accept_confirm(wait: 8) do
+  #   click_button button_text
+  # end
+  page.driver.accept_modal(:confirm, wait: 8) do
     click_button button_text
   end
-
-  # If wish to confirm the text of the dialog box, this will work:
-  #   message = click_button 'Delete Person'
-  #   expect(message).to eq 'Delete Person'
 end
 
 When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
@@ -85,9 +92,7 @@ When /^I reload the page$/ do
   visit current_path
 end
 
-Then(/^I select "(.*?)" in select list$/) do |item|
-  select(item)
-end
+
 
 
 

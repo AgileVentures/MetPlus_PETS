@@ -43,7 +43,7 @@ class AgencyPeopleController < ApplicationController
         # If the :agency_admin error key was set by the model this means that
         # the agency person being edited is the sole agency admin (AA), and that
         # role was unchecked in the edit view. Removing the sole AA is not allowed.
-        # In this case, reset the AA role and add a flash message.
+        # In this case, reset the AA role.
 
         @agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
       end
@@ -60,6 +60,28 @@ class AgencyPeopleController < ApplicationController
     end
   end
 
+  def edit_profile
+    @agency_person = AgencyPerson.find(params[:id])
+  end
+
+  def update_profile
+    @agency_person = AgencyPerson.find(params[:id])
+    person_params = agency_person_params
+    if person_params['password'].to_s.length == 0
+       person_params.delete('password')
+       person_params.delete('password_confirmation')
+    end
+    if @agency_person.update_attributes(person_params)
+      sign_in :user, @agency_person.user, bypass: true
+      flash[:notice] = "Your profile was updated successfully."
+      redirect_to root_path
+    else
+      @model_errors = @agency_person.errors
+      render :edit_profile
+    end
+
+  end
+
   def destroy
     person = AgencyPerson.find(params[:id])
     if person.user != current_user
@@ -74,7 +96,7 @@ class AgencyPeopleController < ApplicationController
   private
 
   def agency_person_params
-    params.require(:agency_person).permit(:first_name, :last_name, :branch_id,
+    params.require(:agency_person).permit(:first_name, :last_name, :branch_id, :phone,
                           agency_role_ids: [], job_category_ids: [],
                           as_jd_job_seeker_ids: [],
                           as_cm_job_seeker_ids: [])

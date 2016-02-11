@@ -1,0 +1,26 @@
+.col-sm-3
+  %h4 Company Contacts
+
+.col-sm-9
+  - if company_people.empty?
+    %h4 There are no people assigned to this company.
+  - else
+    %table.table.table-bordered
+      %thead
+        %tr
+          %td
+            Name
+          %td
+            Role(s)
+          %td
+            Status
+      %tbody
+        - company_people.each do |person|
+          %tr
+            %td
+              = link_to_unless(company_status == Company::STATUS[:DENY],  |
+                          person.full_name, company_person_path(person))  |
+            %td
+              = person.company_roles.pluck(:role).join(', ')
+            %td
+              = person.status if person.status

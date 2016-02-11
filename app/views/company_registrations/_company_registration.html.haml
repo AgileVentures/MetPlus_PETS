@@ -1,10 +1,9 @@
 %h3 Company Registration Information
 
-= render :partial => 'companies/company', :locals => {company: company}
-
-%br/
-%br/
 .row
+  = render partial: 'companies/company', :locals => {company: company}
+
+.row.margin-top
   .col-sm-2
     = button_to 'Edit Registration',                    |
             edit_company_registration_path(company),    |
@@ -33,8 +32,9 @@
           %u not
           to have an email sent to the company contact, dismiss this box and
           click the 'Delete Registration' button.)
-        %label(for='message_text' class='control-label') Explanation:
-        %textarea(class='form-control' id='message_text')
+        .form-group
+          %label(for='message_text' class='control-label') Explanation:
+          %textarea(class='form-control' id='message_text')
       .modal-footer
         %button(type='button' class='btn btn-default'
                                  data-dismiss='modal') Cancel

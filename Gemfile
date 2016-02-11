@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 
-ruby '2.1.8'
+
+# ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
@@ -38,7 +39,7 @@ gem 'figaro'
 
 gem 'cancancan', '~> 1.10'
 
-
+# gem 'nokogiri', '~> 1.6', '>= 1.6.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -87,4 +88,5 @@ group :production do
   # Use Postgres as the database for Active Record
   gem 'pg'
   gem 'rails_12factor'
+  gem 'puma'
 end

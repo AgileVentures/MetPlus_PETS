@@ -1,36 +1,58 @@
 %h2 PETS Administration
 
-= render partial: 'agencies/agency', object: @agency
+.row
+  = render partial: 'agencies/agency', object: @agency
 
-%div{:class => 'container'}
-  .col-sm-2.col-sm-offset-8
-    = button_to 'Edit Agency', edit_agency_path(@agency), |
-            method: :get, class: 'btn btn-primary'        |
+  .col-sm-2.col-sm-offset-10#table_action_button
+    = button_to 'Edit Agency', edit_agency_path(@agency), method: :get, |
+                             class: 'btn btn-primary btn-sm pull-right' |
 
-- if @agency.branches.empty?
-  There are no branches
-- else
+.row
   = render partial: 'branches/branches', object: @agency.branches
 
-%div{:class => 'container'}
-  .col-sm-2.col-sm-offset-8
-    = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
-          method: :get, class: 'btn btn-primary'                  |
+.row
+  - if @agency.branches.empty?
+    .col-sm-2.col-sm-offset-10#table_action_button
+      = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
+          method: :get, class: 'btn btn-primary btn-sm pull-right'  |
+  - else
+    .col-sm-3.col-sm-offset-3
+      %a(id='toggle_branches' href='#branches_table' class='text-muted')
+        Hide Branches
+    .col-sm-2.col-sm-offset-4#table_action_button
+      = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
+          method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
-
-- if @agency.agency_people.empty?
-  There are no people
-- else
+.row
   = render partial: 'agency_people/agency_people', object: @agency.agency_people
 
-%div{:class => 'container'}
-  .col-sm-2.col-sm-offset-8
-    = link_to 'Invite Person',     |
-          new_user_invitation_path(person_type: 'AgencyPerson',   |
-                 org_id: @agency.id),                             |
-          method: :get, class: 'btn btn-primary'                  |
+.row
+  - if @agency.agency_people.empty?
+    .col-sm-2.col-sm-offset-10#table_action_button
+      = link_to 'Invite Person',                                    |
+          new_user_invitation_path(person_type: 'AgencyPerson',     |
+                   org_id: @agency.id),                             |
+          method: :get, class: 'btn btn-primary btn-sm pull-right'  |
+  - else
+    .col-sm-3.col-sm-offset-3
+      %a(id='toggle_people' href='#people_table' class='text-muted')
+        Hide People
+    .col-sm-2.col-sm-offset-4#table_action_button
+      = link_to 'Invite Person',                                    |
+          new_user_invitation_path(person_type: 'AgencyPerson',     |
+                   org_id: @agency.id),                             |
+          method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
-- if @agency.companies.empty?
-  There are no companies
-- else
+.row
   = render partial: 'companies/companies', object: @agency.companies
+
+.row
+  - if not @agency.companies.empty?
+    .col-sm-3.col-sm-offset-3
+      %a(id='toggle_companies' href='#companies_table' class='text-muted')
+        Hide Companies
+
+%script
+  $(VisibilityToggle.setup_branches);
+  $(VisibilityToggle.setup_people);
+  $(VisibilityToggle.setup_companies);

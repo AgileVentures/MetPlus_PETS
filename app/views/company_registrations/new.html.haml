@@ -1,1 +1,12 @@
-= render partial: 'form', locals: {company: @company}
+%h2 Request Company Registration
+
+%p Thank you for your interest in MetPlus!
+
+%p brief promotional message about the mission goes here]
+
+%p
+  Please enter information about your organization and a means of
+  contact using the form below.
+
+= render partial: 'form', locals: {company: @company, method: :post,   |
+          submit: 'Create', url: company_registrations_path}           |

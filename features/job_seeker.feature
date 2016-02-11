@@ -27,7 +27,7 @@ Scenario: new Js Registration
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
   And I fill in "Year Of Birth" with "1990"
-  Then I select "Unemployedlooking" in select list
+  Then I select "Unemployedlooking" in select list "Status"
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent  to your email address. Please follow the link to activate your account."
 
@@ -43,7 +43,7 @@ Scenario: edit Js Registration
   Then I should see "Signed in successfully"
   When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1"
-  Then I select "Employedlooking" in select list
+  Then I select "Employedlooking" in select list "Status"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
   Then I click the "Update Job seeker" button
@@ -55,7 +55,7 @@ Scenario: edit Js Registration without password change
   Then I should see "Signed in successfully"
   When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1" 
-  Then I select "Employednotlooking" in select list
+  Then I select "Employednotlooking" in select list "Status"
   Then I click the "Update Job seeker" button 
   Then I should see "Jobseeker was updated successfully."
 
