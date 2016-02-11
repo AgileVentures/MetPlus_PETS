@@ -28,18 +28,7 @@
           %li
             %div{:class => 'navbar-text'}
               Hello,
-<<<<<<< HEAD
-              / -if current_user.actable_type == 'JobSeeker' 
-              /   = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
-              / -else 
-              /   = link_to current_user.first_name, edit_user_registration_path(current_user)
 
-              =link_to current_user.first_name.capitalize,  {controller: current_user.actable_type.underscore.pluralize, action: 'edit', id: current_user.actable_id} if !current_user.actable_type.nil?
-              / fallback link, Eventually will be removed.
-              =link_to current_user.first_name.capitalize, edit_user_registration_path(current_user) if current_user.actable_type.nil? 
-              
-              
-=======
               -if current_user.actable_type == 'JobSeeker'
                 = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
               -elsif current_user.actable_type == 'CompanyPerson'
@@ -49,8 +38,6 @@
               -else
                 = link_to current_user.first_name, edit_user_registration_path(current_user)
 
-
->>>>>>> development
           %li
             %div{:class => 'button-menu'}
               = link_to 'Log out', logout_path, :role => 'button', method: :delete, :class => 'btn btn-default btn-xs', :id => 'logout_button'
