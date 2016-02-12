@@ -6,6 +6,10 @@ var PusherTest = {
     channel.bind('new_message', function(data) {
       alert('From: ' + data.name + ', Message: ' + data.message);
     });
+    var channel = pusher.subscribe('pusher_test');
+    channel.bind('js_register', function(data) {
+      alert('From: ' + data.name + ', Message: ' + data.message);
+    });
   }
 };
 
