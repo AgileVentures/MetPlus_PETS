@@ -63,12 +63,14 @@ Rails.application.routes.draw do
 
   root 'main#index'
 
+
   get 'agency_admin/home', path: '/admin/agency_admin/home'
 
   get 'agency/home',  path: '/agency/:id'
 
   get 'company/home', path: '/company/:id'
 
+  resources :jobs 
   resources :job_seekers
 
    # The priority is based upon order of creation: first created -> highest priority.

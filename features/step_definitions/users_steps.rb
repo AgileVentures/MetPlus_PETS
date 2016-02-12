@@ -17,6 +17,15 @@ When(/^I visit profile for "(\w+)"$/) do |first_name|
    visit  "/users/edit.#{user.id}"
 end
 
+
+Then(/^I should verify the change of title "(.*?)", shift "(.*?)" and jobId "(.*?)"$/) do |title, shift, jobId|
+  # pending # express the regexp above with the code you wish you had
+  job = Job.find_by_title(title)
+  expect(job.shift).to eql shift
+  expect(job.jobId).to eql jobId 
+
+end
+
 Then(/^I should verify the change of first_name "(.*?)", last_name "(.*?)" and phone "(.*?)"$/) do |first_name, last_name, phone|
     user = User.find_by_first_name(first_name)
     expect(user.last_name).to    eql last_name
