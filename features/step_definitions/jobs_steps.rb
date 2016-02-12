@@ -1,6 +1,9 @@
-Given(/^the following jobs exists:$/) do |table|
-  table.hashes.each do |hash|
-    @job = Job.create!(hash)
-  end
+Then(/^I should verify the change of title "(.*?)", shift "(.*?)" and jobId "(.*?)"$/) do |title, shift, jobId|
+  # pending # express the regexp above with the code you wish you had
+  job = Job.find_by_title(title)
+  expect(job.shift).to eql shift
+  expect(job.jobId).to eql jobId 
+
 end
+
 
