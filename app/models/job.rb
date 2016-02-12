@@ -14,6 +14,7 @@ class Job < ActiveRecord::Base
   CONTENT_TYPES = ['morning', 'day', 'evening']
   validates_presence_of :title
   validates_presence_of :jobId 
+  validates_presence_of :fulltime 
   validates_inclusion_of :shift, :in => CONTENT_TYPES,
   :message => "must be one of: #{CONTENT_TYPES.join(', ')}"
   validates_length_of   :title, maximum: 100

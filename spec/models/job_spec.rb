@@ -27,7 +27,10 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :title }
     it { is_expected.to have_db_column :description }
-  
+    it { is_expected.to have_db_column :jobId }
+    it { is_expected.to have_db_column :shift}
+    it { is_expected.to have_db_column :fulltime}
+
     xit { is_expected.to have_db_column :company_id }
     xit { is_expected.to have_db_column :company_person_id }
     xit { is_expected.to have_db_column :job_category_id }
@@ -38,10 +41,12 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_length_of(:title).is_at_most(100) }
     it { is_expected.to validate_presence_of :description }
     it { is_expected.to validate_length_of(:description).is_at_most(10000) }
-    
+    it { is_expected.to validate_presence_of :jobId}
+    it { is_expected.to validate_presence_of :fulltime}
     xit { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
     xit { is_expected.to validate_presence_of :job_category_id }
+    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[day evening morning])} 
   end
   
   describe 'Class methods' do
