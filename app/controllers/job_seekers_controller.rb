@@ -9,6 +9,7 @@ class JobSeekersController < ApplicationController
     if @jobseeker.save
       flash[:notice] = "A message with a confirmation and link has been sent to your email address. " +
                        "Please follow the link to activate your account."
+      PusherManager.trigger_event(:JS_REGISTER, name: @job_seeker.name)
       redirect_to root_path
     else
       @model_errors = @jobseeker.errors
@@ -25,11 +26,11 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
 
     person_params = jobseeker_params
-    if person_params['password'].to_s.length == 0 
+    if person_params['password'].to_s.length == 0
        person_params.delete('password')
        person_params.delete('password_confirmation')
     end
-    
+
     if @jobseeker.update_attributes(person_params)
        sign_in :user, @jobseeker.user, bypass: true
        flash[:notice] = "Jobseeker was updated successfully."
@@ -39,7 +40,7 @@ class JobSeekersController < ApplicationController
        render 'edit'
     end
   end
-  
+
   def index
     @jobseeker = JobSeeker.all
   end
