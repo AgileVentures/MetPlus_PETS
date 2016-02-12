@@ -63,7 +63,6 @@ Rails.application.routes.draw do
 
   root 'main#index'
 
-
   get 'agency_admin/home', path: '/admin/agency_admin/home'
 
   get 'agency/home',  path: '/agency/:id'
