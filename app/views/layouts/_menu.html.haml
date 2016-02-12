@@ -5,7 +5,7 @@
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
         %li{:class => 'menu-item'}
-          %a{:href => '#', id: 'job'} Jobs
+          %a{:href => '/jobs', id: 'job'} Jobs
         %li{:class => 'menu-item'}
           %a{:href => '#', id: 'about'} About
         %li{:class => 'menu-item'}
@@ -28,6 +28,7 @@
           %li
             %div{:class => 'navbar-text'}
               Hello,
+
               -if current_user.actable_type == 'JobSeeker'
                 = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
               -elsif current_user.actable_type == 'CompanyPerson'
@@ -36,7 +37,6 @@
                 = link_to current_user.first_name, edit_profile_agency_person_path(current_user.actable_id)
               -else
                 = link_to current_user.first_name, edit_user_registration_path(current_user)
-
 
           %li
             %div{:class => 'button-menu'}
