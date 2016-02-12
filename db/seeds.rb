@@ -84,10 +84,12 @@ SkillLevel.create(name: 'Advanced',
 SkillLevel.create(name: 'Expert',
             description: 'Proficient in all aspects, able to work indepently')
 #AgencyRole
+# Create all agency roles - this should stay in production version of this file
 AgencyRole::ROLE.each_value do |agency_role|
   AgencyRole.create(role: agency_role)
 end
 #CompanyRole 
+# Create all company roles - - this should stay in production 
 CompanyRole::ROLE.each_value do |company_role|
   CompanyRole.create(role: company_role)
 end
