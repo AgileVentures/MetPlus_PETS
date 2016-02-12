@@ -8,7 +8,7 @@ var PusherTest = {
     });
     var channel = pusher.subscribe('pusher_test');
     channel.bind('js_register', function(data) {
-      alert('Job Seeker ' + data.name + ' has joined PETS');
+      alert('Job Seeker: ' + data.name + ' has joined PETS');
     });
   }
 };
