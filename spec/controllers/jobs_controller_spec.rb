@@ -7,8 +7,18 @@ RSpec.describe JobsController, type: :controller do
       .to(action: :index) }            
   end
 
+  describe "Route => index" do
+    it { should_not route(:get, "/jobs/new")
+      .to(action: :index) }            
+  end
+
   describe "Route => new" do
     it { should route(:get, "/jobs/new")
+              .to(action: :new) }
+  end
+
+  describe "Route => new" do
+    it { should_not route(:get, "/jobs")
               .to(action: :new) }
   end
 
@@ -17,8 +27,18 @@ RSpec.describe JobsController, type: :controller do
               .to(action: :show, id: 1) }
   end
 
+  describe "Route => show" do
+    it { should_not route(:get, "/jobs/new")
+              .to(action: :show, id: 1) }
+  end
+
   describe "Route => edit" do
     it{ should route(:get, "/jobs/1")
+            .to(action: :show, id: 1) }
+  end
+
+  describe "Route => edit" do
+    it{ should_not route(:get, "/jobs/")
             .to(action: :show, id: 1) }
   end
 
