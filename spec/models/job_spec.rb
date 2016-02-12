@@ -42,7 +42,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_presence_of :description }
     it { is_expected.to validate_length_of(:description).is_at_most(10000) }
     it { is_expected.to validate_presence_of :jobId}
-    it { is_expected.to validate_presence_of :fulltime}
+    it { should allow_value('', nil).for(:fulltime).on(:update) }
+    it { should allow_value('', nil).for(:fulltime).on(:create) }
     xit { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
     xit { is_expected.to validate_presence_of :job_category_id }
