@@ -8,7 +8,7 @@ background: adding job to database
 	| title               | jobId   | shift  | fulltime | description | 
 	| software developer  | KRK12K  | evening| true     | internship position with pay| 
 Scenario: Creating and Updating Job successfully	
-	Given I am on the jobs/new page 
+	Given I am on the job creation page 
     And  I fill in the fields: 
 		| Title                  | cashier|  
 		| Job id                 | KARK12 |  
@@ -30,7 +30,7 @@ Scenario: Creating and Updating Job successfully
 	And   I should verify the change of title "cab-driver", shift "day" and jobId "KRT123"
 
 Scenario: Creating job unsuccessfully 
-	Given I am on the jobs/new page
+	Given I am on the job creation page
 	And  I fill in the fields: 
 		| Title                  | cashier|  
 		| Job id                 |  |  
