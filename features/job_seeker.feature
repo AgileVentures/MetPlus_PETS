@@ -41,7 +41,7 @@ Scenario: edit Js Registration
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "Vijaya" link
+  When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1"
   Then I select "Employedlooking" in select list "Status"
   And I fill in "Password" with "password"
@@ -53,7 +53,7 @@ Scenario: edit Js Registration without password change
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "Vijaya" link
+  When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1" 
   Then I select "Employednotlooking" in select list "Status"
   Then I click the "Update Job seeker" button 
