@@ -1,7 +1,11 @@
 var PusherTest = {
-
-  setup: function () {
+  get_pusher: function () {
     var pusher = new Pusher('<%=ENV['PUSHER_APP_KEY']%>');
+    return function () {return pusher;}
+  },
+  setup: function () {
+    var get_pusher = PusherTest.get_pusher();
+    var pusher = get_pusher();
     var channel = pusher.subscribe('my_channel');
     channel.bind('new_message', function(data) {
       alert('From: ' + data.name + ', Message: ' + data.message);
