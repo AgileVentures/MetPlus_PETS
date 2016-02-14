@@ -1,18 +1,31 @@
 var PusherControl = {
-  get_pusher: function () {
+  get_pusher: (function () {
     var pusher = new Pusher('<%=ENV['PUSHER_APP_KEY']%>');
     return function () {return pusher;}
-  },
+  })(),
   setup: function () {
-    var get_pusher = PusherControl.get_pusher();
-    var pusher = get_pusher();
+    var pusher = PusherControl.get_pusher();
+
+    // the following is used only for test purposes
     var channel = pusher.subscribe('my_channel');
     channel.bind('new_message', function(data) {
       alert('From: ' + data.name + ', Message: ' + data.message);
     });
-    var channel = pusher.subscribe('pusher_test');
-    channel.bind('js_register', function(data) {
-      alert('Job Seeker: ' + data.name + ' has joined PETS');
+
+    // pusher_control channel is used to toggle bindings appropriate
+    // to the user (e.g., when a user logs in as an agency_person,
+    // that client is subscribed to channel(s) appropriate for that role)
+    var channel = pusher.subscribe('pusher_control');
+
+    channel.bind('user_logged_in', function(data) {
+      alert('User ID: ' + data.person_id + ' has logged in.');
+      $(window).unload( function(data) {
+        alert('Now the page should be fully loaded ...');
+      })
+    });
+
+    channel.bind('js_registered', function(data) {
+      alert('Job Seeker: ' + data.name + ' has joined PETS.');
     });
   }
 };

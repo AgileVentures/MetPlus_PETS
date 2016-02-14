@@ -10,9 +10,9 @@ class JobSeekersController < ApplicationController
     if @jobseeker.save
       flash[:notice] = "A message with a confirmation and link has been sent to your email address. " +
                        "Please follow the link to activate your account."
+      redirect_to root_path
       PusherManager.trigger_event(:JS_REGISTER,
               name: @jobseeker.full_name(last_name_first: false))
-      redirect_to root_path
     else
       @model_errors = @jobseeker.errors
       render 'new'
