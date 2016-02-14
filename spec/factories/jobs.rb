@@ -6,7 +6,7 @@ FactoryGirl.define do
     company_person_id 1
     address
     job_category_id 1
-    jobId "KRKE12"
+    company_job_id"KRKE12"
     shift 'day'
     fulltime true 
   end

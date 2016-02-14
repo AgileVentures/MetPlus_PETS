@@ -11,12 +11,12 @@ class Job < ActiveRecord::Base
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :skill_levels, through: :job_skills
 
-  CONTENT_TYPES = ['morning', 'day', 'evening']
+  SHIFT_OPTIONS = ['morning', 'day', 'evening']
   validates_presence_of :title
-  validates_presence_of :jobId 
+  validates_presence_of :company_job_id  
   validates_presence_of :fulltime, allow_blank: true 
-  validates_inclusion_of :shift, :in => CONTENT_TYPES,
-  :message => "must be one of: #{CONTENT_TYPES.join(', ')}"
+  validates_inclusion_of :shift, :in => SHIFT_OPTIONS,
+  :message => "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10000

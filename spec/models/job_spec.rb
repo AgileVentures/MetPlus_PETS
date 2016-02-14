@@ -27,7 +27,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :title }
     it { is_expected.to have_db_column :description }
-    it { is_expected.to have_db_column :jobId }
+    it { is_expected.to have_db_column :company_job_id }
     it { is_expected.to have_db_column :shift}
     it { is_expected.to have_db_column :fulltime}
 
@@ -41,7 +41,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_length_of(:title).is_at_most(100) }
     it { is_expected.to validate_presence_of :description }
     it { is_expected.to validate_length_of(:description).is_at_most(10000) }
-    it { is_expected.to validate_presence_of :jobId}
+    it { is_expected.to validate_presence_of :company_job_id }
     it { should allow_value('', nil).for(:fulltime).on(:update) }
     it { should allow_value('', nil).for(:fulltime).on(:create) }
     xit { is_expected.to validate_presence_of :company_id }

@@ -6,15 +6,15 @@
 	%div{class: "col-sm-6"}
 		=f.text_field :title, class: "form-control" 
 .form-group 
-	=f.label :jobId,"Job id", class: "col-sm-3 control-label text-right"
+	=f.label :company_job_id,"Job id", class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
-		=f.text_field :jobId, class: "form-control" 
+		=f.text_field :company_job_id, class: "form-control" 
 		
 .form-group 
 	=f.label :shift, class: "col-sm-3 control-label text-right"
-	-opts = ['morning', 'day', 'evening']
+	-shift_opts = ['morning', 'day', 'evening']
 	%div{class: "col-sm-5"}
-		=f.collection_select :shift, opts, :to_s, :to_s, {prompt: true},
+		=f.collection_select :shift, shift_opts, :to_s, :to_s, {prompt: true},
 		         class: "form-control" 
 	=f.label :fulltime, class: "control-label"
 	=f.check_box :fulltime

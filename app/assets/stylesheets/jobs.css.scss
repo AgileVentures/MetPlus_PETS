@@ -1,11 +1,11 @@
-@import "bootstrap-sprockets";
-@import "bootstrap";
-
 $light-blue: #12aee2;
 $white: #fff;
+$red: #FF0000;
+$state-danger-text: #a94442;
 
 
 /*ONLY JOB RELATED CSS*/
+
 .modal-content#job-delete-modal-id{
 	background-color: $light-blue;
 }
@@ -108,9 +108,9 @@ $white: #fff;
     }
 }
 #error-explanation {
-  color: red;
+  color: $red;
   ul {
-		color: red;
+		color: $red;
     	margin: 0 0 30px 0;
   	}
 }
