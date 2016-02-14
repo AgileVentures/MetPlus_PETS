@@ -50,7 +50,6 @@ Given(/^the following agency people exist:$/) do |table|
     agency_person.save
   end
 end
-
 Given(/^the following company people exist:$/) do |table|
   table.hashes.each do |hash|
     company_name = hash.delete 'company'

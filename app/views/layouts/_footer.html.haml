@@ -1,4 +1,17 @@
-%footer{:class => 'footer'}
-  %div{:class => 'container'}
-    %center
-      = "® Met Plus #{Date.today.year}"
+/ %footer{:class => 'footer'}
+/   %div{:class => 'container'}
+/     %center
+/       = "® Met Plus #{Date.today.year}"
+/ %div{class: "container", id: "footer-container-id"} 
+/ .navbar.navbar-fixed-bottom
+%div{class: "panel panel-default", id: "panel-default-id"}
+	%div{class: "panel panel-default panel-footer footer text-center"}
+		%div{class: "row text-center", id: "footer-text-color"}
+			For employers:
+			=link_to "Post jobs", new_job_path 
+			|
+			=link_to "Search Resumes", '#'
+			|
+			=link_to "Partner with Us", new_company_registration_path 
+
+		%strong="&reg;".html_safe+" MetPlus #{Date.today.year}"

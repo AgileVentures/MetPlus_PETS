@@ -48,9 +48,19 @@ gem 'cancancan', '~> 1.10'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
+gem 'ffaker' 
+gem 'faker'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
+# gem 'jquery-turbolinks' #will solve reload problems with javascript 
+
+
+
 
 group :development do
   gem 'haml-rails'
+  gem 'bullet'
+
 end
 
 group :development, :test do

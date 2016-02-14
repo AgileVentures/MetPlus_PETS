@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe JobSkill, type: :model do
   describe 'Fixtures' do
-    it 'should have a valid factory' do
+    xit 'should have a valid factory' do
       expect(FactoryGirl.create(:job_skill)).to be_valid
     end
   end
@@ -39,7 +39,7 @@ RSpec.describe JobSkill, type: :model do
   end
   
   describe 'Job Skill' do
-    it 'is valid with all required fields' do
+    xit 'is valid with all required fields' do
       job = FactoryGirl.create(:job)
       skill = FactoryGirl.create(:skill)
       expect(JobSkill.new(job: job, skill: skill,
