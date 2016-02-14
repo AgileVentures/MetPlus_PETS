@@ -35,20 +35,20 @@ Given(/^the following companies exist:$/) do |table|
 end
 
 Given(/^the following agency people exist:$/) do |table|
-table.hashes.each do |hash|
-  agency_name = hash.delete 'agency'
-  hash['agency_id'] = Agency.find_by_name(agency_name).id
+  table.hashes.each do |hash|
+    agency_name = hash.delete 'agency'
+    hash['agency_id'] = Agency.find_by_name(agency_name).id
 
-  agency_role_id = hash.delete 'role'
-  agency_role = AgencyRole.find_by_role(AgencyRole::ROLE[agency_role_id.to_sym])
+    agency_role_id = hash.delete 'role'
+    agency_role = AgencyRole.find_by_role(AgencyRole::ROLE[agency_role_id.to_sym])
 
-  hash['password_confirmation'] = hash['password']
-  hash['confirmed_at'] = Time.now
+    hash['password_confirmation'] = hash['password']
+    hash['confirmed_at'] = Time.now
 
-  agency_person = AgencyPerson.new(hash)
-  agency_person.agency_roles << agency_role
-  agency_person.save
-end
+    agency_person = AgencyPerson.new(hash)
+    agency_person.agency_roles << agency_role
+    agency_person.save
+  end
 end
 
 Given(/^the following company people exist:$/) do |table|
