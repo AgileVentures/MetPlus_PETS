@@ -1,37 +1,37 @@
 Given(/^the following (.+) records:$/) do |factory, table|
-table.hashes.each do |hash|
-  FactoryGirl.create(factory, hash)
-end
+  table.hashes.each do |hash|
+    FactoryGirl.create(factory, hash)
+  end
 
 end
 
 Given(/^the following agency roles exist:$/) do |table|
-table.hashes.each do |hash|
-  hash['role'] = AgencyRole::ROLE[hash['role'].to_sym]
-  AgencyRole.create!(hash)
-end
+  table.hashes.each do |hash|
+    hash['role'] = AgencyRole::ROLE[hash['role'].to_sym]
+    AgencyRole.create!(hash)
+  end
 end
 
 Given(/^the following company roles exist:$/) do |table|
-table.hashes.each do |hash|
-  hash['role'] = CompanyRole::ROLE[hash['role'].to_sym]
-  CompanyRole.create!(hash)
-end
+  table.hashes.each do |hash|
+    hash['role'] = CompanyRole::ROLE[hash['role'].to_sym]
+    CompanyRole.create!(hash)
+  end
 end
 
 Given(/^the following agencies exist:$/) do |table|
-table.hashes.each do |hash|
-  Agency.create!(hash)
-end
+  table.hashes.each do |hash|
+    Agency.create!(hash)
+  end
 end
 
 Given(/^the following companies exist:$/) do |table|
-table.hashes.each do |hash|
-  agency_name = hash.delete 'agency'
-  company = Company.new(hash)
-  company.agencies << Agency.find_by_name(agency_name)
-  company.save
-end
+  table.hashes.each do |hash|
+    agency_name = hash.delete 'agency'
+    company = Company.new(hash)
+    company.agencies << Agency.find_by_name(agency_name)
+    company.save
+  end
 end
 
 Given(/^the following agency people exist:$/) do |table|
