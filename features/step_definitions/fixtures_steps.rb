@@ -50,47 +50,46 @@ Given(/^the following agency people exist:$/) do |table|
     agency_person.save
   end
 end
-
 Given(/^the following company people exist:$/) do |table|
-table.hashes.each do |hash|
-  company_name = hash.delete 'company'
-  hash['company_id'] = Company.find_by_name(company_name).id
+  table.hashes.each do |hash|
+    company_name = hash.delete 'company'
+    hash['company_id'] = Company.find_by_name(company_name).id
 
-  company_role_id = hash.delete 'role'
-  company_role = CompanyRole.find_by_role(CompanyRole::ROLE[company_role_id.to_sym])
+    company_role_id = hash.delete 'role'
+    company_role = CompanyRole.find_by_role(CompanyRole::ROLE[company_role_id.to_sym])
 
-  hash['password_confirmation'] = hash['password']
-  hash['confirmed_at'] = Time.now
+    hash['password_confirmation'] = hash['password']
+    hash['confirmed_at'] = Time.now
 
-  company_person = CompanyPerson.new(hash)
-  company_person.company_roles << company_role
-  company_person.save
-end
+    company_person = CompanyPerson.new(hash)
+    company_person.company_roles << company_role
+    company_person.save
+  end
 end
 
 Given(/^the following agency branches exist:$/) do |table|
-table.hashes.each do |hash|
-  agency_name = hash.delete 'agency'
-  agency = Agency.find_by_name(agency_name)
-  branch_code = hash.delete 'code'
-  branch = Branch.create(code: branch_code, agency: agency)
-  branch.address = Address.create!(hash)
-end
+  table.hashes.each do |hash|
+    agency_name = hash.delete 'agency'
+    agency = Agency.find_by_name(agency_name)
+    branch_code = hash.delete 'code'
+    branch = Branch.create(code: branch_code, agency: agency)
+    branch.address = Address.create!(hash)
+  end
 end
 
 Given(/^the following jobseekerstatus values exist:$/) do |table|
-table.hashes.each do |hash|
-  JobSeekerStatus.create!(hash)
-end
+  table.hashes.each do |hash|
+    JobSeekerStatus.create!(hash)
+  end
 end
 
 Given(/^the following jobseeker exist:$/) do |table|
-table.hashes.each do |hash|
-  jobseeker = hash.delete 'jobseeker'
-  hash['actable_type'] = 'JobSeeker'
-  hash['password_confirmation'] = hash['password']
-  hash['confirmed_at'] = Time.now
-  jobseeker = JobSeeker.new(hash)
-  jobseeker.save
-end
+  table.hashes.each do |hash|
+    jobseeker = hash.delete 'jobseeker'
+    hash['actable_type'] = 'JobSeeker'
+    hash['password_confirmation'] = hash['password']
+    hash['confirmed_at'] = Time.now
+    jobseeker = JobSeeker.new(hash)
+    jobseeker.save
+  end
 end
