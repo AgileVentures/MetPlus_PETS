@@ -150,12 +150,12 @@ companies = Company.all.to_a
   description = Faker::Lorem.paragraph(3,false, 4 )
   shift = ["day", "evening", "morning"][r.rand(3)]
   fulltime =  [false, true][r.rand(2)]
-  jobId = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join 
+  company_job_id  = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join 
 
   Job.create!(title: title,
              description: description,
              shift: shift,
-             jobId: jobId,
+             company_job_id: company_job_id ,
              fulltime: fulltime,
              company_id: companies.pop.id,
              company_person_id: companypeople.pop.id,

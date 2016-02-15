@@ -5,7 +5,7 @@ I want to post, edit, delete jobs
 
 background: adding job to database 
 	Given the following jobs records:
-	| title               | jobId   | shift  | fulltime | description | 
+	| title               | company_job_id  | shift  | fulltime | description | 
 	| software developer  | KRK12K  | evening| true     | internship position with pay| 
 Scenario: Creating and Updating Job successfully	
 	Given I am on the job creation page 

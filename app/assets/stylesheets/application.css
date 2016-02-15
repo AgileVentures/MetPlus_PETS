@@ -191,10 +191,13 @@ body {
     padding-right: 20px;
 }
 
-#login-button {
+.btn.btn-primary#login-button {
     width: 140px;
     height: 39px;
     line-height: 25px;
+    color: #ffffff;
+    background-color: #006dcc;;
+    border-color: #0044cc;
 }
 .jumbotron h2#login-text {
    font-family:  "Arial-BoldMT","Arial Bold","Arial";
