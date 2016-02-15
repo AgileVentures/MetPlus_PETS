@@ -4,8 +4,6 @@ module PusherManager
     case evt_type
     when :JS_REGISTER
       Pusher.trigger('pusher_control', 'js_registered', evt_data)
-    when :USER_LOGIN
-      Pusher.trigger('pusher_control', 'user_logged_in', evt_data)
     end
   end
 end

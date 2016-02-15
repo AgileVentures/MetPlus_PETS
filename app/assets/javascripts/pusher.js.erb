@@ -12,20 +12,14 @@ var PusherControl = {
       alert('From: ' + data.name + ', Message: ' + data.message);
     });
 
-    // pusher_control channel is used to toggle bindings appropriate
-    // to the user (e.g., when a user logs in as an agency_person,
-    // that client is subscribed to channel(s) appropriate for that role)
+    // pusher_control channel is used to send server-side events to client
     var channel = pusher.subscribe('pusher_control');
 
-    channel.bind('user_logged_in', function(data) {
-      alert('User ID: ' + data.person_id + ' has logged in.');
-      $(window).unload( function(data) {
-        alert('Now the page should be fully loaded ...');
-      })
-    });
-
     channel.bind('js_registered', function(data) {
-      alert('Job Seeker: ' + data.name + ' has joined PETS.');
+      // Process event if I am logged in and am an agency_person
+      if (Cookies('person_id') && (Cookies('person_type') === 'AgencyPerson') ) {
+        alert('Job Seeker: ' + data.name + ' has joined PETS.');
+      }
     });
   }
 };

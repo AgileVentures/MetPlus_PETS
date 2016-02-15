@@ -10,14 +10,20 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     super
-    PusherManager.trigger_event(:USER_LOGIN,
-          person_id: current_user.actable.id) if user_signed_in?
+    # Add data to cookies - to be used by pusher controller in client
+    if user_signed_in?
+      cookies[:person_id]   = current_user.actable_id
+      cookies[:person_type] = current_user.actable_type
+    end
   end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    super
+    # Remove cookies data associated with logged-in user
+    cookies.delete :person_id
+    cookies.delete :person_type
+  end
 
   # protected
 
