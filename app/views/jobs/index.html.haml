@@ -1,0 +1,21 @@
+-provide(:title, 'List of jobs')
+
+%div{class: "input-group col-sm-offset-7 col-sm-3", id: "search-id"}
+	=search_field_tag 'search', 'Job title-e.g, accountant, sales',
+		class: "form-control"
+	%span{class: "input-group-btn"}
+		=button_tag "search", class: "btn btn-default"
+%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "jobs-well-lg"}
+	%div{:class => 'row'}
+		%div{class: 'col-xs-4 lead'}
+			%h4{id: 'list-header'} List of job opportunities
+		%div{class: 'col-xs-8 lead text-right'}
+			%h5{id: 'hire-header'} 
+				=link_to 'Are you hiring? Become a hiring partner!',
+				new_company_registration_path 
+
+- @jobs.each do |job|
+	%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
+		= render job 
+%div{class: "col-sm-offset-4 col-sm-6"} 
+	= will_paginate 
