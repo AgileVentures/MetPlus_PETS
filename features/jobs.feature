@@ -9,7 +9,7 @@ background: adding job to database
 	| software developer  | KRK12K  | evening| true     | internship position with pay| 
 Scenario: Creating and Updating Job successfully	
 	Given I am on the job creation page 
-    And  I fill in the fields: 
+	And  I fill in the fields: 
 		| Title                  | cashier|  
 		| Job id                 | KARK12 |  
 		| Description            | Atleast two years work experience|  
@@ -19,7 +19,7 @@ Scenario: Creating and Updating Job successfully
 	Then  I should see "cashier has been created successfully." 
 
 	When I click the "jobs-edit-link" link 
-    And  I fill in the fields: 
+	And  I fill in the fields: 
 		| Title                  | cab-driver|  
 		| Job id                 | KRT123 |  
 		| Description            | Atleast two years work experience|  
