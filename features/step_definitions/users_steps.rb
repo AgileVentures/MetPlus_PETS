@@ -5,18 +5,15 @@ Given(/^I have the following Job Seekers$/) do |table|
   end
 end
 
-
 Given(/^I activate user "([^"]*)"$/) do |email|
   user = User.find_by_email(email)
   expect(user.activate(user.activation_token)).to be true
 end
 
-
 When(/^I visit profile for "(\w+)"$/) do |first_name|
    user = User.find_by_first_name!(first_name)
    visit  "/users/edit.#{user.id}"
 end
-
 
 Then(/^I should verify the change of first_name "(.*?)", last_name "(.*?)" and phone "(.*?)"$/) do |first_name, last_name, phone|
     user = User.find_by_first_name(first_name)
