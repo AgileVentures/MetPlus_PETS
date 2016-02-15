@@ -84,10 +84,6 @@ And(/^(?:I|they) check "([^"]*)"$/) do |item|
   check(item)
 end
 
-# Then(/^I check  "(.*?)"$/) do |item|
-#   check(item)
-# end
-
 And(/^the selection "([^"]*)" should be disabled$/) do |item|
   expect(has_field?(item, disabled: true)).to be true
 end
