@@ -12,7 +12,8 @@ var PusherControl = {
       alert('From: ' + data.name + ', Message: ' + data.message);
     });
 
-    // pusher_control channel is used to send server-side events to client
+    // pusher_control channel is used to send
+    // server-originated events to clients
     var channel = pusher.subscribe('pusher_control');
 
     channel.bind('js_registered', function(data) {
