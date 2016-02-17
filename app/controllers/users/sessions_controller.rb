@@ -9,8 +9,18 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     super
-    PusherManager.trigger_event(:USER_LOGIN,
-          person_id: current_user.actable.id) if user_signed_in?
+    # Add data to cookies - to be used by pusher controller in client
+    if user_signed_in?
+      if current_user.respond_to?(:remember_me) && current_user.remember_me
+        cookies[:person_id]   = { value: current_user.actable_id,
+                                expires: 1.year.from_now }
+        cookies[:person_type] = { value: current_user.actable_type,
+                                expires: 1.year.from_now }
+      else
+        cookies[:person_id]   = current_user.actable_id
+        cookies[:person_type] = current_user.actable_type
+      end
+    end
   end
 
   # DELETE /resource/sign_out
