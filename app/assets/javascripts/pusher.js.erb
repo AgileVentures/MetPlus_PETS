@@ -6,10 +6,14 @@ var PusherControl = {
   setup: function () {
     var pusher = PusherControl.get_pusher();
 
-    // the following is used only for test purposes
-    var channel = pusher.subscribe('my_channel');
+    var channel = pusher.subscribe('test_channel');
     channel.bind('new_message', function(data) {
-      alert('From: ' + data.name + ', Message: ' + data.message);
+      noty({text: "TEST: <a href='/'>Go Home</a>",
+          layout: 'bottomLeft',
+            type: 'information' });
+      noty({text: 'TEST: Message from ' + data.name + ': ' + data.message,
+               layout: 'bottomLeft',
+                 type: 'success' });
     });
 
     // pusher_control channel is used to send
@@ -24,7 +28,20 @@ var PusherControl = {
     });
 
     channel.bind('js_registered', function(data) {
-      alert('Job Seeker: ' + data.name + ' has joined PETS.');
+      // Process event if I am logged in and am an agency_person
+      if (Cookies('person_type') === 'AgencyPerson') {
+        noty({text: 'Job Seeker: ' +
+            "<a href='/job_seekers/" + data.id +
+            "' target='_blank'>" + data.name + "</a>" + ' has joined PETS.',
+            layout: 'bottomRight',
+              type: 'success'});
+      } else {  // this clause for testing purposes
+        noty({text: 'TEST: Job Seeker: ' +
+            "<a href='/job_seekers/" + data.id +
+            "' target='_blank'>" + data.name + "</a>" + ' has joined PETS.',
+            layout: 'bottomLeft',
+              type: 'success'});
+      }
     });
   }
 };
