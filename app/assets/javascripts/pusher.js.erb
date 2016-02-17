@@ -6,6 +6,7 @@ var PusherControl = {
   setup: function () {
     var pusher = PusherControl.get_pusher();
 
+    // for TEST purposes
     var channel = pusher.subscribe('test_channel');
     channel.bind('new_message', function(data) {
       noty({text: "TEST: <a href='/'>Go Home</a>",
@@ -35,7 +36,7 @@ var PusherControl = {
             "' target='_blank'>" + data.name + "</a>" + ' has joined PETS.',
             layout: 'bottomRight',
               type: 'success'});
-      } else {  // this clause for testing purposes
+      } else {  // this clause for TEST purposes
         noty({text: 'TEST: Job Seeker: ' +
             "<a href='/job_seekers/" + data.id +
             "' target='_blank'>" + data.name + "</a>" + ' has joined PETS.',
