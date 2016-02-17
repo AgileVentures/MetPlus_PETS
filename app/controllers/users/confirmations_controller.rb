@@ -17,7 +17,8 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
       if user.errors.empty? && user.actable_type == 'JobSeeker'
         person = user.actable
         PusherManager.trigger_event(:JS_REGISTER,
-                name: person.full_name(last_name_first: false))
+                name: person.full_name(last_name_first: false),
+                  id: person.id)
       end
     end
   end

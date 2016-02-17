@@ -19,7 +19,7 @@ class Users::SessionsController < Devise::SessionsController
   # DELETE /resource/sign_out
   def destroy
     super
-    # Remove cookies data associated with logged-in user
+    # Remove cookies data
     cookies.delete :person_id
     cookies.delete :person_type
   end
