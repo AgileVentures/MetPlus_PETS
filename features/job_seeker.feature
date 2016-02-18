@@ -59,8 +59,26 @@ Scenario: edit Js Registration without password change
   Then I click the "Update Job seeker" button 
   Then I should see "Jobseeker was updated successfully."
 
+@javascript 
+Scenario: delete jobseeker 
+ Given I am on the jobseeker show page
+ When I press the "Delete Jobseeker" button
+ Then I accept the "OK" button
+ #Then I click and accept the "Delete Jobseeker" button
+ And I wait for 3 seconds
+ #Then I should be on the home page
+ #When I click and accept the "Delete Jobseeker" button
+ #And I wait for 3 seconds
+ Then I should see "JobSeeker '1' deleted."
+ #Then I should see "Jobseeker was deleted successfully."
+ 
 
-    
+Scenario:cancel redirect to homepage
+ Given I am on the Jobseeker show page
+ Then I click link  the "cancel" button
+ Then I should be on the home page
+
+
   
 
 
