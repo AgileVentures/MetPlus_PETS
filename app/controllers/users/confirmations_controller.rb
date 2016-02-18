@@ -11,9 +11,13 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
 
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
+    # Override normal handling if the user's email address has already been
+    # confirmed.  In that case, clear the error messages and the parent
+    # method will redirect to login (with appropriate flash message)
     super do |user|
-      debugger
-      num = user.errors.count
+      user.errors.clear if user.errors.messages[:email] &&
+              (user.errors.messages[:email][0] ==
+                 t("errors.messages.already_confirmed"))
     end
   end
 
