@@ -177,6 +177,25 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
       expect(response).to have_http_status(:success)
     end
   end
+  
+  describe "DELETE #destroy" do
+    before(:each) do
+    @jobseeker = FactoryGirl.create(:job_seeker)
+       
+      delete :destroy, id: @jobseeker
+    end
+    
+    it "sets flash message" do
+        expect(flash[:notice]).to eq "JobSeeker '#{@jobseeker.id}' deleted."
+        #expect(flash[:notice]).to eq "Jobseeker was deleted successfully."
+    end
+    it "returns redirect status" do
+       expect(response).to have_http_status(:redirect)
+    end
+  end
+    
+
+
 
 end
 
