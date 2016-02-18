@@ -56,7 +56,7 @@ Feature: Manage Users
 		And I am logged in as "<email>" with password "secret1234"
 		And I should be on the Company Registration page
 
-	Scenario: Confirmation of user email
+	Scenario: Confirmation of user email (and duplicate confirm)
 		Given I am on the Jobseeker Registration page
 		And I fill in the fields:
 		| First Name            | Joseph          |
@@ -73,5 +73,7 @@ Feature: Manage Users
 		And "jsmith@mail.com" should receive an email with subject "Confirmation instructions"
 		When I open the email
 		Then I should see "Confirm my account" in the email body
+		And I follow "Confirm my account" in the email
+		Then I should see "Your email address has been successfully confirmed."
 		And I follow "Confirm my account" in the email
 		Then I should see "Your email address has been successfully confirmed."
