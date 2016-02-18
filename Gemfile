@@ -20,6 +20,10 @@ gem 'haml'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+
+# Adds https://github.com/js-cookie/js-cookie to asset pipeline
+gem 'js_cookie_rails'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -38,6 +42,8 @@ gem 'devise_invitable', '~> 1.5.2'
 gem 'figaro'
 
 gem 'cancancan', '~> 1.10'
+
+gem 'pusher'
 
 # gem 'nokogiri', '~> 1.6', '>= 1.6.7'
 

@@ -13,6 +13,7 @@
 #= require jquery2
 #= require jquery_ujs
 #= require turbolinks
+#= require js.cookie
 #= require_self
 #= require_tree .
 
@@ -29,4 +30,3 @@
 
 # $ ->
 #   postponeMessageRemoval(5000)
-
