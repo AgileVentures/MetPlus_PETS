@@ -45,7 +45,7 @@ Scenario: toggle data tables
   Then "123 Main Street" should be visible
   And I should see "Smith, John"
   Then I click the "Hide People" link
-  And I wait 1 second
+  And I wait 2 seconds
   Then "Smith, John" should not be visible
   Then I click the "Show People" link
   And I wait 1 second
