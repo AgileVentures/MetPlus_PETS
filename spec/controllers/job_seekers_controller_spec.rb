@@ -186,8 +186,8 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
     end
     
     it "sets flash message" do
-        expect(flash[:notice]).to eq "JobSeeker '#{@jobseeker.id}' deleted."
-        #expect(flash[:notice]).to eq "Jobseeker was deleted successfully."
+        
+        expect(flash[:notice]).to eq "Jobseeker was deleted successfully."
     end
     it "returns redirect status" do
        expect(response).to have_http_status(:redirect)
