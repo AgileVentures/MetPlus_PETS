@@ -92,21 +92,12 @@ When /^I reload the page$/ do
   visit current_path
 end
 
-When(/^I press the "(.*?)" button$/) do |button|
-  #pending # express the regexp above with the code you wish you had
-   %{I press (button)} 
-
-end
-Then(/^I accept the "(.*?)" button$/) do |ok|
-  #pending # express the regexp above with the code you wish you had
-  %{I accept(ok)}
+Then(/^I click link  "(.*?)" button$/) do |cancel|
+  %{I click link(cancel)}
 end
 
 
-Then(/^I click link  the "(.*?)" button$/) do |cancel|
-  #pending # express the regexp above with the code you wish you had
-   %{I click link(cancel)}
-end
+
 
 
 
