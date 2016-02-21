@@ -9,10 +9,17 @@ describe CompanyPerson, type: :model do
   it{ is_expected.to have_and_belong_to_many :company_roles }
 
   describe 'Database schema' do
-    it { is_expected.to have_db_column :company_id}
-    it { is_expected.to have_db_column :address_id}
+    it { is_expected.to have_db_column :company_id }
+    it { is_expected.to have_db_column :address_id }
+    it { is_expected.to have_db_column :status }
+    it { is_expected.to have_db_column :title }
   end
-  
+
+  describe 'Validations' do
+    it { is_expected.to validate_inclusion_of(:status).
+            in_array(CompanyPerson::STATUS.values)}
+  end
+
   describe 'Associations' do
     it { is_expected.to belong_to :address }
     it { is_expected.to belong_to :company }
@@ -20,29 +27,16 @@ describe CompanyPerson, type: :model do
              join_table('company_people_roles')}
   end
 
-  describe 'check model restrictions' do 
-
-  describe 'Email check' do
+  describe 'check model restrictions' do
     it { should validate_presence_of(:email)}
     it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email)}
-  end
-
-  describe 'FirstName check' do
     it { is_expected.to validate_presence_of :first_name }
-  end
-
-  describe 'LastName check' do
     it { is_expected.to validate_presence_of :last_name }
+    it { should_not allow_value('asd', '123456', '123 123 12345',
+        '123 1231 1234', '1123 123 1234', ' 123 123 1234').for(:phone)}
+    it { should allow_value('+1 123 123 1234', '123 123 1234',
+        '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:phone)}
   end
-
-  describe 'Phone check' do
-    it { should_not allow_value('asd', '123456', '123 123 12345', 
-      '123 1231 1234', '1123 123 1234', ' 123 123 1234').for(:phone)}
-
-    it { should allow_value('+1 123 123 1234', '123 123 1234', 
-      '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:phone)}
-  end
-end
 
   context "#acting_as?" do
     it "returns true for supermodel class and name" do

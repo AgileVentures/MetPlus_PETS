@@ -15,11 +15,19 @@ def search_text text
     end
   end
 end
-Then(/^I should( not)? see "([^"]*)"$/) do |not_see, string|
+Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   unless not_see
     expect(page.body).to have_text string
   else
     expect(page.body).to_not have_text string
+  end
+end
+
+Then(/^"([^"]*)" should( not)? be visible$/) do |string, not_see|
+  unless not_see
+    expect(has_text?(:visible, string)).to be true
+  else
+    expect(has_text?(:visible, string)).to be false
   end
 end
 
@@ -32,23 +40,23 @@ Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, f
   search_text regex
 end
 
-Then(/^I wait for (\d+) seconds$/) do |seconds|
+Then(/^I wait(?: for)? (\d+) second(?:s)?$/) do |seconds|
   sleep seconds.to_i.seconds
 end
 
-When(/^I fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
+When(/^(?:I|they) fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
   fill_in field, with: value
 end
 
-When(/^I click the "([^"]*)" link$/) do |link|
+When(/^(?:I|they) click the "([^"]*)" link$/) do |link|
   click_link link
 end
 
-When(/^I click(?: the)? "([^"]*)" button$/) do |button|
+When(/^(?:I|they) click(?: the)? "([^"]*)" button$/) do |button|
   click_button button
 end
 
-When(/^I fill in the fields:$/) do |table|
+When(/^(?:I|they) fill in the fields:$/) do |table|
   # table is a table.hashes.keys # => [:First name, :John]
   table.raw.each do |field, value|
     fill_in field, :with => value
@@ -59,28 +67,32 @@ And(/^show me the page$/) do
   save_and_open_page
 end
 
-When(/^I confirm the popup dialog$/) do
-  #page.accept_confirm # clicks the 'OK' button
-  box = page.driver.browser.switch_to.alert
-  box.accept
-  
-  # If wish to confirm the text of the dialog box, this will work:
-  #   box = page.driver.browser.switch_to.alert
-  #   expect(box.text).to eq '<expected text here .....'
-  # The box can be accepted:
-  #   box.accept
-  # Or dismissed:
-  #   box.dismiss
+When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
+  # accept_confirm(wait: 8) do
+  #   click_button button_text
+  # end
+  page.driver.accept_modal(:confirm, wait: 8) do
+    click_button button_text
+  end
 end
 
-When(/^I select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
+When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
   find(:select, list).find(:option, item).select_option
 end
 
-And(/^I check "([^"]*)"$/) do |item|
+And(/^(?:I|they) check "([^"]*)"$/) do |item|
   check(item)
 end
 
 And(/^the selection "([^"]*)" should be disabled$/) do |item|
   expect(has_field?(item, disabled: true)).to be true
 end
+
+When /^I reload the page$/ do
+  visit current_path
+end
+
+
+
+
+

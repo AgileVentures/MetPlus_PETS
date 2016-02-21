@@ -1,31 +1,35 @@
-%h3 Agency Branches
+.col-sm-3
+  %h4 Agency Branches
 
-%div{:class => 'row'}
-  %div{:class => 'panel panel-default'}
-    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
-      %thead
-        %tr
-          %td
-            Code
-          %td
-            City
-          %td
-            Street
-          %td
-            Zipcode
-      %tbody
-        - branches.each do |branch|
+.col-sm-9
+  - if branches.empty?
+    %h5 There are no branches.
+  - else
+    #branches_table.collapse.in
+      %table.table.table-bordered
+        %thead
           %tr
             %td
-              = link_to "#{branch.code}", branch_path(branch)
-            - if branch.address
+              %strong Code
+            %td
+              %strong City
+            %td
+              %strong Street
+            %td
+              %strong Zipcode
+        %tbody
+          - branches.each do |branch|
+            %tr
               %td
-                = branch.address.city
-              %td
-                = branch.address.street
-              %td
-                = branch.address.zipcode
-            - else
-              %td
-              %td
-              %td
+                = link_to "#{branch.code}", branch_path(branch)
+              - if branch.address
+                %td
+                  = branch.address.city
+                %td
+                  = branch.address.street
+                %td
+                  = branch.address.zipcode
+              - else
+                %td
+                %td
+                %td

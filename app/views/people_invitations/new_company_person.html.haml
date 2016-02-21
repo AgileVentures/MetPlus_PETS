@@ -1,0 +1,27 @@
+%h2= t("devise.invitations.new_company_person.header", org: @company_name)
+
+.col-sm-3
+  = form_for resource, :as => resource_name, :url => invitation_path(resource_name), |
+        :html => {:method => :post} do |f|                                           |
+    -# = devise_error_messages!
+    - resource.class.invite_key_fields.each do |field|
+      %p
+        = f.label field
+        %br/
+        = f.text_field field
+
+    %p= f.submit t("devise.invitations.new.submit_button")
+
+.col-sm-8
+  %br/
+  %p This form will send an email invitation to sign up on PETS for your company.
+
+  The receiver of that email will click on a link in that email to complete the registration process in PETS.
+
+  After you successfully send the invitation email, you will be directed to a page where you can
+  specify certain attributes for the new PETS user.  In particular:
+  %p
+    %ul
+      %li
+        %strong Company Role(s)
+        \- "Company Contact", "Company Admin"

@@ -1,10 +1,18 @@
 FactoryGirl.define do
+
   factory :company do
-    name   'My company'
-    ein    '23-4567789'
+    name   'Widgets, Inc.'
+    sequence(:ein) do |n|
+      ein = "12-345#{n}"
+      while ein.length < 10 do
+        ein += '0'
+      end
+      ein
+    end
     phone  '123 123 1234'
-    email   'xyz@company.com'
-    website 'http://www.company.org'
+    email   'contact@widgets.com'
+    website 'http://www.widgets-r-us.com'
+    status  Company::STATUS[:PND]
   end
 
 end

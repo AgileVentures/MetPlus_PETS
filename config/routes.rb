@@ -1,27 +1,81 @@
 Rails.application.routes.draw do
 
-  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout', 
-                                     :sign_in => 'login' }                                
+  devise_for :users,
+      :path_names => {sign_up: 'new', sign_out: 'logout',
+                      sign_in: 'login' },
+      :controllers => {invitations: 'people_invitations',
+                       confirmations: 'users/confirmations' }
+
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
     match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
   end
-  
+
+  # ----------------------- Agency Branches ----------------------------------
+  # Agency admin can create a branch within the agency
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
     resources :branches,      only: [:create, :new]
-    resources :agency_people, only: [:create, :new]
   end
+  # Agency admin can edit and delete a branch
+  resources :branches, path: '/admin/branches',
+                       only: [:show, :edit, :update, :destroy]
+  # --------------------------------------------------------------------------
 
-  resources :branches, path: '/admin/branches', 
+  # ----------------------- Agency People ------------------------------------
+  # Agency admin can edit and delete an agency person
+  resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
-                       
-  resources :agency_people, path: '/admin/agency_people', 
+
+  resources :agency_people do
+    get 'edit_profile', on: :member, as: :edit_profile
+    patch 'update_profile', on: :member, as: :update_profile
+  end
+  # --------------------------------------------------------------------------
+
+  # ----------------------- Company Registration -----------------------------
+  # Only agency admin can edit, destroy and approve/deny company registration
+  resources :company_registrations, path: 'admin/company_registrations',
+                                only: [:edit, :update, :destroy, :show] do
+    patch 'approve', on: :member, as: :approve
+    patch 'deny',    on: :member, as: :deny
+  end
+  # Any PETS visitor can create a company registration request
+  resources :company_registrations, only: [:new, :create]
+  # --------------------------------------------------------------------------
+
+  # ----------------------- Company ------------------------------------------
+  # Company admin (and agency admin) can edit a company
+  resources :companies, path: 'company_admin/companies',
+                                only: [:edit, :update, :show]
+  # Only the agency admin can delete a company
+  resources :companies, path: 'admin/companies',
+                                only: [:destroy, :list]
+  # --------------------------------------------------------------------------
+
+  # ----------------------- Company People -----------------------------------
+  # Company admin (and agency admin) can edit and delete a company person
+  resources :company_people, path: '/company_admin/company_people',
                        only: [:show, :edit, :update, :destroy]
-  
+
+  resources :company_people do
+     get 'edit_profile', on: :member, as: :edit_profile
+     patch 'update_profile', on: :member, as: :update_profile
+  end
+  # --------------------------------------------------------------------------
+
   root 'main#index'
-  
+
   get 'agency_admin/home', path: '/admin/agency_admin/home'
 
+  get 'agency/home',  path: '/agency/:id'
+
+  get 'company/home', path: '/company/:id'
+
+  resources :job_seekers
+
+   # The priority is based upon order of creation: first created -> highest priority.
+
+  # ----------------------- end of customizations ------------------------------
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -35,7 +89,7 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  
+
 =begin
   resources :main
   resources :user do
