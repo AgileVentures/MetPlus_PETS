@@ -29,4 +29,3 @@
 
 # $ ->
 #   postponeMessageRemoval(5000)
-

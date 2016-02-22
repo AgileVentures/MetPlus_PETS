@@ -37,6 +37,10 @@ gem 'devise_invitable', '~> 1.5.2'
 
 gem 'figaro'
 
+gem 'will_paginate'
+
+# gem 'ajax_pagination'
+
 gem 'cancancan', '~> 1.10'
 
 # gem 'nokogiri', '~> 1.6', '>= 1.6.7'

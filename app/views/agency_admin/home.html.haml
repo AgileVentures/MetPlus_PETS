@@ -8,10 +8,11 @@
                              class: 'btn btn-primary btn-sm pull-right' |
 
 .row
-  = render partial: 'branches/branches', object: @agency.branches
+  = render partial: 'branches/branches', object: @branches
+  -# = ajax_section id: 'branches', render: 'branches/branches', object: @branches
 
 .row
-  - if @agency.branches.empty?
+  - if @branches.empty?
     .col-sm-2.col-sm-offset-10#table_action_button
       = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
@@ -24,10 +25,10 @@
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
 .row
-  = render partial: 'agency_people/agency_people', object: @agency.agency_people
+  = render partial: 'agency_people/agency_people', object: @people
 
 .row
-  - if @agency.agency_people.empty?
+  - if @people.empty?
     .col-sm-2.col-sm-offset-10#table_action_button
       = link_to 'Invite Person',                                    |
           new_user_invitation_path(person_type: 'AgencyPerson',     |

@@ -151,6 +151,12 @@ branch = Branch.create(code: '003', agency: agency)
 branch.address = Address.create!(city: 'Detroit',
             street: '3 Auto Drive', zipcode: 48206)
 
+50.times do |n|
+  branch = Branch.create(code: "BR00#{n}", agency: agency)
+  branch.address = Address.create!(city: 'Detroit',
+              street: "#{n} Main Street", zipcode: 48201)
+end
+
 # Job Seekers
 js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                       email: 'tom@gmail.com', password: 'qwerty123',
@@ -216,13 +222,13 @@ jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.kar
 
 
 
-JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey', 
-                      email: 'mary@gmail.com', password: 'qwerty123', 
+JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+                      email: 'mary@gmail.com', password: 'qwerty123',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss2, confirmed_at: Time.now)
-                      
-JobSeeker.create(first_name: 'Frank', last_name: 'Williams', 
-                      email: 'frank@gmail.com', password: 'qwerty123', 
+
+JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+                      email: 'frank@gmail.com', password: 'qwerty123',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss3, confirmed_at: Time.now)
 
