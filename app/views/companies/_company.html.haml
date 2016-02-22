@@ -15,6 +15,11 @@
     = company.email
 .row
   .col-sm-2.text-right
+    %strong Fax:
+  .col-sm-8
+    = company.fax
+.row
+  .col-sm-2.text-right
     %strong Description:
   .col-sm-8
     = truncate(company.description, length: 300)

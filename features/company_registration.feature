@@ -33,6 +33,7 @@ Background: seed data added to database
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
+  | Fax                            |                     |
   | Phone                          | 222-333-4567        |
   | Company Website                | www.widgets.com     |
   | Employer Identification Number | 12-3456789          |
@@ -139,6 +140,7 @@ Scenario: duplicate EIN for Company
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
   | Phone                          | 222-333-4567        |
+  | Fax                            |                     |
   | Company Website                | www.widgets.com     |
   | Employer Identification Number | 12-3456789          |
   | Description                    | Widgets are us!     |
