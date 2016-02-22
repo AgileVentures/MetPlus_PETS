@@ -69,7 +69,7 @@ Scenario: delete jobseeker
 
 Scenario:cancel redirect to homepage
  Given I am on the Jobseeker show page
- Then I click link  "Cancel" button
+ Then I click link "Cancel" button
  Then I should be on the home page
 
 
