@@ -77,3 +77,52 @@ Feature: Manage Users
 		Then I should see "Your email address has been successfully confirmed."
 		And I follow "Confirm my account" in the email
 		Then I should see "Your email address has been successfully confirmed."
+
+Scenario: Resend confirmation email - happy path
+	Given I am on the Jobseeker Registration page
+	And I fill in the fields:
+	| First Name            | Joseph          |
+	| Last Name             | Smith           |
+	| Email                 | jsmith@mail.com |
+	| Phone                 | 111-222-3333    |
+	| Password              | qwerty123       |
+	| Password Confirmation | qwerty123       |
+	| Year Of Birth         | 1980            |
+
+	And I select "Unemployedlooking" in select list "Status"
+	And I click the "Create Job seeker" button
+	And I should see "A message with a confirmation and link has been sent to your email address."
+	Then I click the "Log In" link
+	And I click the "Didn't receive confirmation instructions?" link
+	And I fill in "Email" with "jsmith@mail.com"
+	Then I click the "Resend confirmation instructions" button
+	And I should see "You will receive an email with instructions for how to confirm your email address in a few minutes."
+	And "jsmith@mail.com" should receive 2 emails with subject "Confirmation instructions"
+	Then I open the email
+	And I follow "Confirm my account" in the email
+	Then I should see "Your email address has been successfully confirmed."
+
+Scenario: Resend confirmation email - sad path
+	Given I am on the Jobseeker Registration page
+	And I fill in the fields:
+	| First Name            | Joseph          |
+	| Last Name             | Smith           |
+	| Email                 | jsmith@mail.com |
+	| Phone                 | 111-222-3333    |
+	| Password              | qwerty123       |
+	| Password Confirmation | qwerty123       |
+	| Year Of Birth         | 1980            |
+
+	And I select "Unemployedlooking" in select list "Status"
+	And I click the "Create Job seeker" button
+	And I should see "A message with a confirmation and link has been sent to your email address."
+	And "jsmith@mail.com" should receive an email with subject "Confirmation instructions"
+	Then I open the email
+	And I follow "Confirm my account" in the email
+	Then I should see "Your email address has been successfully confirmed."
+	And I should see "Log in"
+	Then I click the "Didn't receive confirmation instructions?" link
+	And I fill in "Email" with "jsmith@mail.com"
+	And I click the "Resend confirmation instructions" button
+	Then I should see "1 error prevented resending a confirmation email:"
+	And I should see "Email was already confirmed, please try signing in"
