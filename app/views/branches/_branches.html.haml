@@ -6,6 +6,8 @@
     %h5 There are no branches.
   - else
     #branches_table.collapse.in
+      = will_paginate branches, param_name: 'branches_page', |
+                             params: {data_type: 'branches'} |
       %table.table.table-bordered
         %thead
           %tr

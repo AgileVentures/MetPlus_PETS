@@ -9,7 +9,6 @@
 
 .row
   = render partial: 'branches/branches', object: @branches
-  -# = ajax_section id: 'branches', render: 'branches/branches', object: @branches
 
 .row
   - if @branches.empty?

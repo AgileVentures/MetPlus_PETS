@@ -6,6 +6,7 @@
     %h5 There are no agency people.
   - else
     #people_table
+      = will_paginate agency_people, param_name: 'people_page'
       %table{:class => 'table table-bordered'}
         %thead
           %tr
@@ -24,3 +25,4 @@
                 = person.agency_roles.pluck(:role).join(', ')
               %td
                 = person.status if person.status
+      = will_paginate agency_people, param_name: 'people_page'
