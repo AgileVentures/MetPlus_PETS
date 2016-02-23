@@ -46,3 +46,7 @@ var AgencyData = {
     $('#companies_table').on('click', '.pagination a', AgencyData.update_data);
   },
 };
+
+$(AgencyData.setup_branches);
+$(AgencyData.setup_people);
+$(AgencyData.setup_companies);

@@ -8,6 +8,7 @@
                              class: 'btn btn-primary btn-sm pull-right' |
 
 .row
+  %hr
   .col-sm-3
     %h4 Agency Branches
 
@@ -24,13 +25,14 @@
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
   - else
     .col-sm-3.col-sm-offset-3
-      %a(id='toggle_branches' href='#branches_table' class='text-muted')
+      %a(id='toggle_branches' href='#branches_table' class='text-danger')
         Hide Branches
     .col-sm-2.col-sm-offset-4#table_action_button
       = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
 .row
+  %hr
   .col-sm-3
     %h4 Agency Personnel
 
@@ -49,7 +51,7 @@
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
   - else
     .col-sm-3.col-sm-offset-3
-      %a(id='toggle_people' href='#people_table' class='text-muted')
+      %a(id='toggle_people' href='#people_table' class='text-danger')
         Hide People
     .col-sm-2.col-sm-offset-4#table_action_button
       = link_to 'Invite Person',                                    |
@@ -58,6 +60,7 @@
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
 .row
+  %hr
   .col-sm-3
     %h4 Companies
 
@@ -70,10 +73,10 @@
 .row
   - if not @companies.empty?
     .col-sm-3.col-sm-offset-3
-      %a(id='toggle_companies' href='#companies_table' class='text-muted')
+      %a(id='toggle_companies' href='#companies_table' class='text-danger')
         Hide Companies
 
-%script
-  $(AgencyData.setup_branches);
-  $(AgencyData.setup_people);
-  $(AgencyData.setup_companies);
+-# %script
+-#   $(AgencyData.setup_branches);
+-#   $(AgencyData.setup_people);
+-#   $(AgencyData.setup_companies);
