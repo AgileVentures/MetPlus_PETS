@@ -63,7 +63,6 @@ RSpec.describe JobSeekersController, type: :controller do
      before(:each) do
        @jobseeker =  FactoryGirl.create(:job_seeker)
        @jobseekerstatus =  FactoryGirl.create(:job_seeker_status)
-
        patch :update, id: @jobseeker,job_seeker: FactoryGirl.attributes_for(:job_seeker).
 merge(FactoryGirl.attributes_for(:job_seeker_status))
 
