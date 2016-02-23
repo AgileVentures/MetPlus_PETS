@@ -97,9 +97,4 @@ Given(/^the following jobseeker exist:$/) do |table|
   end
 end
 
-
-
-
-
-
  

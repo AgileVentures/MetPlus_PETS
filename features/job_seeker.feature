@@ -12,11 +12,9 @@ Background: seed data added to database
   | Employedlooking      | A jobseeker with a job and looking for a job      | 
   | Employednotlooking   | A jobseeker with a job and not looking for a job for now.|
 
-
   Given the following jobseeker exist:
   | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
   | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password               | 1990       |Unemployedlooking |
-
 
 Scenario: new Js Registration
   Given I am on the Jobseeker Registration page

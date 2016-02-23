@@ -4,7 +4,6 @@ When(/^I go to the (.+) page$/) do |page|
       visit new_company_registration_path 
     when 'Jobseeker Registration'
       visit new_job_seeker_path
-    
     when 'home'
       visit root_path
     when /activation for user '.+'/
