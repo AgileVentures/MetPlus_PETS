@@ -201,7 +201,6 @@ agency_cm_and_jd.save!
 agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                       agency_id: agency.id, email: 'jane@metplus.org',
                       password: 'qwerty123', confirmed_at: Time.now,
-
                       branch_id: agency.branches[2].id,
                       status: AgencyPerson::STATUS[:ACT])
 
@@ -210,6 +209,32 @@ agency_jd.save!
 agency_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
                           job_seeker: js3)
+
+50.times do |n|
+  agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: "Generic#{n}",
+                        agency_id: agency.id, email: "jane#{n}@metplus.org",
+                        password: 'qwerty123', confirmed_at: Time.now,
+                        branch_id: agency.branches[2].id,
+                        status: AgencyPerson::STATUS[:ACT])
+  agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+  agency_jd.save!
+end
+
+50.times do |n|
+  ein = "12-345#{n}"
+  while ein.length < 10 do
+    ein += '0'
+  end
+  company = Company.new(name: "Generic Co. #{n}", ein: ein,
+                       phone: '123 123 1234',
+                       email: "mail@genericco#{n}.com",
+                     website: "http://www.genericco#{n}.com",
+                      status: Company::STATUS[:ACT])
+  company.agencies << agency
+  # don't raise exception as ein logic does not guarantee unique ein
+  # but this logic gives us enough companies for dev/test )
+  company.save
+end
 
 
 jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:

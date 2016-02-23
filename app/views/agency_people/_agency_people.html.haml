@@ -1,28 +1,21 @@
-.col-sm-3
-  %h4 Agency Personnel
-
-.col-sm-9
-  - if agency_people.empty?
-    %h5 There are no agency people.
-  - else
-    #people_table
-      = will_paginate agency_people, param_name: 'people_page'
-      %table{:class => 'table table-bordered'}
-        %thead
-          %tr
-            %td
-              %strong Name
-            %td
-              %strong Role(s)
-            %td
-              %strong Status
-        %tbody
-          - agency_people.each do |person|
-            %tr
-              %td
-                = link_to person.full_name, agency_person_path(person)
-              %td
-                = person.agency_roles.pluck(:role).join(', ')
-              %td
-                = person.status if person.status
-      = will_paginate agency_people, param_name: 'people_page'
+#people_table
+  %table.table.table-bordered
+    %thead
+      %tr
+        %td
+          %strong Name
+        %td
+          %strong Role(s)
+        %td
+          %strong Status
+    %tbody
+      - @agency_people.each do |person|
+        %tr
+          %td
+            = link_to person.full_name, agency_person_path(person)
+          %td
+            = person.agency_roles.pluck(:role).join(', ')
+          %td
+            = person.status if person.status
+  = will_paginate @agency_people, param_name: 'people_page', |
+                          params: {data_type: 'people'}      |

@@ -8,7 +8,14 @@
                              class: 'btn btn-primary btn-sm pull-right' |
 
 .row
-  = render partial: 'branches/branches', object: @branches
+  .col-sm-3
+    %h4 Agency Branches
+
+  .col-sm-9
+    - if @branches.empty?
+      %h5 There are no branches.
+    - else
+      = render 'branches/branches'
 
 .row
   - if @branches.empty?
@@ -24,10 +31,17 @@
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
 .row
-  = render partial: 'agency_people/agency_people', object: @people
+  .col-sm-3
+    %h4 Agency Personnel
+
+  .col-sm-9
+    - if @agency_people.empty?
+      %h5 There are no agency people.
+    - else
+      = render partial: 'agency_people/agency_people'
 
 .row
-  - if @people.empty?
+  - if @agency_people.empty?
     .col-sm-2.col-sm-offset-10#table_action_button
       = link_to 'Invite Person',                                    |
           new_user_invitation_path(person_type: 'AgencyPerson',     |
@@ -44,15 +58,22 @@
           method: :get, class: 'btn btn-primary btn-sm pull-right'  |
 
 .row
-  = render partial: 'companies/companies', object: @agency.companies
+  .col-sm-3
+    %h4 Companies
+
+  .col-sm-9
+    - if @companies.empty?
+      %h5 There are no companies.
+    - else
+      = render partial: 'companies/companies'
 
 .row
-  - if not @agency.companies.empty?
+  - if not @companies.empty?
     .col-sm-3.col-sm-offset-3
       %a(id='toggle_companies' href='#companies_table' class='text-muted')
         Hide Companies
 
 %script
-  $(VisibilityToggle.setup_branches);
-  $(VisibilityToggle.setup_people);
-  $(VisibilityToggle.setup_companies);
+  $(AgencyData.setup_branches);
+  $(AgencyData.setup_people);
+  $(AgencyData.setup_companies);
