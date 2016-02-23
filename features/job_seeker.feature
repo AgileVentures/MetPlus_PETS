@@ -31,7 +31,6 @@ Scenario: new Js Registration
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent  to your email address. Please follow the link to activate your account."
 
-
 Scenario: login action as jobseeker
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
@@ -61,16 +60,15 @@ Scenario: edit Js Registration without password change
 
 @javascript 
 Scenario: delete jobseeker 
- Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
- Then I click and accept the "Delete Jobseeker" button
- And I wait for 1 seconds
- Then I should see "Jobseeker was deleted successfully."
- 
+  Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
+  Then I click and accept the "Delete Jobseeker" button
+  And I wait for 1 seconds
+  Then I should see "Jobseeker was deleted successfully."
 
 Scenario:cancel redirect to homepage
- Given I am on the Jobseeker show page
- Then I click link "Cancel" button
- Then I should be on the home page
+  Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
+  Then I click the "Cancel" link
+  Then I should be on the home page
 
 
   

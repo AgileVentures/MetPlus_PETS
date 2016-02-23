@@ -92,9 +92,7 @@ When /^I reload the page$/ do
   visit current_path
 end
 
-Then(/^I click link "(.*?)" button$/) do |cancel|
-  %{I click link(cancel)}
-end
+
 
 
 

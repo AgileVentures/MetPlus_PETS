@@ -26,20 +26,13 @@
 		
 		%br
 		= JobSeekerStatus.find(@jobseeker.job_seeker_status_id).value
-		
-
-
 %br
 %br
 %div{class: 'row'}
-	
-	
 	.col-sm-2
 	= button_to 'Delete Jobseeker', job_seeker_path(@jobseeker), method: :delete,            | 
       data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
-
 %br
-
 	.col-sm-2
 	=link_to 'Cancel',root_path, class: 'btn btn-link' 
 
