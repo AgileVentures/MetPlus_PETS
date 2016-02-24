@@ -221,6 +221,7 @@ agency_jd.agency_relations <<
 end
 
 50.times do |n|
+  n = n.next if (n % 10 == 0)
   ein = "12-345#{n}"
   while ein.length < 10 do
     ein += '0'
