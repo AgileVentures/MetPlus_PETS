@@ -13,23 +13,18 @@ var AgencyData = {
     return(false);
   },
   update_data: function () {
+    // 'this' is anchor element that recieved the event
     var link_url = $(this).attr('href');
-    if (/data_type=branches/.test(link_url)) {
-      var table_id = '#branches_table';
-    } else if (/data_type=people/.test(link_url)) {
-      var table_id = '#people_table';
-    } else if (/data_type=companies/.test(link_url)) {
-      var table_id = '#companies_table';
-    } else {
-      return(true);
-    }
+    // 'event.currentTarget' is the div element that delegated the event
+    var table_id = '#' + $(event.currentTarget).attr('id')
+
     $.ajax({type: 'GET',
             url: link_url,
             timeout: 5000,
-            error: function (xhrObj, status, exception) {alert('Server Timed Out');},
-            success: function (data, status, xhrObject){
-              $(table_id).html(data);
-              }
+            error: function (xhrObj, status, exception) {
+                              alert('Server Timed Out');},
+            success: function (data, status, xhrObject) {
+                                 $(table_id).html(data);}
             });
     return(false);
   },
