@@ -92,14 +92,3 @@ When /^I reload the page$/ do
   visit current_path
 end
 
-
-
-
-
-
-
-
-
-
-
-

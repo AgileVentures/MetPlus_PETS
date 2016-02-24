@@ -185,11 +185,4 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
     end
   end
 end
-
-
-
-
-
-
-
   

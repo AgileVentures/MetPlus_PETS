@@ -68,8 +68,3 @@ Scenario:cancel redirect to homepage
   Then I click the "Cancel" link
   Then I should be on the home page
 
-
-  
-
-
-
