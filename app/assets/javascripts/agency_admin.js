@@ -13,8 +13,14 @@ var AgencyData = {
     return(false);
   },
   update_data: function () {
+    // Check if this anchor element is disabled (e.g. 'Previous'
+    // link is disabled when on page 1 of pagination)
+    // (anchor is contained in 'li' element which will have 'disabled' class)
+    if ($(this).parent().hasClass('disabled')) { return false; };
+
     // 'this' is anchor element that recieved the event
     var link_url = $(this).attr('href');
+
     // 'event.currentTarget' is the div element that delegated the event
     var table_id = '#' + $(event.currentTarget).attr('id')
 
@@ -41,7 +47,8 @@ var AgencyData = {
     $('#companies_table').on('click', '.pagination a', AgencyData.update_data);
   },
 };
-
-$(AgencyData.setup_branches);
-$(AgencyData.setup_people);
-$(AgencyData.setup_companies);
+$(function () {
+  AgencyData.setup_branches();
+  AgencyData.setup_people();
+  AgencyData.setup_companies();
+});
