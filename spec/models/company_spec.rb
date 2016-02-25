@@ -20,6 +20,7 @@ RSpec.describe Company, type: :model do
     it { is_expected.to have_db_column :name }
     it { is_expected.to have_db_column :ein }
     it { is_expected.to have_db_column :phone }
+    it { is_expected.to have_db_column :fax }
     it { is_expected.to have_db_column :email }
     it { is_expected.to have_db_column :website }
   end
@@ -37,6 +38,7 @@ RSpec.describe Company, type: :model do
        it { is_expected.to validate_uniqueness_of(:ein).case_insensitive.
                 with_message('has already been registered')}
      end
+
      describe 'phone' do
        subject {FactoryGirl.build(:company)}
        it { should_not allow_value('asd', '123456', '123 123 12345',
@@ -44,7 +46,15 @@ RSpec.describe Company, type: :model do
 
        it { should allow_value('+1 123 123 1234', '123 123 1234',
                '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:phone)}
+     end
 
+     describe 'fax' do
+       subject {FactoryGirl.build(:company)}
+       it { should_not allow_value('asd', '123456', '123 123 12345',
+               '123 1231  1234', '1123 123 1234', ' 123 123 1234').for(:fax)}
+
+       it { should allow_value('+1 123 123 1234', '123 123 1234',
+               '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:fax)}
      end
 
      describe 'Email' do
