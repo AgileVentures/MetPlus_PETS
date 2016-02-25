@@ -1,6 +1,6 @@
 var RegistrationDeny = {
   deny_action: function () {
-    var action_url = $('#company_approve_link').attr('href').replace(/approve$/, 'deny')
+    var action_url = $('#company_approve_link').attr('href').replace(/approve$/, 'deny');
 
     $.ajax({type: 'PATCH',
             url: action_url,
