@@ -23,11 +23,6 @@
         = address_f.text_field :zipcode, size: 10, class: 'form-control'
 
   .form-group
-    = label :company, :fax, 'Fax', class: 'control-label col-sm-2'
-    .col-sm-4
-      = phone_field :company, :fax, size: 30, class: 'form-control'
-
-  .form-group
     = label :company, :email, 'Email', class: 'control-label col-sm-2'
     .col-sm-4
       = email_field :company, :email, size: 30, class: 'form-control'
@@ -35,6 +30,11 @@
     = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
     .col-sm-4
       = phone_field :company, :phone, size: 30, class: 'form-control'
+
+  .form-group
+    = label :company, :fax, 'Fax', class: 'control-label col-sm-2'
+    .col-sm-4
+      = phone_field :company, :fax, size: 30, class: 'form-control'
 
   .form-group
     = label :company, :website, 'Company Website', class: 'control-label col-sm-2'

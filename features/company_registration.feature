@@ -33,7 +33,7 @@ Background: seed data added to database
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
-  | Fax                            |                     |
+  | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
   | Company Website                | www.widgets.com     |
   | Employer Identification Number | 12-3456789          |
