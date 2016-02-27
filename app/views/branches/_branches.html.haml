@@ -1,35 +1,30 @@
-.col-sm-3
-  %h4 Agency Branches
-
-.col-sm-9
-  - if branches.empty?
-    %h5 There are no branches.
-  - else
-    #branches_table.collapse.in
-      %table.table.table-bordered
-        %thead
-          %tr
+#branches_table
+  %table.table.table-hover
+    %thead
+      %tr
+        %td
+          %strong Code
+        %td
+          %strong City
+        %td
+          %strong Street
+        %td
+          %strong Zipcode
+    %tbody
+      - @branches.each do |branch|
+        %tr
+          %td
+            = link_to "#{branch.code}", branch_path(branch)
+          - if branch.address
             %td
-              %strong Code
+              = branch.address.city
             %td
-              %strong City
+              = branch.address.street
             %td
-              %strong Street
+              = branch.address.zipcode
+          - else
             %td
-              %strong Zipcode
-        %tbody
-          - branches.each do |branch|
-            %tr
-              %td
-                = link_to "#{branch.code}", branch_path(branch)
-              - if branch.address
-                %td
-                  = branch.address.city
-                %td
-                  = branch.address.street
-                %td
-                  = branch.address.zipcode
-              - else
-                %td
-                %td
-                %td
+            %td
+            %td
+  = will_paginate @branches, param_name: 'branches_page', |
+                     params: {data_type: 'branches'}      |

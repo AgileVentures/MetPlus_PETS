@@ -11,6 +11,7 @@
 # about supported directives.
 
 #= require jquery2
+#= require jquery.turbolinks
 #= require jquery_ujs
 #= require turbolinks
 #= require_self
@@ -29,4 +30,3 @@
 
 # $ ->
 #   postponeMessageRemoval(5000)
-

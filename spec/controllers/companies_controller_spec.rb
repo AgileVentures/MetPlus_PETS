@@ -49,9 +49,10 @@ RSpec.describe CompaniesController, type: :controller do
 
       it 'changes the company attributes' do
         patch :update, id: @company, company: attributes_for(:company,
-          email: 'info@widgets.com')
+          email: 'info@widgets.com', fax:'510 555-1212')
         @company.reload
         expect(@company.email).to eq('info@widgets.com')
+        expect(@company.fax).to eq('510 555-1212')
       end
 
     end

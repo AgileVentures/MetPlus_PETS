@@ -151,6 +151,12 @@ branch = Branch.create(code: '003', agency: agency)
 branch.address = Address.create!(city: 'Detroit',
             street: '3 Auto Drive', zipcode: 48206)
 
+50.times do |n|
+  branch = Branch.create(code: "BR00#{n}", agency: agency)
+  branch.address = Address.create!(city: 'Detroit',
+              street: "#{n} Main Street", zipcode: 48201)
+end
+
 # Job Seekers
 js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                       email: 'tom@gmail.com', password: 'qwerty123',
@@ -195,7 +201,6 @@ agency_cm_and_jd.save!
 agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                       agency_id: agency.id, email: 'jane@metplus.org',
                       password: 'qwerty123', confirmed_at: Time.now,
-
                       branch_id: agency.branches[2].id,
                       status: AgencyPerson::STATUS[:ACT])
 
@@ -205,6 +210,33 @@ agency_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
                           job_seeker: js3)
 
+50.times do |n|
+  agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: "Generic#{n}",
+                        agency_id: agency.id, email: "jane#{n}@metplus.org",
+                        password: 'qwerty123', confirmed_at: Time.now,
+                        branch_id: agency.branches[2].id,
+                        status: AgencyPerson::STATUS[:ACT])
+  agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+  agency_jd.save!
+end
+
+50.times do |n|
+  n = n.next if (n % 10 == 0)
+  ein = "12-345#{n}"
+  while ein.length < 10 do
+    ein += '0'
+  end
+  company = Company.new(name: "Generic Co. #{n}", ein: ein,
+                       phone: '123 123 1234',
+                       email: "mail@genericco#{n}.com",
+                     website: "http://www.genericco#{n}.com",
+                      status: Company::STATUS[:ACT])
+  company.agencies << agency
+  # don't raise exception as ein logic does not guarantee unique ein
+  # but this logic gives us enough companies for dev/test )
+  company.save
+end
+
 
 jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
 "1990", confirmed_at: Time.now)
@@ -216,13 +248,13 @@ jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.kar
 
 
 
-JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey', 
-                      email: 'mary@gmail.com', password: 'qwerty123', 
+JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+                      email: 'mary@gmail.com', password: 'qwerty123',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss2, confirmed_at: Time.now)
-                      
-JobSeeker.create(first_name: 'Frank', last_name: 'Williams', 
-                      email: 'frank@gmail.com', password: 'qwerty123', 
+
+JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+                      email: 'frank@gmail.com', password: 'qwerty123',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss3, confirmed_at: Time.now)
 
