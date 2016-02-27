@@ -24,11 +24,16 @@
   .form-group
     = label :company, :email, 'Email', class: 'control-label col-sm-2'
     .col-sm-5
-      = email_field :company, :email, size: 30, class: 'form-control'
+      = email_field :company, :email, size: 20, class: 'form-control'
 
     = label :company, :phone, 'Phone', class: 'control-label col-sm-1'
     .col-sm-4
-      = phone_field :company, :phone, size: 30, class: 'form-control'
+      = phone_field :company, :phone, size: 20, class: 'form-control'
+
+  .form-group
+    = label :company, :fax, 'Fax', class: 'control-label col-sm-2'
+    .col-sm-5
+      = phone_field :company, :fax, size: 20, class: 'form-control'
 
   .form-group
     = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
@@ -86,4 +91,4 @@
     .col-sm-2.col-sm-offset-2
       = submit_tag submit, method: :post, class: 'btn btn-primary'
     .col-sm-2.col-sm-offset-2
-      = link_to 'Cancel', agency_admin_home_path, class: 'btn btn-danger'
+      = link_to 'Cancel', :back, class: 'btn btn-danger'

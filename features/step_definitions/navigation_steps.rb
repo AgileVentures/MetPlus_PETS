@@ -28,4 +28,6 @@ Then(/^I should be on the (.+) page$/) do |page|
   step "I go to the #{page} page"
 end
 
-
+Given(/I am on the JobSeeker Show page for "([^"]*)"$/) do |email|
+  visit job_seeker_path(User.find_by_email(email).actable_id)
+end

@@ -15,6 +15,15 @@
  */
 
  /*homepage css*/
+.pagination{
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.input-panel-body {
+  padding: 5px;
+}
+
 .col-md-8.col-lg-8{
    padding-left:  0;
 }

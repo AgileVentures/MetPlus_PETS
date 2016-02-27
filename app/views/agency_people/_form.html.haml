@@ -38,47 +38,47 @@
           -# (see the second solution listed)
 
   -# job_categories  (has_and_belongs_to_many)
-  -# NEED TO ACCOMODATE SCROLLING DUE TO LARGE NUMBER OF CATEGORIES
   .form-group
     = person_form.label :job_categories, 'Job Categories', class: 'control-label col-sm-2'
-    .col-sm-8
-      = person_form.collection_check_boxes(:job_category_ids,         |
-                              JobCategory.all, :id, :name) do |box|   |
-        = box.label(class: 'checkbox col-sm-8 normal-label') do
-          = box.check_box
-          = box.text
+    .col-sm-8.panel.pre-scrollable.panel-default
+      .panel-body.input-panel-body
+        = person_form.collection_check_boxes(:job_category_ids,         |
+                                JobCategory.all, :id, :name) do |box|   |
+          = box.label(class: 'checkbox col-sm-8 normal-label') do
+            = box.check_box
+            = box.text
 
   -# job_seekers <> Job Developer association (has_many, through: :agency_relations)
-  -# NEED TO ACCOMODATE SCROLLING DUE TO LARGE NUMBER OF JOB_SEEKERS
   .form-group
     = person_form.label :job_seekers,                                 |
               'Job Seekers for Job Developer role',                   |
               {class: 'control-label col-sm-2',                       |
               'data-toggle' => 'tooltip', 'data-placement' => 'top',  |
               title: "Must have 'Job Developer' role"}                |
-    .col-sm-8
-      = person_form.collection_check_boxes(:as_jd_job_seeker_ids,     |
-            eligible_job_seekers_for_role(agency_person, :JD),        |
-                                          :id, :full_name) do |box|   |
-        = box.label(class: 'checkbox col-sm-8 normal-label') do
-          = box.check_box
-          = box.text
+    .col-sm-8.panel.pre-scrollable.panel-default
+      .panel-body.input-panel-body
+        = person_form.collection_check_boxes(:as_jd_job_seeker_ids,     |
+              eligible_job_seekers_for_role(agency_person, :JD),        |
+                                            :id, :full_name) do |box|   |
+          = box.label(class: 'checkbox col-sm-8 normal-label') do
+            = box.check_box
+            = box.text
 
   -# job_seekers <> Case manager association (has_many, through: :agency_relations)
-  -# NEED TO ACCOMODATE SCROLLING DUE TO LARGE NUMBER OF JOB_SEEKERS
   .form-group
     = person_form.label :job_seekers,                                 |
               'Job Seekers for Case Manager role',                    |
               {class: 'control-label col-sm-2',                       |
               'data-toggle' => 'tooltip', 'data-placement' => 'top',  |
               title: "Must have 'Case Manager' role"}                 |
-    .col-sm-8
-      = person_form.collection_check_boxes(:as_cm_job_seeker_ids,     |
-            eligible_job_seekers_for_role(agency_person, :CM),        |
-                                         :id, :full_name) do |box|    |
-        = box.label(class: 'checkbox col-sm-8 normal-label') do
-          = box.check_box
-          = box.text
+    .col-sm-8.panel.pre-scrollable.panel-default
+      .panel-body.input-panel-body
+        = person_form.collection_check_boxes(:as_cm_job_seeker_ids,     |
+              eligible_job_seekers_for_role(agency_person, :CM),        |
+                                           :id, :full_name) do |box|    |
+          = box.label(class: 'checkbox col-sm-8 normal-label') do
+            = box.check_box
+            = box.text
 
   .form-group
     .col-sm-2.col-sm-offset-2

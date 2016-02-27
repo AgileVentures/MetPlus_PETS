@@ -33,6 +33,7 @@ Background: seed data added to database
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
+  | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
   | Company Website                | www.widgets.com     |
   | Employer Identification Number | 12-3456789          |
@@ -44,9 +45,9 @@ Background: seed data added to database
   | Contact Email                  | hughjobs@widgets.com|
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
-  And I click the "Create" button
 
 Scenario: company registration request
+  And I click the "Create" button
   Then I should see "Thank you for your registration request."
   And I should see "We also sent you an email with more information"
   Then "hughjobs@widgets.com" should receive 1 email with subject "Pending approval"
@@ -54,11 +55,13 @@ Scenario: company registration request
   Then they should see "Thank you for registering Widgets, Inc. in PETS." in the email body
 
 Scenario: attempt login while registration is pending
+  And I click the "Create" button
   Given I am on the home page
   And I login as "hughjobs@widgets.com" with password "qwerty123"
   Then I should see "You have successfully signed up but your account cannot be used until your company registration is approved."
 
 Scenario: company registration approval
+  And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
@@ -74,6 +77,7 @@ Scenario: company registration approval
 
 @javascript
 Scenario: company registration delete
+  And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
@@ -83,6 +87,7 @@ Scenario: company registration delete
 
 @javascript
 Scenario: attempt login after registration is deleted
+  And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
@@ -94,6 +99,7 @@ Scenario: attempt login after registration is deleted
 
 @javascript
 Scenario: company registration denial
+  And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
@@ -108,6 +114,7 @@ Scenario: company registration denial
 
 @javascript
 Scenario: attempt login after registration is denied
+  And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
   Then I click the "Widgets, Inc." link
@@ -121,6 +128,7 @@ Scenario: attempt login after registration is denied
   Then I should see "Your company registration has been denied."
 
 Scenario: duplicate EIN for Company
+  And I click the "Create" button
   Given I am on the home page
   And I click the "Become a hiring partner!" link
   And I wait 1 second
@@ -132,6 +140,7 @@ Scenario: duplicate EIN for Company
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
   | Phone                          | 222-333-4567        |
+  | Fax                            |                     |
   | Company Website                | www.widgets.com     |
   | Employer Identification Number | 12-3456789          |
   | Description                    | Widgets are us!     |
@@ -146,6 +155,7 @@ Scenario: duplicate EIN for Company
   Then I should see "Ein has already been registered"
 
 Scenario: edit Company Registration: change contact email
+  And I click the "Create" button
   Given I am logged in as agency admin
   And a clear email queue
   And I click the "Admin" link
@@ -163,6 +173,7 @@ Scenario: edit Company Registration: change contact email
   And they should see "Thank you for registering Gizmos, Inc. in PETS." in the email body
 
 Scenario: edit Company Registration: change contact password
+  And I click the "Create" button
   Given I am logged in as agency admin
   And a clear email queue
   And I click the "Admin" link
@@ -175,3 +186,7 @@ Scenario: edit Company Registration: change contact password
   And I click the "Update" button
   Then I should see "Registration was successfully updated."
   Then "hughjobs@widgets.com" should have no emails
+
+Scenario: cancel out of registration form
+  And I click the "Cancel" link
+  Then I should be on the home page

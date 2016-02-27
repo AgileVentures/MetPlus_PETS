@@ -2,7 +2,6 @@ Given(/^the following (.+) records:$/) do |factory, table|
   table.hashes.each do |hash|
     FactoryGirl.create(factory, hash)
   end
-
 end
 
 Given(/^the following agency roles exist:$/) do |table|
@@ -90,7 +89,10 @@ Given(/^the following jobseeker exist:$/) do |table|
     hash['actable_type'] = 'JobSeeker'
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
+    seeker_status = hash.delete 'job_seeker_status'
+    job_seeker_status = JobSeekerStatus.find_by_value(seeker_status)
     jobseeker = JobSeeker.new(hash)
+    jobseeker.job_seeker_status = job_seeker_status
     jobseeker.save
   end
 end

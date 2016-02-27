@@ -59,7 +59,53 @@ CompanyPerson.delete_all
 JobCategory.delete_all
 SkillLevel.delete_all
 
-#JobSeekerStatus 
+# <<<<<<< HEAD
+# #JobSeekerStatus 
+# =======
+# cp1 = Company.create(:ein => '12-2123244', :phone=> '721-234-4646',  email: 'casemanager@gmail.com',  website: 'http://www.wallmart.com', :name=> 'Walmart')
+# cp2 = Company.create(:ein => '13-1244445', :phone=>  '721-234-1010', email: 'casemanager2@gmail.com', website: 'http://www.target.com',   :name=> 'Target')
+# cp3 = Company.create(:ein => '12-1252445', :phone=> '865-234-4646', email:  'casemanager3@gmail.com', website: 'http://www.Food4less.com',:name=> 'Food4less')
+# cp4 = Company.create(:ein => '15-1342447', :phone=> '971-234-4646', email:  'casemanager4@gmail.com', website: 'http://www.macy.com',     :name=> 'Macy')
+
+# address1 = Address.create(:street => "1234 East Maripos Avenu", city: "San Diego", zipcode: "92105")
+# address2 = Address.create(:street => "1234 East Main Street", city: "Los Angeles", zipcode: "92108")
+# address1.update_attribute(:location, cp1)
+# address2.update_attribute(:location, cp2)
+
+# cperson = CompanyPerson.create(company_id: cp1.id, address_id: address1.id, status: "Active", title: "General Manager",
+#           email: "example@gmail.com", :password => "secrete", first_name: "salem", :last_name => "Ali", confirmed_at: DateTime.now)
+# cperson2 = CompanyPerson.create(company_id: cp2.id, address_id: address2.id, status: "Active", title: "Day Manager",
+#             email: "example1@gmail.com", :password => "secrete", first_name: "Kalem", :last_name => "Kli", confirmed_at: DateTime.now)
+
+
+# # Job Categories
+# jcategory = JobCategory.create(name: 'SW Developer - RoR',
+#             description: 'Ruby on Rails backend developer')
+# jcategory1 = JobCategory.create(name: 'SW Developer - JS',
+#             description:  'Javascript frontend developer')
+# jcategory2 = JobCategory.create(name: 'SW Developer - Java',
+#             description: 'Java backend developer')
+# jcategory3 = JobCategory.create(name: 'SW Project Manager - Agile',
+#             description: 'Manages Agile SW development projects')
+# jcategory4 = JobCategory.create(name: 'SW Project Manager - Waterfall',
+#             description: 'Manages SW development projects using waterfall SDLC')
+# jcategory5 = JobCategory.create(name: 'Product Manager - SaaS',
+            # description: 'Manages SaaS product development and commecialization')
+
+
+
+# Job.create(:title => 'Software Developer', :description => 'Looking for a software developer intern.', :company_id => cp1.id,
+#             :company_person_id => cperson.id, :job_category_id =>jcategory1.id  )
+# Job.create(:title => 'Cashier', :description => 'Looking for well qualified cashier with 5 years experience', :company_id => cp2.id,
+#             :company_person_id => cperson2.id, :job_category_id => jcategory.id )
+# Job.create(:title => 'Driver', :description => 'Looking for a truck driver with class A license', :company_id => cp3.id,
+#             :company_person_id => cperson.id, :job_category_id => jcategory.id )
+# Job.create(:title => 'Security Personel', :description => 'If you have Security Guard license, and love to work  third shift, than call us.', :company_id => cp4.id,
+            # :company_person_id => cperson.id, :job_category_id => jcategory1.id)
+
+
+
+
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
   case status
   when 'Unemployedlooking'
@@ -143,6 +189,11 @@ if Rails.env.development? # || Rails.env.staging?
     JobCategory.create(name: name, description: description)
   end
 
+  20.times do |n|
+  JobCategory.create(name: "Generic Category #{n}",
+            description: 'Generic Job Description')
+  end
+
   companies = Company.all.to_a
   addresses = Address.all.to_a 
   #CompanyPerson
@@ -222,6 +273,12 @@ if Rails.env.development? # || Rails.env.staging?
                   address: addresses.pop)
   end
 
+  50.times do |n|
+    branch = Branch.create(code: "BR00#{n}", agency: agency)
+    branch.address = Address.create!(city: 'Detroit',
+              street: "#{n} Main Street", zipcode: 48201)
+  end
+
 
 
   branch = Branch.create(code: '001', agency: agency)
@@ -294,8 +351,8 @@ if Rails.env.development? # || Rails.env.staging?
   jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',
                                email:'vijaya.karumudi1@gmail.com', 
                                password:'dfg123',password_confirmation:'dfg123',
-                               phone:'345-890-7890',year_of_birth:
-  "1990", confirmed_at: Time.now)
+                               phone:'345-890-7890',year_of_birth:"1990",
+                               confirmed_at: Time.now)
 
 
   jobseeker = JobSeeker.create(first_name: 'abc', last_name:'def',
@@ -317,3 +374,128 @@ if Rails.env.development? # || Rails.env.staging?
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 end
+# =======
+#           phone: '111 222 3333', fax: '333 444 5555',
+#           email: 'pets_admin@metplus.org',
+#           description: 'Michigan Employment & Training Plus, (MET|PLUS) is a 501 (c) 3, Vocational Training non-profit organization that strives to assist Michigan jobseekers with invaluable training and job development that will put them on a career path to success.')
+
+# branch = Branch.create(code: '001', agency: agency)
+# branch.address = Address.create!(city: 'Detroit',
+#             street: '123 Main Street', zipcode: 48201)
+
+# branch = Branch.create(code: '002', agency: agency)
+# branch.address = Address.create!(city: 'Detroit',
+#             street: '456 Sullivan Street', zipcode: 48204)
+
+# branch = Branch.create(code: '003', agency: agency)
+# branch.address = Address.create!(city: 'Detroit',
+#             street: '3 Auto Drive', zipcode: 48206)
+
+# 50.times do |n|
+#   branch = Branch.create(code: "BR00#{n}", agency: agency)
+#   branch.address = Address.create!(city: 'Detroit',
+#               street: "#{n} Main Street", zipcode: 48201)
+# end
+
+# Job Seekers
+# js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
+#                       email: 'tom@gmail.com', password: 'qwerty123',
+#               year_of_birth: '1980', resume: 'text',
+#           job_seeker_status: @jss1, confirmed_at: Time.now)
+
+# js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+#                       email: 'mary@gmail.com', password: 'qwerty123',
+#               year_of_birth: '1970', resume: 'text',
+#           job_seeker_status: @jss2, confirmed_at: Time.now)
+
+# js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+#                       email: 'frank@gmail.com', password: 'qwerty123',
+#               year_of_birth: '1970', resume: 'text',
+#           job_seeker_status: @jss3, confirmed_at: Time.now)
+
+# # Agency People
+# agency_aa = AgencyPerson.new(first_name: 'John', last_name: 'Smith',
+#                       agency_id: agency.id, email: 'pets_admin@metplus.org',
+#                       password: 'qwerty123', confirmed_at: Time.now,
+#                       branch_id: agency.branches[0].id,
+#                       status: AgencyPerson::STATUS[:ACT])
+# agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
+# agency_aa.save!
+
+# agency_cm_and_jd = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts',
+#                       agency_id: agency.id, email: 'chet@metplus.org',
+#                       password: 'qwerty123', confirmed_at: Time.now,
+#                       branch_id: agency.branches[1].id,
+#                       status: AgencyPerson::STATUS[:ACT])
+# agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
+# agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+# agency_cm_and_jd.save!
+# agency_cm_and_jd.agency_relations <<
+#       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
+#                           job_seeker: js1)
+# agency_cm_and_jd.agency_relations <<
+#       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+#                           job_seeker: js2)
+# agency_cm_and_jd.save!
+
+# agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
+#                       agency_id: agency.id, email: 'jane@metplus.org',
+#                       password: 'qwerty123', confirmed_at: Time.now,
+#                       branch_id: agency.branches[2].id,
+#                       status: AgencyPerson::STATUS[:ACT])
+
+# agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+# agency_jd.save!
+# agency_jd.agency_relations <<
+#       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+#                           job_seeker: js3)
+
+# 50.times do |n|
+#   agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: "Generic#{n}",
+#                         agency_id: agency.id, email: "jane#{n}@metplus.org",
+#                         password: 'qwerty123', confirmed_at: Time.now,
+#                         branch_id: agency.branches[2].id,
+#                         status: AgencyPerson::STATUS[:ACT])
+#   agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+#   agency_jd.save!
+# end
+
+# 50.times do |n|
+#   n = n.next if (n % 10 == 0)
+#   ein = "12-345#{n}"
+#   while ein.length < 10 do
+#     ein += '0'
+#   end
+#   company = Company.new(name: "Generic Co. #{n}", ein: ein,
+#                        phone: '123 123 1234',
+#                        email: "mail@genericco#{n}.com",
+#                      website: "http://www.genericco#{n}.com",
+#                       status: Company::STATUS[:ACT])
+#   company.agencies << agency
+#   # don't raise exception as ein logic does not guarantee unique ein
+#   # but this logic gives us enough companies for dev/test )
+#   company.save
+# end
+
+
+# jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+# "1990", confirmed_at: Time.now)
+
+
+# jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+# "1990", confirmed_at: Time.now)
+
+
+
+
+# JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+#                       email: 'mary@gmail.com', password: 'qwerty123',
+#               year_of_birth: '1970', resume: 'text',
+#           job_seeker_status: @jss2, confirmed_at: Time.now)
+
+# JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+#                       email: 'frank@gmail.com', password: 'qwerty123',
+#               year_of_birth: '1970', resume: 'text',
+#           job_seeker_status: @jss3, confirmed_at: Time.now)
+
+

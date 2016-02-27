@@ -22,6 +22,9 @@ gem 'haml'
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+
+gem 'jquery-turbolinks'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -37,6 +40,11 @@ gem 'devise_invitable', '~> 1.5.2'
 
 gem 'figaro'
 
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
+
+# gem 'ajax_pagination'
+
 gem 'cancancan', '~> 1.10'
 
 # gem 'nokogiri', '~> 1.6', '>= 1.6.7'
@@ -51,7 +59,7 @@ gem 'active_record-acts_as'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 # later we can strict the faker 
-# to staging && development when ready.
+# to staging && development
 gem 'ffaker' 
 gem 'faker'
 # gem 'jquery-turbolinks' #will solve reload problems with javascript 
