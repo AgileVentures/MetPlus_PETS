@@ -109,7 +109,7 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          path to success.')
 
 # seed striction to development, for now 
-if Rails.env.development? # || Rails.env.staging? 
+if Rails.env.development? || Rails.env.test?  # || Rails.env.staging? 
   #Company 
   200.times do |n|
     ein = Faker::Company.ein
