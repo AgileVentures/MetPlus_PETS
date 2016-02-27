@@ -1,3 +1,4 @@
+
 When(/^I go to the (.+) page$/) do |page|
   case page
     
@@ -30,4 +31,9 @@ end
 
 Given(/I am on the JobSeeker Show page for "([^"]*)"$/) do |email|
   visit job_seeker_path(User.find_by_email(email).actable_id)
+end
+
+Given(/^I am on the Job edit page with given record:$/) do 
+  job = FactoryGirl.create(:job)
+  visit edit_job_path(job.id)
 end

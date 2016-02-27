@@ -6,11 +6,10 @@ Then(/^I should verify the change of title "(.*?)", shift "(.*?)" and jobId "(.*
 
 end
 
-Then(/^I should a popup with the job information$/) do
+Then(/^I should see a popup with the following job information$/) do
  	expect(page).to have_content("Are you sure you want 
  	       to delete the following job: 
  	       job title:  #{@job.title}
  	       job id: #{@job.company_job_id}")
-end
-
+end 
 

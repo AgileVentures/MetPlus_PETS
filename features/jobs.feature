@@ -35,20 +35,20 @@ Scenario: Creating, Updating, and Deleting Job successfully
 	When I click the "Return To Jobs" link 
 	And I click the "delete" button
 	And I wait 1 second 
-	Then I should a popup with the job information 
+	Then I should see a popup with the following job information 
 	And I wait 1 second 
 	And I click the "modal-delete-id" link 
 	Then I should see "cab-driver has been deleted successfully."
 
 Scenario: Updating job unsuccessfully 
-	Given I am on the job creation page
+	Given I am on the Job edit page with given record:
 	And  I fill in the fields: 
 		| Title                  | cashier|  
 		| Job id                 |  |  
 		| Description            |  |  
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
-	And  I press "new-job-submit"
+	And  I press "edit-job-submit"
 	Then  I should see "The form contains 2 errors"
 
 Scenario: Creating job unsuccessfully 
