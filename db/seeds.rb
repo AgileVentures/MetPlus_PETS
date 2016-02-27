@@ -79,13 +79,13 @@ end
 SkillLevel.create(name: 'Beginner',
             description: 'Entry level or minimal proficiency')
 SkillLevel.create(name: 'Intermediate',
-            description: 'Proficient in some aspects,\
+            description: 'Proficient in some aspects,
                           requires supervision')
 SkillLevel.create(name: 'Advanced',
-            description: 'Proficient in all aspects,\ 
+            description: 'Proficient in all aspects,
                           requires little supervision')
 SkillLevel.create(name: 'Expert',
-            description: 'Proficient in all aspects,\ 
+            description: 'Proficient in all aspects, 
                           able to work indepently')
 #AgencyRole
 # Create all agency roles - this should stay in production version of this file
@@ -102,11 +102,11 @@ end
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
             phone: '111 222 3333', fax: '333 444 5555',
             email: 'pets_admin@metplus.org',
-            description: 'Michigan Employment & Training Plus, (MET|PLUS) \
-                         is a 501 (c) 3, Vocational Training non-profit \ 
-                         organization that strives to assist Michigan \ 
-                         jobseekers with invaluable training and job \ 
-                         development that will put them on a career \ 
+            description: 'Michigan Employment & Training Plus, (MET|PLUS) 
+                         is a 501 (c) 3, Vocational Training non-profit 
+                         organization that strives to assist Michigan 
+                         jobseekers with invaluable training and job 
+                         development that will put them on a career 
                          path to success.')
 
 # seed striction to development, for now 
@@ -114,7 +114,7 @@ if Rails.env.development? # || Rails.env.staging?
   #Company 
   200.times do |n|
     ein = Faker::Company.ein
-    phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2] \
+    phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
              .join}-#{(1..9).to_a.shuffle[0..3].join}" 
     email =Faker::Internet.email 
     website = Faker::Internet.url 
@@ -191,7 +191,7 @@ if Rails.env.development? # || Rails.env.staging?
     password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name 
-    phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2] \
+    phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
             .join}-#{(1..9).to_a.shuffle[0..3].join}" 
     year_of_birth = 2016 - r.rand(100)
     resume = FFaker::Lorem.word 
