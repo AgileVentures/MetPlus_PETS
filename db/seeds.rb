@@ -81,10 +81,15 @@ jcategory2 = JobCategory.create(name: 'SW Developer - Java',
             description: 'Java backend developer')
 jcategory3 = JobCategory.create(name: 'SW Project Manager - Agile',
             description: 'Manages Agile SW development projects')
-Jjcategory4 = JobCategory.create(name: 'SW Project Manager - Waterfall',
+jcategory4 = JobCategory.create(name: 'SW Project Manager - Waterfall',
             description: 'Manages SW development projects using waterfall SDLC')
 jcategory5 = JobCategory.create(name: 'Product Manager - SaaS',
             description: 'Manages SaaS product development and commecialization')
+
+20.times do |n|
+  JobCategory.create(name: "Generic Category #{n}",
+            description: 'Generic Job Description')
+end
 
 Job.create(:title => 'Software Developer', :description => 'Looking for a software developer intern.', :company_id => cp1.id,
             :company_person_id => cperson.id, :job_category_id =>jcategory1.id  )

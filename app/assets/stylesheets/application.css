@@ -19,6 +19,10 @@
   margin-bottom: 10px;
 }
 
+.input-panel-body {
+  padding: 5px;
+}
+
 /*homepage css*/
 .col-md-8.col-lg-8{
    padding-left:  0;
