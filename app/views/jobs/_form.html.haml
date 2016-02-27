@@ -12,7 +12,7 @@
 		
 .form-group 
 	=f.label :shift, class: "col-sm-3 control-label text-right"
-	-shift_opts = ['morning', 'day', 'evening']
+	-shift_opts = ['Morning', 'Day', 'Evening']  
 	%div{class: "col-sm-5"}
 		=f.collection_select :shift, shift_opts, :to_s, :to_s, {prompt: true},
 		         class: "form-control" 

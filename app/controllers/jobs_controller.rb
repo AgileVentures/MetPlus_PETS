@@ -43,12 +43,13 @@ class JobsController < ApplicationController
 
 	private 
 		def find_job
-			@job = Job.find_by_id(params[:id])
+			@job = Job.find(params[:id])
 		end
 
 		def job_params
-			params.require(:job).permit(:description, :company_id, :shift, 
-			  :company_person_id, :fulltime, :company_job_id, :job_category_id, :title)
+			# params.require(:job).permit(:description, :company_id, :shift, 
+			#   :company_person_id, :fulltime, :company_job_id, :job_category_id, :title)
+			params.require(:job).permit(:description, :shift, :fulltime, :company_job_id, :title)
 		end
 
 

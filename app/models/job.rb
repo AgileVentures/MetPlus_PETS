@@ -11,7 +11,7 @@ class Job < ActiveRecord::Base
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :skill_levels, through: :job_skills
 
-  SHIFT_OPTIONS = ['morning', 'day', 'evening']
+  SHIFT_OPTIONS = ['Morning', 'Day', 'Evening']
   validates_presence_of :title
   validates_presence_of :company_job_id  
   validates_presence_of :fulltime, allow_blank: true 

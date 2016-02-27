@@ -47,7 +47,7 @@ RSpec.describe Job, type: :model do
     xit { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
     xit { is_expected.to validate_presence_of :job_category_id }
-    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[day evening morning])} 
+    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])} 
   end
   
   describe 'Class methods' do

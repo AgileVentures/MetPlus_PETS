@@ -1,5 +1,5 @@
 module JobsHelper
   def list_jobs
-    @jobs ||= Job.take(20)
+    @jobs ||= Job.limit(25).includes(:company)
   end
 end
