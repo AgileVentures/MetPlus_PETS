@@ -56,8 +56,6 @@ gem 'cancancan', '~> 1.10'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
 # later we can strict the faker 
 # to staging && development
 gem 'ffaker' 
@@ -94,7 +92,6 @@ group :development, :test do
 end
 
 group :test do
-  # gem 'simplecov', :require => false 
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers', require: false
