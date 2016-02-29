@@ -1,4 +1,4 @@
-class AddShitfToJobs < ActiveRecord::Migration
+class AddShiftToJobs < ActiveRecord::Migration
   def change
     add_column :jobs, :shift, :string
   end

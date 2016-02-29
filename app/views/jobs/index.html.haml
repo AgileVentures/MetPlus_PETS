@@ -13,9 +13,13 @@
 			%h5{id: 'hire-header'} 
 				=link_to 'Are you hiring? Become a hiring partner!',
 				new_company_registration_path 
-
-- @jobs.each do |job|
+- if @jobs.empty? 
 	%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
-		= render job 
+		%strong{class: "text-center"}
+			%h3 There are no jobs available.
+- else 
+	- @jobs.each do |job|
+		%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
+			= render job 
 %div{class: "col-sm-offset-4 col-sm-6"} 
 	= will_paginate 
