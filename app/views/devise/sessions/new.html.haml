@@ -7,7 +7,7 @@
       %i{class: "fa fa-minus fa-4x fa-rotate-90"}
       #{link_to 'Register as jobseeker', new_job_seeker_path}
       %i{class: "fa fa-minus fa-rotate-90"}
-      #{link_to 'Register as employer', new_company_registration_path}
+      #{link_to 'Register as employer', '#'}
     = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
       .form-group
         / = f.label :email
