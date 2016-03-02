@@ -96,4 +96,3 @@ Given(/^the following jobseeker exist:$/) do |table|
     jobseeker.save
   end
 end
-

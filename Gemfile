@@ -56,9 +56,19 @@ gem 'cancancan', '~> 1.10'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
+# later we can strict the faker 
+# to staging && development
+gem 'ffaker' 
+gem 'faker'
+# gem 'jquery-turbolinks' #will solve reload problems with javascript 
+
+
+
 
 group :development do
   gem 'haml-rails'
+  gem 'bullet'
+
 end
 
 group :development, :test do
