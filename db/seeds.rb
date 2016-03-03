@@ -66,9 +66,9 @@ address2 = Address.create(:street => "1234 East Main Street", city: "Los Angeles
 address1.update_attribute(:location, cp1)
 address2.update_attribute(:location, cp2)
 
-cperson = CompanyPerson.create(company_id: cp1.id, address_id: address1.id, status: "Active", title: "General Manager",
+cperson = CompanyPerson.create!(company_id: cp1.id, address_id: address1.id, status: "Active", title: "General Manager",
           email: "example@gmail.com", :password => "secrete", first_name: "salem", :last_name => "Ali", confirmed_at: DateTime.now)
-cperson2 = CompanyPerson.create(company_id: cp2.id, address_id: address2.id, status: "Active", title: "Day Manager",
+cperson2 = CompanyPerson.create!(company_id: cp2.id, address_id: address2.id, status: "Active", title: "Day Manager",
             email: "example1@gmail.com", :password => "secrete", first_name: "Kalem", :last_name => "Kli", confirmed_at: DateTime.now)
 
 
