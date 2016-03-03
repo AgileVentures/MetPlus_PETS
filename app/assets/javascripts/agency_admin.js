@@ -46,9 +46,14 @@ var AgencyData = {
     $('#toggle_companies').click(AgencyData.toggle);
     $('#companies_table').on('click', '.pagination a', AgencyData.update_data);
   },
+  setup_job_categories: function () {
+    $('#toggle_job_categories').click(AgencyData.toggle);
+    $('#job_categories_table').on('click', '.pagination a', AgencyData.update_data);
+  }
 };
 $(function () {
   AgencyData.setup_branches();
   AgencyData.setup_people();
   AgencyData.setup_companies();
+  AgencyData.setup_job_categories();
 });
