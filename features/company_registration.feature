@@ -93,6 +93,7 @@ Scenario: attempt login after registration is deleted
   Then I click the "Widgets, Inc." link
   Then I click and accept the "Delete Registration" button
   And I log out
+  And I wait 1 second
   Then I am on the home page
   And I login as "hughjobs@widgets.com" with password "qwerty123"
   Then I should see "Invalid email or password."
@@ -109,6 +110,7 @@ Scenario: company registration denial
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
   And I wait 3 seconds
+  And show me the page
   Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
 
@@ -122,6 +124,8 @@ Scenario: attempt login after registration is denied
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
+  And I wait 3 seconds
+  Then I should see "Registration Denied"
   And I log out
   Then I am on the home page
   And I login as "hughjobs@widgets.com" with password "qwerty123"
