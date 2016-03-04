@@ -25,4 +25,4 @@ var RegistrationDeny = {
 // (company_registrations/_company_registration.html.haml).
 // When executed here it only works in Safari, but not in Firefox or Chrome
 // (the latter two browsers require a page refresh in order to work)
-// $(RegistrationDeny.setup);
+$(RegistrationDeny.setup);
