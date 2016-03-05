@@ -4,21 +4,17 @@
   .col-sm-3
     %h4 Job Categories
 
-  .col-sm-9
-    - if @job_categories.empty?
-      %h5 There are no job categories.
-    - else
-      = render 'job_categories'
-
-.row
   - if @job_categories.empty?
-    .col-sm-2.col-sm-offset-10#table_action_button
-      = button_to 'Add Category', :back, |
-          method: :get, class: 'btn btn-primary btn-sm pull-right'  |
+    .col-sm-3
+      %h5 There are no job categories.
   - else
+    .col-sm-9
+      = render 'job_categories'
+    .clearfix
     .col-sm-3.col-sm-offset-3
       %a(id='toggle_job_categories' href='#job_categories_table' class='text-danger')
         Hide Job Categories
-    .col-sm-2.col-sm-offset-4#table_action_button
-      = button_to 'Add Category', :back, |
-          method: :get, class: 'btn btn-primary btn-sm pull-right'  |
+
+  .col-sm-3.col-sm-offset-3.table_action_button
+    = button_to 'Add Category', :back, |
+            method: :get, class: 'btn btn-primary btn-sm pull-right'  |
