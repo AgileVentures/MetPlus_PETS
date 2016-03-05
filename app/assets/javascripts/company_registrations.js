@@ -21,8 +21,5 @@ var RegistrationDeny = {
     $('#send_button').click(RegistrationDeny.deny_action);
   }
 };
-// The line below is currently executed in the view
-// (company_registrations/_company_registration.html.haml).
-// When executed here it only works in Safari, but not in Firefox or Chrome
-// (the latter two browsers require a page refresh in order to work)
-// $(RegistrationDeny.setup);
+
+$(RegistrationDeny.setup);
