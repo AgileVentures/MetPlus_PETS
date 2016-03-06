@@ -69,12 +69,12 @@ SkillLevel.delete_all
               description: "A jobseeker with a job and looking for a job.")
   when 'Employednotlooking'
     @jss3=JobSeekerStatus.find_or_create_by(:value => status,
-          description: "A jobseeker with a job and not looking 
+          description: "A jobseeker with a job and not looking
                         for a job for now.")
   end
 end
 
-#SkillLevel 
+#SkillLevel
 SkillLevel.create(name: 'Beginner',
             description: 'Entry level or minimal proficiency')
 SkillLevel.create(name: 'Intermediate',
@@ -84,15 +84,15 @@ SkillLevel.create(name: 'Advanced',
             description: 'Proficient in all aspects,
                           requires little supervision')
 SkillLevel.create(name: 'Expert',
-            description: 'Proficient in all aspects, 
+            description: 'Proficient in all aspects,
                           able to work indepently')
 #AgencyRole
 # Create all agency roles - this should stay in production version of this file
 AgencyRole::ROLE.each_value do |agency_role|
   AgencyRole.create(role: agency_role)
 end
-#CompanyRole 
-# Create all company roles - - this should stay in production 
+#CompanyRole
+# Create all company roles - - this should stay in production
 CompanyRole::ROLE.each_value do |company_role|
   CompanyRole.create(role: company_role)
 end
@@ -101,23 +101,23 @@ end
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
             phone: '111 222 3333', fax: '333 444 5555',
             email: 'pets_admin@metplus.org',
-            description: 'Michigan Employment & Training Plus, (MET|PLUS) 
-                         is a 501 (c) 3, Vocational Training non-profit 
-                         organization that strives to assist Michigan 
-                         jobseekers with invaluable training and job 
-                         development that will put them on a career 
+            description: 'Michigan Employment & Training Plus, (MET|PLUS)
+                         is a 501 (c) 3, Vocational Training non-profit
+                         organization that strives to assist Michigan
+                         jobseekers with invaluable training and job
+                         development that will put them on a career
                          path to success.')
 
-# seed striction to development, for now 
-if Rails.env.development? # || Rails.env.staging? 
-  #Company 
+# seed striction to development, for now
+if Rails.env.development? # || Rails.env.staging?
+  #Company
   200.times do |n|
     ein = Faker::Company.ein
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
-             .join}-#{(1..9).to_a.shuffle[0..3].join}" 
-    email =Faker::Internet.email 
-    website = Faker::Internet.url 
-    name = Faker::Company.name 
+             .join}-#{(1..9).to_a.shuffle[0..3].join}"
+    email =Faker::Internet.email
+    website = Faker::Internet.url
+    name = Faker::Company.name
     Company.create!(ein: ein,
                     phone: phone,
                     email: email,
@@ -125,20 +125,20 @@ if Rails.env.development? # || Rails.env.staging?
                     name: name)
   end
 
-  companies = Company.all.to_a 
+  companies = Company.all.to_a
   #Address
-  200.times do |n| 
-    street = Faker::Address.street_address 
-    city = Faker::Address.city 
-    zipcode = Faker::Address.zip_code 
-    Address.create(street: street, city: city, zipcode: zipcode, 
+  200.times do |n|
+    street = Faker::Address.street_address
+    city = Faker::Address.city
+    zipcode = Faker::Address.zip_code
+    Address.create(street: street, city: city, zipcode: zipcode,
                    location: companies.pop)
   end
 
-  #JobCategory 
+  #JobCategory
   200.times do |n|
-    name = FFaker::Job.title 
-    description = FFaker::Lorem.sentence 
+    name = FFaker::Job.title
+    description = FFaker::Lorem.sentence
     JobCategory.create(name: name, description: description)
   end
 
@@ -148,34 +148,40 @@ if Rails.env.development? # || Rails.env.staging?
   end
 
   companies = Company.all.to_a
-  addresses = Address.all.to_a 
+  addresses = Address.all.to_a
   #CompanyPerson
   200.times do |n|
-    title = FFaker::Job.title 
-    email = FFaker::Internet.email 
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
+    title = FFaker::Job.title
+    email = FFaker::Internet.email
+    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join
     first_name = FFaker::Name.first_name
-    last_name = FFaker::Name.last_name 
-    confirmed_at = DateTime.now 
-    CompanyPerson.create(title: title, email: email, password: password, 
-                         status: "Active", first_name: first_name,
-                         last_name: last_name,
-                         confirmed_at: confirmed_at,
-                         company_id: companies.pop.id, 
-                         address_id: addresses.pop.id )
+    last_name = FFaker::Name.last_name
+    confirmed_at = DateTime.now
+    cp = CompanyPerson.new(title: title, email: email, password: password,
+                          status: "Active", first_name: first_name,
+                       last_name: last_name,
+                    confirmed_at: confirmed_at,
+                      company_id: companies.pop.id,
+                      address_id: addresses.pop.id )
+    if n < 6
+      cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+    else
+      cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+    end
+    cp.save
   end
 
-  r = Random.new 
-  jobcategories = JobCategory.all.to_a 
-  companypeople = CompanyPerson.all.to_a 
-  companies = Company.all.to_a 
+  r = Random.new
+  jobcategories = JobCategory.all.to_a
+  companypeople = CompanyPerson.all.to_a
+  companies = Company.all.to_a
   #job
   200.times do |n|
-    title = FFaker::Job.title 
+    title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3,false, 4 )
     shift = ["Day", "Evening", "Morning"][r.rand(3)]
     fulltime =  [false, true][r.rand(2)]
-    jobId = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join 
+    jobId = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join
 
     Job.create!(title: title,
                description: description,
@@ -184,22 +190,22 @@ if Rails.env.development? # || Rails.env.staging?
                fulltime: fulltime,
                company_id: companies.pop.id,
                company_person_id: companypeople.pop.id,
-               job_category_id: jobcategories.pop.id) 
+               job_category_id: jobcategories.pop.id)
   end
 
 
-  #jobseeker 
+  #jobseeker
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
-    email = FFaker::Internet.email 
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
+    email = FFaker::Internet.email
+    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join
     first_name = FFaker::Name.first_name
-    last_name = FFaker::Name.last_name 
+    last_name = FFaker::Name.last_name
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
-            .join}-#{(1..9).to_a.shuffle[0..3].join}" 
+            .join}-#{(1..9).to_a.shuffle[0..3].join}"
     year_of_birth = 2016 - r.rand(100)
-    resume = FFaker::Lorem.word 
-    job_seeker_status = jobseekerstatus[r.rand(3)] 
+    resume = FFaker::Lorem.word
+    job_seeker_status = jobseekerstatus[r.rand(3)]
 
     JobSeeker.create(first_name: first_name,
                      last_name: last_name,
@@ -216,10 +222,10 @@ if Rails.env.development? # || Rails.env.staging?
     job.address = Address.all.to_a[index]
   end
 
-  #agency 
-  addresses = Address.all.to_a 
+  #agency
+  addresses = Address.all.to_a
   50.times do |n|
-    code = Faker::Code.ean.split(//).shuffle[1..3].join 
+    code = Faker::Code.ean.split(//).shuffle[1..3].join
     angency = agency
     Branch.create(:code => code,
                   agency: angency,
@@ -302,28 +308,28 @@ if Rails.env.development? # || Rails.env.staging?
 
 
   jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',
-                               email:'vijaya.karumudi1@gmail.com', 
+                               email:'vijaya.karumudi1@gmail.com',
                                password:'dfg123',password_confirmation:'dfg123',
                                phone:'345-890-7890',year_of_birth:"1990",
                                confirmed_at: Time.now)
 
 
   jobseeker = JobSeeker.create(first_name: 'abc', last_name:'def',
-                               email:'vijaya.karumudi1@gmail.com', 
+                               email:'vijaya.karumudi1@gmail.com',
                                password:'dfg123',password_confirmation:'dfg123',
-                               phone:'345-890-7890',year_of_birth: "1990", 
+                               phone:'345-890-7890',year_of_birth: "1990",
                                confirmed_at: Time.now)
 
 
 
 
-  JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey', 
-                        email: 'mary@gmail.com', password: 'qwerty123', 
+  JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+                        email: 'mary@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss2, confirmed_at: Time.now)
-                        
-  JobSeeker.create(first_name: 'Frank', last_name: 'Williams', 
-                        email: 'frank@gmail.com', password: 'qwerty123', 
+
+  JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+                        email: 'frank@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 end
