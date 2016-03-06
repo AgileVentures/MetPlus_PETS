@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       :path_names => {sign_up: 'new', sign_out: 'logout',
                       sign_in: 'login' },
       :controllers => {invitations: 'people_invitations',
-                       confirmations: 'users/confirmations' }
+                     confirmations: 'users/confirmations' }
 
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
@@ -69,10 +69,13 @@ Rails.application.routes.draw do
   get 'agency_admin/job_properties', path: '/agency_admin/job_properties'
   # --------------------------------------------------------------------------
 
+  # ----------------------- Job Categories  ----------------------------------
+  post  'job_categories/create'
+  patch 'job_categories/update'
+  # --------------------------------------------------------------------------
+
 
   root 'main#index'
-
-  get 'agency_admin/home', path: '/admin/agency_admin/home'
 
   get 'agency/home',  path: '/agency/:id'
 

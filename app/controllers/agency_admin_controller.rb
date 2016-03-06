@@ -27,7 +27,6 @@ class AgencyAdminController < ApplicationController
   def job_properties
     @job_categories = JobCategory.order(:name).
                 page(params[:job_categories_page]).per_page(10)
-
     if request.xhr?
       case params[:data_type]
       when 'job_categories'
