@@ -1,6 +1,15 @@
 .col-sm-offset-3.col-sm-6
 	= render 'shared/error_messages', object: f.object 
-.clearfix 
+.clearfix
+- if !f.try(:company_id).nil? 
+		/ final version will have this line only
+		/ without if else statement 
+		= f.hidden_field :company_id  
+- else 
+	/ in case logged in other than job developer
+	/e.g jobseeker.....
+	/to make the validations callbacks happy!
+	= hidden_field_tag Company.first.id, :company_id  
 .form-group 
 	=f.label :title, class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
