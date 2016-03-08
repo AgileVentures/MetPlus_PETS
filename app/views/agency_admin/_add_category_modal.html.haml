@@ -6,8 +6,9 @@
           %span(aria-hidden='true') &times;
         %h4.modal-title Add Job Category
       .modal-body
+        #model_errors
         .form-group
-          %label(for='category_name' class='control-label') Category:
+          %label(for='category_name' class='control-label') Name:
           %textarea(class='form-control' id='category_name')
         .form-group
           %label(for='category_desc' class='control-label') Description:
@@ -16,4 +17,4 @@
         %button(type='button' class='btn btn-default'
                                  data-dismiss='modal') Cancel
         %button(type='button' class='btn btn-primary'
-                id='add_category_button' data-dismiss='modal') Add Category
+                id='add_category_button') Add Category

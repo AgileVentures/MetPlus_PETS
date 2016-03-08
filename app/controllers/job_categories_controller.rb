@@ -1,10 +1,11 @@
 class JobCategoriesController < ApplicationController
   def create
-    if jc = JobCategory.new(category_params).save
+    jc = JobCategory.new(category_params)
+    if jc.save
       render nothing: true
     else
-      render :json => { errors: jc.errors.full_messages,
-                        status: :unprocessable_entity }
+      render partial: 'shared/error_messages',
+                      locals: {object: jc}, status: 422
     end
   end
 

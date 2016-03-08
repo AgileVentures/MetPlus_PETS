@@ -16,8 +16,7 @@
         Hide Job Categories
 
   .col-sm-3.col-sm-offset-3.table_action_button
-    - text_modal_button 'Add Category', 'add_job_category', 'btn btn-primary btn-sm pull-right'
-    -# = button_to 'Add Category', :back, |
-    -#         method: :get, class: 'btn btn-primary btn-sm pull-right'  |
+    - text_modal_button 'Add Job Category', 'add_job_category', |
+                        'btn btn-primary btn-sm pull-right'     |
 
 = render 'add_category_modal'

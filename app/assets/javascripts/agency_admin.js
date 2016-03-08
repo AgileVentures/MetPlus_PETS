@@ -18,51 +18,30 @@ var AgencyData = {
     // (anchor is contained in 'li' element which will have 'disabled' class)
     if ($(this).parent().hasClass('disabled')) { return false; };
 
+    // 'event.currentTarget' is the div element that delegated the event
+    var div_id = '#' + $(event.currentTarget).attr('id')
+
     // 'this' is anchor element that recieved the event
     var link_url = $(this).attr('href');
 
-    // 'event.currentTarget' is the div element that delegated the event
-    var table_id = '#' + $(event.currentTarget).attr('id')
-
-    $.ajax({type: 'GET',
-            url: link_url,
-            timeout: 5000,
-            error: function (xhrObj, status, exception) {
-                              alert('Server Timed Out');},
-            success: function (data, status, xhrObject) {
-                      alert('In Success Function');
-                                 $(table_id).html(data);}
-            });
+    AgencyData.get_updated_data(div_id, link_url);
     return(false);
   },
-  get_update_data: function(div_id) {
-    // 'this' is anchor element that recieved the event
-    var link_url = $(this).attr('href');
-
+  get_updated_data: function(div_id, link_url) {
+    // calls link_url to get data and replace content of div with that
     $.ajax({type: 'GET',
             url: link_url,
             timeout: 5000,
             error: function (xhrObj, status, exception) {
                               alert('Server Timed Out');},
             success: function (data, status, xhrObject) {
-                      alert('In Success Function');
                                  $(div_id).html(data);}
             });
-    return(false);
   },
   add_job_category: function () {
-    // set up action_url (no id needed so can hard-wire)
-    // get category name
-    // get category description
-    // send AJAX request (controller adds category and returns success)
-    // - on success:
-    //   - determine 'active' pagination anchor
-    //   - 'click' that anchor link
-    //   - return true
-    // - on error (for status = 422)
-    //   - get the model error messages
-    //   - render the error messages in the modal window
-    //   - return false
+    // this function is bound to 'click' event on 'Add Category' button
+    // in 'agency_admin/_add_job_category.html.haml'
+    // Create the job category .....
     $.ajax({type: 'POST',
             url: '/job_categories/create/',
             // Get the data entered by the user in the dialog box
@@ -70,18 +49,34 @@ var AgencyData = {
                     'job_category[description]': $('#category_desc').val() },
             timeout: 5000,
             success: function (data, status, xhrObject){
-              alert('Job Category Created');
-              // Find the current (active) pagination anchor and click it -
-              // to force a reload of the page section in case the new
+              // Find the current (active) pagination anchor and
+              // force a reload of the page section in case the new
               // category shows up in that section.
-              $('a', 'li.active','div.pagination').click();
-              return(true);
-              },
-            error: function (xhrObj, status, exception) {alert('Server Timed Out');},
-            });
-
+              var paginate_link = $('a', 'li.active','div.pagination');
+              if (paginate_link === undefined) {
+                paginate_url = paginate_link.attr('href');
+              } else {
+                // If there are too few items on the page the paginate links
+                // will not be present - create appropriate url instead
+                paginate_url = '/agency_admin/job_properties?data_type=' +
+                               'job_categories&job_categories_page=1';
+              }
+              AgencyData.get_updated_data('#job_categories_table',
+                                          paginate_url);
+              $('#model_errors').html('') // Clear model errors in modal
+              $('#add_job_category').modal('hide')
+            },
+            error: function (xhrObj, status, exception) {
+              // If model error(s), show content in div in modal
+              if (exception === 'Unprocessable Entity') {
+                $('#model_errors').html(xhrObj.responseText);
+              } else {
+                alert('Server Error');
+              }
+            },
+          });
+    // Good background on returning error status in ajax controller action:
     // http://travisjeffery.com/b/2012/04/rendering-errors-in-json-with-rails/
-    // http://tomdallimore.com/blog/ajax-and-json-error-handling-on-rails/
   },
   setup_branches: function () {
     $('#toggle_branches').click(AgencyData.toggle);

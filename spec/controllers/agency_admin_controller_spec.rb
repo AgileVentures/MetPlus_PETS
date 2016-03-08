@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AgencyAdminController, type: :controller do
 
-  describe "GET #home" do
+  describe "GET #home and GET #job_properties" do
     let(:agency)  {FactoryGirl.create(:agency)}
     let(:agency_admin) do
       $admin = FactoryGirl.build(:agency_person, agency: agency)
@@ -11,13 +11,25 @@ RSpec.describe AgencyAdminController, type: :controller do
       $admin.save!
       $admin
     end
+    let(:job_categories) do
+      $cats = []
+      $cats << FactoryGirl.create(:job_category, name: 'CAT1') <<
+               FactoryGirl.create(:job_category, name: 'CAT2') <<
+               FactoryGirl.create(:job_category, name: 'CAT3')
+      $cats
+    end
 
-    it 'routes GET /admin/agency_home/ to agency_admin#home' do
-      expect(get: '/admin/agency_admin/home').to route_to(
+    it 'routes GET /agency_admin/home/ to agency_admin#home' do
+      expect(get: '/agency_admin/home').to route_to(
             controller: 'agency_admin', action: 'home')
     end
 
-    context 'controller actions and helper' do
+    it 'routes GET /agency_admin/job_properties/ to agency_admin#job_properties' do
+      expect(get: '/agency_admin/job_properties').to route_to(
+            controller: 'agency_admin', action: 'job_properties')
+    end
+
+    context 'controller actions and helper - home page' do
       before(:each) do
         sign_in agency_admin
         get :home
@@ -35,6 +47,23 @@ RSpec.describe AgencyAdminController, type: :controller do
         expect(response).to have_http_status(:success)
       end
     end
+
+    context 'controller actions and helper - job properties page' do
+      before(:each) do
+        sign_in agency_admin
+        get :job_properties
+      end
+      it 'assigns job_categories for view' do
+        expect(assigns(:job_categories)).to eq job_categories
+      end
+      it 'renders job_categories template' do
+         expect(response).to render_template('job_properties')
+      end
+      it "returns success" do
+        expect(response).to have_http_status(:success)
+      end
+    end
+
   end
 
   describe "XHR GET #home" do
@@ -74,6 +103,32 @@ RSpec.describe AgencyAdminController, type: :controller do
     it 'renders partial for companies' do
       xhr :get, :home, {companies_page: 2, data_type: 'companies'}
       expect(response).to render_template(partial: 'companies/_companies')
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "XHR GET #job_properties" do
+    let(:agency)  {FactoryGirl.create(:agency)}
+    let(:agency_admin) do
+      $admin = FactoryGirl.build(:agency_person, agency: agency)
+      $admin.agency_roles <<
+            FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      $admin.save!
+      $admin
+    end
+
+    before(:each) do
+      25.times do |n|
+        FactoryGirl.create(:job_category, name: "CAT#{n}")
+      end
+      sign_in agency_admin
+      get :job_properties
+    end
+
+    it 'renders partial for job categories' do
+      xhr :get, :job_properties, {job_categories_page: 2,
+                      data_type: 'job_categories'}
+      expect(response).to render_template(partial: '_job_categories')
       expect(response).to have_http_status(:success)
     end
   end
