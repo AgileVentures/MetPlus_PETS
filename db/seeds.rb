@@ -140,8 +140,9 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
-    JobCategory.create(name: name, description: description)
-
+    if !JobCategory.create(name: name, description: description)
+      JobCategory.create!(name: "#{name}_#{n}", description: description)
+    end
   end
 
   companies = Company.all.to_a
