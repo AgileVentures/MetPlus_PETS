@@ -66,12 +66,6 @@ address2 = Address.create(:street => "1234 East Main Street", city: "Los Angeles
 address1.update_attribute(:location, cp1)
 address2.update_attribute(:location, cp2)
 
-cperson = CompanyPerson.create!(company_id: cp1.id, address_id: address1.id, status: "Active", title: "General Manager",
-          email: "example@gmail.com", :password => "secrete", first_name: "salem", :last_name => "Ali", confirmed_at: DateTime.now)
-cperson2 = CompanyPerson.create!(company_id: cp2.id, address_id: address2.id, status: "Active", title: "Day Manager",
-            email: "example1@gmail.com", :password => "secrete", first_name: "Kalem", :last_name => "Kli", confirmed_at: DateTime.now)
-
-
 # Job Categories
 jcategory = JobCategory.create(name: 'SW Developer - RoR',
             description: 'Ruby on Rails backend developer')
@@ -85,16 +79,6 @@ Jjcategory4 = JobCategory.create(name: 'SW Project Manager - Waterfall',
             description: 'Manages SW development projects using waterfall SDLC')
 jcategory5 = JobCategory.create(name: 'Product Manager - SaaS',
             description: 'Manages SaaS product development and commecialization')
-
-Job.create(:title => 'Software Developer', :description => 'Looking for a software developer intern.', :company_id => cp1.id,
-            :company_person_id => cperson.id, :job_category_id =>jcategory1.id  )
-Job.create(:title => 'Cashier', :description => 'Looking for well qualified cashier with 5 years experience', :company_id => cp2.id,
-            :company_person_id => cperson2.id, :job_category_id => jcategory.id )
-Job.create(:title => 'Driver', :description => 'Looking for a truck driver with class A license', :company_id => cp3.id,
-            :company_person_id => cperson.id, :job_category_id => jcategory.id )
-Job.create(:title => 'Security Personel', :description => 'If you have Security Guard license, and love to work  third shift, than call us.', :company_id => cp4.id,
-            :company_person_id => cperson.id, :job_category_id => jcategory1.id)
-
 
 
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
@@ -132,6 +116,31 @@ end
 CompanyRole::ROLE.each_value do |company_role|
   CompanyRole.create(role: company_role)
 end
+
+cperson = CompanyPerson.new(company_id: cp1.id, address_id: address1.id,
+                      status: "Active", title: "General Manager",
+                      email: "example@gmail.com", :password => "secrete",
+                      first_name: "salem", :last_name => "Ali",
+                      confirmed_at: DateTime.now)
+cperson.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+cperson.save
+
+cperson2 = CompanyPerson.create!(company_id: cp2.id, address_id: address2.id,
+                      status: "Active", title: "Day Manager",
+                      email: "example1@gmail.com", :password => "secrete",
+                      first_name: "Kalem", :last_name => "Kli",
+                      confirmed_at: DateTime.now)
+cperson2.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+cperson2.save
+
+Job.create(:title => 'Software Developer', :description => 'Looking for a software developer intern.', :company_id => cp1.id,
+            :company_person_id => cperson.id, :job_category_id =>jcategory1.id  )
+Job.create(:title => 'Cashier', :description => 'Looking for well qualified cashier with 5 years experience', :company_id => cp2.id,
+            :company_person_id => cperson2.id, :job_category_id => jcategory.id )
+Job.create(:title => 'Driver', :description => 'Looking for a truck driver with class A license', :company_id => cp3.id,
+            :company_person_id => cperson.id, :job_category_id => jcategory.id )
+Job.create(:title => 'Security Personel', :description => 'If you have Security Guard license, and love to work  third shift, than call us.', :company_id => cp4.id,
+            :company_person_id => cperson.id, :job_category_id => jcategory1.id)
 
 # Create a default agency, agency branches, agency admin and agency manager
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
@@ -216,13 +225,13 @@ jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.kar
 
 
 
-JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey', 
-                      email: 'mary@gmail.com', password: 'qwerty123', 
+JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+                      email: 'mary@gmail.com', password: 'qwerty123',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss2, confirmed_at: Time.now)
-                      
-JobSeeker.create(first_name: 'Frank', last_name: 'Williams', 
-                      email: 'frank@gmail.com', password: 'qwerty123', 
+
+JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+                      email: 'frank@gmail.com', password: 'qwerty123',
               year_of_birth: '1970', resume: 'text',
           job_seeker_status: @jss3, confirmed_at: Time.now)
 
