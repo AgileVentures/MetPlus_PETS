@@ -6,16 +6,13 @@
 		=cp.label :title, 'Title', autofocus: true, class:'control-label col-sm-2'
 		.col-sm-6
 			=cp.text_field :title, size: 30, class:'form-control'
-
 	- @user_form = cp
 	= render 'users/subform'
-	
 	.form-group
 		.col-sm-2.col-sm-offset-2
 			=@user_form.submit class: 'btn btn-primary'
 		.col-sm-2.col-sm-offset-1
 			=link_to 'Cancel', root_path, class: 'btn btn-danger'
-
-
-
+%i (leave blank password if you don't want to change it)
+%br
 
