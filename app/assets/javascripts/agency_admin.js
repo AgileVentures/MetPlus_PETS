@@ -49,20 +49,26 @@ var AgencyData = {
                     'job_category[description]': $('#category_desc').val() },
             timeout: 5000,
             success: function (data, status, xhrObject){
-              // Find the current (active) pagination anchor and
-              // force a reload of the page section in case the new
-              // category shows up in that section.
-              var paginate_link = $('a', 'li.active','div.pagination');
-              if (paginate_link === undefined) {
-                paginate_url = paginate_link.attr('href');
+              // If this is the first job category added, the job categories
+              // table ID will not yet be visible - in that case, reload page
+              if ($('#job_categories_table').length === 0) {
+                document.location.reload(true);
               } else {
-                // If there are too few items on the page the paginate links
-                // will not be present - create appropriate url instead
-                paginate_url = '/agency_admin/job_properties?data_type=' +
-                               'job_categories&job_categories_page=1';
+                // Find the current (active) pagination anchor and
+                // force a reload of the page section in case the new
+                // category shows up in that section.
+                var paginate_link = $('a', 'li.active','div.pagination');
+                if (paginate_link.length != 0) {
+                  paginate_url = paginate_link.attr('href');
+                } else {
+                  // If there are too few items on the page the paginate links
+                  // will not be present - create appropriate url instead
+                  paginate_url = '/agency_admin/job_properties?data_type=' +
+                                 'job_categories&job_categories_page=1';
+                }
+                AgencyData.get_updated_data('#job_categories_table',
+                                            paginate_url);
               }
-              AgencyData.get_updated_data('#job_categories_table',
-                                          paginate_url);
               $('#model_errors').html('') // Clear model errors in modal
               $('#add_job_category').modal('hide')
             },
