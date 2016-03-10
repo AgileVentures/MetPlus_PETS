@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       :path_names => {sign_up: 'new', sign_out: 'logout',
                       sign_in: 'login' },
       :controllers => {invitations: 'people_invitations',
-                     confirmations: 'users/confirmations' }
+                       confirmations: 'users/confirmations' }
 
   devise_scope :user do
     match  '/login'   => 'devise/sessions#new',        via: 'get'
