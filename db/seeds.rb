@@ -118,11 +118,13 @@ if Rails.env.development? # || Rails.env.staging?
     email =Faker::Internet.email
     website = Faker::Internet.url
     name = Faker::Company.name
-    Company.create!(ein: ein,
+    cmp = Company.new(ein: ein,
                     phone: phone,
                     email: email,
-                    website: website,
-                    name: name)
+                  website: website,
+                     name: name)
+    cmp.agencies << agency
+    cmp.save!
   end
 
   companies = Company.all.to_a
@@ -181,8 +183,7 @@ if Rails.env.development? # || Rails.env.staging?
     shift = ["Day", "Evening", "Morning"][r.rand(3)]
     fulltime =  [false, true][r.rand(2)]
     jobId = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join
-
-    Job.create!(title: title,
+    Job.create(title: title,
                description: description,
                shift: shift,
                company_job_id: jobId ,
