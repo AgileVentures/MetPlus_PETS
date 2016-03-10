@@ -200,12 +200,39 @@ Scenario: non-admin does not see 'admin' in menu
   Then I should see "Signed in successfully."
   And I should not see "Admin"
 
-@javascript
+@selenium
 Scenario: add job category
   And I click the "Job Properties" link
   And I click the "Add Job Category" button
   And I wait 2 seconds
   And I fill in "Name:" with "Test Job Category"
+  And I fill in "Description:" with "Description of Test Job Category"
+  And I click the "Add Category" button
+  And I wait 2 seconds
+  Then I should see "Test Job Category"
+  And I should see "Description of Test Job Category"
+
+@selenium
+Scenario: cancel add job category
+  And I click the "Job Properties" link
+  And I click the "Add Job Category" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test Job Category"
+  And I click the "Cancel" button
+  And I wait 2 seconds
+  Then I should not see "Test Job Category"
+  And I should not see "Description of Test Job Category"
+
+@selenium
+Scenario: show job category model validation errors
+  And I click the "Job Properties" link
+  And I click the "Add Job Category" button
+  And I wait 2 seconds
+  And I click the "Add Category" button
+  And I wait 2 seconds
+  Then I should see "Name can't be blank"
+  And I should see "Description can't be blank"
+  Then I fill in "Name:" with "Test Job Category"
   And I fill in "Description:" with "Description of Test Job Category"
   And I click the "Add Category" button
   And I wait 2 seconds

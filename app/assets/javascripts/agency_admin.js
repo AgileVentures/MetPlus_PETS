@@ -74,7 +74,9 @@ var AgencyData = {
             },
             error: function (xhrObj, status, exception) {
               // If model error(s), show content in div in modal
-              if (exception === 'Unprocessable Entity') {
+              // (Firefox seems to add a trailing whitespace char ....
+              //  hence the 'trim()' function)
+              if (exception.trim() === 'Unprocessable Entity') {
                 $('#model_errors').html(xhrObj.responseText);
               } else {
                 alert('Server Error');
