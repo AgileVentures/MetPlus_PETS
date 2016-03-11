@@ -1,0 +1,26 @@
+.form-group
+	=@user_form.label :first_name, 'First Name', class:'control-label col-sm-2'
+	.col-sm-6
+		=@user_form.text_field :first_name, size: 30, class:'form-control'
+.form-group
+	=@user_form.label :last_name, 'Last Name', class:'control-label col-sm-2'
+	.col-sm-6
+		=@user_form.text_field :last_name, size: 30, class:'form-control'
+	
+.form-group
+	=@user_form.label :email, 'Email', class:'control-label col-sm-2'
+	.col-sm-6
+		=@user_form.text_field :email, size: 30, class:'form-control'
+.form-group
+	=@user_form.label :phone, 'Phone', class:'control-label col-sm-2'
+	.col-sm-6
+		=@user_form.text_field :phone, size: 30, class:'form-control'
+
+.form-group
+	=@user_form.label :password, 'Password', class:'control-label col-sm-2'
+	.col-sm-6
+		=@user_form.password_field :password, size: 30, class:'form-control'
+.form-group
+	=@user_form.label :password_confirmation, 'Password Confirmation', class:'control-label col-sm-2'
+	.col-sm-6
+		=@user_form.password_field :password_confirmation, size: 30, class:'form-control'

@@ -74,18 +74,6 @@ SkillLevel.delete_all
   end
 end
 
-#SkillLevel
-SkillLevel.create(name: 'Beginner',
-            description: 'Entry level or minimal proficiency')
-SkillLevel.create(name: 'Intermediate',
-            description: 'Proficient in some aspects,
-                          requires supervision')
-SkillLevel.create(name: 'Advanced',
-            description: 'Proficient in all aspects,
-                          requires little supervision')
-SkillLevel.create(name: 'Expert',
-            description: 'Proficient in all aspects,
-                          able to work indepently')
 #AgencyRole
 # Create all agency roles - this should stay in production version of this file
 AgencyRole::ROLE.each_value do |agency_role|
@@ -100,7 +88,7 @@ end
 # Create a default agency, agency branches, agency admin and agency manager
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
             phone: '111 222 3333', fax: '333 444 5555',
-            email: 'pets_admin@metplus.org',
+            email: 'pets@metplus.org',
             description: 'Michigan Employment & Training Plus, (MET|PLUS)
                          is a 501 (c) 3, Vocational Training non-profit
                          organization that strives to assist Michigan
@@ -266,59 +254,12 @@ if Rails.env.development? # || Rails.env.staging?
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 
-  # Agency People
-  agency_aa = AgencyPerson.new(first_name: 'John', last_name: 'Smith',
-                        agency_id: agency.id, email: 'pets_admin@metplus.org',
-                        password: 'qwerty123', confirmed_at: Time.now,
-                        branch_id: agency.branches[0].id,
-                        status: AgencyPerson::STATUS[:ACT])
-  agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
-  agency_aa.save!
-
-  agency_cm_and_jd = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts',
-                        agency_id: agency.id, email: 'chet@metplus.org',
-                        password: 'qwerty123', confirmed_at: Time.now,
-                        branch_id: agency.branches[1].id,
-                        status: AgencyPerson::STATUS[:ACT])
-  agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
-  agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
-  agency_cm_and_jd.save!
-  agency_cm_and_jd.agency_relations <<
-        AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
-                            job_seeker: js1)
-  agency_cm_and_jd.agency_relations <<
-        AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
-                            job_seeker: js2)
-  agency_cm_and_jd.save!
-
-  agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
-                        agency_id: agency.id, email: 'jane@metplus.org',
-                        password: 'qwerty123', confirmed_at: Time.now,
-
-                        branch_id: agency.branches[2].id,
-                        status: AgencyPerson::STATUS[:ACT])
-
-  agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
-  agency_jd.save!
-  agency_jd.agency_relations <<
-        AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
-                            job_seeker: js3)
-
-
-  jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',
-                               email:'vijaya.karumudi1@gmail.com',
-                               password:'dfg123',password_confirmation:'dfg123',
-                               phone:'345-890-7890',year_of_birth:"1990",
-                               confirmed_at: Time.now)
-
 
   jobseeker = JobSeeker.create(first_name: 'abc', last_name:'def',
                                email:'vijaya.karumudi1@gmail.com',
                                password:'dfg123',password_confirmation:'dfg123',
                                phone:'345-890-7890',year_of_birth: "1990",
                                confirmed_at: Time.now)
-
-
 
 
   JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
@@ -330,4 +271,66 @@ if Rails.env.development? # || Rails.env.staging?
                         email: 'frank@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss3, confirmed_at: Time.now)
+
 end
+
+# Agency People
+agency_aa = AgencyPerson.new(first_name: 'John', last_name: 'Smith',
+                      agency_id: agency.id, email: 'pets_admin@metplus.org',
+                      password: 'qwerty123', confirmed_at: Time.now,
+                      branch_id: agency.branches[0].id,
+                      status: AgencyPerson::STATUS[:ACT])
+agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
+agency_aa.save!
+
+agency_cm_and_jd = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts',
+                      agency_id: agency.id, email: 'chet@metplus.org',
+                      password: 'qwerty123', confirmed_at: Time.now,
+                      branch_id: agency.branches[1].id,
+                      status: AgencyPerson::STATUS[:ACT])
+agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
+agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+agency_cm_and_jd.save!
+agency_cm_and_jd.agency_relations <<
+      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
+                          job_seeker: js1)
+agency_cm_and_jd.agency_relations <<
+      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+                          job_seeker: js2)
+agency_cm_and_jd.save!
+
+agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
+                      agency_id: agency.id, email: 'jane@metplus.org',
+                      password: 'qwerty123', confirmed_at: Time.now,
+
+                      branch_id: agency.branches[2].id,
+                      status: AgencyPerson::STATUS[:ACT])
+
+agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+agency_jd.save!
+agency_jd.agency_relations <<
+      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+                          job_seeker: js3)
+
+
+jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+"1990", confirmed_at: Time.now)
+
+
+jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
+"1990", confirmed_at: Time.now)
+
+
+
+
+JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
+                      email: 'mary@gmail.com', password: 'qwerty123',
+              year_of_birth: '1970', resume: 'text',
+          job_seeker_status: @jss2, confirmed_at: Time.now)
+
+JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
+                      email: 'frank@gmail.com', password: 'qwerty123',
+              year_of_birth: '1970', resume: 'text',
+          job_seeker_status: @jss3, confirmed_at: Time.now)
+
+# Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.
