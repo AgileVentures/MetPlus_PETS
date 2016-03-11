@@ -127,6 +127,7 @@ if Rails.env.development? # || Rails.env.staging?
 
   companies = Company.all.to_a
   #Address
+
   200.times do |n|
     street = Faker::Address.street_address
     city = Faker::Address.city
@@ -139,12 +140,9 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
-    JobCategory.create(name: name, description: description)
-  end
-
-  20.times do |n|
-  JobCategory.create(name: "Generic Category #{n}",
-            description: 'Generic Job Description')
+    if !JobCategory.create(name: name, description: description)
+      JobCategory.create!(name: "#{name}_#{n}", description: description)
+    end
   end
 
   companies = Company.all.to_a
@@ -176,6 +174,7 @@ if Rails.env.development? # || Rails.env.staging?
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
   #job
+
   200.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3,false, 4 )
@@ -192,7 +191,6 @@ if Rails.env.development? # || Rails.env.staging?
                company_person_id: companypeople.pop.id,
                job_category_id: jobcategories.pop.id)
   end
-
 
   #jobseeker
   jobseekerstatus = JobSeekerStatus.all.to_a

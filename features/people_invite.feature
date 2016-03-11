@@ -41,6 +41,7 @@ Scenario: invite (and reinvite) new agency person
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Invite Person" link
   And I should see "Send invitation"
   And I fill in "Email" with "adam@metplus.org"
@@ -63,6 +64,7 @@ Scenario: agency person accepts invitation in email
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Invite Person" link
   And I fill in "Email" with "adam@metplus.org"
   And I fill in "First name" with "Adam"
@@ -86,6 +88,7 @@ Scenario: invite (and reinvite) new Company person
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets Inc." link
   And I click the "Invite Person" link
   And I should see "Send invitation"
@@ -109,6 +112,7 @@ Scenario: company person accepts invitation in email
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets Inc." link
   Then I click the "Invite Person" link
   And I fill in "Email" with "newguy@widgets.com"

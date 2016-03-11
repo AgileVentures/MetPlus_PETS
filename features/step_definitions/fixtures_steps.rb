@@ -96,3 +96,9 @@ Given(/^the following jobseeker exist:$/) do |table|
     jobseeker.save
   end
 end
+
+Given(/^the following job categories exist:$/) do |table|
+  table.hashes.each do |hash|
+    JobCategory.create!(hash)
+  end
+end

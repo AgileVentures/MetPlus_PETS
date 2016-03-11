@@ -49,7 +49,7 @@
 
 /* this is for a button associated with a table above it. It is set close
    to the table. See agency admin home view for example. */
-#table_action_button {
+.table_action_button {
   margin-bottom: 30px;
   margin-top: -10px;
 }
@@ -236,5 +236,3 @@ body {
     }
 }
 /*form errors css end */
-
-
