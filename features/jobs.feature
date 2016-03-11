@@ -5,8 +5,8 @@ I want to create, update, and delete jobs
 
 background: adding job to database 
 	Given the following jobs records:
-	| title               | company_job_id  | shift  | fulltime | description | 
-	| software developer  | KRK12K  | evening| true     | internship position with pay| 
+	| title               | company_job_id  | shift  | fulltime | description | company_id |
+	| software developer  | KRK12K  | evening| true     | internship position with pay| 3  |
 
 @javascript
 Scenario: Creating, Updating, and Deleting Job successfully	
@@ -15,6 +15,7 @@ Scenario: Creating, Updating, and Deleting Job successfully
 	And  I fill in the fields: 
 		| Title                  | cashier|  
 		| Job id                 | KARK12 |  
+		| 
 		| Description            | Atleast two years work experience|  
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime" 

@@ -1,11 +1,6 @@
 %h4
 	=link_to job.title, job_path(job)
-/ uncomment after company association
-/ is done.
-/ and delete the line following it.
-/ %h5= job.company.name
-%h5 Walmart a placeholder 
-	
+%h5= job.company.name
 %small
 	= "#{time_ago_in_words(job.created_at, )} ago"
 	=render partial: 'modal', locals: {job: job}

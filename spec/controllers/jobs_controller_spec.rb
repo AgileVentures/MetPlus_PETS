@@ -13,11 +13,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+          company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should permit(:description, :shift, :title, 
-                    :company_job_id, :fulltime).
+                    :company_job_id, :fulltime, :company_id).
         for(:create, params: params).
         on(:job)
     end
@@ -31,11 +32,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+          company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should permit(:description, :shift, :title, 
-                    :company_job_id, :fulltime).
+                    :company_job_id, :company_id, :fulltime).
         for(:update, params: params).
         on(:job)
     end
@@ -49,11 +51,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+          company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should_not permit(:description, :shift, :title, 
-                        :company_job_id, :fulltime, :name).
+                        :company_job_id, :company_id, :fulltime, :name).
         for(:create, params: params).
         on(:job)
     end
@@ -67,11 +70,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+           company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should_not permit(:description, :shift, :title, 
-                        :company_job_id, :fulltime, :name).
+                        :company_job_id, :company_id, :fulltime, :name).
         for(:update, params: params).
         on(:job)
     end
@@ -201,7 +205,8 @@ RSpec.describe JobsController, type: :controller do
 
     it 'redirects to the jobs index and increased by 1 count' do
       post :create, :job => {:title => "Ruby on Rails", 
-                             :fulltime => true, description: "passionate",
+                             :fulltime => true, description: "passionate", 
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
       should set_flash 
       expect(response).to redirect_to(:action => 'index')
@@ -212,6 +217,7 @@ RSpec.describe JobsController, type: :controller do
     it 'unsuccessful POST' do
       post :create, :job => {:title => "  ", :fulltime => true,
                              description: "passionate",
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
       expect(response).to render_template('new')
       expect(Job.count).to eq(1)
@@ -228,6 +234,7 @@ RSpec.describe JobsController, type: :controller do
     it 'should have 1 jobs after update and redirects to the show page' do
       patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
                              :fulltime => true, description: "passionate",
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
      
       expect(response).to redirect_to(:action => 'show')
@@ -240,6 +247,7 @@ RSpec.describe JobsController, type: :controller do
      it 'unsuccessful PATCH' do
       patch :update, id: @job.id , :job => {:title => " ", 
                              :fulltime => true, description: "passionate",
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
       
       expect(response).to render_template('edit')

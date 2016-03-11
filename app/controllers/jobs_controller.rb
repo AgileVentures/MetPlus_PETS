@@ -2,8 +2,7 @@ class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
 
 	def index
-		# @jobs = Job.paginate(:page => params[:page], :per_page => 32).includes(:company)
-		@jobs = Job.paginate(:page => params[:page], :per_page => 32)
+		@jobs = Job.paginate(:page => params[:page], :per_page => 32).includes(:company)
 	end	
 
 	def new
@@ -49,7 +48,8 @@ class JobsController < ApplicationController
 		def job_params
 			# params.require(:job).permit(:description, :company_id, :shift, 
 			#   :company_person_id, :fulltime, :company_job_id, :job_category_id, :title)
-			params.require(:job).permit(:description, :shift, :fulltime, :company_job_id, :title)
+			params.require(:job).permit(:description, :shift, :company_job_id,
+			                            :fulltime,:company_id, :title)
 		end
 
 

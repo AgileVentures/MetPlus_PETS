@@ -3,7 +3,7 @@
 %div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
 		=link_to "Delete", job_path(@job), method: :delete, 
-		data: {confirm: "Are you sure you want to delete the following job: #{@job.title}"}
+		 data: {confirm: "Are you sure you want to delete the following job: #{@job.title}"}
 		|
 		=link_to "Edit Job", edit_job_path(@job)
 		|
@@ -13,8 +13,7 @@
 	.clearfix
 	%div{class: "panel panel-default", id: "show-panel-id"}  
 		%div{class: "panel-heading", id: "panel-heading-show-id" }
-			/ %h4=@job.company.name
-			%h4 Walmart 
+			%h4=@job.company.name
 	%table{class: "table table-bordered"} 
 		%tbody 
 			%tr

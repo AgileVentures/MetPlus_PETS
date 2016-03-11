@@ -32,4 +32,12 @@ module ApplicationHelper
               data: {toggle: 'modal', target: "\##{target_div_id}"} )
   end
 
+  def user_type(current_user)
+    if current_user.actable_type
+      current_user.actable_type.constanize.find(current_user.actable_id)
+    else
+      current_user
+    end
+  end
+
 end
