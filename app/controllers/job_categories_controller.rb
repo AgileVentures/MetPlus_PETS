@@ -9,6 +9,17 @@ class JobCategoriesController < ApplicationController
     end
   end
 
+  def edit
+    category = JobCategory.find(params[:id])
+    if category
+      render json: { name: category.name,
+                     description: category.description,
+                     id: category.id }
+    else
+      render nothing: true, status: 422
+    end
+  end
+
   def update
   end
 

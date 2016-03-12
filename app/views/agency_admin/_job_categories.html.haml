@@ -10,7 +10,7 @@
       - @job_categories.each do |jobcat|
         %tr
           %td
-            = jobcat.name
+            = link_to "#{jobcat.name}", edit_job_category_path(jobcat)
           %td
             = jobcat.description
 

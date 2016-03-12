@@ -43,10 +43,10 @@ var AgencyData = {
     // in 'agency_admin/_add_job_category.html.haml'
     // Create the job category .....
     $.ajax({type: 'POST',
-            url: '/job_categories/create/',
+            url: '/job_categories/',
             // Get the data entered by the user in the dialog box
-            data: { 'job_category[name]': $('#category_name').val(),
-                    'job_category[description]': $('#category_desc').val() },
+            data: { 'job_category[name]': $('#add_category_name').val(),
+                    'job_category[description]': $('#add_category_desc').val() },
             timeout: 5000,
             success: function (data, status, xhrObject){
               // If this is the first job category added, the job categories
@@ -69,8 +69,8 @@ var AgencyData = {
                 AgencyData.get_updated_data('#job_categories_table',
                                             paginate_url);
               }
-              $('#model_errors').html('') // Clear model errors in modal
-              $('#add_job_category').modal('hide')
+              $('#model_errors').html(''); // Clear model errors in modal
+              $('#add_job_category').modal('hide');
             },
             error: function (xhrObj, status, exception) {
               // If model error(s), show content in div in modal
@@ -85,6 +85,55 @@ var AgencyData = {
           });
     // Good background on returning error status in ajax controller action:
     // http://travisjeffery.com/b/2012/04/rendering-errors-in-json-with-rails/
+  },
+  edit_job_category: function () {
+    // Get the current attribute values for this job category
+    $.ajax({type: 'GET',
+            url: $(this).attr('href'),
+            timeout: 5000,
+            success: function (data, status, xhrObject){
+              // Store the job_category ID for retrieval in update action
+              AgencyData.job_category_id(data.id);
+
+              // Set the attribute values in the modal and make modal visible
+              $('#update_category_name').val(data.name)
+              $('#update_category_desc').val(data.description)
+              $('#update_job_category').modal('show')
+            },
+            error: function (xhrObj, status, exception) {
+              alert('Error retrieving category attributes');
+            },
+          });
+    return(false);
+  },
+  job_category_id: function(id) {
+    
+  }
+  update_job_category: function () {
+    alert('In Update Job Category function');
+
+    // Update job category
+    $.ajax({type: PATCH,
+            url:
+    })
+      // If success, reload page ....
+      // Find the current (active) pagination anchor and
+      // force a reload of the page section in case the updated
+      // category shows up in that section.
+      var paginate_link = $('a', 'li.active','div.pagination');
+      if (paginate_link.length != 0) {
+        paginate_url = paginate_link.attr('href');
+      } else {
+        // If there are too few items on the page the paginate links
+        // will not be present - create appropriate url instead
+        paginate_url = '/agency_admin/job_properties?data_type=' +
+                       'job_categories&job_categories_page=1';
+      }
+      AgencyData.get_updated_data('#job_categories_table',
+                                  paginate_url);
+      $('#model_errors').html(''); // Clear model errors in modal
+      $('#add_job_category').modal('hide');
+
   },
   setup_branches: function () {
     $('#toggle_branches').click(AgencyData.toggle);
@@ -101,9 +150,14 @@ var AgencyData = {
   setup_job_categories: function () {
     $('#toggle_job_categories').click(AgencyData.toggle);
     $('#job_categories_table').on('click', '.pagination a', AgencyData.update_data);
+    $('#job_categories_table').on('click',
+                  // bind to 'edit category' anchor element
+                  "a[href^='/job_categories/'][href$='edit']",
+                                AgencyData.edit_job_category);
   },
-  setup_add_job_category: function () {
+  setup_manage_job_category: function () {
     $('#add_category_button').click(AgencyData.add_job_category);
+    $('#update_category_button').click(AgencyData.update_job_category);
   }
 };
 $(function () {
@@ -111,5 +165,5 @@ $(function () {
   AgencyData.setup_people();
   AgencyData.setup_companies();
   AgencyData.setup_job_categories();
-  AgencyData.setup_add_job_category();
+  AgencyData.setup_manage_job_category();
 });
