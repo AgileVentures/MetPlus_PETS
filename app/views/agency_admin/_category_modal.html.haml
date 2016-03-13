@@ -7,7 +7,7 @@
         %h4.modal-title
           = modal_title
       .modal-body
-        #model_errors
+        %div{id: "#{modal_action}_model_errors"}
         .form-group
           %label(for='category_name' class='control-label') Name:
           %textarea(class='form-control' id="#{modal_action}_category_name")

@@ -1,11 +1,11 @@
 class JobCategoriesController < ApplicationController
   def create
-    jc = JobCategory.new(category_params)
-    if jc.save
+    category = JobCategory.new(category_params)
+    if category.save
       render nothing: true
     else
       render partial: 'shared/error_messages',
-                      locals: {object: jc}, status: 422
+                      locals: {object: category}, status: 422
     end
   end
 
@@ -16,11 +16,18 @@ class JobCategoriesController < ApplicationController
                      description: category.description,
                      id: category.id }
     else
-      render nothing: true, status: 422
+      render nothing: true, status: 404
     end
   end
 
   def update
+    category = JobCategory.find(params[:id])
+    if category.update(category_params)
+      render nothing: true
+    else
+      render partial: 'shared/error_messages',
+                      locals: {object: category}, status: 422
+    end
   end
 
   def category_params
