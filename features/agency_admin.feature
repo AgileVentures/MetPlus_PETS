@@ -238,3 +238,17 @@ Scenario: show job category model validation errors
   And I wait 2 seconds
   Then I should see "Test Job Category"
   And I should see "Description of Test Job Category"
+
+@selenium
+Scenario: update job category
+  And I click the "Job Properties" link
+  And I click the "Software Engineer - RoR" link
+  And I wait 2 seconds
+  And I fill in "Description:" with ""
+  And I click the "Update Category" button
+  And I should see "Description can't be blank"
+  And I fill in "Description:" with "Backend RoR Development"
+  And I click the "Update Category" button
+  And I wait 2 seconds
+  Then "Update Job Category" should not be visible
+  And I should see "Backend RoR Development"

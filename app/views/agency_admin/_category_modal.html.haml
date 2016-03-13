@@ -9,10 +9,12 @@
       .modal-body
         %div{id: "#{modal_action}_model_errors"}
         .form-group
-          %label(for='category_name' class='control-label') Name:
+          %label(for="#{modal_action}_category_name" class='control-label')
+            Name:
           %textarea(class='form-control' id="#{modal_action}_category_name")
         .form-group
-          %label(for='category_desc' class='control-label') Description:
+          %label(for="#{modal_action}_category_desc" class='control-label')
+            Description:
           %textarea(class='form-control' id="#{modal_action}_category_desc")
       .modal-footer
         %button(type='button' class='btn btn-default'

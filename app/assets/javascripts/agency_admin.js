@@ -54,33 +54,13 @@ var AgencyData = {
               if ($('#job_categories_table').length === 0) {
                 document.location.reload(true);
               } else {
-                // Find the current (active) pagination anchor and
-                // force a reload of the page section in case the new
-                // category shows up in that section.
-                var paginate_link = $('a', 'li.active','div.pagination');
-                if (paginate_link.length != 0) {
-                  paginate_url = paginate_link.attr('href');
-                } else {
-                  // If there are too few items on the page the paginate links
-                  // will not be present - create appropriate url instead
-                  paginate_url = '/agency_admin/job_properties?data_type=' +
-                                 'job_categories&job_categories_page=1';
-                }
-                AgencyData.get_updated_data('#job_categories_table',
-                                            paginate_url);
+                AgencyData.change_job_category_success('#add_job_category',
+                                                       '#add_model_errors');
               }
-              $('#add_model_errors').html(''); // Clear model errors in modal
-              $('#add_job_category').modal('hide');
             },
             error: function (xhrObj, status, exception) {
-              // If model error(s), show content in div in modal
-              // (Firefox seems to add a trailing whitespace char to
-              // 'exception'... hence the 'trim()' function)
-              if (exception.trim() === 'Unprocessable Entity') {
-                $('#add_model_errors').html(xhrObj.responseText);
-              } else {
-                alert('Server Error');
-              }
+              AgencyData.change_job_category_error(exception, xhrObj,
+                                                  '#add_model_errors');
             },
           });
     // Good background on returning error status in ajax controller action:
@@ -115,40 +95,19 @@ var AgencyData = {
                     'job_category[description]': $('#update_category_desc').val() },
             timeout: 5000,
             success: function (data, status, xhrObject) {
-              // Find the current (active) pagination anchor and
-              // force a reload of the page section in case the updated
-              // category shows up in that section.
-              var paginate_link = $('a', 'li.active','div.pagination');
-              if (paginate_link.length != 0) {
-                paginate_url = paginate_link.attr('href');
-              } else {
-                // If there are too few items on the page the paginate links
-                // will not be present - create appropriate url instead
-                paginate_url = '/agency_admin/job_properties?data_type=' +
-                               'job_categories&job_categories_page=1';
-              }
-              AgencyData.get_updated_data('#job_categories_table',
-                                          paginate_url);
-              $('#update_model_errors').html(''); // Clear model errors in modal
-              $('#update_job_category').modal('hide');
+              AgencyData.change_job_category_success('#update_job_category',
+                                                     '#update_model_errors');
             },
             error: function (xhrObj, status, exception) {
-              // If model error(s), show content in div in modal
-              // (Firefox seems to add a trailing whitespace char to
-              // 'exception'... hence the 'trim()' function)
-              if (exception.trim() === 'Unprocessable Entity') {
-                $('#update_model_errors').html(xhrObj.responseText);
-              } else {
-                alert('Server Error');
-              }
+              AgencyData.change_job_category_error(exception, xhrObj,
+                                                  '#update_model_errors');
             },
           });
     return(false);
   },
-  changed_job_category: function (modal_id, model_errors_id) {
-    // Find the current (active) pagination anchor and
-    // force a reload of the page section in case the new
-    // category shows up in that section.
+  change_job_category_success: function (modal_id, model_errors_id) {
+    // Find the current (active) pagination anchor and force a reload of the page
+    // section in case the new or updated category shows up in that section.
     var paginate_link = $('a', 'li.active','div.pagination');
     if (paginate_link.length != 0) {
       paginate_url = paginate_link.attr('href');
@@ -162,6 +121,15 @@ var AgencyData = {
                                 paginate_url);
     $(model_errors_id).html(''); // Clear model errors in modal
     $(modal_id).modal('hide');
+  },
+  change_job_category_error: function (exception, xhrObj, model_errors_id) {
+    // If model error(s), show content in div in modal (Firefox seems to add a
+    // trailing whitespace char to 'exception' - hence the 'trim()' function)
+    if (exception.trim() === 'Unprocessable Entity') {
+      $(model_errors_id).html(xhrObj.responseText);
+    } else {
+      alert('Server Error');
+    }
   },
   setup_branches: function () {
     $('#toggle_branches').click(AgencyData.toggle);

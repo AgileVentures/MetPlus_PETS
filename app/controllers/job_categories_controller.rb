@@ -10,23 +10,29 @@ class JobCategoriesController < ApplicationController
   end
 
   def edit
-    category = JobCategory.find(params[:id])
-    if category
+    begin
+      category = JobCategory.find(params[:id])
+    rescue
+      render nothing: true, status: 404
+    else
       render json: { name: category.name,
                      description: category.description,
                      id: category.id }
-    else
-      render nothing: true, status: 404
     end
   end
 
   def update
-    category = JobCategory.find(params[:id])
-    if category.update(category_params)
-      render nothing: true
+    begin
+      category = JobCategory.find(params[:id])
+    rescue
+      render nothing: true, status: 404
     else
-      render partial: 'shared/error_messages',
-                      locals: {object: category}, status: 422
+      if category.update(category_params)
+        render nothing: true
+      else
+        render partial: 'shared/error_messages',
+                        locals: {object: category}, status: 422
+      end
     end
   end
 
