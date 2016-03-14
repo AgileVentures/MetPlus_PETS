@@ -16,7 +16,17 @@
         Hide Job Categories
 
   .col-sm-3.col-sm-offset-3.table_action_button
-    - text_modal_button 'Add Job Category', 'add_job_category', |
-                        'btn btn-primary btn-sm pull-right'     |
+    - text_modal_button 'Add Job Category', 'add_job_category',
+                        'btn btn-primary btn-sm pull-right'
 
-= render 'add_category_modal'
+= render partial: 'category_modal',
+          locals: {modal_id:     'add_job_category',
+                   modal_action: 'add',
+                   modal_title:  'Add Job Category',
+                   modal_submit: 'Add Category'}
+
+= render partial: 'category_modal',
+          locals: {modal_id:     'update_job_category',
+                   modal_action: 'update',
+                   modal_title:  'Update Job Category',
+                   modal_submit: 'Update Category'}

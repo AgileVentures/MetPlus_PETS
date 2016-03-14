@@ -21,11 +21,46 @@ RSpec.describe JobCategoriesController, type: :controller do
     end
   end
 
-  describe "PATCH #update" do
-    xit "returns http success" do
-      get :update
-      expect(response).to have_http_status(:success)
+  describe "GET #edit" do
+    let(:category)  { FactoryGirl.create(:job_category) }
+
+    context 'job category found' do
+      before(:each) do
+        xhr :get, :edit, id: category
+      end
+
+      it 'renders json structure' do
+        expect(JSON.parse(response.body))
+            .to match({'id' => category.id,
+                       'name' => category.name,
+                       'description' => category.description})
+      end
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'job category NOT found' do
+      it "returns http status not_found" do
+        xhr :get, :edit, id: 0
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
+  describe "PATCH #update" do
+    let(:category)  { FactoryGirl.create(:job_category) }
+    let(:jobcat_params) { FactoryGirl.attributes_for(:job_category) }
+
+    it 'returns success for valid parameters' do
+      xhr :patch, :update, id: category, job_category: jobcat_params
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'returns errors and error status for invalid parameters' do
+      xhr :patch, :update, id: category, job_category: {name: '', description: ''}
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to render_template('shared/_error_messages')
+    end
+  end
 end
