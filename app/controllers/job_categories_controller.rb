@@ -36,6 +36,17 @@ class JobCategoriesController < ApplicationController
     end
   end
 
+  def destroy
+    begin
+      category = JobCategory.find(params[:id])
+    rescue
+      render nothing: true, status: 404
+    else
+      category.delete
+      render json: { job_category_count: JobCategory.count }
+    end
+  end
+
   def category_params
     params.require(:job_category).permit(:name, :description)
   end

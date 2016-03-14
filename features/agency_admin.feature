@@ -252,3 +252,11 @@ Scenario: update job category
   And I wait 2 seconds
   Then "Update Job Category" should not be visible
   And I should see "Backend RoR Development"
+
+@selenium
+Scenario: delete job category
+  And I click the "Job Properties" link
+  And I click the link with url "/job_categories/1"
+  And I wait 2 seconds
+  Then I should not see "Software Engineer - RoR"
+  And I should see "There are no job categories."

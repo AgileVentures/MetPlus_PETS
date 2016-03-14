@@ -63,4 +63,27 @@ RSpec.describe JobCategoriesController, type: :controller do
       expect(response).to render_template('shared/_error_messages')
     end
   end
+
+  describe "DELETE #destroy" do
+    let!(:category)  { FactoryGirl.create(:job_category) }
+
+    context 'job category found' do
+
+      it 'deletes job category' do
+        expect { xhr :delete, :destroy, id: category }.
+            to change(JobCategory, :count).by(-1)
+      end
+      it "returns http success" do
+        xhr :delete, :destroy, id: category
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'job category NOT found' do
+      it "returns http status not_found" do
+        xhr :delete, :destroy, id: 0
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
