@@ -80,6 +80,46 @@ var AgencyData = {
           });
     return(false);
   },
+  delete_job_category: function () {
+    $.ajax({type: 'DELETE',
+            url: $(this).attr('href'),
+            timeout: 5000,
+            success: function (data, status, xhrObject) {
+              // If this was the last job category, the job categories
+              // table ID should not be loaded - in that case, reload page
+              if (data.job_category_count === 0) {
+                document.location.reload(true);
+              } else {
+                // Find the current (active) pagination anchor and force a
+                // reload of the page section.
+                var paginate_link = $('a', 'li.active','div.pagination');
+                if (paginate_link.length != 0) {
+                  // Also need to check if the last job category on this
+                  // page has been deleted - if so, go to previous page link
+                  // (otherwise, will_paginate wil show a blank page
+                  //  with no pagination links)
+                  if ($('#job_categories_table tbody tr').length === 1) {
+                    paginate_url = $('a', '.prev', '.previous_page').attr('href');
+                  } else {
+                    paginate_url = paginate_link.attr('href');
+                  }
+                } else {
+                  // If there are too few items on the page the paginate links
+                  // will not be present - create appropriate url instead
+                  paginate_url = '/agency_admin/job_properties?data_type=' +
+                                 'job_categories&job_categories_page=1';
+                }
+                ManageData.get_updated_data('#job_categories_table',
+                                          paginate_url);
+              }
+            },
+            error: function (xhrObj, status, exception) {
+              alert('Error deleting category attributes');
+            },
+          });
+    return(false);
+
+  },
   change_job_category_success: function (modal_id, model_errors_id) {
     // Find the current (active) pagination anchor and force a reload of the page
     // section in case the new or updated category shows up in that section.
@@ -124,6 +164,10 @@ var AgencyData = {
                   "a[href^='/job_categories/'][href$='edit']",
                                 AgencyData.edit_job_category);
     $('#update_category_button').click(AgencyData.update_job_category);
+    $('#job_categories_table').on('click',
+                  // bind to 'delete category' anchor element
+                  "a[data-method='delete']",
+                                AgencyData.delete_job_category);
   }
 };
 $(function () {
