@@ -1,0 +1,23 @@
+.col-sm-offset-3.col-sm-6
+	= render 'shared/error_messages', object: f.object 
+.clearfix 
+.form-group 
+	=f.label :title, class: "col-sm-3 control-label text-right"
+	%div{class: "col-sm-6"}
+		=f.text_field :title, class: "form-control" 
+.form-group 
+	=f.label :company_job_id,"Job id", class: "col-sm-3 control-label text-right"
+	%div{class: "col-sm-6"}
+		=f.text_field :company_job_id, class: "form-control" 
+		
+.form-group 
+	=f.label :shift, class: "col-sm-3 control-label text-right" 
+	%div{class: "col-sm-5"}
+		=f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s, {prompt: true},
+		         class: "form-control" 
+	=f.label :fulltime, class: "control-label"
+	=f.check_box :fulltime
+.form-group 
+	=f.label :description, class: "col-sm-3 control-label text-right"
+	%div{class: "col-sm-6"}
+		=f.text_area :description, size: "40x10", class: "form-control" 

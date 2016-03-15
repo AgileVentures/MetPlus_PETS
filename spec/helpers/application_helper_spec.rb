@@ -12,4 +12,17 @@ RSpec.describe ApplicationHelper, type: :helper do
           to eq 'No Address'
     end
   end
+
+  context '#full_title' do 
+    
+   it "base title" do 
+     expect(helper.full_title()).to eq("MetPlus")
+   end
+
+   it "show page title" do 
+       expect(helper.full_title("Ruby on Rails")).to eq("Ruby on Rails | MetPlus")
+   end
+
+  end
+
 end

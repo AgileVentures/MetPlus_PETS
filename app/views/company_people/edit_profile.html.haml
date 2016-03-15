@@ -1,37 +1,18 @@
 %h2 Update Your Profile
 %br
+= form_for @company_person, url: update_profile_company_person_path(@company_person), html:{method: 'patch', class: 'form-horizontal'} do |cp|
 
-= form_for @company_person, url: update_profile_company_person_path(@company_person) do |cp|
-	%div{class: 'label-group'}
-		=cp.label :title, 'Title',autofocus: true,class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :title,class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :first_name, 'First Name',autofocus: true,class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :first_name,class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :last_name, 'Last Name', class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :last_name,class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :email,'Email',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :email, class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :phone,'Phone',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.text_field :phone, class:'form-control'
-	%div{class: 'label-group'}
-		=cp.label :password,'Password',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.password_field :password ,class:'form-control'
-		%i (leave blank if you don't want to change it)
+	.form-group
+		=cp.label :title, 'Title', autofocus: true, class:'control-label col-sm-2'
+		.col-sm-6
+			=cp.text_field :title, size: 30, class:'form-control'
+	- @user_form = cp
+	= render 'users/subform'
+	.form-group
+		.col-sm-2.col-sm-offset-2
+			=@user_form.submit class: 'btn btn-primary'
+		.col-sm-2.col-sm-offset-1
+			=link_to 'Cancel', root_path, class: 'btn btn-danger'
+%i (leave password blank, if you don't want to change it)
+%br
 
-	%div{class: 'label-group'}
-		=cp.label :password_confirmation,'Password Confirmation',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=cp.password_field :password_confirmation, class:'form-control'
-
-	%div{class: 'button-group'}
-		=cp.submit 'Update', class:'col-sm-6 col-sm-offset-2 btn btn-primary'

@@ -63,14 +63,25 @@ Rails.application.routes.draw do
   end
   # --------------------------------------------------------------------------
 
-  root 'main#index'
+  # ----------------------- Agency Admin -------------------------------------
+  # Agency admin maintains agency information
+  get 'agency_admin/home',           path: '/agency_admin/home'
+  get 'agency_admin/job_properties', path: '/agency_admin/job_properties'
+  # --------------------------------------------------------------------------
 
-  get 'agency_admin/home', path: '/admin/agency_admin/home'
+  # ----------------------- Job Categories  ----------------------------------
+  post  'job_categories/create'
+  patch 'job_categories/update'
+  # --------------------------------------------------------------------------
+
+
+  root 'main#index'
 
   get 'agency/home',  path: '/agency/:id'
 
   get 'company/home', path: '/company/:id'
 
+  resources :jobs
   resources :job_seekers
 
    # The priority is based upon order of creation: first created -> highest priority.

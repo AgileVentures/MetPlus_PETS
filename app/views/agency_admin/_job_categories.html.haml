@@ -1,0 +1,18 @@
+#job_categories_table
+  %table.table.table-hover
+    %thead
+      %tr
+        %td
+          %strong Name
+        %td
+          %strong Description
+    %tbody
+      - @job_categories.each do |jobcat|
+        %tr
+          %td
+            = jobcat.name
+          %td
+            = jobcat.description
+
+  = will_paginate @job_categories, param_name: 'job_categories_page', |
+                     params: {data_type: 'job_categories'}      |

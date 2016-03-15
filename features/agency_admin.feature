@@ -27,6 +27,10 @@ Background: seed data added to database and log in as agency admim
   | MetPlus | Detroit | 456 Sullivan Street | 48204   | 002  |
   | MetPlus | Detroit | 3 Auto Drive        | 48206   | 003  |
 
+  Given the following job categories exist:
+  | name                      | description                         |
+  | Software Engineer - RoR   | Develop website using Ruby on Rails |
+
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
@@ -34,7 +38,8 @@ Background: seed data added to database and log in as agency admim
   And I click the "Admin" link
 
 @javascript
-Scenario: toggle data tables
+Scenario: toggle data tables - home page
+  And I click the "Agency and Partner Companies" link
   And I wait 1 second
   And I should see "123 Main Street"
   Then I click the "Hide Branches" link
@@ -45,13 +50,27 @@ Scenario: toggle data tables
   Then "123 Main Street" should be visible
   And I should see "Smith, John"
   Then I click the "Hide People" link
-  And I wait 1 seconds
+  And I wait 1 second
   Then "Smith, John" should not be visible
-  # Then I click the "Show People" link
-  # And I wait 1 second
-  # Then "Smith, John" should be visible
+  Then I click the "Show People" link
+  And I wait 1 second
+  Then "Smith, John" should be visible
+
+@javascript
+Scenario: toggle data tables - job properties page
+  And I click the "Job Properties" link
+  And I wait 1 second
+  And I should see "Software Engineer - RoR"
+  Then I click the "Hide Job Categories" link
+  And I wait 1 second
+  Then "Software Engineer - RoR" should not be visible
+  Then I click the "Show Job Categories" link
+  And I wait 1 second
+  Then "Software Engineer - RoR" should be visible
+
 
 Scenario: edit agency information
+  And I click the "Agency and Partner Companies" link
   Then I should see "PETS Administration"
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
@@ -61,6 +80,7 @@ Scenario: edit agency information
   And I should see "MetPlus Two"
 
 Scenario: cancel edit agency information
+  And I click the "Agency and Partner Companies" link
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
@@ -69,6 +89,7 @@ Scenario: cancel edit agency information
   And I should not see "MetPlus Two"
 
 Scenario: errors for edit agency information
+  And I click the "Agency and Partner Companies" link
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Phone" with ""
@@ -80,6 +101,7 @@ Scenario: errors for edit agency information
   And I should see "Website is not a valid website address"
 
 Scenario: edit branch
+  And I click the "Agency and Partner Companies" link
   Then I should see "Agency Branches"
   And I click the "001" link
   Then I should see "Branch Code:"
@@ -91,6 +113,7 @@ Scenario: edit branch
   Then I should see "Branch was successfully updated."
 
 Scenario: cancel edit branch
+  And I click the "Agency and Partner Companies" link
   And I click the "001" link
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
@@ -100,6 +123,7 @@ Scenario: cancel edit branch
   And I should not see "004"
 
 Scenario: error for edit branch
+  And I click the "Agency and Partner Companies" link
   And I click the "001" link
   Then I click the "Edit Branch" button
   And I fill in "Branch Code" with "002"
@@ -110,6 +134,7 @@ Scenario: error for edit branch
   And I should see "Address zipcode should be in form of 12345 or 12345-1234"
 
 Scenario: new agency branch
+  And I click the "Agency and Partner Companies" link
   And I click the "Add Branch" button
   Then I fill in "Branch Code" with "004"
   And I fill in "Street" with "10 Ford Way"
@@ -121,12 +146,14 @@ Scenario: new agency branch
 
 @javascript
 Scenario: delete agency branch
+  And I click the "Agency and Partner Companies" link
   And I click the "003" link
   Then I click and accept the "Delete Branch" button
   And I wait for 3 seconds
   Then I should see "Branch '003' deleted."
 
 Scenario: edit agency person
+  And I click the "Agency and Partner Companies" link
   Then I should see "Agency Personnel"
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
@@ -140,6 +167,7 @@ Scenario: edit agency person
   And I should see "Agency Admin"
 
 Scenario: cancel agency person edit
+  And I click the "Agency and Partner Companies" link
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: Jane Jones"
@@ -150,12 +178,14 @@ Scenario: cancel agency person edit
 
 @javascript
 Scenario: delete agency person
+  And I click the "Agency and Partner Companies" link
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
   And I wait for 3 seconds
   Then I should see "Person 'Jane Jones' deleted."
 
 Scenario: cannot remove sole agency admin
+  And I click the "Agency and Partner Companies" link
   And I click the "Smith, John" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: John Smith"
@@ -163,8 +193,48 @@ Scenario: cannot remove sole agency admin
   And the selection "Agency Admin" should be disabled
 
 Scenario: non-admin does not see 'admin' in menu
+  And I click the "Agency and Partner Companies" link
   Given I log out
   Given I am on the home page
   And I login as "jane@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
   And I should not see "Admin"
+
+@selenium
+Scenario: add job category
+  And I click the "Job Properties" link
+  And I click the "Add Job Category" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test Job Category"
+  And I fill in "Description:" with "Description of Test Job Category"
+  And I click the "Add Category" button
+  And I wait 2 seconds
+  Then I should see "Test Job Category"
+  And I should see "Description of Test Job Category"
+
+@selenium
+Scenario: cancel add job category
+  And I click the "Job Properties" link
+  And I click the "Add Job Category" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test Job Category"
+  And I click the "Cancel" button
+  And I wait 2 seconds
+  Then I should not see "Test Job Category"
+  And I should not see "Description of Test Job Category"
+
+@selenium
+Scenario: show job category model validation errors
+  And I click the "Job Properties" link
+  And I click the "Add Job Category" button
+  And I wait 2 seconds
+  And I click the "Add Category" button
+  And I wait 2 seconds
+  Then I should see "Name can't be blank"
+  And I should see "Description can't be blank"
+  Then I fill in "Name:" with "Test Job Category"
+  And I fill in "Description:" with "Description of Test Job Category"
+  And I click the "Add Category" button
+  And I wait 2 seconds
+  Then I should see "Test Job Category"
+  And I should see "Description of Test Job Category"

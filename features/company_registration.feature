@@ -64,6 +64,7 @@ Scenario: company registration approval
   And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Approve" link
@@ -80,6 +81,7 @@ Scenario: company registration delete
   And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
@@ -90,9 +92,11 @@ Scenario: attempt login after registration is deleted
   And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   Then I click and accept the "Delete Registration" button
   And I log out
+  And I wait 1 second
   Then I am on the home page
   And I login as "hughjobs@widgets.com" with password "qwerty123"
   Then I should see "Invalid email or password."
@@ -102,6 +106,7 @@ Scenario: company registration denial
   And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
@@ -117,12 +122,16 @@ Scenario: attempt login after registration is denied
   And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
+  And I wait 3 seconds
+  Then I should see "Registration Denied"
   And I log out
+  And I wait 1 second
   Then I am on the home page
   And I login as "hughjobs@widgets.com" with password "qwerty123"
   Then I should see "Your company registration has been denied."
@@ -159,6 +168,7 @@ Scenario: edit Company Registration: change contact email
   Given I am logged in as agency admin
   And a clear email queue
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Edit Registration" button
@@ -177,6 +187,7 @@ Scenario: edit Company Registration: change contact password
   Given I am logged in as agency admin
   And a clear email queue
   And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Edit Registration" button

@@ -1,0 +1,22 @@
+%h3 PETS Administration - Job Properties
+
+.row
+  .col-sm-3
+    %h4 Job Categories
+
+  - if @job_categories.empty?
+    .col-sm-3
+      %h5 There are no job categories.
+  - else
+    .col-sm-9
+      = render 'job_categories'
+    .clearfix
+    .col-sm-3.col-sm-offset-3
+      %a(id='toggle_job_categories' href='#job_categories_table' class='text-danger')
+        Hide Job Categories
+
+  .col-sm-3.col-sm-offset-3.table_action_button
+    - text_modal_button 'Add Job Category', 'add_job_category', |
+                        'btn btn-primary btn-sm pull-right'     |
+
+= render 'add_category_modal'

@@ -14,12 +14,16 @@
  *= require_self
  */
 
-.pagination {
+ /*homepage css*/
+.pagination{
   margin-top: 0px;
   margin-bottom: 10px;
 }
 
-/*homepage css*/
+.input-panel-body {
+  padding: 5px;
+}
+
 .col-md-8.col-lg-8{
    padding-left:  0;
 }
@@ -45,7 +49,7 @@
 
 /* this is for a button associated with a table above it. It is set close
    to the table. See agency admin home view for example. */
-#table_action_button {
+.table_action_button {
   margin-bottom: 30px;
   margin-top: -10px;
 }
@@ -129,23 +133,6 @@ body {
 /*end of homepage css*/
 
 
-/*PLEASE PUT COMMENT
-  WHERE EXACTLY
-  CSS APLLIES
-  TO
-*/
-.field_with_errors {
-  padding: 2px;
-  background-color: red;
-  display: table;
-}
-
-.errors_explanation {
-  background: red;
-  margin: 1em 0;
-  padding: 4px;
-}
-
 .form_button {
   float: right;
 }
@@ -213,10 +200,13 @@ body {
     padding-right: 20px;
 }
 
-#login-button {
+.btn.btn-primary#login-button {
     width: 140px;
     height: 39px;
     line-height: 25px;
+    color: #ffffff;
+    background-color: #006dcc;;
+    border-color: #0044cc;
 }
 .jumbotron h2#login-text {
    font-family:  "Arial-BoldMT","Arial Bold","Arial";
@@ -227,3 +217,22 @@ body {
    position: relative;
 }
 /*end of session#new css*/
+
+/* form errors css */
+.field_with_errors .form-control {
+   border-color: #a94442;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  .form-control {
+    color: #a94442;
+  }
+}
+
+#error-explanation {
+  color: #FF0000;;
+  ul {
+    color: #FF0000;;
+      margin: 0 0 30px 0;
+    }
+}
+/*form errors css end */

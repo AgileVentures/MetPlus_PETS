@@ -1,38 +1,10 @@
 = form_for @jobseeker, html: {class: 'form-horizontal'} do |js|
-	
-	.form-group
-		=js.label :first_name, 'First Name', class:'control-label col-sm-2'
-		.col-sm-6
-			=js.text_field :first_name, size: 30, class:'form-control'
-	.form-group
-		=js.label :last_name, 'Last Name', class:'control-label col-sm-2'
-		.col-sm-6
-			=js.text_field :last_name, size: 30, class:'form-control'
-
-	
-	.form-group
-		=js.label :email, 'Email', class:'control-label col-sm-2'
-		.col-sm-6
-			=js.text_field :email, size: 30, class:'form-control'
-	.form-group
-		=js.label :phone, 'Phone', class:'control-label col-sm-2'
-		.col-sm-6
-			=js.text_field :phone, size: 30, class:'form-control'
-
-	.form-group
-		=js.label :password, 'Password', class:'control-label col-sm-2'
-		.col-sm-6
-			=js.password_field :password, size: 30, class:'form-control'
-	.form-group
-		=js.label :password_confirmation, 'Password Confirmation', class:'control-label col-sm-2'
-		.col-sm-6
-			=js.password_field :password_confirmation, size: 30, class:'form-control'
-
+	- @user_form = js
+	= render 'users/subform'
 	.form-group
 		=js.label :year_of_birth, 'Year Of Birth', class:'control-label col-sm-2'
 		.col-sm-6
 			=js.text_field :year_of_birth, size: 30, class:'form-control'
-
 	.form-group
 		=js.label :job_seeker_status_id, 'Status', class:'control-label col-sm-2'
 		.col-sm-6
@@ -42,16 +14,9 @@
 		=js.label :resume, 'Resume', class:'control-label col-sm-2'
 		.col-sm-6
 			=js.file_field :resume
-	
 	.form-group
 		.col-sm-2.col-sm-offset-2
 			=js.submit class: 'btn btn-primary'
 
 		.col-sm-2.col-sm-offset-1
 			=link_to 'Cancel',root_path, class: 'btn btn-danger'
-
-
-
-
-
-	
