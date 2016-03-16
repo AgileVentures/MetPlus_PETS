@@ -1,12 +1,3 @@
-// describe 'clicking on send email button'
-// before each:
-//  load fixture (modal dialog)
-//  click 'Deny' button
-// ajax spy:
-//  confirm it calls correct url
-//  describe 'successful call'
-//    confirm $('#company_status').text === 'Registration Denied'
-
 describe("Clicking 'Send email' button", function () {
   beforeEach(function () {
     loadFixtures('company_registration.html');
@@ -33,7 +24,7 @@ describe("Clicking 'Send email' button", function () {
     spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
       // The 'fake' function has access to all arguments specified to $.ajax(),
       // so ajax argument values can be specified here.
-      
+
       // Call the 'success' function (ajax callback) with the expected
       // returned data (return_val) and 'OK' HTTP status
       ajaxArgs.success(return_val, '200');
