@@ -112,6 +112,11 @@ if Rails.env.development? # || Rails.env.staging?
                   website: website,
                      name: name)
     cmp.agencies << agency
+    if n < 20
+      cmp.status = Company::STATUS[:PND]
+    else
+      cmp.status = Company::STATUS[:ACT]
+    end
     cmp.save!
   end
 
@@ -146,17 +151,14 @@ if Rails.env.development? # || Rails.env.staging?
     last_name = FFaker::Name.last_name
     confirmed_at = DateTime.now
     cp = CompanyPerson.new(title: title, email: email, password: password,
-                          status: "Active", first_name: first_name,
+                      first_name: first_name,
                        last_name: last_name,
                     confirmed_at: confirmed_at,
                       company_id: companies.pop.id,
-                      address_id: addresses.pop.id )
-    if n < 6
-      cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
-    else
-      cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
-    end
-    cp.save
+                      address_id: addresses.pop.id,
+                          status: 'Active')
+    cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+    cp.save!
   end
 
   r = Random.new
