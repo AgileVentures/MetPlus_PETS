@@ -11,7 +11,7 @@ RSpec.describe JobSeekersController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-  
+
   describe "POST #create" do
     context "valid attributes" do
      before(:each) do
@@ -19,13 +19,13 @@ RSpec.describe JobSeekersController, type: :controller do
        @user = FactoryGirl.create(:user)
        @jobseekerstatus = FactoryGirl.create(:job_seeker_status)
        jobseeker_hash = FactoryGirl.attributes_for(:job_seeker).merge(FactoryGirl.attributes_for(:user)).merge(FactoryGirl.attributes_for(:job_seeker_status))
-       post :create, job_seeker: jobseeker_hash 
+       post :create, job_seeker: jobseeker_hash
      end
-        
+
      it 'sets flash message' do
         expect(flash[:notice]).to eq "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
      end
-                
+
      it 'returns redirect status' do
         expect(response).to have_http_status(:redirect)
      end
@@ -43,8 +43,8 @@ RSpec.describe JobSeekersController, type: :controller do
        @jobseekerstatus.assign_attributes(description:'MyText')
        @jobseeker.valid?
        jobseeker1_hash = FactoryGirl.attributes_for(:job_seeker, year_of_birth: '198').merge(FactoryGirl.attributes_for(:user,first_name:'John',last_name:'Smith', phone:'890-789-9087')).merge(FactoryGirl.attributes_for(:job_seeker_status, value=nil, description:'MyText'))
-       post :create, job_seeker: jobseeker1_hash 
-        
+       post :create, job_seeker: jobseeker1_hash
+
      end
      it 'assigns @model_errors for error display in layout' do
        expect(assigns(:model_errors).full_messages).to eq @jobseeker.errors.full_messages
@@ -57,7 +57,7 @@ RSpec.describe JobSeekersController, type: :controller do
      end
     end
  end
-  
+
  describe "PATCH #update" do
    context "valid attributes" do
      before(:each) do
@@ -67,7 +67,7 @@ RSpec.describe JobSeekersController, type: :controller do
 merge(FactoryGirl.attributes_for(:job_seeker_status))
 
      end
-            
+
      it 'sets flash message' do
         expect(flash[:notice]).to eq "Jobseeker was updated successfully."
      end
@@ -78,20 +78,20 @@ merge(FactoryGirl.attributes_for(:job_seeker_status))
         expect(response).to redirect_to(root_path)
      end
    end
-    
+
    context "valid attributes without password change" do
       before(:each) do
         @jobseeker =  FactoryGirl.create(:job_seeker)
         @user =  FactoryGirl.create(:user)
         @jobseekerstatus =  FactoryGirl.create(:job_seeker_status)
-        @jobseeker.valid? 
+        @jobseeker.valid?
         patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980').
 merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',password:nil,password_confirmation:nil,phone:'780-890-8976')).
 merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id:@jobseeker
         @jobseeker.reload
         @user.reload
         @jobseekerstatus.reload
-        
+
       end
      it 'sets a firstname' do
         expect(@jobseeker.first_name).to eq ("John")
@@ -102,7 +102,7 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
      it 'sets a yearofbirth' do
         expect(@jobseeker.year_of_birth).to eq ("1980")
      end
-     it 'sets a  value' do
+     it 'sets a jobseeker status' do
         expect(@jobseekerstatus.value) == ("Employedlooking")
      end
      it 'sets flash message' do
@@ -115,7 +115,7 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
        expect(response).to redirect_to(root_path)
      end
    end
-       
+
    context 'invalid attributes' do
      before(:each) do
        @jobseeker = FactoryGirl.create(:job_seeker)
@@ -140,7 +140,7 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
       @jobseeker = FactoryGirl.create(:job_seeker)
       get :edit, id: @jobseeker
     end
-    
+
     it "renders edit template" do
       expect(response).to render_template 'edit'
     end
@@ -171,7 +171,7 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
       expect(response).to have_http_status(:success)
     end
   end
-  
+
   describe "DELETE #destroy" do
     before(:each) do
       @jobseeker = FactoryGirl.create(:job_seeker)
@@ -185,4 +185,3 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
     end
   end
 end
-  

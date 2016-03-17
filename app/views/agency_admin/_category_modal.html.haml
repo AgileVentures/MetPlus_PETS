@@ -1,0 +1,24 @@
+%div{id: "#{modal_id}", class: 'modal fade'}
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        %button(type='button' class='close' data-dismiss='modal')
+          %span(aria-hidden='true') &times;
+        %h4.modal-title
+          = modal_title
+      .modal-body
+        %div{id: "#{modal_action}_model_errors"}
+        .form-group
+          %label(for="#{modal_action}_category_name" class='control-label')
+            Name:
+          %textarea(class='form-control' id="#{modal_action}_category_name")
+        .form-group
+          %label(for="#{modal_action}_category_desc" class='control-label')
+            Description:
+          %textarea(class='form-control' id="#{modal_action}_category_desc")
+      .modal-footer
+        %button(type='button' class='btn btn-default'
+                                 data-dismiss='modal') Cancel
+        %button(type='button' class='btn btn-primary'
+                id="#{modal_action}_category_button")
+          = modal_submit

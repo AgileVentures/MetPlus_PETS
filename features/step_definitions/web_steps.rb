@@ -49,7 +49,21 @@ When(/^(?:I|they) fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
 end
 
 When(/^(?:I|they) click the "([^"]*)" link$/) do |link|
-  click_link link
+  if Capybara.current_driver == :poltergeist
+    find_link(link).trigger('click')
+  else
+    click_link link
+  end
+  # see discussion here:
+  # https://github.com/teampoltergeist/poltergeist/issues/520
+end
+
+When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
+  if Capybara.current_driver == :poltergeist
+    find_link('', {href: url}).trigger('click')
+  else
+    click_link('', {href: url})
+  end
 end
 
 When(/^(?:I|they) click(?: the)? "([^"]*)" button$/) do |button|
@@ -91,4 +105,3 @@ end
 When /^I reload the page$/ do
   visit current_path
 end
-

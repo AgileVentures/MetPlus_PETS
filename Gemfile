@@ -56,11 +56,11 @@ gem 'cancancan', '~> 1.10'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
-# later we can strict the faker 
+# later we can strict the faker
 # to staging && development
-gem 'ffaker' 
+gem 'ffaker'
 gem 'faker'
-# gem 'jquery-turbolinks' #will solve reload problems with javascript 
+# gem 'jquery-turbolinks' #will solve reload problems with javascript
 
 
 
@@ -68,7 +68,8 @@ gem 'faker'
 group :development do
   gem 'haml-rails'
   gem 'bullet'
-
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
 end
 
 group :development, :test do
@@ -76,9 +77,6 @@ group :development, :test do
   gem 'sqlite3'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
 
   # RSPEC testing
   gem 'rspec-rails', '~> 3.0'

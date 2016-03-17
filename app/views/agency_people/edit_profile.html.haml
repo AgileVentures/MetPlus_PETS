@@ -1,32 +1,14 @@
 %h2 Update Your Profile
 %br
+= form_for @agency_person, url: update_profile_agency_person_path(@agency_person), html: {method: 'patch', class: 'form-horizontal'} do |ap|
+	- @user_form = ap
+	= render 'users/subform'
+	.form-group
+		.col-sm-2.col-sm-offset-2
+			=@user_form.submit class: 'btn btn-primary'
+		.col-sm-2.col-sm-offset-1
+			=link_to 'Cancel', root_path, class: 'btn btn-danger'
+%i (leave password blank, if you don't want to change it)
+%br
 
-= form_for @agency_person, url: update_profile_agency_person_path(@agency_person) do |ap|
-	=ap.label :first_name, 'First Name',autofocus: true,class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=ap.text_field :first_name,class:'form-control'
-	%div{class: 'label-group'}
-		=ap.label :last_name, 'Last Name', class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=ap.text_field :last_name,class:'form-control'
-	%div{class: 'label-group'}
-		=ap.label :email,'Email',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=ap.text_field :email, class:'form-control'
-	%div{class: 'label-group'}
-		=ap.label :phone,'Phone',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=ap.text_field :phone, class:'form-control'
-	%div{class: 'label-group'}
-		=ap.label :password,'Password',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=ap.password_field :password ,class:'form-control'
-		%i (leave blank if you don't want to change it)
 
-	%div{class: 'label-group'}
-		=ap.label :password_confirmation,'Password Confirmation',class:'col-sm-2 control-label text-right'
-	%div{class: 'form-group'}
-		=ap.password_field :password_confirmation, class:'form-control'
-
-	%div{class: 'button-group'}
-		=ap.submit 'Update', class:'col-sm-6 col-sm-offset-2 btn btn-primary'

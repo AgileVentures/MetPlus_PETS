@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :job_category do
-    name "text"
-    description "text description"
- 
+    name 'Software Engineer - RoR'
+    description 'Develop/maintain websites using Ruby on Rails'
   end
 
 end

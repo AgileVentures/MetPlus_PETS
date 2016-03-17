@@ -1,14 +1,14 @@
-Feature: Manage Jobs  
+Feature: Manage Jobs
 
-As a user #not quite correct, 
-I want to create, update, and delete jobs 
+As a company person
+I want to create, update, and delete jobs
 
-background: adding job to database 
+background: adding job to database
 	Given the following jobs records:
 	| title               | company_job_id  | shift  | fulltime | description | company_id |
 	| software developer  | KRK12K  | evening| true     | internship position with pay| 3  |
 
-@javascript
+@selenium 
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Given I am logged in as company person 
 	When I click the "Post jobs" link
@@ -18,7 +18,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 		| Job id                 | KARK12 |  
 		| Description            | Atleast two years work experience|  
 	And  I select "Day" in select list "Shift"
-	And  I check "Fulltime" 
+	And  I check "Fulltime"
 	And  I press "new-job-submit"
 	Then I should see "cashier has been created successfully." 
 
@@ -33,12 +33,13 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Then I should see "cab-driver has been updated successfully."
 	And I should verify the change of title "cab-driver", shift "Day" and jobId "KRT123"
    
-	When I click the "Return To Jobs" link 
+	When I click the "Return To Jobs" link
 	And I click the "delete" button
-	And I wait 1 second 
-	Then I should see a popup with the following job information 
-	And I wait 1 second 
-	And I click the "modal-delete-id" link 
+	And I wait 1 second
+	Then I should see a popup with the following job information
+	And I wait 1 second
+	And I click the "modal-delete-id" link
+	And I wait 2 seconds
 	Then I should see "cab-driver has been deleted successfully."
 
 	And I am on the Job edit page with given record:
