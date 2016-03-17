@@ -144,6 +144,7 @@ GEM
       rack (>= 1.2.1)
       rake
     jasmine-core (2.4.1)
+    jasmine-jquery-rails (2.0.3)
     jbuilder (2.4.0)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -315,6 +316,7 @@ DEPENDENCIES
   haml
   haml-rails
   jasmine
+  jasmine-jquery-rails
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks

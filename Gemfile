@@ -88,6 +88,7 @@ group :development, :test do
   gem 'spring'
 
   gem 'jasmine'
+  gem 'jasmine-jquery-rails'
 end
 
 group :test do
