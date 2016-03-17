@@ -3,6 +3,7 @@ FactoryGirl.define do
     company
     address
     user
+    title "Manager"
     status CompanyPerson::STATUS[:ACT]
   end
 

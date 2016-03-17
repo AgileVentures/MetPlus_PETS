@@ -5,6 +5,10 @@ module ApplicationHelper
     page_title.empty? ? base_title : "#{page_title} | #{base_title}"
   end
 
+  def correct_user_type current_user
+    current_user.try(:actable).nil? ? current_user : current_user.actable
+  end
+
   def flash_to_css key
     case key
       when 'notice'
@@ -32,12 +36,5 @@ module ApplicationHelper
               data: {toggle: 'modal', target: "\##{target_div_id}"} )
   end
 
-  def user_type(current_user)
-    if current_user.actable_type
-      current_user.actable_type.constanize.find(current_user.actable_id)
-    else
-      current_user
-    end
-  end
 
 end

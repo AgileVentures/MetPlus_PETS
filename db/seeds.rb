@@ -49,7 +49,7 @@ require 'ffaker'
 #     user.phone ='619-316-8971'
 #     user.confirmed_at = DateTime.now
 # end
-
+puts "Seeding wait......."
 #incase rerun comes in. not necessary
 JobSeekerStatus.delete_all
 Job.delete_all
@@ -153,7 +153,7 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     title = FFaker::Job.title 
     email = FFaker::Internet.email 
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
+    password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name 
     confirmed_at = DateTime.now 
@@ -163,6 +163,7 @@ if Rails.env.development? # || Rails.env.staging?
                          confirmed_at: confirmed_at,
                          company_id: companies.pop.id, 
                          address_id: addresses.pop.id )
+
   end
 
   r = Random.new 
@@ -192,7 +193,7 @@ if Rails.env.development? # || Rails.env.staging?
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
     email = FFaker::Internet.email 
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join 
+    password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name 
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
