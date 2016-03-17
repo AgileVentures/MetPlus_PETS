@@ -53,5 +53,10 @@ describe('Job Categories', function () {
       expect($('#job_categories_table')).toHandleWith('click',
                                   AgencyData.edit_job_category);
     });
+    it('retrieves job_category attributes via ajax', function () {
+      spyOn($, 'ajax');
+      $("a[href^='/job_categories/'][href$='edit']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
   });
 });
