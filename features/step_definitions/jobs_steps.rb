@@ -8,7 +8,7 @@ end
 
 Then(/^I should see a popup with the following job information$/) do
  	expect(page).to have_content("Are you sure you want 
-       to delete the following job: 
-       job title:  #{@job.title}
-       job id: #{@job.company_job_id}")
+ 		                         to delete the following job: 
+                                 job title:  #{@job.title}
+                                 job id: #{@job.company_job_id}")
 end 
