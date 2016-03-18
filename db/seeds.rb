@@ -49,7 +49,7 @@ require 'ffaker'
 #     user.phone ='619-316-8971'
 #     user.confirmed_at = DateTime.now
 # end
-
+print "Seeding wait......."
 #incase rerun comes in. not necessary
 JobSeekerStatus.delete_all
 Job.delete_all
@@ -122,7 +122,6 @@ if Rails.env.development? # || Rails.env.staging?
 
   companies = Company.all.to_a
   #Address
-
   200.times do |n|
     street = Faker::Address.street_address
     city = Faker::Address.city
@@ -135,9 +134,7 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
-    if !JobCategory.create(name: name, description: description)
-      JobCategory.create!(name: "#{name}_#{n}", description: description)
-    end
+    JobCategory.create!(name: "#{name}_#{n}", description: description)
   end
 
   companies = Company.all.to_a
@@ -166,7 +163,6 @@ if Rails.env.development? # || Rails.env.staging?
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
   #job
-
   200.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3,false, 4 )
@@ -186,8 +182,8 @@ if Rails.env.development? # || Rails.env.staging?
   #jobseeker
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
-    email = FFaker::Internet.email
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join
+    email = FFaker::Internet.email 
+    password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
@@ -337,3 +333,4 @@ JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
           job_seeker_status: @jss3, confirmed_at: Time.now)
 
 # Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.
+puts "\nDone seeding!"
