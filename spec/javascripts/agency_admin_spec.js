@@ -1,11 +1,10 @@
 describe('Job Categories', function () {
+  beforeEach(function () {
+    loadFixtures('job_categories.html');
+  });
   describe("Add job category", function () {
     beforeEach(function () {
-      loadFixtures('job_categories.html');
       $('#add_category_button').click(AgencyData.add_job_category);
-      // Confirm binding just to be sure ...
-      expect($('#add_category_button')).toHandleWith('click',
-                                      AgencyData.add_job_category);
     });
     it('calls ajax to add job category', function() {
       spyOn($, 'ajax');
@@ -45,12 +44,8 @@ describe('Job Categories', function () {
   });
   describe('Edit job category', function () {
     beforeEach(function () {
-      loadFixtures('job_categories.html');
       $('#job_categories_table').on('click',
                     "a[href^='/job_categories/'][href$='edit']",
-                                  AgencyData.edit_job_category);
-      // Confirm binding just to be sure ...
-      expect($('#job_categories_table')).toHandleWith('click',
                                   AgencyData.edit_job_category);
     });
     it('retrieves job_category attributes via ajax', function () {
@@ -61,11 +56,7 @@ describe('Job Categories', function () {
   });
   describe('Update job category', function () {
     beforeEach(function () {
-      loadFixtures('job_categories.html');
       $('#update_category_button').click(AgencyData.update_job_category);
-      // Confirm binding just to be sure ...
-      expect($('#update_category_button')).toHandleWith('click',
-                                         AgencyData.update_job_category);
     });
     it('calls ajax to update job category', function() {
       spyOn($, 'ajax');
@@ -105,12 +96,8 @@ describe('Job Categories', function () {
   });
   describe('delete job category', function () {
     beforeEach(function () {
-      loadFixtures('job_categories.html');
       $('#job_categories_table').on('click',
                     "a[data-method='delete']",
-                                  AgencyData.delete_job_category);
-      // Confirm binding just to be sure ...
-      expect($('#job_categories_table')).toHandleWith('click',
                                   AgencyData.delete_job_category);
     });
     it('calls ajax to delete job category', function() {
