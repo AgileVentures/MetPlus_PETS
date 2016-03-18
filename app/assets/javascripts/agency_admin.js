@@ -15,7 +15,7 @@ var AgencyData = {
 
   add_job_category: function () {
     // this function is bound to 'click' event on 'Add Category' button
-    // in 'agency_admin/_add_job_category.html.haml'
+    // in 'agency_admin/_category_modal.html.haml'
     // Create the job category .....
     $.ajax({type: 'POST',
             url: '/job_categories/',
