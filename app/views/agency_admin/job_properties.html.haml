@@ -9,7 +9,11 @@
       %h5 There are no job categories.
   - else
     .col-sm-9
-      = render 'job_categories'
+      = render partial: 'job_properties', object: @job_categories,
+                locals: {data_type:  'job_categories',
+                         partial_id: 'job_categories_table',
+                         edit_property_path:   :edit_job_category_path,
+                         delete_property_path: :job_category_path}
     .clearfix
     .col-sm-3.col-sm-offset-3
       %a(id='toggle_job_categories' href='#job_categories_table' class='text-danger')
@@ -19,14 +23,12 @@
     - text_modal_button 'Add Job Category', 'add_job_category',
                         'btn btn-primary btn-sm pull-right'
 
-= render partial: 'category_modal',
+= render partial: 'property_modal',
           locals: {modal_id:     'add_job_category',
-                   modal_action: 'add',
                    modal_title:  'Add Job Category',
                    modal_submit: 'Add Category'}
 
-= render partial: 'category_modal',
+= render partial: 'property_modal',
           locals: {modal_id:     'update_job_category',
-                   modal_action: 'update',
                    modal_title:  'Update Job Category',
                    modal_submit: 'Update Category'}

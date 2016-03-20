@@ -30,7 +30,11 @@ class AgencyAdminController < ApplicationController
     if request.xhr?
       case params[:data_type]
       when 'job_categories'
-        render :partial => 'job_categories'
+        render partial: 'job_properties', object: @job_categories,
+                locals: {data_type:  'job_categories',
+                         partial_id: 'job_categories_table',
+                         edit_property_path:   :edit_job_category_path,
+                         delete_property_path: :job_category_path}
       end
     end
   end

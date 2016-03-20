@@ -20,8 +20,8 @@ var AgencyData = {
     $.ajax({type: 'POST',
             url: '/job_categories/',
             // Get the data entered by the user in the dialog box
-            data: { 'job_category[name]': $('#add_category_name').val(),
-                    'job_category[description]': $('#add_category_desc').val() },
+            data: { 'job_category[name]': $('#add_job_category_name').val(),
+                    'job_category[description]': $('#add_job_category_desc').val() },
             timeout: 5000,
             success: function (data, status, xhrObject){
               // If this is the first job category added, the job categories
@@ -30,12 +30,12 @@ var AgencyData = {
                 document.location.reload(true);
               } else {
                 AgencyData.change_job_category_success('#add_job_category',
-                                                       '#add_model_errors');
+                                                       '#add_job_category_errors');
               }
             },
             error: function (xhrObj, status, exception) {
               ManageData.change_data_error(exception, xhrObj,
-                                          '#add_model_errors');
+                                          '#add_job_category_errors');
             },
           });
     // Good background on returning error status in ajax controller action:
@@ -51,8 +51,8 @@ var AgencyData = {
               AgencyData.job_category_id = data.id;
 
               // Set the attribute values in the modal and make modal visible
-              $('#update_category_name').val(data.name)
-              $('#update_category_desc').val(data.description)
+              $('#update_job_category_name').val(data.name)
+              $('#update_job_category_desc').val(data.description)
               $('#update_job_category').modal('show')
             },
             error: function (xhrObj, status, exception) {
@@ -66,16 +66,16 @@ var AgencyData = {
 
     $.ajax({type: 'PATCH',
             url: '/job_categories/' + AgencyData.job_category_id,
-            data: { 'job_category[name]': $('#update_category_name').val(),
-                    'job_category[description]': $('#update_category_desc').val() },
+            data: { 'job_category[name]': $('#update_job_category_name').val(),
+                    'job_category[description]': $('#update_job_category_desc').val() },
             timeout: 5000,
             success: function (data, status, xhrObject) {
               AgencyData.change_job_category_success('#update_job_category',
-                                                     '#update_model_errors');
+                                                     '#update_job_category_errors');
             },
             error: function (xhrObj, status, exception) {
               ManageData.change_data_error(exception, xhrObj,
-                                          '#update_model_errors');
+                                          '#update_job_category_errors');
             },
           });
     return(false);
@@ -158,12 +158,12 @@ var AgencyData = {
                             ManageData.update_paginate_data);
   },
   setup_manage_job_category: function () {
-    $('#add_category_button').click(AgencyData.add_job_category);
+    $('#add_job_category_button').click(AgencyData.add_job_category);
     $('#job_categories_table').on('click',
                   // bind to 'edit category' anchor element
                   "a[href^='/job_categories/'][href$='edit']",
                                 AgencyData.edit_job_category);
-    $('#update_category_button').click(AgencyData.update_job_category);
+    $('#update_job_category_button').click(AgencyData.update_job_category);
     $('#job_categories_table').on('click',
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
