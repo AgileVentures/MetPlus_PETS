@@ -32,18 +32,4 @@ RSpec.describe JobCategory, type: :model do
      end
    end
 
-   describe 'check model restrictions' do
-
-     describe 'Name check' do
-      subject {FactoryGirl.build(:job_category)}
-       it { is_expected.to validate_presence_of :name }
-     end
-
-     describe 'Description check' do
-      subject {FactoryGirl.build(:job_category)}
-       it { is_expected.to validate_presence_of :description }
-     end
-
-   end
-
 end
