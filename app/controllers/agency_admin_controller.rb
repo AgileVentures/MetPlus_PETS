@@ -45,7 +45,8 @@ class AgencyAdminController < ApplicationController
                          partial_id: 'skills_table',
                          edit_property_path:   :edit_skill_path,
                          delete_property_path: :skill_path}
-
+      else
+        raise "Do not recognize data type: #{params[:data_type]}"
       end
     else
       @job_categories = JobCategory.order(:name).

@@ -1,4 +1,8 @@
 class SkillsController < ApplicationController
+  # These actions are designed to respond only to XHR requests
+
+  before_action :confirm_xhr
+
   def create
     skill = Skill.new(skill_params)
     if skill.save
@@ -50,4 +54,11 @@ class SkillsController < ApplicationController
   def skill_params
     params.require(:skill).permit(:name, :description)
   end
+
+  private
+
+  def confirm_xhr
+    raise 'Not an XHR request' unless request.xhr?
+  end
+  
 end

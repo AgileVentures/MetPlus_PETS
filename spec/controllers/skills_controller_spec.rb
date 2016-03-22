@@ -86,4 +86,12 @@ RSpec.describe SkillsController, type: :controller do
       end
     end
   end
+
+  describe 'Call action outside of XHR request' do
+    let!(:skill)  { FactoryGirl.create(:skill) }
+
+    it 'raises an exception' do
+      expect {get :edit, id: skill}.to raise_error(RuntimeError)
+    end
+  end
 end
