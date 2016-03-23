@@ -15,11 +15,12 @@ RSpec.describe JobSeekersController, type: :controller do
   describe "POST #create" do
     context "valid attributes" do
      before(:each) do
+       ActionMailer::Base.deliveries.clear
        @jobseeker = FactoryGirl.create(:job_seeker)
        @user = FactoryGirl.create(:user)
        @jobseekerstatus = FactoryGirl.create(:job_seeker_status)
-       jobseeker_hash = FactoryGirl.attributes_for(:job_seeker).merge(FactoryGirl.attributes_for(:user)).merge(FactoryGirl.attributes_for(:job_seeker_status))
-       post :create, job_seeker: jobseeker_hash
+       @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker).merge(FactoryGirl.attributes_for(:user)).merge(FactoryGirl.attributes_for(:job_seeker_status))
+       post :create, job_seeker: @jobseeker_hash
      end
 
      it 'sets flash message' do
@@ -31,6 +32,24 @@ RSpec.describe JobSeekersController, type: :controller do
      end
      it 'redirects to mainpage' do
        expect(response).to redirect_to(root_path)
+     end
+     describe "confirmation email" do
+       # Include email_spec modules here, not in rails_helper because they
+       # conflict with the capybara-email#open_email method which lets us
+       # call current_email.click_link below.
+       # Re: https://github.com/dockyard/capybara-email/issues/34#issuecomment-49528389
+       include EmailSpec::Helpers
+       include EmailSpec::Matchers
+
+       # open the most recent email sent to user_email
+       subject { open_email(@jobseeker_hash[:email]) }
+
+       # Verify email details
+       it { is_expected.to deliver_to(@jobseeker_hash[:email]) }
+       it { is_expected.to have_body_text(/Welcome #{@jobseeker_hash[:first_name]} #{@jobseeker_hash[:last_name]}!/) }
+       it { is_expected.to have_body_text(/You can confirm your account/) }
+       it { is_expected.to have_body_text(/users\/confirmation\?confirmation/) }
+       it { is_expected.to have_subject(/Confirmation instructions/) }
      end
     end
     context 'invalid attributes' do
