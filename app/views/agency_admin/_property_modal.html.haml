@@ -7,18 +7,18 @@
         %h4.modal-title
           = modal_title
       .modal-body
-        %div{id: "#{modal_action}_model_errors"}
+        %div{id: "#{modal_id}_errors"}
         .form-group
-          %label(for="#{modal_action}_category_name" class='control-label')
+          %label(for="#{modal_id}_name" class='control-label')
             Name:
-          %textarea(class='form-control' id="#{modal_action}_category_name")
+          %textarea(class='form-control' id="#{modal_id}_name")
         .form-group
-          %label(for="#{modal_action}_category_desc" class='control-label')
+          %label(for="#{modal_id}_desc" class='control-label')
             Description:
-          %textarea(class='form-control' id="#{modal_action}_category_desc")
+          %textarea(class='form-control' id="#{modal_id}_desc")
       .modal-footer
         %button(type='button' class='btn btn-default'
                                  data-dismiss='modal') Cancel
         %button(type='button' class='btn btn-primary'
-                id="#{modal_action}_category_button")
+                id="#{modal_id}_button")
           = modal_submit

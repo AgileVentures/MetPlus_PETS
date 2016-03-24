@@ -1,7 +1,7 @@
 describe('Company Registration', function () {
   describe("Clicking 'Send email' button", function () {
     beforeEach(function () {
-      loadFixtures('company_registration.html');
+      loadFixtures('company_registration/company_registration.html');
       expect($('#send_button')).toBeVisible();
       // the line below is a work-around due to loading HTML fixture after
       // document 'ready' events have occurred (hence event won't be bound to
@@ -21,7 +21,7 @@ describe('Company Registration', function () {
                       toEqual('/admin/company_registrations/1/deny');
     });
     it('updates company status', function() {
-      return_val = readFixtures('registration_denied.html');
+      return_val = readFixtures('company_registration/registration_denied.html');
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         // The 'fake' function has access to all arguments specified to $.ajax(),
         // so ajax argument values can be specified here.

@@ -57,7 +57,9 @@ Company.delete_all
 Address.delete_all
 CompanyPerson.delete_all
 JobCategory.delete_all
-SkillLevel.delete_all
+Skill.delete_all
+
+# --------------------------- Seed Production Database --------------------
 
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
   case status
@@ -74,18 +76,17 @@ SkillLevel.delete_all
   end
 end
 
-#AgencyRole
-# Create all agency roles - this should stay in production version of this file
+# Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
   AgencyRole.create(role: agency_role)
 end
-#CompanyRole
-# Create all company roles - - this should stay in production
+
+# Create all company roles
 CompanyRole::ROLE.each_value do |company_role|
   CompanyRole.create(role: company_role)
 end
 
-# Create a default agency, agency branches, agency admin and agency manager
+# Create default agency
 agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
             phone: '111 222 3333', fax: '333 444 5555',
             email: 'pets@metplus.org',
@@ -96,9 +97,12 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          development that will put them on a career
                          path to success.')
 
+puts 'Seeded Production Data'
+
 # seed striction to development, for now
 if Rails.env.development? # || Rails.env.staging?
-  #Company
+
+  #-------------------------- Companies -----------------------------------
   200.times do |n|
     ein = Faker::Company.ein
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
@@ -119,10 +123,10 @@ if Rails.env.development? # || Rails.env.staging?
     end
     cmp.save!
   end
+  puts "Companies created: #{Company.count}"
 
+  #-------------------------- Addresses -----------------------------------
   companies = Company.all.to_a
-  #Address
-
   200.times do |n|
     street = Faker::Address.street_address
     city = Faker::Address.city
@@ -130,8 +134,9 @@ if Rails.env.development? # || Rails.env.staging?
     Address.create(street: street, city: city, zipcode: zipcode,
                    location: companies.pop)
   end
+  puts "Addresses created: #{Address.count}"
 
-  #JobCategory
+  #-------------------------- Job Categories ------------------------------
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
@@ -139,10 +144,18 @@ if Rails.env.development? # || Rails.env.staging?
       JobCategory.create!(name: "#{name}_#{n}", description: description)
     end
   end
+  puts "Job Categories created: #{JobCategory.count}"
 
+  #-------------------------- Skills --------------------------------------
+  30.times do |n|
+    Skill.create(name: FFaker::Skill.specialty,
+                 description: FFaker::Lorem.sentence)
+  end
+  puts "Skills created: #{Skill.count}"
+
+  #-------------------------- Company People ------------------------------
   companies = Company.all.to_a
   addresses = Address.all.to_a
-  #CompanyPerson
   200.times do |n|
     title = FFaker::Job.title
     email = FFaker::Internet.email
@@ -160,12 +173,13 @@ if Rails.env.development? # || Rails.env.staging?
     cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
     cp.save!
   end
+  puts "Company People created: #{CompanyPerson.count}"
 
+  #-------------------------- Jobs ----------------------------------------
   r = Random.new
   jobcategories = JobCategory.all.to_a
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
-  #job
 
   200.times do |n|
     title = FFaker::Job.title
@@ -183,7 +197,13 @@ if Rails.env.development? # || Rails.env.staging?
                job_category_id: jobcategories.pop.id)
   end
 
-  #jobseeker
+  Job.all.to_a.each_with_index do |job, index|
+    job.address = Address.all.to_a[index]
+  end
+
+  puts "Jobs created: #{Job.count}"
+
+  #-------------------------- Job Seekers ---------------------------------
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
     email = FFaker::Internet.email
@@ -206,42 +226,6 @@ if Rails.env.development? # || Rails.env.staging?
                      phone: phone,
                      confirmed_at: DateTime.now)
   end
-
-  Job.all.to_a.each_with_index do |job, index|
-    job.address = Address.all.to_a[index]
-  end
-
-  #agency
-  addresses = Address.all.to_a
-  50.times do |n|
-    code = Faker::Code.ean.split(//).shuffle[1..3].join
-    angency = agency
-    Branch.create(:code => code,
-                  agency: angency,
-                  address: addresses.pop)
-  end
-
-  50.times do |n|
-    branch = Branch.create(code: "BR00#{n}", agency: agency)
-    branch.address = Address.create!(city: 'Detroit',
-              street: "#{n} Main Street", zipcode: 48201)
-  end
-
-
-
-  branch = Branch.create(code: '001', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
-              street: '123 Main Street', zipcode: 48201)
-
-  branch = Branch.create(code: '002', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
-              street: '456 Sullivan Street', zipcode: 48204)
-
-  branch = Branch.create(code: '003', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
-              street: '3 Auto Drive', zipcode: 48206)
-
-  # Job Seekers
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', resume: 'text',
@@ -258,82 +242,81 @@ if Rails.env.development? # || Rails.env.staging?
             job_seeker_status: @jss3, confirmed_at: Time.now)
 
 
-  jobseeker = JobSeeker.create(first_name: 'abc', last_name:'def',
+  JobSeeker.create(first_name: 'abc', last_name:'def',
                                email:'vijaya.karumudi1@gmail.com',
                                password:'dfg123',password_confirmation:'dfg123',
                                phone:'345-890-7890',year_of_birth: "1990",
                                confirmed_at: Time.now)
 
+  puts "Job Seekers created: #{JobSeeker.count}"
 
-  JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
-                        email: 'mary@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text',
-            job_seeker_status: @jss2, confirmed_at: Time.now)
+  #-------------------------- Agency Branches -----------------------------
+  addresses = Address.all.to_a
+  50.times do |n|
+    code = Faker::Code.ean.split(//).shuffle[1..3].join
+    Branch.create(:code => code,
+                  agency: agency,
+                  address: addresses.pop)
+  end
 
-  JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
-                        email: 'frank@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text',
-            job_seeker_status: @jss3, confirmed_at: Time.now)
+  branch = Branch.create(code: '001', agency: agency)
+  branch.address = Address.create!(city: 'Detroit',
+              street: '123 Main Street', zipcode: 48201)
 
+  branch = Branch.create(code: '002', agency: agency)
+  branch.address = Address.create!(city: 'Detroit',
+              street: '456 Sullivan Street', zipcode: 48204)
+
+  branch = Branch.create(code: '003', agency: agency)
+  branch.address = Address.create!(city: 'Detroit',
+              street: '3 Auto Drive', zipcode: 48206)
+
+  puts "Branches created: #{Branch.count}"
+
+  #-------------------------- Agency People -------------------------------
+
+  agency_aa = AgencyPerson.new(first_name: 'John', last_name: 'Smith',
+                       agency_id: agency.id, email: 'pets_admin@metplus.org',
+                       password: 'qwerty123', confirmed_at: Time.now,
+                       branch_id: agency.branches[0].id,
+                       status: AgencyPerson::STATUS[:ACT])
+  agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
+  agency_aa.save!
+
+  agency_cm_and_jd = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts',
+                       agency_id: agency.id, email: 'chet@metplus.org',
+                       password: 'qwerty123', confirmed_at: Time.now,
+                       branch_id: agency.branches[1].id,
+                       status: AgencyPerson::STATUS[:ACT])
+  agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
+  agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+  agency_cm_and_jd.save!
+
+  agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
+                        agency_id: agency.id, email: 'jane@metplus.org',
+                        password: 'qwerty123', confirmed_at: Time.now,
+
+                        branch_id: agency.branches[2].id,
+                        status: AgencyPerson::STATUS[:ACT])
+
+  agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
+  agency_jd.save!
+
+  #-------------------------- Agency Relations ----------------------------
+  agency_cm_and_jd.agency_relations <<
+        AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
+                            job_seeker: js1)
+  agency_cm_and_jd.agency_relations <<
+        AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+                            job_seeker: js2)
+  agency_cm_and_jd.save!
+
+  agency_jd.agency_relations <<
+        AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+                            job_seeker: js3)
+  agency_jd.save!
+
+  puts "Agency Relations created: #{AgencyRelation.count}"
 end
-
-# Agency People
-agency_aa = AgencyPerson.new(first_name: 'John', last_name: 'Smith',
-                      agency_id: agency.id, email: 'pets_admin@metplus.org',
-                      password: 'qwerty123', confirmed_at: Time.now,
-                      branch_id: agency.branches[0].id,
-                      status: AgencyPerson::STATUS[:ACT])
-agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
-agency_aa.save!
-
-agency_cm_and_jd = AgencyPerson.new(first_name: 'Chet', last_name: 'Pitts',
-                      agency_id: agency.id, email: 'chet@metplus.org',
-                      password: 'qwerty123', confirmed_at: Time.now,
-                      branch_id: agency.branches[1].id,
-                      status: AgencyPerson::STATUS[:ACT])
-agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
-agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
-agency_cm_and_jd.save!
-agency_cm_and_jd.agency_relations <<
-      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
-                          job_seeker: js1)
-agency_cm_and_jd.agency_relations <<
-      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
-                          job_seeker: js2)
-agency_cm_and_jd.save!
-
-agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
-                      agency_id: agency.id, email: 'jane@metplus.org',
-                      password: 'qwerty123', confirmed_at: Time.now,
-
-                      branch_id: agency.branches[2].id,
-                      status: AgencyPerson::STATUS[:ACT])
-
-agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
-agency_jd.save!
-agency_jd.agency_relations <<
-      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
-                          job_seeker: js3)
-
-
-jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
-"1990", confirmed_at: Time.now)
-
-
-jobseeker = JobSeeker.create(first_name: 'abc',last_name:'def',email:'vijaya.karumudi1@gmail.com', password:'dfg123',password_confirmation:'dfg123',phone:'345-890-7890',year_of_birth:
-"1990", confirmed_at: Time.now)
-
-
-
-
-JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
-                      email: 'mary@gmail.com', password: 'qwerty123',
-              year_of_birth: '1970', resume: 'text',
-          job_seeker_status: @jss2, confirmed_at: Time.now)
-
-JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
-                      email: 'frank@gmail.com', password: 'qwerty123',
-              year_of_birth: '1970', resume: 'text',
-          job_seeker_status: @jss3, confirmed_at: Time.now)
 
 # Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.

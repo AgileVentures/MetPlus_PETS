@@ -12,10 +12,17 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to have_many :job_skills }
     it { is_expected.to have_many(:jobs).through(:job_skills) }
   end
-  
+
   describe 'Validations' do
-    it { is_expected.to validate_presence_of :name }
-    it { is_expected.to validate_presence_of :description }
+    subject {FactoryGirl.build(:skill)}
+
+    describe 'Name' do
+      it { is_expected.to validate_presence_of(:name) }
+      it { is_expected.to validate_uniqueness_of(:name).case_insensitive }
+    end
+    describe 'Description' do
+      it { is_expected.to validate_presence_of :description }
+    end
   end
 
   describe 'Database schema' do
