@@ -6,41 +6,29 @@ var PusherControl = {
   setup: function () {
     var pusher = PusherControl.get_pusher();
 
-    // for TEST purposes
-    var channel = pusher.subscribe('test_channel');
-    channel.bind('new_message', function(data) {
-      noty({text: "TEST: <a href='/'>Go Home</a>",
-          layout: 'bottomLeft',
-            type: 'information' });
-      noty({text: 'TEST: Message from ' + data.name + ': ' + data.message,
-               layout: 'bottomLeft',
-                 type: 'success' });
-    });
-
     // pusher_control channel is used to send
     // server-originated events to clients
-    var channel = pusher.subscribe('pusher_control');
 
-    channel.bind('user_logged_in', function(data) {
-      alert('User ID: ' + data.person_id + ' has logged in.');
-      $(window).unload( function(data) {
-        alert('Now the page should be fully loaded ...');
-      })
-    });
+    var channel = pusher.subscribe('pusher_control');
 
     channel.bind('js_registered', function(data) {
       // Process event if I am logged in and am an agency_person
       if (Cookies('person_type') === 'AgencyPerson') {
-        noty({text: 'Job Seeker: ' +
-            "<a href='/job_seekers/" + data.id +
-            "' target='_blank'>" + data.name + "</a>" + ' has joined PETS.',
+        noty({text: 'Job Seeker: ' + "<a href='/job_seekers/" + data.id +
+                    "' target='_blank'>" + data.name + "</a>" +
+                    ' has joined PETS.',
             layout: 'bottomRight',
               type: 'success'});
-      } else {  // this clause for TEST purposes
-        noty({text: 'TEST: Job Seeker: ' +
-            "<a href='/job_seekers/" + data.id +
-            "' target='_blank'>" + data.name + "</a>" + ' has joined PETS.',
-            layout: 'bottomLeft',
+      }
+    });
+
+    channel.bind('company_registered', function(data) {
+      // Process event if I am logged in and am an agency_person
+      if (Cookies('person_type') === 'AgencyPerson') {
+        noty({text: 'Company: ' + "<a href='/company_admin/companies/" +
+                    data.id + "' target='_blank'>" + data.name + "</a>" +
+                    ' has registered in PETS.',
+            layout: 'bottomRight',
               type: 'success'});
       }
     });
