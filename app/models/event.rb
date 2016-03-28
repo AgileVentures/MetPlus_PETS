@@ -9,4 +9,5 @@ class Event
       Pusher.trigger('pusher_control', 'company_registered', evt_data)
     end
   end
+  
 end
