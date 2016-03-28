@@ -56,7 +56,7 @@ Scenario: Job Seeker registers in PETS
   Then I am in Admin's browser
   And I should see "Job Seeker: Paula Jones has joined PETS."
 
-@selenium
+@javascript
 Scenario: Company registration request in PETS
   When I am in Admin's browser
   Given I am on the home page
