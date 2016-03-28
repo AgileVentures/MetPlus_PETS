@@ -1,0 +1,131 @@
+<div class='row'>
+  <h3>Company Registration Information</h3>
+  <div class='row'>
+    <div class='row'>
+      <div class='col-sm-2 text-right'>
+        <strong>Name:</strong>
+      </div>
+      <div class='col-sm-8'>
+        Abshire Inc
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm-2 text-right'>
+        <strong>Website:</strong>
+      </div>
+      <div class='col-sm-8'>
+        http://cormierkonopelski.info/jonatan_keebler
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm-2 text-right'>
+        <strong>Email:</strong>
+      </div>
+      <div class='col-sm-8'>
+        marlene@robel.com
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm-2 text-right'>
+        <strong>Fax:</strong>
+      </div>
+      <div class='col-sm-8'>
+
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm-2 text-right'>
+        <strong>Description:</strong>
+      </div>
+      <div class='col-sm-8'>
+
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm-2 text-right'>
+        <strong>Status:</strong>
+      </div>
+      <div class='col-sm-8' id='company_status'>
+        Pending Registration
+        <a class="btn btn-success btn-xs" id="company_approve_link" rel="nofollow" data-method="patch" href="/admin/company_registrations/1/approve">Approve</a>
+        <button class='btn btn-warning btn-xs' data-target='#deny_registration' data-toggle='modal'>Deny</button>
+      </div>
+    </div>
+    <div class='row margin-top'>
+      <div class='col-sm-3'>
+        <h4>Company Contacts</h4>
+      </div>
+      <div class='col-sm-9'>
+        <table class='table table-bordered'>
+          <thead>
+            <tr>
+              <td>
+                Name
+              </td>
+              <td>
+                Role(s)
+              </td>
+              <td>
+                Status
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a href="/company_admin/company_people/199">Barton, Alysha</a>
+              </td>
+              <td>
+                Company Contact
+              </td>
+              <td>
+                Active
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class='row margin-top'>
+    <div class='col-sm-2'>
+      <form class="button_to" method="get" action="/admin/company_registrations/2/edit"><input class="btn btn-primary" type="submit" value="Edit Registration" /></form>
+    </div>
+    <div class='col-sm-2 col-sm-offset-1'>
+      <form class="button_to" method="post" action="/admin/company_registrations/2"><input type="hidden" name="_method" value="delete" /><input data-confirm="Delete company Abshire Inc?" class="btn btn-danger" type="submit" value="Delete Registration" /><input type="hidden" name="authenticity_token" value="yjxU7SsyLVP8OjUxOKYdfRyQ2oyYJy2xpU5qEirj4GuaFdrlnVemt+5mWZL/h6cMH+Am+Xu/VEsUk4cGNQsbaA==" /></form>
+    </div>
+  </div>
+  <div class='modal fade' id='deny_registration' role='dialog' tabindex='-1'>
+    <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+          <h4 class='modal-title'>Explanation for registration denial</h4>
+        </div>
+        <div class='modal-body'>
+          <p>
+            The company contact (who requested the registration) will receive an email
+            explaining the reason for denying the registration.  Please enter the
+            explanation below.
+            <br>
+            <br>
+            (If you would prefer
+            <u>not</u>
+            to have an email sent to the company contact, dismiss this box and
+            click the 'Delete Registration' button.)
+          </p>
+          <div class='form-group'>
+            <label class='control-label' for='message_text'>Explanation:</label>
+            <textarea class='form-control' id='message_text'></textarea>
+          </div>
+        </div>
+        <div class='modal-footer'>
+          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+          <button class='btn btn-primary' data-dismiss='modal' id='send_button' type='button'>Send email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

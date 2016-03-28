@@ -128,7 +128,7 @@ RSpec.describe AgencyAdminController, type: :controller do
     it 'renders partial for job categories' do
       xhr :get, :job_properties, {job_categories_page: 2,
                       data_type: 'job_categories'}
-      expect(response).to render_template(partial: '_job_categories')
+      expect(response).to render_template(partial: '_job_properties')
       expect(response).to have_http_status(:success)
     end
   end

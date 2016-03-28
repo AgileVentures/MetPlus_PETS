@@ -70,10 +70,12 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # ----------------------- Job Categories  ----------------------------------
-  post  'job_categories/create'
-  patch 'job_categories/update'
+  resources :job_categories, only: [:create, :edit, :update, :destroy]
   # --------------------------------------------------------------------------
 
+  # ----------------------- Skills -------------------------------------------
+  resources :skills, only: [:create, :edit, :update, :destroy]
+  # --------------------------------------------------------------------------
 
   root 'main#index'
 

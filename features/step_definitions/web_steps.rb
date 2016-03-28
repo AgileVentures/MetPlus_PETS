@@ -58,6 +58,14 @@ When(/^(?:I|they) click the "([^"]*)" link$/) do |link|
   # https://github.com/teampoltergeist/poltergeist/issues/520
 end
 
+When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
+  if Capybara.current_driver == :poltergeist
+    find_link('', {href: url}).trigger('click')
+  else
+    click_link('', {href: url})
+  end
+end
+
 When(/^(?:I|they) click(?: the)? "([^"]*)" button$/) do |button|
   click_button button
 end

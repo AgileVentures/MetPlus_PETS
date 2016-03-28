@@ -138,6 +138,13 @@ GEM
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
     i18n (0.7.0)
+    jasmine (2.4.0)
+      jasmine-core (~> 2.4)
+      phantomjs
+      rack (>= 1.2.1)
+      rake
+    jasmine-core (2.4.1)
+    jasmine-jquery-rails (2.0.3)
     jbuilder (2.4.0)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -164,6 +171,7 @@ GEM
       mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
     pg (0.18.4)
+    phantomjs (2.1.1.0)
     poltergeist (1.8.1)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -307,6 +315,8 @@ DEPENDENCIES
   figaro
   haml
   haml-rails
+  jasmine
+  jasmine-jquery-rails
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
