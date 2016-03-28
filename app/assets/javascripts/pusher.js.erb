@@ -1,11 +1,6 @@
 var PusherControl = {
   get_pusher: (function () {
-    // <% if defined?(PusherFake) %>
-    //   var pusher = <%= PusherFake.javascript %>;
-    // <% else %>
-      var pusher = new Pusher('<%=ENV['PUSHER_APP_KEY']%>');
-    // <% end %>
-
+    var pusher = new Pusher('<%=ENV['PUSHER_APP_KEY']%>');
     return function () {return pusher;}
   })(),
   setup: function () {
