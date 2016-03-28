@@ -7,8 +7,8 @@ Rails.application.routes.draw do
                                   :confirmations => 'users/confirmations'}
 
   devise_scope :user do
-    match  '/login'   => 'devise/sessions#new',        via: 'get'
-    match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
+    match  '/login'   => 'users/sessions#new',        via: 'get'
+    match  '/logout'  => 'users/sessions#destroy',    via: 'delete'
   end
 
   # ----------------------- Agency Branches ----------------------------------

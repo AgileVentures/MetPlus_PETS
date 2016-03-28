@@ -104,6 +104,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'launchy'
   gem 'selenium-webdriver' # Enables running cuke tests with browser (see env.rb)
+  gem 'pusher-fake'
 end
 
 group :production do
