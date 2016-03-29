@@ -21,6 +21,7 @@ var PusherControl = {
         noty({text: 'Job Seeker: ' + "<a href='/job_seekers/" + data.id +
                     "' target='_blank'>" + data.name + "</a>" +
                     ' has joined PETS.',
+             theme: 'bootstrapTheme',
             layout: 'bottomRight',
               type: 'success'});
       }
@@ -32,8 +33,9 @@ var PusherControl = {
         noty({text: 'Company: ' + "<a href='/company_admin/companies/" +
                     data.id + "' target='_blank'>" + data.name + "</a>" +
                     ' has registered in PETS.',
+             theme: 'bootstrapTheme',
             layout: 'bottomRight',
-              type: 'success'});
+              type: 'information'});
       }
     });
   }
