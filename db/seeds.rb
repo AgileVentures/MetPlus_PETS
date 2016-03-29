@@ -140,7 +140,7 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
-    if !JobCategory.create(name: name, description: description)
+    if !JobCategory.create(name: name, description: description).persisted?
       JobCategory.create!(name: "#{name}_#{n}", description: description)
     end
   end
