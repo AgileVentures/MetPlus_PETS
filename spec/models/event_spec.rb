@@ -1,6 +1,14 @@
 require 'rails_helper'
+require 'agency_mailer'
 
 RSpec.describe Event, type: :model do
+  let!(:agency) { FactoryGirl.create(:agency) }
+
+  before(:each) do
+    3.times do |n|
+      FactoryGirl.create(:agency_person, agency: agency)
+    end
+  end
 
   describe 'js_registered event' do
     it 'triggers a Pusher message' do
@@ -11,6 +19,13 @@ RSpec.describe Event, type: :model do
                          'js_registered',
                          {name: 'Sam Smith', id: 1})
     end
+
+    it 'sends event notification email' do
+      allow(Pusher).to receive(:trigger)
+      expect { Event.create(:JS_REGISTER, name: 'Sam Smith', id: 1) }.
+                    to change(all_emails, :count).by(+1)
+    end
+
   end
 
   describe 'company_registered event' do
@@ -22,5 +37,12 @@ RSpec.describe Event, type: :model do
                          'company_registered',
                          {name: 'Widgets, Inc.', id: 1})
     end
+
+    it 'sends event notification email' do
+      allow(Pusher).to receive(:trigger)
+      expect { Event.create(:COMP_REGISTER, name: 'Widgets, Inc.', id: 1) }.
+                    to change(all_emails, :count).by(+1)
+    end
+
   end
 end

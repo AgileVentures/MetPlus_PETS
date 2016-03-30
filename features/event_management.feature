@@ -53,6 +53,8 @@ Scenario: Job Seeker registers in PETS
   Then I am in Pauls's browser
   And "paulajones@gmail.com" follows "Confirm my account" in the email
   Then I should see "Your email address has been successfully confirmed."
+  And "aa@metplus.org" should receive an email with subject "Job seeker registered"
+  And "jane@metplus.org" should receive an email with subject "Job seeker registered"
   Then I am in Admin's browser
   And I should see "Job Seeker: Paula Jones has joined PETS."
 
@@ -87,5 +89,7 @@ Scenario: Company registration request in PETS
   | Password Confirmation          | qwerty123           |
   And I click the "Create" button
   Then I should see "Thank you for your registration request."
+  And "aa@metplus.org" should receive an email with subject "Company registered"
+  And "jane@metplus.org" should receive an email with subject "Company registered"
   Then I am in Admin's browser
   And I should see "Company: Widgets, Inc. has registered in PETS."
