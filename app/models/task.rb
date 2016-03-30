@@ -28,12 +28,16 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_owner_user user
-    return find_by :owner => user.user if user.is_a? JobSeeker
-    return where("target_user_id=? or (target_agency_id=? and target_agency_role in (?))",
-                 user.user.id, user.agency.id, user.agency_roles.pluck(:role).collect{|pa| AgencyRole::ROLE.key(pa)}) \
+    return where("target_user_id=? and (deferred_date IS NULL or deferred_date < ?)",
+                  user.user.id, Date.today) \
+                if user.is_a? JobSeeker
+    return where("(target_user_id=? or (target_agency_id=? and target_agency_role in (?))) and (deferred_date IS NULL or deferred_date < ?)",
+                 user.user.id, user.agency.id, user.agency_roles.pluck(:role).collect{|pa| AgencyRole::ROLE.key(pa)},
+                 Date.today) \
                    if user.is_a? AgencyPerson
-    return where("target_user_id=? or (target_company_id=? and target_company_role in (?))",
-                 user.user.id, user.company.id, user.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)}) \
+    return where("(target_user_id=? or (target_company_id=? and target_company_role in (?))) and (deferred_date IS NULL or deferred_date < ?)",
+                 user.user.id, user.company.id, user.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)},
+                 Date.today) \
                    if user.is_a? CompanyPerson
   end
 

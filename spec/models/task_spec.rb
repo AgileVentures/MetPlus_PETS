@@ -171,27 +171,36 @@ RSpec.describe Task, type: :model do
       @company_admin1 = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@ca_role])
 
 
-      @task_js = FactoryGirl.build(:task)
-      @task_js.task_owner = {:user => @job_seeker}
-      @task_js.save
+      @task_js = FactoryGirl.create(:task, :task_owner => {:user => @job_seeker})
+      @task_js_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @job_seeker})
 
       @task_jd = FactoryGirl.create(:task, :task_owner => {:user => @job_developer1})
+      @task_jd_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @job_developer1})
       @task_all_jd = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
+      @task_all_jd_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:agency => {agency: @agency, role: :JD}})
 
       @task_cm = FactoryGirl.create(:task, :task_owner => {:user => @case_manager1})
+      @task_cm_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @case_manager1})
       @task_all_cm = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
+      @task_all_cm_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:agency => {agency: @agency, role: :CM}})
 
       @task_aa = FactoryGirl.create(:task, :task_owner => {:user => @agency_admin1})
+      @task_aa_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @agency_admin1})
       @task_all_aa = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
+      @task_all_aa_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:agency => {agency: @agency, role: :AA}})
 
       @task_ca = FactoryGirl.create(:task, :task_owner => {:user => @company_admin1})
+      @task_ca_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @company_admin1})
       @task_all_ca = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
+      @task_all_ca_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:company => {company: @company, role: :CA}})
 
       @task_cc = FactoryGirl.create(:task, :task_owner => {:user => @company_contact1})
+      @task_cc_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @company_contact1})
       @task_all_cc = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
+      @task_all_cc_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:company => {company: @company, role: :CC}})
     end
     it 'job seeker user' do
-      expect(Task.find_by_owner_user @job_seeker).to eq @task_js
+      expect(Task.find_by_owner_user @job_seeker).to eq [@task_js]
     end
     it 'job developer user' do
       expect(Task.find_by_owner_user @job_developer1).to eq [@task_jd, @task_all_jd]
