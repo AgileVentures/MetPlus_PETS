@@ -28,6 +28,16 @@ class Agency < ActiveRecord::Base
   end
   ###################################################
 
+  def agency_people_on_role role
+    users = []
+    agency_people.each do |person|
+      users << person if person.agency_roles &&
+          person.agency_roles.pluck(:role).include?(role)
+    end
+
+    users
+  end
+  
   private
 
   def self.find_users_with_role(agency, role)
