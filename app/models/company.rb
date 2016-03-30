@@ -57,12 +57,7 @@ class Company < ActiveRecord::Base
   private
 
   def self.find_users_with_role(company, role)
-    users = []
-    company.company_people.each do |cp|
-                users << cp if cp.company_roles &&
-                               cp.company_roles.pluck(:role).include?(role)
-    end
-    users
+    company.people_on_role role
   end
 
 end
