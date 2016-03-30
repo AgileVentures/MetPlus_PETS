@@ -2,8 +2,8 @@ FactoryGirl.define do
   factory :task do
     type ""
     association :owner, factory: :job_seeker
-    target_agency_role ""
-    target_company_role ""
+    owner_agency_role ""
+    owner_company_role ""
     deferred_date "2016-03-29 15:37:07"
   end
 
