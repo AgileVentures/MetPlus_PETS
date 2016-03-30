@@ -2,11 +2,7 @@ FactoryGirl.define do
 
   sequence(:ein) do |n|
     n = n.next
-    ein = "12-346#{n}"
-    while ein.length < 10 do
-      ein += '0'
-    end
-    ein
+    "12-346#{ n.to_s.rjust(4, "0")}"
   end
 
   factory :company do
