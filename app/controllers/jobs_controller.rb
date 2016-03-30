@@ -4,22 +4,22 @@ class JobsController < ApplicationController
 
 	def index
 		if company_person?
-			@jobs=@company_person.company.jobs.paginate(:page => params[:page],
+			@jobs = @company_person.company.jobs.paginate(:page => params[:page],
 				                                        :per_page => 32)
 		else
-			@jobs=Job.paginate(:page => params[:page],
+			@jobs = Job.paginate(:page => params[:page],
 				               :per_page => 32).includes(:company)
 		end
 	end	
 
 	def new
-		@job=Job.new(:company_id => params[:company_id])
+		@job = Job.new(:company_id => params[:company_id])
 	end 
 
 	def create
-		@job=Job.new(job_params)
+		@job = Job.new(job_params)
 		if @job.save 
-			flash[:notice]="#{@job.title} has been created successfully."
+			flash[:notice] = "#{@job.title} has been created successfully."
 			redirect_to jobs_url  
 		else
 			render :new 
@@ -34,7 +34,7 @@ class JobsController < ApplicationController
 
 	def update
 		if @job.update_attributes(job_params)
-			flash[:info]="#{@job.title} has been updated successfully."
+			flash[:info] = "#{@job.title} has been updated successfully."
 			redirect_to @job 
 		else
 			render :edit 
@@ -43,7 +43,7 @@ class JobsController < ApplicationController
 
 	def destroy
 		@job.destroy
-		flash[:alert]="#{@job.title} has been deleted successfully."
+		flash[:alert] = "#{@job.title} has been deleted successfully."
 		redirect_to jobs_url 
 	end
 
@@ -51,13 +51,13 @@ class JobsController < ApplicationController
 
 		def authentication_for_post_or_edit 
 			if !company_person?
-			   flash[:alert]="Sorry, You are not allowed to post or edit a job!"
+			   flash[:alert] = "Sorry, You are not allowed to post or edit a job!"
 			   redirect_to :back 
 			end  
 		end
 
 		def set_company_person
-			@company_person=correct_user_type(current_user) 
+			@company_person = correct_user_type(current_user) 
 		end
 
 		def company_person?
