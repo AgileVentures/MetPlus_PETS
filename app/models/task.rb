@@ -10,14 +10,15 @@ class Task < ActiveRecord::Base
   belongs_to :job
 
   def task_owner
-    return owner if owner != nil
+    return owner.pets_user if owner != nil
     return agency.agency_people_on_role AgencyRole::ROLE[target_agency_role.to_sym] if agency != nil
     return company.people_on_role CompanyRole::ROLE[target_company_role.to_sym] if company != nil
     nil
   end
 
   def task_owner=(user: nil, agency: {agency: nil, role: nil}, company: {company: nil, role: nil})
-    self.owner = user
+    self.owner = nil
+    self.owner = user.user if user != nil
     self.agency = agency[:agency]
     self.target_agency_role = agency[:role]
     self.company = company[:company]
@@ -25,13 +26,12 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_owner_user user
-    find_by :owner => user
-  end
-
-  def self.find_by_owner_agency agency
-    find_by :agency => agency
-  end
-  def self.find_by_owner_agency_role agency, role
-    find_by :agency => agency, :target_agency_role => role
+    return find_by :owner => user.user if user.is_a? JobSeeker
+    return where("target_user_id=? or (target_agency_id=? and target_agency_role in (?))",
+                 user.user.id, user.agency.id, user.agency_roles.pluck(:role).collect{|pa| AgencyRole::ROLE.key(pa)}) \
+                   if user.is_a? AgencyPerson
+    return where("target_user_id=? or (target_company_id=? and target_company_role in (?))",
+                 user.user.id, user.company.id, user.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)}) \
+                   if user.is_a? CompanyPerson
   end
 end
