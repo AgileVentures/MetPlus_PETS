@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :skill do
-	name "MyText"
-	description "MyText"
+    name 'Software Development - RoR'
+    description 'Ruby on Rails development expertise'
   end
 
 end

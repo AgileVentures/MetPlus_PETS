@@ -1,0 +1,23 @@
+%div(id="#{partial_id}")
+  %table.table.table-hover
+    %thead
+      %tr
+        %td
+          %strong Name
+        %td
+          %strong Description
+        %td
+          %strong Delete
+    %tbody
+      - job_properties.each do |job_prop|
+        %tr
+          %td
+            = link_to "#{job_prop.name}", send(edit_property_path, job_prop)
+          %td
+            = job_prop.description
+          %td
+            = link_to send(delete_property_path, job_prop), method: :delete do
+              %span.glyphicon.glyphicon-remove
+
+  = will_paginate job_properties, param_name: "#{data_type}_page",
+                     params: {data_type: data_type}

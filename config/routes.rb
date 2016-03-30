@@ -73,6 +73,9 @@ Rails.application.routes.draw do
   resources :job_categories, only: [:create, :edit, :update, :destroy]
   # --------------------------------------------------------------------------
 
+  # ----------------------- Skills -------------------------------------------
+  resources :skills, only: [:create, :edit, :update, :destroy]
+  # --------------------------------------------------------------------------
 
   root 'main#index'
 
