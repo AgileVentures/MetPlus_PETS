@@ -10,13 +10,13 @@ RSpec.describe Task, type: :model do
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
 
-    it { is_expected.to have_db_column :target_user_id }
+    it { is_expected.to have_db_column :owner_user_id }
 
-    it { is_expected.to have_db_column :target_agency_id }
-    it { is_expected.to have_db_column :target_agency_role }
+    it { is_expected.to have_db_column :owner_agency_id }
+    it { is_expected.to have_db_column :owner_agency_role }
 
-    it { is_expected.to have_db_column :target_company_id }
-    it { is_expected.to have_db_column :target_company_role }
+    it { is_expected.to have_db_column :owner_company_id }
+    it { is_expected.to have_db_column :owner_company_role }
 
     it { is_expected.to have_db_column :deferred_date}
     it { is_expected.to have_db_column :user_id}
