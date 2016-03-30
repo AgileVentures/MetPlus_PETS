@@ -34,4 +34,11 @@ class Task < ActiveRecord::Base
                  user.user.id, user.company.id, user.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)}) \
                    if user.is_a? CompanyPerson
   end
+  def user
+    return nil if user.is_nil?
+    user.pets_user
+  end
+  def user= user
+    self.user = user.user
+  end
 end

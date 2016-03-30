@@ -143,6 +143,26 @@ RSpec.describe User, type: :model do
           to eq "#{agency_person.first_name} #{agency_person.last_name}"
     end
   end
+  describe '#pets_user' do
+    it 'returns JobSeeker' do
+      job_seeker = FactoryGirl.create(:job_seeker)
+      user = job_seeker.user
+      expect(user.pets_user).to eq job_seeker
+      expect(user.pets_user.is_a?JobSeeker).to be true
+    end
+    it 'returns AgencyPerson' do
+      agency_person = FactoryGirl.create(:agency_person)
+      user = agency_person.user
+      expect(user.pets_user).to eq agency_person
+      expect(user.pets_user.is_a?AgencyPerson).to be true
+    end
+    it 'returns CompanyPerson' do
+      company_person = FactoryGirl.create(:company_person)
+      user = company_person.user
+      expect(user.pets_user).to eq company_person
+      expect(user.pets_user.is_a?CompanyPerson).to be true
+    end
+  end
 end
 
 
