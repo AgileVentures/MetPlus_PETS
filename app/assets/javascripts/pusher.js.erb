@@ -1,0 +1,44 @@
+var PusherControl = {
+  get_pusher: (function () {
+    var pusher = new Pusher('<%=ENV['PUSHER_APP_KEY']%>');
+    return function () {return pusher;}
+  })(),
+  setup: function () {
+    var pusher = PusherControl.get_pusher();
+
+    // pusher_control channel is used to send
+    // server-originated events to clients
+
+    var channel = pusher.channel('pusher_control');
+
+    if (!channel) {
+      channel = pusher.subscribe('pusher_control');
+    }
+
+    channel.bind('js_registered', function(data) {
+      // Process event if I am logged in and am an agency_person
+      if (Cookies('person_type') === 'AgencyPerson') {
+        noty({text: 'Job Seeker: ' + "<a href='/job_seekers/" + data.id +
+                    "' target='_blank'>" + data.name + "</a>" +
+                    ' has joined PETS.',
+             theme: 'bootstrapTheme',
+            layout: 'bottomRight',
+              type: 'success'});
+      }
+    });
+
+    channel.bind('company_registered', function(data) {
+      // Process event if I am logged in and am an agency_person
+      if (Cookies('person_type') === 'AgencyPerson') {
+        noty({text: 'Company: ' + "<a href='/company_admin/companies/" +
+                    data.id + "' target='_blank'>" + data.name + "</a>" +
+                    ' has registered in PETS.',
+             theme: 'bootstrapTheme',
+            layout: 'bottomRight',
+              type: 'information'});
+      }
+    });
+  }
+};
+
+$(PusherControl.setup);

@@ -41,6 +41,9 @@ class CompanyRegistrationsController < ApplicationController
          " We will review your request and get back to you shortly."
       CompanyMailer.pending_approval(@company,
                                      @company.company_people[0]).deliver_now
+      Event.create(:COMP_REGISTER,
+                   name: @company.name, id: @company.id)
+
       render :confirmation
     else
       @model_errors = @company.errors
