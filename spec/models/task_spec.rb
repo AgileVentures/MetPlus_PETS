@@ -31,43 +31,35 @@ RSpec.describe Task, type: :model do
       @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
       @agency = FactoryGirl.create(:agency)
 
-      @job_developer = FactoryGirl.build(:agency_person)
-      @job_developer.agency_roles << @jd_role
-      @job_developer.save
-      @job_developer1 = FactoryGirl.build(:agency_person)
-      @job_developer1.agency_roles << @jd_role
-      @job_developer1.save
-      @job_developer2 = FactoryGirl.build(:agency_person)
-      @job_developer2.agency_roles << @jd_role
-      @job_developer2.save
-      @agency.agency_people << @job_developer1
-      @agency.agency_people << @job_developer2
+      @job_developer = FactoryGirl.create(:agency_person, :agency_roles => [@jd_role])
+      @job_developer1 = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@jd_role])
+      @job_developer2 = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@jd_role])
 
-      @case_manager = FactoryGirl.create(:agency_person)
-      @case_manager.agency_roles << @cm_role
-      @case_manager.save
-      @case_manager1 = FactoryGirl.create(:agency_person)
-      @case_manager1.agency_roles << @cm_role
-      @case_manager1.save
-      @case_manager2 = FactoryGirl.create(:agency_person)
-      @case_manager2.agency_roles << @cm_role
-      @case_manager2.save
-      @agency.agency_people << @case_manager1
-      @agency.agency_people << @case_manager2
+      @case_manager = FactoryGirl.create(:agency_person, :agency_roles => [@cm_role])
+      @case_manager1 = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@cm_role])
+      @case_manager2 = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@cm_role])
 
-      @agency_admin = FactoryGirl.create(:agency_person)
-      @agency_admin.agency_roles << @aa_role
-      @agency_admin.save
-      @agency_admin1 = FactoryGirl.create(:agency_person)
-      @agency_admin1.agency_roles << @aa_role
-      @agency_admin1.save
-      @agency.agency_people << @agency_admin1
+      @agency_admin = FactoryGirl.create(:agency_person, :agency_roles => [@aa_role])
+      @agency_admin1 = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
 
-      @cm_and_jd = FactoryGirl.create(:agency_person)
-      @cm_and_jd.agency_roles << [@cm_role, @jd_role]
-      @cm_and_jd.save
+      @cm_and_jd = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@cm_role, @jd_role])
+
+
+      @cc_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
+      @ca_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+
+      @company = FactoryGirl.create(:company)
+      @company1 = FactoryGirl.create(:company)
+      @company_contact = FactoryGirl.create(:company_person, :company => @company1, :company_roles => [@cc_role])
+      @company_contact1 = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@cc_role])
+      @company_contact2 = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@cc_role])
+
+
+      @company_admin = FactoryGirl.create(:company_person, :company => @company1, :company_roles => [@ca_role])
+      @company_admin1 = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@ca_role])
+
+
       @task = FactoryGirl.create(:task)
-      @agency.agency_people << @cm_and_jd
     end
     it 'job seeker user' do
       @task.task_owner = {:user => @job_seeker}
@@ -96,6 +88,14 @@ RSpec.describe Task, type: :model do
     it 'agency admin role' do
       @task.task_owner = {:agency => {agency: @agency, role: :AA}}
       expect(@task.task_owner).to eq [@agency_admin1]
+    end
+    it 'company admin role' do
+      @task.task_owner = {:company => {company: @company, role: :CA}}
+      expect(@task.task_owner).to eq [@company_admin1]
+    end
+    it 'company contact role' do
+      @task.task_owner = {:company => {company: @company, role: :CC}}
+      expect(@task.task_owner).to eq [@company_contact1, @company_contact2]
     end
   end
 end
