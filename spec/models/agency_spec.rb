@@ -6,13 +6,13 @@ RSpec.describe Agency, type: :model do
       expect(FactoryGirl.build(:agency)).to be_valid
     end
   end
-  
+
   describe 'Associations' do
     it { is_expected.to have_many :agency_people }
     it { is_expected.to have_many :branches }
     it { is_expected.to have_and_belong_to_many :companies }
   end
-  
+
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :name }
@@ -22,7 +22,7 @@ RSpec.describe Agency, type: :model do
     it { is_expected.to have_db_column :fax }
     it { is_expected.to have_db_column :description }
   end
-  
+
   describe 'Validations' do
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_length_of(:name).is_at_most(100) }
@@ -31,7 +31,7 @@ RSpec.describe Agency, type: :model do
     it { is_expected.to validate_presence_of :phone }
     it { is_expected.to validate_presence_of :email }
   end
-  
+
   describe 'Agency model' do
     it 'is valid with all required fields' do
       expect(Agency.new(name: 'Agency', website: 'myurl.com',
@@ -46,39 +46,52 @@ RSpec.describe Agency, type: :model do
       expect(agency.errors[:email]).to include("can't be blank")
     end
   end
-  
+
   describe 'Agency management' do
     let(:agency) { FactoryGirl.create(:agency) }
     let!(:aa_person1) do
       $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role, 
+      $person.agency_roles << FactoryGirl.create(:agency_role,
                                       role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let!(:aa_person2) do
       $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role, 
+      $person.agency_roles << FactoryGirl.create(:agency_role,
                                       role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let(:jd_person) do
       $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role, 
+      $person.agency_roles << FactoryGirl.create(:agency_role,
                                       role: AgencyRole::ROLE[:JD])
       $person.save
       $person
     end
-    
+
     it 'identifies agency admins' do
       expect(Agency.agency_admins(agency)).to eq [aa_person1, aa_person2]
     end
-    
+
     it 'identifies agency' do
       expect(Agency.this_agency(jd_person)).to eq agency
       expect(Agency.this_agency(aa_person1)).to eq agency
     end
   end
-  
+
+  describe 'Class methods' do
+
+    let(:agency)   { FactoryGirl.create(:agency) }
+    let!(:person1) { FactoryGirl.create(:agency_person, agency: agency) }
+    let!(:person2) { FactoryGirl.create(:agency_person, agency: agency) }
+    let!(:person3) { FactoryGirl.create(:agency_person, agency: agency) }
+
+    it 'returns all emails for people in the agency' do
+      expect(Agency.all_agency_people_emails).
+        to eq [person1.email, person2.email, person3.email]
+    end
+  end
+
 end

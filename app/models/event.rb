@@ -12,7 +12,7 @@ class Event
                      EVT_TYPE[:JS_REGISTER], evt_data)
 
       # Send notification email to all agency personnel
-      agency_emails = AgencyPerson.where(agency: Agency.first).pluck(:email)
+      agency_emails = Agency.all_agency_people_emails
       AgencyMailer.job_seeker_registered(agency_emails, evt_data[:name],
                     evt_data[:id]).deliver_later
 
@@ -21,9 +21,9 @@ class Event
                      EVT_TYPE[:COMP_REGISTER], evt_data)
 
       # Send notification email to all agency personnel
-      agency_emails = AgencyPerson.where(agency: Agency.first).pluck(:email)
-        AgencyMailer.company_registered(agency_emails, evt_data[:name],
-                      evt_data[:id]).deliver_later
+      agency_emails = Agency.all_agency_people_emails
+      AgencyMailer.company_registered(agency_emails, evt_data[:name],
+                    evt_data[:id]).deliver_later
     end
   end
 
