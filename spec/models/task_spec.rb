@@ -23,6 +23,43 @@ RSpec.describe Task, type: :model do
     it { is_expected.to have_db_column :job_id}
     it { is_expected.to have_db_column :company_id}
   end
+  describe 'Validators' do
+    before :each do
+      @company = FactoryGirl.build(:company)
+      @agency = FactoryGirl.build(:agency)
+      @user = FactoryGirl.build(:job_seeker)
+    end
+    describe 'errors' do
+      subject {FactoryGirl.build(:task)}
+      it 'no user set' do
+        should_not allow_value({:user => nil}).for(:task_owner).with_message("need to be set")
+      end
+      it 'no company role' do
+        should_not allow_value({:company => {company: @company, role: nil}}).for(:task_owner).with_message("no company role set")
+      end
+      it 'unkown company role' do
+        should_not allow_value({:company => {company: @company, role: :INVALID}}).for(:task_owner).with_message("unknown company role")
+      end
+      it 'no agency role' do
+        should_not allow_value({:agency => {agency: @agency, role: nil}}).for(:task_owner).with_message("no agency role set")
+      end
+      it 'unkown agency role' do
+        should_not allow_value({:agency => {agency: @agency, role: :INVALID}}).for(:task_owner).with_message("unknown agency role")
+      end
+    end
+    describe 'success' do
+      subject {FactoryGirl.build(:task)}
+      it 'user' do
+        should allow_value({:user => @user}).for(:task_owner)
+      end
+      it 'company' do
+        should allow_value({:company => {company: @company, role: :CC}}).for(:task_owner)
+      end
+      it 'agency' do
+        should allow_value({:agency => {agency: @agency, role: :AA}}).for(:task_owner)
+      end
+    end
+  end
   describe 'Setting owner of the task' do
     before :each do
       @job_seeker = FactoryGirl.create(:job_seeker)
@@ -59,7 +96,7 @@ RSpec.describe Task, type: :model do
       @company_admin1 = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@ca_role])
 
 
-      @task = FactoryGirl.create(:task)
+      @task = FactoryGirl.build(:task)
     end
     it 'job seeker user' do
       @task.task_owner = {:user => @job_seeker}
@@ -134,45 +171,24 @@ RSpec.describe Task, type: :model do
       @company_admin1 = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@ca_role])
 
 
-      @task_js = FactoryGirl.create(:task)
+      @task_js = FactoryGirl.build(:task)
       @task_js.task_owner = {:user => @job_seeker}
       @task_js.save
 
-      @task_jd = FactoryGirl.create(:task)
-      @task_jd.task_owner = {:user => @job_developer1}
-      @task_jd.save
-      @task_all_jd = FactoryGirl.create(:task)
-      @task_all_jd.task_owner = {:agency => {agency: @agency, role: :JD}}
-      @task_all_jd.save
+      @task_jd = FactoryGirl.create(:task, :task_owner => {:user => @job_developer1})
+      @task_all_jd = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
 
-      @task_cm = FactoryGirl.create(:task)
-      @task_cm.task_owner = {:user => @case_manager1}
-      @task_cm.save
-      @task_all_cm = FactoryGirl.create(:task)
-      @task_all_cm.task_owner = {:agency => {agency: @agency, role: :CM}}
-      @task_all_cm.save
+      @task_cm = FactoryGirl.create(:task, :task_owner => {:user => @case_manager1})
+      @task_all_cm = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
 
-      @task_aa = FactoryGirl.create(:task)
-      @task_aa.task_owner = {:user => @agency_admin1}
-      @task_aa.save
-      @task_all_aa = FactoryGirl.create(:task)
-      @task_all_aa.task_owner = {:agency => {agency: @agency, role: :AA}}
-      @task_all_aa.save
+      @task_aa = FactoryGirl.create(:task, :task_owner => {:user => @agency_admin1})
+      @task_all_aa = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
 
-      @task_ca = FactoryGirl.create(:task)
-      @task_ca.task_owner = {:user => @company_admin1}
-      @task_ca.save
-      @task_all_ca = FactoryGirl.create(:task)
-      @task_all_ca.task_owner = {:company => {company: @company, role: :CA}}
-      @task_all_ca.save
+      @task_ca = FactoryGirl.create(:task, :task_owner => {:user => @company_admin1})
+      @task_all_ca = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
 
-      @task_cc = FactoryGirl.create(:task)
-      @task_cc.task_owner = {:user => @company_contact1}
-      @task_cc.save
-      puts @company_contact1
-      @task_all_cc = FactoryGirl.create(:task)
-      @task_all_cc.task_owner = {:company => {company: @company, role: :CC}}
-      @task_all_cc.save
+      @task_cc = FactoryGirl.create(:task, :task_owner => {:user => @company_contact1})
+      @task_all_cc = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
     end
     it 'job seeker user' do
       expect(Task.find_by_owner_user @job_seeker).to eq @task_js
