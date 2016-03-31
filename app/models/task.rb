@@ -10,6 +10,7 @@ class Task < ActiveRecord::Base
   belongs_to :job
 
   validates_with TaskOwnerValidator
+
   scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today)}
   scope :js_tasks, ->(job_seeker) {where('owner_user_id=?', job_seeker.user.id)}
   scope :agency_person_tasks, ->(agency_person) {where('owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))',
@@ -47,18 +48,31 @@ class Task < ActiveRecord::Base
   end
 
   def target
-    return user unless user.is_nil?
-    return company unless company.is_nil?
-    return job unless job.is_nil?
+    return user unless user.nil?
+    return company unless company.nil?
+    return job unless job.nil?
     nil
   end
 
-  def user
-    return nil if user.is_nil?
-    user.pets_user
+  def target= target
+    case target
+      when User, AgencyPerson, CompanyPerson, JobSeeker
+        @user = target.pets_user.user
+        self.company = nil
+        self.job = nil
+      when Job
+        @user = nil
+        self.company = nil
+        self.job = target
+      when Company
+        @user = nil
+        self.company = target
+        self.job = nil
+    end
   end
 
-  def user= user
-    self.user = user.user
+  def user
+    return nil if @user.nil?
+    @user.pets_user
   end
 end
