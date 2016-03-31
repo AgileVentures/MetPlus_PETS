@@ -22,9 +22,11 @@ class Agency < ActiveRecord::Base
     user.actable.agency
   end
 
+  # MULTIPLE AGENCIES: the code below needs to change
   def self.all_agency_people_emails
     first.agency_people.pluck(:email)
   end
+  ###################################################
 
   private
 
