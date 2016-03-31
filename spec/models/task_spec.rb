@@ -135,6 +135,71 @@ RSpec.describe Task, type: :model do
       expect(@task.task_owner).to eq [@company_contact1, @company_contact2]
     end
   end
+  describe 'Setting target of the task' do
+    before :each do
+      @job_seeker = FactoryGirl.create(:job_seeker)
+      @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
+      @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency = FactoryGirl.create(:agency)
+
+      @job_developer = FactoryGirl.create(:agency_person, :agency_roles => [@jd_role])
+
+      @case_manager = FactoryGirl.create(:agency_person, :agency_roles => [@cm_role])
+
+      @agency_admin = FactoryGirl.create(:agency_person, :agency_roles => [@aa_role])
+
+
+      @cc_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
+      @ca_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+
+      @company = FactoryGirl.create(:company)
+      @company_contact = FactoryGirl.create(:company_person, :company => @company1, :company_roles => [@cc_role])
+
+
+      @company_admin = FactoryGirl.create(:company_person, :company => @company1, :company_roles => [@ca_role])
+
+      @job = FactoryGirl.create(:job)
+
+      @task = FactoryGirl.build(:task)
+    end
+    it 'job seeker user' do
+      @task.target = @job_seeker
+      expect(@task.target).to eq @job_seeker
+    end
+    it 'job seeker as a User' do
+      @task.target = @job_seeker.user
+      expect(@task.target).to eq @job_seeker
+    end
+    it 'job developer user' do
+      @task.target = @job_developer
+      expect(@task.target).to eq @job_developer
+    end
+    it 'case manager user' do
+      @task.target = @case_manager
+      expect(@task.target).to eq @case_manager
+    end
+    it 'agency admin user' do
+      @task.target = @agency_admin
+      expect(@task.target).to eq @agency_admin
+    end
+    it 'company admin user' do
+      @task.target = @company_admin
+      expect(@task.target).to eq @company_admin
+    end
+    it 'company contact user' do
+      @task.target = @company_contact
+      expect(@task.target).to eq @company_contact
+    end
+    it 'job' do
+      @task.target = @job
+      expect(@task.target).to eq @job
+    end
+    it 'company' do
+      @task.target = @company
+      expect(@task.target).to eq @company
+    end
+  end
   describe 'Find all tasks for a owner' do
     before :each do
       @job_seeker = FactoryGirl.create(:job_seeker)
