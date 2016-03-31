@@ -60,11 +60,13 @@ gem 'js_cookie_rails'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
+
+gem 'delayed_job_active_record'
+
 # later we can strict the faker
 # to staging && development
 gem 'ffaker'
 gem 'faker'
-# gem 'jquery-turbolinks' #will solve reload problems with javascript
 
 
 

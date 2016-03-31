@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'agency_mailer'
 
 RSpec.describe Event, type: :model do
+  Delayed::Worker.delay_jobs = false
+  
   let!(:agency) { FactoryGirl.create(:agency) }
 
   before(:each) do
