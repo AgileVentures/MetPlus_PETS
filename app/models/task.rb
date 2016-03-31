@@ -9,6 +9,8 @@ class Task < ActiveRecord::Base
   belongs_to :company
   belongs_to :job
 
+  belongs_to :task_setting
+
   validates_with TaskOwnerValidator
 
   scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today)}
@@ -74,5 +76,15 @@ class Task < ActiveRecord::Base
   def user
     return nil if @user.nil?
     @user.pets_user
+  end
+
+  def self.add_task creator, type, target_company = nil, target_person = nil, target_job = nil
+    settings = TaskSetting.find_by_short_name type
+    task = Task.new
+    task.task_owner = person
+    task.company = target_company
+    task.job = target_job
+    task.user = target_person
+    task.task_setting = TaskSetting.find_by_short_name type
   end
 end
