@@ -10,6 +10,16 @@ class Task < ActiveRecord::Base
   belongs_to :job
 
   validates_with TaskOwnerValidator
+  scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today)}
+  scope :js_tasks, ->(job_seeker) {where('owner_user_id=?', job_seeker.user.id)}
+  scope :agency_person_tasks, ->(agency_person) {where('owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))',
+                                                         agency_person.user.id,
+                                                         agency_person.agency.id,
+                                                         agency_person.agency_roles.pluck(:role).collect{|pa| AgencyRole::ROLE.key(pa)})}
+  scope :company_person_tasks, ->(company_person) {where('owner_user_id=? or (owner_company_id=? and owner_company_role in (?))',
+                                                         company_person.user.id,
+                                                         company_person.company.id,
+                                                         company_person.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)})}
 
   def task_owner
     return owner.pets_user if owner != nil
@@ -28,20 +38,20 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_owner_user user
-    return where("owner_user_id=? and (deferred_date IS NULL or deferred_date < ?)",
-                  user.user.id, Date.today) \
+    return today_tasks.js_tasks(user) \
                 if user.is_a? JobSeeker
-    return where("(owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))) and (deferred_date IS NULL or deferred_date < ?)",
-                 user.user.id, user.agency.id, user.agency_roles.pluck(:role).collect{|pa| AgencyRole::ROLE.key(pa)},
-                 Date.today) \
+    return today_tasks.agency_person_tasks(user) \
                    if user.is_a? AgencyPerson
-    return where("(owner_user_id=? or (owner_company_id=? and owner_company_role in (?))) and (deferred_date IS NULL or deferred_date < ?)",
-                 user.user.id, user.company.id, user.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)},
-                 Date.today) \
+    return today_tasks.company_person_tasks(user) \
                    if user.is_a? CompanyPerson
   end
 
-
+  def target
+    return user unless user.is_nil?
+    return company unless company.is_nil?
+    return job unless job.is_nil?
+    nil
+  end
 
   def user
     return nil if user.is_nil?
