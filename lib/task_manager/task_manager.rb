@@ -1,8 +1,7 @@
 module TaskManager
-  STATUS = ['New', 'Work in progress', 'Done']
+  STATUS = ['New', 'Work in progress', 'Done', 'Assigned']
 
   module ClassMethods
-  # The JS just got inactive
     def create_task(audience, task_type, *args)
       person = nil
       job = nil
@@ -20,8 +19,6 @@ module TaskManager
     def method_missing(meth, *args, &block)
       if meth.to_s =~ /^new_(.+)$/
         return new_task $1, *args
-      elsif meth.to_s =~ /^wip_(.+)$/
-        return TaskManager::wip self
       else
         super meth, *args, &block
       end
@@ -29,7 +26,7 @@ module TaskManager
 
     # Logic for this method MUST match that of the detection in method_missing
     def respond_to_missing?(method_name, include_private = false)
-      method_name =~ /^(new|wip|close)_(.+)$/ || super
+      method_name =~ /^new_(.+)$/ || super
     end
 
 
@@ -63,11 +60,18 @@ module TaskManager
     end
   end
 
+  def assign person
+    raise ArgumentError, 'Task need to be in created state' if status != STATUS[0]
+    send("assign_#{task_type}".to_sym, self, person)
+  end
+
   def work_in_progress
+    raise ArgumentError, 'Task need to be in assigned state' if status != STATUS[3]
     send("wip_#{task_type}".to_sym, self)
   end
 
   def complete
+    raise ArgumentError, 'Task need to be in work in progress state' if status != STATUS[1]
     send("done_#{task_type}".to_sym, self)
   end
 
@@ -76,6 +80,8 @@ module TaskManager
       return TaskManager::wip_default self
     elsif meth.to_s =~ /^done_(.+)$/
       return TaskManager::done_default self
+    elsif meth.to_s =~ /^assign_(.+)$/
+      return TaskManager::assign_default self, *args
     else
       super meth, *args, &block
     end
@@ -89,10 +95,19 @@ module TaskManager
 
   private
 
+  def self.assign_default task, person, *args
+    task.status = STATUS[3]
+    task.task_owner = {:user => person}
+    task.save
+    Task.unschedule_event :taskCreated, task, :AA
+    Task.schedule_event :taskAssigned, task, :AA
+    return task
+  end
+
   def self.wip_default task
     task.status = STATUS[1]
     task.save
-    Task.unschedule_event :taskCreated, task, :AA
+    Task.unschedule_event :taskAssigned, task, :AA
     Task.schedule_event :taskWorkStarted, task, :AA
     return task
   end
