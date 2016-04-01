@@ -1,4 +1,8 @@
+require 'task_manager/task_manager'
 class Task < ActiveRecord::Base
+
+  include TaskManager
+
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_user_id'
 
   belongs_to :owner_agency, class_name: 'Agency', foreign_key: 'owner_agency_id'
