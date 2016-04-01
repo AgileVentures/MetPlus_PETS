@@ -6,11 +6,14 @@ class Event
     @@delay = delay_seconds
   end
 
+  def self.delay_seconds
+    @@delay
+  end
+
   EVT_TYPE = {JS_REGISTER:   'js_registered',
               COMP_REGISTER: 'company_registered'}
 
   def self.create(evt_type, evt_data)
-    debugger
     case evt_type
     when :JS_REGISTER     # job seeker registered
       Pusher.trigger('pusher_control',
