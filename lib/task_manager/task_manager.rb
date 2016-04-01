@@ -18,7 +18,6 @@ module TaskManager
     end
 
     def method_missing(meth, *args, &block)
-      byebug
       if meth.to_s =~ /^new_(.+)$/
         return new_task $1, *args
       elsif meth.to_s =~ /^wip_(.+)$/
@@ -73,7 +72,6 @@ module TaskManager
   end
 
   def method_missing(meth, *args, &block)
-    puts "calling method #{meth}"
     if meth.to_s =~ /^wip_(.+)$/
       return TaskManager::wip_default self
     elsif meth.to_s =~ /^done_(.+)$/
@@ -108,7 +106,6 @@ module TaskManager
   end
 
   def self.included(base)
-    puts "#{base} included #{self}"
     base.extend ClassMethods
     base.include InstanceMethods
   end

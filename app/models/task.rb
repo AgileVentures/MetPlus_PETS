@@ -1,7 +1,9 @@
 require 'task_manager/task_manager'
+require 'task_manager/business_logic'
 class Task < ActiveRecord::Base
 
   include TaskManager
+  include BusinessLogic
 
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_user_id'
 
@@ -54,7 +56,7 @@ class Task < ActiveRecord::Base
   end
 
   def target
-    return user unless user.nil?
+    return person unless person.nil?
     return company unless company.nil?
     return job unless job.nil?
     nil
@@ -63,32 +65,27 @@ class Task < ActiveRecord::Base
   def target= target
     case target
       when User, AgencyPerson, CompanyPerson, JobSeeker
-        @user = target.pets_user.user
+        self.person = target.pets_user.user
         self.company = nil
         self.job = nil
       when Job
-        @user = nil
+        self.person = nil
         self.company = nil
         self.job = target
       when Company
-        @user = nil
+        self.person = nil
         self.company = target
         self.job = nil
     end
   end
 
-  def user
-    return nil if @user.nil?
-    @user.pets_user
+  def person
+    return nil if self.user.nil?
+    self.user.pets_user
   end
 
-  def self.add_task creator, type, target_company = nil, target_person = nil, target_job = nil
-    settings = TaskSetting.find_by_short_name type
-    task = Task.new
-    task.task_owner = person
-    task.company = target_company
-    task.job = target_job
-    task.user = target_person
-    task.task_setting = TaskSetting.find_by_short_name type
+  def person= person
+    self.user = nil
+    self.user = person.pets_user.user unless person.nil?
   end
 end

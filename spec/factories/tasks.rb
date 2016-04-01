@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :task do
-    type ""
+    task_type "new_task"
     association :owner, factory: :job_seeker
     owner_agency_role ""
     owner_company_role ""
