@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'agency_mailer'
 
 RSpec.describe Event, type: :model do
-  
   let!(:agency) { FactoryGirl.create(:agency) }
 
   before(:each) do
