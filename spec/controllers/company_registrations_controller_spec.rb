@@ -102,6 +102,14 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:company_role) { FactoryGirl.create(:company_role,
                                 role: CompanyRole::ROLE[:CA])}
 
+    before(:each) do
+      # need to create agency people to receive 'company registered'
+      # event email (see models/Event.rb)
+      3.times do |n|
+        FactoryGirl.create(:agency_person, agency: agency)
+      end
+    end
+
     context 'valid attributes' do
       before(:each) do
         post :create, company: registration_params
@@ -129,8 +137,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
 
     it 'sends registration-pending email' do
+      # one email is sent to company registrant,
+      # one email is sent to all agency people
       expect { post :create, company: registration_params }.
-                    to change(all_emails, :count).by(+1)
+                    to change(all_emails, :count).by(+2)
     end
 
     context 'invalid attributes' do
@@ -169,6 +179,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                                 role: CompanyRole::ROLE[:CA])}
 
     before(:each) do
+      3.times do |n|
+        FactoryGirl.create(:agency_person, agency: agency)
+      end
       post :create, company: registration_params
     end
 
@@ -207,6 +220,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                                 role: CompanyRole::ROLE[:CA])}
 
     before(:each) do
+      3.times do |n|
+        FactoryGirl.create(:agency_person, agency: agency)
+      end
       post :create, company: registration_params
     end
 
@@ -242,6 +258,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                                 role: CompanyRole::ROLE[:CA])}
 
     before(:each) do
+      3.times do |n|
+        FactoryGirl.create(:agency_person, agency: agency)
+      end
       post :create, company: registration_params
     end
 

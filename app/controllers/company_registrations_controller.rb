@@ -34,7 +34,9 @@ class CompanyRegistrationsController < ApplicationController
     @company.company_people[0].company_roles <<
                     CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
 
+    # MULTIPLE AGENCIES: the code below needs to change
     @company.agencies << Agency.first
+    ###################################################
 
     if @company.save
       flash.notice = "Thank you for your registration request. " +

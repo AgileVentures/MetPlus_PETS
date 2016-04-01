@@ -7,7 +7,24 @@ class CompanyMailerPreview < ActionMailer::Preview
     company.agencies << FactoryGirl.create(:agency)
     company.save
     company_person = FactoryGirl.create(:company_person, company: company)
-    CompanyMailer.pending_approval(company_person)
+    CompanyMailer.pending_approval(company, company_person)
+  end
+
+  def registration_approved
+    company = FactoryGirl.build(:company)
+    company.agencies << FactoryGirl.create(:agency)
+    company.save
+    company_person = FactoryGirl.create(:company_person, company: company)
+    CompanyMailer.registration_approved(company, company_person)
+  end
+
+  def registration_denied
+    company = FactoryGirl.build(:company)
+    company.agencies << FactoryGirl.create(:agency)
+    company.save
+    company_person = FactoryGirl.create(:company_person, company: company)
+    CompanyMailer.registration_denied(company, company_person,
+            "Your EIN is not valid and we think you're a scam operation.")
   end
 
 end
