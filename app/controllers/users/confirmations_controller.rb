@@ -1,4 +1,5 @@
 class Users::ConfirmationsController < Devise::ConfirmationsController
+  require 'event'
   # GET /resource/confirmation/new
   # def new
   #   super
@@ -11,13 +12,22 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
 
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
-    # Override normal handling if the user's email address has already been
-    # confirmed.  In that case, clear the error messages and the parent
-    # method will redirect to login (with appropriate flash message)
     super do |user|
-      user.errors.clear if user.errors.messages[:email] &&
-              (user.errors.messages[:email][0] ==
-                 t("errors.messages.already_confirmed"))
+      if user.errors.empty? && user.actable_type == 'JobSeeker'
+        person = user.actable
+        Event.create(:JS_REGISTER,
+                     name: person.full_name(last_name_first: false),
+                     id:   person.id)
+      else
+        # Override normal handling if the user's email address has already been
+        # confirmed.  In that case, clear the error messages and the parent
+        # method will redirect to login (with appropriate flash message)
+        # (this error will happen if the user clicks the link in the
+        #  comnfirmation email more than once)
+        user.errors.clear if user.errors.messages[:email] &&
+                (user.errors.messages[:email][0] ==
+                  t("errors.messages.already_confirmed"))
+      end
     end
   end
 

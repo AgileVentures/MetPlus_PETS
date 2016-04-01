@@ -2,7 +2,7 @@ class Agency < ActiveRecord::Base
   has_many :agency_people
   has_many :branches
   has_and_belongs_to_many :companies
-  
+
   validates_presence_of :name, :website, :phone, :email
   validates_length_of   :name, maximum: 100
   validates_length_of   :website, maximum: 200
@@ -10,15 +10,15 @@ class Agency < ActiveRecord::Base
   validates :email, :email => true
   validates :website, :website => true
   validates :fax, :phone => true, allow_blank: true
-  
+
   def self.agency_admins(agency)
     find_users_with_role(agency, AgencyRole::ROLE[:AA])
   end
-  
+
   def self.this_agency(user)
     raise RuntimeError, 'Logged in user is not an agency person' unless
             user.actable.is_a? AgencyPerson
-            
+
     user.actable.agency
   end
 
@@ -31,11 +31,17 @@ class Agency < ActiveRecord::Base
 
     users
   end
-  
+
+  # MULTIPLE AGENCIES: the code below needs to change
+  def self.all_agency_people_emails
+    first.agency_people.pluck(:email)
+  end
+  ###################################################
+
   private
-  
+
   def self.find_users_with_role(agency, role)
     agency.agency_people_on_role role
   end
-  
+
 end

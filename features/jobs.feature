@@ -8,7 +8,7 @@ background: adding job to database
 	| title               | company_job_id  | shift  | fulltime | description |
 	| software developer  | KRK12K  | evening| true     | internship position with pay|
 
-@selenium
+@javascript
 Scenario: Creating, Updating, and Deleting Job successfully
 	Given I am on the job creation page
 	And I wait 1 second
