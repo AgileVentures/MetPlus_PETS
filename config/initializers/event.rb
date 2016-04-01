@@ -1,1 +1,1 @@
-Event.delay_seconds = 30
+Event.delay_seconds = 10
