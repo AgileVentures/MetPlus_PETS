@@ -57,11 +57,11 @@ class JobsController < ApplicationController
 		end
 
 		def set_company_person
-			@company_person = correct_user_type(current_user) 
+			@company_person = pets_user 
 		end
 
 		def company_person?
-			if correct_user_type(current_user).is_a?(CompanyPerson)
+			if pets_user.is_a?(CompanyPerson)
 				set_company_person
 				return true
 			else

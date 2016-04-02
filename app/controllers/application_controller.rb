@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   
   protect_from_forgery with: :exception
-  helper_method :correct_user_type 
+  helper_method :pets_user 
 
   
 
@@ -12,7 +12,8 @@ class ApplicationController < ActionController::Base
   
   protected
 
-    def correct_user_type(current_user)
+    def pets_user
+       return nil if current_user.nil?  
        current_user.try(:actable).nil? ? current_user : current_user.actable
     end
     def store_current_location
