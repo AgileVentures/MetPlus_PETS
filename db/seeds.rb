@@ -97,7 +97,7 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          development that will put them on a career
                          path to success.')
 
-puts 'Seeded Production Data'
+puts "\nSeeded Production Data"
 
 # seed striction to development, for now
 if Rails.env.development? # || Rails.env.staging?
@@ -134,7 +134,9 @@ if Rails.env.development? # || Rails.env.staging?
     Address.create(street: street, city: city, zipcode: zipcode,
                    location: companies.pop)
   end
-  puts "Addresses created: #{Address.count}"
+  #puts this after execution, 
+  #might create confusion any case of errros
+  puts "Addresses created: #{Address.count}" 
 
   #-------------------------- Job Categories ------------------------------
   200.times do |n|
@@ -157,7 +159,7 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     title = FFaker::Job.title
     email = FFaker::Internet.email
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join
+    password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
     confirmed_at = DateTime.now

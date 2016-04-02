@@ -7,11 +7,12 @@
 %div{class: "panel panel-default", id: "panel-default-id"}
 	%div{class: "panel panel-default panel-footer footer text-center"}
 		%div{class: "row text-center", id: "footer-text-color"}
-			For employers:
-			=link_to "Post jobs", new_job_path(company_id: correct_user_type(current_user).try(:company_id))
-			|
-			=link_to "Search Resumes", '#'
-			|
-			=link_to "Partner with Us", new_company_registration_path 
+			-if current_user.try(:actable).is_a?(CompanyPerson)
+				For employers:
+				=link_to "Post jobs", new_job_path(company_id: current_user.try(:actable).try(:company_id))
+				|
+				=link_to "Search Resumes", '#'
+				|
+				=link_to "Partner with Us", new_company_registration_path 
 
 		%strong="&reg;".html_safe+" MetPlus #{Date.today.year}"
