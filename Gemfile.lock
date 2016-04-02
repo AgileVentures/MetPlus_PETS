@@ -137,6 +137,7 @@ GEM
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
+    httpclient (2.7.1)
     i18n (0.7.0)
     jasmine (2.4.0)
       jasmine-core (~> 2.4)
@@ -155,6 +156,8 @@ GEM
     jquery-turbolinks (2.1.0)
       railties (>= 3.1.0)
       turbolinks
+    js_cookie_rails (1.0.1)
+      railties (>= 3.1)
     json (1.8.3)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -179,6 +182,11 @@ GEM
       websocket-driver (>= 0.2.0)
     puma (2.11.3)
       rack (>= 1.1, < 2.0)
+    pusher (0.17.0)
+      httpclient (~> 2.7)
+      multi_json (~> 1.0)
+      pusher-signature (~> 0.1.8)
+    pusher-signature (0.1.8)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -235,7 +243,7 @@ GEM
     rspec-support (3.4.1)
     ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
-    rubyzip (1.1.7)
+    rubyzip (1.2.0)
     sass (3.4.20)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -246,9 +254,8 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    selenium-webdriver (2.48.1)
+    selenium-webdriver (2.53.0)
       childprocess (~> 0.5)
-      multi_json (~> 1.0)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
     sexp_processor (4.6.0)
@@ -320,10 +327,12 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
+  js_cookie_rails
   launchy
   pg
   poltergeist
   puma
+  pusher
   rails (= 4.2.3)
   rails_12factor
   rspec-rails (~> 3.0)

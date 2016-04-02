@@ -1,14 +1,14 @@
 Rails.application.routes.draw do
 
-  devise_for :users,
-      :path_names => {sign_up: 'new', sign_out: 'logout',
-                      sign_in: 'login' },
-      :controllers => {invitations: 'people_invitations',
-                       confirmations: 'users/confirmations' }
+  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
+                                     :sign_in => 'login' },
+                :controllers => { :invitations   => 'people_invitations',
+                                  :sessions      => 'users/sessions',
+                                  :confirmations => 'users/confirmations'}
 
   devise_scope :user do
-    match  '/login'   => 'devise/sessions#new',        via: 'get'
-    match  '/logout'  => 'devise/sessions#destroy',    via: 'delete'
+    match  '/login'   => 'users/sessions#new',        via: 'get'
+    match  '/logout'  => 'users/sessions#destroy',    via: 'delete'
   end
 
   # ----------------------- Agency Branches ----------------------------------

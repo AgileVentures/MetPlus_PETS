@@ -1,0 +1,13 @@
+%p
+  Agency Event Notification
+%p
+  - if @obj_type == 'Job Seeker'
+    A new job seeker has joined PETS:
+    = link_to @obj_name, job_seeker_url(id: @obj_id)
+  - else
+    A company has requested registration in PETS:
+    = link_to @obj_name, company_url(id: @obj_id)
+%p
+  If you have any questions please contact the PETS administrator at:
+  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
+         subject: "New #{@obj_type}: #{@obj_name}")

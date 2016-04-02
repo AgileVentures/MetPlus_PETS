@@ -8,10 +8,16 @@ background: adding job to database
 	| title               | company_job_id  | shift  | fulltime | description | company_id |
 	| software developer  | KRK12K  | evening| true     | internship position with pay| 3  |
 
+<<<<<<< HEAD
 @selenium 
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Given I am logged in as company person 
 	When I click the "Post jobs" link
+=======
+@javascript
+Scenario: Creating, Updating, and Deleting Job successfully
+	Given I am on the job creation page
+>>>>>>> development
 	And I wait 1 second
 	And I fill in the fields: 
 		| Title                  | cashier|  
