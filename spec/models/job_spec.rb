@@ -32,7 +32,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :fulltime}
     it { is_expected.to have_db_column :company_id }
 
-    xit { is_expected.to have_db_column :company_person_id }
+    it { is_expected.to have_db_column :company_person_id }
     xit { is_expected.to have_db_column :job_category_id }
   end
   

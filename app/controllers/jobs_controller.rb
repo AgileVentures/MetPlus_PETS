@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
-	before_action :authentication_for_post_or_edit, only: [:new, :edit] 
+	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update] 
 
 	def index
 		if company_person?
@@ -18,6 +18,8 @@ class JobsController < ApplicationController
 
 	def create
 		@job = Job.new(job_params)
+		address = @company_person.address 
+		@job.address = address 
 		if @job.save 
 			flash[:notice] = "#{@job.title} has been created successfully."
 			redirect_to jobs_url  
@@ -53,7 +55,8 @@ class JobsController < ApplicationController
 			if !company_person?
 			   flash[:alert] = "Sorry, You are not allowed to post or edit a job!"
 			   redirect_to :back 
-			end  
+			end 
+			set_company_person 
 		end
 
 		def set_company_person

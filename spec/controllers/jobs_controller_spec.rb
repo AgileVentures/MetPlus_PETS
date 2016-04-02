@@ -180,7 +180,7 @@ RSpec.describe JobsController, type: :controller do
      before do 
       company_person = FactoryGirl.create(:company_person) 
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in company_person.acting_as
+      sign_in @company_person.acting_as
     end
   
     before(:example){ patch :edit, :id => @job.id }
@@ -188,6 +188,10 @@ RSpec.describe JobsController, type: :controller do
     it "is a success" do 
       expect(subject.current_user).to_not eq(nil)
       expect(response).to have_http_status(:ok)
+    end
+
+    it "company person and job should have same address" do 
+      expect(@job.address).to eql(company_person)
     end
 
     it "renders 'edit' template" do
