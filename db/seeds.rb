@@ -134,8 +134,7 @@ if Rails.env.development? # || Rails.env.staging?
     Address.create(street: street, city: city, zipcode: zipcode,
                    location: companies.pop)
   end
-  #puts this after execution, 
-  #might create confusion any case of errros
+  
   puts "Addresses created: #{Address.count}" 
 
   #-------------------------- Job Categories ------------------------------
