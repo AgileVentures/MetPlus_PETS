@@ -2,7 +2,7 @@
 
 %div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
-		-if current_user.try(:actable).is_a?(CompanyPerson)
+		-if pets_user.is_a?(CompanyPerson)
 			=link_to "Delete", job_path(@job), method: :delete,
 			  data: {confirm: "Are you sure you want to delete: #{@job.title}"}
 			|
