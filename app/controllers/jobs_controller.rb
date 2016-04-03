@@ -52,7 +52,7 @@ class JobsController < ApplicationController
 		def authentication_for_post_or_edit 
 			if !company_person?
 			   flash[:alert] = "Sorry, You are not allowed to post or edit a job!"
-			   redirect_to :back 
+			   redirect_to jobs_url 
 			end  
 		end
 
