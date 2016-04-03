@@ -20,10 +20,11 @@ class Job < ActiveRecord::Base
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10000
+  validates_presence_of :company_id
 
   #These will be uncommented once 
   # we start implementing the features
-    # validates_presence_of :company_id
+    
     # validates_presence_of :job_category_id
     # validates_presence_of :company_person_id
 end

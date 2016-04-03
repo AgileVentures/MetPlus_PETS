@@ -49,7 +49,7 @@ require 'ffaker'
 #     user.phone ='619-316-8971'
 #     user.confirmed_at = DateTime.now
 # end
-
+print "Seeding wait......."
 #incase rerun comes in. not necessary
 JobSeekerStatus.delete_all
 Job.delete_all
@@ -97,7 +97,7 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          development that will put them on a career
                          path to success.')
 
-puts 'Seeded Production Data'
+puts "\nSeeded Production Data"
 
 # seed striction to development, for now
 if Rails.env.development? # || Rails.env.staging?
@@ -134,15 +134,14 @@ if Rails.env.development? # || Rails.env.staging?
     Address.create(street: street, city: city, zipcode: zipcode,
                    location: companies.pop)
   end
-  puts "Addresses created: #{Address.count}"
+  
+  puts "Addresses created: #{Address.count}" 
 
   #-------------------------- Job Categories ------------------------------
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
-    if !JobCategory.create(name: name, description: description).persisted?
-      JobCategory.create!(name: "#{name}_#{n}", description: description)
-    end
+    JobCategory.create!(name: "#{name}_#{n}", description: description)
   end
   puts "Job Categories created: #{JobCategory.count}"
 
@@ -159,7 +158,7 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     title = FFaker::Job.title
     email = FFaker::Internet.email
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join
+    password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
     confirmed_at = DateTime.now
@@ -180,7 +179,7 @@ if Rails.env.development? # || Rails.env.staging?
   jobcategories = JobCategory.all.to_a
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
-
+  #job
   200.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3,false, 4 )
@@ -206,8 +205,8 @@ if Rails.env.development? # || Rails.env.staging?
   #-------------------------- Job Seekers ---------------------------------
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
-    email = FFaker::Internet.email
-    password = (('a'..'z').to_a + (1..9).to_a).shuffle[0..10].join
+    email = FFaker::Internet.email 
+    password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
@@ -321,3 +320,4 @@ if Rails.env.development? # || Rails.env.staging?
 end
 
 # Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.
+puts "\nDone seeding!"

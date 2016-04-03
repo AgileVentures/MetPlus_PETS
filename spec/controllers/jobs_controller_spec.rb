@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe JobsController, type: :controller do
+
   before(:context) do 
     @job =  FactoryGirl.create(:job)
   end
@@ -13,11 +14,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+          company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should permit(:description, :shift, :title, 
-                    :company_job_id, :fulltime).
+                    :company_job_id, :fulltime, :company_id).
         for(:create, params: params).
         on(:job)
     end
@@ -31,11 +33,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+          company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should permit(:description, :shift, :title, 
-                    :company_job_id, :fulltime).
+                    :company_job_id, :company_id, :fulltime).
         for(:update, params: params).
         on(:job)
     end
@@ -49,11 +52,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+          company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should_not permit(:description, :shift, :title, 
-                        :company_job_id, :fulltime, :name).
+                        :company_job_id, :company_id, :fulltime, :name).
         for(:create, params: params).
         on(:job)
     end
@@ -67,11 +71,12 @@ RSpec.describe JobsController, type: :controller do
           shift: 'Day',
           fulltime: false,
           title: 'swt',
+           company_id: '3',
           company_job_id: 'RT123'
         }
       }
       should_not permit(:description, :shift, :title, 
-                        :company_job_id, :fulltime, :name).
+                        :company_job_id, :company_id, :fulltime, :name).
         for(:update, params: params).
         on(:job)
     end
@@ -87,9 +92,43 @@ RSpec.describe JobsController, type: :controller do
       .to(action: :index) }            
   end
 
-  describe "Route => new" do
-    it { should route(:get, "/jobs/new")
-              .to(action: :new) }
+  describe "unauthorized user  " do
+    before(:each) do 
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in FactoryGirl.create(:user)
+    end
+
+    it do 
+      expect(subject.current_user).to_not eq(nil)
+    end
+
+    it"shoud not post job" do 
+      request.env["HTTP_REFERER"] = '/'
+      get :new 
+      redirect_to '/'
+      should set_flash.to("Sorry, You are not allowed to post or edit a job!") 
+    end
+  end
+
+  describe "authorized user" do
+
+    before do 
+      company_person = FactoryGirl.create(:company_person) 
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in company_person.acting_as 
+    end
+
+    it do 
+      expect(subject.current_user).to_not eq(nil)
+    end
+
+    it do 
+       get :new
+       expect(response).to have_http_status(200)
+       expect(response).to render_template('new')
+       should_not set_flash 
+    end
+
   end
 
   describe "Route => new, sad path" do
@@ -117,18 +156,9 @@ RSpec.describe JobsController, type: :controller do
             .to(action: :show, id: 1) }
   end
 
-  describe 'GET #new' do
-    before(:example){ get :new }
-
-    it "is a success" do 
-      expect(response).to have_http_status(:ok)
-    end
-
-    it "renders 'new' template" do
-      expect(response).to render_template('new')
-    end
-
-    it { should_not set_flash }
+  describe "Route => edit, sad path" do
+    it{ should route(:get, "/jobs/new")
+            .to(action: :new) }
   end
 
   describe 'GET #index' do
@@ -146,11 +176,17 @@ RSpec.describe JobsController, type: :controller do
 
   end
 
-  describe 'GET #edit' do
-    
+  describe 'GET #edit authorized user' do
+     before do 
+      company_person = FactoryGirl.create(:company_person) 
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in company_person.acting_as
+    end
+  
     before(:example){ patch :edit, :id => @job.id }
 
     it "is a success" do 
+      expect(subject.current_user).to_not eq(nil)
       expect(response).to have_http_status(:ok)
     end
 
@@ -159,6 +195,23 @@ RSpec.describe JobsController, type: :controller do
     end
 
     it { should_not set_flash }
+  end
+
+  describe 'GET #edit unauthorized user' do
+     before do 
+      request.env["HTTP_REFERER"] = '/jobs'
+      user = FactoryGirl.create(:user) 
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in user
+    end
+  
+    before(:example){ patch :edit, :id => @job.id }
+
+    it "redirect to jobs" do 
+      expect(subject.current_user).to_not eq(nil)
+      redirect_to '/jobs'
+      should set_flash
+    end 
   end
 
   describe 'DELETE #destroy' do
@@ -193,7 +246,7 @@ RSpec.describe JobsController, type: :controller do
 
   end
 
-  describe 'POST #create' do
+  describe 'successful POST #create' do
 
     it "has 1 jobs at the start" do 
       expect(Job.count).to eq(1)
@@ -201,18 +254,20 @@ RSpec.describe JobsController, type: :controller do
 
     it 'redirects to the jobs index and increased by 1 count' do
       post :create, :job => {:title => "Ruby on Rails", 
-                             :fulltime => true, description: "passionate",
+                             :fulltime => true, description: "passionate", 
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
-      should set_flash 
       expect(response).to redirect_to(:action => 'index')
+      should set_flash 
       expect(Job.count).to eq(2)
       expect(response.status).to  eq(302) 
     end 
 
-    it 'unsuccessful POST' do
+    it 'unsuccessful POST #create' do
       post :create, :job => {:title => "  ", :fulltime => true,
                              description: "passionate",
-                             :shift => "Evening", company_job_id: "WERRR123"}
+                             company_id: '3',
+                             :shift => "Evening", company_job_id: "WERRR123" }
       expect(response).to render_template('new')
       expect(Job.count).to eq(1)
       expect(response.status).to  eq(200) 
@@ -228,6 +283,7 @@ RSpec.describe JobsController, type: :controller do
     it 'should have 1 jobs after update and redirects to the show page' do
       patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
                              :fulltime => true, description: "passionate",
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
      
       expect(response).to redirect_to(:action => 'show')
@@ -240,6 +296,7 @@ RSpec.describe JobsController, type: :controller do
      it 'unsuccessful PATCH' do
       patch :update, id: @job.id , :job => {:title => " ", 
                              :fulltime => true, description: "passionate",
+                             company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
       
       expect(response).to render_template('edit')
