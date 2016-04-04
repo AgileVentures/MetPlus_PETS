@@ -1,6 +1,9 @@
 module TaskManager
 
-  STATUS = ['New', 'Work in progress', 'Done', 'Assigned']
+  STATUS = {NEW: 'New',
+            WIP: 'Work in progress',
+            DONE: 'Done',
+            ASSIGNED: 'Assigned'}
 
   ## The methods from this module will be available at Class level
   module ClassMethods
@@ -52,7 +55,7 @@ module TaskManager
       task.job = target_job
       task.company = target_company
       task.task_type = task_type
-      task.status = STATUS[0]
+      task.status = STATUS[:NEW]
       task.save
       task
     end
@@ -72,19 +75,19 @@ module TaskManager
 
   ## Assign the current task to a specific person
   def assign person
-    raise ArgumentError, 'Task need to be in created state' if status != STATUS[0]
+    raise ArgumentError, 'Task need to be in created state' if status != STATUS[:NEW]
     send("assign_#{task_type}".to_sym, self, person)
   end
 
   ## Change the status of the task to Work In Progress
   def work_in_progress
-    raise ArgumentError, 'Task need to be in assigned state' if status != STATUS[3]
+    raise ArgumentError, 'Task need to be in assigned state' if status != STATUS[:ASSIGNED]
     send("wip_#{task_type}".to_sym, self)
   end
 
   ## Change the status of the task to Complete
   def complete
-    raise ArgumentError, 'Task need to be in work in progress state' if status != STATUS[1]
+    raise ArgumentError, 'Task need to be in work in progress state' if status != STATUS[:WIP]
     send("done_#{task_type}".to_sym, self)
   end
 
@@ -109,7 +112,7 @@ module TaskManager
   # Function that will assign a task to a person
   # Default function called, if no other specific function exists
   def self.assign_default task, person, *args, &block
-    task.status = STATUS[3]
+    task.status = STATUS[:ASSIGNED]
     task.task_owner = {:user => person}
     task.save
     if args.size == 1 or args[1] != 'no_events'
@@ -122,7 +125,7 @@ module TaskManager
   # Function that will mark the task as Work in Progress
   # Default function called, if no other specific function exists
   def self.wip_default task, *args, &block
-    task.status = STATUS[1]
+    task.status = STATUS[:WIP]
     task.save
     if args.size == 1 or args[1] != 'no_events'
       Task.unschedule_event :taskAssigned, task, :AA
@@ -134,7 +137,7 @@ module TaskManager
   # Function that will mark the task as Done
   # Default function called, if no other specific function exists
   def self.done_default task, *args, &block
-    task.status = STATUS[2]
+    task.status = STATUS[:DONE]
     task.save
     if args.size == 1 or args[1] != 'no_events'
       Task.unschedule_event :taskWorkStarted, task, :AA

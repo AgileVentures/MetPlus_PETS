@@ -19,16 +19,16 @@ class Task < ActiveRecord::Base
 
   validates_with TaskOwnerValidator
 
-  scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today)}
+  scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date <= ?', Date.today)}
   scope :js_tasks, ->(job_seeker) {where('owner_user_id=?', job_seeker.user.id)}
   scope :agency_person_tasks, ->(agency_person) {where('owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))',
                                                          agency_person.user.id,
                                                          agency_person.agency.id,
-                                                         agency_person.agency_roles.pluck(:role).collect{|pa| AgencyRole::ROLE.key(pa)})}
+                                                         agency_person.agency_roles.pluck(:role).collect{|role| AgencyRole::ROLE.key(role)})}
   scope :company_person_tasks, ->(company_person) {where('owner_user_id=? or (owner_company_id=? and owner_company_role in (?))',
                                                          company_person.user.id,
                                                          company_person.company.id,
-                                                         company_person.company_roles.pluck(:role).collect{|pa| CompanyRole::ROLE.key(pa)})}
+                                                         company_person.company_roles.pluck(:role).collect{|role| CompanyRole::ROLE.key(role)})}
 
   def task_owner
     return owner.pets_user if owner != nil
