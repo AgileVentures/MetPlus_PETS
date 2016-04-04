@@ -143,6 +143,56 @@ RSpec.describe User, type: :model do
           to eq "#{agency_person.first_name} #{agency_person.last_name}"
     end
   end
+  describe '#pets_user' do
+    it 'job seeker' do
+      job_seeker = FactoryGirl.create(:job_seeker)
+      user = User.find_by_id job_seeker.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a JobSeeker
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a JobSeeker
+    end
+    it 'job developer' do
+      job_developer = FactoryGirl.create(:job_developer)
+      user = User.find_by_id job_developer.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a AgencyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a AgencyPerson
+    end
+    it 'case manager' do
+      case_manager = FactoryGirl.create(:case_manager)
+      user = User.find_by_id case_manager.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a AgencyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a AgencyPerson
+    end
+    it 'agency admin' do
+      agency_admin = FactoryGirl.create(:agency_admin)
+      user = User.find_by_id agency_admin.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a AgencyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a AgencyPerson
+    end
+    it 'company admin' do
+      company_admin = FactoryGirl.create(:company_admin)
+      user = User.find_by_id company_admin.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a CompanyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a CompanyPerson
+    end
+    it 'company contact' do
+      company_contact = FactoryGirl.create(:company_contact)
+      user = User.find_by_id company_contact.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a CompanyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a CompanyPerson
+    end
+  end
 end
 
 
