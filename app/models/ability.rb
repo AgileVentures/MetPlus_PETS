@@ -28,5 +28,9 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+    user ||= User.new
+    can :manage, Agency do |agency|
+      user.pets_user.is_agency_admin? agency
+     end
   end
 end

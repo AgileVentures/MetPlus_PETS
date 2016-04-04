@@ -9,7 +9,11 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :store_current_location, :unless => :devise_controller?
-  
+
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:warning] = exception.message
+    redirect_to root_path
+  end
 
   protected
 

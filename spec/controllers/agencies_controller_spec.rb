@@ -5,6 +5,8 @@ RSpec.describe AgenciesController, type: :controller do
   describe "GET #edit" do
     before(:each) do
       @agency = FactoryGirl.create(:agency)
+      agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
+      sign_in agency_admin
       get :edit, id: @agency
     end
     it 'assigns @agency for form' do
@@ -17,11 +19,23 @@ RSpec.describe AgenciesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+  describe "GET #edit as" do
+    before(:each) do
+    end
+    it " Job Developer Fail" do
+      @agency = FactoryGirl.create(:agency)
+      agency_admin = FactoryGirl.create(:job_developer, agency: @agency)
+      sign_in agency_admin
+      expect{get :edit, id: @agency}.to raise_error(CanCan::AccessDenied)
+    end
+  end
 
   describe "PATCH #update" do
     context 'valid attributes' do
       before(:each) do
         @agency = FactoryGirl.create(:agency)
+        agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
+        sign_in agency_admin
         patch :update, agency: FactoryGirl.attributes_for(:agency),
                      id: @agency
       end
@@ -41,6 +55,8 @@ RSpec.describe AgenciesController, type: :controller do
     context 'invalid attributes' do
       before(:each) do
         @agency = FactoryGirl.create(:agency)
+        agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
+        sign_in agency_admin
         @agency.assign_attributes(phone: '', website: 'nodomain')
         @agency.valid?
         patch :update, agency: FactoryGirl.attributes_for(:agency, 
