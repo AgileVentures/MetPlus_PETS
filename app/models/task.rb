@@ -15,8 +15,6 @@ class Task < ActiveRecord::Base
   belongs_to :company
   belongs_to :job
 
-  belongs_to :task_setting
-
   validates_with TaskOwnerValidator
 
   scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date <= ?', Date.today)}
