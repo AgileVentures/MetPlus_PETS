@@ -19,14 +19,18 @@ RSpec.describe AgenciesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-  describe "GET #edit as" do
+  describe "GET #edit as Job Developer" do
     before(:each) do
-    end
-    it " Job Developer Fail" do
       @agency = FactoryGirl.create(:agency)
       agency_admin = FactoryGirl.create(:job_developer, agency: @agency)
       sign_in agency_admin
-      expect{get :edit, id: @agency}.to raise_error(CanCan::AccessDenied)
+      get :edit, id: @agency
+    end
+    it "redirect" do
+      expect(response).to have_http_status 302
+    end
+    it 'sets flash message' do
+      expect(flash[:warning]).to eq "You are not authorized to access this page."
     end
   end
 
