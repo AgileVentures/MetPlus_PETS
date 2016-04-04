@@ -90,4 +90,8 @@ class AgencyPerson < ActiveRecord::Base
     seekers
   end
 
+  def is_agency_admin? agency
+    Agency.agency_admins(agency).include?(self)
+  end
+
 end

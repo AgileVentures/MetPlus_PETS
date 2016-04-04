@@ -51,6 +51,14 @@ class User < ActiveRecord::Base
     super && approved?
   end
 
+  def pets_user
+    self.try(:actable).nil? ? self : self.actable
+  end
+
+  def is_agency_admin? agency
+    false
+  end
+
   def inactive_message
     if !approved? && actable.status == CompanyPerson::STATUS[:PND]
       :signed_up_but_not_approved

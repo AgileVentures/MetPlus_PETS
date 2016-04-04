@@ -1,7 +1,6 @@
 
 When(/^I go to the (.+) page$/) do |page|
   case page
-    
     when 'job creation'
       visit new_job_path  
     when 'Company Registration'
@@ -10,7 +9,9 @@ When(/^I go to the (.+) page$/) do |page|
       visit new_job_seeker_path
     when 'home'
       visit root_path
-
+    when /agency '(.+)' edit/
+      agency = page.match(/'(.+)'/)
+      visit edit_agency_path(Agency.find_by_name(agency[1]))
     when /activation for user '.+'/
       user = page.match(/'(.+)'/)
       if user[1] =~ /@/

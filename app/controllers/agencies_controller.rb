@@ -1,5 +1,5 @@
 class AgenciesController < ApplicationController
-  
+  load_and_authorize_resource
   def edit
     @agency = Agency.find(params[:id])
   end
