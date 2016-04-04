@@ -85,28 +85,28 @@ RSpec.describe TaskManager do
     describe '#assign' do
       subject {TaskTester.create_task({user: @job_developer}, 'simple', @job)}
       it('Check status change') do
-        expect(subject.status).to eq(TaskManager::STATUS[0])
+        expect(subject.status).to eq(TaskManager::STATUS[:NEW])
         subject.assign @job_developer
-        expect(subject.status).to eq(TaskManager::STATUS[3])
+        expect(subject.status).to eq(TaskManager::STATUS[:ASSIGNED])
       end
       it('Invalid status change') do
-        subject.status = TaskManager::STATUS[1]
+        subject.status = TaskManager::STATUS[:WIP]
         expect{subject.assign @job_developer}.to raise_error(ArgumentError).with_message 'Task need to be in created state'
-        expect(subject.status).to eq(TaskManager::STATUS[1])
+        expect(subject.status).to eq(TaskManager::STATUS[:WIP])
       end
     end
     describe '#work_in_progress' do
       subject {TaskTester.create_task({user: @job_developer}, 'simple', @job)}
       it('Check status change') do
         subject.assign @job_developer
-        expect(subject.status).to eq(TaskManager::STATUS[3])
+        expect(subject.status).to eq(TaskManager::STATUS[:ASSIGNED])
         subject.work_in_progress
-        expect(subject.status).to eq(TaskManager::STATUS[1])
+        expect(subject.status).to eq(TaskManager::STATUS[:WIP])
       end
       it('Invalid status change') do
-        subject.status = TaskManager::STATUS[1]
+        subject.status = TaskManager::STATUS[:DONE]
         expect{subject.work_in_progress}.to raise_error(ArgumentError).with_message 'Task need to be in assigned state'
-        expect(subject.status).to eq(TaskManager::STATUS[1])
+        expect(subject.status).to eq(TaskManager::STATUS[:DONE])
       end
     end
     describe '#complete' do
@@ -114,14 +114,14 @@ RSpec.describe TaskManager do
       it('Check status change') do
         subject.assign @job_developer
         subject.work_in_progress
-        expect(subject.status).to eq(TaskManager::STATUS[1])
+        expect(subject.status).to eq(TaskManager::STATUS[:WIP])
         subject.complete
-        expect(subject.status).to eq(TaskManager::STATUS[2])
+        expect(subject.status).to eq(TaskManager::STATUS[:DONE])
       end
       it('Invalid status change') do
-        subject.status = TaskManager::STATUS[0]
+        subject.status = TaskManager::STATUS[:NEW]
         expect{subject.complete}.to raise_error(ArgumentError).with_message 'Task need to be in work in progress state'
-        expect(subject.status).to eq(TaskManager::STATUS[0])
+        expect(subject.status).to eq(TaskManager::STATUS[:NEW])
       end
     end
   end

@@ -14,30 +14,30 @@ module BusinessLogic
 ##         assign_default person, 'no_events'
 ##         # your code here
 ##     end
-##   The 'no_events' tell the function to do not set events for this specific task or if you want to set the events
-##   using your code
+##   The 'no_events' tell the function to not set events for this specific task.
+##   Remove that if you want an event to be set, or you can set the event for this task in this method.
 ##
 ## If we need to overload the work_in_progress method for the event "my_event"
 ## 1 - Add a function in InstanceMethods called that looks like this:
-##     def wip_my_event person
-##         wip_default 'no_events'
+##     def wip_my_event task
+##         wip_default task 'no_events'
 ##         # your code here
 ##     end
-##   The 'no_events' tell the function to do not set events for this specific task or if you want to set the events
-##   using your code
+##   The 'no_events' tell the function to not set events for this specific task.
+##   Remove that if you want an event to be set, or you can set the event for this task in this method.
 ##
 ## If we need to overload the complete method for the event "my_event"
 ## 1 - Add a function in InstanceMethods called that looks like this:
-##     def done_my_event person
-##         done_default 'no_events'
+##     def done_my_event task
+##         done_default task 'no_events'
 ##         # your code here
 ##     end
-##   The 'no_events' tell the function to do not set events for this specific task or if you want to set the events
-##   using your code
+##   The 'no_events' tell the function to not set events for this specific task.
+##   Remove that if you want an event to be set, or you can set the event for this task in this method.
 ##
 
-  DESCRIPTIONS = {:need_job_developer => 'Job Seeker have no assigned Job Developer',
-                  :need_case_manager  => 'Job Seeker have no assigned Case Manager'}
+  DESCRIPTIONS = {:need_job_developer => 'Job Seeker has no assigned Job Developer',
+                  :need_case_manager  => 'Job Seeker has no assigned Case Manager'}
 
   module ClassMethods
     def new_js_registration_task jobseeker, agency
