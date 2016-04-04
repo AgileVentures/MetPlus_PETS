@@ -8,6 +8,7 @@ background: adding job to database
 	| title               | company_job_id  | shift  | fulltime | description | company_id |
 	| software developer  | KRK12K  | evening| true     | internship position with pay| 3  |
 
+
 @selenium 
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Given I am logged in as company person 

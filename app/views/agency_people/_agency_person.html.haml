@@ -66,7 +66,7 @@
       %ul
         - agency_person.agency_relations.in_role_of(:JD).each do |relation|
           %li
-            = relation.job_seeker.full_name
+            = link_to relation.job_seeker.full_name, job_seeker_path(relation.job_seeker.id)
 
 %h4
   = "#{agency_person.first_name} is the Case Manager for these people:"
@@ -79,7 +79,7 @@
       %ul
         - agency_person.agency_relations.in_role_of(:CM).each do |relation|
           %li
-            = relation.job_seeker.full_name
+            = link_to relation.job_seeker.full_name, job_seeker_path(relation.job_seeker.id)
 
 %br
 %br

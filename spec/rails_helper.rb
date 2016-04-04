@@ -31,6 +31,10 @@ Capybara.javascript_driver = :poltergeist
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+# Turn off delayed mail delivery
+Delayed::Worker.delay_jobs = false
+
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -62,7 +66,7 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-#Make the devise controllers and views available to spec 
-RSpec.configure do |config| 
+#Make the devise controllers and views available to spec
+RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
 end

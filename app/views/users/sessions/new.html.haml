@@ -1,0 +1,31 @@
+
+%div{class: 'col-xs-6  col-xs-offset-3'}
+  %div{class: "jumbotron"}
+    %h2{id: 'login-text'} Log in
+    %p{id: 'account-link'}
+      Log In to your account
+      %i{class: "fa fa-minus fa-4x fa-rotate-90"}
+      #{link_to 'Register as jobseeker', new_job_seeker_path}
+      %i{class: "fa fa-minus fa-rotate-90"}
+      #{link_to 'Register as employer', '#'}
+    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      .form-group
+        / = f.label :email
+        = f.email_field :email, autofocus: true, :placeholder => "email address", class: "form-control"
+      .form-group
+        / = f.label :password
+        = f.password_field :password, :placeholder => '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;'.html_safe,  autocomplete: "off",
+      class: "form-control"
+        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+          = link_to "Forgot your password?", new_password_path(resource_name), id: "pas_forgot"
+      - if devise_mapping.rememberable?
+        .button-group
+          = f.button class: "btn btn-primary", id: 'login-button' do 
+            Log in
+            %i{class: 'fa fa-lg fa-long-arrow-right pull-right'}
+
+          = f.check_box :remember_me, class: "checkbox-inline"
+          = f.label :remember_me
+
+
+    = render "devise/shared/links"

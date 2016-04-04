@@ -6,6 +6,21 @@ Feature: Manage Users
 
 	#@focus
 	Background:
+		Given the following agency roles exist:
+	  | role  |
+	  | AA    |
+	  | CM    |
+	  | JD    |
+
+	  Given the following agencies exist:
+	  | name    | website     | phone        | email                  | fax          |
+	  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+
+	  Given the following agency people exist:
+	  | agency  | role  | first_name | last_name | email            | password  |
+	  | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
+	  | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+
 		Given the following user records:
 		| email               | password   | password_confirmation | first_name | last_name | phone          | confirmed_at                      |
 		| salemamba@gmail.com | secret1234 | secret1234            | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |
