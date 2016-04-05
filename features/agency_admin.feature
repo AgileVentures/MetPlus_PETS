@@ -22,10 +22,10 @@ Background: seed data added to database and log in as agency admim
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
   Given the following agency branches exist:
-  | agency  | city    | street              | zipcode | code |
-  | MetPlus | Detroit | 123 Main Street     | 48201   | 001  |
-  | MetPlus | Detroit | 456 Sullivan Street | 48204   | 002  |
-  | MetPlus | Detroit | 3 Auto Drive        | 48206   | 003  |
+  | agency  | state     | city     | street              | zipcode | code |
+  | MetPlus | Michigan  |  Detroit | 123 Main Street     | 48201   | 001  |
+  | MetPlus | Michigan  |  Detroit | 456 Sullivan Street | 48204   | 002  |
+  | MetPlus | Mighigan  |  Detroit | 3 Auto Drive        | 48206   | 003  |
 
   Given the following job categories exist:
   | name                      | description                         |
@@ -136,9 +136,11 @@ Scenario: error for edit branch
 Scenario: new agency branch
   And I click the "Agency and Partner Companies" link
   And I click the "Add Branch" button
-  Then I fill in "Branch Code" with "004"
-  And I fill in "Street" with "10 Ford Way"
+  Then I fill in "Branch Code" with "003"
+  #And I fill in "Street" with "10 Ford Way"
+  And I fill in "Street" with "3 Auto Drive"
   And I fill in "City" with "Detroit"
+  Then I select "Michigan" in select list "State"
   And I fill in "Zipcode" with "48208"
   And I click the "Create" button
   Then I should see "Branch was successfully created."
