@@ -53,7 +53,7 @@ class BranchesController < ApplicationController
   
   def branch_params
     params.require(:branch).permit(:code, 
-            address_attributes: [:id, :street, :city, :zipcode])
+            address_attributes: [:id, :street, :city, :zipcode,:state])
                                     
   end
   
