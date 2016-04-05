@@ -22,6 +22,8 @@ class Job < ActiveRecord::Base
   validates_length_of   :description, maximum: 10000
   validates_presence_of :company_id
 
+  scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
+
   #These will be uncommented once
   # we start implementing the features
     # validates_presence_of :job_category_id

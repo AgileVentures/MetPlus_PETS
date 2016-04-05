@@ -22,6 +22,9 @@ class JobSeeker < ActiveRecord::Base
   # def job_developer
   #   AgencyRelation.job_developer_for_job_seeker(self)
   # end
+  def is_job_seeker?
+    true
+  end
 
 
   def case_manager
