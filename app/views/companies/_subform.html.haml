@@ -4,20 +4,9 @@
     = @cmp_form.text_field :name, size: 30, class: 'form-control'
 
 = @cmp_form.fields_for :addresses do |address_f|
-  .form-group
-    = address_f.label :street, 'Company Address', class: 'control-label col-sm-2'
-    .col-sm-6
-      = address_f.text_field :street, class: 'form-control'
 
-  .form-group
-    = address_f.label :city, 'City', class: 'control-label col-sm-2'
-    .col-sm-3
-      = address_f.text_field :city, size: 30, class: 'form-control'
-
-  .form-group
-    = address_f.label :zipcode, 'Zipcode', class: 'control-label col-sm-2'
-    .col-sm-2
-      = address_f.text_field :zipcode, size: 10, class: 'form-control'
+  - @address_form = address_f
+  = render 'address/addressform'
 
 .form-group
   = label :company, :email, 'Email', class: 'control-label col-sm-2'
