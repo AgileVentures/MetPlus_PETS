@@ -10,5 +10,8 @@ class JobSeeker < ActiveRecord::Base
   validates_presence_of :year_of_birth, :job_seeker_status_id #,:resume
   validates  :year_of_birth, :year_of_birth => true
 
+  def is_job_seeker?
+    true
+  end
 
 end

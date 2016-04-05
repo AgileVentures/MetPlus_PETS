@@ -143,6 +143,104 @@ RSpec.describe User, type: :model do
           to eq "#{agency_person.first_name} #{agency_person.last_name}"
     end
   end
+  describe '#pets_user' do
+    it 'job seeker' do
+      job_seeker = FactoryGirl.create(:job_seeker)
+      user = User.find_by_id job_seeker.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a JobSeeker
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a JobSeeker
+    end
+    it 'job developer' do
+      job_developer = FactoryGirl.create(:job_developer)
+      user = User.find_by_id job_developer.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a AgencyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a AgencyPerson
+    end
+    it 'case manager' do
+      case_manager = FactoryGirl.create(:case_manager)
+      user = User.find_by_id case_manager.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a AgencyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a AgencyPerson
+    end
+    it 'agency admin' do
+      agency_admin = FactoryGirl.create(:agency_admin)
+      user = User.find_by_id agency_admin.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a AgencyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a AgencyPerson
+    end
+    it 'company admin' do
+      company_admin = FactoryGirl.create(:company_admin)
+      user = User.find_by_id company_admin.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a CompanyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a CompanyPerson
+    end
+    it 'company contact' do
+      company_contact = FactoryGirl.create(:company_contact)
+      user = User.find_by_id company_contact.user.id
+      expect(user).to be_a User
+      expect(user).not_to be_a CompanyPerson
+      expect(user.pets_user).not_to be_a User
+      expect(user.pets_user).to be_a CompanyPerson
+    end
+  end
+  describe '#is_job_developer?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:job_developer, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_job_developer?(agency)).to be false
+    end
+  end
+  describe '#is_case_manager?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:case_manager, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_case_manager?(agency)).to be false
+    end
+  end
+  describe '#is_agency_admin?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:agency_admin, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_agency_admin?(agency)).to be false
+    end
+  end
+  describe '#is_job_seeker?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:job_seeker)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_job_seeker?).to be false
+    end
+  end
+  describe '#is_company_contact?' do
+    let(:company) {FactoryGirl.create(:company)}
+    let(:person) {FactoryGirl.create(:company_contact, :company => company)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_company_contact?(company)).to be false
+    end
+  end
+  describe '#is_company_admin?' do
+    let(:company) {FactoryGirl.create(:company)}
+    let(:person) {FactoryGirl.create(:company_admin, :company => company)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_company_admin?(company)).to be false
+    end
+  end
 end
 
 
