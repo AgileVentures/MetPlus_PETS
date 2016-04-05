@@ -36,6 +36,7 @@ var TaskManager = {
                     layout: 'bottomRight',
                       type: 'success'});
                 TaskManager.load_tasks();
+                $("#assignTaskModal").modal('hide');
             },
             error: function (xhrObj, status, exception) {
                 noty({text: xhrObj['message'],
