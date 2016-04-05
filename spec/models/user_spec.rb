@@ -193,6 +193,54 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a CompanyPerson
     end
   end
+  describe '#is_job_developer?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:job_developer, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_job_developer?(agency)).to be false
+    end
+  end
+  describe '#is_case_manager?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:case_manager, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_case_manager?(agency)).to be false
+    end
+  end
+  describe '#is_agency_admin?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:agency_admin, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_agency_admin?(agency)).to be false
+    end
+  end
+  describe '#is_job_seeker?' do
+    let(:agency) {FactoryGirl.create(:agency)}
+    let(:person) {FactoryGirl.create(:job_seeker, :agency => agency)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_job_seeker?).to be false
+    end
+  end
+  describe '#is_company_contact?' do
+    let(:company) {FactoryGirl.create(:company)}
+    let(:person) {FactoryGirl.create(:company_contact, :company => company)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_company_contact?(company)).to be false
+    end
+  end
+  describe '#is_company_admin?' do
+    let(:company) {FactoryGirl.create(:company)}
+    let(:person) {FactoryGirl.create(:company_admin, :company => company)}
+    let(:user) {User.find_by_id person.user.id}
+    it 'false' do
+      expect(user.is_company_admin?(company)).to be false
+    end
+  end
 end
 
 

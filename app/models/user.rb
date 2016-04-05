@@ -55,6 +55,30 @@ class User < ActiveRecord::Base
     self.try(:actable).nil? ? self : self.actable
   end
 
+  def is_job_seeker?
+    false
+  end
+
+  def is_job_developer? agency
+    false
+  end
+
+  def is_case_manager? agency
+    false
+  end
+
+  def is_agency_admin? agency
+    false
+  end
+
+  def is_company_admin? company
+    false
+  end
+
+  def is_company_contact? company
+    false
+  end
+
   def inactive_message
     if !approved? && actable.status == CompanyPerson::STATUS[:PND]
       :signed_up_but_not_approved
