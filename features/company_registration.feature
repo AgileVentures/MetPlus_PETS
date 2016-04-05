@@ -27,10 +27,12 @@ Background: seed data added to database
   And I click the "Become a hiring partner!" link
   And I wait 1 second
   Then I should see "Company Registration"
+  And show me the page
   And I fill in the fields:
   | Company Name                   | Widgets, Inc.       |
-  | Company Address                | 12 Main Street      |
+ # | Street                         | 12 Main Street      |
   | City                           | Detroit             |
+  | State                          | Michigan            |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
   | Fax                            | 333-222-4321        |
