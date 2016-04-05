@@ -67,6 +67,7 @@ module BusinessLogic
     if info[:type] == Agency
       return Agency.send info[:function], task_owner[0].agency
     end
+    nil
   end
 
   private

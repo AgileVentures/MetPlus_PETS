@@ -28,16 +28,25 @@ var TaskManager = {
         var post_data = {to: $("#task_assign_select").val()};
         $.ajax({type: 'PATCH',
             url: url,
-            // Get the data entered by the user in the dialog box
             data: post_data,
             timeout: 5000,
-            success: function (data, status, xhrObject){
-                alert('success');
+            success: function (){
+                noty({text: 'Task assigned',
+                     theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                      type: 'success'});
+                TaskManager.load_tasks();
             },
             error: function (xhrObj, status, exception) {
-                alert(xhrObject)
+                noty({text: xhrObj['message'],
+                     theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                      type: 'error'});
             }
         });
+    },
+    load_tasks: function() {
+
     },
     setup: function() {
         $(".assign_button").click(TaskManager.load_assign_modal);

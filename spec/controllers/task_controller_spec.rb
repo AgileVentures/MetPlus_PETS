@@ -9,10 +9,73 @@ RSpec.describe TaskController, type: :controller do
     end
   end
 
-  describe "GET #assign" do
-    it "returns http success" do
-      get :assign
-      expect(response).to have_http_status(:success)
+  describe "PATCH #assign" do
+    describe 'successfull' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd3 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd4 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+      end
+      subject{xhr :patch, :assign , {id: @task.id}, :format => :json}
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+    end
+    describe 'errors' do
+      describe 'missing parameters' do
+        subject{xhr :patch, :assign , {id: 1}, :format => :json}
+        it 'returns error' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check content' do
+          expect(subject.body).to eq({:message => 'Missing assigned target'}.to_json)
+        end
+      end
+      describe 'Cannot find task' do
+        it 'returns error' do
+          xhr :patch, :assign , {id: -1, to: 100}, :format => :json
+          expect(response).to have_http_status(403)
+        end
+        it 'check content' do
+          xhr :patch, :assign , {id: -1, to: 100}, :format => :json
+          expect(response.body).to eq({:message => 'Cannot find the task!'}.to_json)
+        end
+      end
+      describe 'Cannot find user' do
+        before :each do
+          agency = FactoryGirl.create(:agency)
+          FactoryGirl.create(:agency_admin, :agency => agency)
+          js = FactoryGirl.create(:job_seeker)
+          @task = Task.new_js_unassigned_jd_task js, agency
+        end
+        subject{xhr :patch, :assign , {id: @task.id, to: 100}, :format => :json}
+        it 'returns error' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check content' do
+          expect(subject.body).to eq({:message => 'Cannot find user!'}.to_json)
+        end
+      end
+      describe 'Cannot assign task to user' do
+        before :each do
+          agency = FactoryGirl.create(:agency)
+          FactoryGirl.create(:agency_admin, :agency => agency)
+          @js = FactoryGirl.create(:job_seeker)
+          @task = Task.new_js_unassigned_jd_task @js, agency
+        end
+        subject{xhr :patch, :assign , {id: @task.id, to: @js.id}, :format => :json}
+        it 'returns error' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check content' do
+          expect(subject.body).to eq({:message => 'Cannot assign the task to that user!'}.to_json)
+        end
+      end
     end
   end
 
