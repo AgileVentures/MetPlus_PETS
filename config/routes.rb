@@ -77,6 +77,15 @@ Rails.application.routes.draw do
   resources :skills, only: [:create, :edit, :update, :destroy]
   # --------------------------------------------------------------------------
 
+  # ----------------------- Tasks --------------------------------------------
+  resources :task, only: [:index] do
+    patch 'assign', on: :member, as: :assign
+    patch 'in_progress', on: :member, as: :in_progress
+    patch 'done', on: :member, as: :done
+    get 'list_owners', on: :member, as: :list_owners
+  end
+  # --------------------------------------------------------------------------
+
   root 'main#index'
 
   get 'agency/home',  path: '/agency/:id'

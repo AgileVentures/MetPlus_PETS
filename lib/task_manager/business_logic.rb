@@ -38,6 +38,8 @@ module BusinessLogic
 
   DESCRIPTIONS = {:need_job_developer => 'Job Seeker has no assigned Job Developer',
                   :need_case_manager  => 'Job Seeker has no assigned Case Manager'}
+  ASSIGNABLE_LIST = {:need_job_developer => {type: Agency, function: :job_developers},
+                     :need_case_manager => {type: Agency, function: :case_managers}}
 
   module ClassMethods
     def new_js_registration_task jobseeker, agency
@@ -57,6 +59,14 @@ module BusinessLogic
 
   def description
     DESCRIPTIONS[task_type.to_sym]
+  end
+
+  def assignable_list
+    return nil if not owner.nil?
+    info = ASSIGNABLE_LIST[task_type.to_sym]
+    if info[:type] == Agency
+      return Agency.send info[:function], task_owner[0].agency
+    end
   end
 
   private
