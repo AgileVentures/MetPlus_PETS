@@ -10,7 +10,7 @@ RSpec.describe TaskController, type: :controller do
   end
 
   describe "PATCH #assign" do
-    describe 'successfull' do
+    describe 'successful' do
       before :each do
         agency = FactoryGirl.create(:agency)
         FactoryGirl.create(:agency_admin, :agency => agency)
@@ -79,17 +79,70 @@ RSpec.describe TaskController, type: :controller do
     end
   end
 
-  describe "GET #in_progress" do
-    it "returns http success" do
-      get :in_progress
-      expect(response).to have_http_status(:success)
+  describe "PATCH #in_progress" do
+    describe 'successful' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        @task.assign @jd1
+      end
+      subject{xhr :patch, :in_progress , {id: @task.id}, :format => :json}
+      it "returns http success" do
+        expect(subject).to have_http_status(:success)
+      end
+      it "check task status" do
+        subject
+        expect(Task.find_by_id(@task.id).status).to eq(Task::STATUS[:WIP])
+      end
+    end
+    describe 'errors' do
+      describe 'Cannot find task' do
+        it 'returns error' do
+          xhr :patch, :in_progress , {id: -1}, :format => :json
+          expect(response).to have_http_status(403)
+        end
+        it 'check content' do
+          xhr :patch, :in_progress , {id: -1}, :format => :json
+          expect(response.body).to eq({:message => 'Cannot find the task!'}.to_json)
+        end
+      end
     end
   end
 
-  describe "GET #done" do
-    it "returns http success" do
-      get :done
-      expect(response).to have_http_status(:success)
+  describe "PATCH #done" do
+    describe 'successful' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        @task.assign @jd1
+        @task.work_in_progress
+      end
+      subject{xhr :patch, :done , {id: @task.id}, :format => :json}
+      it "returns http success" do
+        expect(subject).to have_http_status(:success)
+      end
+      it "check task status" do
+        subject
+        expect(Task.find_by_id(@task.id).status).to eq(Task::STATUS[:DONE])
+      end
+    end
+    describe 'errors' do
+      describe 'Cannot find task' do
+        it 'returns error' do
+          xhr :patch, :done , {id: -1}, :format => :json
+          expect(response).to have_http_status(403)
+        end
+        it 'check content' do
+          xhr :patch, :done , {id: -1}, :format => :json
+          expect(response.body).to eq({:message => 'Cannot find the task!'}.to_json)
+        end
+      end
     end
   end
 
@@ -124,7 +177,7 @@ RSpec.describe TaskController, type: :controller do
     describe 'unknown task' do
       subject{xhr :get, :list_owners , {id: -1000}, :format => :json}
       it "returns http error" do
-        expect(subject).to have_http_status(401)
+        expect(subject).to have_http_status(403)
       end
       it 'check content' do
         expect(subject.body).to eq({:message => 'Cannot find the task!'}.to_json)
@@ -140,7 +193,7 @@ RSpec.describe TaskController, type: :controller do
       end
       subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
       it "returns http success" do
-        expect(subject).to have_http_status(401)
+        expect(subject).to have_http_status(403)
       end
       it 'check content' do
         expect(subject.body).to eq({:message => 'There are no users you can assign this task to!'}.to_json)

@@ -22,9 +22,27 @@ class TaskController < ApplicationController
   end
 
   def in_progress
+    raise 'Unsupported request' if not request.xhr?
+    task = Task.find_by_id params[:id]
+    return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+    begin
+      task.work_in_progress
+    rescue Exception => e
+      return render json: {:message => e.message}, status: 500 if user.nil?
+    end
+    render json: {:message => 'Task work in progress'}
   end
 
   def done
+    raise 'Unsupported request' if not request.xhr?
+    task = Task.find_by_id params[:id]
+    return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+    begin
+      task.complete
+    rescue Exception => e
+      return render json: {:message => e.message}, status: 500 if user.nil?
+    end
+    render json: {:message => 'Task finished'}
   end
 
   def list_owners
@@ -32,10 +50,11 @@ class TaskController < ApplicationController
     term = params[:q] || {}
     term = term['term'] || ''
     term = term.downcase
-    return render json: {:message => 'Cannot find the task!'}, status: 401 if task.nil?
+    task = Task.find_by_id params[:id]
+    return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
     list_users = []
     all_users = task.assignable_list
-    return render json: {:message => 'There are no users you can assign this task to!'}, status: 401 \
+    return render json: {:message => 'There are no users you can assign this task to!'}, status: 403 \
           if all_users.nil? or all_users.size == 0
     all_users.each do |user|
       if user.full_name.downcase =~ /#{term}/
