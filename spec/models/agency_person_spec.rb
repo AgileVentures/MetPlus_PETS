@@ -95,40 +95,38 @@ RSpec.describe AgencyPerson, type: :model do
     end
 
   end
-  describe '#is_job_developer?' do
+  describe 'Identity check with' do
     let(:agency) {FactoryGirl.create(:agency)}
     let(:agency1) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:job_developer, :agency => agency)}
-    let(:person_other_agency) {FactoryGirl.create(:job_developer, :agency => agency1)}
-    it 'correct' do
-      expect(person.is_job_developer?(agency)).to be true
+    describe '#is_job_developer?' do
+      let(:person) {FactoryGirl.create(:job_developer, :agency => agency)}
+      let(:person_other_agency) {FactoryGirl.create(:job_developer, :agency => agency1)}
+      it 'correct' do
+        expect(person.is_job_developer?(agency)).to be true
+      end
+      it 'incorrect' do
+        expect(person_other_agency.is_job_developer?(agency)).to be false
+      end
     end
-    it 'incorrect' do
-      expect(person_other_agency.is_job_developer?(agency)).to be false
+    describe '#is_case_manager?' do
+      let(:person) {FactoryGirl.create(:case_manager, :agency => agency)}
+      let(:person_other_agency) {FactoryGirl.create(:case_manager, :agency => agency1)}
+      it 'correct' do
+        expect(person.is_case_manager?(agency)).to be true
+      end
+      it 'incorrect' do
+        expect(person_other_agency.is_case_manager?(agency)).to be false
+      end
     end
-  end
-  describe '#is_case_manager?' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:agency1) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:case_manager, :agency => agency)}
-    let(:person_other_agency) {FactoryGirl.create(:case_manager, :agency => agency1)}
-    it 'correct' do
-      expect(person.is_case_manager?(agency)).to be true
-    end
-    it 'incorrect' do
-      expect(person_other_agency.is_case_manager?(agency)).to be false
-    end
-  end
-  describe '#is_agency_admin?' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:agency1) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:agency_admin, :agency => agency)}
-    let(:person_other_agency) {FactoryGirl.create(:agency_admin, :agency => agency1)}
-    it 'correct' do
-      expect(person.is_agency_admin?(agency)).to be true
-    end
-    it 'incorrect' do
-      expect(person_other_agency.is_agency_admin?(agency)).to be false
+    describe '#is_agency_admin?' do
+      let(:person) {FactoryGirl.create(:agency_admin, :agency => agency)}
+      let(:person_other_agency) {FactoryGirl.create(:agency_admin, :agency => agency1)}
+      it 'correct' do
+        expect(person.is_agency_admin?(agency)).to be true
+      end
+      it 'incorrect' do
+        expect(person_other_agency.is_agency_admin?(agency)).to be false
+      end
     end
   end
 end
