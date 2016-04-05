@@ -219,7 +219,7 @@ RSpec.describe User, type: :model do
   end
   describe '#is_job_seeker?' do
     let(:agency) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:job_seeker, :agency => agency)}
+    let(:person) {FactoryGirl.create(:job_seeker)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_job_seeker?).to be false
