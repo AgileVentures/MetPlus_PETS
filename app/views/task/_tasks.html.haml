@@ -32,13 +32,9 @@
             - elsif task.status == Task::STATUS[:ASSIGNED]
               = link_to root_path, :title => 'Start working on task' do
                 %i.fa-hourglass-start.fa-1
-              = link_to root_path, :title => 'Notify assigned person' do
-                %i.fa-envelope.fa-1
             - elsif task.status == Task::STATUS[:WIP]
               = link_to root_path, :title => 'Work complete' do
                 %i.fa-flag-checkered.fa-1
-              = link_to root_path, :title => 'Notify assigned person' do
-                %i.fa-envelope.fa-1
 
 
 %div{id: 'assignTaskModal', class: 'modal fade'}
