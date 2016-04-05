@@ -49,7 +49,8 @@ require 'ffaker'
 #     user.phone ='619-316-8971'
 #     user.confirmed_at = DateTime.now
 # end
-print "Seeding wait......."
+
+puts "Seeding wait......."
 #incase rerun comes in. not necessary
 JobSeekerStatus.delete_all
 Job.delete_all
@@ -134,8 +135,8 @@ if Rails.env.development? # || Rails.env.staging?
     Address.create(street: street, city: city, zipcode: zipcode,
                    location: companies.pop)
   end
-  
-  puts "Addresses created: #{Address.count}" 
+
+  puts "Addresses created: #{Address.count}"
 
   #-------------------------- Job Categories ------------------------------
   200.times do |n|
@@ -205,7 +206,7 @@ if Rails.env.development? # || Rails.env.staging?
   #-------------------------- Job Seekers ---------------------------------
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
-    email = FFaker::Internet.email 
+    email = FFaker::Internet.email
     password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name

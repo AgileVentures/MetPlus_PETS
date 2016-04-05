@@ -26,7 +26,7 @@ RSpec.describe AgencyRelation, type: :model do
     it { is_expected.to validate_presence_of :agency_role }
   end
 
-  describe 'Job Skill' do
+  describe 'AgencyPerson <> JobSeeker relation' do
     let(:person)     { FactoryGirl.create(:agency_person) }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:role)       { FactoryGirl.create(:agency_role) }
