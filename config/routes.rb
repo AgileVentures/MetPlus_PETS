@@ -84,7 +84,9 @@ Rails.application.routes.draw do
   get 'company/home', path: '/company/:id'
 
   resources :jobs
+
   resources :job_seekers
+  get 'job_seekers/home',  path: '/job_seekers/:id/home'
 
    # The priority is based upon order of creation: first created -> highest priority.
 

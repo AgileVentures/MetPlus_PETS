@@ -38,11 +38,11 @@ class Agency < ActiveRecord::Base
   end
   ###################################################
 
-
   private
 
   def self.find_users_with_role(agency, role)
     agency.agency_people_on_role role
   end
+
 
 end
