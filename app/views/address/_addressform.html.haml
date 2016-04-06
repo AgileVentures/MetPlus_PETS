@@ -1,21 +1,22 @@
-= @address_form.fields_for :address do |address_form|
+= @parent_form.fields_for fields_for_name.to_sym do |address_form|
   .form-group
-    = label :street, 'Street', class: 'control-label col-sm-2'
+    = address_form.label :street, 'Street', class: 'control-label col-sm-2'
     .col-sm-4
       = address_form.text_field :street, size: 30, class: 'form-control'
 
   .form-group
-    = label :city, 'City', class: 'control-label col-sm-2'
+    = address_form.label :city, 'City', class: 'control-label col-sm-2'
     .col-sm-3
       = address_form.text_field :city, size: 30, class: 'form-control'
 
   .form-group
-    = label  :state,'State', class: 'control-label col-sm-2'
+    = address_form.label :state,'State', class: 'control-label col-sm-2'
     .col-sm-5
-      = address_form.collection_select :state, Address.states_full_name, :to_s, :to_s, include_blank: true, class: 'form-control'
+      = address_form.collection_select(:state, Address.states_full_name,
+                :to_s, :to_s, {include_blank: true}, class: 'form-control')
 
   .form-group
-    = label :zipcode, 'Zipcode', class: 'control-label col-sm-2'
+    = address_form.label :zipcode, 'Zipcode', class: 'control-label col-sm-2'
     .col-sm-2
       = address_form.text_field :zipcode, size: 10, class: 'form-control'
 
