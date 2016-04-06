@@ -1,10 +1,10 @@
-= @tasks.each do |task|
+- @tasks.each do |task|
   .row
     .col-md-12
       .row
         .col-md-5
           = task.description
-        .col-md-3
+        .col-md-2
           - if task.status == Task::STATUS[:NEW]
             = task.status
           - else
@@ -12,7 +12,20 @@
             = link_to( task.task_owner.full_name, show_person_path(task.task_owner))
             )
         .col-md-3
-          = task.updated_at
+          - if not task.user.nil?
+            %p
+              User:
+              =link_to( task.person.full_name, show_person_path(task.person))
+          - if not task.job.nil?
+            %p
+              Job:
+              = link_to(task.job.title, job_path(task.job))
+          - if not task.company.nil?
+            %p
+              Company:
+              = link_to(task.company.name, company_home_path(task.company))
+        .col-md-1
+          = task.updated_at.strftime("%F")
         .col-md-1
           - if task.status == Task::STATUS[:NEW]
             = link_to '#', :title => 'Assign task', class: 'assign_button' ,data: {'task-id': task.id, toggle: 'modal', target: "#assignTaskModal"} do
