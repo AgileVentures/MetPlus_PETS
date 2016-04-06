@@ -16,17 +16,22 @@ class CruncherService
     mime_type = MIME::Types.type_for(file_name)
 
     raise "Invalid MIME type for file: #{file_name}" if mime_type.empty?
-    raise "Unsupported file type of file: #{file_name}" if 
+    raise "Unsupported file type of file: #{file_name}" if
+          not Resume::FILETYPES.include? mime_type.first.preferred_extension
 
     result = RestClient.post(service_url + '/curriculum/upload',
       { 'file'   => file,
-        'name'   => file_name
+        'name'   => file_name,
         'userId' => user_id },
       { 'Accept' => 'application/json',
         'X-Auth-Token' => auth_token,
         'Content-Type' => mime_type.first.content_type })
 
-    # Parse result and determine return value
+    result_code = JSON.parse(result)['resultCode']
+    message     = JSON.parse(result)['message']
+
+    return true if result_code == 'SUCCESS'
+    false
   end
 
   private
@@ -34,7 +39,7 @@ class CruncherService
   def self.auth_token
     return @@auth_token if @@auth_token
 
-    result = Rest.Client.post(service_url + '/authenticate', {},
+    result = RestClient.post(service_url + '/authenticate', {},
                 {'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
                  'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD']})
     @@auth_token =  JSON.parse(result)['token']
