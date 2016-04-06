@@ -31,7 +31,7 @@ class Agency < ActiveRecord::Base
 
     users
   end
-  
+
   # MULTIPLE AGENCIES: the code below needs to change
   def self.all_agency_people_emails
     first.agency_people.pluck(:email)
@@ -41,6 +41,7 @@ class Agency < ActiveRecord::Base
   private
 
   def self.find_users_with_role(agency, role)
+    agency.agency_people_on_role role
     users = []
     agency.agency_people.each do |ap|
                 users << ap if ap.agency_roles &&
