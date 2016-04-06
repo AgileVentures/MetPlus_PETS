@@ -27,12 +27,10 @@ Background: seed data added to database
   And I click the "Become a hiring partner!" link
   And I wait 1 second
   Then I should see "Company Registration"
-  And show me the page
   And I fill in the fields:
   | Company Name                   | Widgets, Inc.       |
- # | Street                         | 12 Main Street      |
+  | Street                         | 12 Main Street      |
   | City                           | Detroit             |
-  | State                          | Michigan            |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
   | Fax                            | 333-222-4321        |
@@ -47,6 +45,7 @@ Background: seed data added to database
   | Contact Email                  | hughjobs@widgets.com|
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
+  And  I select "Michigan" in select list "State"
 
 Scenario: company registration request
   And I click the "Create" button

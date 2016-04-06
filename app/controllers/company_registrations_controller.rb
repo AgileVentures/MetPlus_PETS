@@ -134,7 +134,7 @@ class CompanyRegistrationsController < ApplicationController
 
   private
   def company_params
-    params.require(:company).permit(:name, :email, :phone,
+    params.require(:company).permit(:name, :email, :phone, :fax,
     :website, :ein, :description,
     company_people_attributes: [:id, :first_name, :last_name,
                         :phone, :email, :title,
