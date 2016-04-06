@@ -20,6 +20,12 @@ module WillPaginateHelper
   end
 
   def js_will_paginate(collection, options = {})
-    will_paginate(collection, options.merge(:renderer => WillPaginateHelper::WillPaginateJSLinkRenderer))
+    will_paginate(collection, options.merge(:renderer => WillPaginateHelper::LinkRenderer))
+  end
+  class LinkRenderer < WillPaginate::ActionView::LinkRenderer
+    def link(text, target, attributes = {})
+      attributes['data-remote'] = true
+      super
+    end
   end
 end

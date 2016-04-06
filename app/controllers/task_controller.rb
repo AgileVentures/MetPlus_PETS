@@ -1,7 +1,9 @@
 class TaskController < ApplicationController
   include Tasks
   def index
-    @tasks = display_tasks
+    @task_type = 'mine-open'
+    @render_modal = true
+    @tasks = display_tasks @task_type
   end
 
   def assign
@@ -46,8 +48,11 @@ class TaskController < ApplicationController
   end
 
   def tasks
+    @task_type = params[:task_type] || 'mine'
     raise 'Unsupported request' if not request.xhr?
-    @tasks = display_tasks
+
+    @render_modal = false
+    @tasks = display_tasks @task_type
     render partial: 'tasks'
   end
 

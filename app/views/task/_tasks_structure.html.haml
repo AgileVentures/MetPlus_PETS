@@ -1,0 +1,37 @@
+.container
+  .row
+    .col-md-12
+      .row
+        .col-md-5
+          Task
+        .col-md-3
+          State
+        .col-md-3
+          Last change date
+        .col-md-1
+          Options
+  %div{:id => 'tasks'}
+    = render partial: 'tasks'
+- if @render_modal
+  %div{id: "assignTaskModal", class: 'modal fade'}
+    .modal-dialog(role='document')
+      %form{ :action => "#", :method => "patch" }
+        .modal-content
+          .modal-header
+            %button(type='button' class='close' data-dismiss='modal')
+              %span(aria-hidden='true') &times;
+            %h4.modal-title
+              Assign user
+          .modal-body
+            .form-group
+              %label(for="assignTaskModal_name" class='control-label')
+                Select the user to assign the task to:
+              .row
+                .col-md-4
+                  %select{:id => 'task_assign_select', :style => 'width: 100%;'}
+          .modal-footer
+            %button(type='button' class='btn btn-default'
+            data-dismiss='modal') Cancel
+            %submit(type='button' class='btn btn-primary'
+            id='assignTaskModal_button')
+              Assign

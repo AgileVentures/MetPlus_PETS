@@ -84,7 +84,8 @@ Rails.application.routes.draw do
     patch 'done', on: :member, as: :done
     get 'list_owners', on: :member, as: :list_owners
   end
-  match  '/task/tasks'   => 'task#tasks',        via: 'get'
+  #match  '/task/tasks'   => 'task#tasks',        via: 'get'
+  get 'task/tasks/:task_type' => 'task#tasks'
   # --------------------------------------------------------------------------
 
   root 'main#index'

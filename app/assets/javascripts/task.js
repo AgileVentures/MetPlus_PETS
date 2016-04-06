@@ -87,7 +87,26 @@ var TaskManager = {
         });
     },
     load_tasks: function() {
-
+        console.log('load_tasks()');
+        $("#tasks").html("Page is loading...");
+        $.ajax({type: 'GET',
+            url: this.href,
+            data: {},
+            timeout: 5000,
+            success: function (data){
+                $("#tasks").html(data);
+                TaskManager.setup();
+                console.log('updated tasks()');
+            },
+            error: function (xhrObj, status, exception) {
+                noty({text: 'Unable to retrieve the tasks for the user',
+                    theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                    type: 'error'});
+            }
+        });
+        console.log('end load_tasks()');
+        return false;
     },
     setup: function() {
         $(".assign_button").click(TaskManager.load_assign_modal);
@@ -95,6 +114,7 @@ var TaskManager = {
         $(".done_button").click(TaskManager.done_task);
         $("#assignTaskModal_button").click(TaskManager.assign_user);
         $("#assignTaskModal").modal('hide');
+        $("#tasks > .pagination a").click(TaskManager.load_tasks);
     }
 };
 

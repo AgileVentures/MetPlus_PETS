@@ -18,6 +18,7 @@ class Task < ActiveRecord::Base
   validates_with TaskOwnerValidator
 
   scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today + 1)}
+  scope :open_tasks, -> {today_tasks.where('status != ?', STATUS[:DONE])}
   scope :js_tasks, ->(job_seeker) {where('owner_user_id=?', job_seeker.user.id)}
   scope :agency_person_tasks, ->(agency_person) {where('owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))',
                                                          agency_person.user.id,
@@ -50,6 +51,15 @@ class Task < ActiveRecord::Base
     return today_tasks.agency_person_tasks(user) \
                    if user.is_a? AgencyPerson
     return today_tasks.company_person_tasks(user) \
+                   if user.is_a? CompanyPerson
+  end
+
+  def self.find_by_owner_user_open user
+    return open_tasks.js_tasks(user) \
+                if user.is_a? JobSeeker
+    return open_tasks.agency_person_tasks(user) \
+                   if user.is_a? AgencyPerson
+    return open_tasks.company_person_tasks(user) \
                    if user.is_a? CompanyPerson
   end
 
