@@ -109,6 +109,8 @@ Scenario: edit branch
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "004"
+  And I fill in "City" with "San Jose"
+  Then I select "California" in select list "State"
   And I click the "Update" button
   Then I should see "Branch was successfully updated."
 
@@ -136,9 +138,8 @@ Scenario: error for edit branch
 Scenario: new agency branch
   And I click the "Agency and Partner Companies" link
   And I click the "Add Branch" button
-  Then I fill in "Branch Code" with "003"
-  #And I fill in "Street" with "10 Ford Way"
-  And I fill in "Street" with "3 Auto Drive"
+  Then I fill in "Branch Code" with "004"
+  And I fill in "Street" with "10 Ford Way"
   And I fill in "City" with "Detroit"
   Then I select "Michigan" in select list "State"
   And I fill in "Zipcode" with "48208"
