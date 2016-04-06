@@ -1,4 +1,4 @@
-- @tasks.each do |task|
+- all_tasks.each do |task|
   .row
     .col-md-12
       .row
@@ -36,4 +36,4 @@
           - elsif task.status == Task::STATUS[:WIP]
             = link_to '#', :title => 'Work complete', class: 'wip_button', data:{'url': done_task_path(task)} do
               %i.fa.fa-flag-checkered.fa-1
-= will_paginate @tasks, param_name: 'tasks_page', :params => {:controller => 'task', :action => 'tasks', :task_type => @task_type}
+= will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'task', :action => 'tasks', :task_type => task_type}

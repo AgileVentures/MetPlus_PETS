@@ -1,1 +1,2 @@
-= render partial: 'tasks_structure'
+= render partial: 'tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
+= render partial: 'tasks_structure' , :locals => {all_tasks: @tasks_t2, task_type: @task_type_t2}

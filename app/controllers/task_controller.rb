@@ -1,9 +1,11 @@
 class TaskController < ApplicationController
   include Tasks
   def index
-    @task_type = 'mine-open'
+    @task_type_t1 = 'mine-open'
+    @task_type_t2 = 'mine-closed'
     @render_modal = true
-    @tasks = display_tasks @task_type
+    @tasks_t1 = display_tasks @task_type_t1
+    @tasks_t2 = display_tasks @task_type_t2
   end
 
   def assign
@@ -53,7 +55,7 @@ class TaskController < ApplicationController
 
     @render_modal = false
     @tasks = display_tasks @task_type
-    render partial: 'tasks'
+    render partial: 'tasks', :locals => {all_tasks: @tasks, task_type: @task_type}
   end
 
   def list_owners

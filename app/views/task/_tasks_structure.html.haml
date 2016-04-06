@@ -12,9 +12,14 @@
           Change date
         .col-md-1
           Options
-  %div{:id => 'tasks'}
-    = render partial: 'tasks'
+  %div{:id => "#{task_type}-tasks"}
+    = render partial: 'tasks', :locals => {all_tasks: all_tasks, task_type: task_type}
+%script{:type=>"text/javascript"}
+  $(document).ready( function() {
+  =  "TaskManagerHolder('#{task_type}-tasks', '#{task_type}')"
+  } );
 - if @render_modal
+  - @render_modal = false
   %div{id: "assignTaskModal", class: 'modal fade'}
     .modal-dialog(role='document')
       %form{ :action => "#", :method => "patch" }

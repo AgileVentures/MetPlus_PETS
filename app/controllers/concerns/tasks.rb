@@ -5,6 +5,8 @@ module Tasks
     case task_type
       when 'mine-open'
         return Task.paginate(:page => params[:tasks_page], :per_page => 10).find_by_owner_user_open pets_user
+      when 'mine-closed'
+        return Task.paginate(:page => params[:tasks_page], :per_page => 10).find_by_owner_user_closed pets_user
     end
   end
 end
