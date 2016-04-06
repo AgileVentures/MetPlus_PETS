@@ -1,4 +1,4 @@
-.container
+.container{:id => 'tasks'}
   .row
     .col-md-12
       .row
@@ -30,12 +30,12 @@
               = link_to '#', :title => 'Assign task', class: 'assign_button' ,data: {'task-id': task.id, toggle: 'modal', target: "#assignTaskModal"} do
                 %i.fa-male.fa-1
             - elsif task.status == Task::STATUS[:ASSIGNED]
-              = link_to root_path, :title => 'Start working on task' do
+              = link_to '#', :title => 'Start working on task', class: 'wip_button', data:{'url': in_progress_task_path(task)} do
                 %i.fa-hourglass-start.fa-1
             - elsif task.status == Task::STATUS[:WIP]
-              = link_to root_path, :title => 'Work complete' do
+              = link_to '#', :title => 'Work complete', class: 'wip_button', data:{'url': done_task_path(task)} do
                 %i.fa-flag-checkered.fa-1
-
+  = js_will_paginate @tasks, param_name: 'tasks_page', :params => {:controller => 'task', :action => 'tasks'}
 
 %div{id: 'assignTaskModal', class: 'modal fade'}
   .modal-dialog(role='document')

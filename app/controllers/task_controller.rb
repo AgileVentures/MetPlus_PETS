@@ -45,6 +45,12 @@ class TaskController < ApplicationController
     render json: {:message => 'Task finished'}
   end
 
+  def tasks
+    raise 'Unsupported request' if not request.xhr?
+    @tasks = display_tasks
+    render partial: 'tasks'
+  end
+
   def list_owners
     raise 'Unsupported request' if not request.xhr?
     term = params[:q] || {}

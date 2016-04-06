@@ -46,11 +46,53 @@ var TaskManager = {
             }
         });
     },
+    wip_task: function() {
+        var url = $(this).data("url");
+        $.ajax({type: 'PATCH',
+            url: url,
+            data: {},
+            timeout: 5000,
+            success: function (){
+                noty({text: 'Work on the task started',
+                    theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                    type: 'success'});
+            },
+            error: function (xhrObj, status, exception) {
+                noty({text: xhrObj['message'],
+                    theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                    type: 'error'});
+            }
+        });
+    },
+    done_task: function() {
+        var url = $(this).data("url");
+        $.ajax({type: 'PATCH',
+            url: url,
+            data: {},
+            timeout: 5000,
+            success: function (){
+                noty({text: 'Work on the task is done',
+                    theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                    type: 'success'});
+            },
+            error: function (xhrObj, status, exception) {
+                noty({text: xhrObj['message'],
+                    theme: 'bootstrapTheme',
+                    layout: 'bottomRight',
+                    type: 'error'});
+            }
+        });
+    },
     load_tasks: function() {
 
     },
     setup: function() {
         $(".assign_button").click(TaskManager.load_assign_modal);
+        $(".wip_button").click(TaskManager.wip_task);
+        $(".done_button").click(TaskManager.done_task);
         $("#assignTaskModal_button").click(TaskManager.assign_user);
         $("#assignTaskModal").modal('hide');
     }
