@@ -1,17 +1,29 @@
-- all_tasks.each do |task|
-  .row
-    .col-md-12
-      .row
-        .col-md-5
+%table.table.table-hover
+  %thead
+    %tr
+      %td
+        Task
+      %td
+        State
+      %td
+        Entities associated
+      %td
+        Change date
+      %td
+        Options
+  %tbody
+    - all_tasks.each do |task|
+      %tr
+        %td
           = task.description
-        .col-md-2
+        %td
           - if task.status == Task::STATUS[:NEW]
             = task.status
           - else
             = "#{task.status}("
             = link_to( task.task_owner.full_name, show_person_path(task.task_owner))
             )
-        .col-md-3
+        %td
           - if not task.user.nil?
             %p
               User:
@@ -24,9 +36,9 @@
             %p
               Company:
               = link_to(task.company.name, company_home_path(task.company))
-        .col-md-1
+        %td
           = task.updated_at.strftime("%F")
-        .col-md-1
+        %td
           - if task.status == Task::STATUS[:NEW]
             = link_to '#', :title => 'Assign task', class: 'assign_button' ,data: {'task-id': task.id, toggle: 'modal', target: "#assignTaskModal"} do
               %i.fa.fa-male.fa-1
@@ -34,6 +46,6 @@
             = link_to '#', :title => 'Start working on task', class: 'wip_button', data:{'url': in_progress_task_path(task)} do
               %i.fa.fa-hourglass-start.fa-1
           - elsif task.status == Task::STATUS[:WIP]
-            = link_to '#', :title => 'Work complete', class: 'wip_button', data:{'url': done_task_path(task)} do
+            = link_to '#', :title => 'Work complete', class: 'done_button', data:{'url': done_task_path(task)} do
               %i.fa.fa-flag-checkered.fa-1
 = will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'task', :action => 'tasks', :task_type => task_type}

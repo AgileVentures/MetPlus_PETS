@@ -1,19 +1,5 @@
-.container
-  .row
-    .col-md-12
-      .row
-        .col-md-5
-          Task
-        .col-md-2
-          State
-        .col-md-3
-          Entities associated
-        .col-md-1
-          Change date
-        .col-md-1
-          Options
-  %div{:id => "#{task_type}-tasks"}
-    = render partial: 'tasks', :locals => {all_tasks: all_tasks, task_type: task_type}
+%div{:id => "#{task_type}-tasks"}
+  = render partial: 'tasks', :locals => {all_tasks: all_tasks, task_type: task_type}
 %script{:type=>"text/javascript"}
   $(document).ready( function() {
   =  "TaskManagerHolder('#{task_type}-tasks', '#{task_type}')"

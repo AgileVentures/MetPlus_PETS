@@ -119,45 +119,52 @@ var TaskManagerHolder = function(holder_id, task_type) {
     return __TaskManagerHolder[holder_id];
 };
 
-$(document).ready( function() {
-    $('#assignTaskModal').on('shown.bs.modal', function (e) {
-        console.log("going to set the button option");
-        $('#assignTaskModal_button').click( function() {
-            if ($("#task_assign_select").val() === null) {
-                return;
-            }
-            var url = $('#task_assign_select').closest('form').attr('action');
-            var post_data = {to: $("#task_assign_select").val()};
-            $.ajax({
-                type: 'PATCH',
-                url: url,
-                data: post_data,
-                timeout: 5000,
-                success: function () {
-                    noty({
-                        text: 'Task assigned',
-                        theme: 'bootstrapTheme',
-                        layout: 'bottomRight',
-                        type: 'success'
-                    });
-                    TaskManagerHolder($('#assignTaskModal_button').data('location'), "").refresh_tasks();
-                    $("#assignTaskModal").modal('hide');
-                },
-                error: function (xhrObj, status, exception) {
-                    noty({
-                        text: xhrObj['message'],
-                        theme: 'bootstrapTheme',
-                        layout: 'bottomRight',
-                        type: 'error'
-                    });
-                }
-            });
-            return false;
-        });
-    });
-    $('#assignTaskModal').on('hidden.bs.modal', function (e) {
-        $('#assignTaskModal_button').unbind('click');
-    });
+var TaskModal = {
+  setup: function() {
+      $('#assignTaskModal').on('shown.bs.modal', function (e) {
+          console.log("going to set the button option");
+          $('#assignTaskModal_button').click( function() {
+              if ($("#task_assign_select").val() === null) {
+                  return;
+              }
+              var url = $('#task_assign_select').closest('form').attr('action');
+              var post_data = {to: $("#task_assign_select").val()};
+              $.ajax({
+                  type: 'PATCH',
+                  url: url,
+                  data: post_data,
+                  timeout: 5000,
+                  success: function () {
+                      noty({
+                          text: 'Task assigned',
+                          theme: 'bootstrapTheme',
+                          layout: 'bottomRight',
+                          type: 'success'
+                      });
+                      TaskManagerHolder($('#assignTaskModal_button').data('location'), "").refresh_tasks();
+                      $("#assignTaskModal").modal('hide');
+                  },
+                  error: function (xhrObj, status, exception) {
+                      noty({
+                          text: xhrObj['message'],
+                          theme: 'bootstrapTheme',
+                          layout: 'bottomRight',
+                          type: 'error'
+                      });
+                  }
+              });
+              return false;
+          });
+      });
+      $('#assignTaskModal').on('hidden.bs.modal', function (e) {
+          $('#assignTaskModal_button').unbind('click');
+      });
+      try {
+          $("#assignTaskModal").modal('hide');
+      } catch(err) {}
+  }
+};
 
-    $("#assignTaskModal").modal('hide');
+$(function () {
+    TaskModal.setup();
 });
