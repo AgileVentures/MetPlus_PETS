@@ -8,10 +8,8 @@ class Resume < ActiveRecord::Base
   # Valid file types for résumé files:
   FILETYPES = ['pdf', 'doc', 'docx']
 
-  # In addition to calling .new, the file attribute needs to have been set
-  # before calling .save
-
   def initialize(*args)
+    # attribute 'file' is not persisted so will not be handled by super
     self.file = args[0].delete :file if not args.empty?
     super
   end
