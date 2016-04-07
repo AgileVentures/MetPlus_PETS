@@ -71,7 +71,7 @@ Scenario: Company registration request in PETS
   Then I should see "Request Company Registration"
   And I fill in the fields:
   | Company Name                   | Widgets, Inc.       |
-  | Company Address                | 12 Main Street      |
+  | Street                         | 12 Main Street      |
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
@@ -87,6 +87,7 @@ Scenario: Company registration request in PETS
   | Contact Email                  | hughjobs@widgets.com|
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
+  And  I select "Michigan" in select list "State"
   And I click the "Create" button
   Then I should see "Thank you for your registration request."
   And "aa@metplus.org" should receive an email with subject "Company registered"
