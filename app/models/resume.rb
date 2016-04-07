@@ -16,16 +16,17 @@ class Resume < ActiveRecord::Base
 
   def save
     return false if not valid? or not super
-    return true if upload(file, file_name, job_seeker_id)
+    return true if upload_resume(file, file_name, job_seeker_id)
 
     errors.add(:file, 'could not be uploaded - see system admin')
+    false
   end
 
   private
 
-  def self.upload(file, user_id)
+  def upload
     # 'file' is a Ruby File object
     # file type must confirm to acceptable file types defined in Resume model
-    ResumeCruncher.upload_resume(file, file_name, user_id)
+    ResumeCruncher.upload_resume(file, file_name, job_seeker_id)
   end
 end
