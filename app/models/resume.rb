@@ -24,7 +24,7 @@ class Resume < ActiveRecord::Base
 
   private
 
-  def upload
+  def upload_resume
     # 'file' is a Ruby File object
     # file type must confirm to acceptable file types defined in Resume model
     ResumeCruncher.upload_resume(file, file_name, job_seeker_id)
