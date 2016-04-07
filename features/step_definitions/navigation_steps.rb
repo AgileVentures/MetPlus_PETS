@@ -10,6 +10,8 @@ When(/^I go to the (.+) page$/) do |page|
       visit new_job_seeker_path
     when 'home'
       visit root_path
+    when 'tasks'
+      visit task_index_path
 
     when /activation for user '.+'/
       user = page.match(/'(.+)'/)
