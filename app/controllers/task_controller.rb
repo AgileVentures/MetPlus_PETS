@@ -20,9 +20,9 @@ class TaskController < ApplicationController
     begin
       task.assign user
     rescue Exception => e
-      return render json: {:message => e.message}, status: 500 if user.nil?
+      return render json: {:message => e.message}, status: 500
     end
-    render json: {:message => 'Task assigned'}
+    return render json: {:message => 'Task assigned'}
   end
 
   def in_progress

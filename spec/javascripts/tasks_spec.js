@@ -15,9 +15,8 @@ describe('Tasks', function () {
     it('calls ajax to add job category', function () {
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.url).toEqual("/task/2/in_progress");
-      }).and.callFake(function(ajaxArgs) {
-        expect(ajaxArgs.url).toEqual("/task/2/in_progress");
       });
+      console.log($('.wip_button'));
       $('.wip_button').trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
