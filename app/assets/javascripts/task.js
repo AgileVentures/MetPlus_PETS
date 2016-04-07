@@ -3,6 +3,19 @@ var TaskManager = function (holder_id, task_type) {
     var self = this;
     this.last_load_url = "/task/tasks/" + task_type;
 
+    this.success_notification = function(text) {
+        noty({text: text,
+            theme: 'bootstrapTheme',
+            layout: 'bottomRight',
+            type: 'success'});
+    };
+    this.error_notification = function(text) {
+        noty({text: text,
+            theme: 'bootstrapTheme',
+            layout: 'bottomRight',
+            type: 'error'});
+    };
+
     this.load_assign_modal = function (event) {
         console.log("load_assign_modal");
         var task_id = $(this).data("task-id");
@@ -37,13 +50,9 @@ var TaskManager = function (holder_id, task_type) {
             success: function (data){
                 $("#" + self.holder_id).html(data);
                 self.init();
-                console.log('updated tasks()');
             },
             error: function (xhrObj, status, exception) {
-                noty({text: 'Unable to retrieve the tasks for the user',
-                    theme: 'bootstrapTheme',
-                    layout: 'bottomRight',
-                    type: 'error'});
+                self.error_notification(xhrObj.responseJSON['message']);
             }
         });
     };
@@ -57,28 +66,17 @@ var TaskManager = function (holder_id, task_type) {
 
     this.wip_task = function(event) {
         event.preventDefault();
-        console.log('testing');
         var url = $(this).data("url");
         $.ajax({type: 'PATCH',
             url: url,
             data: {},
             timeout: 5000,
             success: function (){
-
-                console.log('bamm');
-                noty({text: 'Work on the task started',
-                    theme: 'bootstrapTheme',
-                    layout: 'bottomRight',
-                    type: 'success'});
+                self.success_notification('Work on the task started');
                 self.refresh_tasks();
             },
             error: function (xhrObj, status, exception) {
-                noty({text: xhrObj['message'],
-                    theme: 'bootstrapTheme',
-                    layout: 'bottomRight',
-                    type: 'error'});
-
-                console.log('slamm');
+                self.error_notification(xhrObj.responseJSON['message']);
             }
         });
     };
@@ -89,17 +87,11 @@ var TaskManager = function (holder_id, task_type) {
             data: {},
             timeout: 5000,
             success: function (){
-                noty({text: 'Work on the task is done',
-                    theme: 'bootstrapTheme',
-                    layout: 'bottomRight',
-                    type: 'success'});
+                self.success_notification('Work on the task is done');
                 self.refresh_tasks();
             },
             error: function (xhrObj, status, exception) {
-                noty({text: xhrObj['message'],
-                    theme: 'bootstrapTheme',
-                    layout: 'bottomRight',
-                    type: 'error'});
+                self.error_notification(xhrObj.responseJSON['message']);
             }
         });
         return false;
@@ -127,7 +119,6 @@ var TaskManagerHolder = function(holder_id, task_type) {
 var TaskModal = {
   setup: function() {
       $('#assignTaskModal').on('shown.bs.modal', function (e) {
-          console.log("going to set the button option");
           $('#assignTaskModal_button').click( function() {
               if ($("#task_assign_select").val() === null) {
                   return;
