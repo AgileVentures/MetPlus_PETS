@@ -13,10 +13,10 @@ class CruncherService
   end
 
   def self.upload_file(file, file_name, user_id)
-    mime_type = MIME::Types.type_for(file_name)
+    mime_type = MIME::Types.type_for(URI.escape(file_name))
 
     raise "Invalid MIME type for file: #{file_name}" if mime_type.empty?
-    raise "Unsupported file type of file: #{file_name}" if
+    raise "Unsupported file type for: #{file_name}" if
           not Resume::FILETYPES.include? mime_type.first.preferred_extension
 
     result = RestClient.post(service_url + '/curriculum/upload',
