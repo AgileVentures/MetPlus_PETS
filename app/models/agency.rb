@@ -52,4 +52,5 @@ class Agency < ActiveRecord::Base
     agency.agency_people_on_role role
   end
 
+
 end

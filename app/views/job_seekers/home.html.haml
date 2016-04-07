@@ -1,0 +1,45 @@
+%h3 Your Information
+%div{:class => 'container'}
+  %div{class: 'div_align_left'}
+    %b First Name:
+    = @jobseeker.first_name
+    %br
+    %b Last Name:
+    = @jobseeker.last_name
+    %br
+    %b Status:
+    = JobSeekerStatus.find(@jobseeker.job_seeker_status_id).value
+    %br
+    %b Last Login:
+    - unless @jobseeker.last_sign_in_at.nil?
+      = @jobseeker.last_sign_in_at.strftime('%x')
+
+  %div{class: 'div_align_left'}
+    %b Case Manager:
+    - if @jobseeker.case_manager.nil?
+      %i None assigned
+    - else
+    = @jobseeker.case_manager.full_name
+    %br
+    %b Job Developer:
+    - if @jobseeker.job_developer.nil?
+      %i None assigned
+    - else
+      = @jobseeker.job_developer.full_name
+      %br
+      %p
+  %div{class: 'div_align_left'}
+    = link_to 'Update your information', edit_job_seeker_path, class: 'btn btn-primary'
+
+
+%h3 Your Applications
+%i This feature has not been built yet
+
+%h3 Job Opportunities - Best Match
+%div
+  = render partial: 'jobs/compact_list', locals: {jobs: @past_week}
+.clearfix
+%h3 Job Opportunities - New
+%div
+  = render partial: 'jobs/compact_list', locals: {jobs: @newjobs}
+.clearfix

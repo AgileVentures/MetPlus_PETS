@@ -40,6 +40,13 @@ class JobSeekersController < ApplicationController
     end
   end
 
+  def home
+    @jobseeker = JobSeeker.find(params[:id])
+    @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
+    @past_week = Job.new_jobs(Time.now - 3.weeks).paginate(:page => params[:page], :per_page => 5)
+
+  end
+
   def index
     @jobseeker = JobSeeker.all
   end
