@@ -55,13 +55,17 @@ var TaskManager = function (holder_id, task_type) {
         return false;
     };
 
-    this.wip_task = function() {
+    this.wip_task = function(event) {
+        event.preventDefault();
+        console.log('testing');
         var url = $(this).data("url");
         $.ajax({type: 'PATCH',
             url: url,
             data: {},
             timeout: 5000,
             success: function (){
+
+                console.log('bamm');
                 noty({text: 'Work on the task started',
                     theme: 'bootstrapTheme',
                     layout: 'bottomRight',
@@ -73,9 +77,10 @@ var TaskManager = function (holder_id, task_type) {
                     theme: 'bootstrapTheme',
                     layout: 'bottomRight',
                     type: 'error'});
+
+                console.log('slamm');
             }
         });
-        return false;
     };
     this.done_task = function() {
         var url = $(this).data("url");
