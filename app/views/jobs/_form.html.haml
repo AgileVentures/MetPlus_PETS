@@ -1,6 +1,9 @@
 .col-sm-offset-3.col-sm-6
 	= render 'shared/error_messages', object: f.object 
-.clearfix 
+.clearfix
+
+= f.hidden_field  :company_id
+ 
 .form-group 
 	=f.label :title, class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}

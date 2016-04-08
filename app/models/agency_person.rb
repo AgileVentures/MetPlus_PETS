@@ -90,4 +90,26 @@ class AgencyPerson < ActiveRecord::Base
     seekers
   end
 
+  def is_job_developer? agency
+    return false if self.agency != agency
+    has_role?(:JD)
+  end
+
+  def is_case_manager? agency
+    return false if self.agency != agency
+    has_role?(:CM)
+  end
+
+  def is_agency_admin? agency
+    return false if self.agency != agency
+    has_role?(:AA)
+  end
+
+
+
+  private
+  def has_role? role
+    agency_roles.pluck(:role).include?AgencyRole::ROLE[role]
+  end
+
 end

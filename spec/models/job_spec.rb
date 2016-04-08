@@ -30,8 +30,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :company_job_id }
     it { is_expected.to have_db_column :shift}
     it { is_expected.to have_db_column :fulltime}
+    it { is_expected.to have_db_column :company_id }
 
-    xit { is_expected.to have_db_column :company_id }
     xit { is_expected.to have_db_column :company_person_id }
     xit { is_expected.to have_db_column :job_category_id }
   end
@@ -44,7 +44,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_presence_of :company_job_id }
     it { should allow_value('', nil).for(:fulltime).on(:update) }
     it { should allow_value('', nil).for(:fulltime).on(:create) }
-    xit { is_expected.to validate_presence_of :company_id }
+    it { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
     xit { is_expected.to validate_presence_of :job_category_id }
     it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])} 

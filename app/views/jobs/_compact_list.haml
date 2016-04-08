@@ -1,0 +1,30 @@
+#jobs_table
+- if jobs.empty?
+  %i There are no jobs available
+- else
+  %table.table.table-hover
+    %thead
+      %tr
+        %td
+          %strong Title
+        %td
+          %strong Employer
+        %td
+          %strong Description
+        %td
+          %strong Posted
+    %tbody
+      - jobs.each do |job|
+        %tr
+          %td
+            = link_to "#{job.title}", job_path(job)
+            %td
+              = Company
+            %td
+              = job.description
+            %td
+              = "#{time_ago_in_words(job.created_at, )} ago"
+
+  %div{class: "col-sm-offset-2 col-sm-8"}
+    = will_paginate jobs
+%br

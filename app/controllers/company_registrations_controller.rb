@@ -34,13 +34,18 @@ class CompanyRegistrationsController < ApplicationController
     @company.company_people[0].company_roles <<
                     CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
 
+    # MULTIPLE AGENCIES: the code below needs to change
     @company.agencies << Agency.first
+    ###################################################
 
     if @company.save
       flash.notice = "Thank you for your registration request. " +
          " We will review your request and get back to you shortly."
       CompanyMailer.pending_approval(@company,
                                      @company.company_people[0]).deliver_now
+      Event.create(:COMP_REGISTER,
+                   name: @company.name, id: @company.id)
+
       render :confirmation
     else
       @model_errors = @company.errors

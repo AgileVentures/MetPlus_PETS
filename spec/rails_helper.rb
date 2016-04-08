@@ -6,7 +6,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'byebug'
-
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
 require 'capybara/poltergeist'
@@ -31,6 +30,10 @@ Capybara.javascript_driver = :poltergeist
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+# Turn off delayed mail delivery
+Delayed::Worker.delay_jobs = false
+
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -63,7 +66,7 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-#Make the devise controllers and views available to spec 
-RSpec.configure do |config| 
+#Make the devise controllers and views available to spec
+RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
 end

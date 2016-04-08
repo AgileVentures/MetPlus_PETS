@@ -26,6 +26,7 @@ class Company < ActiveRecord::Base
 
   validates :status, inclusion: STATUS.values
 
+
   def self.company_admins(company)
     find_users_with_role(company, CompanyRole::ROLE[:CA])
   end
@@ -43,15 +44,20 @@ class Company < ActiveRecord::Base
     (admins.count > 1) || (admins.count == 1 && !admins.include?(self))
   end
 
+  def people_on_role role
+    users = []
+    company_people.each do |person|
+      users << person if person.company_roles &&
+          person.company_roles.pluck(:role).include?(role)
+    end
+
+    users
+  end
+
   private
 
   def self.find_users_with_role(company, role)
-    users = []
-    company.company_people.each do |cp|
-                users << cp if cp.company_roles &&
-                               cp.company_roles.pluck(:role).include?(role)
-    end
-    users
+    company.people_on_role role
   end
 
 end

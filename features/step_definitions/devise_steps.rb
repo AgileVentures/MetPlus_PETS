@@ -13,4 +13,11 @@ end
 Then(/^I log(?: ?)out$/) do
   step %{I click the "Log out" link}
 end
+
+
+Given(/^I am logged in as company person$/) do
+	company_person = FactoryGirl.create(:company_person)
+	step %{I am on the home page}
+  	step %{I login as "unique1@gmail.com" with password "qwerty123"}
+end
   

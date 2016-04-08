@@ -1,16 +1,12 @@
 %h4
 	=link_to job.title, job_path(job)
-/ uncomment after company association
-/ is done.
-/ and delete the line following it.
-/ %h5= job.company.name
-%h5 Walmart a placeholder 
-	
+%h5= job.company.name
 %small
 	= "#{time_ago_in_words(job.created_at, )} ago"
 	=render partial: 'modal', locals: {job: job}
-	%button.btn.btn-primary.btn-xs.pull-right#jobs-delete-link{"data-target" => "#myModal",
-	 "data-toggle" => "modal", :type => "button"}
-		delete
-	=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", 
-	       id: "jobs-edit-link"
+	-if @company_person
+		%button.btn.btn-primary.btn-xs.pull-right#jobs-delete-link{"data-target" => "#myModal",
+		 "data-toggle" => "modal", :type => "button"}
+			delete
+		=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", 
+		       id: "jobs-edit-link"

@@ -47,6 +47,10 @@ gem 'bootstrap-will_paginate'
 
 gem 'cancancan', '~> 1.10'
 
+gem 'pusher'
+
+gem 'js_cookie_rails'
+
 # gem 'nokogiri', '~> 1.6', '>= 1.6.7'
 
 # Use Unicorn as the app server
@@ -56,11 +60,13 @@ gem 'cancancan', '~> 1.10'
 # gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
+
+gem 'delayed_job_active_record'
+
 # later we can strict the faker
 # to staging && development
 gem 'ffaker'
 gem 'faker'
-# gem 'jquery-turbolinks' #will solve reload problems with javascript
 
 
 

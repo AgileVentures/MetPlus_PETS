@@ -1,14 +1,20 @@
 class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
+	before_action :authentication_for_post_or_edit, only: [:new, :edit] 
 
 	def index
-		# @jobs = Job.paginate(:page => params[:page], :per_page => 32).includes(:company)
-		@jobs = Job.paginate(:page => params[:page], :per_page => 32)
+		if company_person?
+			@jobs = @company_person.company.jobs.paginate(:page => params[:page],
+				                                        :per_page => 32)
+		else
+			@jobs = Job.paginate(:page => params[:page],
+				               :per_page => 32).includes(:company)
+		end
 	end	
 
 	def new
-		@job = Job.new
-	end
+		@job = Job.new(:company_id => params[:company_id])
+	end 
 
 	def create
 		@job = Job.new(job_params)
@@ -42,6 +48,27 @@ class JobsController < ApplicationController
 	end
 
 	private 
+
+		def authentication_for_post_or_edit 
+			if !company_person?
+			   flash[:alert] = "Sorry, You are not allowed to post or edit a job!"
+			   redirect_to jobs_url 
+			end  
+		end
+
+		def set_company_person
+			@company_person = pets_user 
+		end
+
+		def company_person?
+			if pets_user.is_a?(CompanyPerson)
+				set_company_person
+				return true
+			else
+				return false
+			end
+		end
+
 		def find_job
 			@job = Job.find(params[:id])
 		end
@@ -49,7 +76,8 @@ class JobsController < ApplicationController
 		def job_params
 			# params.require(:job).permit(:description, :company_id, :shift, 
 			#   :company_person_id, :fulltime, :company_job_id, :job_category_id, :title)
-			params.require(:job).permit(:description, :shift, :fulltime, :company_job_id, :title)
+			params.require(:job).permit(:description, :shift, :company_job_id,
+			                            :fulltime,:company_id, :title)
 		end
 
 
