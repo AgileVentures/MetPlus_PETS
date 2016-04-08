@@ -4,9 +4,8 @@
     .col-sm-3
       = branch_form.text_field :code, size: 8, class: 'form-control'
 
-  - @parent_form = branch_form
-  = render partial: 'address/addressform', locals: {fields_for_name: 'address'}
-
+    
+  = render partial: 'address/addressform', locals: {fields_for_name: 'address', address_form: branch_form}
 
   .form-group
     .col-sm-2.col-sm-offset-2
