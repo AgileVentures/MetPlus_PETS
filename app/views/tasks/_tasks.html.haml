@@ -4,7 +4,7 @@
       %td
         Task
       %td
-        State
+        Status
       %td
         Entities associated
       %td
@@ -13,10 +13,10 @@
         Options
   %tbody
     - all_tasks.each do |task|
-      %tr
+      %tr{:id => "task-#{task.id}"}
         %td
           = task.description
-        %td
+        %td{:id => "task-#{task.id}-status"}
           - if task.status == Task::STATUS[:NEW]
             = task.status
           - else
@@ -59,4 +59,4 @@
                            id: "done-#{task.id}",
                            data:{'url': done_task_path(task)} do
               %i.fa.fa-flag-checkered.fa-1
-= will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'task', :action => 'tasks', :task_type => task_type}
+= will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'tasks', :action => 'tasks', :task_type => task_type}

@@ -123,8 +123,10 @@ var TaskModal = {
               if ($("#task_assign_select").val() === null) {
                   return;
               }
-              var url = $('#task_assign_select').closest('form').attr('action');
-              var post_data = {to: $("#task_assign_select").val()};
+              var url = $('#task_assign_select').closest('form').attr('action') + '/' + $("#task_assign_select").val();
+              var post_data = {};
+
+              console.log("Submit form to: " + url);
               $.ajax({
                   type: 'PATCH',
                   url: url,
@@ -151,6 +153,6 @@ var TaskModal = {
   }
 };
 
-$(function () {
+$(document).ready(function () {
     TaskModal.setup();
 });
