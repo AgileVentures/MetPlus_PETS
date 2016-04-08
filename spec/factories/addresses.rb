@@ -5,6 +5,7 @@ FactoryGirl.define do
     zipcode "01746"
     location_id 1
     location_type "MyString"
+    state "MyString"
   end
 
 end

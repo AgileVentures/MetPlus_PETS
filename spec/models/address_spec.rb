@@ -15,6 +15,7 @@ RSpec.describe Address, type: :model do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :street }
     it { is_expected.to have_db_column :city }
+    it { is_expected.to have_db_column :state }
     it { is_expected.to have_db_column :zipcode }
     it { is_expected.to have_db_column :location_id }
     it { is_expected.to have_db_column :location_type }
@@ -23,6 +24,7 @@ RSpec.describe Address, type: :model do
   describe 'Validations' do
     it { is_expected.to validate_presence_of :street }
     it { is_expected.to validate_presence_of :city }
+    it { is_expected.to validate_presence_of :state }
     it 'validates correct zip code format' do
       expect(FactoryGirl.build(:address, zipcode: '33445')).to be_valid
       expect(FactoryGirl.build(:address, zipcode: '55555-4444')).to be_valid
