@@ -11,7 +11,7 @@ When(/^I go to the (.+) page$/) do |page|
     when 'home'
       visit root_path
     when 'tasks'
-      visit task_index_path
+      visit tasks_path
 
     when /activation for user '.+'/
       user = page.match(/'(.+)'/)

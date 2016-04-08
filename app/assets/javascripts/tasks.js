@@ -1,7 +1,7 @@
 var TaskManager = function (holder_id, task_type) {
 
     var self = this;
-    this.last_load_url = "/task/tasks/" + task_type;
+    this.last_load_url = "/tasks/tasks/" + task_type;
 
     this.success_notification = function(text) {
         noty({text: text,
@@ -22,7 +22,7 @@ var TaskManager = function (holder_id, task_type) {
         $("#task_assign_select").select2({
             placeholder: "Select the user",
             ajax: {
-                url: "/task/" + task_id + "/list_owners",
+                url: "/tasks/" + task_id + "/list_owners",
                 dataType: 'json',
                 type: "GET",
                 delay: 250,
@@ -36,7 +36,7 @@ var TaskManager = function (holder_id, task_type) {
                 cache: true
             }
         });
-        $('#task_assign_select').closest('form').attr('action','/task/' + task_id + '/assign');
+        $('#task_assign_select').closest('form').attr('action','/tasks/' + task_id + '/assign');
         $('#assignTaskModal_button').data('location',self.holder_id);
     };
 

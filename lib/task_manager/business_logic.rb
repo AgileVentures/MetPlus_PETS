@@ -62,7 +62,7 @@ module BusinessLogic
   end
 
   def assignable_list
-    return [] if not owner.nil?
+    return [] unless owner.nil?
     info = ASSIGNABLE_LIST[task_type.to_sym]
     if info[:type] == :agency
       return Agency.send info[:function], task_owner[0].agency

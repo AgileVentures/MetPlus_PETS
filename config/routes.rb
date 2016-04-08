@@ -78,14 +78,13 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # ----------------------- Tasks --------------------------------------------
-  resources :task, only: [:index] do
+  resources :tasks, only: [:index] do
     patch 'assign', on: :member, as: :assign
     patch 'in_progress', on: :member, as: :in_progress
     patch 'done', on: :member, as: :done
     get 'list_owners', on: :member, as: :list_owners
   end
-  #match  '/task/tasks'   => 'task#tasks',        via: 'get'
-  get 'task/tasks/:task_type' => 'task#tasks'
+  get 'tasks/tasks/:task_type' => 'task#tasks'
   # --------------------------------------------------------------------------
 
   root 'main#index'

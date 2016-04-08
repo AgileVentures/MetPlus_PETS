@@ -1,4 +1,4 @@
-class TaskController < ApplicationController
+class TasksController < ApplicationController
   include Tasks
   def index
     @task_type_t1 = 'mine-open'

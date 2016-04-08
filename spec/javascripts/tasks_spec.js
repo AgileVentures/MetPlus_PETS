@@ -13,7 +13,7 @@ describe('Tasks', function () {
             spyOn(Notification, 'error_notification');
             spyOn(taskManager, 'init');
             request = jasmine.Ajax.requests.mostRecent();
-            expect(request.url).toMatch(/\/task\/tasks\/mine-open\?tasks_page=2/);
+            expect(request.url).toMatch(/\/tasks\/tasks\/mine-open\?tasks_page=2/);
             expect(request.method).toBe('GET');
         });
         afterEach(function(){
@@ -34,7 +34,7 @@ describe('Tasks', function () {
             spyOn(Notification, 'error_notification');
             spyOn(taskManager, 'refresh_tasks');
             request = jasmine.Ajax.requests.mostRecent();
-            expect(request.url).toBe('/task/2/in_progress');
+            expect(request.url).toBe('/tasks/2/in_progress');
             expect(request.method).toBe('PATCH');
         });
         afterEach(function(){
@@ -68,7 +68,7 @@ describe('Tasks', function () {
             spyOn(Notification, 'error_notification');
             spyOn(taskManager, 'refresh_tasks');
             request = jasmine.Ajax.requests.mostRecent();
-            expect(request.url).toBe('/task/3/done');
+            expect(request.url).toBe('/tasks/3/done');
             expect(request.method).toBe('PATCH');
         });
         afterEach(function(){

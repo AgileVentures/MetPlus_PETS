@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TaskController, type: :controller do
+RSpec.describe TasksController, type: :controller do
 
   describe "PATCH #assign" do
     describe 'successful' do
