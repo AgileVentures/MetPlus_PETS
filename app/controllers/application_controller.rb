@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
       when JobSeeker
         return job_seekers_home_path(person)
     end
-    return root_path
+    stored_location_for(resource) || request.referer || root_path
   end
 
   protected

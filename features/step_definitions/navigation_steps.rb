@@ -10,10 +10,10 @@ def page_translator name
     when 'home'
       return root_path
     when /Job Seeker '.+' Home/
-      user = page.match(/'(.+)'/)
-      return job_seeker_home_path(User.find_by_email(user[1]))
+      user = name.match(/'(.+)'/)
+      return job_seekers_home_path(User.find_by_email(user[1]))
     when /activation for user '.+'/
-      user = page.match(/'(.+)'/)
+      user = name.match(/'(.+)'/)
       if user[1] =~ /@/
         return activate_user_path(User.find_by_email(user[1]).activation_token)
       else

@@ -21,7 +21,7 @@ Feature: Manage Users
 	  | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
 	  | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
-		Given the following user records:
+		Given the following job_seeker records:
 		| email               | password   | password_confirmation | first_name | last_name | phone          | confirmed_at                      |
 		| salemamba@gmail.com | secret1234 | secret1234            | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |
 
@@ -66,10 +66,11 @@ Feature: Manage Users
 		And I should be on the home page
 	# maybe fail after cancancan implementation
 
-	Scenario: Redirecting back to previous page after successfull login
-		Given I am on the Company Registration page
-		And I am logged in as "<email>" with password "secret1234"
-		And I should be on the Company Registration page
+	# Scenario removed because now the users are redirected to they page
+	#Scenario: Redirecting back to previous page after successfull login
+	#	Given I am on the Company Registration page
+	#	And I am logged in as "<email>" with password "secret1234"
+	#	And I should be on the Company Registration page
 
 	Scenario: Confirmation of user email (and duplicate confirm)
 		Given I am on the Jobseeker Registration page
