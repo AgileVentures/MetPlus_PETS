@@ -52,7 +52,7 @@ var TaskManager = function (holder_id, task_type) {
                 self.init();
             },
             error: function (xhrObj, status, exception) {
-                self.error_notification(xhrObj.responseJSON['message']);
+                Notification.error_notification(xhrObj.responseJSON['message']);
             }
         });
     };
@@ -72,11 +72,11 @@ var TaskManager = function (holder_id, task_type) {
             data: {},
             timeout: 5000,
             success: function (){
-                self.success_notification('Work on the task started');
+                Notification.success_notification('Work on the task started');
                 self.refresh_tasks();
             },
             error: function (xhrObj, status, exception) {
-                self.error_notification(xhrObj.responseJSON['message']);
+                Notification.error_notification(xhrObj.responseJSON['message']);
             }
         });
     };
@@ -87,11 +87,11 @@ var TaskManager = function (holder_id, task_type) {
             data: {},
             timeout: 5000,
             success: function (){
-                self.success_notification('Work on the task is done');
+                Notification.success_notification('Work on the task is done');
                 self.refresh_tasks();
             },
             error: function (xhrObj, status, exception) {
-                self.error_notification(xhrObj.responseJSON['message']);
+                Notification.error_notification(xhrObj.responseJSON['message']);
             }
         });
         return false;
@@ -131,22 +131,12 @@ var TaskModal = {
                   data: post_data,
                   timeout: 5000,
                   success: function () {
-                      noty({
-                          text: 'Task assigned',
-                          theme: 'bootstrapTheme',
-                          layout: 'bottomRight',
-                          type: 'success'
-                      });
+                      Notification.success_notification('Task assigned');
                       TaskManagerHolder($('#assignTaskModal_button').data('location'), "").refresh_tasks();
                       $("#assignTaskModal").modal('hide');
                   },
                   error: function (xhrObj, status, exception) {
-                      noty({
-                          text: xhrObj['message'],
-                          theme: 'bootstrapTheme',
-                          layout: 'bottomRight',
-                          type: 'error'
-                      });
+                      Notification.error_notification(xhrObj.responseJSON['message']);
                   }
               });
               return false;

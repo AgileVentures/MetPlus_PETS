@@ -48,7 +48,6 @@ Feature: Have a task system in the site
     Then I should see "Signed in successfully."
     Then I go to the tasks page
     And I should see "Job Seeker has no assigned Job Developer"
-    And I should see "Job Seeker has no assigned Case Manager"
     Then I press the assign button of the task 1
     And I should see "Select the user to assign the task to:"
     And I select "Smith, John" in select list "task_assign_select"

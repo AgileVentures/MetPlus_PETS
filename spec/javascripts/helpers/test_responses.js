@@ -1,5 +1,12 @@
 var TestResponses = {
     tasks: {
+        paginate: {
+            success: {
+                status: 200,
+                contentType: 'text/html',
+                responseText: 'Freshly baked tasks'
+            }
+        },
         wip: {
             success: {
                 status: 200,
