@@ -8,6 +8,14 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :store_current_location, :unless => :devise_controller?
 
+  def after_sign_in_path_for(resource)
+    person = resource.pets_user
+    case person
+      when JobSeeker
+        return job_seekers_home_path(person)
+    end
+    return root_path
+  end
 
   protected
 
