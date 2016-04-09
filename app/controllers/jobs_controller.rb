@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
-	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update] 
+	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy] 
 	before_action :is_company_person_job, only: [:edit, :destroy, :update]
 
 
@@ -58,7 +58,7 @@ class JobsController < ApplicationController
 
 		def authentication_for_post_or_edit 
 			if !company_person?
-			   flash[:alert] = "Sorry, You are not allowed to post or edit a job!"  
+			   flash[:alert] = "Sorry, You are not permitted to post, edit or delete a job!"  
 			   redirect_to jobs_url 
 			else
 			   set_company_person

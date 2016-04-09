@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe JobsController, type: :controller do
 
   before(:example) do 
+
       @company_person = FactoryGirl.create(:company_person) 
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in @company_person 
@@ -111,7 +112,7 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe "unauthorized user  " do
-    before(:each) do 
+    before(:example) do 
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:user)
     end
@@ -124,7 +125,7 @@ RSpec.describe JobsController, type: :controller do
       request.env["HTTP_REFERER"] = '/'
       get :new 
       redirect_to '/'
-      should set_flash.to("Sorry, You are not allowed to post or edit a job!") 
+      should set_flash.to( "Sorry, You are not permitted to post, edit or delete a job!") 
     end
   end
 
@@ -307,7 +308,7 @@ RSpec.describe JobsController, type: :controller do
   end
 
 
-  describe 'DELETE #destroy happy path' do
+  describe 'DELETE #destroy sad path, for different company_person ' do
     
     before(:example){ delete :destroy, :id => @job.id} 
 
@@ -323,11 +324,11 @@ RSpec.describe JobsController, type: :controller do
 
 
     before(:example) do 
+      sign_out @company_person
       @company_person = FactoryGirl.create(:company_person) 
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in @company_person 
+      sign_in @company_person.acting_as  
     end
-
 
     before(:example){ delete :destroy, :id => @job_2.id} 
 
@@ -339,7 +340,48 @@ RSpec.describe JobsController, type: :controller do
       expect(response).not_to render_template(' ')
     end 
 
+    it do
+     should set_flash.to("Sorry, you can't edit or delete #{@job.company.name} job!")
+    end
+
+  end
+
+
+  describe 'DELETE #destroy sad path, jobseeker' do
+    
+    before(:example){ delete :destroy, :id => @job.id} 
+
+    it "is a success" do 
+      expect(response).to have_http_status(302)
+    end
+
+    it "renders 'delete' template" do
+      expect(response).not_to render_template(' ')
+    end 
+
     it { should set_flash }
+
+
+    before(:example) do 
+      sign_out @company_person
+      @job_seeker = FactoryGirl.create(:job_seeker) 
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in @job_seeker.acting_as  
+    end
+
+    before(:example){ delete :destroy, :id => @job_2.id} 
+
+    it "is a success" do 
+      expect(response).to have_http_status(302)
+    end
+
+    it "renders 'delete' template" do
+      expect(response).not_to render_template(' ')
+    end 
+
+    it do
+     should set_flash.to("Sorry, You are not permitted to post, edit or delete a job!" )
+    end
 
   end
 
