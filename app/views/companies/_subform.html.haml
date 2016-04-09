@@ -1,48 +1,35 @@
 .form-group
   = label :company, :name, 'Company Name', class: 'control-label col-sm-2'
   .col-sm-6
-    = @cmp_form.text_field :name, size: 30, class: 'form-control'
+    = @address_form.text_field :name, size: 30, class: 'form-control'
 
-= @cmp_form.fields_for :addresses do |address_f|
-  .form-group
-    = address_f.label :street, 'Company Address', class: 'control-label col-sm-2'
-    .col-sm-6
-      = address_f.text_field :street, class: 'form-control'
-
-  .form-group
-    = address_f.label :city, 'City', class: 'control-label col-sm-2'
-    .col-sm-3
-      = address_f.text_field :city, size: 30, class: 'form-control'
-
-  .form-group
-    = address_f.label :zipcode, 'Zipcode', class: 'control-label col-sm-2'
-    .col-sm-2
-      = address_f.text_field :zipcode, size: 10, class: 'form-control'
+= render partial: 'address/addressform', locals: {fields_for_name: 'addresses' }
 
 .form-group
   = label :company, :email, 'Email', class: 'control-label col-sm-2'
   .col-sm-4
-    = @cmp_form.email_field :email, size: 30, class: 'form-control'
+    = @address_form.email_field :email, size: 30, class: 'form-control'
 
   = label :company, :phone, 'Phone', class: 'control-label col-sm-2'
   .col-sm-4
-    = @cmp_form.phone_field :phone, size: 30, class: 'form-control'
+    = @address_form.phone_field :phone, size: 30, class: 'form-control'
 
 .form-group
   = label :company, :fax, 'Fax', class: 'control-label col-sm-2'
   .col-sm-4
-    = @cmp_form.phone_field :fax, size: 30, class: 'form-control'
+    = @address_form.phone_field :fax, size: 30, class: 'form-control'
 
 .form-group
   = label :company, :website, 'Company Website', class: 'control-label col-sm-2'
   .col-sm-4
-    = @cmp_form.text_field :website, size: 30, class: 'form-control'
+    = @address_form.text_field :website, size: 30, class: 'form-control'
 
   = label :company, :ein, 'Employer Identification Number', class: 'control-label col-sm-2'
   .col-sm-4
-    = @cmp_form.text_field :ein, size: 30, class: 'form-control'
+    = @address_form.text_field :ein, size: 30, class: 'form-control'
 
 .form-group
   = label :company, :description, 'Description', class: 'control-label col-sm-2'
   .col-sm-10
-    = @cmp_form.text_area :description, cols: 90, rows: 5, class: 'form-control'
+    = @address_form.text_area :description, cols: 90, rows: 5, class: 'form-control'
+
