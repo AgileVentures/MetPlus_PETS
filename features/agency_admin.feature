@@ -22,10 +22,10 @@ Background: seed data added to database and log in as agency admim
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
   Given the following agency branches exist:
-  | agency  | city    | street              | zipcode | code |
-  | MetPlus | Detroit | 123 Main Street     | 48201   | 001  |
-  | MetPlus | Detroit | 456 Sullivan Street | 48204   | 002  |
-  | MetPlus | Detroit | 3 Auto Drive        | 48206   | 003  |
+  | agency  | state     | city     | street              | zipcode | code |
+  | MetPlus | Michigan  |  Detroit | 123 Main Street     | 48201   | 001  |
+  | MetPlus | Michigan  |  Detroit | 456 Sullivan Street | 48204   | 002  |
+  | MetPlus | Mighigan  |  Detroit | 3 Auto Drive        | 48206   | 003  |
 
   Given the following job categories exist:
   | name                      | description                         |
@@ -109,6 +109,8 @@ Scenario: edit branch
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "004"
+  And I fill in "City" with "San Jose"
+  Then I select "California" in select list "State"
   And I click the "Update" button
   Then I should see "Branch was successfully updated."
 
@@ -139,6 +141,7 @@ Scenario: new agency branch
   Then I fill in "Branch Code" with "004"
   And I fill in "Street" with "10 Ford Way"
   And I fill in "City" with "Detroit"
+  Then I select "Michigan" in select list "State"
   And I fill in "Zipcode" with "48208"
   And I click the "Create" button
   Then I should see "Branch was successfully created."
