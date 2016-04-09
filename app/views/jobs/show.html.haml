@@ -23,13 +23,12 @@
 			%tr
 				%td Location:
 				%td
-					/ =@job.address.street 
-					123 43rd street 
+					=@job.address.street 
+					
 					%br
-					/ #{@job.address.city}, MI 
-					Detroit 
-					/ =@job.address.zipcode 
-					92100
+					#{@job.address.city}, MI  
+					=@job.address.zipcode 
+					
 			%tr
 				%td Job category:
 				/ %td=@job.job_category.name 
