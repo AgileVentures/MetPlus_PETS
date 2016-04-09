@@ -50,4 +50,29 @@ describe CompanyPerson, type: :model do
     end
   end
 
+  describe '#is_company_contact?' do
+    let(:company) {FactoryGirl.create(:company)}
+    let(:company1) {FactoryGirl.create(:company)}
+    let(:person) {FactoryGirl.create(:company_contact, :company => company)}
+    let(:person_other_company) {FactoryGirl.create(:company_contact, :company => company1)}
+    it 'correct' do
+      expect(person.is_company_contact?(company)).to be true
+    end
+    it 'incorrect' do
+      expect(person_other_company.is_company_contact?(company)).to be false
+    end
+  end
+
+  describe '#is_company_admin?' do
+    let(:company) {FactoryGirl.create(:company)}
+    let(:company1) {FactoryGirl.create(:company)}
+    let(:person) {FactoryGirl.create(:company_admin, :company => company)}
+    let(:person_other_company) {FactoryGirl.create(:company_admin, :company => company1)}
+    it 'correct' do
+      expect(person.is_company_admin?(company)).to be true
+    end
+    it 'incorrect' do
+      expect(person_other_company.is_company_admin?(company)).to be false
+    end
+  end
 end

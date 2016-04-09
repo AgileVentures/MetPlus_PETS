@@ -48,7 +48,7 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
     end
   end
 
-  context 'eligible_job_seekers_for_role' do
+  context 'job_seeker / agency_person relationships' do
     let(:agency) { FactoryGirl.create(:agency) }
 
     let!(:aa_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
@@ -100,5 +100,6 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
       expect(eligible_job_seekers_for_role(jd_person, :CM)).
                           to match_array [bob, charles, dave]
     end
+
   end
 end

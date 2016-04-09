@@ -40,4 +40,19 @@ class CompanyPerson < ActiveRecord::Base
     not other_company_admin?
   end
 
+
+  def is_company_admin? company
+    return false if self.company != company
+    has_role?(:CA)
+  end
+
+  def is_company_contact? company
+    return false if self.company != company
+    has_role?(:CC)
+  end
+
+  private
+  def has_role? role
+    company_roles.pluck(:role).include?CompanyRole::ROLE[role]
+  end
 end

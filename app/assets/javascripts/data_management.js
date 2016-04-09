@@ -21,7 +21,7 @@ var ManageData = {
     }
   },
 
-  update_paginate_data: function () {
+  update_paginate_data: function (event) {
     // This helper function will update visible data when a will_paginate
     // link is clicked.
     // The data to be updated must be enclosed in a div (here, 'div_id')
@@ -42,7 +42,7 @@ var ManageData = {
     if ($(this).parent().hasClass('disabled')) { return false; };
 
     // 'event.currentTarget' is the div element that delegated the event
-    var div_id = '#' + $(event.currentTarget).attr('id')
+    var div_id = '#' + $(event.delegateTarget).attr('id')
 
     // 'this' is anchor element that recieved the event
     var link_url = $(this).attr('href');

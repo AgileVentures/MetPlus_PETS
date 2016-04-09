@@ -13,8 +13,8 @@ class Job < ActiveRecord::Base
 
   SHIFT_OPTIONS = ['Morning', 'Day', 'Evening']
   validates_presence_of :title
-  validates_presence_of :company_job_id  
-  validates_presence_of :fulltime, allow_blank: true 
+  validates_presence_of :company_job_id
+  validates_presence_of :fulltime, allow_blank: true
   validates_inclusion_of :shift, :in => SHIFT_OPTIONS,
   :message => "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
@@ -22,7 +22,8 @@ class Job < ActiveRecord::Base
   validates_length_of   :description, maximum: 10000
   validates_presence_of :company_id
   validates_presence_of :company_person_id
-
   #validates_presence_of :job_category_id
-    
+  scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
+
+  
 end
