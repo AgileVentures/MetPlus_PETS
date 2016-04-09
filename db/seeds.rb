@@ -300,15 +300,15 @@ if Rails.env.development? # || Rails.env.staging?
   end
 
   branch = Branch.create(code: '001', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
+  branch.address = Address.create!(city: 'Detroit', state: "MI",
               street: '123 Main Street', zipcode: 48201)
 
   branch = Branch.create(code: '002', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
+  branch.address = Address.create!(city: 'Detroit',state: "MI",
               street: '456 Sullivan Street', zipcode: 48204)
 
   branch = Branch.create(code: '003', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
+  branch.address = Address.create!(city: 'Detroit',state: "MI",
               street: '3 Auto Drive', zipcode: 48206)
 
   puts "Branches created: #{Branch.count}"
