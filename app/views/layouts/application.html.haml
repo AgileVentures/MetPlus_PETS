@@ -40,8 +40,7 @@
             - @model_errors.full_messages.each do |msg|
               %li= msg
       %div{:class => 'row'}
-        = yield
-      = debug(params) if Rails.env.development? 
+        = yield 
     = render 'layouts/footer'
 
 %script
