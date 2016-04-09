@@ -19,22 +19,29 @@ class CruncherService
     raise "Unsupported file type for: #{file_name}" if
           not Resume::FILETYPES.include? mime_type.first.preferred_extension
 
-    result = RestClient.post(service_url + '/curriculum/upload',
-      { 'file'   => file,
-        'name'   => file_name,
-        'userId' => user_id },
-      { 'Accept' => 'application/json',
-        'X-Auth-Token' => auth_token,
-        'Content-Type' => mime_type.first.content_type })
+    retry_upload = true
+    begin
+      result = RestClient.post(service_url + '/curriculum/upload',
+              { 'file'   => file,
+                'name'   => file_name,
+                'userId' => user_id },
+              { 'Accept' => 'application/json',
+                'X-Auth-Token' => auth_token,
+                'Content-Type' => mime_type.first.content_type })
 
-    result_code = JSON.parse(result)['resultCode']
-    message     = JSON.parse(result)['message']
+      return JSON.parse(result)['resultCode'] == 'SUCCESS'
 
-    return true if result_code == 'SUCCESS'
-    false
+    rescue RestClient::Unauthorized   # most likely expired token
+      # Retry and force refresh of cached auth_token
+      self.auth_token = nil
+      if retry_upload
+        retry_upload == false
+        file = file.open # reopen as .post closes the file
+        retry
+      end
+      raise
+    end
   end
-
-  private
 
   def self.auth_token
     return @@auth_token if @@auth_token
@@ -42,7 +49,14 @@ class CruncherService
     result = RestClient.post(service_url + '/authenticate', {},
                 {'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
                  'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD']})
-    @@auth_token =  JSON.parse(result)['token']
+
+    raise "Invalid credentials for Cruncher access" if result.code == 401
+
+    self.auth_token =  JSON.parse(result)['token']
+  end
+
+  def self.auth_token=(token)
+    @@auth_token =  token
   end
 
 end
