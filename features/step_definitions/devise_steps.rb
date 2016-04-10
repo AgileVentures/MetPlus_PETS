@@ -3,7 +3,6 @@ And(/^I (?:login|am logged in) as "([^"]*)" with password "([^"]*)"$/) do |email
   step %{I fill in "user_email" with "#{email}"}
   step %{I fill in "user_password" with "#{password}"}
   step %{I click "Log in" button}
-  step %{I should see "Signed in successfully."}
 end
 
 Given(/^I am logged in as agency admin$/) do
