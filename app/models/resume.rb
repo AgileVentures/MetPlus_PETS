@@ -24,12 +24,4 @@ class Resume < ActiveRecord::Base
     destroy
     false
   end
-
-  # private
-  #
-  # def upload_resume
-  #   # 'file' is a Ruby File object
-  #   # file type must confirm to acceptable file types defined above
-  #   ResumeCruncher.upload_resume(file, file_name, job_seeker_id)
-  # end
 end
