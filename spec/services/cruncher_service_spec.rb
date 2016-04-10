@@ -11,7 +11,7 @@ RSpec.describe CruncherService, type: :request do
         '/curriculum/upload',
       { 'file'   => fixture_file_upload('files/Admin-Assistant-Resume.pdf'),
         'name'   => 'Admin-Assistant-Resume.pdf',
-        'userId' => 'test_user' },
+        'userId' => 'test_id' },
       { 'Accept' => 'application/json',
         'X-Auth-Token' => JSON.parse(auth_result)['token'],
         'Content-Type' => 'application/pdf' })}
@@ -77,14 +77,14 @@ RSpec.describe CruncherService, type: :request do
         file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
         expect(CruncherService.upload_file(file,
                                     'Admin-Assistant-Resume.pdf',
-                                    'test_user')).to be true
+                                    'test_id')).to be true
       end
 
       it 'raises error for invalid file type' do
         file = fixture_file_upload('files/Example Excel File.xls')
         expect{ CruncherService.upload_file(file,
                                     'Example Excel File.xls',
-                                    'test_user') }.
+                                    'test_id') }.
                       to raise_error(RuntimeError)
       end
 
@@ -92,14 +92,14 @@ RSpec.describe CruncherService, type: :request do
         file = fixture_file_upload('files/Test File.zzz')
         expect{ CruncherService.upload_file(file,
                                     'Test File.zzz',
-                                    'test_user') }.
+                                    'test_id') }.
                       to raise_error(RuntimeError)
       end
       it 'retries for expired auth_token' do
         file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
         expect(CruncherService.upload_file(file,
                                     'Admin-Assistant-Resume.pdf',
-                                    'test_user')).to be true
+                                    'test_id')).to be true
 
         CruncherService.auth_token = 'expired'
 
@@ -109,7 +109,7 @@ RSpec.describe CruncherService, type: :request do
         file = fixture_file_upload('files/Janitor-Resume.doc')
         expect(CruncherService.upload_file(file,
                                     'Janitor-Resume.doc',
-                                    'test_user')).to be true
+                                    'test_id')).to be true
       end
     end
   end

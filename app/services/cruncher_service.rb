@@ -12,7 +12,7 @@ class CruncherService
     @@service_url
   end
 
-  def self.upload_file(file, file_name, user_id)
+  def self.upload_file(file, file_name, file_id)
     mime_type = MIME::Types.type_for(URI.escape(file_name))
 
     raise "Invalid MIME type for file: #{file_name}" if mime_type.empty?
@@ -24,7 +24,7 @@ class CruncherService
       result = RestClient.post(service_url + '/curriculum/upload',
               { 'file'   => file,
                 'name'   => file_name,
-                'userId' => user_id },
+                'userId' => file_id },
               { 'Accept' => 'application/json',
                 'X-Auth-Token' => auth_token,
                 'Content-Type' => mime_type.first.content_type })

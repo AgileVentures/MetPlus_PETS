@@ -13,7 +13,7 @@ RSpec.describe Resume, type: :model do
     it { is_expected.to have_db_column :job_seeker_id }
   end
 
-  describe 'Resume' do
+  describe 'Resume instance' do
     it 'is valid with all required fields' do
       file = fixture_file_upload('files/Janitor-Resume.doc')
       resume = Resume.new(file_name: 'testfile.doc',
@@ -22,5 +22,60 @@ RSpec.describe Resume, type: :model do
 
       expect(resume).to be_valid
     end
+    it 'is invalid without all required fields' do
+      file = fixture_file_upload('files/Janitor-Resume.doc')
+
+      resume = Resume.new(file_name: 'testfile.doc',
+              job_seeker_id: FactoryGirl.create(:job_seeker).id)
+      expect(resume).not_to be_valid
+      resume = Resume.new(file_name: nil,
+              job_seeker_id: FactoryGirl.create(:job_seeker).id,
+              file: file)
+      expect(resume).not_to be_valid
+      resume = Resume.new(file_name: 'testfile.doc',
+              job_seeker_id: nil,
+              file: file)
+      expect(resume).not_to be_valid
+
+    end
   end
+
+  context 'saving model instance and resume file' do
+    let(:job_seeker) {FactoryGirl.create(:job_seeker)}
+
+    it 'succeeds with valid model and file type' do
+      file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: job_seeker.id)
+      expect(resume.save).to be true
+    end
+
+    it 'fails with invalid model and valid file type' do
+      file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: nil)
+      expect(resume.save).to be false
+      expect(resume.errors.full_messages).
+              to contain_exactly("Job seeker can't be blank")
+    end
+
+    it 'fails with valid model and invalid file type' do
+      file = fixture_file_upload('files/Test File.zzz')
+      resume = Resume.new(file: file,
+                          file_name: 'Test File.zzz',
+                          job_seeker_id: job_seeker.id)
+      expect{ resume.save }.to raise_error(RuntimeError)
+    end
+
+    it 'fails with invalid model and invalid file type' do
+      file = fixture_file_upload('files/Test File.zzz')
+      resume = Resume.new(file: file,
+                          file_name: 'nil',
+                          job_seeker_id: job_seeker.id)
+      expect{ resume.save }.to raise_error(RuntimeError)
+    end
+  end
+
 end
