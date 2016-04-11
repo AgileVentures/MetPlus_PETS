@@ -76,7 +76,7 @@ module TaskManager
   ## Assign the current task to a specific person
   def assign person
     raise ArgumentError, 'Task need to be in created state' if status != STATUS[:NEW]
-    send("assign_#{task_type}".to_sym, self, person)
+    send("assign_#{task_type}".to_sym, self, person.pets_user)
   end
 
   ## Change the status of the task to Work In Progress
@@ -93,11 +93,11 @@ module TaskManager
 
   def method_missing(meth, *args, &block)
     if meth.to_s =~ /^wip_(.+)$/
-      return TaskManager::wip_default self, *args, &block
+      return TaskManager::wip_default *args, &block
     elsif meth.to_s =~ /^done_(.+)$/
-      return TaskManager::done_default self, *args, &block
+      return TaskManager::done_default *args, &block
     elsif meth.to_s =~ /^assign_(.+)$/
-      return TaskManager::assign_default self, *args, &block
+      return TaskManager::assign_default *args, &block
     else
       super meth, *args, &block
     end
@@ -114,7 +114,7 @@ module TaskManager
   def self.assign_default task, person, *args, &block
     task.status = STATUS[:ASSIGNED]
     task.task_owner = {:user => person}
-    task.save
+    task.save!
     if args.size == 1 or args[1] != 'no_events'
       Task.unschedule_event :taskCreated, task, :AA
       Task.schedule_event :taskAssigned, task, :AA
@@ -126,7 +126,7 @@ module TaskManager
   # Default function called, if no other specific function exists
   def self.wip_default task, *args, &block
     task.status = STATUS[:WIP]
-    task.save
+    task.save!
     if args.size == 1 or args[1] != 'no_events'
       Task.unschedule_event :taskAssigned, task, :AA
       Task.schedule_event :taskWorkStarted, task, :AA
@@ -138,7 +138,7 @@ module TaskManager
   # Default function called, if no other specific function exists
   def self.done_default task, *args, &block
     task.status = STATUS[:DONE]
-    task.save
+    task.save!
     if args.size == 1 or args[1] != 'no_events'
       Task.unschedule_event :taskWorkStarted, task, :AA
       Task.schedule_event :taskDone, task, :AA

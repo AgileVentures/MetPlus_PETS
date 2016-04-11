@@ -286,4 +286,99 @@ RSpec.describe Task, type: :model do
       expect(Task.find_by_owner_user @company_contact1).to eq [@task_cc, @task_all_cc]
     end
   end
+  describe 'Find all tasks for a owner' do
+    before :each do
+      @job_seeker = FactoryGirl.create(:job_seeker)
+      @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
+      @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency = FactoryGirl.create(:agency)
+
+      @job_developer = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@jd_role])
+
+      @case_manager = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@cm_role])
+
+      @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+
+      @cc_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
+      @ca_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+
+      @company = FactoryGirl.create(:company)
+      @company_contact = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@cc_role])
+
+
+      @company_admin = FactoryGirl.create(:company_person, :company => @company, :company_roles => [@ca_role])
+
+
+      @task_js_new = FactoryGirl.create(:task, :task_owner => {:user => @job_seeker})
+      @task_js_closed = FactoryGirl.create(:task, :task_owner => {:user => @job_seeker})
+      @task_js_closed.assign @job_seeker
+      @task_js_closed.work_in_progress
+      @task_js_closed.complete
+
+      @task_jd_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
+      @task_jd_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
+      @task_jd_closed.assign @job_developer
+      @task_jd_closed.work_in_progress
+      @task_jd_closed.complete
+
+      @task_cm_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
+      @task_cm_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
+      @task_cm_closed.assign @case_manager
+      @task_cm_closed.work_in_progress
+      @task_cm_closed.complete
+
+      @task_aa_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
+      @task_aa_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
+      @task_aa_closed.assign @agency_admin
+      @task_aa_closed.work_in_progress
+      @task_aa_closed.complete
+
+      @task_ca_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
+      @task_ca_closed = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
+      @task_ca_closed.assign @company_admin
+      @task_ca_closed.work_in_progress
+      @task_ca_closed.complete
+
+      @task_cc_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
+      @task_cc_closed = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
+      @task_cc_closed.assign @company_contact
+      @task_cc_closed.work_in_progress
+      @task_cc_closed.complete
+    end
+    describe 'open tasks' do
+      it 'job developer user' do
+        expect(Task.find_by_owner_user_open @job_developer).to eq [@task_jd_new]
+      end
+      it 'case manager user' do
+        expect(Task.find_by_owner_user_open @case_manager).to eq [@task_cm_new]
+      end
+      it 'agency admin user' do
+        expect(Task.find_by_owner_user_open @agency_admin).to eq [@task_aa_new]
+      end
+      it 'company admin user' do
+        expect(Task.find_by_owner_user_open @company_admin).to eq [@task_ca_new]
+      end
+      it 'company contact user' do
+        expect(Task.find_by_owner_user_open @company_contact).to eq [@task_cc_new]
+      end
+    end
+    describe 'close tasks' do
+      it 'job developer user' do
+        expect(Task.find_by_owner_user_closed @job_developer).to eq [@task_jd_closed]
+      end
+      it 'case manager user' do
+        expect(Task.find_by_owner_user_closed @case_manager).to eq [@task_cm_closed]
+      end
+      it 'agency admin user' do
+        expect(Task.find_by_owner_user_closed @agency_admin).to eq [@task_aa_closed]
+      end
+      it 'company admin user' do
+        expect(Task.find_by_owner_user_closed @company_admin).to eq [@task_ca_closed]
+      end
+      it 'company contact user' do
+        expect(Task.find_by_owner_user_closed @company_contact).to eq [@task_cc_closed]
+      end
+    end
+  end
 end

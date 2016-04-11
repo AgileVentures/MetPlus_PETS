@@ -31,5 +31,10 @@ module ApplicationHelper
               data: {toggle: 'modal', target: "\##{target_div_id}"} )
   end
 
+  def show_person_path person
+    return job_seeker_path person if person.is_job_seeker?
+    return agency_person_path person if person.is_a? AgencyPerson
+    return company_person_path person if person.is_a? CompanyPerson
+  end
 
 end
