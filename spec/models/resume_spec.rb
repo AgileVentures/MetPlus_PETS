@@ -14,7 +14,16 @@ RSpec.describe Resume, type: :model do
   end
 
   describe 'Resume instance' do
+
     it 'is valid with all required fields' do
+
+      stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
       file = fixture_file_upload('files/Janitor-Resume.doc')
       resume = Resume.new(file_name: 'testfile.doc',
               job_seeker_id: FactoryGirl.create(:job_seeker).id,
@@ -23,6 +32,7 @@ RSpec.describe Resume, type: :model do
       expect(resume).to be_valid
     end
     it 'is invalid without all required fields' do
+
       file = fixture_file_upload('files/Janitor-Resume.doc')
 
       resume = Resume.new(file_name: 'testfile.doc',
@@ -43,7 +53,18 @@ RSpec.describe Resume, type: :model do
   context 'saving model instance and resume file' do
     let(:job_seeker) {FactoryGirl.create(:job_seeker)}
 
+    before(:each) do
+      stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+    end
+
     it 'succeeds with valid model and file type' do
+
+      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
       file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
       resume = Resume.new(file: file,
                           file_name: 'Admin-Assistant-Resume.pdf',
@@ -53,6 +74,11 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'fails with invalid model and valid file type' do
+
+      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
       file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
       resume = Resume.new(file: file,
                           file_name: 'Admin-Assistant-Resume.pdf',
@@ -64,6 +90,10 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'fails with valid model and invalid file type' do
+
+      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_raise(RuntimeError)
+
       file = fixture_file_upload('files/Test File.zzz')
       resume = Resume.new(file: file,
                           file_name: 'Test File.zzz',
@@ -73,6 +103,10 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'fails with invalid model and invalid file type' do
+
+      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_raise(RuntimeError)
+
       file = fixture_file_upload('files/Test File.zzz')
       resume = Resume.new(file: file,
                           file_name: 'nil',

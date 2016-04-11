@@ -19,7 +19,17 @@
 require 'rubygems'
 require 'factory_girl'
 require 'email-spec'
-require "codeclimate-test-reporter"
+require 'codeclimate-test-reporter'
+require 'webmock/rspec'
+
+# WebMock config
+
+#  Uncomment to disable Webmock and access external services during test:
+WebMock.disable!
+
+#  This allows non-mocked external service calls to proceed:
+WebMock.allow_net_connect!
+
 CodeClimate::TestReporter.start
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
