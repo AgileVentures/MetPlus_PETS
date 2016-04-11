@@ -1,7 +1,7 @@
 class JobSeeker < ActiveRecord::Base
   acts_as :user
   belongs_to :job_seeker_status
-  #has_one    :resume
+  has_many   :resumes
 
   has_one	   :address, as: :location
   has_many   :agency_relations
