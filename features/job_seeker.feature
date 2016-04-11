@@ -33,6 +33,7 @@ Scenario: login action as jobseeker
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully."
+  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
 
 Scenario: edit Js Registration
   Given I am on the home page

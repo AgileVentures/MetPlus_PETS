@@ -20,4 +20,3 @@ Given(/^I am logged in as company person$/) do
 	step %{I am on the home page}
   	step %{I login as "unique1@gmail.com" with password "qwerty123"}
 end
-  

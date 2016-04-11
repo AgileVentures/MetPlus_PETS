@@ -131,8 +131,9 @@ if Rails.env.development? # || Rails.env.staging?
   200.times do |n|
     street = Faker::Address.street_address
     city = Faker::Address.city
+    state = Faker::Address.state
     zipcode = Faker::Address.zip_code
-    Address.create(street: street, city: city, zipcode: zipcode,
+    Address.create(street: street, city: city, zipcode: zipcode, state: state,
                    location: companies.pop)
   end
 
@@ -143,6 +144,7 @@ if Rails.env.development? # || Rails.env.staging?
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
     JobCategory.create!(name: "#{name}_#{n}", description: description)
+    
   end
   puts "Job Categories created: #{JobCategory.count}"
 
@@ -226,6 +228,43 @@ if Rails.env.development? # || Rails.env.staging?
                      phone: phone,
                      confirmed_at: DateTime.now)
   end
+
+  Job.all.to_a.each_with_index do |job, index|
+    job.address = Address.all.to_a[index]
+  end
+
+  #agency
+  addresses = Address.all.to_a
+  50.times do |n|
+    code = Faker::Code.ean.split(//).shuffle[1..3].join
+    angency = agency
+    Branch.create(:code => code,
+                  agency: angency,
+                  address: addresses.pop)
+  end
+
+  50.times do |n|
+    branch = Branch.create(code: "BR00#{n}", agency: agency)
+    branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: "#{n} Main Street", zipcode: 48201)
+  end
+
+
+
+  branch = Branch.create(code: '001', agency: agency)
+  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: '123 Main Street', zipcode: 48201)
+
+  branch = Branch.create(code: '002', agency: agency)
+  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: '456 Sullivan Street', zipcode: 48204)
+
+  branch = Branch.create(code: '003', agency: agency)
+  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: '3 Auto Drive', zipcode: 48206)
+
+  # Job Seekers
+
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', resume: 'text',
