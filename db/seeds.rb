@@ -169,8 +169,8 @@ if Rails.env.development? # || Rails.env.staging?
                       first_name: first_name,
                        last_name: last_name,
                     confirmed_at: confirmed_at,
-                      company_id: companies.pop.id,
-                      address_id: addresses.pop.id,
+                      company_id: companies[n].id,
+                      address_id: addresses[n].id,
                           status: 'Active')
     cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
     cp.save!
@@ -182,6 +182,7 @@ if Rails.env.development? # || Rails.env.staging?
   jobcategories = JobCategory.all.to_a
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
+  addresses = Address.all.to_a 
   #job
   200.times do |n|
     title = FFaker::Job.title
@@ -189,18 +190,17 @@ if Rails.env.development? # || Rails.env.staging?
     shift = ["Day", "Evening", "Morning"][r.rand(3)]
     fulltime =  [false, true][r.rand(2)]
     jobId = ((1..9).to_a + ('A'..'Z').to_a).shuffle[0..7].join
-    Job.create(title: title,
+    job =Job.create(title: title,
                description: description,
                shift: shift,
                company_job_id: jobId ,
                fulltime: fulltime,
-               company_id: companies.pop.id,
-               company_person_id: companypeople.pop.id,
-               job_category_id: jobcategories.pop.id)
-  end
-
-  Job.all.to_a.each_with_index do |job, index|
-    job.address = Address.all.to_a[index]
+               company_id: companies[n].id,
+               company_person_id: companypeople[n].id,
+               job_category_id: jobcategories[n].id,
+               address_id: addresses[n].id)
+     
+ 
   end
 
   puts "Jobs created: #{Job.count}"
@@ -300,15 +300,15 @@ if Rails.env.development? # || Rails.env.staging?
   end
 
   branch = Branch.create(code: '001', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
+  branch.address = Address.create!(city: 'Detroit', state: "MI",
               street: '123 Main Street', zipcode: 48201)
 
   branch = Branch.create(code: '002', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
+  branch.address = Address.create!(city: 'Detroit',state: "MI",
               street: '456 Sullivan Street', zipcode: 48204)
 
   branch = Branch.create(code: '003', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
+  branch.address = Address.create!(city: 'Detroit',state: "MI",
               street: '3 Auto Drive', zipcode: 48206)
 
   puts "Branches created: #{Branch.count}"
