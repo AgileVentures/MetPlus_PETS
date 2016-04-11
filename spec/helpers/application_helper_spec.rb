@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe ApplicationHelper, type: :helper do
   context 'single_line_address method' do
     it 'returns string for address' do
-      address = FactoryGirl.build(:address)
+      address = FactoryGirl.build(:address, :state => "MI")
       expect(single_line_address(address)).
-          to eq "#{address.street}, #{address.city}, #{address.zipcode}"
+          to eq "#{address.street}, #{address.city}, MI #{address.zipcode}"
     end
     it 'return no-address for nil' do
       expect(single_line_address(nil)).
