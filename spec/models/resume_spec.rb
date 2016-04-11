@@ -49,6 +49,7 @@ RSpec.describe Resume, type: :model do
                           file_name: 'Admin-Assistant-Resume.pdf',
                           job_seeker_id: job_seeker.id)
       expect(resume.save).to be true
+      expect(Resume.count).to eq 1
     end
 
     it 'fails with invalid model and valid file type' do
@@ -59,6 +60,7 @@ RSpec.describe Resume, type: :model do
       expect(resume.save).to be false
       expect(resume.errors.full_messages).
               to contain_exactly("Job seeker can't be blank")
+      expect(Resume.count).to eq 0
     end
 
     it 'fails with valid model and invalid file type' do
@@ -67,6 +69,7 @@ RSpec.describe Resume, type: :model do
                           file_name: 'Test File.zzz',
                           job_seeker_id: job_seeker.id)
       expect{ resume.save }.to raise_error(RuntimeError)
+      expect(Resume.count).to eq 0
     end
 
     it 'fails with invalid model and invalid file type' do
@@ -75,6 +78,7 @@ RSpec.describe Resume, type: :model do
                           file_name: 'nil',
                           job_seeker_id: job_seeker.id)
       expect{ resume.save }.to raise_error(RuntimeError)
+      expect(Resume.count).to eq 0
     end
   end
 

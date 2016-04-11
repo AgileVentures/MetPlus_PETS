@@ -18,10 +18,12 @@ class Resume < ActiveRecord::Base
 
   def save
     return false if not valid? or not super
-    return true if ResumeCruncher.upload_resume(file, file_name, id)
-
-    errors.add(:file, 'could not be uploaded - see system admin')
-    destroy
-    false
+    begin
+      return true if ResumeCruncher.upload_resume(file, file_name, id)
+    rescue
+      errors.add(:file, 'could not be uploaded - see system admin')
+      destroy
+      raise
+    end
   end
 end
