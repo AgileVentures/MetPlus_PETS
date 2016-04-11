@@ -25,5 +25,6 @@ class Resume < ActiveRecord::Base
       destroy
       raise
     end
+    false
   end
 end
