@@ -35,7 +35,7 @@ class CruncherService
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
       if retry_upload
-        retry_upload == false
+        retry_upload = false
         file = file.open # reopen as .post closes the file
         retry
       end
