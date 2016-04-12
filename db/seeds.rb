@@ -3,18 +3,21 @@ require 'ffaker'
 
 puts "Seeding wait......."
 #incase rerun comes in. not necessary
+Address.delete_all
+Agency.delete_all
+AgencyPerson.delete_all
 AgencyRelation.delete_all
+AgencyRole.delete_all
+Branch.delete_all
+Company.delete_all
+CompanyPerson.delete_all
+CompanyRole.delete_all
+Job.delete_all
+JobCategory.delete_all
 JobSeeker.delete_all
 JobSeekerStatus.delete_all
-Job.delete_all
-CompanyPerson.delete_all
-Address.delete_all
-Company.delete_all
-JobCategory.delete_all
 Skill.delete_all
-AgencyPerson.delete_all
-Branch.delete_all
-Agency.delete_all
+Task.delete_all
 User.delete_all
 
 # --------------------------- Seed Production Database --------------------
@@ -81,9 +84,10 @@ if Rails.env.development? || Rails.env.staging?
     end
     cmp.save!
   end
+
   puts "Companies created: #{Company.count}"
 
-  #-------------------------- Addresses -----------------------------------
+  #-------------------------- Company Addresses ---------------------------
   companies = Company.all.to_a
   200.times do |n|
     street = Faker::Address.street_address
@@ -94,15 +98,16 @@ if Rails.env.development? || Rails.env.staging?
                    location: companies.pop)
   end
 
-  puts "Addresses created: #{Address.count}"
+  puts "Company Addresses created: #{Address.count}"
 
   #-------------------------- Job Categories ------------------------------
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
     JobCategory.create!(name: "#{name}_#{n}", description: description)
-    
+
   end
+
   puts "Job Categories created: #{JobCategory.count}"
 
   #-------------------------- Skills --------------------------------------
@@ -110,6 +115,7 @@ if Rails.env.development? || Rails.env.staging?
     Skill.create(name: FFaker::Skill.specialty,
                  description: FFaker::Lorem.sentence)
   end
+
   puts "Skills created: #{Skill.count}"
 
   #-------------------------- Company People ------------------------------
@@ -186,42 +192,6 @@ if Rails.env.development? || Rails.env.staging?
                      confirmed_at: DateTime.now)
   end
 
-  Job.all.to_a.each_with_index do |job, index|
-    job.address = Address.all.to_a[index]
-  end
-
-  #agency
-  addresses = Address.all.to_a
-  50.times do |n|
-    code = Faker::Code.ean.split(//).shuffle[1..3].join
-    angency = agency
-    Branch.create(:code => code,
-                  agency: angency,
-                  address: addresses.pop)
-  end
-
-  50.times do |n|
-    branch = Branch.create(code: "BR00#{n}", agency: agency)
-    branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: "#{n} Main Street", zipcode: 48201)
-  end
-
-
-
-  branch = Branch.create(code: '001', agency: agency)
-  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: '123 Main Street', zipcode: 48201)
-
-  branch = Branch.create(code: '002', agency: agency)
-  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: '456 Sullivan Street', zipcode: 48204)
-
-  branch = Branch.create(code: '003', agency: agency)
-  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: '3 Auto Drive', zipcode: 48206)
-
-  # Job Seekers
-
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', resume: 'text',
@@ -234,6 +204,11 @@ if Rails.env.development? || Rails.env.staging?
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                         email: 'frank@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text',
+            job_seeker_status: @jss3, confirmed_at: Time.now)
+
+  js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
+                        email: 'henry@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 
@@ -257,16 +232,17 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   branch = Branch.create(code: '001', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
-              street: '123 Main Street', state: 'MI', zipcode: 48201)
+
+  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: '123 Main Street', zipcode: 48201)
 
   branch = Branch.create(code: '002', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
-              street: '456 Sullivan Street', state: 'MI', zipcode: 48204)
+  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: '456 Sullivan Street', zipcode: 48204)
 
   branch = Branch.create(code: '003', agency: agency)
-  branch.address = Address.create!(city: 'Detroit',
-              street: '3 Auto Drive', state: 'MI', zipcode: 48206)
+  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
+              street: '3 Auto Drive', zipcode: 48206)
 
   puts "Branches created: #{Branch.count}"
 
@@ -299,6 +275,8 @@ if Rails.env.development? || Rails.env.staging?
   agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_jd.save!
 
+  puts "AgencyPeople created: #{AgencyPerson.count}"
+
   #-------------------------- Agency Relations ----------------------------
   agency_cm_and_jd.agency_relations <<
         AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
@@ -314,6 +292,18 @@ if Rails.env.development? || Rails.env.staging?
   agency_jd.save!
 
   puts "Agency Relations created: #{AgencyRelation.count}"
+
+  #-------------------------- Tasks ---------------------------------------
+  companies = Company.where(status: Company::STATUS[:PND])
+
+  Task.new_js_unassigned_cm_task(js3, agency)
+  Task.new_js_registration_task(js4, agency)
+  Task.new_review_company_registration_task(companies[0], agency)
+  Task.new_review_company_registration_task(companies[1], agency)
+  Task.new_review_company_registration_task(companies[2], agency)
+  Task.new_review_company_registration_task(companies[3], agency)
+
+  puts "Tasks created: #{Task.count}"
 end
 
 # Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.
