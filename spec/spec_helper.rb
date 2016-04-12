@@ -25,7 +25,7 @@ require 'webmock/rspec'
 # WebMock config
 
 #  Uncomment to disable Webmock and access external services during test:
-WebMock.disable!
+# WebMock.disable!
 
 #  This allows non-mocked external service calls to proceed:
 WebMock.allow_net_connect!
