@@ -91,7 +91,7 @@ RSpec.describe SkillsController, type: :controller do
     let!(:skill)  { FactoryGirl.create(:skill) }
 
     it 'raises an exception' do
-      expect {get :edit, id: skill}.to raise_error(RuntimeError)
+      expect {get :show, id: skill}.to raise_error(RuntimeError)
     end
   end
 end

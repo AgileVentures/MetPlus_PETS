@@ -309,7 +309,7 @@ var AgencyData = {
     $('#add_job_category_button').click(AgencyData.add_job_category);
     $('#job_categories_table').on('click',
                   // bind to 'edit category' anchor element
-                  "a[href^='/job_categories/'][href$='edit']",
+                  "a[href^='/job_categories/'][data-method='edit']",
                                 AgencyData.edit_job_category);
     $('#update_job_category_button').click(AgencyData.update_job_category);
     $('#job_categories_table').on('click',
@@ -321,7 +321,7 @@ var AgencyData = {
     $('#add_skill_button').click(AgencyData.add_skill);
     $('#skills_table').on('click',
                   // bind to 'edit skill' anchor element
-                  "a[href^='/skills/'][href$='edit']",
+                  "a[href^='/skills/'][data-method='edit']",
                                 AgencyData.edit_skill);
     $('#update_skill_button').click(AgencyData.update_skill);
     $('#skills_table').on('click',
