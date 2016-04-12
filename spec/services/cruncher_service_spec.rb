@@ -23,32 +23,21 @@ RSpec.describe CruncherService, type: :request do
   end
 
   context 'Cruncher HTTP calls' do
-
-    before(:each) do
-      stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
-    end
-
-    describe 'authorization' do
-      it 'returns HTTP success' do
-
-        stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+    describe 'authentication success' do
+      before(:each) do
+        stub_request(:post, CruncherService.service_url + '/authenticate').
+            to_return(body: "{\"token\": \"12345\"}", status: 200,
             :headers => {'Content-Type'=> 'application/json'})
-
+      end
+      it 'returns HTTP success' do
         expect(auth_result.code).to eq 200
       end
-
       it 'returns authorization token' do
-
-        stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
-
-        expect(JSON.parse(auth_result)['token']).not_to be_nil
+        expect(JSON.parse(auth_result)['token']).to eq '12345'
       end
+    end
 
+    describe 'authentication failure' do
       it 'raises error with invalid credentials' do
 
         stub_request(:post, CruncherService.service_url + '/authenticate').
