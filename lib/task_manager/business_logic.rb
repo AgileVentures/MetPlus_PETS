@@ -37,9 +37,11 @@ module BusinessLogic
 ##
 
   DESCRIPTIONS = {:need_job_developer => 'Job Seeker has no assigned Job Developer',
-                  :need_case_manager  => 'Job Seeker has no assigned Case Manager'}
+                  :need_case_manager  => 'Job Seeker has no assigned Case Manager',
+                  :company_registration => 'Review company registration'}
   ASSIGNABLE_LIST = {:need_job_developer => {type: :agency, function: :job_developers},
-                     :need_case_manager => {type: :agency, function: :case_managers}}
+                     :need_case_manager => {type: :agency, function: :case_managers},
+                     :company_registration => {type: :agency, function: :agency_admins}}
 
   module ClassMethods
     def new_js_registration_task jobseeker, agency
