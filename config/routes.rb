@@ -70,11 +70,11 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # ----------------------- Job Categories  ----------------------------------
-  resources :job_categories, only: [:create, :edit, :update, :destroy]
+  resources :job_categories, only: [:create, :show, :update, :destroy]
   # --------------------------------------------------------------------------
 
   # ----------------------- Skills -------------------------------------------
-  resources :skills, only: [:create, :edit, :update, :destroy]
+  resources :skills, only: [:create, :show, :update, :destroy]
   # --------------------------------------------------------------------------
 
   # ----------------------- Tasks --------------------------------------------
