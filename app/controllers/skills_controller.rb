@@ -13,7 +13,7 @@ class SkillsController < ApplicationController
     end
   end
 
-  def edit
+  def show
     begin
       skill = Skill.find(params[:id])
     rescue
