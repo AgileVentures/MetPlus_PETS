@@ -1,6 +1,5 @@
 def page_translator name
   case name
-
     when 'job creation'
       return new_job_path
     when 'Company Registration'
@@ -8,9 +7,9 @@ def page_translator name
     when 'Jobseeker Registration'
       return new_job_seeker_path
     when 'home'
-      visit root_path
+      return root_path
     when 'tasks'
-      visit tasks_path
+      return tasks_path
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
       return job_seekers_home_path(User.find_by_email(user[1]))
