@@ -17,6 +17,7 @@ class TasksController < ApplicationController
     return render json: {:message => 'Cannot find user!'}, status: 403 if user.nil?
     return render json: {:message => 'Cannot assign the task to that user!'}, status: 403 \
             if not task.assignable_list.include? user.pets_user
+    authorize task
     begin
       task.assign user
     rescue Exception => e
@@ -52,11 +53,13 @@ class TasksController < ApplicationController
   end
 
   def tasks
+    authorize Task.new
     @task_type = params[:task_type] || 'mine'
     raise 'Unsupported request' if not request.xhr?
 
     @render_modal = false
     @tasks = display_tasks @task_type
+
     render partial: 'tasks', :locals => {all_tasks: @tasks, task_type: @task_type}
   end
 

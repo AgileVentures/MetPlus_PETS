@@ -45,6 +45,7 @@ RSpec.describe TasksController, type: :controller do
           FactoryGirl.create(:agency_admin, :agency => agency)
           js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
+          sign_in js
         end
         subject{xhr :patch, :assign , {id: @task.id, to: 100}, :format => :json}
         it 'returns error' do
@@ -60,6 +61,7 @@ RSpec.describe TasksController, type: :controller do
           FactoryGirl.create(:agency_admin, :agency => agency)
           @js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task @js, agency
+          sign_in @js
         end
         subject{xhr :patch, :assign , {id: @task.id, to: @js.id}, :format => :json}
         it 'returns error' do
@@ -180,7 +182,18 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
-
+  describe "GET #tasks" do
+    describe 'unauthorized' do
+      subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
+      it "returns http error" do
+        expect(subject).to have_http_status(403)
+      end
+      it "check task status" do
+        subject
+        expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
+  end
   describe "GET #list_owners" do
     describe 'retrieve information' do
       before :each do

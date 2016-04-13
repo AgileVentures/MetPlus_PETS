@@ -8,4 +8,7 @@ class TaskPolicy < ApplicationPolicy
   def assign?
     record.task_owner.include? user
   end
+  def tasks?
+    not user.nil?
+  end
 end
