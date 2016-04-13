@@ -1,5 +1,8 @@
 %h2
   = "Welcome back to PETS, #{pets_user.full_name}"
+  = link_to edit_profile_company_person_path(pets_user),
+    :title => 'Edit profile' do
+    %i.fa.fa-pencil-square-o.fa-1
 
 %h3 Tasks that need your attention
 = render partial: 'tasks/tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
@@ -129,4 +132,7 @@
 
   .row.text-center
     <div class="pagination"><ul class="pagination"><li class="prev previous_page disabled"><a href="#">← Previous</a></li> <li class="active"><a rel="start" href="#">1</a></li> <li><a rel="next" href="#">2</a></li> <li class="next next_page "><a rel="next" href="#">Next →</a></li></ul></div>
-= link_to('Invite colleague', )
+  = link_to 'Invite Colleague',                                      |
+              new_user_invitation_path(person_type: 'CompanyPerson', |
+                     org_id: pets_user.company.id),                  |
+              method: :get, class: 'btn btn-primary'
