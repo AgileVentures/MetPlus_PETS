@@ -69,7 +69,7 @@ describe JobSeeker, type: :model do
         bob.assign_job_developer(jd_person, agency)
         expect(bob.job_developer).to eq(jd_person)
       end
-      it 'not a case manager' do
+      it 'not a job developer' do
         expect{bob.assign_job_developer cm_person, agency}.to raise_error("User Manager, John is not a Job Developer")
       end
     end
@@ -85,7 +85,7 @@ describe JobSeeker, type: :model do
       it 'success' do
         expect(dave.job_developer).to eq(jd_person)
       end
-      it 'no case manager' do
+      it 'no job developer' do
         expect(adam.job_developer).to eq(nil)
       end
     end
