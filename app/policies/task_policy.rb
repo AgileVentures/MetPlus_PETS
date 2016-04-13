@@ -5,4 +5,7 @@ class TaskPolicy < ApplicationPolicy
   def done?
     record.task_owner == user
   end
+  def assign?
+    record.task_owner.include? user
+  end
 end
