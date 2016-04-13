@@ -61,6 +61,10 @@ class CompanyPeopleController < ApplicationController
     redirect_to company_path(person.company)
   end
 
+  def home
+
+  end
+
   private
 
   def company_person_params

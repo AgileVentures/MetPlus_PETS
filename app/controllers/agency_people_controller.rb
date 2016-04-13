@@ -93,10 +93,6 @@ class AgencyPeopleController < ApplicationController
     redirect_to agency_admin_home_path
   end
 
-  def home
-
-  end
-
   private
 
   def agency_person_params
