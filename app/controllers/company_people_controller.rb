@@ -1,4 +1,5 @@
 class CompanyPeopleController < ApplicationController
+  include Tasks
 
   def show
     @company_person = CompanyPerson.find(params[:id])
@@ -62,7 +63,9 @@ class CompanyPeopleController < ApplicationController
   end
 
   def home
-
+    @task_type_t1 = 'mine-open'
+    @render_modal = true
+    @tasks_t1 = display_tasks @task_type_t1
   end
 
   private
