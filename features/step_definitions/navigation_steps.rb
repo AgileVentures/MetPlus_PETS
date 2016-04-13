@@ -13,6 +13,15 @@ def page_translator name
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
       return job_seekers_home_path(User.find_by_email(user[1]))
+    when /Company Person '.+' Home/
+      user = name.match(/'(.+)'/)
+      return home_company_person_path(User.find_by_email(user[1]).pets_user)
+    when /'.+' edit profile/
+      user = name.match(/'(.+)'/)
+      user = User.find_by_email(user[1]).pets_user
+      return edit_job_seeker_path user if user.is_job_seeker?
+      return edit_profile_company_person_path user if user.is_a? CompanyPerson
+      return edit_profile_agency_person_path user if user.is_a? AgencyPerson
     when /activation for user '.+'/
       user = name.match(/'(.+)'/)
       if user[1] =~ /@/
