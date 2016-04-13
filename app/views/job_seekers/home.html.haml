@@ -19,15 +19,14 @@
     - if @jobseeker.case_manager.nil?
       %i None assigned
     - else
-    = @jobseeker.case_manager.full_name
+      = @jobseeker.case_manager.full_name
     %br
     %b Job Developer:
     - if @jobseeker.job_developer.nil?
       %i None assigned
     - else
       = @jobseeker.job_developer.full_name
-      %br
-      %p
+    %br
   %div{class: 'div_align_left'}
     = link_to 'Update your information', edit_job_seeker_path, class: 'btn btn-primary'
 
