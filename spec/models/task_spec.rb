@@ -166,30 +166,37 @@ RSpec.describe Task, type: :model do
     it 'job seeker user' do
       @task.target = @job_seeker
       expect(@task.target).to eq @job_seeker
+      expect(@task.person).to eq @job_seeker
     end
     it 'job seeker as a User' do
       @task.target = @job_seeker.user
       expect(@task.target).to eq @job_seeker
+      expect(@task.person).to eq @job_seeker
     end
     it 'job developer user' do
       @task.target = @job_developer
       expect(@task.target).to eq @job_developer
+      expect(@task.person).to eq @job_developer
     end
     it 'case manager user' do
       @task.target = @case_manager
       expect(@task.target).to eq @case_manager
+      expect(@task.person).to eq @case_manager
     end
     it 'agency admin user' do
       @task.target = @agency_admin
       expect(@task.target).to eq @agency_admin
+      expect(@task.person).to eq @agency_admin
     end
     it 'company admin user' do
       @task.target = @company_admin
       expect(@task.target).to eq @company_admin
+      expect(@task.person).to eq @company_admin
     end
     it 'company contact user' do
       @task.target = @company_contact
       expect(@task.target).to eq @company_contact
+      expect(@task.person).to eq @company_contact
     end
     it 'job' do
       @task.target = @job
