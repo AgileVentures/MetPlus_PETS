@@ -48,10 +48,10 @@ module TaskManager
 
     private
     ## Method that will create the task itself
-    def new_task task_type, owner, target_user = nil, target_job = nil, target_company = nil
+    def new_task task_type, owner, target_person = nil, target_job = nil, target_company = nil
       task = Task.new
       task.task_owner = owner
-      task.user = target_user
+      task.user = target_person.user if target_person
       task.job = target_job
       task.company = target_company
       task.task_type = task_type
