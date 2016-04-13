@@ -60,4 +60,19 @@ RSpec.describe BusinessLogic do
       end
     end
   end
+  describe 'Review company registration' do
+    before :each do
+      @agency = FactoryGirl.create(:agency)
+      @company = FactoryGirl.create(:company, agencies: [@agency])
+
+      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+    end
+    describe '#new_review_company_registration_task' do
+      subject {TaskTester.new_review_company_registration_task @company, @agency}
+      it('owner is agency admin'){expect(subject.task_owner).to eq([@agency_admin])}
+      it('target company'){expect(subject.target).to eq(@company)}
+      it('check type'){expect(subject.task_type.to_sym).to eq(:company_registration)}
+    end
+  end
 end
