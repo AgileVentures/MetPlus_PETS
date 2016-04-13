@@ -1,24 +1,4 @@
-
 require 'ffaker'
-
-puts "Seeding wait......."
-#incase rerun comes in. not necessary
-Address.delete_all
-Agency.delete_all
-AgencyPerson.delete_all
-AgencyRelation.delete_all
-AgencyRole.delete_all
-Branch.delete_all
-Company.delete_all
-CompanyPerson.delete_all
-CompanyRole.delete_all
-Job.delete_all
-JobCategory.delete_all
-JobSeeker.delete_all
-JobSeekerStatus.delete_all
-Skill.delete_all
-Task.delete_all
-User.delete_all
 
 # --------------------------- Seed Production Database --------------------
 
@@ -59,6 +39,8 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          path to success.')
 
 puts "\nSeeded Production Data"
+
+puts "\nSeeding development DB"
 
 # seed striction to development, for now
 if Rails.env.development? || Rails.env.staging?
