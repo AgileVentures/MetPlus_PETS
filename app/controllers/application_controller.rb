@@ -5,8 +5,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :pets_user
 
+  include Pundit
+
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :store_current_location, :unless => :devise_controller?
+
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def after_sign_in_path_for(resource)
     person = resource.pets_user
@@ -18,6 +23,7 @@ class ApplicationController < ActionController::Base
     end
     stored_location_for(resource) || request.referer || root_path
   end
+
 
   protected
 
@@ -33,6 +39,15 @@ class ApplicationController < ActionController::Base
       [:first_name,:last_name, :phone].each do |field|
         devise_parameter_sanitizer.for(:account_update)<<field
         devise_parameter_sanitizer.for(:sign_up)<<field
+      end
+    end
+
+    def user_not_authorized
+      if request.xhr?
+        return render json: {:message => 'You are not authorized to perform this action.'}, status: 403
+      else
+        flash[:alert] = "You are not authorized to perform this action."
+        redirect_to(request.referrer || root_path)
       end
     end
 end

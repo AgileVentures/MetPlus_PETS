@@ -81,6 +81,7 @@ RSpec.describe TasksController, type: :controller do
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
+        sign_in @jd1
       end
       subject{xhr :patch, :in_progress , {id: @task.id}, :format => :json}
       it "returns http success" do
@@ -103,6 +104,26 @@ RSpec.describe TasksController, type: :controller do
         end
       end
     end
+    describe 'unauthorized' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        @task.assign @jd1
+        sign_in @jd2
+      end
+      subject{xhr :patch, :in_progress , {id: @task.id}, :format => :json}
+      it "returns http error" do
+        expect(subject).to have_http_status(403)
+      end
+      it "check task status" do
+        subject
+        expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
   end
 
   describe "PATCH #done" do
@@ -115,6 +136,7 @@ RSpec.describe TasksController, type: :controller do
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
         @task.work_in_progress
+        sign_in @jd1
       end
       subject{xhr :patch, :done , {id: @task.id}, :format => :json}
       it "returns http success" do
@@ -135,6 +157,26 @@ RSpec.describe TasksController, type: :controller do
           xhr :patch, :done , {id: -1}, :format => :json
           expect(response.body).to eq({:message => 'Cannot find the task!'}.to_json)
         end
+      end
+    end
+    describe 'unauthorized' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        @task.assign @jd1
+        sign_in @jd2
+      end
+      subject{xhr :patch, :done , {id: @task.id}, :format => :json}
+      it "returns http error" do
+        expect(subject).to have_http_status(403)
+      end
+      it "check task status" do
+        subject
+        expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
       end
     end
   end

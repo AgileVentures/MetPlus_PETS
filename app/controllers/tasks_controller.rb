@@ -29,6 +29,7 @@ class TasksController < ApplicationController
     raise 'Unsupported request' if not request.xhr?
     task = Task.find_by_id params[:id]
     return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+    authorize task
     begin
       task.work_in_progress
     rescue Exception => e
@@ -41,6 +42,7 @@ class TasksController < ApplicationController
     raise 'Unsupported request' if not request.xhr?
     task = Task.find_by_id params[:id]
     return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+    authorize task
     begin
       task.complete
     rescue Exception => e
