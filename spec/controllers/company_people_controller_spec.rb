@@ -15,6 +15,20 @@ RSpec.describe CompanyPeopleController, type: :controller do
     end
   end
 
+  describe "GET #home" do
+    before(:each) do
+      @companyperson = FactoryGirl.create(:company_person)
+      get :home, id: @companyperson
+    end
+
+    it "renders edit_profile template" do
+      expect(response).to render_template 'home'
+    end
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "PATCH #update_profile" do
 
     context "valid attributes" do
