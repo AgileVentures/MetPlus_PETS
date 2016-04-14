@@ -9,7 +9,7 @@ Background: seed data added to database
   Given the following jobseekerstatus values exist:
   | value                | description |
   | Unemployedlooking    | A jobseeker without any work and looking for a job|
-  | Employedlooking      | A jobseeker with a job and looking for a job      | 
+  | Employedlooking      | A jobseeker with a job and looking for a job      |
   | Employednotlooking   | A jobseeker with a job and not looking for a job for now.|
 
   Given the following jobseeker exist:
@@ -34,6 +34,16 @@ Scenario: login action as jobseeker
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully."
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
+  And I should see "vijaya"
+
+Scenario: jobseeker homepage with no agency relations
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully."
+  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
+  And I should see "First Name: vijaya"
+  And I should see "Case Manager: None assigned"
+  And I should see "Job Developer: None assigned"
 
 Scenario: edit Js Registration
   Given I am on the home page
@@ -52,13 +62,13 @@ Scenario: edit Js Registration without password change
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully"
   When I click the "vijaya" link
-  And I fill in "First Name" with "vijaya1" 
+  And I fill in "First Name" with "vijaya1"
   Then I select "Employednotlooking" in select list "Status"
-  Then I click the "Update Job seeker" button 
+  Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
-@javascript 
-Scenario: delete jobseeker 
+@javascript
+Scenario: delete jobseeker
   Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
   Then I click and accept the "Delete Jobseeker" button
   And I wait for 1 seconds
@@ -68,4 +78,3 @@ Scenario:cancel redirect to homepage
   Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
   Then I click the "Cancel" link
   Then I should be on the home page
-
