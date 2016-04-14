@@ -54,6 +54,10 @@ RSpec.describe CruncherService, type: :request do
     describe 'upload file' do
 
       before(:each) do
+
+        stub_request(:post, CruncherService.service_url + '/authenticate').
+            to_return(body: "{\"token\": \"12345\"}", status: 200,
+            :headers => {'Content-Type'=> 'application/json'})
         stub_request(:post, CruncherService.service_url + '/curriculum/upload').
             to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
             :headers => {'Content-Type'=> 'application/json'})
