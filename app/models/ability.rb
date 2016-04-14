@@ -28,5 +28,23 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+    user ||= User.new
+    user = user.pets_user
+
+    can :task_assign, Task do |task|
+      task.task_owner.include? user
+    end
+
+    can :task_in_progress, Task do |task|
+      task.task_owner == user
+    end
+
+    can :task_done, Task do |task|
+      task.task_owner == user
+    end
+
+    can :task_list, Task do
+      not user.id.nil?
+    end
   end
 end

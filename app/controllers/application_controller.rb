@@ -19,6 +19,17 @@ class ApplicationController < ActionController::Base
     stored_location_for(resource) || request.referer || root_path
   end
 
+  rescue_from CanCan::AccessDenied, :with => :fun
+  def fun(exception)
+
+    if request.xhr?
+        return render json: {:message => 'You are not authorized to perform this action.'}, status: 403
+    else
+      flash[:alert] = "You are not authorized to perform this action."
+      redirect_to(request.referrer || root_path)
+    end
+  end
+
   protected
 
     def pets_user

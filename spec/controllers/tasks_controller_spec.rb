@@ -45,6 +45,7 @@ RSpec.describe TasksController, type: :controller do
           FactoryGirl.create(:agency_admin, :agency => agency)
           js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
+          sign_in js
         end
         subject{xhr :patch, :assign , {id: @task.id, to: 100}, :format => :json}
         it 'returns error' do
@@ -60,6 +61,7 @@ RSpec.describe TasksController, type: :controller do
           FactoryGirl.create(:agency_admin, :agency => agency)
           @js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task @js, agency
+          sign_in @js
         end
         subject{xhr :patch, :assign , {id: @task.id, to: @js.id}, :format => :json}
         it 'returns error' do
@@ -81,6 +83,7 @@ RSpec.describe TasksController, type: :controller do
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
+        sign_in @jd1
       end
       subject{xhr :patch, :in_progress , {id: @task.id}, :format => :json}
       it "returns http success" do
@@ -103,6 +106,26 @@ RSpec.describe TasksController, type: :controller do
         end
       end
     end
+    describe 'unauthorized' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        @task.assign @jd1
+        sign_in @jd2
+      end
+      subject{xhr :patch, :in_progress , {id: @task.id}, :format => :json}
+      it "returns http error" do
+        expect(subject).to have_http_status(403)
+      end
+      it "check task status" do
+        subject
+        expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
   end
 
   describe "PATCH #done" do
@@ -115,6 +138,7 @@ RSpec.describe TasksController, type: :controller do
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
         @task.work_in_progress
+        sign_in @jd1
       end
       subject{xhr :patch, :done , {id: @task.id}, :format => :json}
       it "returns http success" do
@@ -137,8 +161,39 @@ RSpec.describe TasksController, type: :controller do
         end
       end
     end
+    describe 'unauthorized' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, :agency => agency)
+        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+        @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        @task.assign @jd1
+        sign_in @jd2
+      end
+      subject{xhr :patch, :done , {id: @task.id}, :format => :json}
+      it "returns http error" do
+        expect(subject).to have_http_status(403)
+      end
+      it "check task status" do
+        subject
+        expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
   end
-
+  describe "GET #tasks" do
+    describe 'unauthorized' do
+      subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
+      it "returns http error" do
+        expect(subject).to have_http_status(403)
+      end
+      it "check task status" do
+        subject
+        expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
+  end
   describe "GET #list_owners" do
     describe 'retrieve information' do
       before :each do
@@ -157,14 +212,14 @@ RSpec.describe TasksController, type: :controller do
       end
       it 'check content' do
         expect(JSON.parse(subject.body)).to eq({'results' => [
-                                                   {'id' => @jd1.id,
-                                                    'text' => @jd1.full_name},
-                                                   {'id' => @jd2.id,
-                                                    'text' => @jd2.full_name},
-                                                   {'id' => @jd3.id,
-                                                    'text' => @jd3.full_name},
-                                                   {'id' => @jd4.id,
-                                                    'text' => @jd4.full_name}]})
+            {'id' => @jd1.id,
+             'text' => @jd1.full_name},
+            {'id' => @jd2.id,
+             'text' => @jd2.full_name},
+            {'id' => @jd3.id,
+             'text' => @jd3.full_name},
+            {'id' => @jd4.id,
+             'text' => @jd4.full_name}]})
       end
     end
     describe 'unknown task' do
