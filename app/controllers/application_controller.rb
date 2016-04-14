@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
+  class ApplicationController::AuthorizationException < Exception
+
+  end
 
   protect_from_forgery with: :exception
   helper_method :pets_user
@@ -12,6 +15,7 @@ class ApplicationController < ActionController::Base
 
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from ApplicationController::AuthorizationException, with: :user_not_authenticated
 
   def after_sign_in_path_for(resource)
     person = resource.pets_user
@@ -42,11 +46,24 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def user_logged!
+      raise ApplicationController::AuthorizationException, "must be logged in" unless pets_user
+    end
+
     def user_not_authorized
       if request.xhr?
         return render json: {:message => 'You are not authorized to perform this action.'}, status: 403
       else
         flash[:alert] = "You are not authorized to perform this action."
+        redirect_to(request.referrer || root_path)
+      end
+    end
+
+    def user_not_authenticated
+      if request.xhr?
+        return render json: {:message => 'You need to login to perform this action.'}, status: 401
+      else
+        flash[:alert] = "You need to login to perform this action."
         redirect_to(request.referrer || root_path)
       end
     end
