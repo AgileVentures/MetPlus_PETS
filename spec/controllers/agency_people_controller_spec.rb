@@ -159,9 +159,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
      end
      context "valid attributes without password change" do
        before(:each) do
+         @password = aa_person.encrypted_password
          patch :update_profile,
            agency_person:FactoryGirl.attributes_for(:agency_person,
-           password: nil, password_confirmation: nil).
+           password: '', password_confirmation: '').
            merge(FactoryGirl.attributes_for(:user, first_name:'John',
            last_name:'Smith',phone:'780-890-8976')),
            id: aa_person
@@ -173,6 +174,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'sets a lastname' do
          expect(aa_person.last_name).to eq ("Smith")
       end
+       it 'dont change password' do
+         expect(aa_person.encrypted_password).to eq (@password)
+       end
       it 'sets flash message' do
          expect(flash[:notice]).to eq "Your profile was updated successfully."
       end
