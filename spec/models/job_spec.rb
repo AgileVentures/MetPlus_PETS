@@ -22,6 +22,7 @@ RSpec.describe Job, type: :model do
           source(:skill).class_name('Skill')}
     it { is_expected.to have_many(:skill_levels).through(:job_skills) }
     it { is_expected.to have_many(:job_applications) }
+    it { is_expected.to have_many(:job_seekers).through(:job_applications) }
   end
   
   describe 'Database schema' do
