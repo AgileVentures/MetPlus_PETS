@@ -1,5 +1,7 @@
 class AgencyPeopleController < ApplicationController
 
+  include UserParameters
+
   def show
     @agency_person = AgencyPerson.find(params[:id])
   end
@@ -66,11 +68,7 @@ class AgencyPeopleController < ApplicationController
 
   def update_profile
     @agency_person = AgencyPerson.find(params[:id])
-    person_params = agency_person_params
-    if person_params['password'].to_s.length == 0
-       person_params.delete('password')
-       person_params.delete('password_confirmation')
-    end
+    person_params = handle_user_form_parameters agency_person_params
     if @agency_person.update_attributes(person_params)
       sign_in :user, @agency_person.user, bypass: true
       flash[:notice] = "Your profile was updated successfully."
