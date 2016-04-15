@@ -16,6 +16,7 @@ describe JobSeeker, type: :model do
   	xit {is_expected.to validate_presence_of(:resume)}
     it {is_expected.to validate_presence_of(:job_seeker_status_id)}
   	it {is_expected.to have_many(:agency_people).through(:agency_relations)}
+    it {is_expected.to have_many(:job_applications)}
 
   	it{should allow_value('1987', '1916', '2000', '2014').for(:year_of_birth)}
   	it{should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth)}
