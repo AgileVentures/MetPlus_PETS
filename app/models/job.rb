@@ -10,6 +10,7 @@ class Job < ActiveRecord::Base
   has_many   :nice_to_have_skills, -> {where job_skills: {required: false}},
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :skill_levels, through: :job_skills
+  has_many   :job_applications
 
   SHIFT_OPTIONS = ['Morning', 'Day', 'Evening']
   validates_presence_of :title
