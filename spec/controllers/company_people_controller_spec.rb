@@ -50,8 +50,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
       it 'redirects to mainpage' do
          expect(response).to redirect_to(root_path)
       end
-     end
-     context "valid attributes without password change" do
+    end
+    context "valid attributes without password change" do
        before(:each) do
          @companyperson =  FactoryGirl.create(:company_admin,
                                               :password => 'testing.....',
@@ -67,27 +67,27 @@ RSpec.describe CompanyPeopleController, type: :controller do
                id:@companyperson
          @companyperson.reload
        end
-      it 'sets a title' do
-        expect(@companyperson.title).to eq ("Line Manager")
-      end
-      it 'sets a firstname' do
+       it 'sets a title' do
+         expect(@companyperson.title).to eq ("Line Manager")
+       end
+       it 'sets a firstname' do
          expect(@companyperson.first_name).to eq ("John")
-      end
-      it 'sets a lastname' do
+       end
+       it 'sets a lastname' do
          expect(@companyperson.last_name).to eq ("Smith")
-      end
+       end
        it 'dont change password' do
          expect(@companyperson.encrypted_password).to eq (@password)
        end
-      it 'sets flash message' do
+       it 'sets flash message' do
          expect(flash[:notice]).to eq "Your profile was updated successfully."
-      end
-      it 'returns redirect status' do
+       end
+       it 'returns redirect status' do
          expect(response).to have_http_status(:redirect)
-      end
-      it 'redirects to mainpage' do
-        expect(response).to redirect_to(root_path)
-      end
+       end
+       it 'redirects to mainpage' do
+         expect(response).to redirect_to(root_path)
+       end
      end
   end
 end

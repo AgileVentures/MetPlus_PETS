@@ -1,5 +1,7 @@
 class JobSeekersController < ApplicationController
 
+  include UserParameters
+
   def new
     @jobseeker = JobSeeker.new
   end
@@ -24,11 +26,7 @@ class JobSeekersController < ApplicationController
   def update
     @jobseeker = JobSeeker.find(params[:id])
 
-    person_params = jobseeker_params
-    if person_params['password'].to_s.length == 0
-       person_params.delete('password')
-       person_params.delete('password_confirmation')
-    end
+    person_params = handle_user_form_parameters jobseeker_params
 
     if @jobseeker.update_attributes(person_params)
        sign_in :user, @jobseeker.user, bypass: true
