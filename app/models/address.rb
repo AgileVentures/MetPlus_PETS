@@ -1,6 +1,7 @@
 class Address < ActiveRecord::Base
   belongs_to :location, polymorphic: true
   has_many :jobs 
+  has_many :company_people
   validates_presence_of :street
   validates_presence_of :city
   validates_presence_of :state
