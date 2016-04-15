@@ -5,9 +5,24 @@ class Resume < ActiveRecord::Base
 
   validates_presence_of :file, on: :create
   validates_presence_of :file_name, :job_seeker_id
+  validate :acceptable_file_type
 
-  # Valid file types for résumé files:
-  FILETYPES = ['pdf', 'doc', 'docx']
+  def acceptable_file_type
+    return if not file_name
+    mime_type = MIME::Types.type_for(URI.escape(file_name))
+    # Below is using 'if not' since 'unless' construct does not
+    # seem to short-circuit the rest of the statement with the
+    # result that 'content_type' could be called on nil
+    return if not mime_type.empty? and
+          MIMETYPES.include? mime_type.first.content_type
+
+    errors[:file_name] << 'unsupported file type'
+  end
+
+  # Valid MIME types for résumé files: pdf, doc, docx, pages
+  MIMETYPES = ['application/pdf', 'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/x-iwork-pages-sffpages']
 
   def initialize(file: nil, file_name: nil, job_seeker_id: nil)
     super

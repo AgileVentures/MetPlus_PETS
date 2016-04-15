@@ -98,7 +98,7 @@ RSpec.describe Resume, type: :model do
       resume = Resume.new(file: file,
                           file_name: 'Test File.zzz',
                           job_seeker_id: job_seeker.id)
-      expect{ resume.save }.to raise_error(RuntimeError)
+      expect(resume.save).to be false
       expect(Resume.count).to eq 0
     end
 
@@ -111,7 +111,7 @@ RSpec.describe Resume, type: :model do
       resume = Resume.new(file: file,
                           file_name: 'nil',
                           job_seeker_id: job_seeker.id)
-      expect{ resume.save }.to raise_error(RuntimeError)
+      expect(resume.save).to be false
       expect(Resume.count).to eq 0
     end
   end
