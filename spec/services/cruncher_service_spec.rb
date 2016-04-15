@@ -33,7 +33,7 @@ RSpec.describe CruncherService, type: :request do
         expect(auth_result.code).to eq 200
       end
       it 'returns authorization token' do
-        expect(JSON.parse(auth_result)['token']).to eq '12345'
+        expect(JSON.parse(auth_result)['token']).not_to be_nil
       end
     end
 
