@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe JobApplication, type: :model do
+  describe 'Database schema' do
+    it {is_expected.to have_db_column :job_seeker_id}
+    it {is_expected.to have_db_column :job_id }
+    it {is_expected.to have_db_column :status }
+  end
   describe 'Associations' do
     it { is_expected.to belong_to :job_seeker }
     it { is_expected.to belong_to :job }
