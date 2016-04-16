@@ -1,12 +1,10 @@
 require 'rails_helper'
-require 'task_manager/task_manager'
-require 'task_manager/business_logic'
 class TaskTester
-  include TaskManager
-  include BusinessLogic
+  include TaskManager::TaskManager
+  include TaskManager::BusinessLogic
 end
 
-RSpec.describe BusinessLogic do
+RSpec.describe TaskManager::BusinessLogic do
   describe 'No Case Manager Assigned to Job Seeker' do
     before :each do
       @job_seeker = FactoryGirl.create(:job_seeker)

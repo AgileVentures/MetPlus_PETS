@@ -4,12 +4,10 @@ class CruncherService
 
   @@auth_token = nil
 
-  def self.service_url=(url) # called from initializer
-    @@service_url = url
-  end
-
   def self.service_url
-    @@service_url
+    # Changed to use constant instead of class var as Rails reloads all
+    # classes on each request (unless config.cache_classes = true)
+    CRUNCHER_URL
   end
 
   def self.upload_file(file, file_name, file_id)
@@ -17,7 +15,7 @@ class CruncherService
 
     raise "Invalid MIME type for file: #{file_name}" if mime_type.empty?
     raise "Unsupported file type for: #{file_name}" if
-          not Resume::FILETYPES.include? mime_type.first.preferred_extension
+          not Resume::MIMETYPES.include? mime_type.first.content_type
 
     retry_upload = true
     begin
