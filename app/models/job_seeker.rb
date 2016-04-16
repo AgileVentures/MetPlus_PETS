@@ -25,10 +25,6 @@ class JobSeeker < ActiveRecord::Base
 
   end
 
-  # def job_developer_of
-  #   AgencyPerson.job_developer_of self
-  # end
-  #
   def job_developer
     find_agency_person(:JD)
   end
