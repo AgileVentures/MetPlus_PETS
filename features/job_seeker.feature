@@ -30,6 +30,20 @@ Scenario: new Js Registration
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
 
+Scenario: Invalid résumé file type
+  Given I am on the Jobseeker Registration page
+  When I fill in "First Name" with "test"
+  And I fill in "Last Name" with "js80"
+  And I fill in "Email" with "testjobseeker80@gmail.com"
+  And I fill in "Phone" with "345-890-7890"
+  And I fill in "Password" with "password"
+  And I fill in "Password Confirmation" with "password"
+  And I fill in "Year Of Birth" with "1990"
+  Then I select "Unemployedlooking" in select list "Status"
+  And I choose resume file "Test File.zzz"
+  Then I click the "Create Job seeker" button
+  Then I should see "File name unsupported file type"
+
 Scenario: login action as jobseeker
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"

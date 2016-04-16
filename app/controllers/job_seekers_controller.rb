@@ -21,6 +21,7 @@ class JobSeekersController < ApplicationController
         unless resume.save
           models_saved = false
           @jobseeker.destroy
+          @jobseeker.errors.messages.merge! resume.errors.messages
         end
       end
     end
