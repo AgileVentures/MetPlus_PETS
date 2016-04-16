@@ -10,6 +10,12 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
   end
 
+  def home
+    @job_developer = AgencyPerson.find(params[:id])
+    @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
+    @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd], :per_page=> 5).your_jobseekers_jd(@job_developer)
+  end
+
   def update
     @agency_person = AgencyPerson.find(params[:id])
     model_params = agency_person_params

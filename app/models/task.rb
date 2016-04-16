@@ -1,9 +1,7 @@
-require 'task_manager/task_manager'
-require 'task_manager/business_logic'
 class Task < ActiveRecord::Base
 
-  include TaskManager
-  include BusinessLogic
+  include TaskManager::TaskManager
+  include TaskManager::BusinessLogic
 
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_user_id'
 

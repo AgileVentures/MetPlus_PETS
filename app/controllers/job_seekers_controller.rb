@@ -7,8 +7,28 @@ class JobSeekersController < ApplicationController
   end
 
   def create
+    jobseeker_params = form_params
+    dispatch_file    = jobseeker_params.delete 'resume'
+
     @jobseeker = JobSeeker.new(jobseeker_params)
-    if @jobseeker.save
+    models_saved = @jobseeker.save
+
+    if models_saved
+      if dispatch_file          # If there is a résumé, try to save that
+        tempfile = dispatch_file.tempfile
+        filename = dispatch_file.original_filename
+
+        resume = Resume.new(file: tempfile, file_name: filename,
+                            job_seeker_id: @jobseeker.id)
+        unless resume.save
+          models_saved = false
+          @jobseeker.destroy
+          @jobseeker.errors.messages.merge! resume.errors.messages
+        end
+      end
+    end
+
+    if models_saved
       flash[:notice] = "A message with a confirmation and link has been sent to your email address. " +
                        "Please follow the link to activate your account."
       redirect_to root_path
@@ -16,7 +36,6 @@ class JobSeekersController < ApplicationController
       @model_errors = @jobseeker.errors
       render 'new'
     end
-
   end
 
   def edit
@@ -61,7 +80,7 @@ class JobSeekersController < ApplicationController
   end
 
   private
-   def jobseeker_params
+   def form_params
      params.require(:job_seeker).permit(:first_name,
             :last_name, :email, :phone,
             :password,
@@ -69,6 +88,5 @@ class JobSeekersController < ApplicationController
             :year_of_birth,
             :job_seeker_status_id,
             :resume)
-
    end
 end

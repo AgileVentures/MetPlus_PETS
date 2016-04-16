@@ -1,6 +1,45 @@
 require 'rails_helper'
 
 RSpec.describe AgencyPeopleController, type: :controller do
+  describe "GET #home" do
+    let(:agency) { FactoryGirl.create(:agency) }
+
+    let!(:cm_person) {FactoryGirl.create(:case_manager, first_name: 'John', last_name: 'Manager', agency: agency)}
+    let!(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
+    let!(:aa_person) {FactoryGirl.create(:agency_admin, first_name: 'John', last_name: 'Admin', agency: agency)}
+
+    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
+    let!(:bob)     { FactoryGirl.create(:job_seeker, first_name: 'Bob', last_name: 'Smith') }
+    let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
+    let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
+
+    before(:each) do
+      adam.assign_job_developer(jd_person, agency)
+      get :home, id: jd_person
+    end
+
+    it 'assigns @job_developer for view' do
+      expect(assigns(:job_developer)).to eq jd_person
+    end
+    #byebug
+    it 'renders home template' do
+      expect(response).to render_template('home')
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "returns your jobseekers" do
+      expect(assigns(:your_jobseekers_jd)).to include(adam)
+    end
+
+   it "returns a list of jobseekers without a job developer" do
+     expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
+   end
+
+  end
+
 
   describe "GET #show" do
     let(:person)   { FactoryGirl.create(:agency_person) }

@@ -136,3 +136,7 @@ Then(/^I select2 "([^"]*)" from "([^"]*)"$/) do |value, select_name|
     find("li", text: value).click
   end
 end
+
+When /^I choose resume file "([^"]*)"$/ do |filename|
+  attach_file('Resume', "#{Rails.root}/spec/fixtures/files/#{filename}")
+end
