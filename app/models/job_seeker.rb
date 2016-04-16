@@ -10,21 +10,23 @@ class JobSeeker < ActiveRecord::Base
   validates_presence_of :year_of_birth, :job_seeker_status_id #,:resume
   validates  :year_of_birth, :year_of_birth => true
 
+
   def is_job_seeker?
     true
   end
 
-  def case_manager
-    find_agency_person(:CM)
+  def self.js_without_jd
+    where("job_seekers.id not in (?)", AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).order("users.last_name")
+  end
+
+  def self.your_jobseekers_jd(job_developer)
+    # this method serves the Job Developer home page, hence the "your"
+    where(:id => AgencyRelation.in_role_of(:JD).where(:agency_person => job_developer).pluck(:job_seeker_id)).order("users.last_name")
+
   end
 
   def job_developer
     find_agency_person(:JD)
-  end
-
-  def assign_case_manager(case_manager, agency)
-    raise "User #{case_manager.full_name} is not a Case Manager" unless case_manager.is_case_manager? agency
-    assign_agency_person(case_manager, :CM)
   end
 
   def assign_job_developer(job_developer, agency)
@@ -32,7 +34,21 @@ class JobSeeker < ActiveRecord::Base
     assign_agency_person(job_developer, :JD)
   end
 
+  def case_manager
+    find_agency_person(:CM)
+  end
+
+  def assign_case_manager(case_manager, agency)
+    raise "User #{case_manager.full_name} is not a Case Manager" unless case_manager.is_case_manager? agency
+    assign_agency_person(case_manager, :CM)
+  end
+
   private
+  # Helper methods for associating job seekers with agency people
+  # These business rules are enforced:
+  # 1) A job seeker can have only one case manager
+  # 2) A job seeker can have only one job developer ('primary' JD)
+
   def assign_agency_person(agency_person, role_key)
     ap_relation = find_agency_person(role_key)
     if ap_relation

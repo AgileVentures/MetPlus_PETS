@@ -79,7 +79,7 @@ class AgencyPerson < ActiveRecord::Base
     agency_relations.in_role_of(:JD).each do |relation|
       seekers << relation.job_seeker.id
     end
-    seekers
+    seekers.sort {|js1, js2| js1.last_name <=> js2.last_name }
   end
 
   def as_cm_job_seeker_ids
@@ -87,7 +87,7 @@ class AgencyPerson < ActiveRecord::Base
     agency_relations.in_role_of(:CM).each do |relation|
       seekers << relation.job_seeker.id
     end
-    seekers
+    seekers.sort {|js1, js2| js1.last_name <=> js2.last_name }
   end
 
   def is_job_developer? agency
