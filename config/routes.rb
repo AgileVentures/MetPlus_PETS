@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   resources :company_people do
      get 'edit_profile', on: :member, as: :edit_profile
      patch 'update_profile', on: :member, as: :update_profile
+     get 'home', on: :member, as: :home
   end
   # --------------------------------------------------------------------------
 
@@ -70,11 +71,22 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # ----------------------- Job Categories  ----------------------------------
-  resources :job_categories, only: [:create, :edit, :update, :destroy]
+  resources :job_categories, only: [:create, :show, :update, :destroy]
   # --------------------------------------------------------------------------
 
   # ----------------------- Skills -------------------------------------------
-  resources :skills, only: [:create, :edit, :update, :destroy]
+  resources :skills, only: [:create, :show, :update, :destroy]
+  # --------------------------------------------------------------------------
+
+  # ----------------------- Tasks --------------------------------------------
+  resources :tasks, only: [:index] do
+    patch 'assign', on: :member, as: :assign
+    patch 'in_progress', on: :member, as: :in_progress
+    patch 'done', on: :member, as: :done
+    get 'list_owners', on: :member, as: :list_owners
+  end
+  get 'tasks/tasks/:task_type' => 'tasks#tasks'
+  patch 'tasks/:id/assign/:to' => 'tasks#assign', as: :assign_tasks
   # --------------------------------------------------------------------------
 
   root 'main#index'

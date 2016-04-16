@@ -1,0 +1,139 @@
+%h2
+  = "Welcome back to PETS, #{pets_user.full_name}"
+  = link_to edit_profile_company_person_path(pets_user),
+    :title => 'Edit profile',
+    :id => 'edit-profile' do
+    %i.fa.fa-pencil-square-o.fa-1
+
+%h3 Tasks that need your attention
+= render partial: 'tasks/tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
+
+%h3 All company jobs
+%div{:id => 'company-jobs'}
+  %table.table.table-hover
+    %thead
+      %tr
+        %td Description
+        %td Last update
+        %td Poster
+        %td Number of applications
+    %tbody
+      %tr
+        %td Nice job1
+        %td 2016-02-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 4
+      %tr
+        %td Nice job2
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 3
+      %tr
+        %td Nice job3
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 1
+      %tr
+        %td Nice job4
+        %td 2015-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 4
+      %tr
+        %td Nice job5
+        %td 2016-05-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 2
+      %tr
+        %td Nice job6
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 0
+      %tr
+        %td Nice job7
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 4
+      %tr
+        %td Nice job8
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 4
+      %tr
+        %td Nice job9
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 4
+      %tr
+        %td Nice job10
+        %td 2016-03-04
+        %td
+          = link_to(pets_user.full_name, company_person_path(pets_user))
+        %td 4
+  .row.text-center
+    <div class="pagination"><ul class="pagination"><li class="prev previous_page disabled"><a href="#">← Previous</a></li> <li class="active"><a rel="start" href="#">1</a></li> <li><a rel="next" href="#">2</a></li> <li class="next next_page "><a rel="next" href="#">Next →</a></li></ul></div>
+
+%h3 Your colleagues who are on PETS
+%div{:id => 'company-people'}
+  %table.table.table-hover
+    %thead
+      %tr
+        %td Name
+        %td Email
+        %td Phone
+    %tbody
+      %tr
+        %td Company user 1
+        %td user1@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 2
+        %td user2@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 3
+        %td user3@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 4
+        %td user4@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 5
+        %td user5@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 6
+        %td user6@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 7
+        %td user7@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 8
+        %td user8@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 9
+        %td user9@company.com
+        %td (123) 123 1234
+      %tr
+        %td Company user 10
+        %td user10@company.com
+        %td (123) 123 1234
+
+  .row.text-center
+    <div class="pagination"><ul class="pagination"><li class="prev previous_page disabled"><a href="#">← Previous</a></li> <li class="active"><a rel="start" href="#">1</a></li> <li><a rel="next" href="#">2</a></li> <li class="next next_page "><a rel="next" href="#">Next →</a></li></ul></div>
+  = link_to 'Invite Colleague',                                      |
+              new_user_invitation_path(person_type: 'CompanyPerson', |
+                     org_id: pets_user.company.id),                  |
+              method: :get, class: 'btn btn-primary'                 |

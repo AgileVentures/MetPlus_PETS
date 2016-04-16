@@ -63,6 +63,9 @@ gem 'active_record-acts_as'
 
 gem 'delayed_job_active_record'
 
+gem 'json'
+gem 'rest-client'
+
 # later we can strict the faker
 # to staging && development
 gem 'ffaker'
@@ -106,6 +109,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'launchy'
   gem 'selenium-webdriver' # Enables running cuke tests with browser (see env.rb)
+  gem 'webmock'
 end
 
 group :production do
