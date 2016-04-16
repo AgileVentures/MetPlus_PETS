@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     person = resource.pets_user
     case person
       when JobSeeker
-        return job_seekers_home_path(person)
+        return home_job_seeker_path(person)
       when CompanyPerson
         return home_company_person_path(person)
     end
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   protected
 
     def pets_user
-       return nil if current_user.nil?  
+       return nil if current_user.nil?
        current_user.try(:actable).nil? ? current_user : current_user.actable
     end
     def store_current_location

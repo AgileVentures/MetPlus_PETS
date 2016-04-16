@@ -13,13 +13,13 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
-  context '#full_title' do 
-    
-   it "base title" do 
+  context '#full_title' do
+
+   it "base title" do
      expect(helper.full_title()).to eq("MetPlus")
    end
 
-   it "show page title" do 
+   it "show page title" do
        expect(helper.full_title("Ruby on Rails")).to eq("Ruby on Rails | MetPlus")
    end
 
@@ -69,7 +69,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     describe 'job seeker' do
       let!(:job_seeker) {FactoryGirl.create(:job_seeker)}
       it 'success' do
-        expect(helper.show_person_home_page_path job_seeker).to eq(job_seekers_home_path job_seeker)
+        expect(helper.show_person_home_page_path job_seeker).to eq(home_job_seeker_path job_seeker)
       end
     end
     describe 'agency people as' do
