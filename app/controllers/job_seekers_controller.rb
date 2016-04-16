@@ -45,7 +45,7 @@ class JobSeekersController < ApplicationController
   def update
     @jobseeker = JobSeeker.find(params[:id])
 
-    person_params = handle_user_form_parameters jobseeker_params
+    person_params = handle_user_form_parameters form_params
 
     if @jobseeker.update_attributes(person_params)
        sign_in :user, @jobseeker.user, bypass: true
