@@ -3,11 +3,14 @@ class JobSeeker < ActiveRecord::Base
   belongs_to :job_seeker_status
   has_many   :resumes
 
-  has_one	   :address, as: :location
+  has_one    :address, as: :location
   has_many   :agency_relations
   has_many   :agency_people, through: :agency_relations
 
   validates_presence_of :year_of_birth, :job_seeker_status_id
+  has_many   :job_applications
+  has_many   :jobs, through: :job_applications
+
   validates  :year_of_birth, :year_of_birth => true
 
 
