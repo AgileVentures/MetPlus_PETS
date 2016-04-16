@@ -39,7 +39,7 @@ module ApplicationHelper
 
   def show_person_home_page_path person
     return root_path if person.nil?
-    return job_seekers_home_path person if person.is_job_seeker?
+    return home_job_seeker_path person if person.is_job_seeker?
     return home_company_person_path person if person.is_a? CompanyPerson
     root_path
   end
