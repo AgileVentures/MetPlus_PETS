@@ -7,6 +7,7 @@ class JobSeeker < ActiveRecord::Base
   has_many   :agency_relations
   has_many   :agency_people, through: :agency_relations
 
+  validates_presence_of :year_of_birth, :job_seeker_status_id
   has_many   :job_applications
   has_many   :jobs, through: :job_applications
 

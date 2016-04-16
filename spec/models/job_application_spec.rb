@@ -22,7 +22,7 @@ RSpec.describe JobApplication, type: :model do
          subject.status = 0
          expect(subject.status).to eq 'pending'
        end
-       it 'Status 1 should be pending' do
+       it 'Status 1 should be rejected' do
          subject.status = 1
          expect(subject.status).to eq 'rejected'
        end
