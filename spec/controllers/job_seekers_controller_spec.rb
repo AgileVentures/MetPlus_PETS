@@ -133,19 +133,21 @@ RSpec.describe JobSeekersController, type: :controller do
    end
 
    context "valid attributes without password change" do
-      before(:each) do
-        @jobseeker =  FactoryGirl.create(:job_seeker)
-        @user =  FactoryGirl.create(:user)
-        @jobseekerstatus =  FactoryGirl.create(:job_seeker_status)
-        @jobseeker.valid?
-        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980').
-merge(FactoryGirl.attributes_for(:user, first_name:'John',last_name:'Smith',password:nil,password_confirmation:nil,phone:'780-890-8976')).
-merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id:@jobseeker
-        @jobseeker.reload
-        @user.reload
-        @jobseekerstatus.reload
+     before(:each) do
+       @jobseeker =  FactoryGirl.create(:job_seeker)
+       @jobseekerstatus =  FactoryGirl.create(:job_seeker_status)
+       @jobseeker.valid?
+       @password = @jobseeker.encrypted_password
+       patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980',
+                                                            first_name: 'John', last_name: 'Smith',
+                                                            password: '', password_confirmation: '',
+                                                            phone: '780-890-8976',
+                                                            job_seeker_status: @jobseekerstatus),
+             id:@jobseeker
+       @jobseeker.reload
+       @jobseekerstatus.reload
 
-      end
+     end
      it 'sets a firstname' do
         expect(@jobseeker.first_name).to eq ("John")
      end
@@ -157,6 +159,9 @@ merge(FactoryGirl.attributes_for(:job_seeker_status,value:'Employedlooking')),id
      end
      it 'sets a jobseeker status' do
         expect(@jobseekerstatus.value) == ("Employedlooking")
+     end
+     it 'dont change password' do
+        expect(@jobseeker.encrypted_password).to eq (@password)
      end
      it 'sets flash message' do
         expect(flash[:notice]).to eq "Jobseeker was updated successfully."
