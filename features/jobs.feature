@@ -100,7 +100,8 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And  I fill in the fields:
 		| Title                  |  |
 	And  I select "Widgets, Inc." in select list "Company Name"
-	And  I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
+	And I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
+	And I fill in the fields:
 		| Job id                 |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"

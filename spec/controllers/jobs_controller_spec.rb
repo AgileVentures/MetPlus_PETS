@@ -393,7 +393,6 @@ RSpec.describe JobsController, type: :controller do
       @job_developer = FactoryGirl.create(:job_developer, :agency => agency) 
       @request.env["devise.mapping"] = Devise.mappings[:user]
       FactoryGirl.create(:company)
-      FactoryGirl.create(:address)
       sign_in @job_developer.acting_as  
     end
 
