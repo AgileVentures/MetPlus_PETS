@@ -89,7 +89,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And I fill in the fields:
 		| Title                  | cab-driver|
 	And  I select "Widgets, Inc." in select list "Company Name"
-	And  I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
 		| Job id                 | KRT123 |
 		| Description            | Atleast two years work experience|
 	And  I select "Day" in select list "Shift"
