@@ -26,6 +26,6 @@ Given(/^I am logged in as job developer$/) do
   agency = FactoryGirl.create(:agency)
   FactoryGirl.create(:job_developer, :agency => agency)
   step %{I am on the home page}
-  step %{I login as "unique1@gmail.com" with password "qwerty123"}
+  step %{I login as "unique2@gmail.com" with password "qwerty123"}
 end
 
