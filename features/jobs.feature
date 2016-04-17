@@ -66,7 +66,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And I logout
 
 
-
 @selenium 
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Given I am logged in as job developer 
