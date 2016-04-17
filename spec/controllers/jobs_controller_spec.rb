@@ -246,7 +246,7 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'successful POST #create' do
 
-    it "has 1 jobs at the start" do 
+    it "has 2 jobs at the start" do 
       expect(Job.count).to eq(2)
     end
 
@@ -278,11 +278,11 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'PATCh #update' do
 
-     it "has 1 jobs at the start" do 
+     it "has 2 jobs at the start" do 
       expect(Job.count).to eq(2)
     end
 
-    it 'should have 1 jobs after update and redirects to the show page' do
+    it 'should have 2 jobs after update and redirects to the show page' do
       patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
                              :fulltime => true, description: "passionate",
                              company_id: '3',
@@ -384,6 +384,81 @@ RSpec.describe JobsController, type: :controller do
     end
 
   end
+
+  describe 'successful POST #create' do
+
+    before(:example) do 
+      sign_out @company_person
+      @job_developer = FactoryGirl.create(:job_developer) 
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      FactoryGirl.create(:company)
+      FactoryGirl.create(:address)
+      sign_in @job_developer.acting_as  
+    end
+
+    it "has 2 jobs at the start" do 
+      expect(Job.count).to eq(2)
+    end
+
+    it 'redirects to the jobs index and increased by 1 count' do
+      
+      post :create, :job => {:title => "Ruby on Rails", 
+                             :fulltime => true,
+                             description: "passionate", 
+                             :shift => "Evening",
+                             :company_id => 1,
+                             :address_id => 1, 
+                             company_person_id: nil, 
+                             company_job_id: "WERRR123"}
+      # byebug
+      expect(response).to redirect_to(:action => 'index')
+      should set_flash 
+      expect(Job.count).to eq(3)
+      expect(response.status).to  eq(302) 
+    end 
+
+    it 'unsuccessful POST #create' do
+      post :create, :job => {:title => "  ", :fulltime => true,
+                             description: "passionate",
+                             company_id: '3',
+                             :shift => "Evening", company_job_id: "WERRR123" }
+      expect(response).to render_template('new')
+      expect(Job.count).to eq(2)
+      expect(response.status).to  eq(200) 
+    end 
+
+    it "has 2 jobs at the start" do 
+      expect(Job.count).to eq(2)
+    end
+
+    it 'should have 2 jobs after update and redirects to the show page' do
+      patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
+                             :fulltime => true, description: "passionate",
+                             company_id: '3',
+                             address_id: '2',
+                             company_person_id: nil,
+                             :shift => "Evening", company_job_id: "WERRR123"}
+     
+      expect(response).to redirect_to(:action => 'show')
+      should set_flash 
+      expect(Job.count).to eq(2)
+      expect(response.status).to  eq(302)
+
+    end 
+
+    describe do 
+      before(:example){ delete :destroy, :id => @job.id} 
+
+      it "is a success" do 
+        expect(response).to have_http_status(302)
+      end
+    end
+
+
+  end
+
+
+
 
 
   

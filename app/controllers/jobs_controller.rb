@@ -1,13 +1,13 @@
 class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
 	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy] 
-	before_action :is_company_person_job, only: [:edit, :destroy, :update]
+	before_action :is_right_company_person, only: [:edit, :destroy, :update]
 
 
 	def index
-		if company_person?
-			@jobs = @company_person.company.jobs.paginate(:page => params[:page],
-				                                        :per_page => 32)
+		if company_p_or_job_d? && @cp_or_jd.is_a?(CompanyPerson)
+			@jobs = @cp_or_jd.company.jobs.paginate(:page => params[:page],
+				                                        :per_page => 32) 
 		else
 			@jobs = Job.paginate(:page => params[:page],
 				               :per_page => 32).includes(:company)
@@ -21,8 +21,8 @@ class JobsController < ApplicationController
 
 	def create
 		@job = Job.new(job_params)
-		 
-		@job.address = @company_person.address 
+    
+		@job.address = @cp_or_jd.address if pets_user.is_a?(CompanyPerson)
 		if @job.save 
 			flash[:notice] = "#{@job.title} has been created successfully."
 			redirect_to jobs_url  
@@ -38,7 +38,6 @@ class JobsController < ApplicationController
 	end
 
 	def update
-	
 		if @job.update_attributes(job_params)
 			flash[:info] = "#{@job.title} has been updated successfully."
 			redirect_to @job 
@@ -48,7 +47,6 @@ class JobsController < ApplicationController
 	end
 
 	def destroy
-
 		@job.destroy
 		flash[:alert] = "#{@job.title} has been deleted successfully."
 		redirect_to jobs_url 
@@ -57,34 +55,40 @@ class JobsController < ApplicationController
 	private 
 
 		def authentication_for_post_or_edit 
-			if !company_person?
+			if !company_p_or_job_d? 
 			   flash[:alert] = "Sorry, You are not permitted to post, edit or delete a job!"  
 			   redirect_to jobs_url 
 			else
-			   set_company_person
+			   set_company_p_or_job_d
 			end  
 
 		end
 
-		def set_company_person
-			@company_person = pets_user 
+		def set_company_p_or_job_d
+			@cp_or_jd = pets_user 
 		end
 
-		def company_person?
-			if pets_user.is_a?(CompanyPerson)
-				set_company_person
+	
+		def company_p_or_job_d?
+			if pets_user.is_a?(CompanyPerson) 
+				set_company_p_or_job_d
 				return true
+		    elsif pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
+		    	set_company_p_or_job_d
+		    	return true 
 			else
 				return false
 			end
 		end
 
-		def is_company_person_job
-			 set_company_person
-			 if !(@job.address == @company_person.address)
-			 	flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
-			 	redirect_to jobs_url
-			 end
+		def is_right_company_person
+			if @cp_or_jd.is_a?(CompanyPerson)
+				if !(@cp_or_jd.address==@job.address)
+			    	flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!" 
+			    	redirect_to jobs_url
+			    end
+			 	
+			end
 		end
 
 		def find_job

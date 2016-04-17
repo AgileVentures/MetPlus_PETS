@@ -14,5 +14,12 @@
 				=link_to "Search Resumes", '#'
 				|
 				=link_to "Partner with Us", new_company_registration_path 
+			-if pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
+				For employers:
+				=link_to "Post jobs", new_job_path
+				|
+				=link_to "Search Resumes", '#'
+				|
+				=link_to "Partner with Us", new_company_registration_path
 
 		%strong="&reg;".html_safe+" MetPlus #{Date.today.year}"

@@ -41,7 +41,9 @@
               %li= msg
       %div{:class => 'row'}
         = yield 
+      = debug(params) if Rails.env.development? 
     = render 'layouts/footer'
+
 
 %script
   $(document).ready(function(){$('[data-toggle="tooltip"]').tooltip(); });
