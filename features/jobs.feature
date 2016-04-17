@@ -85,34 +85,12 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And  I press "new-job-submit"
 	Then I should see "cashier has been created successfully."
 
-	When I click the "jobs-edit-link" link
-	And I fill in the fields:
-		| Title                  | cab-driver|
-	And  I select "Widgets, Inc." in select list "Company Name"
-		| Job id                 | KRT123 |
-		| Description            | Atleast two years work experience|
-	And  I select "Day" in select list "Shift"
-	Then I check "Fulltime"
-	And I press "Update"
-	Then I should see "cab-driver has been updated successfully."
-	And I should verify the change of title "cab-driver", shift "Day" and jobId "KRT123"
-
-	When I click the "Return To Jobs" link
-	And I click the "delete" button
-	And I wait 1 second
-	Then I should see a popup with the following job information
-	And I wait 1 second
-	And I click the "modal-delete-id" link
-	And I wait 2 seconds
-	Then I should see "cab-driver has been deleted successfully."
 
 	And I am on the Job edit page with given record:
 	And  I fill in the fields:
 		| Title                  | cashier|
 		| Job id                 |  |
 		| Description            |  |
-	And  I select "Widgets, Inc." in select list "Company Name"
-	And  I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
 	And  I press "edit-job-submit"
