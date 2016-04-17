@@ -40,6 +40,24 @@ Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, f
   search_text regex
 end
 
+Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
+  regex = /#{toSearch}.+#{last}/
+  if not_see
+    step %{I should not see "#{regex}"}
+  else
+    step %{I should see "#{regex}"}
+  end
+end
+
+Then(/^I should( not)? see "([^"]*)" after "([^"]*)"$/) do |not_see, toSearch, first|
+  regex = /#{first}.+#{toSearch}/
+  if not_see
+    step %{I should not see "#{regex}"}
+  else
+    step %{I should see "#{regex}"}
+  end
+end
+
 Then(/^I wait(?: for)? (\d+) second(?:s)?$/) do |seconds|
   sleep seconds.to_i.seconds
 end
@@ -108,4 +126,17 @@ end
 
 When /^I am in (.*) browser$/ do |name|
   Capybara.session_name = name
+end
+
+Then(/^I select2 "([^"]*)" from "([^"]*)"$/) do |value, select_name|
+
+  find("#select2-#{select_name}-container").click
+  find(".select2-search__field").set(value)
+  within ".select2-results" do
+    find("li", text: value).click
+  end
+end
+
+When /^I choose resume file "([^"]*)"$/ do |filename|
+  attach_file('Resume', "#{Rails.root}/spec/fixtures/files/#{filename}")
 end

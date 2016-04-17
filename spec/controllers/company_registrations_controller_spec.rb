@@ -247,7 +247,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:registration_params) do
       $params = FactoryGirl.attributes_for(:company)
       $params[:company_people_attributes] =
-                [FactoryGirl.attributes_for(:user)]
+                [FactoryGirl.attributes_for(:user, :password => 'testing1234', :password_confirmation => 'testing1234')]
       $params[:addresses_attributes] =
                 [FactoryGirl.attributes_for(:address)]
       $params
@@ -274,6 +274,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       registration_params[:company_people_attributes] =
                 {'0' => FactoryGirl.attributes_for(:user,
                     first_name: 'Fred', last_name: 'Flintstone')}
+
       registration_params[:company_people_attributes]['0'][:id] =
                     company.company_people[0].id
 
@@ -282,13 +283,50 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                     city: 'Boston')}
       registration_params[:addresses_attributes]['0'][:id] =
                     company.addresses[0].id
-
       expect { patch :update, company: registration_params,
           id: company.id }.
                     to_not change(CompanyPerson, :count)
       expect { patch :update, company: registration_params,
           id: company.id }.
                     to_not change(Address, :count)
+
+    end
+
+    xit 'update company person without password change' do
+      # Change registration data for update
+      company = Company.find_by_name(prior_name)
+
+      registration_params = FactoryGirl.attributes_for(:company,
+                                                       name: 'Sprockets Corporation')
+
+      registration_params[:company_people_attributes] =
+          {'0' => FactoryGirl.attributes_for(:user,
+                                             first_name: 'Fred', last_name: 'Flintstone',
+                                              password: '', password_confirmation: '')}
+      registration_params[:company_people_attributes]['0'][:id] =
+          company.company_people[0].id
+
+      registration_params[:addresses_attributes] =
+          {'0' => FactoryGirl.attributes_for(:address,
+                                             city: 'Boston')}
+      registration_params[:addresses_attributes]['0'][:id] =
+          company.addresses[0].id
+
+
+      password = company.company_people[0].encrypted_password
+
+      expect { patch :update, company: registration_params,
+                     id: company.id }.
+          to_not change(CompanyPerson, :count)
+      expect { patch :update, company: registration_params,
+                     id: company.id }.
+          to_not change(Address, :count)
+
+      company.reload
+
+      expect(company.company_people[0].first_name).to eq('Fred')
+      expect(company.company_people[0].encrypted_password).to eq(password)
+
     end
   end
 

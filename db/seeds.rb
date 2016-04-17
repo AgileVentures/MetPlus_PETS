@@ -1,64 +1,4 @@
-
 require 'ffaker'
-
-# case Rails.env
-#   when "development"
-#     comp1 = FactoryGirl.create(:company, :name => 'Company 1', :email => 'info@company1.com')
-#     comp2 = FactoryGirl.create(:company, :name => 'Company 2', :email => 'info@company2.com')
-#     emp1 = FactoryGirl.create(:employer, :first_name => 'John', :email => 'john@company1.com', :company => comp1)
-#     emp2 = FactoryGirl.create(:employer, :first_name => 'Tom', :email => 'tom@company1.com', :company => comp1)
-#     emp3 = FactoryGirl.create(:employer, :first_name => 'Mary', :email => 'mary@company2.com', :company => comp2)
-
-#     skill1 = FactoryGirl.create(:skill, :name => 'Handyman', :description => 'Some handy man')
-#     skill2 = FactoryGirl.create(:skill, :name => 'Software Developer', :description => 'Develops software')
-#     skill3 = FactoryGirl.create(:skill, :name => 'Cook', :description => 'Cooks very nice food')
-#     skill4 = FactoryGirl.create(:skill, :name => 'English teacher', :description => 'Teaches english')
-#     skill5 = FactoryGirl.create(:skill, :name => 'Manager', :description => 'Someone that manages')
-#     skill6 = FactoryGirl.create(:skill, :name => 'Administrative', :description => 'Administrative work')
-
-#     job1 = FactoryGirl.create(:job, :company => comp1, :employer => emp1, :title => 'Software developer',
-#                               :description => 'Looking for a software developer that can work miracles')
-#     job1.required_skills << skill2
-#     job1.nice_to_have_skills << skill5
-#     job1.save
-
-#     job2 = FactoryGirl.create(:job, :company => comp1, :employer => emp2, :title => 'Teacher',
-#                               :description => 'Looking for a nice english teacher to do some teaching')
-#     job2.required_skills << skill4
-#     job2.save
-
-#     job3 = FactoryGirl.create(:job, :company => comp2, :employer => emp3, :title => 'The Cook',
-#                               :description => 'Cooking that can cook and do some handywork')
-#     job3.required_skills << skill3
-#     job3.nice_to_have_skills << skill1
-#     job3.save
-
-#     job4 = FactoryGirl.create(:job, :company => comp1, :employer => emp3, :title => 'Need a person',
-#                               :description => 'Need someone that can do a bunch of things')
-#     job4.required_skills << skill6
-#     job4.required_skills << skill5
-#     job4.nice_to_have_skills << skill1
-#     job4.nice_to_have_skills << skill4
-#     job4.save
-# end
-# User.find_or_create_by(email: 'salemamba1@gmail.com') do |user|
-#     user.first_name = "salem"
-#     user.last_name  = 'amba'
-#     user.password = 'secret123'
-#     user.password_confirmation = 'secret123'
-#     user.phone ='619-316-8971'
-#     user.confirmed_at = DateTime.now
-# end
-
-puts "Seeding wait......."
-#incase rerun comes in. not necessary
-JobSeekerStatus.delete_all
-Job.delete_all
-Company.delete_all
-Address.delete_all
-CompanyPerson.delete_all
-JobCategory.delete_all
-Skill.delete_all
 
 # --------------------------- Seed Production Database --------------------
 
@@ -100,8 +40,10 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
 
 puts "\nSeeded Production Data"
 
+puts "\nSeeding development DB"
+
 # seed striction to development, for now
-if Rails.env.development? # || Rails.env.staging?
+if Rails.env.development? || Rails.env.staging?
 
   #-------------------------- Companies -----------------------------------
   200.times do |n|
@@ -124,9 +66,10 @@ if Rails.env.development? # || Rails.env.staging?
     end
     cmp.save!
   end
+
   puts "Companies created: #{Company.count}"
 
-  #-------------------------- Addresses -----------------------------------
+  #-------------------------- Company Addresses ---------------------------
   companies = Company.all.to_a
   200.times do |n|
     street = Faker::Address.street_address
@@ -137,15 +80,16 @@ if Rails.env.development? # || Rails.env.staging?
                    location: companies.pop)
   end
 
-  puts "Addresses created: #{Address.count}"
+  puts "Company Addresses created: #{Address.count}"
 
   #-------------------------- Job Categories ------------------------------
   200.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
     JobCategory.create!(name: "#{name}_#{n}", description: description)
-    
+
   end
+
   puts "Job Categories created: #{JobCategory.count}"
 
   #-------------------------- Skills --------------------------------------
@@ -153,6 +97,7 @@ if Rails.env.development? # || Rails.env.staging?
     Skill.create(name: FFaker::Skill.specialty,
                  description: FFaker::Lorem.sentence)
   end
+
   puts "Skills created: #{Skill.count}"
 
   #-------------------------- Company People ------------------------------
@@ -229,42 +174,6 @@ if Rails.env.development? # || Rails.env.staging?
                      confirmed_at: DateTime.now)
   end
 
-  Job.all.to_a.each_with_index do |job, index|
-    job.address = Address.all.to_a[index]
-  end
-
-  #agency
-  addresses = Address.all.to_a
-  50.times do |n|
-    code = Faker::Code.ean.split(//).shuffle[1..3].join
-    angency = agency
-    Branch.create(:code => code,
-                  agency: angency,
-                  address: addresses.pop)
-  end
-
-  50.times do |n|
-    branch = Branch.create(code: "BR00#{n}", agency: agency)
-    branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: "#{n} Main Street", zipcode: 48201)
-  end
-
-
-
-  branch = Branch.create(code: '001', agency: agency)
-  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: '123 Main Street', zipcode: 48201)
-
-  branch = Branch.create(code: '002', agency: agency)
-  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: '456 Sullivan Street', zipcode: 48204)
-
-  branch = Branch.create(code: '003', agency: agency)
-  branch.address = Address.create!(city: 'Detroit', state: 'Michigan',
-              street: '3 Auto Drive', zipcode: 48206)
-
-  # Job Seekers
-
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', resume: 'text',
@@ -277,6 +186,11 @@ if Rails.env.development? # || Rails.env.staging?
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                         email: 'frank@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text',
+            job_seeker_status: @jss3, confirmed_at: Time.now)
+
+  js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
+                        email: 'henry@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 
@@ -342,6 +256,8 @@ if Rails.env.development? # || Rails.env.staging?
   agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_jd.save!
 
+  puts "AgencyPeople created: #{AgencyPerson.count}"
+
   #-------------------------- Agency Relations ----------------------------
   agency_cm_and_jd.agency_relations <<
         AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
@@ -357,6 +273,18 @@ if Rails.env.development? # || Rails.env.staging?
   agency_jd.save!
 
   puts "Agency Relations created: #{AgencyRelation.count}"
+
+  #-------------------------- Tasks ---------------------------------------
+  companies = Company.where(status: Company::STATUS[:PND])
+
+  Task.new_js_unassigned_cm_task(js3, agency)
+  Task.new_js_registration_task(js4, agency)
+  Task.new_review_company_registration_task(companies[0], agency)
+  Task.new_review_company_registration_task(companies[1], agency)
+  Task.new_review_company_registration_task(companies[2], agency)
+  Task.new_review_company_registration_task(companies[3], agency)
+
+  puts "Tasks created: #{Task.count}"
 end
 
 # Think we have enough users(JS, AA, JD, CM, CP). We can login in productin env with created creditials.

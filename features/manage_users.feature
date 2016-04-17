@@ -66,10 +66,11 @@ Feature: Manage Users
 		And I should be on the home page
 	# maybe fail after cancancan implementation
 
-	Scenario: Redirecting back to previous page after successfull login
-		Given I am on the Company Registration page
-		And I am logged in as "<email>" with password "secret1234"
-		And I should be on the Company Registration page
+	# Scenario removed because now the users are redirected to they page
+	#Scenario: Redirecting back to previous page after successfull login
+	#	Given I am on the Company Registration page
+	#	And I am logged in as "<email>" with password "secret1234"
+	#	And I should be on the Company Registration page
 
 	Scenario: Confirmation of user email (and duplicate confirm)
 		Given I am on the Jobseeker Registration page

@@ -42,6 +42,9 @@ end
 # Turn off delaying emails
 Delayed::Worker.delay_jobs = false
 
+# Allow non-mocked service calls to proceed:
+WebMock.allow_net_connect!
+
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 #

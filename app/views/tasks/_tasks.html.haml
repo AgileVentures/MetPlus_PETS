@@ -1,0 +1,62 @@
+%table.table.table-hover
+  %thead
+    %tr
+      %td
+        Task
+      %td
+        Status
+      %td
+        Entities associated
+      %td
+        Change date
+      %td
+        Options
+  %tbody
+    - all_tasks.each do |task|
+      %tr{:id => "task-#{task.id}"}
+        %td
+          = task.description
+        %td{:id => "task-#{task.id}-status"}
+          - if task.status == Task::STATUS[:NEW]
+            = task.status
+          - else
+            = "#{task.status}("
+            = link_to( task.task_owner.full_name, show_person_path(task.task_owner))
+            )
+        %td
+          - if not task.user.nil?
+            %p
+              User:
+              =link_to( task.person.full_name, show_person_path(task.person))
+          - if not task.job.nil?
+            %p
+              Job:
+              = link_to(task.job.title, job_path(task.job))
+          - if not task.company.nil?
+            %p
+              Company:
+              = link_to(task.company.name, company_home_path(task.company))
+        %td
+          = task.updated_at.strftime('%F')
+        %td
+          - if task.status == Task::STATUS[:NEW]
+            = link_to '#', :title => 'Assign task',
+                            class: 'assign_button',
+                            id: "assign-#{task.id}",
+                            data: { :task_id => task.id,
+                                    :toggle => 'modal',
+                                    :target => '#assignTaskModal'} do
+              %i.fa.fa-male.fa-1
+          - elsif task.status == Task::STATUS[:ASSIGNED]
+            = link_to '#', :title => 'Start working on task',
+                           class: 'wip_button',
+                           id: "wip-#{task.id}",
+                           data: {:url => in_progress_task_path(task)} do
+              %i.fa.fa-hourglass-start.fa-1
+          - elsif task.status == Task::STATUS[:WIP]
+            = link_to '#', :title => 'Work complete',
+                           class: 'done_button',
+                           id: "done-#{task.id}",
+                           data: {:url => done_task_path(task)} do
+              %i.fa.fa-flag-checkered.fa-1
+= will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'tasks', :action => 'tasks', :task_type => task_type}

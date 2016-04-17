@@ -38,14 +38,17 @@ Given(/^the following agency people exist:$/) do |table|
     agency_name = hash.delete 'agency'
     hash['agency_id'] = Agency.find_by_name(agency_name).id
 
-    agency_role_id = hash.delete 'role'
-    agency_role = AgencyRole.find_by_role(AgencyRole::ROLE[agency_role_id.to_sym])
 
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
+    roles = hash.delete('role').split(/,/)
 
     agency_person = AgencyPerson.new(hash)
-    agency_person.agency_roles << agency_role
+
+    roles.each do |role|
+      agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[role.to_sym])
+    end
+
     agency_person.save
   end
 end
@@ -100,5 +103,35 @@ end
 Given(/^the following job categories exist:$/) do |table|
   table.hashes.each do |hash|
     JobCategory.create!(hash)
+  end
+end
+
+Given(/^the following tasks exist:$/) do |table|
+  table.hashes.each do |hash|
+
+    owner = hash.delete 'owner'
+    targets = hash.delete 'targets'
+    hash['task_type'] = hash['task_type'].to_sym
+    hash['status'] = Task::STATUS[hash['status'].to_sym]
+    hash['deferred_date'] = Date.parse(hash.delete 'deferred_date')
+
+    task = FactoryGirl.build(:task, hash)
+
+    if owner =~ /,/
+      agency = Agency.find_by_name(owner.split(/,/)[0])
+      role = owner.split(/,/)[1]
+      if agency.nil?
+        company = Company.find_by_name(owner.split(/,/)[0])
+        task.task_owner = {:company => {company: company, role: role.to_sym}}
+      else
+        task.task_owner = {:agency => {agency: agency, role: role.to_sym}}
+      end
+    else
+      task.task_owner = {:user => User.find_by_email(owner).pets_user}
+    end
+    if targets =~ /@/
+      task.target = User.find_by_email targets
+    end
+    task.save!
   end
 end

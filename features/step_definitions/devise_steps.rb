@@ -25,8 +25,6 @@ Given(/^I am logged in as job developer$/) do
   FactoryGirl.create(:job_developer)
   step %{I am on the home page}
   step %{I login as "unique1@gmail.com" with password "qwerty123"}
+  step %{I should be on the Company Person 'unique1@gmail.com' Home page}
 end
 
-
-
-  

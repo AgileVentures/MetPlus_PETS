@@ -1,12 +1,10 @@
 require 'rails_helper'
-require 'task_manager/task_manager'
-require 'task_manager/business_logic'
 class TaskTester
-  include TaskManager
-  include BusinessLogic
+  include TaskManager::TaskManager
+  include TaskManager::BusinessLogic
 end
 
-RSpec.describe BusinessLogic do
+RSpec.describe TaskManager::BusinessLogic do
   describe 'No Case Manager Assigned to Job Seeker' do
     before :each do
       @job_seeker = FactoryGirl.create(:job_seeker)
@@ -58,6 +56,21 @@ RSpec.describe BusinessLogic do
         it('owner is agency admin'){expect(subject[1].task_owner).to eq([@agency_admin])}
         it('target job seeker'){expect(subject[1].target).to eq(@job_seeker)}
       end
+    end
+  end
+  describe 'Review company registration' do
+    before :each do
+      @agency = FactoryGirl.create(:agency)
+      @company = FactoryGirl.create(:company, agencies: [@agency])
+
+      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+    end
+    describe '#new_review_company_registration_task' do
+      subject {TaskTester.new_review_company_registration_task @company, @agency}
+      it('owner is agency admin'){expect(subject.task_owner).to eq([@agency_admin])}
+      it('target company'){expect(subject.target).to eq(@company)}
+      it('check type'){expect(subject.task_type.to_sym).to eq(:company_registration)}
     end
   end
 end

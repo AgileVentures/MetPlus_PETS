@@ -8,11 +8,21 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :store_current_location, :unless => :devise_controller?
 
+  def after_sign_in_path_for(resource)
+    person = resource.pets_user
+    case person
+      when JobSeeker
+        return home_job_seeker_path(person)
+      when CompanyPerson
+        return home_company_person_path(person)
+    end
+    stored_location_for(resource) || request.referer || root_path
+  end
 
   protected
 
     def pets_user
-       return nil if current_user.nil?  
+       return nil if current_user.nil?
        current_user.try(:actable).nil? ? current_user : current_user.actable
     end
     def store_current_location

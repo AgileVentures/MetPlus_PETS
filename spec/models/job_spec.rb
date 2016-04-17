@@ -21,6 +21,8 @@ RSpec.describe Job, type: :model do
           through(:job_skills).conditions(job_skills: {required: false}).
           source(:skill).class_name('Skill')}
     it { is_expected.to have_many(:skill_levels).through(:job_skills) }
+    it { is_expected.to have_many(:job_applications) }
+    it { is_expected.to have_many(:job_seekers).through(:job_applications) }
   end
   
   describe 'Database schema' do

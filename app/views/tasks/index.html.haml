@@ -1,0 +1,4 @@
+%h3 Tasks unassigned or assigned to you
+= render partial: 'tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
+%h3 Tasks completed by you
+= render partial: 'tasks_structure' , :locals => {all_tasks: @tasks_t2, task_type: @task_type_t2}

@@ -1,4 +1,5 @@
 class CompanyRegistrationsController < ApplicationController
+  include UserParameters
 
   def new
     @company = Company.new
@@ -43,8 +44,7 @@ class CompanyRegistrationsController < ApplicationController
          " We will review your request and get back to you shortly."
       CompanyMailer.pending_approval(@company,
                                      @company.company_people[0]).deliver_now
-      Event.create(:COMP_REGISTER,
-                   name: @company.name, id: @company.id)
+      Event.create(:COMP_REGISTER, @company)
 
       render :confirmation
     else
@@ -62,10 +62,7 @@ class CompanyRegistrationsController < ApplicationController
     @company = Company.find(params[:id])
 
     reg_params = company_params
-    if reg_params[:company_people_attributes]['0'][:password].empty?
-      reg_params[:company_people_attributes]['0'].delete :password
-      reg_params[:company_people_attributes]['0'].delete :password_confirmation
-    end
+    reg_params[:company_people_attributes]['0'] = handle_user_form_parameters reg_params[:company_people_attributes]['0']
 
     changed_email = (@company.company_people[0].email !=
             reg_params[:company_people_attributes]['0'][:email])
