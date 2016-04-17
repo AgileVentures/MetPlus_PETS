@@ -4,14 +4,7 @@
 - if @cp_or_jd.is_a?(CompanyPerson)
 	= f.hidden_field  :company_id
 	= f.hidden_field  :company_person_id 
-/ - if @cp_or_jd.is_a?(AgencyPerson)
-/ 	= f.hidden_field  :company_id
-/ 	= f.hidden_field  :company_person_id 
-	
-
-
-
- 
+	 
 .form-group 
 	=f.label :title, class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}

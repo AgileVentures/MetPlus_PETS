@@ -15,5 +15,4 @@ end
 
 Given(/^the Widgets, Inc\. company name with address exist in the record$/) do
 	FactoryGirl.create(:company)
-	# FactoryGirl.create(:address)
 end

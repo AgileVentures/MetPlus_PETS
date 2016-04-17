@@ -73,9 +73,9 @@ class JobsController < ApplicationController
 			if pets_user.is_a?(CompanyPerson) 
 				set_company_p_or_job_d
 				return true
-		    elsif pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
-		    	set_company_p_or_job_d
-		    	return true 
+			elsif pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
+				set_company_p_or_job_d
+				return true 
 			else
 				return false
 			end
