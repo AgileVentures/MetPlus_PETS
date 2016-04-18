@@ -83,7 +83,7 @@ class JobsController < ApplicationController
 
 		def is_right_company_person
 			if @cp_or_jd.is_a?(CompanyPerson)
-				if !(@cp_or_jd.address==@job.address)
+				if !(@cp_or_jd.company==@job.company)
 					flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!" 
 					redirect_to jobs_url
 				end
