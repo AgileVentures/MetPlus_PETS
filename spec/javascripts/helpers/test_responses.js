@@ -35,5 +35,14 @@ var TestResponses = {
                 responseText: '{"message": "Error message"}'
             }
         }
+    },
+    jobs: {
+        paginate: {
+            success: {
+                status: 200,
+                contentType: 'text/html',
+                responseText: 'Freshly baked jobs'
+            }
+        }
     }
 };
