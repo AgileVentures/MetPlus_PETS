@@ -38,4 +38,4 @@ Feature: Access agency admin when not a valid administrator
     Given I login as "jane@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
     And I go to the agency 'MetPlus' edit page
-    And I should see "You are not authorized to perform this action."
+    And I should see "You are not authorized to edit MetPlus agency."
