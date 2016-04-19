@@ -49,17 +49,18 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
                 if( typeof successCallback == "function" )
                     successCallback();
             },
-            error: function (xhrObj, status, exception) {
+            error: function (xhrObj) {
                 Notification.error_notification(xhrObj.responseJSON['message']);
                 if( typeof errorCallback == "function" )
                     errorCallback();
             }
         });
     };
-    this.refresh_jobs = function (target_idx, url) {
+    this.refresh_div = function (target_idx, url) {
         self.load_jobs_from_url(target_idx, url);
     };
-    this.paginate_jobs = function() {
+    this.paginate_jobs = function(ev) {
+        ev.preventDefault();
         self.load_jobs_from_url($(this).data('position'), this.href);
         return false;
     };
@@ -74,8 +75,9 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
     this.setup = function() {
         $(self.viewSelector).each(function(i, obj) {
             var job_type = $(obj).data(self.paginationType);
-            self.refresh_jobs(i, self.url + job_type)
+            self.refresh_div(i, self.url + job_type)
         });
     };
     this.setup();
+    return this;
 };
