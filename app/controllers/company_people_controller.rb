@@ -63,6 +63,7 @@ class CompanyPeopleController < ApplicationController
     @task_type_t1 = 'mine-open'
     @render_modal = true
     @tasks_t1 = display_tasks @task_type_t1
+    @job_type = 'my-company-all'
   end
 
   private

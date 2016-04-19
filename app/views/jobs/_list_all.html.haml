@@ -1,0 +1,32 @@
+%div{:id => "jobs-#{job_type}", :class => 'jobs-view', :data => {:job_type => @job_type}}
+  %table.table.table-hover
+    %thead
+      %tr
+        - job_fields(job_type).each do |field|
+          - case field
+            - when :title
+              %td Title
+            - when :updated_at
+              %td Last update
+            - when :poster
+              %td Poster
+            - when :num_applicants
+              %td Number of applications
+    %tbody
+      - all_jobs.each do |job|
+        %tr
+        - job_fields(job_type).each do |field|
+          - case field
+            - when :title
+              %td
+                = link_to(job.title, job_path(job))
+            - when :updated_at
+              %td
+                = job.updated_at.strftime('%F')
+            - when :poster
+              %td
+                = link_to(job.company_person.full_name, company_person_path(job.company_person))
+            - when :num_applicants
+              %td
+                = job.number_applicants
+  = will_paginate all_jobs, param_name: 'jobs_page', :params => {:controller => 'jobs', :action => 'list', :job_type => job_type}
