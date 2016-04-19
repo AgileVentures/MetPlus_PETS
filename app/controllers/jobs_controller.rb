@@ -52,11 +52,12 @@ class JobsController < ApplicationController
 	end
 
 	def list
-    job_type = params[:job_type] || 'my-company-all'
+    @job_type = params[:job_type] || 'my-company-all'
     raise 'Unsupported request' if not request.xhr?
 
-    jobs = display_jobs job_type
-    render partial: 'list_all', :locals => {all_jobs: jobs, job_type: job_type}
+    @jobs = []
+    @jobs = display_jobs @job_type
+    render partial: 'list_all', :locals => {all_jobs: @jobs, job_type: @job_type}
   end
 
 	private 
