@@ -33,26 +33,53 @@ class JobSeekersController < ApplicationController
                        "Please follow the link to activate your account."
       redirect_to root_path
     else
-      @model_errors = @jobseeker.errors
       render 'new'
     end
   end
 
   def edit
     @jobseeker = JobSeeker.find(params[:id])
+    @current_resume = Resume.find_by_job_seeker_id(@jobseeker.id)
   end
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
 
-    person_params = handle_user_form_parameters form_params
+    jobseeker_params = handle_user_form_parameters form_params
+    dispatch_file    = jobseeker_params.delete 'resume'
 
-    if @jobseeker.update_attributes(person_params)
+    models_saved = @jobseeker.update_attributes(jobseeker_params)
+
+    if models_saved
+      if dispatch_file          # If there is a résumé, try to save/update that
+        tempfile = dispatch_file.tempfile
+        filename = dispatch_file.original_filename
+
+        # Update current résumé if present, otherwise save new
+        # Statement below needs to change if more than one resume per job seeker
+        resume = Resume.find_by_job_seeker_id(@jobseeker.id)
+        if (resume)
+          resume.file_name = filename
+          resume.file = tempfile
+        else
+          resume = Resume.new(file: tempfile, file_name: filename,
+                     job_seeker_id: @jobseeker.id)
+        end
+
+        unless resume.save
+          models_saved = false
+          @jobseeker.errors.messages.merge! resume.errors.messages
+        end
+      end
+    end
+
+
+    if models_saved
        sign_in :user, @jobseeker.user, bypass: true
        flash[:notice] = "Jobseeker was updated successfully."
        redirect_to root_path
     else
-       @model_errors = @jobseeker.errors
+       @resume = resume
        render 'edit'
     end
   end

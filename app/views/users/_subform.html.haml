@@ -6,7 +6,7 @@
 	=@user_form.label :last_name, 'Last Name', class:'control-label col-sm-2'
 	.col-sm-6
 		=@user_form.text_field :last_name, size: 30, class:'form-control'
-	
+
 .form-group
 	=@user_form.label :email, 'Email', class:'control-label col-sm-2'
 	.col-sm-6
@@ -19,8 +19,12 @@
 .form-group
 	=@user_form.label :password, 'Password', class:'control-label col-sm-2'
 	.col-sm-6
-		=@user_form.password_field :password, size: 30, class:'form-control'
+		=@user_form.password_field :password, size: 30, class:'form-control',
+								placeholder: pw_placeholder
 .form-group
-	=@user_form.label :password_confirmation, 'Password Confirmation', class:'control-label col-sm-2'
+	=@user_form.label :password_confirmation, 'Password Confirmation',
+								class:'control-label col-sm-2'
 	.col-sm-6
-		=@user_form.password_field :password_confirmation, size: 30, class:'form-control'
+		=@user_form.password_field :password_confirmation, size: 30,
+								class:'form-control',
+								placeholder: pw_placeholder

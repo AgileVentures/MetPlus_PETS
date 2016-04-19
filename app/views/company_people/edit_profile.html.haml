@@ -7,7 +7,8 @@
 		.col-sm-6
 			=cp.text_field :title, size: 30, class:'form-control'
 	- @user_form = cp
-	= render 'users/subform'
+	= render partial: 'users/subform',
+		locals: {pw_placeholder: "leave blank if you don't want to change password"}
 	.form-group
 		.col-sm-2.col-sm-offset-2
 			=@user_form.submit class: 'btn btn-primary'
@@ -15,4 +16,3 @@
 			=link_to 'Cancel', root_path, class: 'btn btn-danger'
 %i (leave password blank, if you don't want to change it)
 %br
-
