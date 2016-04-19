@@ -35,7 +35,7 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
     this.viewSelector = viewSelector;
     this.paginationType = paginationType;
 
-    this.load_jobs_from_url = function(target_idx, url) {
+    this.load_div_from_url = function(target_idx, url) {
         var target = $($(self.viewSelector)[target_idx]);
         target.html("Page is loading...");
         $.ajax({type: 'GET',
@@ -57,25 +57,25 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
         });
     };
     this.refresh_div = function (target_idx, url) {
-        self.load_jobs_from_url(target_idx, url);
+        self.load_div_from_url(target_idx, url);
     };
-    this.paginate_jobs = function(ev) {
+    this.paginate_div = function(ev) {
         ev.preventDefault();
-        self.load_jobs_from_url($(this).data('position'), this.href);
+        self.load_div_from_url($(this).data('position'), this.href);
         return false;
     };
 
     this.init = function(obj, target_idx) {
         obj.find(".pagination a").each(function(i, obj) {
-            $(obj).click(self.paginate_jobs);
+            $(obj).click(self.paginate_div);
             $(obj).data('position', target_idx);
         });
     };
 
     this.setup = function() {
         $(self.viewSelector).each(function(i, obj) {
-            var job_type = $(obj).data(self.paginationType);
-            self.refresh_div(i, self.url + job_type)
+            var div_type = $(obj).data(self.paginationType);
+            self.refresh_div(i, self.url + div_type)
         });
     };
     this.setup();
