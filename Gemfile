@@ -45,7 +45,7 @@ gem 'bootstrap-will_paginate'
 
 # gem 'ajax_pagination'
 
-#gem 'cancancan', '~> 1.10'
+## Authorization gem
 gem "pundit"
 
 gem 'pusher'
