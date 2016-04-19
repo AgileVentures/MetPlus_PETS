@@ -5,7 +5,7 @@
 	.clearfix
 	- @user_form = js
 	= render partial: 'users/subform',
-			locals: {pw_placeholder: (pw_placeholder if defined? pw_placeholder)}
+			locals: {new_form: (new_form if defined? new_form)}
 	.form-group
 		=js.label :year_of_birth, 'Year Of Birth', class:'control-label col-sm-2'
 		.col-sm-6
