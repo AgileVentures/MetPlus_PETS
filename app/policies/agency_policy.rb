@@ -1,0 +1,2 @@
+class AgencyPolicy
+end

@@ -5,6 +5,8 @@ RSpec.describe AgenciesController, type: :controller do
   describe "GET #edit" do
     before(:each) do
       @agency = FactoryGirl.create(:agency)
+      agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
+      sign_in agency_admin
       get :edit, id: @agency
     end
     it 'assigns @agency for form' do
@@ -17,11 +19,26 @@ RSpec.describe AgenciesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-
+  describe "GET #edit as Job Developer" do
+    before(:each) do
+      @agency = FactoryGirl.create(:agency)
+      agency_admin = FactoryGirl.create(:job_developer, agency: @agency)
+      sign_in agency_admin
+      get :edit, id: @agency
+    end
+    it "redirect" do
+      expect(response).to have_http_status 302
+    end
+    it 'sets flash message' do
+      expect(flash[:warning]).to eq "You are not authorized to access this page."
+    end
+  end
   describe "PATCH #update" do
     context 'valid attributes' do
       before(:each) do
         @agency = FactoryGirl.create(:agency)
+        agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
+        sign_in agency_admin
         patch :update, agency: FactoryGirl.attributes_for(:agency),
                      id: @agency
       end
@@ -43,6 +60,8 @@ RSpec.describe AgenciesController, type: :controller do
         @agency = FactoryGirl.create(:agency)
         @agency.assign_attributes(phone: '', website: 'nodomain')
         @agency.valid?
+        agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
+        sign_in agency_admin
         patch :update, agency: FactoryGirl.attributes_for(:agency, 
                         phone: '', website: 'nodomain'), id: @agency
       end
