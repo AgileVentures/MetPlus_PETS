@@ -522,7 +522,7 @@ RSpec.describe JobsController, type: :controller do
 
       it 'check jobs' do
         byebug
-        assigns(:jobs).to_s
+        a = assigns(:jobs)
         expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
         expect(assigns(:jobs).size).to be 1
       end
