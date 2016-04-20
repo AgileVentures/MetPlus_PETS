@@ -24,7 +24,7 @@ Scenario: new Js Registration
   And I fill in "Phone" with "345-890-7890"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
-  And I fill in "Year Of Birth" with "1990"
+  And I select "1990" in select list "Year Of Birth"
   Then I select "Unemployedlooking" in select list "Status"
   And I choose resume file "Admin-Assistant-Resume.pdf"
   Then I click the "Create Job seeker" button
@@ -38,7 +38,7 @@ Scenario: Invalid résumé file type
   And I fill in "Phone" with "345-890-7890"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
-  And I fill in "Year Of Birth" with "1990"
+  And I select "1990" in select list "Year Of Birth"
   Then I select "Unemployedlooking" in select list "Status"
   And I choose resume file "Test File.zzz"
   Then I click the "Create Job seeker" button
