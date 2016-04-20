@@ -176,22 +176,22 @@ if Rails.env.development? || Rails.env.staging?
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
-                year_of_birth: '1980', resume: 'text',
+                year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
             job_seeker_status: @jss1, confirmed_at: Time.now)
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
                         email: 'mary@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
             job_seeker_status: @jss2, confirmed_at: Time.now)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                         email: 'frank@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
                         email: 'henry@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now)
 
 
@@ -199,7 +199,7 @@ if Rails.env.development? || Rails.env.staging?
                                email:'vijaya.karumudi1@gmail.com',
                                password:'dfg123',password_confirmation:'dfg123',
                                phone:'345-890-7890',year_of_birth: "1990",
-                               confirmed_at: Time.now,
+                               confirmed_at: Time.now, phone: '111-222-3333',
                                job_seeker_status: @jss1)
 
   puts "Job Seekers created: #{JobSeeker.count}"

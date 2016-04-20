@@ -99,9 +99,6 @@ RSpec.describe JobSeekersController, type: :controller do
        post :create, job_seeker: jobseeker1_hash
 
      end
-     it 'assigns @model_errors for error display in layout' do
-       expect(assigns(:model_errors).full_messages).to eq @jobseeker.errors.full_messages
-     end
      it 'renders new template' do
         expect(response).to render_template('new')
      end
@@ -112,23 +109,84 @@ RSpec.describe JobSeekersController, type: :controller do
  end
 
  describe "PATCH #update" do
-   context "valid attributes" do
+   context "valid attributes and initial résumé upload" do
      before(:each) do
+
+       stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
+       stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
        @jobseeker =  FactoryGirl.create(:job_seeker)
-       patch :update, id: @jobseeker,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge(FactoryGirl.attributes_for(:job_seeker_status))
      end
 
      it 'sets flash message' do
+        patch :update, id: @jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                resume: fixture_file_upload('files/Janitor-Resume.doc')).
+            merge(FactoryGirl.attributes_for(:job_seeker_status))
         expect(flash[:notice]).to eq "Jobseeker was updated successfully."
      end
      it 'returns redirect status' do
+        patch :update, id: @jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                resume: fixture_file_upload('files/Janitor-Resume.doc')).
+            merge(FactoryGirl.attributes_for(:job_seeker_status))
         expect(response).to have_http_status(:redirect)
      end
      it 'redirects to mainpage' do
+        patch :update, id: @jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                resume: fixture_file_upload('files/Janitor-Resume.doc')).
+            merge(FactoryGirl.attributes_for(:job_seeker_status))
         expect(response).to redirect_to(root_path)
+     end
+     it 'saves resume record' do
+       expect{ patch :update, id: @jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                resume: fixture_file_upload('files/Janitor-Resume.doc')).
+            merge(FactoryGirl.attributes_for(:job_seeker_status)) }.
+          to change(Resume, :count).by(+1)
+     end
+   end
+
+   context "valid attributes and résumé file update" do
+     before(:each) do
+
+       stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
+       stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
+       @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
+              resume: fixture_file_upload('files/Janitor-Resume.doc')).
+              merge(FactoryGirl.attributes_for(:user)).
+              merge(FactoryGirl.attributes_for(:job_seeker_status))
+
+       post :create, job_seeker: @jobseeker_hash
+
+       @jobseeker = JobSeeker.find(1)
+
+       patch :update, id: @jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')).
+            merge(FactoryGirl.attributes_for(:job_seeker_status))
+
+       @jobseeker.reload
+     end
+
+     it 'updates resume record' do
+       expect(@jobseeker.resumes[0].file_name).
+              to eq 'Admin-Assistant-Resume.pdf'
+     end
+     it 'sets flash message' do
+       expect(flash[:notice]).to eq "Jobseeker was updated successfully."
      end
    end
 
@@ -181,9 +239,6 @@ RSpec.describe JobSeekersController, type: :controller do
        @jobseeker.valid?
        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '198',resume:''),id:@jobseeker
      end
-     it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).to eq @jobseeker.errors.full_messages
-     end
      it 'renders edit template' do
         expect(response).to render_template('edit')
      end
@@ -195,10 +250,30 @@ RSpec.describe JobSeekersController, type: :controller do
 
   describe "GET #edit" do
     before(:each) do
-      @jobseeker = FactoryGirl.create(:job_seeker)
+      stub_request(:post, CruncherService.service_url + '/authenticate').
+         to_return(body: "{\"token\": \"12345\"}", status: 200,
+         :headers => {'Content-Type'=> 'application/json'})
+
+      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
+         to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+         :headers => {'Content-Type'=> 'application/json'})
+
+      @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
+             resume: fixture_file_upload('files/Janitor-Resume.doc')).
+             merge(FactoryGirl.attributes_for(:user)).
+             merge(FactoryGirl.attributes_for(:job_seeker_status))
+
+      post :create, job_seeker: @jobseeker_hash
+
+      @jobseeker = JobSeeker.find(1)
+
       get :edit, id: @jobseeker
     end
 
+    it 'assigns jobseeker and current_resume for view' do
+      expect(assigns(:jobseeker)).to eq @jobseeker
+      expect(assigns(:current_resume)).to eq @jobseeker.resumes[0]
+    end
     it "renders edit template" do
       expect(response).to render_template 'edit'
     end
