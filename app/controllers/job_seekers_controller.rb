@@ -39,7 +39,7 @@ class JobSeekersController < ApplicationController
 
   def edit
     @jobseeker = JobSeeker.find(params[:id])
-    @current_resume = Resume.find_by_job_seeker_id(@jobseeker.id)
+    @current_resume = @jobseeker.resumes[0]
   end
 
   def update
@@ -56,8 +56,8 @@ class JobSeekersController < ApplicationController
         filename = dispatch_file.original_filename
 
         # Update current résumé if present, otherwise save new
-        # Statement below needs to change if more than one resume per job seeker
-        resume = Resume.find_by_job_seeker_id(@jobseeker.id)
+        # (Statement below needs to change if more than one resume per JS)
+        resume = @jobseeker.resumes[0]
         if (resume)
           resume.file_name = filename
           resume.file = tempfile
