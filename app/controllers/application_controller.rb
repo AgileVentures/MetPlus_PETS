@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   protected
 
     def action_description
-      @description ||= 'perform this action.'
+      @description ||= 'perform this action'
     end
 
     def action_description= description
