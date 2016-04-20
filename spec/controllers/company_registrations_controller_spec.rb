@@ -292,7 +292,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     end
 
-    xit 'update company person without password change' do
+    it 'update company person without password change' do
       # Change registration data for update
       company = Company.find_by_name(prior_name)
 
@@ -323,6 +323,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           to_not change(Address, :count)
 
       company.reload
+      company.company_people[0].reload
 
       expect(company.company_people[0].first_name).to eq('Fred')
       expect(company.company_people[0].encrypted_password).to eq(password)
