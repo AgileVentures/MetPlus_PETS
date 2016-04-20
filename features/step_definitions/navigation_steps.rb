@@ -12,7 +12,7 @@ def page_translator name
       return tasks_path
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
-      return job_seekers_home_path(User.find_by_email(user[1]))
+      return job_seekers_home_path(User.find_by_email(user[1]).pets_user)
     when /Company Person '.+' Home/
       user = name.match(/'(.+)'/)
       return home_company_person_path(User.find_by_email(user[1]).pets_user)
@@ -49,7 +49,7 @@ Given(/I am on the JobSeeker Show page for "([^"]*)"$/) do |email|
   visit job_seeker_path(User.find_by_email(email).actable_id)
 end
 
-Given(/^I am on the Job edit page with given record:$/) do 
+Given(/^I am on the Job edit page with given record:$/) do
   job = FactoryGirl.create(:job)
   visit edit_job_path(job.id)
 end
