@@ -494,6 +494,9 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each do end
         expect(assigns(:jobs).all.size).to be 10
         expect(assigns(:jobs).first.title).to eq 'Awesome job 0'
         expect(assigns(:jobs).last.title).to eq 'Awesome job 9'
@@ -521,8 +524,9 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'check jobs' do
-        byebug
-        a = assigns(:jobs)
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each do end
         expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
         expect(assigns(:jobs).size).to be 1
       end
@@ -551,6 +555,9 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each do end
         expect(assigns(:jobs).all.size).to be 4
         expect(assigns(:jobs).first.title).to eq 'Awesome new job 0'
         expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'
