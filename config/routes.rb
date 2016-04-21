@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :agency_people do
     get 'edit_profile', on: :member, as: :edit_profile
     patch 'update_profile', on: :member, as: :update_profile
+    get 'home', on: :member, as: :home
   end
   # --------------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ Rails.application.routes.draw do
     patch 'done', on: :member, as: :done
     get 'list_owners', on: :member, as: :list_owners
   end
-  get 'tasks/tasks/:task_type' => 'tasks#tasks'
+  get 'tasks/tasks/:task_type' => 'tasks#tasks', as: :list_tasks
   patch 'tasks/:id/assign/:to' => 'tasks#assign', as: :assign_tasks
   # --------------------------------------------------------------------------
 
@@ -97,8 +98,12 @@ Rails.application.routes.draw do
 
   resources :jobs
 
-  resources :job_seekers
-  get 'job_seekers/home',  path: '/job_seekers/:id/home'
+  # ----------------------------Job Seekers-----------------------------------
+  resources :job_seekers do
+     get 'home', on: :member, as: :home
+  end
+  # --------------------------------------------------------------------------
+
 
    # The priority is based upon order of creation: first created -> highest priority.
 

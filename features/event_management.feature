@@ -44,7 +44,7 @@ Scenario: Job Seeker registers in PETS
   And I fill in "Phone" with "345-890-7890"
   And I fill in "Password" with "qwerty123"
   And I fill in "Password Confirmation" with "qwerty123"
-  And I fill in "Year Of Birth" with "1980"
+  And I select "1980" in select list "Year Of Birth"  
   And I select "Unemployedlooking" in select list "Status"
   Then I click the "Create Job seeker" button
   Then "paulajones@gmail.com" should receive an email with subject "Confirmation instructions"

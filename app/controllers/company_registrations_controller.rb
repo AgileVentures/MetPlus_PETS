@@ -1,4 +1,5 @@
 class CompanyRegistrationsController < ApplicationController
+  include UserParameters
 
   def new
     @company = Company.new
@@ -61,10 +62,7 @@ class CompanyRegistrationsController < ApplicationController
     @company = Company.find(params[:id])
 
     reg_params = company_params
-    if reg_params[:company_people_attributes]['0'][:password].empty?
-      reg_params[:company_people_attributes]['0'].delete :password
-      reg_params[:company_people_attributes]['0'].delete :password_confirmation
-    end
+    reg_params[:company_people_attributes]['0'] = handle_user_form_parameters reg_params[:company_people_attributes]['0']
 
     changed_email = (@company.company_people[0].email !=
             reg_params[:company_people_attributes]['0'][:email])
