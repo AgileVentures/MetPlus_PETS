@@ -14,42 +14,47 @@ RSpec.describe JobSeekersController, type: :controller do
 
   describe "POST #create" do
     context "valid attributes" do
-      before(:each) do
-       ActionMailer::Base.deliveries.clear
-       @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker).
-              merge(FactoryGirl.attributes_for(:user)).
-              merge(FactoryGirl.attributes_for(:job_seeker_status))
-       post :create, job_seeker: @jobseeker_hash
-     end
+       before(:each) do
+        ActionMailer::Base.deliveries.clear
+        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker).
+               merge(FactoryGirl.attributes_for(:user)).
+               merge(FactoryGirl.attributes_for(:job_seeker_status))
+        @jobseeker_hash[:address_attributes] = FactoryGirl.attributes_for(:address, zipcode: '54321')
+        post :create, job_seeker: @jobseeker_hash
+      end
 
-     it 'sets flash message' do
-        expect(flash[:notice]).to eq "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
-     end
+      it 'sets flash message' do
+         expect(flash[:notice]).to eq "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
+      end
 
-     it 'returns redirect status' do
-        expect(response).to have_http_status(:redirect)
-     end
-     it 'redirects to root page' do
-       expect(response).to redirect_to(root_path)
-     end
-     describe "confirmation email" do
-       # Include email_spec modules here, not in rails_helper because they
-       # conflict with the capybara-email#open_email method which lets us
-       # call current_email.click_link below.
-       # Re: https://github.com/dockyard/capybara-email/issues/34#issuecomment-49528389
-       include EmailSpec::Helpers
-       include EmailSpec::Matchers
+      it 'returns redirect status' do
+         expect(response).to have_http_status(:redirect)
+      end
+      it 'redirects to root page' do
+        expect(response).to redirect_to(root_path)
+      end
+      it 'check address' do
+        js = User.find_by_email(@jobseeker_hash[:email]).pets_user
+        expect(js.address.zipcode).to eq '54321'
+      end
+      describe "confirmation email" do
+         # Include email_spec modules here, not in rails_helper because they
+         # conflict with the capybara-email#open_email method which lets us
+         # call current_email.click_link below.
+         # Re: https://github.com/dockyard/capybara-email/issues/34#issuecomment-49528389
+         include EmailSpec::Helpers
+         include EmailSpec::Matchers
 
-       # open the most recent email sent to user_email
-       subject { open_email(@jobseeker_hash[:email]) }
+         # open the most recent email sent to user_email
+         subject { open_email(@jobseeker_hash[:email]) }
 
-       # Verify email details
-       it { is_expected.to deliver_to(@jobseeker_hash[:email]) }
-       it { is_expected.to have_body_text(/Welcome #{@jobseeker_hash[:first_name]} #{@jobseeker_hash[:last_name]}!/) }
-       it { is_expected.to have_body_text(/You can confirm your account/) }
-       it { is_expected.to have_body_text(/users\/confirmation\?confirmation/) }
-       it { is_expected.to have_subject(/Confirmation instructions/) }
-     end
+         # Verify email details
+         it { is_expected.to deliver_to(@jobseeker_hash[:email]) }
+         it { is_expected.to have_body_text(/Welcome #{@jobseeker_hash[:first_name]} #{@jobseeker_hash[:last_name]}!/) }
+         it { is_expected.to have_body_text(/You can confirm your account/) }
+         it { is_expected.to have_body_text(/users\/confirmation\?confirmation/) }
+         it { is_expected.to have_subject(/Confirmation instructions/) }
+      end
     end
 
     context "valid attributes and resume file upload" do
@@ -95,7 +100,9 @@ RSpec.describe JobSeekersController, type: :controller do
             merge(FactoryGirl.attributes_for(:user, first_name: 'John',
                    last_name: 'Smith', phone: '890-789-9087')).
             merge(FactoryGirl.attributes_for(:job_seeker_status,
-                   value=nil, description:'MyText'))
+                   value=nil, description:'MyText')).
+           merge(FactoryGirl.attributes_for(:address,
+                                            zipcode: '12345131231231231231236'))
        post :create, job_seeker: jobseeker1_hash
 
      end
@@ -150,6 +157,17 @@ RSpec.describe JobSeekersController, type: :controller do
                 resume: fixture_file_upload('files/Janitor-Resume.doc')).
             merge(FactoryGirl.attributes_for(:job_seeker_status)) }.
           to change(Resume, :count).by(+1)
+     end
+     it 'check adddress change' do
+       use_hash = FactoryGirl.attributes_for(:job_seeker,
+                                            resume: fixture_file_upload('files/Janitor-Resume.doc')).
+                   merge(FactoryGirl.attributes_for(:job_seeker_status))
+
+       use_hash[:address_attributes] = FactoryGirl.attributes_for(:address, zipcode: '12346')
+       patch :update, id: @jobseeker,
+         job_seeker: use_hash
+       @jobseeker.reload
+       expect(@jobseeker.address.zipcode).to eq '12346'
      end
    end
 
