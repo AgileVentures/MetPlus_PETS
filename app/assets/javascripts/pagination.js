@@ -28,7 +28,7 @@
  *   Select by class if we have more then 1
  *     PaginationManager('/potatos/list/', '.potato-view', 'potato-pagination-type'
  */
-var PaginationManager = function (url, viewSelector, paginationType, successCallback, errorCallback) {
+var PaginationHandler = function (url, viewSelector, paginationType, successCallback, errorCallback) {
 
     var self = this;
 
@@ -39,7 +39,7 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
         , radius: 13 // The radius of the inner circle
         , scale: 0.25 // Scales overall size of the spinner
         , corners: 1 // Corner roundness (0..1)
-        , color: '#000' // #rgb or #rrggbb or array of colors
+        , color: '#6495ed' // #rgb or #rrggbb or array of colors
         , opacity: 0.3 // Opacity of the lines
         , rotate: 30 // The rotation offset
         , direction: 1 // 1: clockwise, -1: counterclockwise
@@ -61,7 +61,6 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
         var target = $($(self.viewSelector)[target_idx]);
         target.addClass('opaque');
         var spinner = new Spinner(self.spinnerOpts).spin(target[0]);
-        //target.html("Page is loading...");
         $.ajax({type: 'GET',
             url: url,
             data: {},
@@ -109,3 +108,48 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
     this.setup();
     return this;
 };
+
+var PaginationFunctions = function() {
+    var self = this;
+    this.successFunctions = {};
+    this.errorFunctions = {};
+    this.addFunction = function(divId, successCallback, errorCallback) {
+        self.successFunctions[divId] = successCallback;
+        self.errorFunctions[divId] = errorCallback;
+    };
+    this.getSuccessFunction = function(divId) {
+        if(divId in self.successFunctions) {
+            return self.successFunctions[divId];
+        }
+        return undefined;
+    };
+    this.getErrorFunction = function(divId) {
+        if(divId in self.errorFunctions) {
+            return self.errorFunctions[divId];
+        }
+        return undefined;
+    };
+    return this;
+};
+
+var PaginationManager = {
+    setupAll: function(classSelector, paginationFunctions) {
+        var funs = (typeof paginationFunctions === 'undefined') ? PaginationFunctions() : paginationFunctions;
+
+        $('.'+classSelector).each(function(i, obj) {
+            var id = $(obj).attr('id');
+            PaginationManager.setupOne(obj,
+                funs.getSuccessFunction(id),
+                funs.getErrorFunction(id));
+        });
+    },
+    setupOne: function(obj, successCallback, errorCallback) {
+        var id = $(obj).attr('id');
+        var url = $(obj).data('url');
+        PaginationHandler(url, '#' + id, 'paginationType', successCallback, errorCallback);
+    }
+};
+
+$(document).ready(function () {
+    PaginationManager.setupAll('pagination-div');
+});

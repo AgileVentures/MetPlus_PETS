@@ -9,78 +9,7 @@
 = render partial: 'tasks/tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
 
 %h3 All company jobs
-%div{:id => 'company-jobs'}
-  %table.table.table-hover
-    %thead
-      %tr
-        %td Description
-        %td Last update
-        %td Poster
-        %td Number of applications
-    %tbody
-      %tr
-        %td Nice job1
-        %td 2016-02-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 4
-      %tr
-        %td Nice job2
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 3
-      %tr
-        %td Nice job3
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 1
-      %tr
-        %td Nice job4
-        %td 2015-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 4
-      %tr
-        %td Nice job5
-        %td 2016-05-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 2
-      %tr
-        %td Nice job6
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 0
-      %tr
-        %td Nice job7
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 4
-      %tr
-        %td Nice job8
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 4
-      %tr
-        %td Nice job9
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 4
-      %tr
-        %td Nice job10
-        %td 2016-03-04
-        %td
-          = link_to(pets_user.full_name, company_person_path(pets_user))
-        %td 4
-  .row.text-center
-    <div class="pagination"><ul class="pagination"><li class="prev previous_page disabled"><a href="#">← Previous</a></li> <li class="active"><a rel="start" href="#">1</a></li> <li><a rel="next" href="#">2</a></li> <li class="next next_page "><a rel="next" href="#">Next →</a></li></ul></div>
-
+%div{:id => "jobs-#{@job_type}", :class => 'pagination-div', :data => {:pagination_type => @job_type, :url => list_jobs_path}}
 %h3 Your colleagues who are on PETS
 %div{:id => 'company-people'}
   %table.table.table-hover
