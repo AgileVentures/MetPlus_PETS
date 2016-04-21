@@ -37,27 +37,41 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
 
     var self = this;
 
-    this.spinnerOpts = {
-        lines: 13 // The number of lines to draw
-        , length: 28 // The length of each line
-        , width: 17 // The line thickness
-        , radius: 13 // The radius of the inner circle
-        , scale: 0.25 // Scales overall size of the spinner
-        , corners: 1 // Corner roundness (0..1)
-        , color: '#6495ed' // #rgb or #rrggbb or array of colors
-        , opacity: 0.3 // Opacity of the lines
-        , rotate: 30 // The rotation offset
-        , direction: 1 // 1: clockwise, -1: counterclockwise
-        , speed: 1 // Rounds per second
-        , trail: 100 // Afterglow percentage
-        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-        , zIndex: 2e9 // The z-index (defaults to 2000000000)
-        , className: 'spinner' // The CSS class to assign to the spinner
-        , top: '50%' // Top position relative to parent
-        , left: '50%' // Left position relative to parent
-        , shadow: false // Whether to render a shadow
-        , hwaccel: false // Whether to use hardware acceleration
+    this.spinner = function(target){
+        var self = this;
+        this.spinnerOpts = {
+            lines: 13 // The number of lines to draw
+            , length: 28 // The length of each line
+            , width: 17 // The line thickness
+            , radius: 13 // The radius of the inner circle
+            , scale: 0.25 // Scales overall size of the spinner
+            , corners: 1 // Corner roundness (0..1)
+            , color: '#6495ed' // #rgb or #rrggbb or array of colors
+            , opacity: 0.3 // Opacity of the lines
+            , rotate: 30 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1 // Rounds per second
+            , trail: 100 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+        };
+        this._spinner = new Spinner(self.spinnerOpts);
+        this.start = function() {
+            target.addClass('opaque');
+            self._spinner.spin(target[0]);
+        };
+        this.stop = function() {
+            target.removeClass('opaque');
+            self._spinner.stop();
+        };
+        return this;
     };
+
     this.url = url;
     this.viewSelector = viewSelector;
     this.successCallback = successCallback;
@@ -65,8 +79,8 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
 
     this.load_div_from_url = function(target_idx, url) {
         var target = $($(self.viewSelector)[target_idx]);
-        target.addClass('opaque');
-        var spinner = new Spinner(self.spinnerOpts).spin(target[0]);
+        var spinner = self.spinner(target);
+        spinner.start();
         $.ajax({type: 'GET',
             url: url,
             data: {},
@@ -81,9 +95,12 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
                     self.successCallback();
             },
             error: function (xhrObj) {
-                target.removeClass('opaque');
                 spinner.stop();
-                Notification.error_notification(xhrObj.responseJSON['message']);
+                if(typeof xhrObj.responseJSON == 'undefined') {
+                    Notification.error_notification('Unable to retrieve the intended page of results');
+                } else {
+                    Notification.error_notification(xhrObj.responseJSON['message']);
+                }
                 if( typeof self.errorCallback == "function" )
                     self.errorCallback();
             }
