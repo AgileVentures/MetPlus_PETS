@@ -28,11 +28,37 @@ Feature: Company Person
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | ein        | status |
       | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+      | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
       | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
       | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+      | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
+
+    Given the following jobs exist:
+      | title               | company_job_id  | shift  | fulltime | description                 | company      | creator        |
+      | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK02K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK03K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK04K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK05K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK06K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK07K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK08K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK10K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK11K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Doctor              | AAEE1K          | Evening| true     | internship position with pay| Feature Inc. | ca@feature.com |
+      | Cook                | KRK12K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK13K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK14K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK15K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK16K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK17K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK18K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK19K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK20K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
 
   Scenario: company admin login and edit profile from home page
     Given I am on the home page
@@ -83,3 +109,13 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
+
+  @selenium
+  Scenario: verify job listing in home page
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    And I should be on the Company Person 'ca@widgets.com' Home page
+    And I wait for 5 seconds
+    And I should not see "Cook"
+    And I should not see "Doctor"
+    And I should see "software developer"
