@@ -97,7 +97,6 @@ Rails.application.routes.draw do
   get 'company/home', path: '/company/:id'
 
   resources :jobs
-  get 'jobs/list/:job_type' => 'jobs#list', as: :list_jobs
 
   # ----------------------------Job Seekers-----------------------------------
   resources :job_seekers do

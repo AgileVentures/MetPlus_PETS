@@ -1,10 +1,6 @@
 class JobsController < ApplicationController
-  include JobsViewer
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
-	before_action :authentication_for_post_or_edit, only: [:new, :edit]
-
-
-  helper_method :job_fields
+	before_action :authentication_for_post_or_edit, only: [:new, :edit] 
 
 	def index
 		if company_person?
@@ -49,16 +45,6 @@ class JobsController < ApplicationController
 		@job.destroy
 		flash[:alert] = "#{@job.title} has been deleted successfully."
 		redirect_to jobs_url 
-	end
-
-	def list
-    raise 'Unsupported request' if not request.xhr?
-
-    @job_type = params[:job_type] || 'my-company-all'
-
-    @jobs = []
-    @jobs = display_jobs @job_type
-    render partial: 'list_all', :locals => {all_jobs: @jobs, job_type: @job_type}
 	end
 
 	private 
