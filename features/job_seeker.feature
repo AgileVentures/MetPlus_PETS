@@ -56,6 +56,7 @@ Scenario: edit Js Registration
   Then I should see "Signed in successfully"
   When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1"
+  And I fill in "Zip code" with "54321"
   Then I select "Employedlooking" in select list "Status"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
