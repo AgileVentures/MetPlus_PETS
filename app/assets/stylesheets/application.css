@@ -229,10 +229,16 @@ body {
 }
 
 #error-explanation {
-  color: #FF0000;;
+  color: #FF0000;
   ul {
     color: #FF0000;;
       margin: 0 0 30px 0;
     }
 }
 /*form errors css end */
+
+
+
+.opaque > *:not(.spinner) {
+    opacity: 0.7;
+}

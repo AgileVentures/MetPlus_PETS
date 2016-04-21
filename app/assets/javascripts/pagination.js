@@ -31,18 +31,44 @@
 var PaginationManager = function (url, viewSelector, paginationType, successCallback, errorCallback) {
 
     var self = this;
+
+    this.spinnerOpts = {
+        lines: 13 // The number of lines to draw
+        , length: 28 // The length of each line
+        , width: 17 // The line thickness
+        , radius: 13 // The radius of the inner circle
+        , scale: 0.25 // Scales overall size of the spinner
+        , corners: 1 // Corner roundness (0..1)
+        , color: '#000' // #rgb or #rrggbb or array of colors
+        , opacity: 0.3 // Opacity of the lines
+        , rotate: 30 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 1 // Rounds per second
+        , trail: 100 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '50%' // Left position relative to parent
+        , shadow: false // Whether to render a shadow
+        , hwaccel: false // Whether to use hardware acceleration
+    };
     this.url = url;
     this.viewSelector = viewSelector;
     this.paginationType = paginationType;
 
     this.load_div_from_url = function(target_idx, url) {
         var target = $($(self.viewSelector)[target_idx]);
-        target.html("Page is loading...");
+        target.addClass('opaque');
+        var spinner = new Spinner(self.spinnerOpts).spin(target[0]);
+        //target.html("Page is loading...");
         $.ajax({type: 'GET',
             url: url,
             data: {},
             timeout: 5000,
             success: function (data){
+                target.removeClass('opaque');
+                spinner.stop();
                 target.replaceWith(data);
                 target = $($(self.viewSelector)[target_idx]);
                 self.init(target, target_idx);
@@ -50,6 +76,8 @@ var PaginationManager = function (url, viewSelector, paginationType, successCall
                     successCallback();
             },
             error: function (xhrObj) {
+                target.removeClass('opaque');
+                spinner.stop();
                 Notification.error_notification(xhrObj.responseJSON['message']);
                 if( typeof errorCallback == "function" )
                     errorCallback();
