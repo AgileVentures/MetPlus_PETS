@@ -31,6 +31,14 @@ class ApplicationController < ActionController::Base
 
   protected
 
+    def action_description
+      @description ||= 'perform this action'
+    end
+
+    def action_description= description
+      @description = description
+    end
+
     def pets_user
        return nil if current_user.nil?
        current_user.try(:actable).nil? ? current_user : current_user.actable
@@ -51,19 +59,21 @@ class ApplicationController < ActionController::Base
     end
 
     def user_not_authorized
+      msg = action_description
       if request.xhr?
-        return render json: {:message => 'You are not authorized to perform this action.'}, status: 403
+        return render json: {:message => "You are not authorized to #{msg}."}, status: 403
       else
-        flash[:alert] = "You are not authorized to perform this action."
+        flash[:alert] = "You are not authorized to #{msg}."
         redirect_to(request.referrer || root_path)
       end
     end
 
     def user_not_authenticated
+      msg = action_description
       if request.xhr?
-        return render json: {:message => 'You need to login to perform this action.'}, status: 401
+        return render json: {:message => "You need to login to #{msg}."}, status: 401
       else
-        flash[:alert] = "You need to login to perform this action."
+        flash[:alert] = "You need to login to #{msg}."
         redirect_to(request.referrer || root_path)
       end
     end
