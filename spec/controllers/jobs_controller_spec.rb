@@ -411,7 +411,7 @@ RSpec.describe JobsController, type: :controller do
                              :address_id => 1, 
                              company_person_id: nil, 
                              company_job_id: "WERRR123"}
-      # byebug
+      
       expect(response).to redirect_to(:action => 'index')
       should set_flash 
       expect(Job.count).to eq(3)
