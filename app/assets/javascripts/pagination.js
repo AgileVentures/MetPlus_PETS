@@ -1,5 +1,12 @@
 /**
- * This manager can handle the pagination on any page
+ * This handler will do the pagination for one specific table.
+ * This function should be used for more advanced control over the paginate.
+ *
+ *
+ * Automatic pagination
+ * ** If you want to add a basic pagination, please scroll down to the PaginationManager **
+ *
+ *
  * @param url This parameter is used as the URL for the AJAX call
  *             it will be concatenated with the type of pagination found
  * @param viewSelector Selector used to find the div that will be replaced by the answer from AJAX
@@ -56,6 +63,8 @@ var PaginationHandler = function (url, viewSelector, paginationType, successCall
     this.url = url;
     this.viewSelector = viewSelector;
     this.paginationType = paginationType;
+    this.successCallback = successCallback;
+    this.errorCallback = errorCallback;
 
     this.load_div_from_url = function(target_idx, url) {
         var target = $($(self.viewSelector)[target_idx]);
@@ -71,15 +80,15 @@ var PaginationHandler = function (url, viewSelector, paginationType, successCall
                 target.replaceWith(data);
                 target = $($(self.viewSelector)[target_idx]);
                 self.init(target, target_idx);
-                if( typeof successCallback == "function" )
-                    successCallback();
+                if( typeof self.successCallback == "function" )
+                    self.successCallback();
             },
             error: function (xhrObj) {
                 target.removeClass('opaque');
                 spinner.stop();
                 Notification.error_notification(xhrObj.responseJSON['message']);
-                if( typeof errorCallback == "function" )
-                    errorCallback();
+                if( typeof self.errorCallback == "function" )
+                    self.errorCallback();
             }
         });
     };
@@ -105,6 +114,15 @@ var PaginationHandler = function (url, viewSelector, paginationType, successCall
             self.refresh_div(i, self.url + div_type)
         });
     };
+
+    this.addSuccessCallback = function(successCallback) {
+        self.successCallback = successCallback;
+    };
+
+    this.addErrorCallback = function(errorCallback) {
+        self.errorCallback = errorCallback;
+    };
+
     this.setup();
     return this;
 };
@@ -132,7 +150,33 @@ var PaginationFunctions = function() {
     return this;
 };
 
+/**
+ * The pagination manager will try to load in all the site the pagination tables that
+ * use the class 'pagination-div'
+ *
+ * Example of a div that automatically be loaded:
+ * I need to paginate my potato collection.
+ * The list can be retrieve using AJAX from the url: /potatos/list/all-my-potatoes
+ *
+ * The implementation:
+ * Add the following HTML code to your page
+ * <div id='potato-1' class='pagination-div' data-url='/potatos/list/' data-potato-pagination-type='all-my-potatoes'>
+ * </div>
+ *
+ * Remark, the ID of the div should never be the same, to make sure everything works as expected.
+ *
+ * If you want to setup a specific call back of success in the previous example you should do:
+ * PaginationManager.handlers['potato-1'].addSuccessCallback(function(){
+ *    ....
+ * });
+ * PaginationManager.handlers['potato-1'].addErrorCallback(function(){
+ *    ....
+ * });
+ *
+ * @type {{setupAll: PaginationManager.setupAll, setupOne: PaginationManager.setupOne}}
+ */
 var PaginationManager = {
+    handlers: {},
     setupAll: function(classSelector, paginationFunctions) {
         var funs = (typeof paginationFunctions === 'undefined') ? PaginationFunctions() : paginationFunctions;
 
@@ -146,7 +190,11 @@ var PaginationManager = {
     setupOne: function(obj, successCallback, errorCallback) {
         var id = $(obj).attr('id');
         var url = $(obj).data('url');
-        PaginationHandler(url, '#' + id, 'paginationType', successCallback, errorCallback);
+        PaginationManager.handlers[id] = PaginationHandler(url,
+                                                '#' + id,
+                                                'paginationType',
+                                                successCallback,
+                                                errorCallback);
     }
 };
 
