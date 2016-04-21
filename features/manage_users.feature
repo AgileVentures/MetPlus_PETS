@@ -81,7 +81,7 @@ Feature: Manage Users
 		| Phone                 | 111-222-3333    |
 		| Password              | qwerty123       |
 		| Password Confirmation | qwerty123       |
-		| Year Of Birth         | 1980            |
+		And I select "1980" in select list "Year Of Birth"
 
 		And I select "Unemployedlooking" in select list "Status"
 		And I click the "Create Job seeker" button
@@ -103,7 +103,7 @@ Scenario: Resend confirmation email - happy path
 	| Phone                 | 111-222-3333    |
 	| Password              | qwerty123       |
 	| Password Confirmation | qwerty123       |
-	| Year Of Birth         | 1980            |
+	And I select "1980" in select list "Year Of Birth"
 
 	And I select "Unemployedlooking" in select list "Status"
 	And I click the "Create Job seeker" button
@@ -127,7 +127,7 @@ Scenario: Resend confirmation email - sad path
 	| Phone                 | 111-222-3333    |
 	| Password              | qwerty123       |
 	| Password Confirmation | qwerty123       |
-	| Year Of Birth         | 1980            |
+	And I select "1980" in select list "Year Of Birth"
 
 	And I select "Unemployedlooking" in select list "Status"
 	And I click the "Create Job seeker" button

@@ -22,6 +22,9 @@ def page_translator name
       return edit_job_seeker_path user if user.is_job_seeker?
       return edit_profile_company_person_path user if user.is_a? CompanyPerson
       return edit_profile_agency_person_path user if user.is_a? AgencyPerson
+    when /agency '(.+)' edit/
+      agency = name.match(/'(.+)'/)
+      return edit_agency_path(Agency.find_by_name(agency[1]))
     when /activation for user '.+'/
       user = name.match(/'(.+)'/)
       if user[1] =~ /@/

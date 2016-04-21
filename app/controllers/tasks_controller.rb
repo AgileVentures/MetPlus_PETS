@@ -1,5 +1,8 @@
 class TasksController < ApplicationController
   include Tasks
+
+  before_action :user_logged!
+
   def index
     @task_type_t1 = 'mine-open'
     @task_type_t2 = 'mine-closed'
@@ -17,6 +20,7 @@ class TasksController < ApplicationController
     return render json: {:message => 'Cannot find user!'}, status: 403 if user.nil?
     return render json: {:message => 'Cannot assign the task to that user!'}, status: 403 \
             if not task.assignable_list.include? user.pets_user
+    authorize task
     begin
       task.assign user
     rescue Exception => e
@@ -29,6 +33,7 @@ class TasksController < ApplicationController
     raise 'Unsupported request' if not request.xhr?
     task = Task.find_by_id params[:id]
     return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+    authorize task
     begin
       task.work_in_progress
     rescue Exception => e
@@ -41,6 +46,7 @@ class TasksController < ApplicationController
     raise 'Unsupported request' if not request.xhr?
     task = Task.find_by_id params[:id]
     return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+    authorize task
     begin
       task.complete
     rescue Exception => e
@@ -55,6 +61,7 @@ class TasksController < ApplicationController
 
     @render_modal = false
     @tasks = display_tasks @task_type
+
     render partial: 'tasks', :locals => {all_tasks: @tasks, task_type: @task_type}
   end
 

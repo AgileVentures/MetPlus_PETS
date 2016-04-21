@@ -39,7 +39,7 @@
         %td
           = task.updated_at.strftime('%F')
         %td
-          - if task.status == Task::STATUS[:NEW]
+          - if task.status == Task::STATUS[:NEW] and policy(task).assign?
             = link_to '#', :title => 'Assign task',
                             class: 'assign_button',
                             id: "assign-#{task.id}",
@@ -47,13 +47,13 @@
                                     :toggle => 'modal',
                                     :target => '#assignTaskModal'} do
               %i.fa.fa-male.fa-1
-          - elsif task.status == Task::STATUS[:ASSIGNED]
+          - elsif task.status == Task::STATUS[:ASSIGNED] and policy(task).in_progress?
             = link_to '#', :title => 'Start working on task',
                            class: 'wip_button',
                            id: "wip-#{task.id}",
                            data: {:url => in_progress_task_path(task)} do
               %i.fa.fa-hourglass-start.fa-1
-          - elsif task.status == Task::STATUS[:WIP]
+          - elsif task.status == Task::STATUS[:WIP] and policy(task).done?
             = link_to '#', :title => 'Work complete',
                            class: 'done_button',
                            id: "done-#{task.id}",
