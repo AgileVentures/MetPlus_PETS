@@ -237,8 +237,14 @@ body {
 }
 /*form errors css end */
 
-
-
+/** Spinner back panel **/
 .opaque > *:not(.spinner) {
     opacity: 0.7;
 }
+/** Spinner back panel end **/
+
+/* Pagination div css */
+.pagination-div {
+    position: relative;
+}
+/* Pagination div css end */
