@@ -19,7 +19,9 @@
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/themes/default.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/themes/bootstrap.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.min.js'
+    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js'
   %body
+    %a{:href => '#top'}
     = render partial: 'layouts/menu'
     %div{:class => 'content container'}
       %div{:class => 'row', :id => 'messages'}
@@ -42,7 +44,7 @@
             - @model_errors.full_messages.each do |msg|
               %li= msg
       %div{:class => 'row'}
-        = yield
+        = yield  
     = render 'layouts/footer'
 
 %script
