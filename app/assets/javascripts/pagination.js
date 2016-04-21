@@ -30,7 +30,8 @@
  *   Select by id
  *     PaginationHandler('/potatos/list/potato-pagination-type', '#potato-1')
  *
- *   Select by class if we have more then 1
+ *    Select by class if we have more than one pagination section on the page for the same collection
+ *    (e.g. a view showing "Job Seekers without a Job Developer" and "Job Seekers without a Case Manager")
  *     PaginationHandler('/potatos/list/potato-pagination-type', '.potato-view')
  */
 var PaginationHandler = function (url, viewSelector, successCallback, errorCallback) {
