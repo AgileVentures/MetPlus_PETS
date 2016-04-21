@@ -4,8 +4,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.string :street
       t.string :city
       t.string :zipcode
-      t.references :location, polymorphic: true, index: true
-
+      t.references :location, polymorphic: true, index: true 
       t.timestamps null: false
     end
     create_table :skills do |t|
@@ -89,6 +88,7 @@ class CreateDatabase < ActiveRecord::Migration
     create_table :jobs do |t|
       t.string :title
       t.string :description
+      t.integer :address_id, index: true 
       t.references :company, index: true, foreign_key: true
       t.references :company_person, index: true, foreign_key: true
       t.references :job_category, index: true, foreign_key: true
