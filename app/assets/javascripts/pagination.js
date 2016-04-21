@@ -10,8 +10,6 @@
  * @param url This parameter is used as the URL for the AJAX call
  *             it will be concatenated with the type of pagination found
  * @param viewSelector Selector used to find the div that will be replaced by the answer from AJAX
- * @param paginationType This is the name of the data field in the div selected that contains
- *                       the rest of the URL
  * @param successCallback After changing the div with the latest information calls this function
  *                        that can be or not present.
  *                        Only use this functions if you need to execute more operations
@@ -25,17 +23,17 @@
  *
  * The implementation:
  * Add the following HTML code to your page
- * <div id='potato-1' class='potato-view' data-potato-pagination-type='all-my-potatoes'>
+ * <div id='potato-1' class='potato-view'>
  * </div>
  *
  * Add one of the following options to your JS file
  *   Select by id
- *     PaginationManager('/potatos/list/', '#potato-1', 'potato-pagination-type')
+ *     PaginationHandler('/potatos/list/potato-pagination-type', '#potato-1')
  *
  *   Select by class if we have more then 1
- *     PaginationManager('/potatos/list/', '.potato-view', 'potato-pagination-type'
+ *     PaginationHandler('/potatos/list/potato-pagination-type', '.potato-view')
  */
-var PaginationHandler = function (url, viewSelector, paginationType, successCallback, errorCallback) {
+var PaginationHandler = function (url, viewSelector, successCallback, errorCallback) {
 
     var self = this;
 
@@ -62,7 +60,6 @@ var PaginationHandler = function (url, viewSelector, paginationType, successCall
     };
     this.url = url;
     this.viewSelector = viewSelector;
-    this.paginationType = paginationType;
     this.successCallback = successCallback;
     this.errorCallback = errorCallback;
 
@@ -77,7 +74,7 @@ var PaginationHandler = function (url, viewSelector, paginationType, successCall
             success: function (data){
                 target.removeClass('opaque');
                 spinner.stop();
-                target.replaceWith(data);
+                target.html(data);
                 target = $($(self.viewSelector)[target_idx]);
                 self.init(target, target_idx);
                 if( typeof self.successCallback == "function" )
@@ -110,8 +107,7 @@ var PaginationHandler = function (url, viewSelector, paginationType, successCall
 
     this.setup = function() {
         $(self.viewSelector).each(function(i, obj) {
-            var div_type = $(obj).data(self.paginationType);
-            self.refresh_div(i, self.url + div_type)
+            self.refresh_div(i, self.url)
         });
     };
 
@@ -192,7 +188,6 @@ var PaginationManager = {
         var url = $(obj).data('url');
         PaginationManager.handlers[id] = PaginationHandler(url,
                                                 '#' + id,
-                                                'paginationType',
                                                 successCallback,
                                                 errorCallback);
     }
