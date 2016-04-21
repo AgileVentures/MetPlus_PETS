@@ -26,12 +26,6 @@ class Job < ActiveRecord::Base
 
   scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
 
-  scope :find_by_company, ->(company) {where(:company => company)}
-
-  def number_applicants
-    job_applications.size
-  end
-
   #These will be uncommented once
   # we start implementing the features
     # validates_presence_of :job_category_id

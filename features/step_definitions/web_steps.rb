@@ -140,4 +140,3 @@ end
 When /^I choose resume file "([^"]*)"$/ do |filename|
   attach_file('Resume', "#{Rails.root}/spec/fixtures/files/#{filename}")
 end
-

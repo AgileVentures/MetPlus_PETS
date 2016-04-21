@@ -29,7 +29,7 @@ Given(/^the following companies exist:$/) do |table|
     agency_name = hash.delete 'agency'
     company = Company.new(hash)
     company.agencies << Agency.find_by_name(agency_name)
-    company.save!
+    company.save
   end
 end
 
@@ -133,21 +133,5 @@ Given(/^the following tasks exist:$/) do |table|
       task.target = User.find_by_email targets
     end
     task.save!
-  end
-end
-
-
-Given(/^the following jobs exist:$/) do |table|
-  table.hashes.each do |hash|
-
-    company_name  = hash.delete 'company'
-    creator_email = hash.delete 'creator'
-
-    job = FactoryGirl.build(:job, hash)
-
-    job.company = Company.find_by_name company_name
-    job.company_person = User.find_by_email(creator_email).pets_user
-
-    job.save!
   end
 end
