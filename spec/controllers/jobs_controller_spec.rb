@@ -304,5 +304,115 @@ RSpec.describe JobsController, type: :controller do
       expect(response.status).to  eq(200)
      end 
   end
-  
+
+  describe 'GET #list' do
+
+    before :each do
+      agency = FactoryGirl.create(:agency)
+      company = FactoryGirl.create(:company)
+      @ca = FactoryGirl.create(:company_admin, :company => company)
+      company1 = FactoryGirl.create(:company)
+      @ca1 = FactoryGirl.create(:company_admin, :company => company1)
+      @job.destroy
+      31.times.each do |i|
+        FactoryGirl.create(:job, :title => "Awesome job #{i}", :company => company, :company_person => @ca)
+      end
+      4.times.each do |i|
+        FactoryGirl.create(:job, :title => "Awesome new job #{i}", :company => company1, :company_person => @ca1)
+      end
+    end
+
+    describe 'first page' do
+
+      before :each do
+        sign_in @ca
+        xhr :get, :list, :job_type => 'my-company-all'
+      end
+
+      it "is a success" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders 'jobs/_list_all' template" do
+
+        expect(response).to render_template('jobs/_list_all')
+      end
+
+      it 'check job_type' do
+        expect(assigns(:job_type)).to eq 'my-company-all'
+      end
+
+      it 'check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each do end
+        expect(assigns(:jobs).all.size).to be 10
+        expect(assigns(:jobs).first.title).to eq 'Awesome job 0'
+        expect(assigns(:jobs).last.title).to eq 'Awesome job 9'
+      end
+
+      it { should_not set_flash }
+    end
+    describe 'last page' do
+      before :each do
+        sign_in @ca
+        xhr :get, :list, :job_type => 'my-company-all', :jobs_page => 4
+      end
+
+      it "is a success" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders 'jobs/_list_all' template" do
+
+        expect(response).to render_template('jobs/_list_all')
+      end
+
+      it 'check job_type' do
+        expect(assigns(:job_type)).to eq 'my-company-all'
+      end
+
+      it 'check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each do end
+        expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
+        expect(assigns(:jobs).size).to be 1
+      end
+
+      it { should_not set_flash }
+    end
+
+    describe 'only page different company' do
+
+      before :each do
+        sign_in @ca1
+        xhr :get, :list, :job_type => 'my-company-all'
+      end
+
+      it "is a success" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders 'jobs/_list_all' template" do
+
+        expect(response).to render_template('jobs/_list_all')
+      end
+
+      it 'check job_type' do
+        expect(assigns(:job_type)).to eq 'my-company-all'
+      end
+
+      it 'check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each do end
+        expect(assigns(:jobs).all.size).to be 4
+        expect(assigns(:jobs).first.title).to eq 'Awesome new job 0'
+        expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'
+      end
+
+      it { should_not set_flash }
+    end
+  end
 end

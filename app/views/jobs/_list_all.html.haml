@@ -1,0 +1,32 @@
+%table.table.table-hover
+  %thead
+    %tr
+      - job_fields(job_type).each do |field|
+        - case field
+          - when :title
+            %td.strong Title
+          - when :updated_at
+            %td.strong Last update
+          - when :poster
+            %td.strong Poster
+          - when :num_applicants
+            %td.string Number of applications
+  %tbody
+    - all_jobs.each do |job|
+      %tr
+      - job_fields(job_type).each do |field|
+        - case field
+          - when :title
+            %td.col-md-4
+              = link_to(job.title, job_path(job))
+          - when :updated_at
+            %td.col-md-2
+              = job.updated_at.strftime('%F')
+          - when :poster
+            %td.col-md-3
+              = link_to(job.company_person.full_name, company_person_path(job.company_person))
+          - when :num_applicants
+            %td.col-md-2
+              = job.number_applicants
+.row.text-center
+  = will_paginate all_jobs, param_name: 'jobs_page', :params => {:controller => 'jobs', :action => 'list', :job_type => job_type}
