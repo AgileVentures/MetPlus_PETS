@@ -93,6 +93,12 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
         self.load_div_from_url(target_idx, url);
     };
     this.paginate_div = function(ev) {
+        // Check if this anchor element is disabled (e.g. 'Previous'
+        // link is disabled when on page 1 of pagination)
+        // (anchor is contained in 'li' element which will have 'disabled' class)
+
+        if ($(this).parent().hasClass('disabled')) { return false; }
+
         ev.preventDefault();
         self.load_div_from_url($(this).data('position'), this.href);
         return false;
