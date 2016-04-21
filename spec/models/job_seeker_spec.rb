@@ -57,6 +57,9 @@ describe JobSeeker, type: :model do
       adam.assign_case_manager(cm_person, agency)
       dave.assign_job_developer(jd_person, agency)
     end
+    # describe '#self.js_without_jd' do
+    #   expect(JobSeeker.js_without_jd).to include(adam)
+    # end
     describe '#assign_case_manager' do
       it 'success' do
         bob.assign_case_manager(cm_person, agency)
