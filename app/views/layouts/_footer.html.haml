@@ -14,7 +14,7 @@
 				|
 				=link_to "Search Resumes", '#'
 				|
-			-elsif pets_user.is_job_developer?(pets_user.try(:agency))
+			-elsif pets_user.try(:agency)  && pets_user.is_job_developer?(pets_user.try(:agency))
 			
 				=link_to "Post jobs", new_job_path
 				|
