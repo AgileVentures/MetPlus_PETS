@@ -2,7 +2,7 @@
 
 %div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
-		-if pets_user.is_a?(CompanyPerson)
+		-if pets_user.is_a?(CompanyPerson) || pets_user.is_job_developer?(pets_user.agency)
 			=link_to "Delete", job_path(@job), method: :delete,
 			  data: {confirm: "Are you sure you want to delete: #{@job.title}"}
 			|
@@ -23,13 +23,11 @@
 			%tr
 				%td Location:
 				%td
-					/ =@job.address.street 
-					123 43rd street 
+					=@job.address.street 
 					%br
-					/ #{@job.address.city}, MI 
-					Detroit 
-					/ =@job.address.zipcode 
-					92100
+					#{@job.address.city}, #{@job.address.state} 
+					=@job.address.zipcode 
+					
 			%tr
 				%td Job category:
 				/ %td=@job.job_category.name 
