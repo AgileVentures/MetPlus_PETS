@@ -184,7 +184,7 @@ var PaginationFunctions = function() {
  *
  * Remark, the ID of the div should never be the same, to make sure everything works as expected.
  *
- * If you want to setup a specific call back of success in the previous example you should do:
+ * If you want to setup a specific callback for success or error in the previous example you should do:
  * PaginationManager.handlers['potato-1'].addSuccessCallback(function(){
  *    ....
  * });
