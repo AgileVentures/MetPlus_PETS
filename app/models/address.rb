@@ -1,6 +1,6 @@
 class Address < ActiveRecord::Base
   belongs_to :location, polymorphic: true
-  
+  has_many :company_people
   validates_presence_of :street
   validates_presence_of :city
   validates_presence_of :state
@@ -9,7 +9,10 @@ class Address < ActiveRecord::Base
     message: 'should be in form of 12345 or 12345-1234',
     allow_blank: true
 
-
+  def full_address
+  	"#{street} #{city}, #{state} #{zipcode}"
+  end
+  
   def self.us_states
     [
 	['Alabama', 'AL'],

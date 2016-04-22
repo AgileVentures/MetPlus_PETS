@@ -44,19 +44,21 @@ Scenario: Job Seeker registers in PETS
   And I fill in "Phone" with "345-890-7890"
   And I fill in "Password" with "qwerty123"
   And I fill in "Password Confirmation" with "qwerty123"
-  And I fill in "Year Of Birth" with "1980"
+  And I select "1980" in select list "Year Of Birth"  
   And I select "Unemployedlooking" in select list "Status"
   Then I click the "Create Job seeker" button
   Then "paulajones@gmail.com" should receive an email with subject "Confirmation instructions"
   When "paulajones@gmail.com" opens the email
   Then they should see "Confirm my account" in the email body
-  Then I am in Pauls's browser
+  Then I am in Paula's browser
   And "paulajones@gmail.com" follows "Confirm my account" in the email
   Then I should see "Your email address has been successfully confirmed."
   And "aa@metplus.org" should receive an email with subject "Job seeker registered"
   And "jane@metplus.org" should receive an email with subject "Job seeker registered"
   Then I am in Admin's browser
   And I should see "Job Seeker: Paula Jones has joined PETS."
+  Then I go to the tasks page
+  And I should see "Job Seeker has no assigned Job Developer"
 
 @selenium
 Scenario: Company registration request in PETS
@@ -94,3 +96,5 @@ Scenario: Company registration request in PETS
   And "jane@metplus.org" should receive an email with subject "Company registered"
   Then I am in Admin's browser
   And I should see "Company: Widgets, Inc. has registered in PETS."
+  Then I go to the tasks page
+  And I should see "Review company registration"

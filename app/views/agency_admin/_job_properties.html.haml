@@ -12,7 +12,7 @@
       - job_properties.each do |job_prop|
         %tr
           %td
-            = link_to "#{job_prop.name}", send(edit_property_path, job_prop)
+            = link_to "#{job_prop.name}", send(show_property_path, job_prop), method: :edit
           %td
             = job_prop.description
           %td

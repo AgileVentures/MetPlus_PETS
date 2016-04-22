@@ -34,7 +34,7 @@ class AgencyAdminController < ApplicationController
         render partial: 'job_properties', object: @job_categories,
                 locals: {data_type:  'job_categories',
                          partial_id: 'job_categories_table',
-                         edit_property_path:   :edit_job_category_path,
+                         show_property_path:   :job_category_path,
                          delete_property_path: :job_category_path}
       when 'skills'
         @skills = Skill.order(:name).
@@ -43,7 +43,7 @@ class AgencyAdminController < ApplicationController
         render partial: 'job_properties', object: @skills,
                 locals: {data_type:  'skills',
                          partial_id: 'skills_table',
-                         edit_property_path:   :edit_skill_path,
+                         show_property_path:   :skill_path,
                          delete_property_path: :skill_path}
       else
         raise "Do not recognize data type: #{params[:data_type]}"

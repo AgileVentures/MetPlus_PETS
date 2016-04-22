@@ -1,11 +1,22 @@
 class AgencyPeopleController < ApplicationController
 
+  include UserParameters
+
   def show
     @agency_person = AgencyPerson.find(params[:id])
   end
 
   def edit
     @agency_person = AgencyPerson.find(params[:id])
+  end
+
+  def home
+    @agency_person = AgencyPerson.find(params[:id])
+    @agency = @agency_person.agency
+    @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
+    @js_without_cm = JobSeeker.paginate(:page=> params[:js_without_cm_page], :per_page=>5).js_without_cm
+    @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd_page], :per_page=> 5).your_jobseekers_jd(@agency_person)
+    @your_jobseekers_cm = JobSeeker.paginate(:page=> params[:your_jobseekers_cm_page], :per_page=> 5).your_jobseekers_cm(@agency_person)
   end
 
   def update
@@ -66,11 +77,7 @@ class AgencyPeopleController < ApplicationController
 
   def update_profile
     @agency_person = AgencyPerson.find(params[:id])
-    person_params = agency_person_params
-    if person_params['password'].to_s.length == 0
-       person_params.delete('password')
-       person_params.delete('password_confirmation')
-    end
+    person_params = handle_user_form_parameters agency_person_params
     if @agency_person.update_attributes(person_params)
       sign_in :user, @agency_person.user, bypass: true
       flash[:notice] = "Your profile was updated successfully."
