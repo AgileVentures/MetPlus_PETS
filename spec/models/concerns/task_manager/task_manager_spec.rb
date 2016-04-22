@@ -1,10 +1,9 @@
 require 'rails_helper'
-require 'task_manager/task_manager'
 class TaskTester
-  include TaskManager
+  include TaskManager::TaskManager
 end
 
-RSpec.describe TaskManager do
+RSpec.describe TaskManager::TaskManager do
   describe 'Class methods' do
 
     before :each do
@@ -85,28 +84,28 @@ RSpec.describe TaskManager do
     describe '#assign' do
       subject {TaskTester.create_task({user: @job_developer}, 'simple', @job)}
       it('Check status change') do
-        expect(subject.status).to eq(TaskManager::STATUS[:NEW])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:NEW])
         subject.assign @job_developer
-        expect(subject.status).to eq(TaskManager::STATUS[:ASSIGNED])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:ASSIGNED])
       end
       it('Invalid status change') do
-        subject.status = TaskManager::STATUS[:WIP]
+        subject.status = TaskManager::TaskManager::STATUS[:WIP]
         expect{subject.assign @job_developer}.to raise_error(ArgumentError).with_message 'Task need to be in created state'
-        expect(subject.status).to eq(TaskManager::STATUS[:WIP])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:WIP])
       end
     end
     describe '#work_in_progress' do
       subject {TaskTester.create_task({user: @job_developer}, 'simple', @job)}
       it('Check status change') do
         subject.assign @job_developer
-        expect(subject.status).to eq(TaskManager::STATUS[:ASSIGNED])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:ASSIGNED])
         subject.work_in_progress
-        expect(subject.status).to eq(TaskManager::STATUS[:WIP])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:WIP])
       end
       it('Invalid status change') do
-        subject.status = TaskManager::STATUS[:DONE]
+        subject.status = TaskManager::TaskManager::STATUS[:DONE]
         expect{subject.work_in_progress}.to raise_error(ArgumentError).with_message 'Task need to be in assigned state'
-        expect(subject.status).to eq(TaskManager::STATUS[:DONE])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:DONE])
       end
     end
     describe '#complete' do
@@ -114,14 +113,14 @@ RSpec.describe TaskManager do
       it('Check status change') do
         subject.assign @job_developer
         subject.work_in_progress
-        expect(subject.status).to eq(TaskManager::STATUS[:WIP])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:WIP])
         subject.complete
-        expect(subject.status).to eq(TaskManager::STATUS[:DONE])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:DONE])
       end
       it('Invalid status change') do
-        subject.status = TaskManager::STATUS[:NEW]
+        subject.status = TaskManager::TaskManager::STATUS[:NEW]
         expect{subject.complete}.to raise_error(ArgumentError).with_message 'Task need to be in work in progress state'
-        expect(subject.status).to eq(TaskManager::STATUS[:NEW])
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:NEW])
       end
     end
   end

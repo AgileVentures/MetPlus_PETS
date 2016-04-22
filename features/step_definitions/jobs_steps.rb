@@ -12,3 +12,7 @@ Then(/^I should see a popup with the following job information$/) do
                  job title:  #{@job.title}
                  job id: #{@job.company_job_id}")
 end 
+
+Given(/^the Widgets, Inc\. company name with address exist in the record$/) do
+	FactoryGirl.create(:company)
+end

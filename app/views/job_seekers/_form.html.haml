@@ -1,10 +1,22 @@
 = form_for @jobseeker, html: {class: 'form-horizontal'} do |js|
+	.col-sm-offset-2.col-sm-6
+		= render 'shared/error_messages', object: @jobseeker
+		%br
+	.clearfix
 	- @user_form = js
-	= render 'users/subform'
+	= render partial: 'users/subform',
+			locals: {new_form: (new_form if defined? new_form)}
 	.form-group
 		=js.label :year_of_birth, 'Year Of Birth', class:'control-label col-sm-2'
 		.col-sm-6
-			=js.text_field :year_of_birth, size: 30, class:'form-control'
+			- if @jobseeker.year_of_birth
+				- start_year = Date.parse("#{@jobseeker.year_of_birth}0101").year
+			- else
+				- start_year = Date.today.year - 16
+
+			= select_year(start_year, field_name: :year_of_birth,
+									  start_year: start_year, end_year: start_year - 60,
+										prefix: 'job_seeker')
 	.form-group
 		=js.label :job_seeker_status_id, 'Status', class:'control-label col-sm-2'
 		.col-sm-6
@@ -13,8 +25,16 @@
 	.form-group
 		=js.label :resume, 'Resume', class:'control-label col-sm-2'
 		.col-sm-6
-			=js.file_field :resume
+			=js.file_field :resume, accept: Resume::MIMETYPES.join(',')
+		.clearfix
+		.col-sm-8.col-sm-offset-2
+			- if @current_resume
+				= "(Your resume on file is \"#{@current_resume.file_name}\",       |
+				 				and was uploaded on #{@current_resume.updated_at.          |
+								in_time_zone('Eastern Time (US & Canada)').to_s(:long)})" |
+
 	.form-group
+		%br
 		.col-sm-2.col-sm-offset-2
 			=js.submit class: 'btn btn-primary'
 

@@ -16,6 +16,8 @@ describe JobSeeker, type: :model do
   	xit {is_expected.to validate_presence_of(:resume)}
     it {is_expected.to validate_presence_of(:job_seeker_status_id)}
   	it {is_expected.to have_many(:agency_people).through(:agency_relations)}
+    it {is_expected.to have_many(:job_applications)}
+    it {is_expected.to have_many(:jobs).through(:job_applications)}
 
   	it{should allow_value('1987', '1916', '2000', '2014').for(:year_of_birth)}
   	it{should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth)}
@@ -42,58 +44,55 @@ describe JobSeeker, type: :model do
   context 'job_seeker / agency_person relationships' do
     let(:agency) { FactoryGirl.create(:agency) }
 
-    let!(:aa_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
-    let!(:jd_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD]) }
-    let!(:cm_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM]) }
+    let!(:cm_person) {FactoryGirl.create(:case_manager, first_name: 'John', last_name: 'Manager', agency: agency)}
+    let!(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
+    let!(:aa_person) {FactoryGirl.create(:agency_admin, first_name: 'John', last_name: 'Admin', agency: agency)}
 
-    let!(:aa_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << aa_role
-      $person.save
-      $person
-    end
-    let!(:cm_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << cm_role
-      $person.save
-      $person
-    end
-    let!(:jd_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << jd_role
-      $person.save
-      $person
-    end
     let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
     let!(:bob)     { FactoryGirl.create(:job_seeker, first_name: 'Bob', last_name: 'Smith') }
     let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
     let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
 
     before(:each) do
-      cm_person.agency_relations << AgencyRelation.new(agency_role: cm_role,
-                                          job_seeker: adam)
-      cm_person.save!
-      jd_person.agency_relations << AgencyRelation.new(agency_role: jd_role,
-                                          job_seeker: dave)
-      jd_person.save!
+      adam.assign_case_manager(cm_person, agency)
+      dave.assign_job_developer(jd_person, agency)
     end
-
-    it 'returns a case manager for a given job seeker' do
-      expect(adam.case_manager).to eq(cm_person)
+    # describe '#self.js_without_jd' do
+    #   expect(JobSeeker.js_without_jd).to include(adam)
+    # end
+    describe '#assign_case_manager' do
+      it 'success' do
+        bob.assign_case_manager(cm_person, agency)
+        expect(bob.case_manager).to eq(cm_person)
+      end
+      it 'not a case manager' do
+        expect{bob.assign_case_manager jd_person, agency}.to raise_error("User Developer, John is not a Case Manager")
+      end
     end
-    it 'returns a job developer for a given job seeker' do
-      expect(dave.job_developer).to eq(jd_person)
+    describe '#assign_job_developer' do
+      it 'success' do
+        bob.assign_job_developer(jd_person, agency)
+        expect(bob.job_developer).to eq(jd_person)
+      end
+      it 'not a job developer' do
+        expect{bob.assign_job_developer cm_person, agency}.to raise_error("User Manager, John is not a Job Developer")
+      end
     end
-
-    it 'assigns an agency person to a job seeker in a given role' do
-      bob.assign_agency_person(jd_person, :JD)
-      expect(bob.job_developer).to eq(jd_person)
+    describe '#case_manager' do
+      it 'success' do
+        expect(adam.case_manager).to eq(cm_person)
+      end
+      it 'no case manager' do
+        expect(dave.case_manager).to eq(nil)
+      end
     end
-
-    it 'finds the agency relation for a job seeker in a given role' do
-      expect(dave.find_agency_person(:JD)).to eq(jd_person)
+    describe '#job_developer' do
+      it 'success' do
+        expect(dave.job_developer).to eq(jd_person)
+      end
+      it 'no job developer' do
+        expect(adam.job_developer).to eq(nil)
+      end
     end
-
   end
-
 end

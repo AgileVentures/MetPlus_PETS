@@ -15,9 +15,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     super do |user|
       if user.errors.empty? && user.actable_type == 'JobSeeker'
         person = user.actable
-        Event.create(:JS_REGISTER,
-                     name: person.full_name(last_name_first: false),
-                     id:   person.id)
+        Event.create(:JS_REGISTER, person)
       else
         # Override normal handling if the user's email address has already been
         # confirmed.  In that case, clear the error messages and the parent

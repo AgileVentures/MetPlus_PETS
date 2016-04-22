@@ -21,12 +21,12 @@ RSpec.describe JobCategoriesController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
+  describe "GET #show" do
     let(:category)  { FactoryGirl.create(:job_category) }
 
     context 'job category found' do
       before(:each) do
-        xhr :get, :edit, id: category
+        xhr :get, :show, id: category
       end
 
       it 'renders json structure' do
@@ -42,7 +42,7 @@ RSpec.describe JobCategoriesController, type: :controller do
 
     context 'job category NOT found' do
       it "returns http status not_found" do
-        xhr :get, :edit, id: 0
+        xhr :get, :show, id: 0
         expect(response).to have_http_status(:not_found)
       end
     end
