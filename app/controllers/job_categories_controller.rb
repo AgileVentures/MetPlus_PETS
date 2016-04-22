@@ -9,7 +9,7 @@ class JobCategoriesController < ApplicationController
     end
   end
 
-  def edit
+  def show
     begin
       category = JobCategory.find(params[:id])
     rescue

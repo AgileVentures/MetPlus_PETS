@@ -1,6 +1,5 @@
 def page_translator name
   case name
-
     when 'job creation'
       return new_job_path
     when 'Company Registration'
@@ -9,9 +8,23 @@ def page_translator name
       return new_job_seeker_path
     when 'home'
       return root_path
+    when 'tasks'
+      return tasks_path
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
-      return job_seekers_home_path(User.find_by_email(user[1]))
+      return home_job_seeker_path(User.find_by_email(user[1]))
+    when /Company Person '.+' Home/
+      user = name.match(/'(.+)'/)
+      return home_company_person_path(User.find_by_email(user[1]).pets_user)
+    when /'.+' edit profile/
+      user = name.match(/'(.+)'/)
+      user = User.find_by_email(user[1]).pets_user
+      return edit_job_seeker_path user if user.is_job_seeker?
+      return edit_profile_company_person_path user if user.is_a? CompanyPerson
+      return edit_profile_agency_person_path user if user.is_a? AgencyPerson
+    when /agency '(.+)' edit/
+      agency = name.match(/'(.+)'/)
+      return edit_agency_path(Agency.find_by_name(agency[1]))
     when /activation for user '.+'/
       user = name.match(/'(.+)'/)
       if user[1] =~ /@/
@@ -39,7 +52,7 @@ Given(/I am on the JobSeeker Show page for "([^"]*)"$/) do |email|
   visit job_seeker_path(User.find_by_email(email).actable_id)
 end
 
-Given(/^I am on the Job edit page with given record:$/) do 
+Given(/^I am on the Job edit page with given record:$/) do
   job = FactoryGirl.create(:job)
   visit edit_job_path(job.id)
 end

@@ -10,7 +10,7 @@ RSpec.describe Job, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :company }
     it { is_expected.to belong_to :company_person }
-    it  { is_expected.to have_one  :address }
+    it  { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
     it { is_expected.to have_many :job_skills }
     it { is_expected.to have_many(:skills).through(:job_skills) }
@@ -21,6 +21,8 @@ RSpec.describe Job, type: :model do
           through(:job_skills).conditions(job_skills: {required: false}).
           source(:skill).class_name('Skill')}
     it { is_expected.to have_many(:skill_levels).through(:job_skills) }
+    it { is_expected.to have_many(:job_applications) }
+    it { is_expected.to have_many(:job_seekers).through(:job_applications) }
   end
   
   describe 'Database schema' do
@@ -32,7 +34,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :fulltime}
     it { is_expected.to have_db_column :company_id }
 
-    xit { is_expected.to have_db_column :company_person_id }
+    it { is_expected.to have_db_column :company_person_id }
+    it { is_expected.to have_db_column :address_id }
     xit { is_expected.to have_db_column :job_category_id }
   end
   

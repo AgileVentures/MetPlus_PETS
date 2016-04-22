@@ -1,18 +1,30 @@
 .col-sm-offset-3.col-sm-6
 	= render 'shared/error_messages', object: f.object 
 .clearfix
-
-= f.hidden_field  :company_id
- 
+- if @cp_or_jd.is_a?(CompanyPerson)
+	= f.hidden_field  :company_id
+	= f.hidden_field  :company_person_id 
+	 
 .form-group 
 	=f.label :title, class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
 		=f.text_field :title, class: "form-control" 
+
+-if @cp_or_jd.is_a?(AgencyPerson) && @cp_or_jd.is_job_developer?(pets_user.agency)
+	.form-group
+		=f.label  :company_id, "Company Name",class: "col-sm-3 control-label text-right"
+		%div{class: "col-sm-6"}
+			=f.collection_select :company_id, Company.all, :id, :name, {prompt: true}, {class: "form-control"} 
+	.form-group
+		=f.label  :address_id, "Company Address",class: "col-sm-3 control-label text-right"
+		%div{class: "col-sm-6"}
+			=f.collection_select :address_id, Address.all, :id, :full_address, {prompt: true}, {class: "form-control"} 
+ 		
 .form-group 
 	=f.label :company_job_id,"Job id", class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
 		=f.text_field :company_job_id, class: "form-control" 
-		
+	
 .form-group 
 	=f.label :shift, class: "col-sm-3 control-label text-right" 
 	%div{class: "col-sm-5"}

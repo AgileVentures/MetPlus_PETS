@@ -1,0 +1,129 @@
+<div class="row">
+    <div id="mine-open-tasks">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <td>
+                    Task
+                </td>
+                <td>
+                    State
+                </td>
+                <td>
+                    Entities associated
+                </td>
+                <td>
+                    Change date
+                </td>
+                <td>
+                    Options
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    New
+                </td>
+                <td>
+                    <p>
+                        Company:
+                        <a href="/company/201">Bogan Inc</a>
+                    </p>
+                </td>
+                <td>
+                    2016-04-06
+                </td>
+                <td>
+                    <a title="Assign task" class="assign_button" data-task-id="1" data-toggle="modal" data-target="#assignTaskModal" href="#">assign
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    New
+                </td>
+                <td>
+                    <p>
+                        User:
+                        <a href="/job_seekers/2">Bartoletti, Elenor</a>
+                    </p>
+                    <p>
+                        Job:
+                        <a href="/jobs/199">Principal Solutions Director</a>
+                    </p>
+                </td>
+                <td>
+                    2016-04-06
+                </td>
+                <td>
+                    <a title="Start working on task" class="wip_button" href="#" data-url="/tasks/2/in_progress">wip
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Job Seeker has no assigned Job Developer
+                </td>
+                <td>
+                    New
+                </td>
+                <td>
+                    <p>
+                        User:
+                        <a href="/task/tasks/mine-open">Hodkiewicz, Barney</a>
+                    </p>
+                </td>
+                <td>
+                    2016-04-05
+                </td>
+                <td>
+                    <a title="Work complete" class="done_button" href="#" data-url="/tasks/3/done">done
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination"><ul class="pagination"><li class="prev previous_page disabled"><a href="#">← Previous</a></li> <li class="active"><a rel="start" href="/tasks/tasks/mine-open?tasks_page=1">1</a></li> <li><a rel="next" href="/tasks/tasks/mine-open?tasks_page=2">2</a></li> <li class="next next_page "><a id="next-page" rel="next" href="/tasks/tasks/mine-open?tasks_page=2">Next →</a></li></ul></div>
+    </div>
+    <div class="modal fade" id="assignTaskModal">
+        <div class="modal-dialog" role="document">
+            <form action="#" method="patch">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">
+                            Assign user
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label" for="assignTaskModal_name">
+                                Select the user to assign the task to:
+                            </label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select id="task_assign_select" style="width: 100%;"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+                        <submit class="btn btn-primary" id="assignTaskModal_button" type="button">
+                            Assign
+                        </submit>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

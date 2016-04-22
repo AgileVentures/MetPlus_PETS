@@ -4,7 +4,7 @@
 %small
 	= "#{time_ago_in_words(job.created_at, )} ago"
 	=render partial: 'modal', locals: {job: job}
-	-if @company_person
+	-if pets_user.is_a?(CompanyPerson) || (pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)) 
 		%button.btn.btn-primary.btn-xs.pull-right#jobs-delete-link{"data-target" => "#myModal",
 		 "data-toggle" => "modal", :type => "button"}
 			delete

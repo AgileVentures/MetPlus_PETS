@@ -21,12 +21,12 @@ RSpec.describe SkillsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
+  describe "GET #show" do
     let(:skill)  { FactoryGirl.create(:skill) }
 
     context 'skill found' do
       before(:each) do
-        xhr :get, :edit, id: skill
+        xhr :get, :show, id: skill
       end
 
       it 'renders json structure' do
@@ -42,7 +42,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'skill NOT found' do
       it "returns http status not_found" do
-        xhr :get, :edit, id: 0
+        xhr :get, :show, id: 0
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -91,7 +91,7 @@ RSpec.describe SkillsController, type: :controller do
     let!(:skill)  { FactoryGirl.create(:skill) }
 
     it 'raises an exception' do
-      expect {get :edit, id: skill}.to raise_error(RuntimeError)
+      expect {get :show, id: skill}.to raise_error(RuntimeError)
     end
   end
 end

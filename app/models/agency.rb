@@ -38,6 +38,14 @@ class Agency < ActiveRecord::Base
   end
   ###################################################
 
+  def self.job_developers agency
+    find_users_with_role agency, AgencyRole::ROLE[:JD]
+  end
+
+  def self.case_managers agency
+    find_users_with_role agency, AgencyRole::ROLE[:CM]
+  end
+
   private
 
   def self.find_users_with_role(agency, role)
