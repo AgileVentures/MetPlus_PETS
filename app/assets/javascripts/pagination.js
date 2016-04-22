@@ -57,13 +57,9 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
             self.errorCallback = PaginationFunctions.getErrorFunction(self.name);
         if(typeof self.beforeGetCallback == 'undefined')
             self.beforeGetCallback = PaginationFunctions.getBeforeGetFunction(self.name);
-
-
-        if( typeof self.beforeGetCallback == "function" ) {
+        
+        if( typeof self.beforeGetCallback == "function" )
             self.beforeGetCallback();
-            console.log('bamm')
-        }
-
 
         var target = $($(self.viewSelector)[target_idx]);
         var spinner = self.spinner(target);
