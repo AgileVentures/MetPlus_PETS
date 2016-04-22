@@ -114,7 +114,7 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
         }, false);
 
         obj.find(".pagination a").each(function(i, obj) {
-            $(obj).click(self.paginate_div);
+            $(obj).off('click').click(self.paginate_div);
             $(obj).data('position', target_idx);
         });
     };

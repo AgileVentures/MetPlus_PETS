@@ -59,7 +59,7 @@ var TaskManager = function (holder_id, task_type) {
     this.refresh_tasks = function () {
         //self.load_tasks_from_url(self.last_load_url);
         self.unsetTaskHolder();
-        $("#" + self.holder_id).dispatchEvent(PaginationManager.ReloadPaginationEvent);
+        $("#" + self.holder_id)[0].dispatchEvent(PaginationManager.ReloadPaginationEvent);
     };
 /**    this.load_tasks = function() {
         self.load_tasks_from_url(this.href);
@@ -101,19 +101,19 @@ var TaskManager = function (holder_id, task_type) {
     this.holder_id = holder_id;
 
     this.unsetTaskHolder = function () {
-        console.log('bammm');
+
         delete __TaskManagerHolder[self.holder_id];
     };
 
     this.init = function() {
         var obj = $("#" + self.holder_id);
         console.log(obj);
-        obj.find(".assign_button").click(self.load_assign_modal);
+        obj.find(".assign_button").off('click').click(self.load_assign_modal);
         console.log(obj.find(".assign_button"));
-        obj.find(".wip_button").click(self.wip_task);
-        obj.find(".done_button").click(self.done_task);
+        obj.find(".wip_button").off('click').click(self.wip_task);
+        obj.find(".done_button").off('click').click(self.done_task);
         //$("#" + self.holder_id).find(".pagination a").click(self.load_tasks);
-        PaginationFunctions.addFunction(self.holder_id, self.init, undefined, self.unsetTaskHolder);
+        PaginationFunctions.addFunction(self.holder_id, undefined, undefined, self.unsetTaskHolder);
     };
     this.init();
 };
@@ -130,7 +130,7 @@ var TaskManagerHolder = function(holder_id, task_type) {
 var TaskModal = {
   setup: function() {
       $('#assignTaskModal').on('shown.bs.modal', function (e) {
-          $('#assignTaskModal_button').click( function() {
+          $('#assignTaskModal_button').off('click').click( function() {
               if ($("#task_assign_select").val() === null) {
                   return;
               }
