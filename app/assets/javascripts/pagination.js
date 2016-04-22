@@ -34,7 +34,8 @@
  *    (e.g. a view showing "Job Seekers without a Job Developer" and "Job Seekers without a Case Manager")
  *     PaginationHandler('/potatos/list/potato-pagination-type', '.potato-view')
  */
-var PaginationHandler = function (url, viewSelector, successCallback, errorCallback) {
+
+var PaginationHandler = function (url, viewSelector, successCallback, errorCallback, beforeGetCallback) {
 
     var self = this;
 
@@ -42,13 +43,32 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
 
     this.url = url;
     this.viewSelector = viewSelector;
+    this.name = viewSelector.substring(1);
     this.successCallback = successCallback;
     this.errorCallback = errorCallback;
+    this.beforeGetCallback = beforeGetCallback;
+    this.lastURL = '';
 
     this.load_div_from_url = function(target_idx, url) {
+
+        if(typeof self.successCallback == 'undefined')
+            self.successCallback = PaginationFunctions.getSuccessFunction(self.name);
+        if(typeof self.errorCallback == 'undefined')
+            self.errorCallback = PaginationFunctions.getErrorFunction(self.name);
+        if(typeof self.beforeGetCallback == 'undefined')
+            self.beforeGetCallback = PaginationFunctions.getBeforeGetFunction(self.name);
+
+
+        if( typeof self.beforeGetCallback == "function" ) {
+            self.beforeGetCallback();
+            console.log('bamm')
+        }
+
+
         var target = $($(self.viewSelector)[target_idx]);
         var spinner = self.spinner(target);
         spinner.start();
+        this.lastURL = url;
         $.ajax({type: 'GET',
             url: url,
             data: {},
@@ -87,8 +107,12 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
         self.load_div_from_url($(this).data('position'), this.href);
         return false;
     };
-
     this.init = function(obj, target_idx) {
+
+        obj[target_idx].addEventListener(PaginationManager.ReloadPaginationEventName, function (e) {
+            self.load_div_from_url(target_idx, self.lastURL);
+        }, false);
+
         obj.find(".pagination a").each(function(i, obj) {
             $(obj).click(self.paginate_div);
             $(obj).data('position', target_idx);
@@ -113,27 +137,33 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
     return this;
 };
 
-var PaginationFunctions = function() {
-    var self = this;
-    this.successFunctions = {};
-    this.errorFunctions = {};
-    this.addFunction = function(divId, successCallback, errorCallback) {
-        self.successFunctions[divId] = successCallback;
-        self.errorFunctions[divId] = errorCallback;
-    };
-    this.getSuccessFunction = function(divId) {
-        if(divId in self.successFunctions) {
-            return self.successFunctions[divId];
+var PaginationFunctions = {
+    successFunctions: {},
+    errorFunctions: {},
+    beforeGetFunctions: {},
+    addFunction: function(divId, successCallback, errorCallback, beforeGetCallback) {
+        PaginationFunctions.successFunctions[divId] = successCallback;
+        PaginationFunctions.errorFunctions[divId] = errorCallback;
+        PaginationFunctions.beforeGetFunctions[divId] = beforeGetCallback;
+    },
+    getSuccessFunction: function(divId) {
+        if(divId in PaginationFunctions.successFunctions) {
+            return PaginationFunctions.successFunctions[divId];
         }
         return undefined;
-    };
-    this.getErrorFunction = function(divId) {
-        if(divId in self.errorFunctions) {
-            return self.errorFunctions[divId];
+    },
+    getErrorFunction: function(divId) {
+        if(divId in PaginationFunctions.errorFunctions) {
+            return PaginationFunctions.errorFunctions[divId];
         }
         return undefined;
-    };
-    return this;
+    },
+    getBeforeGetFunction: function(divId) {
+        if(divId in PaginationFunctions.beforeGetFunctions) {
+            return PaginationFunctions.beforeGetFunctions[divId];
+        }
+        return undefined;
+    }
 };
 
 /**
@@ -162,24 +192,24 @@ var PaginationFunctions = function() {
  * @type {{setupAll: PaginationManager.setupAll, setupOne: PaginationManager.setupOne}}
  */
 var PaginationManager = {
+    ReloadPaginationEventName: 'reload-pagination',
+    ReloadPaginationEvent: new Event('reload-pagination'),
     handlers: {},
-    setupAll: function(classSelector, paginationFunctions) {
-        var funs = (typeof paginationFunctions === 'undefined') ? PaginationFunctions() : paginationFunctions;
-
+    setupAll: function(classSelector) {
         $('.'+classSelector).each(function(i, obj) {
             var id = $(obj).attr('id');
             PaginationManager.setupOne(obj,
-                funs.getSuccessFunction(id),
-                funs.getErrorFunction(id));
+                PaginationFunctions.getSuccessFunction(id),
+                PaginationFunctions.getErrorFunction(id));
         });
     },
     setupOne: function(obj, successCallback, errorCallback) {
         var id = $(obj).attr('id');
         var url = $(obj).data('url');
-        PaginationManager.handlers[id] = PaginationHandler(url,
-                                                '#' + id,
-                                                successCallback,
-                                                errorCallback);
+        PaginationManager.handlers[id] = new PaginationHandler(url,
+                                                                '#' + id,
+                                                                successCallback,
+                                                                errorCallback);
     }
 };
 

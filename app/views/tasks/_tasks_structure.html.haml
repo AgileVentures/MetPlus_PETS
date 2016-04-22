@@ -1,11 +1,7 @@
-%div{:id => "#{task_type}-tasks"}
-  = render partial: 'tasks/tasks', :locals => {all_tasks: all_tasks, task_type: task_type}
-%script{:type=>"text/javascript"}
-  $(document).ready( function() {
-  =  "TaskManagerHolder('#{task_type}-tasks', '#{task_type}')"
-  } );
-- if @render_modal
-  - @render_modal = false
+%div{:id => "tasks-#{task_type}", :class => 'pagination-div', :data => {:url => list_tasks_path(task_type)}}
+
+- unless defined? @modal_rendered
+  - @modal_rendered = true
   %div{id: "assignTaskModal", class: 'modal fade'}
     .modal-dialog(role='document')
       %form{ :action => "#", :method => "patch" }
@@ -27,4 +23,4 @@
             data-dismiss='modal') Cancel
             %button(type='submit' class='btn btn-primary'
             id='assignTaskModal_button')
-              Assign
+            Assign

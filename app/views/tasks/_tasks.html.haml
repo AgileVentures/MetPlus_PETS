@@ -59,4 +59,10 @@
                            id: "done-#{task.id}",
                            data: {:url => done_task_path(task)} do
               %i.fa.fa-flag-checkered.fa-1
-= will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'tasks', :action => 'tasks', :task_type => task_type}
+.row.text-center
+  = will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'tasks', :action => 'tasks', :task_type => task_type}
+
+%script{:type=>"text/javascript"}
+  $(document).ready( function() {
+  =  "TaskManagerHolder('tasks-#{task_type}', '#{task_type}')"
+  } );
