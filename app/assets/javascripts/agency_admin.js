@@ -94,13 +94,27 @@ var AgencyData = {
               AgencyData[job_property + '_id'] = data.id;
 
               // Set the attribute values in the modal and make modal visible
-              var name_field_id = '#update_' + job_property + '_name';
-              var desc_field_id = '#update_' + job_property + '_desc';
-              var modal_id = '#update_' + job_property;
+              var modal_id = 'update_' + job_property;
+              var modal_selector = '#' + modal_id
 
-              $(name_field_id).val(data.name);
-              $(desc_field_id).val(data.description);
-              $(modal_id).modal('show');
+              $(modal_selector + '_name').val(data.name);
+              $(modal_selector + '_desc').val(data.description);
+
+              // Show existing job_category skills in modal
+              if (job_property === 'job_category' &&
+                               data['skills'].length != 0) {
+                var skills_list = '';
+                var i;
+                for (i = 0; i < data['skills'].length; i += 1) {
+                  skill = data['skills'][i];
+                  skills_list += '<div class="draggable_delete" ' +
+                                 'id="'+modal_id+'_skill_'+skill.id+'">' +
+                                 skill.name + '</div>';
+                }
+                $(modal_selector + '_skills').html(skills_list);
+              }
+
+              $(modal_selector).modal('show');
             },
             error: function (xhrObj, status, exception) {
               alert('Error retrieving property attributes');
@@ -328,6 +342,24 @@ var AgencyData = {
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
                                 AgencyData.delete_skill);
+    $('.draggable').draggable({ revert: 'invalid',
+                                cursor: 'move',
+                                containment: 'document',
+                                helper: 'clone' });
+    $('.droppable').droppable({ activeClass: 'ui-state-hover',
+        drop: function(event, ui) {
+          var ele = $(ui.draggable[0]);
+          // Add this element unless already present
+          rg = new RegExp("\"" + ele.attr('id') + "\"")
+          if (!rg.test($(this).html())) {
+            add_skill = '<div id="'+ele.attr('id')+'">' +
+                        ele.text().trim() + '</div>';
+            $(add_skill).appendTo(this);
+          }
+        },
+        accept: '.draggable'
+      });
+    $('.sortable').sortable();
   }
 };
 $(function () {

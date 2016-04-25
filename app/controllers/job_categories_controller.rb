@@ -15,9 +15,13 @@ class JobCategoriesController < ApplicationController
     rescue
       render nothing: true, status: 404
     else
+      skills_list = category.skills.map do |skill|
+        { id: skill.id, name: skill.name }
+      end
       render json: { name: category.name,
                      description: category.description,
-                     id: category.id }
+                     id: category.id,
+                     skills: skills_list }
     end
   end
 

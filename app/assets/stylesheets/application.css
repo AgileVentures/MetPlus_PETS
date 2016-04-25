@@ -58,6 +58,13 @@
    margin-top: 20px;
 }
 
+.fixed-panel {
+  min-height: 25em;
+  max-height: 25em;
+  overflow-y: scroll;
+  cursor:     pointer;
+}
+
 .navbar {
     background: #0C7BA1;
 }
