@@ -107,9 +107,10 @@ var AgencyData = {
                 var i;
                 for (i = 0; i < data['skills'].length; i += 1) {
                   skill = data['skills'][i];
-                  skills_list += '<div class="draggable_delete" ' +
-                                 'id="'+modal_id+'_skill_'+skill.id+'">' +
-                                 skill.name + '</div>';
+                  skills_list +=
+                      '<div class="draggable_delete ui-widget-content" ' +
+                      'id="'+modal_id+'_skill_'+skill.id+'">' +
+                      skill.name + '</div>';
                 }
                 $(modal_selector + '_skills').html(skills_list);
               }
@@ -343,7 +344,7 @@ var AgencyData = {
                   "a[data-method='delete']",
                                 AgencyData.delete_skill);
     $('.draggable').draggable({ revert: 'invalid',
-                                cursor: 'move',
+                                cursor: 'pointer',
                                 containment: 'document',
                                 helper: 'clone' });
     $('.droppable').droppable({ activeClass: 'ui-state-hover',
@@ -352,14 +353,21 @@ var AgencyData = {
           // Add this element unless already present
           rg = new RegExp("\"" + ele.attr('id') + "\"")
           if (!rg.test($(this).html())) {
-            add_skill = '<div id="'+ele.attr('id')+'">' +
-                        ele.text().trim() + '</div>';
+            add_skill = '<div class="draggable_delete ui-widget-content" '
+            + 'id="' + ele.attr('id')+'">' + ele.text().trim() + '</div>';
             $(add_skill).appendTo(this);
           }
         },
         accept: '.draggable'
       });
-    $('.sortable').sortable();
+    $('.droppable').sortable();
+    $('.all_skills').droppable({ activeClass: 'ui-state-hover',
+                                 accept: '.draggable_delete',
+                                 tolerance: 'intersect',
+          drop: function(event, ui) {
+            // Delete element from skills for this category
+            $('#' + $(ui.draggable[0]).attr('id')).remove();
+          } });
   }
 };
 $(function () {

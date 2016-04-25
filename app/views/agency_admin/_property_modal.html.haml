@@ -21,11 +21,11 @@
             .col-sm-6.panel.panel-primary
               .panel-heading
                 Skills for this job category
-              .panel-body.fixed-panel.droppable.sortable{id: "#{modal_id}_skills"}
+              .panel-body.fixed-panel.droppable{id: "#{modal_id}_skills"}
             .col-sm-6.panel.panel-primary
               .panel-heading
                 All Skills
-              .panel-body.fixed-panel.droppable
+              .panel-body.fixed-panel.all_skills
                 - Skill.order(:name).each do |skill|
                   .draggable.ui-widget-content{id: "#{modal_id}_skill_#{skill.id}"}
                     = skill.name
