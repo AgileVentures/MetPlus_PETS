@@ -2,19 +2,6 @@ var TaskManager = function (holder_id, task_type) {
 
     var self = this;
 
-    this.success_notification = function(text) {
-        noty({text: text,
-            theme: 'bootstrapTheme',
-            layout: 'bottomRight',
-            type: 'success'});
-    };
-    this.error_notification = function(text) {
-        noty({text: text,
-            theme: 'bootstrapTheme',
-            layout: 'bottomRight',
-            type: 'error'});
-    };
-
     this.load_assign_modal = function (event) {
         var task_id = $(this).data("task-id");
         $("#task_assign_select").select2({
@@ -39,7 +26,7 @@ var TaskManager = function (holder_id, task_type) {
     };
     this.refresh_tasks = function () {
         self.unsetTaskHolder();
-        $("#" + self.holder_id)[0].dispatchEvent(PaginationManager.ReloadPaginationEvent);
+        $("#" + self.holder_id).trigger('pagination:reload');
     };
     this.wip_task = function(event) {
         event.preventDefault();

@@ -104,10 +104,10 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
         return false;
     };
     this.init = function(obj, target_idx) {
-
-        obj[target_idx].addEventListener(PaginationManager.ReloadPaginationEventName, function (e) {
+        $(obj[target_idx]).off('pagination:reload')
+                       .on('pagination:reload', function (event) {
             self.load_div_from_url(target_idx, self.lastURL);
-        }, false);
+        });
 
         obj.find(".pagination a").each(function(i, obj) {
             $(obj).off('click').click(self.paginate_div);
@@ -188,8 +188,6 @@ var PaginationFunctions = {
  * @type {{setupAll: PaginationManager.setupAll, setupOne: PaginationManager.setupOne}}
  */
 var PaginationManager = {
-    ReloadPaginationEventName: 'reload-pagination',
-    ReloadPaginationEvent: new Event('reload-pagination'),
     handlers: {},
     setupAll: function(classSelector) {
         $('.'+classSelector).each(function(i, obj) {
