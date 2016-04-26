@@ -15,6 +15,12 @@
     = @address_form.phone_field :phone, size: 30, class: 'form-control'
 
 .form-group
+  = label :job_email, 'Job Email', class: 'control-label col-sm-2'
+  %i.fa.fa-question-circle{:title => "Email where the job applications will be sent", data: {:toggle=>"popover"}}
+  .col-sm-6
+    = @address_form.email_field :job_email, size: 30, class: 'form-control'
+
+.form-group
   = label :company, :fax, 'Fax', class: 'control-label col-sm-2'
   .col-sm-4
     = @address_form.phone_field :fax, size: 30, class: 'form-control'
