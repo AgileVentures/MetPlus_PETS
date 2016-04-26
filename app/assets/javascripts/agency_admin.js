@@ -343,13 +343,24 @@ var AgencyData = {
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
                                 AgencyData.delete_skill);
+    // The items in the right-hand-side of the skills list consist
+    // of all available skills.  These are added to class "draggable",
+    // and can be dragged to the LHS to assign a skill to the category.
+    // Dragging the skill does not remove it from the "all skills" list.
     $('.draggable').draggable({ revert: 'invalid',
                                 cursor: 'pointer',
                                 containment: 'document',
                                 helper: 'clone' });
+
+    // Class "droppable" is assigned to the container on the LHS.  These
+    // are skills assigned (or to be assigned) to the category.
+    // These skills are assigned class ".draggable_delete" because they
+    // can be dragged back to the RHS to delete them from the list of
+    // skills for the category.
     $('.droppable').droppable({
           activeClass: 'ui-state-hover',
           accept: '.draggable',
+          // Handle dragging a skill to the container
           drop: function(event, ui) {
             var ele = $(ui.draggable[0]);
             // Add this element unless already present
@@ -362,6 +373,9 @@ var AgencyData = {
           }
         });
     $('.droppable').sortable();
+
+    // Skills on the LHS can be dragged to the "all skills" (RHS) container
+    // to remove them from assignment to the category.
     $('.all_skills').droppable({
           activeClass: 'ui-state-hover',
           accept: '.draggable_delete',
