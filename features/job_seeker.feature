@@ -13,8 +13,8 @@ Background: seed data added to database
   | Employednotlooking   | A jobseeker with a job and not looking for a job for now.|
 
   Given the following jobseeker exist:
-  | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
-  | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password               | 1990       |Unemployedlooking |
+  | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
+  | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployedlooking |
 
 Scenario: new Js Registration
   Given I am on the Jobseeker Registration page
@@ -66,11 +66,15 @@ Scenario: edit Js Registration
   Then I should see "Signed in successfully"
   When I click the "vijaya" link
   And I fill in "First Name" with "vijaya1"
+  And I fill in "Zipcode" with "54321"
   Then I select "Employedlooking" in select list "Status"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
+  When I click the "vijaya" link
+  Then The field 'First Name' should have the value 'vijaya1'
+  And The field 'Zipcode' should have the value '54321'
 
 Scenario: edit Js Registration without password change
   Given I am on the home page

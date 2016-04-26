@@ -3,7 +3,8 @@ class JobSeeker < ActiveRecord::Base
   belongs_to :job_seeker_status
   has_many   :resumes
 
-  has_one    :address, as: :location
+  belongs_to :address
+  accepts_nested_attributes_for :address
   has_many   :agency_relations
   has_many   :agency_people, through: :agency_relations
 

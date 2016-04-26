@@ -1,5 +1,16 @@
 require 'ffaker'
 
+def create_address(location = nil)
+  street = Faker::Address.street_address
+  city = Faker::Address.city
+  state = Faker::Address.state
+  zipcode = Faker::Address.zip_code
+
+  return Address.create(street: street, city: city, zipcode: zipcode, state: state) if location.nil?
+  Address.create(street: street, city: city, zipcode: zipcode, state: state,
+                 location: location)
+end
+
 # --------------------------- Seed Production Database --------------------
 
 ['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
@@ -65,6 +76,8 @@ if Rails.env.development? || Rails.env.staging?
       cmp.status = Company::STATUS[:ACT]
     end
     cmp.save!
+
+    create_address(cmp)
   end
 
   # Create a known company person for dev/test purposes
@@ -78,15 +91,6 @@ if Rails.env.development? || Rails.env.staging?
   puts "Companies created: #{Company.count}"
 
   #-------------------------- Company Addresses ---------------------------
-  companies = Company.all.to_a
-  200.times do |n|
-    street = Faker::Address.street_address
-    city = Faker::Address.city
-    state = Faker::Address.state
-    zipcode = Faker::Address.zip_code
-    Address.create(street: street, city: city, zipcode: zipcode, state: state,
-                   location: companies.pop)
-  end
 
   puts "Company Addresses created: #{Address.count}"
 
@@ -205,36 +209,42 @@ if Rails.env.development? || Rails.env.staging?
                      job_seeker_status: job_seeker_status,
                      resume: resume,
                      phone: phone,
-                     confirmed_at: DateTime.now)
+                     confirmed_at: DateTime.now,
+                     address: create_address)
   end
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
-                         email: 'tom@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1980', resume: 'text',
-                         job_seeker_status: @jss1, confirmed_at: Time.now)
+                        email: 'tom@gmail.com', password: 'qwerty123',
+                year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss1, confirmed_at: Time.now,
+                      address: create_address)
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
-                         email: 'mary@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1970', resume: 'text',
-                         job_seeker_status: @jss2, confirmed_at: Time.now)
+                        email: 'mary@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss2, confirmed_at: Time.now,
+                      address: create_address)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
-                         email: 'frank@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1970', resume: 'text',
-                         job_seeker_status: @jss3, confirmed_at: Time.now)
+                        email: 'frank@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss3, confirmed_at: Time.now,
+                      address: create_address)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
-                         email: 'henry@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1970', resume: 'text',
-                         job_seeker_status: @jss3, confirmed_at: Time.now)
+                        email: 'henry@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss3, confirmed_at: Time.now,
+                      address: create_address)
 
 
   JobSeeker.create(first_name: 'abc', last_name:'def',
-                   email:'vijaya.karumudi1@gmail.com',
-                   password:'dfg123',password_confirmation:'dfg123',
-                   phone:'345-890-7890',year_of_birth: "1990",
-                   confirmed_at: Time.now,
-                   job_seeker_status: @jss1)
+                               email:'vijaya.karumudi1@gmail.com',
+                               password:'dfg123',password_confirmation:'dfg123',
+                               year_of_birth: "1990",
+                               confirmed_at: Time.now, phone: '111-222-3333',
+                               job_seeker_status: @jss1,
+                               address: create_address)
 
   puts "Job Seekers created: #{JobSeeker.count}"
 
