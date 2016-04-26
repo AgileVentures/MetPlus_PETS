@@ -344,18 +344,7 @@ var AgencyData = {
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
                                 AgencyData.delete_job_category);
-  },
-  setup_manage_skill: function () {
-    $('#add_skill_button').click(AgencyData.add_skill);
-    $('#skills_table').on('click',
-                  // bind to 'edit skill' anchor element
-                  "a[href^='/skills/'][data-method='edit']",
-                                AgencyData.edit_skill);
-    $('#update_skill_button').click(AgencyData.update_skill);
-    $('#skills_table').on('click',
-                  // bind to 'delete category' anchor element
-                  "a[data-method='delete']",
-                                AgencyData.delete_skill);
+
     // The items in the right-hand-side of the skills list consist
     // of all available skills.  These are added to class "draggable",
     // and can be dragged to the LHS to assign a skill to the category.
@@ -401,6 +390,18 @@ var AgencyData = {
             $(ui.draggable[0]).remove();
           }
         });
+  },
+  setup_manage_skill: function () {
+    $('#add_skill_button').click(AgencyData.add_skill);
+    $('#skills_table').on('click',
+                  // bind to 'edit skill' anchor element
+                  "a[href^='/skills/'][data-method='edit']",
+                                AgencyData.edit_skill);
+    $('#update_skill_button').click(AgencyData.update_skill);
+    $('#skills_table').on('click',
+                  // bind to 'delete category' anchor element
+                  "a[data-method='delete']",
+                                AgencyData.delete_skill);
   }
 };
 $(function () {
