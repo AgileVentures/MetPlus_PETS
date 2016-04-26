@@ -38,6 +38,20 @@ var AgencyData = {
     post_data[job_property + '[name]']        = $(name_field_id).val();
     post_data[job_property + '[description]'] = $(desc_field_id).val();
 
+    var skill_ids = [];
+
+    if (job_property === 'job_category' &&
+                $('.droppable#add_job_category_skills').length != 0) {
+
+      $("div[id^='update_job_category_skill_']").each(function() {
+        // The skill ID is the last digit(s) in the CSS ID
+        skill_id = this.id.match(/\d+$/);
+        skill_ids.push(skill_id[0]);
+      })
+
+      post_data[job_property + '[skill_ids]'] = skill_ids;
+    }
+
     $.ajax({type: 'POST',
             url: '/' + job_prop_plural + '/',
             // Get the data entered by the user in the dialog box
@@ -56,6 +70,9 @@ var AgencyData = {
                                                        model_errors_id,
                                                        job_prop_plural);
               }
+              // Clear input fields in the modal
+              $(name_field_id).val('');
+              $(desc_field_id).val('');
             },
             error: function (xhrObj, status, exception) {
               var model_errors_id = '#add_'+job_property+'_errors';
@@ -65,6 +82,32 @@ var AgencyData = {
     // Good background on returning error status in ajax controller action:
     // http://travisjeffery.com/b/2012/04/rendering-errors-in-json-with-rails/
   },
+
+  prepare_property_data_for_ajax function(job_property, type) {
+    // type: 'add' or 'update'
+
+    // Create the post/patch data for ajax .....
+    var name_field_id = '#' + type + '_' + job_property + '_name';
+    var desc_field_id = '#' + type + '_' + job_property + '_desc';
+    var post_data = {};
+    post_data[job_property + '[name]']        = $(name_field_id).val();
+    post_data[job_property + '[description]'] = $(desc_field_id).val();
+
+    var skill_ids = [];
+
+    if (job_property === 'job_category' &&
+                $('.droppable#add_job_category_skills').length != 0) {
+
+      $("div[id^='update_job_category_skill_']").each(function() {
+        // The skill ID is the last digit(s) in the CSS ID
+        skill_id = this.id.match(/\d+$/);
+        skill_ids.push(skill_id[0]);
+      })
+
+      post_data[job_property + '[skill_ids]'] = skill_ids;
+    }
+  },
+
   edit_job_category: function () {
     // Get the url from the anchor element that was clicked
     var url = $(this).attr('href');
@@ -101,6 +144,11 @@ var AgencyData = {
               $(modal_selector + '_desc').val(data.description);
 
               var skills_list = '';
+
+              // Clear any residual category skills from prior
+              // category add or update action
+              $("div[id^='update_job_category_skill_']").remove();
+
               // Show existing job_category skills in modal
               if (job_property === 'job_category' &&
                                data['skills'].length != 0) {
@@ -345,6 +393,15 @@ var AgencyData = {
                   "a[data-method='delete']",
                                 AgencyData.delete_job_category);
 
+    $('#add_job_category').on('show.bs.modal', function(e) {
+      // When the 'add_job_category' modal is about to be shown, clear
+      // residual category skills that have been displayed in the
+      // LHS of the category skills assignment section of the modal
+      // (otherwise, skills left in the LHS from a prior 'update category'
+      //  will still be present).
+      $("div[id^='update_job_category_skill_']").remove();
+    });
+
     // The items in the right-hand-side of the skills list consist
     // of all available skills.  These are added to class "draggable",
     // and can be dragged to the LHS to assign a skill to the category.
@@ -366,7 +423,7 @@ var AgencyData = {
           drop: function(event, ui) {
             var ele = $(ui.draggable[0]);
             // Add this element unless already present
-            rg = new RegExp("\"" + ele.attr('id') + "\"")
+            rg = new RegExp(ele.attr('id') + "\"");
             if (!rg.test($(this).html())) {
 
               add_skill = '<div class="draggable_delete ui-widget-content" ' +
