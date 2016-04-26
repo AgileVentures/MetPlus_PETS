@@ -11,7 +11,7 @@ Background: seed data added to database
   | role  |
   | AA    |
   | JD    |
-  | CM |
+  | CM    |
 
   Given the following company roles exist:
   | role  |
