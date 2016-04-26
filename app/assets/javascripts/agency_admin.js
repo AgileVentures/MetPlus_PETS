@@ -31,26 +31,8 @@ var AgencyData = {
     //     job_prop_plural: the pluralized version of job_property,
     //                      e.g. 'job_categories', 'skills'
 
-    // Create the post data for ajax .....
-    var name_field_id = '#add_' + job_property + '_name';
-    var desc_field_id = '#add_' + job_property + '_desc';
-    var post_data = {};
-    post_data[job_property + '[name]']        = $(name_field_id).val();
-    post_data[job_property + '[description]'] = $(desc_field_id).val();
-
-    var skill_ids = [];
-
-    if (job_property === 'job_category' &&
-                $('.droppable#add_job_category_skills').length != 0) {
-
-      $("div[id^='update_job_category_skill_']").each(function() {
-        // The skill ID is the last digit(s) in the CSS ID
-        skill_id = this.id.match(/\d+$/);
-        skill_ids.push(skill_id[0]);
-      })
-
-      post_data[job_property + '[skill_ids]'] = skill_ids;
-    }
+    // Prep the post data for ajax .....
+    post_data = AgencyData.prepare_property_data_for_ajax(job_property, 'add');
 
     $.ajax({type: 'POST',
             url: '/' + job_prop_plural + '/',
@@ -83,7 +65,7 @@ var AgencyData = {
     // http://travisjeffery.com/b/2012/04/rendering-errors-in-json-with-rails/
   },
 
-  prepare_property_data_for_ajax function(job_property, type) {
+  prepare_property_data_for_ajax: function(job_property, type) {
     // type: 'add' or 'update'
 
     // Create the post/patch data for ajax .....
@@ -95,17 +77,20 @@ var AgencyData = {
 
     var skill_ids = [];
 
-    if (job_property === 'job_category' &&
-                $('.droppable#add_job_category_skills').length != 0) {
+    selector = '.droppable#' + type + '_job_category_skills';
+
+    // if (job_property === 'job_category' &&
+    //             $('.droppable#add_job_category_skills').length != 0) {
+    if (job_property === 'job_category' && $(selector).length != 0) {
 
       $("div[id^='update_job_category_skill_']").each(function() {
         // The skill ID is the last digit(s) in the CSS ID
         skill_id = this.id.match(/\d+$/);
         skill_ids.push(skill_id[0]);
       })
-
       post_data[job_property + '[skill_ids]'] = skill_ids;
     }
+    return post_data;
   },
 
   edit_job_category: function () {
@@ -197,24 +182,7 @@ var AgencyData = {
     //                      e.g. 'job_categories', 'skills'
 
     // Create the PATCH data for ajax .....
-    var name_field_id = '#update_' + job_property + '_name';
-    var desc_field_id = '#update_' + job_property + '_desc';
-    var patch_data = {};
-    patch_data[job_property + '[name]']        = $(name_field_id).val();
-    patch_data[job_property + '[description]'] = $(desc_field_id).val();
-
-    var skill_ids = [];
-
-    if (job_property === 'job_category' &&
-                $('.droppable#update_job_category_skills').length != 0) {
-
-      $("div[id^='update_job_category_skill_']").each(function() {
-        skill_id = this.id.match(/\d+$/);
-        skill_ids.push(skill_id[0]);
-      })
-
-      patch_data[job_property + '[skill_ids]'] = skill_ids;
-    }
+    patch_data = AgencyData.prepare_property_data_for_ajax(job_property, 'update');
 
     $.ajax({type: 'PATCH',
             url: '/'+job_prop_plural+'/' + AgencyData[job_property + '_id'],
