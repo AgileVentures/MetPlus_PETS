@@ -10,6 +10,8 @@ Background: seed data added to database
   Given the following agency roles exist:
   | role  |
   | AA    |
+  | JD    |
+  | CM |
 
   Given the following company roles exist:
   | role  |

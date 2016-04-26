@@ -17,9 +17,9 @@ Background: seed data added to database and log in as agency admim
   | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
 
   Given the following agency people exist:
-  | agency  | role  | first_name | last_name | email            | password  |
-  | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
-  | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+  | agency  | role  | first_name | last_name | email            | password  | phone        |
+  | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 | 555-222-3334 |
+  | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 | 555-222-3334 |
 
   Given the following agency branches exist:
   | agency  | state     | city     | street              | zipcode | code |

@@ -59,6 +59,7 @@ describe JobSeeker, type: :model do
       adam.assign_case_manager(cm_person, agency)
       dave.assign_job_developer(jd_person, agency)
     end
+
     describe '#assign_case_manager' do
       it 'success' do
         bob.assign_case_manager(cm_person, agency)

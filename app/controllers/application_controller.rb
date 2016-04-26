@@ -24,6 +24,8 @@ class ApplicationController < ActionController::Base
         return home_job_seeker_path(person)
       when CompanyPerson
         return home_company_person_path(person)
+      when AgencyPerson
+        return home_agency_person_path(person)
     end
     stored_location_for(resource) || request.referer || root_path
   end

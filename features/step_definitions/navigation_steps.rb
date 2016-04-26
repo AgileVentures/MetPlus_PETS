@@ -16,6 +16,9 @@ def page_translator name
     when /Company Person '.+' Home/
       user = name.match(/'(.+)'/)
       return home_company_person_path(User.find_by_email(user[1]).pets_user)
+    when /Agency Person '.+' Home/
+      user = name.match(/'(.+)'/)
+      return home_agency_person_path(User.find_by_email(user[1]).pets_user)
     when /'.+' edit profile/
       user = name.match(/'(.+)'/)
       user = User.find_by_email(user[1]).pets_user
