@@ -13,6 +13,7 @@ Background: seed data added to database
   | JD    |
   | CM    |
 
+
   Given the following company roles exist:
   | role  |
   | CA    |

@@ -70,5 +70,9 @@ class PeopleInvitationsController < Devise::InvitationsController
     end
     user
   end
+  protected
+    def after_invite_path_for(resource)
+      stored_location_for(resource) || request.referer || root_path
+    end
 
 end

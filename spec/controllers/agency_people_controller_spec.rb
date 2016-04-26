@@ -15,11 +15,13 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
 
     before(:each) do
-      get :home, id: aa_person
+      adam.assign_job_developer(jd_person, agency)
+      bob.assign_case_manager(cm_person, agency)
+      get :home, id: jd_person
     end
 
     it 'assigns @agency_person for view' do
-      expect(assigns(:agency_person)).to eq aa_person
+      expect(assigns(:agency_person)).to eq jd_person
     end
     #byebug
     it 'renders home template' do
@@ -40,6 +42,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it "returns job developer's jobseekers" do
         expect(assigns(:your_jobseekers_jd)).to include(adam)
       end
+
 
      it "returns a list of jobseekers without a job developer" do
        expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
