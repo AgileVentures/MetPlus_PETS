@@ -1,5 +1,5 @@
 %h2
-  = "Welcome back to PETS, #{pets_user.full_name}"
+  = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
   = link_to edit_profile_agency_person_path(pets_user),
     :title => 'Edit profile',
     :id => 'edit-profile' do
@@ -10,11 +10,45 @@
 
 - if @agency_person.is_case_manager?(@agency)
   %h3 Your Job Seekers (Case Manager)
-  %i Jobseekers go here: name, status (ex: employed seeking), last login
-
+  .col-sm-9
+    %table.table.table-hover
+      %thead
+        %tr
+          %td
+            %strong Name
+          %td
+            %strong Status
+          %td
+            %strong Last Login
+      %tbody
+          %tr
+            %td
+              John Doe
+            %td
+              Unemployedlooking
+            %td
+              April 22, 2016
+  .clearfix
   %h3 Job Seekers Without a Case Manager
-  %i Jobseekers go here: name, status (ex: employed seeking), last login
-
+  m-9
+    %table.table.table-hover
+      %thead
+        %tr
+          %td
+            %strong Name
+          %td
+            %strong Status
+          %td
+            %strong Last Login
+      %tbody
+          %tr
+            %td
+              John Doe
+            %td
+              Unemployedlooking
+            %td
+              April 22, 2016
+  .clearfix
 
 - if @agency_person.is_job_developer?(@agency)
   %h3 Your Job Seekers (Job Developer)
