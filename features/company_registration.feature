@@ -33,6 +33,7 @@ Background: seed data added to database
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
+  | Job Email                      | jobs@widgets.com    |
   | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
   | Company Website                | www.widgets.com     |
@@ -165,7 +166,7 @@ Scenario: duplicate EIN for Company
   And I click the "Create" button
   Then I should see "Ein has already been registered"
 
-Scenario: edit Company Registration: change contact email
+Scenario: edit Company Registration: change contact email and job email
   And I click the "Create" button
   Given I am logged in as agency admin
   And a clear email queue
@@ -177,6 +178,7 @@ Scenario: edit Company Registration: change contact email
   And I should see "Edit Company Registration"
   Then I fill in "Company Name" with "Gizmos, Inc."
   And I fill in "Contact Email" with "hughjobs@gizmos.com"
+  And I fill in "Job Email" with "job@gizmos.com"
   And I click the "Update" button
   Then I should see "Registration was successfully updated."
   Then "hughjobs@widgets.com" should have no emails
