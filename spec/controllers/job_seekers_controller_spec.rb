@@ -158,7 +158,7 @@ RSpec.describe JobSeekersController, type: :controller do
             merge(FactoryGirl.attributes_for(:job_seeker_status)) }.
           to change(Resume, :count).by(+1)
      end
-     it 'check adddress change' do
+     it 'check address change' do
        use_hash = FactoryGirl.attributes_for(:job_seeker,
                                             resume: fixture_file_upload('files/Janitor-Resume.doc')).
                    merge(FactoryGirl.attributes_for(:job_seeker_status))

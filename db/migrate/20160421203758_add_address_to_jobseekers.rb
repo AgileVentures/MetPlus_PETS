@@ -1,4 +1,4 @@
-class AddAddressToUsers < ActiveRecord::Migration
+class AddAddressToJobseekers < ActiveRecord::Migration
   def up
     change_table :job_seekers do |t|
       t.references :address, index: true, foreign_key: true
