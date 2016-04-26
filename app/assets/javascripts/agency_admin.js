@@ -93,27 +93,27 @@ var AgencyData = {
               // Store the job property ID for retrieval in update action
               AgencyData[job_property + '_id'] = data.id;
 
-              // Set the attribute values in the modal and make modal visible
+              // Set the attribute values in the modal
               var modal_id = 'update_' + job_property;
               var modal_selector = '#' + modal_id
 
               $(modal_selector + '_name').val(data.name);
               $(modal_selector + '_desc').val(data.description);
 
+              var skills_list = '';
               // Show existing job_category skills in modal
               if (job_property === 'job_category' &&
                                data['skills'].length != 0) {
-                var skills_list = '';
                 var i;
                 for (i = 0; i < data['skills'].length; i += 1) {
                   skill = data['skills'][i];
                   skills_list +=
                       '<div class="draggable_delete ui-widget-content" ' +
-                      'id="'+modal_id+'_cat_skill_'+skill.id+'">' +
+                      'id="update_job_category_skill_' + skill.id + '">' +
                       skill.name + '</div>';
                 }
-                $(modal_selector + '_skills').html(skills_list);
               }
+              $(modal_selector + '_skills').html(skills_list);
 
               $(modal_selector).modal('show');
             },
@@ -154,6 +154,19 @@ var AgencyData = {
     var patch_data = {};
     patch_data[job_property + '[name]']        = $(name_field_id).val();
     patch_data[job_property + '[description]'] = $(desc_field_id).val();
+
+    var skill_ids = [];
+
+    if (job_property === 'job_category' &&
+                $('.droppable#update_job_category_skills').length != 0) {
+
+      $("div[id^='update_job_category_skill_']").each(function() {
+        skill_id = this.id.match(/\d+$/);
+        skill_ids.push(skill_id[0]);
+      })
+
+      patch_data[job_property + '[skill_ids]'] = skill_ids;
+    }
 
     $.ajax({type: 'PATCH',
             url: '/'+job_prop_plural+'/' + AgencyData[job_property + '_id'],
@@ -366,8 +379,11 @@ var AgencyData = {
             // Add this element unless already present
             rg = new RegExp("\"" + ele.attr('id') + "\"")
             if (!rg.test($(this).html())) {
-              add_skill = '<div class="draggable_delete ui-widget-content" '
-              + 'id="' + ele.attr('id')+'">' + ele.text().trim() + '</div>';
+
+              add_skill = '<div class="draggable_delete ui-widget-content" ' +
+              'id="update_job_category_' + ele.attr('id') + '">'
+              + ele.text().trim() + '</div>';
+
               $(add_skill).appendTo(this);
             }
           }

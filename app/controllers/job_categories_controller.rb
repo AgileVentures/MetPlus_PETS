@@ -52,6 +52,6 @@ class JobCategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:job_category).permit(:name, :description)
+    params.require(:job_category).permit(:name, :description, skill_ids: [])
   end
 end

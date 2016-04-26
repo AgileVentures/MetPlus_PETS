@@ -27,7 +27,7 @@
                 All Skills
               .panel-body.fixed-panel.all_skills
                 - Skill.order(:name).each do |skill|
-                  .draggable.ui-widget-content{id: "#{modal_id}_skill_#{skill.id}"}
+                  .draggable.ui-widget-content{id: "skill_#{skill.id}"}
                     = skill.name
 
       .modal-footer
