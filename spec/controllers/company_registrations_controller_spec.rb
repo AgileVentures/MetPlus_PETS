@@ -125,6 +125,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         expect(assigns(:company).company_people[0].status).
                             to eq CompanyPerson::STATUS[:PND]
       end
+      it "sets job_email on the model" do
+        expect(Company.find_by_job_email(registration_params[:job_email])).not_to be nil
+      end
       it 'sets flash message' do
         expect(flash[:notice]).to match "Thank you for your registration request."
       end
@@ -245,7 +248,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:agency)   { FactoryGirl.create(:agency) }
 
     let!(:registration_params) do
-      $params = FactoryGirl.attributes_for(:company)
+      $params = FactoryGirl.attributes_for(:company, :job_email => 'jobs@widgets.com')
       $params[:company_people_attributes] =
                 [FactoryGirl.attributes_for(:user, :password => 'testing1234', :password_confirmation => 'testing1234')]
       $params[:addresses_attributes] =
@@ -256,6 +259,28 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     let!(:company_role) { FactoryGirl.create(:company_role,
                                 role: CompanyRole::ROLE[:CA])}
+    let(:previous_parameters) do
+
+      company = Company.find_by_name(prior_name)
+
+      $params = FactoryGirl.attributes_for(:company,
+                                                       name: 'Sprockets Corporation')
+
+      $params[:company_people_attributes] =
+          {'0' => FactoryGirl.attributes_for(:user,
+                                             first_name: 'Fred', last_name: 'Flintstone',
+                                             password: '', password_confirmation: '')}
+      $params[:company_people_attributes]['0'][:id] =
+          company.company_people[0].id
+
+      $params[:addresses_attributes] =
+          {'0' => FactoryGirl.attributes_for(:address,
+                                             city: 'Boston')}
+      $params[:addresses_attributes]['0'][:id] =
+          company.addresses[0].id
+      $params
+    end
+    let(:company_id) {Company.find_by_name(prior_name).id}
 
     before(:each) do
       3.times do |n|
@@ -269,7 +294,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       company = Company.find_by_name(prior_name)
 
       registration_params = FactoryGirl.attributes_for(:company,
-                                      name: 'Sprockets Corporation')
+                                      name: 'Sprockets Corporation',
+                                      job_email: 'jobs@sprockets.org')
 
       registration_params[:company_people_attributes] =
                 {'0' => FactoryGirl.attributes_for(:user,
@@ -290,6 +316,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           id: company.id }.
                     to_not change(Address, :count)
 
+      company.reload
+      expect(company.job_email).to eq('jobs@sprockets.org')
     end
 
     it 'update company person without password change' do
@@ -328,6 +356,22 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       expect(company.company_people[0].first_name).to eq('Fred')
       expect(company.company_people[0].encrypted_password).to eq(password)
 
+    end
+    describe 'job email field' do
+      it 'to be empty' do
+        previous_parameters[:job_email] = ''
+        patch :update, company: previous_parameters,
+             id: company_id
+        company = Company.find_by_id company_id
+        expect(company.job_email).to eq ''
+      end
+      it 'to have changed' do
+        previous_parameters[:job_email] = 'jobs@real.com'
+        patch :update, company: previous_parameters,
+              id: company_id
+        company = Company.find_by_id company_id
+        expect(company.job_email).to eq 'jobs@real.com'
+      end
     end
   end
 
