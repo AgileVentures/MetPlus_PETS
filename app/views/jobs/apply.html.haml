@@ -1,0 +1,26 @@
+%p
+%p
+.row
+  .col-sm-12
+    %h4
+      Congratulations, you were able to apply with success to the job
+      = link_to @job.title, job_path(@job)
+%p
+%p
+.row
+  .col-sm-12
+    .row
+      Next steps:
+    .ul
+      .li
+        The hiring manager will review your application. You will be notified
+        when the company reaches a decision.
+      .li
+        Check out more information about this company
+        = link_to 'here', company_home_path(@job.company)
+      .li
+        Check out other job possibilites
+        = link_to 'here', jobs_url
+      .li
+        Go back to you
+        = link_to 'home page', home_job_seeker_path(pets_user)

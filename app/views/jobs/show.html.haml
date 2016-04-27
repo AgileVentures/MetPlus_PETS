@@ -2,57 +2,55 @@
 
 %div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
-		-if pets_user.is_a?(CompanyPerson) || pets_user.is_job_developer?(pets_user.agency)
+		-if pets_user.is_a?(CompanyPerson) || pets_user.is_job_developer?(current_agency)
 			=link_to "Delete", job_path(@job), method: :delete,
 			  data: {confirm: "Are you sure you want to delete: #{@job.title}"}
 			|
 			=link_to "Edit Job", edit_job_path(@job)
 			|
-		=link_to "Return To Jobs", jobs_path 
+		=link_to "Return To Jobs", jobs_path
 		|
 		=link_to "Send this job to a friend", '#'
 	.clearfix
-	%div{class: "panel panel-default", id: "show-panel-id"}  
+	%div{class: "panel panel-default", id: "show-panel-id"}
 		%div{class: "panel-heading", id: "panel-heading-show-id" }
 			%h4=@job.company.name
-	%table{class: "table table-bordered"} 
-		%tbody 
+	%table{class: "table table-bordered"}
+		%tbody
 			%tr
 				%td Job title:
 				%td=@job.title
 			%tr
 				%td Location:
 				%td
-					=@job.address.street 
+					=@job.address.street
 					%br
-					#{@job.address.city}, #{@job.address.state} 
-					=@job.address.zipcode 
-					
+					#{@job.address.city}, #{@job.address.state}
+					=@job.address.zipcode
+
 			%tr
 				%td Job category:
-				/ %td=@job.job_category.name 
+				/ %td=@job.job_category.name
 				%td Walmart co. placeholder
-			%tr 
-				%td Full time: 
+			%tr
+				%td Full time:
 				%td=@job.fulltime ? "Yes" : "No"
-			%tr 
-				%td Job ID: 
-				%td=@job.company_job_id 
-			%tr 
-				%td Shift: 
-				%td=@job.shift 
-			%tr 
-				%td Contact information: 
+			%tr
+				%td Job ID:
+				%td=@job.company_job_id
+			%tr
+				%td Shift:
+				%td=@job.shift
+			%tr
+				%td Contact information:
 				%td
 					Contact: Place Holder
 					%br
-					Email: #{mail_to('placeholder@gmail.com')} 
-			%tr 
-				%td Job Details: 
+					Email: #{mail_to('placeholder@gmail.com')}
+			%tr
+				%td Job Details:
 				%td=@job.description
-	=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4"
-
-
-		
-
-
+	=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
+				data: { :toggle => 'modal',
+								:target => '#applyJobModal'}
+	=render partial: 'apply_modal', :locals => {:job => @job}
