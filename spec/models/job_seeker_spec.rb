@@ -47,6 +47,7 @@ describe JobSeeker, type: :model do
     let(:agency) { FactoryGirl.create(:agency) }
 
     let!(:cm_person) {FactoryGirl.create(:case_manager, first_name: 'John', last_name: 'Manager', agency: agency)}
+    let!(:cm_person2) {FactoryGirl.create(:case_manager, first_name: 'Jane', last_name: 'Manager2', agency: agency)}
     let!(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
     let!(:aa_person) {FactoryGirl.create(:agency_admin, first_name: 'John', last_name: 'Admin', agency: agency)}
 
@@ -92,6 +93,16 @@ describe JobSeeker, type: :model do
       end
       it 'no job developer' do
         expect(adam.job_developer).to eq(nil)
+      end
+    end
+    describe '#reassign agency person' do
+      it 'replaces current case manager' do
+        adam.assign_case_manager(cm_person2, agency)
+        expect(adam.case_manager).to eq(cm_person2)
+      end
+      it 'replaces current job developer' do
+        dave.assign_case_manager(cm_person2, agency)
+        expect(dave.case_manager).to eq(cm_person2)
       end
     end
   end

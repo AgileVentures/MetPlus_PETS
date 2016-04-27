@@ -62,15 +62,15 @@ class JobSeeker < ActiveRecord::Base
   # 2) A job seeker can have only one job developer ('primary' JD)
 
   def assign_agency_person(agency_person, role_key)
-    ap_relation = find_agency_person(role_key)
+    ap_relation = find_agency_person_relation(role_key)
     if ap_relation
       # Is this role assigned already to an agency person?
 
       # If so, is this the same agency person? - then we're done
-      return if ap_relation == agency_person
+      return if ap_relation.agency_person == agency_person
 
-      # Otherwise, reassign case manager role for this job seeker
-      ap_relation = agency_person
+		# Otherwise, reassign agency person role for this job seeker
+      ap_relation.agency_person = agency_person
       ap_relation.save
     else
       # Otherwise, assign this agency person, in this role, to job seeker
@@ -81,11 +81,18 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def find_agency_person(role_key)
+    agency_relation = find_agency_person_relation(role_key)
+
+    return (agency_relation ? agency_relation.agency_person : nil)
+  end
+
+  def find_agency_person_relation(role_key)
+    # Returns AgencyRelation instance if an agency person, acting in the
+    # specific role, is found for this job seeker
     if not self.agency_relations.empty?
       ap_relation = self.agency_relations.in_role_of(role_key)[0]
-      return ap_relation.agency_person if ap_relation
+      return ap_relation if ap_relation
     end
     nil # return nil if no agency person found for that role
   end
-
 end
