@@ -6,7 +6,8 @@
     %i.fa.fa-pencil-square-o.fa-1
 
 %h3 Tasks that need your attention
-= render partial: 'tasks/tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
+= render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
+
 
 %h3 All company jobs
 %div{:id => "jobs-#{@job_type}", :class => 'pagination-div', :data => {:url => list_jobs_path(@job_type)}}

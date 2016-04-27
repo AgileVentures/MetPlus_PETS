@@ -49,6 +49,7 @@ Feature: Have a task system in the site
     And I login as "jane-dev@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
     Then I go to the tasks page
+    And I wait 1 second
     And I should see "Job Seeker has no assigned Job Developer"
     And I should not see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
     And The task 1 status is "New"
@@ -63,7 +64,7 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see notification "Work on the task started"
     And The task 1 status is "Work in progress"
-    And I wait 1 second
+    And I wait 2 second
     Then I press the done button of the task 1
     And I wait 1 second
     And I should see notification "Work on the task is done"

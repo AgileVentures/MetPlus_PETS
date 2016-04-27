@@ -56,10 +56,11 @@ class TasksController < ApplicationController
   end
 
   def tasks
-    @task_type = params[:task_type] || 'mine'
     raise 'Unsupported request' if not request.xhr?
 
-    @render_modal = false
+    @task_type = params[:task_type] || 'mine'
+
+    @render_modal = params[:modal]
     @tasks = display_tasks @task_type
 
     render partial: 'tasks', :locals => {all_tasks: @tasks, task_type: @task_type}
