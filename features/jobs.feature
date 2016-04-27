@@ -3,10 +3,7 @@ Feature: Manage Jobs
 As a company person or job developer
 I want to create, update, and delete jobs
 
-background: adding job to database
-	Given the following jobs records:
-	| title               | company_job_id  | shift  | fulltime | description | company_id |
-	| software developer  | KRK12K  | evening| true     | internship position with pay| 3  |
+Background: adding job to database
 
 	Given the following agency roles exist:
 		| role  |
