@@ -14,29 +14,8 @@
     %i There are no job seekers assigned to you yet.
   - else
     .col-sm-9
-      %table.table.table-hover
-        %thead
-          %tr
-            %td
-              %strong Name
-            %td
-              %strong Status
-            %td
-              %strong Last Login
-        %tbody
-          - @your_jobseekers_cm.each do |js|
-            %tr
-              %td
-                = js.full_name
-              %td
-                - unless js.job_seeker_status.nil?
-                  = js.job_seeker_status.value
-              %td
-                - if js.last_sign_in_at.nil?
-                  %i never
-                - else
-                  = js.last_sign_in_at
-      = will_paginate @your_jobseekers_cm, param_name: 'your_jobseekers_cm_page'
+      = render 'job_seekers', :locals => {job_seekers: @your_jobseekers_cm}
+
     .clearfix
 
     %h3 Job Seekers Without a Case Manager
