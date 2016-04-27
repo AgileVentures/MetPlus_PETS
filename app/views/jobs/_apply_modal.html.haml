@@ -7,10 +7,10 @@
         :type => "button"}
           %span{"aria-hidden" => "true"} ×
         %h4#myModalLabel.modal-title.text-center
-          =current_user.first_name if !current_user.nil?
+          Application process
       .modal-body
         %p
-          You are applying for the
+          Job information
           .row
             .col-sm-6
               Job title: #{job.title}
@@ -20,6 +20,7 @@
             .col-sm-12
               Company:
               = link_to job.company.name, company_home_path(job.company)
+          
           .row
             .col-sm-2.warning-text
               Warning:
