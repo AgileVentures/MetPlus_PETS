@@ -96,6 +96,7 @@ Given(/^the following jobseeker exist:$/) do |table|
     job_seeker_status = JobSeekerStatus.find_by_value(seeker_status)
     jobseeker = JobSeeker.new(hash)
     jobseeker.job_seeker_status = job_seeker_status
+    jobseeker.address = FactoryGirl.create(:address)
     jobseeker.save
   end
 end
