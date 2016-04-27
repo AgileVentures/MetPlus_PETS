@@ -131,7 +131,7 @@ var AgencyData = {
               var skills_list = '';
 
               // Clear any residual category skills from prior
-              // category add or update action
+              // category 'add' or 'update' action
               $("div[id^='update_job_category_skill_']").remove();
 
               // Show existing job_category skills in modal
