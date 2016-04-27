@@ -2,7 +2,7 @@
 
 %div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
-		-if pets_user.is_a?(CompanyPerson) || pets_user.is_job_developer?(current_agency)
+		-if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
 			=link_to "Delete", job_path(@job), method: :delete,
 			  data: {confirm: "Are you sure you want to delete: #{@job.title}"}
 			|
@@ -50,7 +50,7 @@
 			%tr
 				%td Job Details:
 				%td=@job.description
-	- if not pets_user.ni? and policy(@job).apply?
+	- if not pets_user.nil? and policy(@job).apply?
 		=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
 					data: { :toggle => 'modal',
 									:target => '#applyJobModal'}
