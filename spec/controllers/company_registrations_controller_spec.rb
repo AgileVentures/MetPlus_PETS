@@ -258,21 +258,17 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:prior_name) { registration_params[:name] }
 
     let!(:company_role) { FactoryGirl.create(:company_role,
-                                role: CompanyRole::ROLE[:CA])}
+                                  role: CompanyRole::ROLE[:CA])}
     let(:previous_parameters) do
-
       company = Company.find_by_name(prior_name)
-
       $params = FactoryGirl.attributes_for(:company,
-                                                       name: 'Sprockets Corporation')
-
+                                  name: 'Sprockets Corporation')
       $params[:company_people_attributes] =
           {'0' => FactoryGirl.attributes_for(:user,
                                              first_name: 'Fred', last_name: 'Flintstone',
                                              password: '', password_confirmation: '')}
       $params[:company_people_attributes]['0'][:id] =
           company.company_people[0].id
-
       $params[:addresses_attributes] =
           {'0' => FactoryGirl.attributes_for(:address,
                                              city: 'Boston')}
