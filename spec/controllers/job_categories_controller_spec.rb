@@ -73,11 +73,30 @@ RSpec.describe JobCategoriesController, type: :controller do
 
   describe "PATCH #update" do
     let(:category)  { FactoryGirl.create(:job_category) }
-    let(:jobcat_params) { FactoryGirl.attributes_for(:job_category) }
+    let(:jobcat_params) do
+      params = FactoryGirl.attributes_for(:job_category)
+      params[:skill_ids] = skill_ids
+      params
+    end
 
     it 'returns success for valid parameters' do
       xhr :patch, :update, id: category, job_category: jobcat_params
       expect(response).to have_http_status(:success)
+    end
+
+    it 'assigns skills to category' do
+      xhr :patch, :update, id: category, job_category: jobcat_params
+      expect(JobCategory.find(category.id).skills.count).to eq 4
+    end
+
+    it 'updates assigned skills for category' do
+      xhr :patch, :update, id: category, job_category: jobcat_params
+      expect(JobCategory.find(category.id).skills.count).to eq 4
+
+      jobcat_params[:skill_ids] = [s1, s2]
+
+      xhr :patch, :update, id: category, job_category: jobcat_params
+      expect(JobCategory.find(category.id).skills.count).to eq 2
     end
 
     it 'returns errors and error status for invalid parameters' do
@@ -96,6 +115,23 @@ RSpec.describe JobCategoriesController, type: :controller do
         expect { xhr :delete, :destroy, id: category }.
             to change(JobCategory, :count).by(-1)
       end
+
+      it 'deletes records in the category<>skill join table' do
+        category.skills = [s1, s2, s3, s4]
+        expect(category.skills.count).to eq 4
+        expect(s1.job_categories.count).to eq 1
+        expect(s2.job_categories.count).to eq 1
+        expect(s3.job_categories.count).to eq 1
+        expect(s4.job_categories.count).to eq 1
+
+        xhr :delete, :destroy, id: category
+
+        expect(s1.job_categories.count).to eq 0
+        expect(s2.job_categories.count).to eq 0
+        expect(s3.job_categories.count).to eq 0
+        expect(s4.job_categories.count).to eq 0
+      end
+
       it "returns http success" do
         xhr :delete, :destroy, id: category
         expect(response).to have_http_status(:success)
