@@ -105,26 +105,26 @@
     %i All job seekers have a Case Manager at the moment.
   - else
     .col-sm-9
-    %table.table.table-hover
-      %thead
-        %tr
-          %td
-            %strong Name
-          %td
-            %strong Status
-          %td
-            %strong Last Login
-      %tbody
-        - @js_without_jd.each do |js|
+      %table.table.table-hover
+        %thead
           %tr
             %td
-              = js.full_name
+              %strong Name
             %td
-              - unless js.job_seeker_status.nil?
-                = js.job_seeker_status.value
+              %strong Status
             %td
-              - if js.last_sign_in_at.nil?
-                %i never
-              - else
-                = js.last_sign_in_at
+              %strong Last Login
+        %tbody
+          - @js_without_jd.each do |js|
+            %tr
+              %td
+                = js.full_name
+              %td
+                - unless js.job_seeker_status.nil?
+                  = js.job_seeker_status.value
+              %td
+                - if js.last_sign_in_at.nil?
+                  %i never
+                - else
+                  = js.last_sign_in_at
     = will_paginate @js_without_jd, param_name: 'js_without_jd_page'

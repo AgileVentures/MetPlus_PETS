@@ -141,3 +141,6 @@ When /^I choose resume file "([^"]*)"$/ do |filename|
   attach_file('Resume', "#{Rails.root}/spec/fixtures/files/#{filename}")
 end
 
+When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
+  expect(page).to have_field(field, with: value)
+end

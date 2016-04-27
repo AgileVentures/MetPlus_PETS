@@ -43,7 +43,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(assigns(:your_jobseekers_jd)).to include(adam)
       end
 
-
      it "returns a list of jobseekers without a job developer" do
        expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
      end
