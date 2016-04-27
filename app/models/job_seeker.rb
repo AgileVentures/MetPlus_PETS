@@ -66,10 +66,10 @@ class JobSeeker < ActiveRecord::Base
       # Is this role assigned already to an agency person?
 
       # If so, is this the same agency person? - then we're done
-      return if ap_relation.agency_person == agency_person
+      return if ap_relation == agency_person
 
       # Otherwise, reassign case manager role for this job seeker
-      ap_relation.agency_person = agency_person
+      ap_relation = agency_person
       ap_relation.save
     else
       # Otherwise, assign this agency person, in this role, to job seeker
