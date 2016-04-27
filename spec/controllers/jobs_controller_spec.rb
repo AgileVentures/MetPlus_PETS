@@ -568,18 +568,17 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #apply' do
+    let!(:job_seeker){FactoryGirl.create(:job_seeker)}
     before :each do
       agency = FactoryGirl.create(:agency)
-      company = FactoryGirl.create(:company)
-      @ca = FactoryGirl.create(:company_admin, :company => company)
-      @job_seeker = FactoryGirl.create(:job_seeker)
     end
     describe 'unknown job' do
       before :each do
-        sign_in @job_seeker
-        get :apply, :job_id => 1000, :user_id => @job_seeker.id
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, {:job_id => 1000, :user_id => job_seeker.id}
       end
       it "is a redirect" do
+        expect(controller.current_user).not_to be_nil
         expect(response).to have_http_status(:redirect)
       end
       it "redirected to list of jobs" do
@@ -591,7 +590,7 @@ RSpec.describe JobsController, type: :controller do
     end
     describe 'unknown job seeker' do
       before :each do
-        sign_in @job_seeker
+        allow(controller).to receive(:current_user).and_return(job_seeker)
         get :apply, :job_id => @job.id, :user_id => 10000
       end
       it "is a redirect" do
@@ -606,8 +605,8 @@ RSpec.describe JobsController, type: :controller do
     end
     describe 'successful application' do
       before :each do
-        sign_in @job_seeker
-        get :apply, :job_id => @job.id, :user_id => @job_seeker.id
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "is a success" do
         expect(response).to have_http_status(:ok)
@@ -620,17 +619,17 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'job should have one applicant' do
         @job.reload
-        expect(@job.job_seekers).to include @job_seeker
+        expect(@job.job_seekers).to include job_seeker
       end
     end
     describe 'error applications' do
       let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
       before :each do
-        sign_in @job_seeker
         expect(Job).to receive(:find_by_id).and_return(job)
         expect(job).to receive(:save!).and_raise(Exception)
-        expect(job).to receive(:id).twice.and_return(1).and_return(1)
-        get :apply, :job_id => @job.id, :user_id => @job_seeker.id
+        expect(job).to receive(:id).exactly(4).times.and_return(1)
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "is a redirect" do
         expect(response).to have_http_status(:redirect)
@@ -642,6 +641,43 @@ RSpec.describe JobsController, type: :controller do
         should set_flash
         expect(flash[:alert]).to be_present
         expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
+      end
+    end
+    describe 'user not logged in' do
+      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+      before :each do
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "is a redirect" do
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to the job" do
+        expect(response).to redirect_to(root_path)
+      end
+      it 'check set flash' do
+        should set_flash
+        expect(flash[:alert]).to be_present
+        expect(flash[:alert]).to eq "You are not authorized to perform this action."
+      end
+    end
+    describe 'logged in as company person' do
+      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+      before :each do
+        company = FactoryGirl.create(:company)
+        @ca = FactoryGirl.create(:company_admin, :company => company)
+        allow(controller).to receive(:current_user).and_return(@ca)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "is a redirect" do
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to the job" do
+        expect(response).to redirect_to(root_path)
+      end
+      it 'check set flash' do
+        should set_flash
+        expect(flash[:alert]).to be_present
+        expect(flash[:alert]).to eq "You are not authorized to perform this action."
       end
     end
   end

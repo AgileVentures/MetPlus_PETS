@@ -5,6 +5,7 @@ class JobsController < ApplicationController
 	before_action :find_job,	only: [:show, :edit, :update, :destroy]
 	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy]
 	before_action :is_right_company_person, only: [:edit, :destroy, :update]
+	before_action :user_logged!, only: [:apply]
 
 	helper_method :job_fields
 
@@ -74,6 +75,9 @@ class JobsController < ApplicationController
 			redirect_to jobs_url
 			return
 		end
+
+		authorize @job
+
 		@job_seeker = JobSeeker.find_by_id params[:user_id]
 		if @job_seeker == nil
 			flash[:alert] = "Unable to find the user that want to apply."

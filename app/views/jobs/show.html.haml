@@ -50,7 +50,8 @@
 			%tr
 				%td Job Details:
 				%td=@job.description
-	=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
-				data: { :toggle => 'modal',
-								:target => '#applyJobModal'}
-	=render partial: 'apply_modal', :locals => {:job => @job}
+	- if not pets_user.ni? and policy(@job).apply?
+		=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
+					data: { :toggle => 'modal',
+									:target => '#applyJobModal'}
+		=render partial: 'apply_modal', :locals => {:job => @job}
