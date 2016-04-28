@@ -121,7 +121,7 @@ RSpec.describe JobsController, type: :controller do
       expect(subject.current_user).to_not eq(nil)
     end
 
-    it"shoud not post job" do
+    it"should not post job" do
       request.env["HTTP_REFERER"] = '/'
       get :new
       redirect_to '/'
@@ -196,12 +196,6 @@ RSpec.describe JobsController, type: :controller do
       expect(subject.current_user).to_not eq(nil)
       expect(response).to have_http_status(:ok)
     end
-
-    it "company person and job should have same address" do
-      expect(@job.address).to eql(@company_person.address)
-    end
-
-
 
     it "renders 'edit' template" do
       expect(response).to render_template('edit')
@@ -646,7 +640,7 @@ RSpec.describe JobsController, type: :controller do
     describe 'user not logged in' do
       let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
       before :each do
-        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+        get :apply, :job_id => job.id, :user_id => job_seeker.id
       end
       it "is a redirect" do
         expect(response).to have_http_status(:redirect)
@@ -666,7 +660,7 @@ RSpec.describe JobsController, type: :controller do
         company = FactoryGirl.create(:company)
         @ca = FactoryGirl.create(:company_admin, :company => company)
         allow(controller).to receive(:current_user).and_return(@ca)
-        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+        get :apply, :job_id => job.id, :user_id => job_seeker.id
       end
       it "is a redirect" do
         expect(response).to have_http_status(:redirect)
