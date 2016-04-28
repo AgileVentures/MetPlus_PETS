@@ -18,6 +18,7 @@ class Company < ActiveRecord::Base
   validates :email, :email => true
   validates :website, :website => true
   validates_presence_of :name
+  validates :job_email, :email => true, allow_blank: true
 
   STATUS = { PND:   'Pending Registration', # Company has registered but not yet approved
              ACT:   'Active',
