@@ -2,6 +2,7 @@ describe('Job Categories', function () {
   beforeEach(function () {
     loadFixtures('agency_admin/job_categories.html');
   });
+
   describe("Add job category", function () {
     beforeEach(function () {
       $('#add_job_category_button').click(AgencyData.add_job_category);
@@ -48,6 +49,7 @@ describe('Job Categories', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+
   describe('Edit job category', function () {
     beforeEach(function () {
       $('#job_categories_table').on('click',
@@ -109,6 +111,7 @@ describe('Job Categories', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+
   describe('delete job category', function () {
     beforeEach(function () {
       $('#job_categories_table').on('click',
@@ -137,10 +140,12 @@ describe('Job Categories', function () {
     });
   });
 });
+
 describe('Skills', function () {
   beforeEach(function () {
     loadFixtures('agency_admin/skills.html');
   });
+
   describe("Add skill", function () {
     beforeEach(function () {
       $('#add_skill_button').click(AgencyData.add_skill);
@@ -181,6 +186,7 @@ describe('Skills', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+
   describe('Edit skill', function () {
     beforeEach(function () {
       $('#skills_table').on('click',
@@ -193,6 +199,7 @@ describe('Skills', function () {
       expect($.ajax).toHaveBeenCalled();
     });
   });
+
   describe('Update skill', function () {
     beforeEach(function () {
       $('#update_skill_button').click(AgencyData.update_skill);
@@ -233,6 +240,7 @@ describe('Skills', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+  
   describe('delete skill', function () {
     beforeEach(function () {
       $('#skills_table').on('click',

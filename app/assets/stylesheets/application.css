@@ -63,6 +63,8 @@
   max-height: 25em;
   overflow-y: scroll;
   cursor:     pointer;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .navbar {

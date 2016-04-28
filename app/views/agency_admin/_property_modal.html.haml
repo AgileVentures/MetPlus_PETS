@@ -18,14 +18,14 @@
           %textarea(class='form-control' id="#{modal_id}_desc")
         - if /job_category/ =~ modal_id
           .form-group
-            .col-sm-6.panel.panel-primary
+            .col-sm-6.panel.panel-primary.fixed-panel
               .panel-heading
                 Skills for this job category
-              .panel-body.fixed-panel.droppable{id: "#{modal_id}_skills"}
-            .col-sm-6.panel.panel-primary
+              .panel-body.droppable{id: "#{modal_id}_skills"}
+            .col-sm-6.panel.panel-primary.fixed-panel
               .panel-heading
                 All Skills
-              .panel-body.fixed-panel.all_skills
+              .panel-body.all_skills
                 - Skill.order(:name).each do |skill|
                   .draggable.ui-widget-content{id: "skill_#{skill.id}"}
                     = skill.name
