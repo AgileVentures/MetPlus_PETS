@@ -5,8 +5,8 @@
     :id => 'edit-profile' do
     %i.fa.fa-pencil-square-o.fa-1
 
-%h3 Tasks that need your attention
-%i Tasks would go here
+%h3 Tasks that are unassigned or assigned to you
+= render partial: 'tasks/tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
 
 - if @agency_person.is_case_manager?(@agency)
   %h3 Your Job Seekers (Case Manager)
@@ -14,39 +14,60 @@
     %i There are no job seekers assigned to you yet.
   - else
     .col-sm-9
-      = render 'job_seekers', :locals => {job_seekers: @your_jobseekers_cm}
-
+    %table.table.table-hover
+      %thead
+        %tr
+          %td
+            %strong Name
+          %td
+            %strong Status
+          %td
+            %strong Last Login
+      %tbody
+        - @your_jobseekers_cm.each do |js|
+          %tr
+            %td
+              = js.full_name
+            %td
+              - unless js.job_seeker_status.nil?
+                = js.job_seeker_status.value
+            %td
+              - if js.last_sign_in_at.nil?
+                %i never
+              - else
+                = js.last_sign_in_at
+    = will_paginate @your_jobseekers_cm, param_name: 'your_jobseekers_cm_page'
     .clearfix
 
-    %h3 Job Seekers Without a Case Manager
-    - if @js_without_cm.empty?
-      %i All job seekers have a Case Manager at the moment.
-    -else
-      .col-sm-9
-        %table.table.table-hover
-          %thead
+  %h3 Job Seekers Without a Case Manager
+  - if @js_without_cm.empty?
+    %i All job seekers have a Case Manager at the moment.
+  -else
+    .col-sm-9
+      %table.table.table-hover
+        %thead
+          %tr
+            %td
+              %strong Name
+            %td
+              %strong Status
+            %td
+              %strong Last Login
+        %tbody
+          - @js_without_cm.each do |js|
             %tr
               %td
-                %strong Name
+                = js.full_name
               %td
-                %strong Status
+                - unless js.job_seeker_status.nil?
+                  = js.job_seeker_status.value
               %td
-                %strong Last Login
-          %tbody
-            - @js_without_cm.each do |js|
-              %tr
-                %td
-                  = js.full_name
-                %td
-                  - unless js.job_seeker_status.nil?
-                    = js.job_seeker_status.value
-                %td
-                  - if js.last_sign_in_at.nil?
-                    %i never
-                  - else
-                    = js.last_sign_in_at
-        = will_paginate @js_without_jd, param_name: 'js_without_cm_page'
-      .clearfix
+                - if js.last_sign_in_at.nil?
+                  %i never
+                - else
+                  = js.last_sign_in_at
+      = will_paginate @js_without_jd, param_name: 'js_without_cm_page'
+    .clearfix
 
 - if @agency_person.is_job_developer?(@agency)
   %h3 Your Job Seekers
