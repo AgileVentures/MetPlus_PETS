@@ -26,8 +26,8 @@ class UpdateJobSeekerStatusValueField < ActiveRecord::Migration
 		end
 
 		change_table :job_seekers do |t|
-			t.remove :job_seeker_statuses
-			t.string :status
+			t.remove :job_seeker_status_id
+			t.string :job_seeker_status
 		end
 	end
 end
