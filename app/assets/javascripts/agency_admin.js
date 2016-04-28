@@ -79,8 +79,6 @@ var AgencyData = {
 
     selector = '.droppable#' + type + '_job_category_skills';
 
-    // if (job_property === 'job_category' &&
-    //             $('.droppable#add_job_category_skills').length != 0) {
     if (job_property === 'job_category' && $(selector).length != 0) {
 
       $("div[id^='update_job_category_skill_']").each(function() {
