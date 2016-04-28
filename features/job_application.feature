@@ -55,9 +55,11 @@ Given the following jobseeker exist:
 		And I should see "software developer"
 		Then I click the "software developer" link
 		Then I click the "Click Here To Apply Online" link
+	  And I wait for 1 second
 		And I should see "You are applying"
 		Then I press "Close"
 		Then I click the "Click Here To Apply Online" link
+	  And I wait for 1 second
 		And I should see "You are applying"
 		Then I click the "Apply Now" link
 		And I should see "Congratulations, you were able to apply with success"
