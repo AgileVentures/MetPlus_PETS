@@ -16,9 +16,14 @@ describe('Job Categories', function () {
       $('#add_job_category_name').val('New Category');
       $('#add_job_category_desc').val('New Category Description');
 
+      skill1 = $('<div class="draggable_delete" ' +
+      'id="update_job_category_skill_1">Test Skill 1</div>');
+
+      $('#add_job_category_skills').append(skill1);
+
       var user_data = {'job_category[name]': 'New Category',
                        'job_category[description]': 'New Category Description',
-                       'job_category[skill_ids]': []};
+                       'job_category[skill_ids]': ['1']};
 
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.data).toEqual(user_data);
@@ -69,9 +74,17 @@ describe('Job Categories', function () {
       $('#update_job_category_name').val('Updated Category');
       $('#update_job_category_desc').val('Updated Category Description');
 
+      skill1 = $('<div class="draggable_delete" ' +
+      'id="update_job_category_skill_1">Test Skill 1</div>');
+      skill2 = $('<div class="draggable_delete" ' +
+      'id="update_job_category_skill_2">Test Skill 2</div>');
+
+      $('#add_job_category_skills').append(skill1);
+      $('#add_job_category_skills').append(skill2);
+
       var user_data = {'job_category[name]': 'Updated Category',
                        'job_category[description]': 'Updated Category Description',
-                       'job_category[skill_ids]': []};
+                       'job_category[skill_ids]': ['1', '2']};
 
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.data).toEqual(user_data);
