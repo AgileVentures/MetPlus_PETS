@@ -17,7 +17,8 @@ describe('Job Categories', function () {
       $('#add_job_category_desc').val('New Category Description');
 
       var user_data = {'job_category[name]': 'New Category',
-                       'job_category[description]': 'New Category Description'};
+                       'job_category[description]': 'New Category Description',
+                       'job_category[skill_ids]': []};
 
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.data).toEqual(user_data);
@@ -69,7 +70,8 @@ describe('Job Categories', function () {
       $('#update_job_category_desc').val('Updated Category Description');
 
       var user_data = {'job_category[name]': 'Updated Category',
-                       'job_category[description]': 'Updated Category Description'};
+                       'job_category[description]': 'Updated Category Description',
+                       'job_category[skill_ids]': []};
 
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.data).toEqual(user_data);

@@ -53,8 +53,8 @@ var AgencyData = {
                                                        job_prop_plural);
               }
               // Clear input fields in the modal
-              $(name_field_id).val('');
-              $(desc_field_id).val('');
+              $('#add_' + job_property + '_name').val('');
+              $('#add_' + job_property + '_desc').val('');
             },
             error: function (xhrObj, status, exception) {
               var model_errors_id = '#add_'+job_property+'_errors';
