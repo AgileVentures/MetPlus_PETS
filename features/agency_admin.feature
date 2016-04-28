@@ -280,7 +280,6 @@ Scenario: update skills assigned to job category
   And I should see "Ruby on Rails" under "Skills for this job category"
   And I should see "Scrum Master" under "Skills for this job category"
   Then I drag "Javascript" to "All Skills"
-  And show me the page
   And I click the "Update Category" button
   And I wait 2 seconds
   And I click the "Software Engineer - RoR" link
