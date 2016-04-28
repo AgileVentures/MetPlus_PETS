@@ -6,13 +6,13 @@ class UpdateJobSeekerStatusValueField < ActiveRecord::Migration
 		end
 
 		[
-			{:key => 'UNEMPLOYERLOOKING',
+			{:key => 'UNEMPLOYEDLOOKING',
 				:short_description => 'Unemployed Seeking',
 				:description => 'A jobseeker Without any work and looking for a job.'},
-			{:key => 'EMPLOYERLOOKING',
+			{:key => 'EMPLOYEDLOOKING',
 				:short_description => 'Employed Looking',
 				:description => 'A jobseeker with a job and looking for a job.'},
-			{:key => 'EMPLOYERNOTLOOKING',
+			{:key => 'EMPLOYEDNOTLOOKING',
 				:short_description => 'Employer Not Looking',
 				:description => 'A jobseeker with a job and not looking for a job for now.'}
 		].each do |values|

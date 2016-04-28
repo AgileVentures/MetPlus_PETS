@@ -14,9 +14,9 @@ class JobSeeker < ActiveRecord::Base
 	validates  :year_of_birth, :year_of_birth => true
 
 
-	STATUS = {:unemployed_seeking   => 'UNEMPLOYERLOOKING',
-						:employed_seeking     => 'EMPLOYERLOOKING',
-						:employed_not_seeking => 'EMPLOYERNOTLOOKING'}
+	STATUS = {:unemployed_seeking   => 'UNEMPLOYEDLOOKING',
+						:employed_seeking     => 'EMPLOYEDLOOKING',
+						:employed_not_seeking => 'EMPLOYEDNOTLOOKING'}
 
 	validates_presence_of :job_seeker_status
 	validates :job_seeker_status, inclusion: { in: STATUS.values,

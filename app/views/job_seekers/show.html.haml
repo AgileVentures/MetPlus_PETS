@@ -23,16 +23,15 @@
 		= @jobseeker.phone
 		%br
 		= @jobseeker.year_of_birth
-		
+
 		%br
-		= JobSeekerStatus.find(@jobseeker.job_seeker_status_id).value
+		= @jobseeker.status.short_description
 %br
 %br
 %div{class: 'row'}
 	.col-sm-2
-	= button_to 'Delete Jobseeker', job_seeker_path(@jobseeker), method: :delete,            | 
-      data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
+	= button_to 'Delete Jobseeker', job_seeker_path(@jobseeker), method: :delete,            |
+			data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
 %br
 	.col-sm-2
-	=link_to 'Cancel',root_path, class: 'btn btn-link' 
-
+	=link_to 'Cancel',root_path, class: 'btn btn-link'

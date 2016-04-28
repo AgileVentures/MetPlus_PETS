@@ -1,7 +1,8 @@
 FactoryGirl.define do
-  factory :job_seeker_status do
-    value "Employedlooking"
-description "Currently employed but looking for better opportunity"
-  end
+	factory :job_seeker_status do
+		key "UNEMPLOYEDLOOKING"
+		short_description 'Unemployed Seeking'
+		description "Currently employed but looking for better opportunity"
+	end
 
 end

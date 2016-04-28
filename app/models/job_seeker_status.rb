@@ -10,4 +10,7 @@ class JobSeekerStatus < ActiveRecord::Base
 				too_long:  "is too long (maximum is 255 characters)",
 				too_short: "is too short (minimum is 10 characters)"
 
+	def self.all_valid
+		where(:key => JobSeeker::STATUS.values)
+	end
 end
