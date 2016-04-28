@@ -13,7 +13,7 @@ class UpdateJobSeekerStatusValueField < ActiveRecord::Migration
 				:short_description => 'Employed Looking',
 				:description => 'A jobseeker with a job and looking for a job.'},
 			{:key => 'EMPLOYEDNOTLOOKING',
-				:short_description => 'Employer Not Looking',
+				:short_description => 'Employed Not Looking',
 				:description => 'A jobseeker with a job and not looking for a job for now.'}
 		].each do |values|
 			execute "insert into job_seeker_statuses " +
