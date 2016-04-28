@@ -24,7 +24,7 @@ class Job < ActiveRecord::Base
   validates_length_of   :description, maximum: 10000
   validates_presence_of :company_id
   validates_presence_of :company_person_id, allow_nil: true 
-  #validates_presence_of :job_category_id
+  validates_presence_of :job_category_id
   scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
   scope :find_by_company, ->(company) {where(:company => company)}
 

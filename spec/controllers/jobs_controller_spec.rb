@@ -10,6 +10,7 @@ RSpec.describe JobsController, type: :controller do
       @job =  FactoryGirl.create(:job) 
       @job_2 = FactoryGirl.create(:job)
       @address = FactoryGirl.create(:address)
+      @job_category = FactoryGirl.create(:job_category)
   end
 
   describe "permit params to create and update job" do 
@@ -25,12 +26,14 @@ RSpec.describe JobsController, type: :controller do
           company_id: @company_person.company.id,
           company_job_id: @job.company_job_id,
           company_person_id:  @company_person.id, 
-          address_id: @address.id 
+          address_id: @address.id, 
+          job_category_id: @job_category.id
         }
       }
 
       should permit(:description, :shift, :title, :company_person_id, 
-                    :company_job_id, :fulltime, :company_id, :address_id).
+                    :company_job_id, :fulltime, :company_id, 
+                    :job_category_id, :address_id).
         for(:create, params: params).
         on(:job)
     end
@@ -47,11 +50,13 @@ RSpec.describe JobsController, type: :controller do
             company_id: @company_person.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
-            address_id: @address.id 
+            address_id: @address.id,
+            job_category_id: @job_category.id
         }
       }
       should permit(:description, :shift, :title, :address_id, 
-                    :company_job_id, :company_id, :company_person_id, :fulltime).
+                    :company_job_id, :company_id, 
+                    :job_category_id, :company_person_id, :fulltime).
         for(:update, params: params).on(:job)
     end
   end
@@ -68,11 +73,13 @@ RSpec.describe JobsController, type: :controller do
             company_id: @company_person.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
-            address_id: @address.id 
+            address_id: @address.id,
+            job_category_id: @job_category.id
         }
       }
       should_not permit(:description, :shift, :title, :company_person_id,
-                        :company_job_id, :company_id, :fulltime, :address_id, :name).
+                        :company_job_id, :company_id, 
+                        :job_category_id, :fulltime, :address_id, :name).
         for(:create, params: params).
         on(:job)
     end
@@ -89,13 +96,13 @@ RSpec.describe JobsController, type: :controller do
           company_id: @company_person.company.id,
           company_job_id: @job.company_job_id,
           company_person_id:  @company_person.id,
-          address_id: @address.id
-
-
+          address_id: @address.id,
+          job_category_id: @job_category.id
         }
       }
       should_not permit(:description, :shift, :title,:company_person_id, 
-                        :company_job_id, :company_id, :fulltime,:address_id, :name).
+                        :company_job_id, :company_id, 
+                        :job_category_id, :fulltime,:address_id, :name).
         for(:update, params: params).
         on(:job)
     end
@@ -258,7 +265,8 @@ RSpec.describe JobsController, type: :controller do
                              address_id: '2',
                              company_person_id: 3,
                              :shift => "Evening", 
-                             company_job_id: "WERRR123"}
+                             company_job_id: "WERRR123",
+                             job_category_id: "3"}
       expect(response).to redirect_to(:action => 'index')
       should set_flash 
       expect(Job.count).to eq(3)
@@ -269,7 +277,8 @@ RSpec.describe JobsController, type: :controller do
       post :create, :job => {:title => "  ", :fulltime => true,
                              description: "passionate",
                              company_id: '3',
-                             :shift => "Evening", company_job_id: "WERRR123" }
+                             :shift => "Evening", company_job_id: "WERRR123",
+                             job_category_id: "3"}
       expect(response).to render_template('new')
       expect(Job.count).to eq(2)
       expect(response.status).to  eq(200) 
@@ -286,8 +295,9 @@ RSpec.describe JobsController, type: :controller do
       patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
                              :fulltime => true, description: "passionate",
                              company_id: '3',
-                             :shift => "Evening", company_job_id: "WERRR123"}
-     
+                             :shift => "Evening", company_job_id: "WERRR123",
+                             job_category_id: "3"}
+      
       expect(response).to redirect_to(:action => 'show')
       should set_flash 
       expect(Job.count).to eq(2)
@@ -299,7 +309,8 @@ RSpec.describe JobsController, type: :controller do
       patch :update, id: @job.id , :job => {:title => " ", 
                              :fulltime => true, description: "passionate",
                              company_id: '3',
-                             :shift => "Evening", company_job_id: "WERRR123"}
+                             :shift => "Evening", company_job_id: "WERRR123",
+                             job_category_id: "3"}
       
       expect(response).to render_template('edit')
       expect(Job.count).to eq(2)
@@ -408,7 +419,8 @@ RSpec.describe JobsController, type: :controller do
                              :company_id => 1,
                              :address_id => 1, 
                              company_person_id: nil, 
-                             company_job_id: "WERRR123"}
+                             company_job_id: "WERRR123",
+                             job_category_id: "3"}
       
       expect(response).to redirect_to(:action => 'index')
       should set_flash 
@@ -420,7 +432,8 @@ RSpec.describe JobsController, type: :controller do
       post :create, :job => {:title => "  ", :fulltime => true,
                              description: "passionate",
                              company_id: '3',
-                             :shift => "Evening", company_job_id: "WERRR123" }
+                             :shift => "Evening", company_job_id: "WERRR123",
+                             job_category_id: "3"}
       expect(response).to render_template('new')
       expect(Job.count).to eq(2)
       expect(response.status).to  eq(200) 
@@ -436,7 +449,8 @@ RSpec.describe JobsController, type: :controller do
                              company_id: '3',
                              address_id: '2',
                              company_person_id: nil,
-                             :shift => "Evening", company_job_id: "WERRR123"}
+                             :shift => "Evening", company_job_id: "WERRR123",
+                             job_category_id: "3"}
      
       expect(response).to redirect_to(:action => 'show')
       should set_flash 

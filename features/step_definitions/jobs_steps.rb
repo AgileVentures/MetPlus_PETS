@@ -16,3 +16,7 @@ end
 Given(/^the Widgets, Inc\. company name with address exist in the record$/) do
 	FactoryGirl.create(:company)
 end
+
+Given(/^the Software Engineer\-RoR job category exist in the test db$/) do
+	FactoryGirl.create(:job_category)
+end

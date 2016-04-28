@@ -13,6 +13,7 @@ background: adding job to database
 @selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Given I am logged in as company person
+	And the Software Engineer-RoR job category exist in the test db
 	When I click the "Post jobs" link
 	And I wait 1 second
 	And I fill in the fields:
@@ -20,6 +21,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 		| Job id                 | KARK12 |
 		| Description            | Atleast two years work experience|
 	And  I select "Day" in select list "Shift"
+	And  I select "Software Engineer-RoR" in select list "Job Category"
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
 	Then I should see "cashier has been created successfully."
@@ -60,6 +62,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 		| Job id                 |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"
+	And  I select "Software Engineer-RoR" in select list "Job Category"
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
 	Then  I should see "The form contains 3 errors"
@@ -70,10 +73,12 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Given I am logged in as job developer 
 	And the Widgets, Inc. company name with address exist in the record
+	And the Software Engineer-RoR job category exist in the test db
 	When I click the "Post jobs" link
 	And I wait 1 second
 	And I fill in the fields:
 		| Title                  | cashier|
+	And  I select "Software Engineer-RoR" in select list "Job Category"
 	And  I select "Widgets, Inc." in select list "Company Name"
 	And  I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
 	And I fill in the fields:
@@ -104,6 +109,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 		| Job id                 |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"
+	And  I select "Software Engineer-RoR" in select list "Job Category"
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
 	Then  I should see "The form contains 3 errors"

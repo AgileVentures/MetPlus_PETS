@@ -9,6 +9,10 @@
 	=f.label :title, class: "col-sm-3 control-label text-right"
 	%div{class: "col-sm-6"}
 		=f.text_field :title, class: "form-control" 
+.form-group
+	=f.label  :job_category_id, "Job Category", class: "col-sm-3 control-label text-right"
+	%div{class: "col-sm-6"}
+		=f.collection_select :job_category_id, JobCategory.all, :id, :name, {prompt: true}, {class: "form-control"}
 
 -if @cp_or_jd.is_a?(AgencyPerson) && @cp_or_jd.is_job_developer?(pets_user.agency)
 	.form-group
