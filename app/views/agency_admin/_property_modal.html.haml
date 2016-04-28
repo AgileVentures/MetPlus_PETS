@@ -11,11 +11,25 @@
         .form-group
           %label(for="#{modal_id}_name" class='control-label')
             Name:
-          %textarea(class='form-control' id="#{modal_id}_name")
+          %textarea(class='form-control' id="#{modal_id}_name" rows='1')
         .form-group
           %label(for="#{modal_id}_desc" class='control-label')
             Description:
           %textarea(class='form-control' id="#{modal_id}_desc")
+        - if /job_category/ =~ modal_id
+          .form-group
+            .col-sm-6.panel.panel-primary.fixed-panel
+              .panel-heading
+                Skills for this job category
+              .panel-body.droppable{id: "#{modal_id}_skills"}
+            .col-sm-6.panel.panel-primary.fixed-panel
+              .panel-heading
+                All Skills
+              .panel-body.all_skills
+                - Skill.order(:name).each do |skill|
+                  .draggable.ui-widget-content{id: "skill_#{skill.id}"}
+                    = skill.name
+
       .modal-footer
         %button(type='button' class='btn btn-default'
                                  data-dismiss='modal') Cancel

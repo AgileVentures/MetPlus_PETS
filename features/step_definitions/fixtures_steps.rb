@@ -107,6 +107,12 @@ Given(/^the following job categories exist:$/) do |table|
   end
 end
 
+Given(/^the following job skills exist:$/) do |table|
+  table.hashes.each do |hash|
+    Skill.create!(hash)
+  end
+end
+
 Given(/^the following tasks exist:$/) do |table|
   table.hashes.each do |hash|
 

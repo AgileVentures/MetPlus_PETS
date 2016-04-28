@@ -31,6 +31,12 @@ Background: seed data added to database and log in as agency admim
   | name                      | description                         |
   | Software Engineer - RoR   | Develop website using Ruby on Rails |
 
+  Given the following job skills exist:
+  | name          | description                              |
+  | Javascript    | Develop with Javascript                  |
+  | Ruby on Rails | Develop websites with Ruby on Rails      |
+  | Scrum Master  | Act as scrum master for XP/Agile process |
+
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
@@ -210,10 +216,13 @@ Scenario: add job category
   And I wait 2 seconds
   And I fill in "Name:" with "Test Job Category"
   And I fill in "Description:" with "Description of Test Job Category"
+  And I drag "Javascript" to "Skills for this job category"
   And I click the "Add Category" button
   And I wait 2 seconds
   Then I should see "Test Job Category"
   And I should see "Description of Test Job Category"
+  And I click the "Test Job Category" link
+  And I should see "Javascript" under "Skills for this job category"
 
 @selenium
 Scenario: cancel add job category
@@ -257,9 +266,94 @@ Scenario: update job category
   And I should see "Backend RoR Development"
 
 @selenium
+Scenario: update skills assigned to job category
+  And I click the "Job Properties" link
+  And I click the "Software Engineer - RoR" link
+  And I wait 2 seconds
+  And I drag "Javascript" to "Skills for this job category"
+  And I drag "Ruby on Rails" to "Skills for this job category"
+  And I drag "Scrum Master" to "Skills for this job category"
+  And I click the "Update Category" button
+  And I wait 2 seconds
+  And I click the "Software Engineer - RoR" link
+  And I should see "Javascript" under "Skills for this job category"
+  And I should see "Ruby on Rails" under "Skills for this job category"
+  And I should see "Scrum Master" under "Skills for this job category"
+  Then I drag "Javascript" to "All Skills"
+  And I click the "Update Category" button
+  And I wait 2 seconds
+  And I click the "Software Engineer - RoR" link
+  Then I should see "Ruby on Rails" under "Skills for this job category"
+  Then I should see "Scrum Master" under "Skills for this job category"
+  And I should not see "Javascript" under "Skills for this job category"
+
+
+
+
+
+@selenium
 Scenario: delete job category
   And I click the "Job Properties" link
   And I click the link with url "/job_categories/1"
   And I wait 2 seconds
   Then I should not see "Software Engineer - RoR"
   And I should see "There are no job categories."
+
+@selenium
+Scenario: add job skill
+  And I click the "Job Properties" link
+  And I click the "Add Job Skill" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test Job Skill"
+  And I fill in "Description:" with "Description of Test Job Skill"
+  And I click the "Add Skill" button
+  And I wait 2 seconds
+  Then I should see "Test Job Skill"
+  And I should see "Description of Test Job Skill"
+
+@selenium
+Scenario: cancel add job skill
+  And I click the "Job Properties" link
+  And I click the "Add Job Skill" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test Job Skill"
+  And I click the "Cancel" button
+  And I wait 2 seconds
+  Then I should not see "Test Job Skill"
+
+@selenium
+Scenario: show job skill model validation errors
+  And I click the "Job Properties" link
+  And I click the "Add Job Skill" button
+  And I wait 2 seconds
+  And I click the "Add Skill" button
+  And I wait 2 seconds
+  Then I should see "Name can't be blank"
+  And I should see "Description can't be blank"
+  Then I fill in "Name:" with "Test Job Skill"
+  And I fill in "Description:" with "Description of Test Job Skill"
+  And I click the "Add Skill" button
+  And I wait 2 seconds
+  Then I should see "Test Job Skill"
+  And I should see "Description of Test Job Skill"
+
+@selenium
+Scenario: update job skill
+  And I click the "Job Properties" link
+  And I click the "Javascript" link
+  And I wait 2 seconds
+  And I fill in "Description:" with ""
+  And I click the "Update Skill" button
+  And I should see "Description can't be blank"
+  And I fill in "Description:" with "Develop with Javascript and jQuery"
+  And I click the "Update Skill" button
+  And I wait 2 seconds
+  Then "Update Skill" should not be visible
+  And I should see "Develop with Javascript and jQuery"
+
+@selenium
+Scenario: delete job skill
+  And I click the "Job Properties" link
+  And I click the link with url "/skills/1"
+  And I wait 2 seconds
+  Then "Javascript" should not be visible

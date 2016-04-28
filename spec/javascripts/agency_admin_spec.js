@@ -2,6 +2,7 @@ describe('Job Categories', function () {
   beforeEach(function () {
     loadFixtures('agency_admin/job_categories.html');
   });
+
   describe("Add job category", function () {
     beforeEach(function () {
       $('#add_job_category_button').click(AgencyData.add_job_category);
@@ -16,8 +17,14 @@ describe('Job Categories', function () {
       $('#add_job_category_name').val('New Category');
       $('#add_job_category_desc').val('New Category Description');
 
+      skill1 = $('<div class="draggable_delete" ' +
+      'id="update_job_category_skill_1">Test Skill 1</div>');
+
+      $('#add_job_category_skills').append(skill1);
+
       var user_data = {'job_category[name]': 'New Category',
-                       'job_category[description]': 'New Category Description'};
+                       'job_category[description]': 'New Category Description',
+                       'job_category[skill_ids]': ['1']};
 
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.data).toEqual(user_data);
@@ -42,6 +49,7 @@ describe('Job Categories', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+
   describe('Edit job category', function () {
     beforeEach(function () {
       $('#job_categories_table').on('click',
@@ -68,8 +76,17 @@ describe('Job Categories', function () {
       $('#update_job_category_name').val('Updated Category');
       $('#update_job_category_desc').val('Updated Category Description');
 
+      skill1 = $('<div class="draggable_delete" ' +
+      'id="update_job_category_skill_1">Test Skill 1</div>');
+      skill2 = $('<div class="draggable_delete" ' +
+      'id="update_job_category_skill_2">Test Skill 2</div>');
+
+      $('#add_job_category_skills').append(skill1);
+      $('#add_job_category_skills').append(skill2);
+
       var user_data = {'job_category[name]': 'Updated Category',
-                       'job_category[description]': 'Updated Category Description'};
+                       'job_category[description]': 'Updated Category Description',
+                       'job_category[skill_ids]': ['1', '2']};
 
       spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
         expect(ajaxArgs.data).toEqual(user_data);
@@ -94,6 +111,7 @@ describe('Job Categories', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+
   describe('delete job category', function () {
     beforeEach(function () {
       $('#job_categories_table').on('click',
@@ -122,10 +140,12 @@ describe('Job Categories', function () {
     });
   });
 });
+
 describe('Skills', function () {
   beforeEach(function () {
     loadFixtures('agency_admin/skills.html');
   });
+
   describe("Add skill", function () {
     beforeEach(function () {
       $('#add_skill_button').click(AgencyData.add_skill);
@@ -166,6 +186,7 @@ describe('Skills', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+
   describe('Edit skill', function () {
     beforeEach(function () {
       $('#skills_table').on('click',
@@ -178,6 +199,7 @@ describe('Skills', function () {
       expect($.ajax).toHaveBeenCalled();
     });
   });
+
   describe('Update skill', function () {
     beforeEach(function () {
       $('#update_skill_button').click(AgencyData.update_skill);
@@ -218,6 +240,7 @@ describe('Skills', function () {
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+  
   describe('delete skill', function () {
     beforeEach(function () {
       $('#skills_table').on('click',

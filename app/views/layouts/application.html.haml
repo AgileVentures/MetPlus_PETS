@@ -8,6 +8,7 @@
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css'
     = stylesheet_link_tag "application", :media => "all", 'data-turbolinks-track' => true
     -# pusher should be loaded before the application js files - pusher.js depends on this
     = javascript_include_tag '//js.pusher.com/3.0/pusher.min.js'
@@ -20,6 +21,7 @@
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/themes/bootstrap.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js'
+    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'
   %body
     %a{:href => '#top'}
     = render partial: 'layouts/menu'
@@ -44,7 +46,7 @@
             - @model_errors.full_messages.each do |msg|
               %li= msg
       %div{:class => 'row'}
-        = yield  
+        = yield
     = render 'layouts/footer'
 
 %script

@@ -31,12 +31,8 @@ var AgencyData = {
     //     job_prop_plural: the pluralized version of job_property,
     //                      e.g. 'job_categories', 'skills'
 
-    // Create the post data for ajax .....
-    var name_field_id = '#add_' + job_property + '_name';
-    var desc_field_id = '#add_' + job_property + '_desc';
-    var post_data = {};
-    post_data[job_property + '[name]']        = $(name_field_id).val();
-    post_data[job_property + '[description]'] = $(desc_field_id).val();
+    // Prep the post data for ajax .....
+    post_data = AgencyData.prepare_property_data_for_ajax(job_property, 'add');
 
     $.ajax({type: 'POST',
             url: '/' + job_prop_plural + '/',
@@ -56,6 +52,9 @@ var AgencyData = {
                                                        model_errors_id,
                                                        job_prop_plural);
               }
+              // Clear input fields in the modal
+              $('#add_' + job_property + '_name').val('');
+              $('#add_' + job_property + '_desc').val('');
             },
             error: function (xhrObj, status, exception) {
               var model_errors_id = '#add_'+job_property+'_errors';
@@ -65,6 +64,33 @@ var AgencyData = {
     // Good background on returning error status in ajax controller action:
     // http://travisjeffery.com/b/2012/04/rendering-errors-in-json-with-rails/
   },
+
+  prepare_property_data_for_ajax: function(job_property, type) {
+    // type: 'add' or 'update'
+
+    // Create the post/patch data for ajax .....
+    var name_field_id = '#' + type + '_' + job_property + '_name';
+    var desc_field_id = '#' + type + '_' + job_property + '_desc';
+    var post_data = {};
+    post_data[job_property + '[name]']        = $(name_field_id).val();
+    post_data[job_property + '[description]'] = $(desc_field_id).val();
+
+    var skill_ids = [];
+
+    selector = '.droppable#' + type + '_job_category_skills';
+
+    if (job_property === 'job_category' && $(selector).length != 0) {
+
+      $("div[id^='update_job_category_skill_']").each(function() {
+        // The skill ID is the last digit(s) in the CSS ID
+        skill_id = this.id.match(/\d+$/);
+        skill_ids.push(skill_id[0]);
+      })
+      post_data[job_property + '[skill_ids]'] = skill_ids;
+    }
+    return post_data;
+  },
+
   edit_job_category: function () {
     // Get the url from the anchor element that was clicked
     var url = $(this).attr('href');
@@ -93,14 +119,34 @@ var AgencyData = {
               // Store the job property ID for retrieval in update action
               AgencyData[job_property + '_id'] = data.id;
 
-              // Set the attribute values in the modal and make modal visible
-              var name_field_id = '#update_' + job_property + '_name';
-              var desc_field_id = '#update_' + job_property + '_desc';
-              var modal_id = '#update_' + job_property;
+              // Set the attribute values in the modal
+              var modal_id = 'update_' + job_property;
+              var modal_selector = '#' + modal_id
 
-              $(name_field_id).val(data.name);
-              $(desc_field_id).val(data.description);
-              $(modal_id).modal('show');
+              $(modal_selector + '_name').val(data.name);
+              $(modal_selector + '_desc').val(data.description);
+
+              var skills_list = '';
+
+              // Clear any residual category skills from prior
+              // category 'add' or 'update' action
+              $("div[id^='update_job_category_skill_']").remove();
+
+              // Show existing job_category skills in modal
+              if (job_property === 'job_category' &&
+                               data['skills'].length != 0) {
+                var i;
+                for (i = 0; i < data['skills'].length; i += 1) {
+                  skill = data['skills'][i];
+                  skills_list +=
+                      '<div class="draggable_delete ui-widget-content" ' +
+                      'id="update_job_category_skill_' + skill.id + '">' +
+                      skill.name + '</div>';
+                }
+              }
+              $(modal_selector + '_skills').html(skills_list);
+
+              $(modal_selector).modal('show');
             },
             error: function (xhrObj, status, exception) {
               alert('Error retrieving property attributes');
@@ -134,11 +180,7 @@ var AgencyData = {
     //                      e.g. 'job_categories', 'skills'
 
     // Create the PATCH data for ajax .....
-    var name_field_id = '#update_' + job_property + '_name';
-    var desc_field_id = '#update_' + job_property + '_desc';
-    var patch_data = {};
-    patch_data[job_property + '[name]']        = $(name_field_id).val();
-    patch_data[job_property + '[description]'] = $(desc_field_id).val();
+    patch_data = AgencyData.prepare_property_data_for_ajax(job_property, 'update');
 
     $.ajax({type: 'PATCH',
             url: '/'+job_prop_plural+'/' + AgencyData[job_property + '_id'],
@@ -316,6 +358,61 @@ var AgencyData = {
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
                                 AgencyData.delete_job_category);
+
+    $('#add_job_category').on('show.bs.modal', function(e) {
+      // When the 'add_job_category' modal is about to be shown, clear
+      // residual category skills that have been displayed in the
+      // LHS of the category skills assignment section of the modal
+      // (otherwise, skills left in the LHS from a prior 'update category'
+      //  will still be present).
+      $("div[id^='update_job_category_skill_']").remove();
+    });
+
+    // The items in the right-hand-side of the skills list consist
+    // of all available skills.  These are added to class "draggable",
+    // and can be dragged to the LHS to assign a skill to the category.
+    // Dragging the skill does not remove it from the "all skills" list.
+    $('.draggable').draggable({ revert: 'invalid',
+                                cursor: 'pointer',
+                                containment: 'document',
+                                helper: 'clone' });
+
+    // Class "droppable" is assigned to the container on the LHS.  These
+    // are skills assigned (or to be assigned) to the category.
+    // These skills are assigned class ".draggable_delete" because they
+    // can be dragged back to the RHS to delete them from the list of
+    // skills for the category.
+    $('.droppable').droppable({
+          activeClass: 'ui-state-hover',
+          accept: '.draggable',
+          // Handle dragging a skill to the container
+          drop: function(event, ui) {
+            var ele = $(ui.draggable[0]);
+            // Add this element unless already present
+            rg = new RegExp(ele.attr('id') + "\"");
+            if (!rg.test($(this).html())) {
+
+              add_skill = '<div class="draggable_delete ui-widget-content" ' +
+              'id="update_job_category_' + ele.attr('id') + '">'
+              + ele.text().trim() + '</div>';
+
+              $(add_skill).appendTo(this);
+            }
+          }
+        });
+    $('.droppable').sortable();
+
+    // Skills on the LHS can be dragged to the "all skills" (RHS) container
+    // to remove them from assignment to the category.
+    $('.all_skills').droppable({
+          activeClass: 'ui-state-hover',
+          accept: '.draggable_delete',
+          tolerance: 'intersect',
+          drop: function(event, ui) {
+            // Delete element from skills for this category
+            $(ui.draggable[0]).remove();
+          }
+        });
   },
   setup_manage_skill: function () {
     $('#add_skill_button').click(AgencyData.add_skill);
