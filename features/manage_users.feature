@@ -6,30 +6,17 @@ Feature: Manage Users
 
 	#@focus
 	Background:
-		Given the following agency roles exist:
-	  | role  |
-	  | AA    |
-	  | CM    |
-	  | JD    |
 
-	  Given the following agencies exist:
-	  | name    | website     | phone        | email                  | fax          |
-	  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+		Given the default settings are present
 
-	  Given the following agency people exist:
-	  | agency  | role  | first_name | last_name | email            | password  |
-	  | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
-	  | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+		Given the following agency people exist:
+		| agency  | role  | first_name | last_name | email            | password  |
+		| MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
+		| MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
 		Given the following user records:
 		| email               | password   | password_confirmation | first_name | last_name | phone          | confirmed_at                      |
 		| salemamba@gmail.com | secret1234 | secret1234            | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |
-
-		Given the following jobseekerstatus values exist:
-		| value                | description |
-		| Unemployedlooking    | A jobseeker without any work and looking for a job|
-		| Employedlooking      | A jobseeker with a job and looking for a job      |
-		| Employednotlooking   | A jobseeker with a job and not looking for a job for now.|
 
 	Scenario Outline: Updating User successfully
 		Given I am on the home page
@@ -37,7 +24,7 @@ Feature: Manage Users
 		And   I visit profile for "salem"
 		Then  I should see "Edit User"
 
-	    When  I fill in the fields:
+			When  I fill in the fields:
 			| Password              | newsecret1234 |
 			| Password confirmation | newsecret1234 |
 			| Current password      | secret1234    |
@@ -83,7 +70,7 @@ Feature: Manage Users
 		| Password Confirmation | qwerty123       |
 		And I select "1980" in select list "Year Of Birth"
 
-		And I select "Unemployedlooking" in select list "Status"
+		And I select "Employed Looking" in select list "Status"
 		And I click the "Create Job seeker" button
 		Then I should see "A message with a confirmation and link has been sent to your email address."
 		And "jsmith@mail.com" should receive an email with subject "Confirmation instructions"
@@ -105,7 +92,7 @@ Scenario: Resend confirmation email - happy path
 	| Password Confirmation | qwerty123       |
 	And I select "1980" in select list "Year Of Birth"
 
-	And I select "Unemployedlooking" in select list "Status"
+	And I select "Employed Looking" in select list "Status"
 	And I click the "Create Job seeker" button
 	And I should see "A message with a confirmation and link has been sent to your email address."
 	Then I click the "Log In" link
@@ -129,7 +116,7 @@ Scenario: Resend confirmation email - sad path
 	| Password Confirmation | qwerty123       |
 	And I select "1980" in select list "Year Of Birth"
 
-	And I select "Unemployedlooking" in select list "Status"
+	And I select "Employed Looking" in select list "Status"
 	And I click the "Create Job seeker" button
 	And I should see "A message with a confirmation and link has been sent to your email address."
 	And "jsmith@mail.com" should receive an email with subject "Confirmation instructions"
