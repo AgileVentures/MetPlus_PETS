@@ -37,6 +37,7 @@ Scenario: Job Seeker registers in PETS
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
+  Then I am in Paula's browser
   Then I go to the Jobseeker Registration page
   When I fill in "First Name" with "Paula"
   And I fill in "Last Name" with "Jones"
@@ -50,7 +51,6 @@ Scenario: Job Seeker registers in PETS
   Then "paulajones@gmail.com" should receive an email with subject "Confirmation instructions"
   When "paulajones@gmail.com" opens the email
   Then they should see "Confirm my account" in the email body
-  Then I am in Paula's browser
   And "paulajones@gmail.com" follows "Confirm my account" in the email
   Then I should see "Your email address has been successfully confirmed."
   And "aa@metplus.org" should receive an email with subject "Job seeker registered"
@@ -58,6 +58,7 @@ Scenario: Job Seeker registers in PETS
   Then I am in Admin's browser
   And I should see "Job Seeker: Paula Jones has joined PETS."
   Then I go to the tasks page
+  And I wait for 1 second
   And I should see "Job Seeker has no assigned Job Developer"
 
 @selenium
