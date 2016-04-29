@@ -80,4 +80,5 @@ Scenario: Company registration request in PETS
   Then I am in Admin's browser
   And I should see "Company: Widgets, Inc. has registered in PETS."
   Then I go to the tasks page
+  And I wait for 1 second
   And I should see "Review company registration"
