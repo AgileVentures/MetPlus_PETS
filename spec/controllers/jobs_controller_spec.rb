@@ -638,7 +638,7 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'user not logged in' do
-      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+      let!(:job) { FactoryGirl.create(:job) } # no lazy load, executed right away, no need to mock
       before :each do
         get :apply, :job_id => job.id, :user_id => job_seeker.id
       end
@@ -655,7 +655,7 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'logged in as company person' do
-      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+      let!(:job) { FactoryGirl.create(:job) } # no lazy load, executed right away, no need to mock
       before :each do
         company = FactoryGirl.create(:company)
         @ca = FactoryGirl.create(:company_admin, :company => company)
