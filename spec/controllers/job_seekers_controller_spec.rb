@@ -15,10 +15,11 @@ RSpec.describe JobSeekersController, type: :controller do
   describe "POST #create" do
     context "valid attributes" do
        before(:each) do
+        js_status = FactoryGirl.create(:job_seeker_status)
         ActionMailer::Base.deliveries.clear
         @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker).
                merge(FactoryGirl.attributes_for(:user)).
-               merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+               merge({:job_seeker_status_id => js_status.id})
         @jobseeker_hash[:address_attributes] = FactoryGirl.attributes_for(:address, zipcode: '54321')
         post :create, job_seeker: @jobseeker_hash
       end
@@ -68,10 +69,12 @@ RSpec.describe JobSeekersController, type: :controller do
           :headers => {'Content-Type'=> 'application/json'})
 
        ActionMailer::Base.deliveries.clear
+
+       js_status = FactoryGirl.create(:job_seeker_status)
        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
               resume: fixture_file_upload('files/Janitor-Resume.doc')).
               merge(FactoryGirl.attributes_for(:user)).
-              merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+              merge({:job_seeker_status_id => js_status.id})
      end
 
      it 'saves job seeker' do
@@ -100,7 +103,7 @@ RSpec.describe JobSeekersController, type: :controller do
             merge(FactoryGirl.attributes_for(:user, first_name: 'John',
                    last_name: 'Smith', phone: '890-789-9087')).
             merge(FactoryGirl.attributes_for(:job_seeker_status,
-                   value=nil, description:'MyText')).
+                   description:'MyText')).
            merge(FactoryGirl.attributes_for(:address,
                                             zipcode: '12345131231231231231236'))
        post :create, job_seeker: jobseeker1_hash
@@ -129,39 +132,40 @@ RSpec.describe JobSeekersController, type: :controller do
 
        @jobseeker =  FactoryGirl.create(:job_seeker)
      end
+     let(:js_status) {FactoryGirl.create(:job_seeker_status)}
 
      it 'sets flash message' do
         patch :update, id: @jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
                 resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+            merge({:job_seeker_status_id => js_status.id})
         expect(flash[:notice]).to eq "Jobseeker was updated successfully."
      end
      it 'returns redirect status' do
         patch :update, id: @jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
                 resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+            merge({:job_seeker_status_id => js_status.id})
         expect(response).to have_http_status(:redirect)
      end
      it 'redirects to mainpage' do
         patch :update, id: @jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
                 resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+            merge({:job_seeker_status_id => js_status.id})
         expect(response).to redirect_to(root_path)
      end
      it 'saves resume record' do
        expect{ patch :update, id: @jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
                 resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]}) }.
+            merge({:job_seeker_status_id => js_status.id}) }.
           to change(Resume, :count).by(+1)
      end
      it 'check address change' do
        use_hash = FactoryGirl.attributes_for(:job_seeker,
                                             resume: fixture_file_upload('files/Janitor-Resume.doc')).
-                   merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+                   merge({:job_seeker_status_id => js_status.id})
 
        use_hash[:address_attributes] = FactoryGirl.attributes_for(:address, zipcode: '12346')
        patch :update, id: @jobseeker,
@@ -182,10 +186,11 @@ RSpec.describe JobSeekersController, type: :controller do
           to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
           :headers => {'Content-Type'=> 'application/json'})
 
+       js_status = FactoryGirl.create(:job_seeker_status)
        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
               resume: fixture_file_upload('files/Janitor-Resume.doc')).
               merge(FactoryGirl.attributes_for(:user)).
-              merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+              merge({:job_seeker_status_id => js_status.id})
 
        post :create, job_seeker: @jobseeker_hash
 
@@ -194,7 +199,7 @@ RSpec.describe JobSeekersController, type: :controller do
        patch :update, id: @jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
                 resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')).
-            merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+            merge({:job_seeker_status_id => js_status.id})
 
        @jobseeker.reload
      end
@@ -214,11 +219,12 @@ RSpec.describe JobSeekersController, type: :controller do
        @jobseeker.valid?
        FactoryGirl.create(:job_seeker_status)
        @password = @jobseeker.encrypted_password
+       js_status = FactoryGirl.create(:job_seeker_status)
        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '1980',
                                                             first_name: 'John', last_name: 'Smith',
                                                             password: '', password_confirmation: '',
                                                             phone: '780-890-8976',
-                                                            job_seeker_status: JobSeeker::STATUS[:unemployed_seeking]),
+                                                            job_seeker_status: js_status),
              id:@jobseeker
        @jobseeker.reload
 
@@ -233,7 +239,7 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(@jobseeker.year_of_birth).to eq ("1980")
      end
      it 'sets a jobseeker status' do
-        expect(@jobseeker.status.key) == (JobSeeker::STATUS[:unemployed_seeking])
+        expect(@jobseeker.status.id) == (JobSeekerStatus.first.id)
      end
      it 'dont change password' do
         expect(@jobseeker.encrypted_password).to eq (@password)
@@ -275,10 +281,11 @@ RSpec.describe JobSeekersController, type: :controller do
          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
          :headers => {'Content-Type'=> 'application/json'})
 
+      js_status = FactoryGirl.create(:job_seeker_status)
       @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
              resume: fixture_file_upload('files/Janitor-Resume.doc')).
              merge(FactoryGirl.attributes_for(:user)).
-             merge({:job_seeker_status => JobSeeker::STATUS[:unemployed_seeking]})
+             merge({:job_seeker_status_id => js_status.id})
 
       post :create, job_seeker: @jobseeker_hash
 

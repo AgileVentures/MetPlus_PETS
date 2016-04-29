@@ -1,6 +1,6 @@
 class JobSeekerStatus < ActiveRecord::Base
 
-  validates_presence_of :description, :key, :short_description
+  validates_presence_of :description, :short_description
 
   validates_length_of :short_description, within: 5..25,
         too_long:  "is too long (maximum is 25 characters)",
@@ -9,8 +9,4 @@ class JobSeekerStatus < ActiveRecord::Base
   validates_length_of :description, within: 10..255,
         too_long:  "is too long (maximum is 255 characters)",
         too_short: "is too short (minimum is 10 characters)"
-
-  def self.all_valid
-    where(:key => JobSeeker::STATUS.values)
-  end
 end

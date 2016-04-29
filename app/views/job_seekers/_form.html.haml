@@ -18,9 +18,9 @@
                     start_year: start_year, end_year: start_year - 60,
                     prefix: 'job_seeker')
   .form-group
-    =js.label :job_seeker_status, 'Status', class: 'control-label col-sm-2'
+    =js.label :status_id, 'Status', class: 'control-label col-sm-2'
     .col-sm-6
-      =js.collection_select(:job_seeker_status, JobSeekerStatus.all_valid, :key, :short_description, {prompt: true})
+      =js.collection_select(:job_seeker_status_id, JobSeekerStatus.all, :id, :short_description, {prompt: true}, {:id => :Status})
 
   .form-group
     =js.label :resume, 'Resume', class:'control-label col-sm-2'

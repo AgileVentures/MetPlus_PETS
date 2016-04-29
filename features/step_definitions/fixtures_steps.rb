@@ -95,7 +95,7 @@ Given(/^the following jobseeker exist:$/) do |table|
     seeker_status = hash.delete 'job_seeker_status'
     job_seeker_status = JobSeekerStatus.find_by_short_description(seeker_status)
     jobseeker = JobSeeker.new(hash)
-    jobseeker.status = job_seeker_status
+    jobseeker.job_seeker_status = job_seeker_status
     jobseeker.address = FactoryGirl.create(:address)
     jobseeker.save!
   end
@@ -155,14 +155,11 @@ end
 
 Given(/^the default settings are present$/) do
   [
-    {:key => 'UNEMPLOYEDLOOKING',
-      :short_description => 'Unemployed Seeking',
+    { :short_description => 'Unemployed Seeking',
       :description => 'A jobseeker Without any work and looking for a job.'},
-    {:key => 'EMPLOYEDLOOKING',
-      :short_description => 'Employed Looking',
+    { :short_description => 'Employed Looking',
       :description => 'A jobseeker with a job and looking for a job.'},
-    {:key => 'EMPLOYEDNOTLOOKING',
-      :short_description => 'Employed Not Looking',
+    { :short_description => 'Employed Not Looking',
       :description => 'A jobseeker with a job and not looking for a job for now.'}
   ].each do |values|
     FactoryGirl.create(:job_seeker_status, values)

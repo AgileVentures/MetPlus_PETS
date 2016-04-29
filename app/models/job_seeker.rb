@@ -13,25 +13,11 @@ class JobSeeker < ActiveRecord::Base
 
   validates  :year_of_birth, :year_of_birth => true
 
-
-  STATUS = {:unemployed_seeking   => 'UNEMPLOYEDLOOKING',
-            :employed_seeking     => 'EMPLOYEDLOOKING',
-            :employed_not_seeking => 'EMPLOYEDNOTLOOKING'}
-
+  belongs_to :job_seeker_status
   validates_presence_of :job_seeker_status
-  validates :job_seeker_status, inclusion: { in: STATUS.values,
-              message: "%{value} is not a valid size" }
 
   def status
-    JobSeekerStatus.find_by_key(job_seeker_status)
-  end
-
-  def status= value
-    if value.is_a? JobSeekerStatus
-      self.job_seeker_status = value.key
-    else
-      self.job_seeker_status = STATUS[value]
-    end
+    job_seeker_status
   end
 
   def is_job_seeker?

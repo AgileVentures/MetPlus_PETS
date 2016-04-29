@@ -12,17 +12,9 @@ def create_address(location = nil)
 end
 
 # --------------------------- Seed Production Database --------------------
-
-JobSeekerStatus.all_valid.each do |status|
-  case status.key
-    when JobSeeker::STATUS[:unemployed_seeking]
-      @jss1 = status
-    when JobSeeker::STATUS[:unemployed_seeking]
-      @jss2 = status
-    when JobSeeker::STATUS[:unemployed_seeking]
-      @jss3 = status
-  end
-end
+@jss1 = JobSeekerStatus.first
+@jss2 = JobSeekerStatus.second
+@jss3 = JobSeekerStatus.third
 
 # Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
@@ -212,25 +204,25 @@ if Rails.env.development? || Rails.env.staging?
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
-            job_seeker_status: @jss1.key, confirmed_at: Time.now,
+            job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
                         email: 'mary@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
-            job_seeker_status: @jss2.key, confirmed_at: Time.now,
+            job_seeker_status: @jss2, confirmed_at: Time.now,
                       address: create_address)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                         email: 'frank@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
-            job_seeker_status: @jss3.key, confirmed_at: Time.now,
+            job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
                         email: 'henry@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
-            job_seeker_status: @jss3.key, confirmed_at: Time.now,
+            job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
 
 
@@ -239,7 +231,7 @@ if Rails.env.development? || Rails.env.staging?
                                password:'dfg123',password_confirmation:'dfg123',
                                year_of_birth: "1990",
                                confirmed_at: Time.now, phone: '111-222-3333',
-                               job_seeker_status: @jss1.key,
+                               job_seeker_status: @jss1,
                                address: create_address)
 
   puts "Job Seekers created: #{JobSeeker.count}"
