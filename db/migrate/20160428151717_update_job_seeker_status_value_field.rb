@@ -1,5 +1,5 @@
 class UpdateJobSeekerStatusValueField < ActiveRecord::Migration
-  def change
+  def up
     change_table :job_seeker_statuses do |t|
       t.rename :value, :key
       t.string :short_description
@@ -28,6 +28,16 @@ class UpdateJobSeekerStatusValueField < ActiveRecord::Migration
     change_table :job_seekers do |t|
       t.remove :job_seeker_status_id
       t.string :job_seeker_status
+    end
+  end
+  def down
+    change_table :job_seeker_statuses do |t|
+      t.rename :key, :value
+      t.remove :short_description
+    end
+    change_table :job_seekers do |t|
+      t.belongs_to :job_seeker_status
+      t.remove :job_seeker_status
     end
   end
 end
