@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   end
 
   protect_from_forgery with: :exception
-  helper_method :pets_user
+  helper_method :pets_user, :current_agency
 
   include Pundit
 
@@ -77,6 +77,14 @@ class ApplicationController < ActionController::Base
       else
         flash[:alert] = "You need to login to #{msg}."
         redirect_to(request.referrer || root_path)
+      end
+    end
+    def current_agency
+      if pets_user.is_a? AgencyPerson
+        return pets_user.agency
+      else
+        ## This branch need to be changed when we have multi agencies
+        return Agency.first
       end
     end
 end

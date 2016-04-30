@@ -2,21 +2,21 @@ require 'rails_helper'
 
 RSpec.describe JobsController, type: :controller do
 
-  before(:example) do 
+  before(:example) do
 
-      @company_person = FactoryGirl.create(:company_person) 
+      @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in @company_person 
-      @job =  FactoryGirl.create(:job) 
+      sign_in @company_person
+      @job =  FactoryGirl.create(:job)
       @job_2 = FactoryGirl.create(:job)
       @address = FactoryGirl.create(:address)
   end
 
-  describe "permit params to create and update job" do 
-    
+  describe "permit params to create and update job" do
+
     it do
       params = {
-      
+
         job: {
           description: @job.description,
           shift: @job.shift,
@@ -24,12 +24,12 @@ RSpec.describe JobsController, type: :controller do
           title: @job.title,
           company_id: @company_person.company.id,
           company_job_id: @job.company_job_id,
-          company_person_id:  @company_person.id, 
-          address_id: @address.id 
+          company_person_id:  @company_person.id,
+          address_id: @address.id
         }
       }
 
-      should permit(:description, :shift, :title, :company_person_id, 
+      should permit(:description, :shift, :title, :company_person_id,
                     :company_job_id, :fulltime, :company_id, :address_id).
         for(:create, params: params).
         on(:job)
@@ -38,7 +38,7 @@ RSpec.describe JobsController, type: :controller do
 
     it do
       params = {
-          id: @job.id, 
+          id: @job.id,
           job: {
             description: @job.description,
             shift: @job.shift,
@@ -47,19 +47,19 @@ RSpec.describe JobsController, type: :controller do
             company_id: @company_person.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
-            address_id: @address.id 
+            address_id: @address.id
         }
       }
-      should permit(:description, :shift, :title, :address_id, 
+      should permit(:description, :shift, :title, :address_id,
                     :company_job_id, :company_id, :company_person_id, :fulltime).
         for(:update, params: params).on(:job)
     end
   end
 
-   describe "not permit params to create and update job" do 
+   describe "not permit params to create and update job" do
     it do
       params = {
-      
+
           job: {
             description: @job.description,
             shift: @job.shift,
@@ -68,7 +68,7 @@ RSpec.describe JobsController, type: :controller do
             company_id: @company_person.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
-            address_id: @address.id 
+            address_id: @address.id
         }
       }
       should_not permit(:description, :shift, :title, :company_person_id,
@@ -80,7 +80,7 @@ RSpec.describe JobsController, type: :controller do
 
     it do
       params = {
-        id: @job.id, 
+        id: @job.id,
         job: {
           description: @job.description,
           shift: @job.shift,
@@ -94,7 +94,7 @@ RSpec.describe JobsController, type: :controller do
 
         }
       }
-      should_not permit(:description, :shift, :title,:company_person_id, 
+      should_not permit(:description, :shift, :title,:company_person_id,
                         :company_job_id, :company_id, :fulltime,:address_id, :name).
         for(:update, params: params).
         on(:job)
@@ -103,42 +103,42 @@ RSpec.describe JobsController, type: :controller do
 
   describe "Route => index" do
     it { should route(:get, "/jobs")
-      .to(action: :index) }            
+      .to(action: :index) }
   end
 
   describe "Route => index, sad path" do
     it { should_not route(:get, "/jobs/new")
-      .to(action: :index) }            
+      .to(action: :index) }
   end
 
   describe "unauthorized user  " do
-    before(:example) do 
+    before(:example) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:user)
     end
 
-    it do 
+    it do
       expect(subject.current_user).to_not eq(nil)
     end
 
-    it"shoud not post job" do 
+    it"should not post job" do
       request.env["HTTP_REFERER"] = '/'
-      get :new 
+      get :new
       redirect_to '/'
-      should set_flash.to( "Sorry, You are not permitted to post, edit or delete a job!") 
+      should set_flash.to( "Sorry, You are not permitted to post, edit or delete a job!")
     end
   end
 
   describe "authorized user" do
-    it do 
+    it do
       expect(subject.current_user).to_not eq(nil)
     end
 
-    it do 
+    it do
        get :new
        expect(response).to have_http_status(200)
        expect(response).to render_template('new')
-       should_not set_flash 
+       should_not set_flash
     end
 
   end
@@ -176,7 +176,7 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #index' do
     before(:example){ get :index }
 
-    it "is a success" do 
+    it "is a success" do
       expect(response).to have_http_status(:ok)
     end
 
@@ -189,19 +189,13 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #edit authorized user' do
-  
+
     before(:example){ patch :edit, :id => @job.id }
 
-    it "is a success" do 
+    it "is a success" do
       expect(subject.current_user).to_not eq(nil)
       expect(response).to have_http_status(:ok)
     end
-
-    it "company person and job should have same address" do 
-      expect(@job.address).to eql(@company_person.address)
-    end
-
-
 
     it "renders 'edit' template" do
       expect(response).to render_template('edit')
@@ -211,28 +205,28 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #edit unauthorized user' do
-     before do 
+     before do
       request.env["HTTP_REFERER"] = '/jobs'
-      user = FactoryGirl.create(:user) 
+      user = FactoryGirl.create(:user)
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in user
     end
-  
+
     before(:example){ patch :edit, :id => @job.id }
 
-    it "redirect to jobs" do 
+    it "redirect to jobs" do
       expect(subject.current_user).to_not eq(nil)
       redirect_to '/jobs'
       should set_flash
-    end 
+    end
   end
 
 
   describe 'GET #show' do
-   
+
     before(:example) { get :show, :id => @job.id }
 
-    it "is a success" do 
+    it "is a success" do
       expect(response).to have_http_status(:ok)
     end
 
@@ -246,24 +240,24 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'successful POST #create' do
 
-    it "has 2 jobs at the start" do 
+    it "has 2 jobs at the start" do
       expect(Job.count).to eq(2)
     end
 
     it 'redirects to the jobs index and increased by 1 count' do
-      post :create, :job => {:title => "Ruby on Rails", 
+      post :create, :job => {:title => "Ruby on Rails",
                              :fulltime => true,
-                             description: "passionate", 
+                             description: "passionate",
                              company_id: '3',
                              address_id: '2',
                              company_person_id: 3,
-                             :shift => "Evening", 
+                             :shift => "Evening",
                              company_job_id: "WERRR123"}
       expect(response).to redirect_to(:action => 'index')
-      should set_flash 
+      should set_flash
       expect(Job.count).to eq(3)
-      expect(response.status).to  eq(302) 
-    end 
+      expect(response.status).to  eq(302)
+    end
 
     it 'unsuccessful POST #create' do
       post :create, :job => {:title => "  ", :fulltime => true,
@@ -272,71 +266,71 @@ RSpec.describe JobsController, type: :controller do
                              :shift => "Evening", company_job_id: "WERRR123" }
       expect(response).to render_template('new')
       expect(Job.count).to eq(2)
-      expect(response.status).to  eq(200) 
-    end 
+      expect(response.status).to  eq(200)
+    end
   end
 
   describe 'PATCh #update' do
 
-     it "has 2 jobs at the start" do 
+     it "has 2 jobs at the start" do
       expect(Job.count).to eq(2)
     end
 
     it 'should have 2 jobs after update and redirects to the show page' do
-      patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
+      patch :update, id: @job.id , :job => {:title => "Ruby on Rails",
                              :fulltime => true, description: "passionate",
                              company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
-     
+
       expect(response).to redirect_to(:action => 'show')
-      should set_flash 
+      should set_flash
       expect(Job.count).to eq(2)
       expect(response.status).to  eq(302)
 
-     end 
+     end
 
      it 'unsuccessful PATCH' do
-      patch :update, id: @job.id , :job => {:title => " ", 
+      patch :update, id: @job.id , :job => {:title => " ",
                              :fulltime => true, description: "passionate",
                              company_id: '3',
                              :shift => "Evening", company_job_id: "WERRR123"}
-      
+
       expect(response).to render_template('edit')
       expect(Job.count).to eq(2)
       expect(response.status).to  eq(200)
-     end 
+     end
   end
   describe 'DELETE #destroy sad path, for different company_person ' do
-    
-    before(:example){ delete :destroy, :id => @job.id} 
 
-    it "is a success" do 
+    before(:example){ delete :destroy, :id => @job.id}
+
+    it "is a success" do
       expect(response).to have_http_status(302)
     end
 
     it "renders 'delete' template" do
       expect(response).not_to render_template(' ')
-    end 
+    end
 
     it { should set_flash }
 
 
-    before(:example) do 
+    before(:example) do
       sign_out @company_person
-      @company_person = FactoryGirl.create(:company_person) 
+      @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in @company_person.acting_as  
+      sign_in @company_person.acting_as
     end
 
-    before(:example){ delete :destroy, :id => @job_2.id} 
+    before(:example){ delete :destroy, :id => @job_2.id}
 
-    it "is a success" do 
+    it "is a success" do
       expect(response).to have_http_status(302)
     end
 
     it "renders 'delete' template" do
       expect(response).not_to render_template(' ')
-    end 
+    end
 
     it do
      should set_flash.to("Sorry, you can't edit or delete #{@job.company.name} job!")
@@ -346,36 +340,36 @@ RSpec.describe JobsController, type: :controller do
 
 
   describe 'DELETE #destroy sad path, jobseeker' do
-    
-    before(:example){ delete :destroy, :id => @job.id} 
 
-    it "is a success" do 
+    before(:example){ delete :destroy, :id => @job.id}
+
+    it "is a success" do
       expect(response).to have_http_status(302)
     end
 
     it "renders 'delete' template" do
       expect(response).not_to render_template(' ')
-    end 
+    end
 
     it { should set_flash }
 
 
-    before(:example) do 
+    before(:example) do
       sign_out @company_person
-      @job_seeker = FactoryGirl.create(:job_seeker) 
+      @job_seeker = FactoryGirl.create(:job_seeker)
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in @job_seeker.acting_as  
+      sign_in @job_seeker.acting_as
     end
 
-    before(:example){ delete :destroy, :id => @job_2.id} 
+    before(:example){ delete :destroy, :id => @job_2.id}
 
-    it "is a success" do 
+    it "is a success" do
       expect(response).to have_http_status(302)
     end
 
     it "renders 'delete' template" do
       expect(response).not_to render_template(' ')
-    end 
+    end
 
     it do
      should set_flash.to("Sorry, You are not permitted to post, edit or delete a job!" )
@@ -385,36 +379,36 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'successful POST #create' do
 
-    before(:example) do 
+    before(:example) do
       sign_out @company_person
       agency = FactoryGirl.create(:agency)
-      @job_developer = FactoryGirl.create(:job_developer, :agency => agency) 
+      @job_developer = FactoryGirl.create(:job_developer, :agency => agency)
       @request.env["devise.mapping"] = Devise.mappings[:user]
       FactoryGirl.create(:company)
       FactoryGirl.create(:address)
-      sign_in @job_developer.acting_as  
+      sign_in @job_developer.acting_as
     end
 
-    it "has 2 jobs at the start" do 
+    it "has 2 jobs at the start" do
       expect(Job.count).to eq(2)
     end
 
     it 'redirects to the jobs index and increased by 1 count' do
-      
-      post :create, :job => {:title => "Ruby on Rails", 
+
+      post :create, :job => {:title => "Ruby on Rails",
                              :fulltime => true,
-                             description: "passionate", 
+                             description: "passionate",
                              :shift => "Evening",
                              :company_id => 1,
-                             :address_id => 1, 
-                             company_person_id: nil, 
+                             :address_id => 1,
+                             company_person_id: nil,
                              company_job_id: "WERRR123"}
-      
+
       expect(response).to redirect_to(:action => 'index')
-      should set_flash 
+      should set_flash
       expect(Job.count).to eq(3)
-      expect(response.status).to  eq(302) 
-    end 
+      expect(response.status).to  eq(302)
+    end
 
     it 'unsuccessful POST #create' do
       post :create, :job => {:title => "  ", :fulltime => true,
@@ -423,32 +417,32 @@ RSpec.describe JobsController, type: :controller do
                              :shift => "Evening", company_job_id: "WERRR123" }
       expect(response).to render_template('new')
       expect(Job.count).to eq(2)
-      expect(response.status).to  eq(200) 
-    end 
+      expect(response.status).to  eq(200)
+    end
 
-    it "has 2 jobs at the start" do 
+    it "has 2 jobs at the start" do
       expect(Job.count).to eq(2)
     end
 
     it 'should have 2 jobs after update and redirects to the show page' do
-      patch :update, id: @job.id , :job => {:title => "Ruby on Rails", 
+      patch :update, id: @job.id , :job => {:title => "Ruby on Rails",
                              :fulltime => true, description: "passionate",
                              company_id: '3',
                              address_id: '2',
                              company_person_id: nil,
                              :shift => "Evening", company_job_id: "WERRR123"}
-     
+
       expect(response).to redirect_to(:action => 'show')
-      should set_flash 
+      should set_flash
       expect(Job.count).to eq(2)
       expect(response.status).to  eq(302)
 
-    end 
+    end
 
-    describe do 
-      before(:example){ delete :destroy, :id => @job.id} 
+    describe do
+      before(:example){ delete :destroy, :id => @job.id}
 
-      it "is a success" do 
+      it "is a success" do
         expect(response).to have_http_status(302)
       end
     end
@@ -564,6 +558,121 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it { should_not set_flash }
+    end
+  end
+
+  describe 'GET #apply' do
+    let!(:job_seeker){FactoryGirl.create(:job_seeker)}
+    before :each do
+      agency = FactoryGirl.create(:agency)
+    end
+    describe 'unknown job' do
+      before :each do
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, {:job_id => 1000, :user_id => job_seeker.id}
+      end
+      it "is a redirect" do
+        expect(controller.current_user).not_to be_nil
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to list of jobs" do
+        expect(response).to redirect_to(:action => 'index')
+      end
+      it 'check set flash' do
+        should set_flash
+      end
+    end
+    describe 'unknown job seeker' do
+      before :each do
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => @job.id, :user_id => 10000
+      end
+      it "is a redirect" do
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to the job" do
+        expect(response).to redirect_to(:action => 'show', :id => @job.id)
+      end
+      it 'check set flash' do
+        should set_flash
+      end
+    end
+    describe 'successful application' do
+      before :each do
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "is a success" do
+        expect(response).to have_http_status(:ok)
+      end
+      it "render template" do
+        expect(response).to render_template('jobs/apply')
+      end
+      it 'check set flash' do
+        should_not set_flash
+      end
+      it 'job should have one applicant' do
+        @job.reload
+        expect(@job.job_seekers).to include job_seeker
+      end
+    end
+    describe 'error applications' do
+      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+      before :each do
+        expect(Job).to receive(:find_by_id).and_return(job)
+        expect(job).to receive(:save!).and_raise(Exception)
+        expect(job).to receive(:id).exactly(4).times.and_return(1)
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "is a redirect" do
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to the job" do
+        expect(response).to redirect_to(:action => 'show', :id => @job.id)
+      end
+      it 'check set flash' do
+        should set_flash
+        expect(flash[:alert]).to be_present
+        expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
+      end
+    end
+    describe 'user not logged in' do
+      let!(:job) { FactoryGirl.create(:job) } # no lazy load, executed right away, no need to mock
+      before :each do
+        get :apply, :job_id => job.id, :user_id => job_seeker.id
+      end
+      it "is a redirect" do
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to the job" do
+        expect(response).to redirect_to(root_path)
+      end
+      it 'check set flash' do
+        should set_flash
+        expect(flash[:alert]).to be_present
+        expect(flash[:alert]).to eq "You are not authorized to perform this action."
+      end
+    end
+    describe 'logged in as company person' do
+      let!(:job) { FactoryGirl.create(:job) } # no lazy load, executed right away, no need to mock
+      before :each do
+        company = FactoryGirl.create(:company)
+        @ca = FactoryGirl.create(:company_admin, :company => company)
+        allow(controller).to receive(:current_user).and_return(@ca)
+        get :apply, :job_id => job.id, :user_id => job_seeker.id
+      end
+      it "is a redirect" do
+        expect(response).to have_http_status(:redirect)
+      end
+      it "redirected to the job" do
+        expect(response).to redirect_to(root_path)
+      end
+      it 'check set flash' do
+        should set_flash
+        expect(flash[:alert]).to be_present
+        expect(flash[:alert]).to eq "You are not authorized to perform this action."
+      end
     end
   end
 end
