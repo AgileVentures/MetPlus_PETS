@@ -6,7 +6,7 @@ RSpec.describe Job, type: :model do
       expect(FactoryGirl.build(:job)).to be_valid
     end
   end
-  
+
   describe 'Associations' do
     it { is_expected.to belong_to :company }
     it { is_expected.to belong_to :company_person }
@@ -24,7 +24,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_applications) }
     it { is_expected.to have_many(:job_seekers).through(:job_applications) }
   end
-  
+
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :title }
@@ -38,7 +38,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :address_id }
     xit { is_expected.to have_db_column :job_category_id }
   end
-  
+
   describe 'Validations' do
     it { is_expected.to validate_presence_of :title }
     it { is_expected.to validate_length_of(:title).is_at_most(100) }
@@ -50,12 +50,23 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
     xit { is_expected.to validate_presence_of :job_category_id }
-    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])} 
+    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])}
   end
-  
+
   describe 'Class methods' do
   end
-  
+
   describe 'Instance methods' do
+    describe '#apply' do
+      let(:job) {FactoryGirl.create(:job)}
+      let(:job_seeker) {FactoryGirl.create(:job_seeker)}
+      it 'success' do
+        num_applications = job.number_applicants
+        job.apply job_seeker
+        job.reload
+        expect(job.job_seekers).to include job_seeker
+        expect(job.number_applicants).to be(num_applications + 1)
+      end
+    end
   end
 end
