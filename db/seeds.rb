@@ -12,21 +12,9 @@ def create_address(location = nil)
 end
 
 # --------------------------- Seed Production Database --------------------
-
-['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
-  case status
-    when 'Unemployedlooking'
-      @jss1 = JobSeekerStatus.find_or_create_by(:value => status,
-                                                description: "A jobseeker Without any work and looking for a job.")
-    when 'Employedlooking'
-      @jss2 = JobSeekerStatus.find_or_create_by(:value => status,
-                                                description: "A jobseeker with a job and looking for a job.")
-    when 'Employednotlooking'
-      @jss3=JobSeekerStatus.find_or_create_by(:value => status,
-                                              description: "A jobseeker with a job and not looking
-                        for a job for now.")
-  end
-end
+@jss1 = JobSeekerStatus.first
+@jss2 = JobSeekerStatus.second
+@jss3 = JobSeekerStatus.third
 
 # Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
@@ -153,7 +141,7 @@ if Rails.env.development? || Rails.env.staging?
   jobcategories = JobCategory.all.to_a
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
-  addresses = Address.all.to_a 
+  addresses = Address.all.to_a
   #job
   200.times do |n|
     title = FFaker::Job.title
@@ -170,8 +158,8 @@ if Rails.env.development? || Rails.env.staging?
                company_person_id: companypeople[n].id,
                job_category_id: jobcategories[n].id,
                address_id: addresses[n].id)
-     
- 
+
+
   end
 
   # Create jobs for 'known_company'

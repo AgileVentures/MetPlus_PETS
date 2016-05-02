@@ -6,30 +6,12 @@ Feature: manage notifications upon specific system events
 
 Background: seed data
 
-  Given the following agency roles exist:
-  | role  |
-  | AA    |
-  | CM    |
-  | JD    |
-
-  Given the following agencies exist:
-  | name    | website     | phone        | email                  | fax          |
-  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+  Given the default settings are present
 
   Given the following agency people exist:
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
-
-  Given the following jobseekerstatus values exist:
-  | value                | description |
-  | Unemployedlooking    | A jobseeker without any work and looking for a job|
-  | Employedlooking      | A jobseeker with a job and looking for a job      |
-  | Employednotlooking   | A jobseeker with a job and not looking for a job for now.|
-
-  Given the following company roles exist:
-  | role  |
-  | CA    |
 
 @selenium
 Scenario: Job Seeker registers in PETS
@@ -46,7 +28,7 @@ Scenario: Job Seeker registers in PETS
   And I fill in "Password" with "qwerty123"
   And I fill in "Password Confirmation" with "qwerty123"
   And I select "1980" in select list "Year Of Birth"
-  And I select "Unemployedlooking" in select list "Status"
+  And I select "Unemployed Seeking" in select list "Status"
   Then I click the "Create Job seeker" button
   Then "paulajones@gmail.com" should receive an email with subject "Confirmation instructions"
   When "paulajones@gmail.com" opens the email
