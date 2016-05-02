@@ -46,7 +46,7 @@ class CompaniesController < ApplicationController
                        locals: {people: @people,
                                 people_type: @people_type,
                                 company: @company}
-	end
+  end
 
   private
   def company_params
