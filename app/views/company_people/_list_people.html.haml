@@ -1,0 +1,41 @@
+%table.table.table-hover
+  %thead
+    %tr
+      - company_people_fields(people_type).each do |field|
+        - case field
+          - when :full_name
+            %td.strong Name
+          - when :email
+            %td.strong Email
+          - when :phone
+            %td.strong Phone
+          - when :roles
+            %td.strong Role
+          - when :status
+            %td.strong Status
+  %tbody
+    - people.each do |person|
+      %tr
+      - company_people_fields(people_type).each do |field|
+        - case field
+          - when :full_name
+            %td.col-md-4
+              = person.full_name
+          - when :email
+            %td.col-md-2
+              = person.email
+          - when :phone
+            %td.col-md-3
+              = person.phone
+          - when :roles
+            %td.col-md-2
+              = person.company_roles.pluck(:role).join(', ')
+          - when :status
+            %td.col-md-2
+              = person.status
+.row.text-center
+  = will_paginate people, param_name: 'people_page',
+          :params => {:controller => 'companies',
+                      :action => 'list_people',
+                      :id => company.id,
+                      :people_type => people_type}

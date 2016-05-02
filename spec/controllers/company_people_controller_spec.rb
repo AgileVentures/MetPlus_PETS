@@ -1,4 +1,5 @@
 require 'rails_helper'
+include CompanyPeopleViewer
 
 RSpec.describe CompanyPeopleController, type: :controller do
   describe "GET #edit_profile" do
@@ -18,9 +19,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe "GET #home" do
     before(:each) do
       @companyperson = FactoryGirl.create(:company_person)
+      sign_in @companyperson
       get :home, id: @companyperson
     end
 
+    it 'instance vars for view' do
+      expect(assigns(:company)).to eq @companyperson.company
+      expect(assigns(:task_type)).to eq 'mine-open'
+      expect(assigns(:job_type)).to eq 'my-company-all'
+      expect(assigns(:people_type)).to eq 'my-company-all'
+
+    end
     it "renders edit_profile template" do
       expect(response).to render_template 'home'
     end

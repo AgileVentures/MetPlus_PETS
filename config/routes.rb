@@ -51,6 +51,9 @@ Rails.application.routes.draw do
   # Only the agency admin can delete a company
   resources :companies, path: 'admin/companies',
                                 only: [:destroy, :list]
+
+  get 'companies/:id/list_people/:people_type' =>
+              'companies#list_people', as: :list_company_people
   # --------------------------------------------------------------------------
 
   # ----------------------- Company People -----------------------------------
