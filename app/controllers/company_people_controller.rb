@@ -60,9 +60,7 @@ class CompanyPeopleController < ApplicationController
   end
 
   def home
-    @task_type_t1 = 'mine-open'
-    @render_modal = true
-    @tasks_t1 = display_tasks @task_type_t1
+    @task_type = 'mine-open'
 
     @job_type = 'my-company-all'
   end
