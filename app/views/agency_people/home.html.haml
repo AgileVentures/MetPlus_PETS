@@ -5,7 +5,7 @@
     :id => 'edit-profile' do
     %i.fa.fa-pencil-square-o.fa-1
 
-%h3 Tasks that are unassigned or assigned to you
+%h3 Your Open Tasks
 = render partial: 'tasks/tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
 
 - if @agency_person.is_case_manager?(@agency)

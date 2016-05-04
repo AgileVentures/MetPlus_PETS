@@ -16,25 +16,17 @@ Feature: Agency Person
       | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
 
     Given the following agency people exist:
-      | agency  | role  | first_name | last_name | email            | password  |  phone       |
-      | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 | 555-222-3334 |
-      | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 | 555-222-3334 |
+      | agency  | role  | first_name | last_name | email                | password  |  phone       |
+      | MetPlus | AA    | John       | Smith     | aa@metplus.org       | qwerty123 | 555-222-3334 |
+      | MetPlus | CM    | Jane       | Jones     | jane@metplus.org     | qwerty123 | 555-222-3334 |
+      | MetPlus | JD    | Jane       | Developer | jane-dev@metplus.org | qwerty123 | 555-222-3334 |
+      | MetPlus | JD    | Bill       | Developer | bill@metplus.org     | qwerty123 | 555-222-3334 |
 
-    Given the following company roles exist:
-      | role  |
-      | CA    |
-      | CC    |
+    Given the following tasks exist:
+      | task_type          | owner                | deferred_date | status      | targets               |
+      | need_case_manager  | jane@metplus.org     | 2016-03-10    | WIP         | john-worker@gmail.com |
 
-    Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-
-    Given the following company people exist:
-      | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
-
-  Scenario: Agency Person login and edit from home page
+  Scenario: Case Manager login and edit from home page
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'jane@metplus.org' Home page
@@ -47,3 +39,20 @@ Feature: Agency Person
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Samantha"
+
+  Scenario: Case Manager with tasks on home page
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'jane@metplus.org' Home page
+    And I should see "Your Open Tasks"
+    And I should see "Job Seeker has no assigned Case Manager"
+    And I should see "Work in progress( Jones, Jane )"
+    And I should not see "You have no open tasks at this time"
+
+  Scenario: Job Developer without tasks from home page
+    Given I am on the home page
+    And I login as "bill@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'bill@metplus.org' Home page
+    And I should see "Your Open Tasks"
+    And I should not see "Job Seeker has no assigned Job Developer"
+    And I should not see "Job Seekers Without a Case Manager"

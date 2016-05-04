@@ -32,6 +32,19 @@ RSpec.describe AgencyPeopleController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
+    context 'tasks' do
+      before (:each) do
+        @my_open_task = Task.new_js_unassigned_jd_task(charles, agency)
+        @my_open_task.assign jd_person
+      end
+      it 'displays my tasks' do
+        expect(@task_type_t1).to include(@my_open_task)
+      end
+      it 'does not display tasks not mine' do
+
+      end
+    end
+
     context 'job developer scenarios' do
       before(:each) do
         adam.assign_job_developer(jd_person, agency)
