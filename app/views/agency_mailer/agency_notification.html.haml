@@ -3,10 +3,21 @@
 %p
   - if @obj_type == 'Job Seeker'
     A new job seeker has joined PETS:
-    = link_to @obj_name, job_seeker_url(id: @obj_id)
-  - else
+    = link_to @obj.full_name(last_name_first: false),
+                             job_seeker_url(id: @obj.id)
+
+  - elsif @obj_type == 'Company'
     A company has requested registration in PETS:
-    = link_to @obj_name, company_url(id: @obj_id)
+    = link_to @obj.name, company_url(id: @obj.id)
+
+  - elsif @obj_type == 'Job Application'
+    A job seeker has applied to this job:
+    = link_to @obj.job.title, job_url(id: @obj.job.id)
+    , for company: #{@obj.job.company.name}
+    %br
+    %br
+    The job seeker who applied is:
+    = link_to @obj.job_seeker.full_name, job_seeker_url(id: @obj.job_seeker.id)
 %p
   If you have any questions please contact the PETS administrator at:
   = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
