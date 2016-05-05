@@ -72,7 +72,7 @@
                 = js.full_name
               %td
                 - unless js.job_seeker_status.nil?
-                  = js.job_seeker_status.value
+                  = js.status.short_description
               %td
                 - if js.last_sign_in_at.nil?
                   %i never

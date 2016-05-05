@@ -596,7 +596,7 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'check set flash' do
         should set_flash
-        expect(flash[:alert]).to eq "Unable to find the user that wants to apply."
+        expect(flash[:alert]).to eq "Unable to find the user who wants to apply."
       end
     end
     describe 'successful application' do
