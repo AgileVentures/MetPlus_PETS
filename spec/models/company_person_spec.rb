@@ -75,4 +75,18 @@ describe CompanyPerson, type: :model do
       expect(person_other_company.is_company_admin?(company)).to be false
     end
   end
+
+  describe 'scope all_company_people' do
+    let(:company) { FactoryGirl.create(:company) }
+
+    let!(:cp1) { FactoryGirl.create(:company_admin,   company: company) }
+    let!(:cp2) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:cp3) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:cp4) { FactoryGirl.create(:company_contact, company: company) }
+
+    it 'returns all company people' do
+      expect(CompanyPerson.all_company_people(company)).
+                    to include cp1, cp2, cp3, cp4
+    end
+  end
 end

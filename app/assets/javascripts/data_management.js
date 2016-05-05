@@ -41,7 +41,7 @@ var ManageData = {
     // (anchor is contained in 'li' element which will have 'disabled' class)
     if ($(this).parent().hasClass('disabled')) { return false; };
 
-    // 'event.currentTarget' is the div element that delegated the event
+    // 'event.delegateTarget' is the div element that delegated the event
     var div_id = '#' + $(event.delegateTarget).attr('id')
 
     // 'this' is anchor element that recieved the event
