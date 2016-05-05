@@ -80,7 +80,7 @@ class JobsController < ApplicationController
 
 		@job_seeker = JobSeeker.find_by_id params[:user_id]
 		if @job_seeker == nil
-			flash[:alert] = "Unable to find the user that wants to apply."
+			flash[:alert] = "Unable to find the user who wants to apply."
 			redirect_to job_path(@job)
 			return
 		end
