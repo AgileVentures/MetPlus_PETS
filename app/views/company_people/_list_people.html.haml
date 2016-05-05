@@ -35,7 +35,7 @@
               = person.status
 .row.text-center
   = will_paginate people, param_name: 'people_page',
-          :params => {:controller => 'companies',
+          :params => {:controller => 'company_people',
                       :action => 'list_people',
-                      :id => company.id,
+                      :company_id => company.id,
                       :people_type => people_type}

@@ -1,7 +1,4 @@
 class CompaniesController < ApplicationController
-  include CompanyPeopleViewer
-
-  helper_method :company_people_fields
 
   def show
     @company = Company.find(params[:id])
@@ -30,22 +27,6 @@ class CompaniesController < ApplicationController
       @model_errors = @company.errors
       render :edit
     end
-  end
-
-  def list_people
-    raise 'Unsupported request' if not request.xhr?
-
-    @company = Company.find(params[:id])
-
-    @people_type = params[:people_type] || 'my-company-all'
-
-    @people = []
-    @people = display_company_people @people_type
-
-    render :partial => 'company_people/list_people',
-                       locals: {people: @people,
-                                people_type: @people_type,
-                                company: @company}
   end
 
   private
