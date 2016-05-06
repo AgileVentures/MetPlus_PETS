@@ -38,6 +38,6 @@ class Job < ActiveRecord::Base
   end
 
   def last_application_by_job_seeker(job_seeker)
-    job_applications.where(job_seeker: job_seeker).last
+    job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 end

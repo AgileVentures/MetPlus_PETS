@@ -81,10 +81,6 @@ RSpec.describe TaskManager::BusinessLogic do
     let(:job)            { FactoryGirl.create(:job, company: company,
                                               company_person: company_admin) }
 
-    # before :each do
-    #   job.apply job_seeker
-    #   @application = job.last_application_by_job_seeker(job_seeker)
-    # end
     describe '#new_review_job_application_task' do
       subject {TaskTester.new_review_job_application_task job, company}
       it('owner is company admin'){expect(subject.task_owner).to eq([company_admin])}
