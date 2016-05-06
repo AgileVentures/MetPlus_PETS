@@ -32,10 +32,6 @@
             -if !(params[:controller]=='devise/sessions' && params[:action]=='new' || params[:action]== 'create')
               %div{:class => 'button-menu'}
                 = link_to 'Log In', login_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
-          %li{:id => 'register-button'}
-            -if !(params[:controller]=='devise/registrations' && params[:action]=='new')
-              %div{:class => 'button-menu'}
-                = link_to 'New user', new_user_registration_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'registration_button'
         - else
           %li
             %div{:class => 'navbar-text'}
