@@ -20,6 +20,11 @@
   margin-bottom: 10px;
 }
 
+.fixed-panel {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 .input-panel-body {
   padding: 5px;
 }
