@@ -35,6 +35,17 @@ var PusherControl = {
 
       }
     });
+
+    channel.bind('jobseeker_applied', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
+        Notification.info_notification('Job Seeker: ' +
+            "<a href='/job_seekers/" + data.js_id +
+            " target='_blank'>" + data.js_name + "</a>" +
+            " has applied to <a href='/jobs/" + data.job_id +
+            "' target='_blank'>this job</a>");
+      }
+    });
   }
 };
 

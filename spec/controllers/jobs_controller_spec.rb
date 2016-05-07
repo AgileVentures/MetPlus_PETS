@@ -580,6 +580,7 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'check set flash' do
         should set_flash
+        expect(flash[:alert]).to eq "Unable to find the job the user is trying to apply to."
       end
     end
     describe 'unknown job seeker' do
@@ -595,10 +596,12 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'check set flash' do
         should set_flash
+        expect(flash[:alert]).to eq "Unable to find the user who wants to apply."
       end
     end
     describe 'successful application' do
       before :each do
+        allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
@@ -614,6 +617,10 @@ RSpec.describe JobsController, type: :controller do
       it 'job should have one applicant' do
         @job.reload
         expect(@job.job_seekers).to include job_seeker
+      end
+      it 'creates :JS_APPLY event' do
+        application = @job.job_applications[0]
+        expect(Event).to have_received(:create).with(:JS_APPLY, application)
       end
     end
     describe 'error applications' do
