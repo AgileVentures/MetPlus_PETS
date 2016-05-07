@@ -6,7 +6,7 @@
     = image_tag('MetPlus_Logo.png', size: '120x120',
                   style: 'float:left; margin: 0 30px 30px 0;')
     %p{style: 'text-align: justify; margin-right: 10px;'}
-      Michigan Employment & Training Plus, (MET|PLUS) is a 501(c)(3),
+      Michigan Employment & Training Plus, (MET|PLUS) is a 501(c)(3)
       Vocational Training non-profit organization that strives to assist
       Michigan job seekers with invaluable training and job development that
       will put them on a career path to success. Our focus is helping dedicated
@@ -24,7 +24,9 @@
   .col-sm-5.panel.panel-primary.fixed-panel(style='margin-top: 50px;')
     .panel-heading(style='text-align: center;')
       .panel-title  Public Employment Tracking System (PETS)
-    .panel-body.bg-info{style: 'border-radius: 4px;'}
+    -# Using background color causes loss of background radius
+    -# (rounded corners for panel) - reset those to recover
+    .panel-body.bg-info(style='border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;')
       PETS (this website) is a platform used for multiple purposes:
       %ul
         %li Assist job seekers in finding employment
