@@ -1,4 +1,5 @@
 require 'rails_helper'
+include CompanyPeopleViewer
 
 RSpec.describe CompanyPeopleController, type: :controller do
   describe "GET #edit_profile" do
@@ -18,9 +19,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe "GET #home" do
     before(:each) do
       @companyperson = FactoryGirl.create(:company_person)
+      sign_in @companyperson
       get :home, id: @companyperson
     end
 
+    it 'instance vars for view' do
+      expect(assigns(:company)).to eq @companyperson.company
+      expect(assigns(:task_type)).to eq 'mine-open'
+      expect(assigns(:job_type)).to eq 'my-company-all'
+      expect(assigns(:people_type)).to eq 'my-company-all'
+
+    end
     it "renders edit_profile template" do
       expect(response).to render_template 'home'
     end
@@ -90,4 +99,29 @@ RSpec.describe CompanyPeopleController, type: :controller do
        end
      end
   end
+
+  describe 'GET #list_people' do
+    let(:company) { FactoryGirl.create(:company) }
+
+    let!(:cp1) { FactoryGirl.create(:company_admin,   company: company) }
+    let!(:cp2) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:cp3) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:cp4) { FactoryGirl.create(:company_contact, company: company) }
+
+    before(:each) do
+      sign_in cp1
+      xhr :get, :list_people, company_id: company.id,
+                people_type: 'my-company-all'
+    end
+    it 'assigns @people to collection of all company people' do
+      expect(assigns(:people)).to include cp1, cp2, cp3, cp4
+    end
+    it 'renders company_people/list_people template' do
+      expect(response).to render_template('company_people/_list_people')
+    end
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+  end
+
 end

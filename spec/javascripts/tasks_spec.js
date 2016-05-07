@@ -1,9 +1,14 @@
 describe('Tasks', function () {
     var taskManager = TaskManagerHolder('mine-open-tasks', 'mine-open');
+    var paginationHandler = PaginationHandler("/jobs/list/my-company-all", '.pagination-div');
     beforeEach(function () {
         loadFixtures('tasks/task_list.html');
         taskManager.init();
         TaskModal.setup();
+        spyOn(paginationHandler, 'refresh_div');
+        spyOn(paginationHandler, 'spinner').and.returnValue(jasmine.createSpyObj('spinner', ['start', 'stop']));
+        paginationHandler.setup();
+        paginationHandler.init($('.pagination-div'), 0);
     });
     describe("Retrieve tasks using ajax call", function () {
         var request;
@@ -21,7 +26,6 @@ describe('Tasks', function () {
         });
         it('success', function () {
             request.respondWith(TestResponses.tasks.paginate.success);
-            expect(taskManager.init).toHaveBeenCalled();
             expect(Notification.error_notification).not.toHaveBeenCalled();
         });
     });

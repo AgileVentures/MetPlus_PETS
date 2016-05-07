@@ -16,7 +16,7 @@ var Notification = {
         Notification.notify(text, 'error');
     },
     info_notification: function(text) {
-        Notification.notify(text, 'info');
+        Notification.notify(text, 'information');
     },
     alert_notification: function(text) {
         Notification.notify(text, 'alert');

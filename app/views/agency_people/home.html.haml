@@ -1,7 +1,15 @@
-%h3 Your Job Seekers
-- if @your_jobseekers_jd.empty?
-  %i There are no job seekers assigned to you yet.
-- else
+%h2
+  = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
+  = link_to edit_profile_agency_person_path(pets_user),
+    :title => 'Edit profile',
+    :id => 'edit-profile' do
+    %i.fa.fa-pencil-square-o.fa-1
+
+%h3 Tasks that need your attention
+%i Tasks would go here
+
+- if @agency_person.is_case_manager?(@agency)
+  %h3 Your Job Seekers (Case Manager)
   .col-sm-9
     %table.table.table-hover
       %thead
@@ -13,7 +21,79 @@
           %td
             %strong Last Login
       %tbody
-        - @your_jobseekers_jd.each do |js|
+        %tr
+          %td
+            John Doe
+          %td
+            Unemployedlooking
+          %td
+            April 22, 2016
+  .clearfix
+  %h3 Job Seekers Without a Case Manager
+  .col-sm-9
+    %table.table.table-hover
+      %thead
+        %tr
+          %td
+            %strong Name
+          %td
+            %strong Status
+          %td
+            %strong Last Login
+      %tbody
+        %tr
+          %td
+            John Doe
+          %td
+            Unemployedlooking
+          %td
+            April 22, 2016
+  .clearfix
+
+- if @agency_person.is_job_developer?(@agency)
+  %h3 Your Job Seekers (Job Developer)
+  - if @your_jobseekers_jd.empty?
+    %i There are no job seekers assigned to you yet.
+  - else
+    .col-sm-9
+      %table.table.table-hover
+        %thead
+          %tr
+            %td
+              %strong Name
+            %td
+              %strong Status
+            %td
+              %strong Last Login
+        %tbody
+          - @your_jobseekers_jd.each do |js|
+            %tr
+              %td
+                = js.full_name
+              %td
+                - unless js.job_seeker_status.nil?
+                  = js.job_seeker_status.value
+              %td
+                - if js.last_sign_in_at.nil?
+                  %i never
+                - else
+                  = js.last_sign_in_at
+      = will_paginate @your_jobseekers_jd, param_name: 'your_jobseekers_jd_page'
+    .clearfix
+
+  %h3 Job Seekers Without a Job Developer
+  .col-sm-9
+    %table.table.table-hover
+      %thead
+        %tr
+          %td
+            %strong Name
+          %td
+            %strong Status
+          %td
+            %strong Last Login
+      %tbody
+        - @js_without_jd.each do |js|
           %tr
             %td
               = js.full_name
@@ -25,31 +105,4 @@
                 %i never
               - else
                 = js.last_sign_in_at
-    = will_paginate @your_jobseekers_jd, param_name: 'your_jobseekers_jd_page'
-  .clearfix
-
-%h3 Job Seekers Without a Job Developer
-.col-sm-9
-  %table.table.table-hover
-    %thead
-      %tr
-        %td
-          %strong Name
-        %td
-          %strong Status
-        %td
-          %strong Last Login
-    %tbody
-      - @js_without_jd.each do |js|
-        %tr
-          %td
-            = js.full_name
-          %td
-            - unless js.job_seeker_status.nil?
-              = js.job_seeker_status.value
-          %td
-            - if js.last_sign_in_at.nil?
-              %i never
-            - else
-              = js.last_sign_in_at
-  = will_paginate @js_without_jd, param_name: 'js_without_jd_page'
+    = will_paginate @js_without_jd, param_name: 'js_without_jd_page'

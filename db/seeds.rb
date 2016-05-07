@@ -1,21 +1,20 @@
 require 'ffaker'
 
-# --------------------------- Seed Production Database --------------------
+def create_address(location = nil)
+  street = Faker::Address.street_address
+  city = Faker::Address.city
+  state = Faker::Address.state
+  zipcode = Faker::Address.zip_code
 
-['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
-  case status
-    when 'Unemployedlooking'
-      @jss1 = JobSeekerStatus.find_or_create_by(:value => status,
-                                                description: "A jobseeker Without any work and looking for a job.")
-    when 'Employedlooking'
-      @jss2 = JobSeekerStatus.find_or_create_by(:value => status,
-                                                description: "A jobseeker with a job and looking for a job.")
-    when 'Employednotlooking'
-      @jss3=JobSeekerStatus.find_or_create_by(:value => status,
-                                              description: "A jobseeker with a job and not looking
-                        for a job for now.")
-  end
+  return Address.create(street: street, city: city, zipcode: zipcode, state: state) if location.nil?
+  Address.create(street: street, city: city, zipcode: zipcode, state: state,
+                 location: location)
 end
+
+# --------------------------- Seed Production Database --------------------
+@jss1 = JobSeekerStatus.first
+@jss2 = JobSeekerStatus.second
+@jss3 = JobSeekerStatus.third
 
 # Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
@@ -65,6 +64,8 @@ if Rails.env.development? || Rails.env.staging?
       cmp.status = Company::STATUS[:ACT]
     end
     cmp.save!
+
+    create_address(cmp)
   end
 
   # Create a known company person for dev/test purposes
@@ -78,15 +79,6 @@ if Rails.env.development? || Rails.env.staging?
   puts "Companies created: #{Company.count}"
 
   #-------------------------- Company Addresses ---------------------------
-  companies = Company.all.to_a
-  200.times do |n|
-    street = Faker::Address.street_address
-    city = Faker::Address.city
-    state = Faker::Address.state
-    zipcode = Faker::Address.zip_code
-    Address.create(street: street, city: city, zipcode: zipcode, state: state,
-                   location: companies.pop)
-  end
 
   puts "Company Addresses created: #{Address.count}"
 
@@ -142,6 +134,28 @@ if Rails.env.development? || Rails.env.staging?
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
 
+  # Create more company people for 'known company'
+  21.times do |n|
+    title = FFaker::Job.title
+    email = FFaker::Internet.email
+    password = "secret123"
+    first_name = FFaker::Name.first_name
+    last_name = FFaker::Name.last_name
+    confirmed_at = DateTime.now
+    cp = CompanyPerson.new(title: FFaker::Job.title,
+                           email: FFaker::Internet.email,
+                        password: 'qwerty123',
+                      first_name: FFaker::Name.first_name,
+                       last_name: FFaker::Name.last_name,
+                           phone: FFaker::PhoneNumber.short_phone_number,
+                    confirmed_at: DateTime.now,
+                      company_id: known_company.id,
+                      address_id: addresses[n].id,
+                          status: 'Active')
+    cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+    cp.save!
+  end
+
   puts "Company People created: #{CompanyPerson.count}"
 
   #-------------------------- Jobs ----------------------------------------
@@ -149,7 +163,7 @@ if Rails.env.development? || Rails.env.staging?
   jobcategories = JobCategory.all.to_a
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
-  addresses = Address.all.to_a 
+  addresses = Address.all.to_a
   #job
   200.times do |n|
     title = FFaker::Job.title
@@ -166,8 +180,8 @@ if Rails.env.development? || Rails.env.staging?
                company_person_id: companypeople[n].id,
                job_category_id: jobcategories[n].id,
                address_id: addresses[n].id)
-     
- 
+
+
   end
 
   # Create jobs for 'known_company'
@@ -205,36 +219,42 @@ if Rails.env.development? || Rails.env.staging?
                      job_seeker_status: job_seeker_status,
                      resume: resume,
                      phone: phone,
-                     confirmed_at: DateTime.now)
+                     confirmed_at: DateTime.now,
+                     address: create_address)
   end
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
-                         email: 'tom@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1980', resume: 'text',
-                         job_seeker_status: @jss1, confirmed_at: Time.now)
+                        email: 'tom@gmail.com', password: 'qwerty123',
+                year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss1, confirmed_at: Time.now,
+                      address: create_address)
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
-                         email: 'mary@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1970', resume: 'text',
-                         job_seeker_status: @jss2, confirmed_at: Time.now)
+                        email: 'mary@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss2, confirmed_at: Time.now,
+                      address: create_address)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
-                         email: 'frank@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1970', resume: 'text',
-                         job_seeker_status: @jss3, confirmed_at: Time.now)
+                        email: 'frank@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss3, confirmed_at: Time.now,
+                      address: create_address)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
-                         email: 'henry@gmail.com', password: 'qwerty123',
-                         year_of_birth: '1970', resume: 'text',
-                         job_seeker_status: @jss3, confirmed_at: Time.now)
+                        email: 'henry@gmail.com', password: 'qwerty123',
+                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+            job_seeker_status: @jss3, confirmed_at: Time.now,
+                      address: create_address)
 
 
   JobSeeker.create(first_name: 'abc', last_name:'def',
-                   email:'vijaya.karumudi1@gmail.com',
-                   password:'dfg123',password_confirmation:'dfg123',
-                   phone:'345-890-7890',year_of_birth: "1990",
-                   confirmed_at: Time.now,
-                   job_seeker_status: @jss1)
+                               email:'vijaya.karumudi1@gmail.com',
+                               password:'dfg123',password_confirmation:'dfg123',
+                               year_of_birth: "1990",
+                               confirmed_at: Time.now, phone: '111-222-3333',
+                               job_seeker_status: @jss1,
+                               address: create_address)
 
   puts "Job Seekers created: #{JobSeeker.count}"
 

@@ -60,7 +60,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       end
       it 'redirects as specified' do
         expect(response).
-            to render_template(@controller.after_invite_path_for(agency_admin))
+            to render_template("devise/mailer/invitation_instructions")
       end
 
       it 'resets session hash values to nil' do

@@ -78,13 +78,13 @@ RSpec.describe ApplicationHelper, type: :helper do
       let!(:job_developer) {FactoryGirl.create(:job_developer, :agency => agency)}
       let!(:agency_admin) {FactoryGirl.create(:agency_admin, :agency => agency)}
       it 'job developer' do
-        expect(helper.show_person_home_page_path job_developer).to eq(root_path)
+        expect(helper.show_person_home_page_path job_developer).to eq(home_agency_person_path(job_developer))
       end
       it 'case manager' do
-        expect(helper.show_person_home_page_path case_manager).to eq(root_path)
+        expect(helper.show_person_home_page_path case_manager).to eq(home_agency_person_path(case_manager))
       end
       it 'agency admin' do
-        expect(helper.show_person_home_page_path agency_admin).to eq(root_path)
+        expect(helper.show_person_home_page_path agency_admin).to eq(home_agency_person_path(agency_admin))
       end
     end
     describe 'company people as' do

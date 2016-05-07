@@ -2,6 +2,10 @@ class CompanyPeopleController < ApplicationController
   include Tasks
   include UserParameters
 
+  include CompanyPeopleViewer
+
+  helper_method :company_people_fields
+
   def show
     @company_person = CompanyPerson.find(params[:id])
   end
@@ -60,11 +64,26 @@ class CompanyPeopleController < ApplicationController
   end
 
   def home
-    @task_type_t1 = 'mine-open'
-    @render_modal = true
-    @tasks_t1 = display_tasks @task_type_t1
+    @task_type   = 'mine-open'
+    @job_type    = 'my-company-all'
+    @people_type = 'my-company-all'
+    @company     = pets_user.company
+  end
 
-    @job_type = 'my-company-all'
+  def list_people
+    raise 'Unsupported request' if not request.xhr?
+
+    @company = Company.find(params[:company_id])
+
+    @people_type = params[:people_type] || 'my-company-all'
+
+    @people = []
+    @people = display_company_people @people_type
+
+    render :partial => 'company_people/list_people',
+                       locals: {people: @people,
+                                people_type: @people_type,
+                                company: @company}
   end
 
   private

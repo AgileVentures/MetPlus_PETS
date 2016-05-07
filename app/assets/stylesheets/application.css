@@ -248,3 +248,8 @@ body {
     position: relative;
 }
 /* Pagination div css end */
+/* Warning text */
+.warning-text {
+  color: red;
+}
+/* Warning text end */
