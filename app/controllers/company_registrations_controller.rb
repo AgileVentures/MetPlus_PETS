@@ -48,7 +48,6 @@ class CompanyRegistrationsController < ApplicationController
 
       render :confirmation
     else
-      @model_errors = @company.errors
       render :new
     end
   end
@@ -83,7 +82,6 @@ class CompanyRegistrationsController < ApplicationController
       end
       redirect_to agency_admin_home_path
     else
-      @model_errors = @company.errors
       render :edit
     end
   end

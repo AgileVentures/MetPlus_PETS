@@ -121,10 +121,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
         patch :update, id: aa_person, agency_person: person_hash
       end
 
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).
-                to eq ["Agency admin cannot be unset for sole agency admin."]
-      end
       it 'renders edit template' do
         expect(response).to render_template('edit')
       end
