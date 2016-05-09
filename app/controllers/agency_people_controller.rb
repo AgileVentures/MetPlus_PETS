@@ -57,14 +57,6 @@ class AgencyPeopleController < ApplicationController
 
         @agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
       end
-      unless @agency_person.errors[:job_seeker].empty?
-
-        # If the :job_seeker error key was set by the model this means that the agency person
-        # being edited does not have the 'Job Developer' role but has been assigned to be the
-        # primary job developer for one or more job seekers.
-
-        @agency_person.job_seekers = []
-      end
       @model_errors = @agency_person.errors
       render :edit
     end

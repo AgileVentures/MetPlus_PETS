@@ -35,6 +35,26 @@ RSpec.describe AgencyPerson, type: :model do
       expect(person).to_not be_valid
     end
     it { is_expected.to validate_inclusion_of(:status).in_array(AgencyPerson::STATUS.values)}
+    it 'invalidates assignment as job developer if does not have that role' do
+      agency_person = FactoryGirl.build(:case_manager)
+      agency_person.agency_relations << FactoryGirl.create(:agency_relation,
+                            agency_person: agency_person,
+                            job_seeker: FactoryGirl.create(:job_seeker),
+                            agency_role: AgencyRole.create(role: AgencyRole::ROLE[:JD]))
+      agency_person.valid?
+      expect(agency_person.errors[:person]).
+        to include('cannot be assigned as Job Developer unless person has that role.')
+    end
+    it 'invalidates assignment as case manager if does not have that role' do
+      agency_person = FactoryGirl.build(:job_developer)
+      agency_person.agency_relations << FactoryGirl.create(:agency_relation,
+                            agency_person: agency_person,
+                            job_seeker: FactoryGirl.create(:job_seeker),
+                            agency_role: AgencyRole.create(role: AgencyRole::ROLE[:CM]))
+      agency_person.valid?
+      expect(agency_person.errors[:person]).
+        to include('cannot be assigned as Case Manager unless person has that role.')
+    end
   end
 
   describe 'Agency Person' do

@@ -20,7 +20,7 @@ class AgencyPerson < ActiveRecord::Base
 
   validate :job_seeker_assigned_to_job_developer
 
-  # validate :job_seeker_assigned_to_case_manager
+  validate :job_seeker_assigned_to_case_manager
 
   def not_removing_sole_agency_admin
     # This validation is to prevent the removal of a sole agency admin - which
@@ -75,16 +75,22 @@ class AgencyPerson < ActiveRecord::Base
   end
 
   def as_jd_job_seeker_ids
+    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:JD]).id
+
     seekers = []
-    agency_relations.in_role_of(:JD).each do |relation|
+    agency_relations.includes(:job_seeker).
+                  where(agency_role_id: role_id).each do |relation|
       seekers << relation.job_seeker.id
     end
     seekers
   end
 
   def as_cm_job_seeker_ids
+    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:CM]).id
+
     seekers = []
-    agency_relations.in_role_of(:CM).each do |relation|
+    agency_relations.includes(:job_seeker).
+                  where(agency_role_id: role_id).each do |relation|
       seekers << relation.job_seeker.id
     end
     seekers
