@@ -1,17 +1,14 @@
 = form_for agency_person, url: url, method: method do |person_form|
-  -# html: {class: 'form-horizontal'} do |person_form|
 
   -# branch assignment (belongs_to)
   .form-group
     = person_form.label :branch_id, 'Branch', class: 'col-sm-2'
-    -# .col-sm-4
     = person_form.collection_select(:branch_id, Branch.all, :id, :code,
           {include_blank: true, class: 'form-control'})
 
   -# agency_roles assignment  (has_and_belongs_to_many)
   .form-group
     = person_form.label :agency_roles, 'Roles', class: 'col-sm-2'
-    -# .col-sm-10
     = person_form.collection_check_boxes(:agency_role_ids,
                            AgencyRole.all, :id, :role) do |box|
       = box.label(class: 'checkbox-inline disabled normal-label') do
