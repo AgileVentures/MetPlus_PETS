@@ -7,6 +7,7 @@ end
 RSpec.describe UserParameters do
 
   describe '#handle_user_form_parameters' do
+
     let(:no_password)    {{:first_name => 'John', :last_name => 'Smith',
                            :password_confirmation => ''}}
     let(:empty_password) {{:first_name => 'John', :last_name => 'Smith',

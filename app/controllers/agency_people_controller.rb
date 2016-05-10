@@ -14,7 +14,9 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
     @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
-    @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd], :per_page=> 5).your_jobseekers_jd(@agency_person)
+    @js_without_cm = JobSeeker.paginate(:page=> params[:js_without_cm_page], :per_page=>5).js_without_cm
+    @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd_page], :per_page=> 5).your_jobseekers_jd(@agency_person)
+    @your_jobseekers_cm = JobSeeker.paginate(:page=> params[:your_jobseekers_cm_page], :per_page=> 5).your_jobseekers_cm(@agency_person)
 
   end
 

@@ -13,6 +13,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
     let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
 
+
     before(:each) do
       adam.assign_job_developer(jd_person, agency)
       bob.assign_case_manager(cm_person, agency)
@@ -31,15 +32,38 @@ RSpec.describe AgencyPeopleController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it "returns job developer's jobseekers" do
-      expect(assigns(:your_jobseekers_jd)).to include(adam)
-    end
+    context 'job developer scenarios' do
+      before(:each) do
+        adam.assign_job_developer(jd_person, agency)
+        bob.assign_case_manager(cm_person, agency)
+        get :home, id: jd_person
+      end
 
-   it "returns a list of jobseekers without a job developer" do
-     expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
+      it "returns job developer's jobseekers" do
+        expect(assigns(:your_jobseekers_jd)).to include(adam)
+      end
+
+     it "returns a list of jobseekers without a job developer" do
+       expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
+     end
    end
 
+   context 'case manager scenarios' do
+     before(:each) do
+       adam.assign_job_developer(jd_person, agency)
+       bob.assign_case_manager(cm_person, agency)
+       get :home, id: cm_person
+     end
 
+     it "returns case_manager's jobseekers" do
+       expect(assigns(:your_jobseekers_cm)).to include(bob)
+     end
+
+     it "returns a list of jobseekers without a case manager" do
+       expect(assigns(:js_without_cm)).to match_array([adam, charles, dave])
+     end
+
+   end
   end
 
 
