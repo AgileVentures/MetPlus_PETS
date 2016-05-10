@@ -39,5 +39,9 @@ class Job < ActiveRecord::Base
 
   def last_application_by_job_seeker(job_seeker)
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
+  
+  def save!
+   super
+   JobCruncher.create_job(id, title, description)
   end
 end
