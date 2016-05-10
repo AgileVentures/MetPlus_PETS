@@ -17,16 +17,15 @@ class AgenciesController < ApplicationController
       flash[:notice] = "Agency was successfully updated."
       redirect_to agency_admin_home_path
     else
-      @model_errors = @agency.errors
       render :edit
     end
   end
-  
+
   private
-  
+
   def agency_params
     params.require(:agency).permit(:name, :website, :phone, :fax,
                                    :email, :description)
   end
-  
+
 end

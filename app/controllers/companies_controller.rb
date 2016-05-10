@@ -24,7 +24,6 @@ class CompaniesController < ApplicationController
       flash[:notice] = "company was successfully updated."
       redirect_to company_path(@company)
     else
-      @model_errors = @company.errors
       render :edit
     end
   end

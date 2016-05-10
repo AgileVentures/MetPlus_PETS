@@ -27,7 +27,6 @@ class CompanyPeopleController < ApplicationController
       flash[:notice] = "Your profile was updated successfully."
       redirect_to root_path
     else
-      @model_errors = @company_person.errors
       render :edit_profile
     end
   end
@@ -47,7 +46,6 @@ class CompanyPeopleController < ApplicationController
 
         @company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
       end
-      @model_errors = @company_person.errors
       render :edit
     end
   end
