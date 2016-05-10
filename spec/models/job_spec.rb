@@ -60,12 +60,40 @@ RSpec.describe Job, type: :model do
     describe '#apply' do
       let(:job) {FactoryGirl.create(:job)}
       let(:job_seeker) {FactoryGirl.create(:job_seeker)}
-      it 'success' do
+      let(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+
+      it 'success - first application' do
         num_applications = job.number_applicants
         job.apply job_seeker
         job.reload
-        expect(job.job_seekers).to include job_seeker
+        expect(job.job_seekers).to eq [job_seeker]
         expect(job.number_applicants).to be(num_applications + 1)
+      end
+      it 'second application, same job seeker' do
+        num_applications = job.number_applicants
+        job.apply job_seeker
+        first_appl = job.last_application_by_job_seeker(job_seeker)
+        job.apply job_seeker
+        second_appl = job.last_application_by_job_seeker(job_seeker)
+        job.reload
+        expect(job.job_seekers).to eq [job_seeker]
+        expect(job.number_applicants).to be(num_applications + 2)
+        expect(job.last_application_by_job_seeker(job_seeker)).
+                        to eq second_appl
+      end
+      it 'two applications, different job seekers' do
+        num_applications = job.number_applicants
+        job.apply job_seeker
+        first_appl = job.last_application_by_job_seeker(job_seeker)
+        job.apply job_seeker2
+        second_appl = job.last_application_by_job_seeker(job_seeker2)
+        job.reload
+        expect(job.job_seekers).to eq [job_seeker, job_seeker2]
+        expect(job.number_applicants).to be(num_applications + 2)
+        expect(job.last_application_by_job_seeker(job_seeker)).
+                        to eq first_appl
+        expect(job.last_application_by_job_seeker(job_seeker2)).
+                        to eq second_appl
       end
     end
   end
