@@ -8,8 +8,8 @@
     = @jobseeker.last_name
     %br
     %b Status:
-    = JobSeekerStatus.find(@jobseeker.job_seeker_status_id).value
     %br
+    = @jobseeker.status.short_description
     %b Last Login:
     - unless @jobseeker.last_sign_in_at.nil?
       = @jobseeker.last_sign_in_at.strftime('%x')

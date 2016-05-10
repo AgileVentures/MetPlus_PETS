@@ -12,12 +12,12 @@ class Users::SessionsController < Devise::SessionsController
     # Add data to cookies - to be used by pusher controller in client
     if user_signed_in?
       if current_user.respond_to?(:remember_me) && current_user.remember_me
-        cookies[:person_id]   = { value: current_user.actable_id,
+        cookies[:user_id]     = { value: current_user.id,
                                 expires: 1.year.from_now }
         cookies[:person_type] = { value: current_user.actable_type,
                                 expires: 1.year.from_now }
       else
-        cookies[:person_id]   = current_user.actable_id
+        cookies[:user_id]     = current_user.id
         cookies[:person_type] = current_user.actable_type
       end
     end

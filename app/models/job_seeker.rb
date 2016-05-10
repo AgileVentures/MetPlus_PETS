@@ -1,6 +1,5 @@
 class JobSeeker < ActiveRecord::Base
   acts_as :user
-  belongs_to :job_seeker_status
   has_many   :resumes
 
   belongs_to :address
@@ -8,12 +7,18 @@ class JobSeeker < ActiveRecord::Base
   has_many   :agency_relations
   has_many   :agency_people, through: :agency_relations
 
-  validates_presence_of :year_of_birth, :job_seeker_status_id
+  validates_presence_of :year_of_birth
   has_many   :job_applications
   has_many   :jobs, through: :job_applications
 
   validates  :year_of_birth, :year_of_birth => true
 
+  belongs_to :job_seeker_status
+  validates_presence_of :job_seeker_status
+
+  def status
+    job_seeker_status
+  end
 
   def is_job_seeker?
     true
@@ -62,14 +67,14 @@ class JobSeeker < ActiveRecord::Base
   # 2) A job seeker can have only one job developer ('primary' JD)
 
   def assign_agency_person(agency_person, role_key)
-    ap_relation = find_agency_person(role_key)
+    ap_relation = find_agency_person_relation(role_key)
     if ap_relation
       # Is this role assigned already to an agency person?
 
       # If so, is this the same agency person? - then we're done
       return if ap_relation.agency_person == agency_person
 
-      # Otherwise, reassign case manager role for this job seeker
+		# Otherwise, reassign agency person role for this job seeker
       ap_relation.agency_person = agency_person
       ap_relation.save
     else
@@ -81,11 +86,18 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def find_agency_person(role_key)
+    agency_relation = find_agency_person_relation(role_key)
+
+    return (agency_relation ? agency_relation.agency_person : nil)
+  end
+
+  def find_agency_person_relation(role_key)
+    # Returns AgencyRelation instance if an agency person, acting in the
+    # specific role, is found for this job seeker
     if not self.agency_relations.empty?
       ap_relation = self.agency_relations.in_role_of(role_key)[0]
-      return ap_relation.agency_person if ap_relation
+      return ap_relation if ap_relation
     end
     nil # return nil if no agency person found for that role
   end
-
 end

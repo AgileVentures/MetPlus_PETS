@@ -23,6 +23,7 @@ RSpec.describe Company, type: :model do
     it { is_expected.to have_db_column :fax }
     it { is_expected.to have_db_column :email }
     it { is_expected.to have_db_column :website }
+    it { is_expected.to have_db_column :job_email }
   end
 
    describe 'Validation' do
@@ -80,6 +81,12 @@ RSpec.describe Company, type: :model do
      describe 'Name check' do
        subject {FactoryGirl.build(:company)}
        it { is_expected.to validate_presence_of :name }
+     end
+
+     describe 'Job Email' do
+       it {should_not validate_presence_of(:job_email) }
+       it { should_not allow_value('asd', 'john@company').for(:job_email)}
+       it { should allow_value('johndoe@company.com').for(:job_email)}
      end
 
    end

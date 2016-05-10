@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   # Only the agency admin can delete a company
   resources :companies, path: 'admin/companies',
                                 only: [:destroy, :list]
+
   # --------------------------------------------------------------------------
 
   # ----------------------- Company People -----------------------------------
@@ -63,6 +64,10 @@ Rails.application.routes.draw do
      patch 'update_profile', on: :member, as: :update_profile
      get 'home', on: :member, as: :home
   end
+
+  get 'company_people/:company_id/list_people/:people_type' =>
+              'company_people#list_people', as: :list_company_people
+
   # --------------------------------------------------------------------------
 
   # ----------------------- Agency Admin -------------------------------------
@@ -98,6 +103,7 @@ Rails.application.routes.draw do
 
   resources :jobs
   get 'jobs/list/:job_type' => 'jobs#list', as: :list_jobs
+  get 'jobs/:job_id/apply/:user_id' => 'jobs#apply', as: :apply_job
 
   # ----------------------------Job Seekers-----------------------------------
   resources :job_seekers do

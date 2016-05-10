@@ -18,24 +18,32 @@ var PusherControl = {
     channel.bind('js_registered', function(data) {
       // Process event if I am logged in and am an agency_person
       if (Cookies('person_type') === 'AgencyPerson') {
-        noty({text: 'Job Seeker: ' + "<a href='/job_seekers/" + data.id +
-                    "' target='_blank'>" + data.name + "</a>" +
-                    ' has joined PETS.',
-             theme: 'bootstrapTheme',
-            layout: 'bottomRight',
-              type: 'success'});
+        Notification.success_notification('Job Seeker: ' +
+            "<a href='/job_seekers/" + data.id +
+            "' target='_blank'>" + data.name + "</a>" +
+            ' has joined PETS.');
       }
     });
 
     channel.bind('company_registered', function(data) {
       // Process event if I am logged in and am an agency_person
       if (Cookies('person_type') === 'AgencyPerson') {
-        noty({text: 'Company: ' + "<a href='/company_admin/companies/" +
-                    data.id + "' target='_blank'>" + data.name + "</a>" +
-                    ' has registered in PETS.',
-             theme: 'bootstrapTheme',
-            layout: 'bottomRight',
-              type: 'information'});
+        Notification.info_notification('Company: ' +
+            "<a href='/company_admin/companies/" +
+            data.id + "' target='_blank'>" + data.name + "</a>" +
+            ' has registered in PETS.');
+
+      }
+    });
+
+    channel.bind('jobseeker_applied', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
+        Notification.info_notification('Job Seeker: ' +
+            "<a href='/job_seekers/" + data.js_id +
+            " target='_blank'>" + data.js_name + "</a>" +
+            " has applied to <a href='/jobs/" + data.job_id +
+            "' target='_blank'>this job</a>");
       }
     });
   }

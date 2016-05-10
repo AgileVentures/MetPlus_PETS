@@ -3,12 +3,13 @@ Feature: Manage Jobs
 As a company person or job developer
 I want to create, update, and delete jobs
 
-background: adding job to database
-	Given the following jobs records:
-	| title               | company_job_id  | shift  | fulltime | description | company_id |
-	| software developer  | KRK12K  | evening| true     | internship position with pay| 3  |
+Background: adding job to database
 
-
+	Given the following agency roles exist:
+		| role  |
+		| AA    |
+		| CM    |
+		| JD    |
 
 @selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
@@ -66,9 +67,9 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And I logout
 
 
-@selenium 
+@selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
-	Given I am logged in as job developer 
+	Given I am logged in as job developer
 	And the Widgets, Inc. company name with address exist in the record
 	When I click the "Post jobs" link
 	And I wait 1 second

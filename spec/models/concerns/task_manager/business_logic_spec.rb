@@ -73,4 +73,20 @@ RSpec.describe TaskManager::BusinessLogic do
       it('check type'){expect(subject.task_type.to_sym).to eq(:company_registration)}
     end
   end
+
+  describe 'Review job application' do
+    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
+    let(:company)        { FactoryGirl.create(:company) }
+    let(:company_admin)  { FactoryGirl.create(:company_admin, company: company) }
+    let(:job)            { FactoryGirl.create(:job, company: company,
+                                              company_person: company_admin) }
+
+    describe '#new_review_job_application_task' do
+      subject {TaskTester.new_review_job_application_task job, company}
+      it('owner is company admin'){expect(subject.task_owner).to eq([company_admin])}
+      it('target application'){expect(subject.target).to eq(job)}
+      it('check type'){expect(subject.task_type.to_sym).to eq(:job_application)}
+    end
+  end
+
 end

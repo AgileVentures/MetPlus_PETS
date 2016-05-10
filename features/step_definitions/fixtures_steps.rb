@@ -53,6 +53,18 @@ Given(/^the following agency people exist:$/) do |table|
   end
 end
 
+Given(/^the following agency relations exist:$/) do |table|
+  table.hashes.each do |hash|
+    job_seeker    = User.find_by_email(hash['job_seeker']).actable
+    agency_person = User.find_by_email(hash['agency_person']).actable
+    if hash['role'] == 'JD'
+      job_seeker.assign_job_developer agency_person, agency_person.agency
+    else
+      job_seeker.assign_case_manager agency_person, agency_person.agency
+    end
+  end
+end
+
 Given(/^the following company people exist:$/) do |table|
   table.hashes.each do |hash|
     company_name = hash.delete 'company'
@@ -93,11 +105,11 @@ Given(/^the following jobseeker exist:$/) do |table|
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
     seeker_status = hash.delete 'job_seeker_status'
-    job_seeker_status = JobSeekerStatus.find_by_value(seeker_status)
+    job_seeker_status = JobSeekerStatus.find_by_short_description(seeker_status)
     jobseeker = JobSeeker.new(hash)
     jobseeker.job_seeker_status = job_seeker_status
     jobseeker.address = FactoryGirl.create(:address)
-    jobseeker.save
+    jobseeker.save!
   end
 end
 
@@ -151,4 +163,32 @@ Given(/^the following jobs exist:$/) do |table|
 
     job.save!
   end
+end
+
+Given(/^the default settings are present$/) do
+  [
+    { :short_description => 'Unemployed Seeking',
+      :description => 'A jobseeker Without any work and looking for a job.'},
+    { :short_description => 'Employed Looking',
+      :description => 'A jobseeker with a job and looking for a job.'},
+    { :short_description => 'Employed Not Looking',
+      :description => 'A jobseeker with a job and not looking for a job for now.'}
+  ].each do |values|
+    FactoryGirl.create(:job_seeker_status, values)
+  end
+  step "the following agency roles exist:", table(%{
+    | role  |
+    | AA    |
+    | CM    |
+    | JD    |
+  })
+  step "the following agencies exist:", table(%{
+  | name    | website     | phone        | email                  | fax          |
+  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+  })
+  step "the following company roles exist:", table(%{
+    | role  |
+    | CA    |
+    | CC    |
+  })
 end

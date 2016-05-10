@@ -1,7 +1,7 @@
 class Job < ActiveRecord::Base
   belongs_to :company
   belongs_to :company_person
-  belongs_to :address 
+  belongs_to :address
   belongs_to :job_category
   has_many   :job_skills
   has_many   :skills, through: :job_skills
@@ -23,7 +23,7 @@ class Job < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of   :description, maximum: 10000
   validates_presence_of :company_id
-  validates_presence_of :company_person_id, allow_nil: true 
+  validates_presence_of :company_person_id, allow_nil: true
   #validates_presence_of :job_category_id
   scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
   scope :find_by_company, ->(company) {where(:company => company)}
@@ -31,5 +31,13 @@ class Job < ActiveRecord::Base
   def number_applicants
     job_applications.size
   end
-  
+
+  def apply job_seeker
+    job_seekers << job_seeker
+    save!
+  end
+
+  def last_application_by_job_seeker(job_seeker)
+    job_applications.where(job_seeker: job_seeker).order(:created_at).last
+  end
 end

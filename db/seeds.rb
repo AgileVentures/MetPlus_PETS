@@ -12,21 +12,9 @@ def create_address(location = nil)
 end
 
 # --------------------------- Seed Production Database --------------------
-
-['Unemployedlooking', 'Employedlooking', 'Employednotlooking'].each do |status|
-  case status
-    when 'Unemployedlooking'
-      @jss1 = JobSeekerStatus.find_or_create_by(:value => status,
-                                                description: "A jobseeker Without any work and looking for a job.")
-    when 'Employedlooking'
-      @jss2 = JobSeekerStatus.find_or_create_by(:value => status,
-                                                description: "A jobseeker with a job and looking for a job.")
-    when 'Employednotlooking'
-      @jss3=JobSeekerStatus.find_or_create_by(:value => status,
-                                              description: "A jobseeker with a job and not looking
-                        for a job for now.")
-  end
-end
+@jss1 = JobSeekerStatus.first
+@jss2 = JobSeekerStatus.second
+@jss3 = JobSeekerStatus.third
 
 # Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
@@ -146,6 +134,28 @@ if Rails.env.development? || Rails.env.staging?
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
 
+  # Create more company people for 'known company'
+  21.times do |n|
+    title = FFaker::Job.title
+    email = FFaker::Internet.email
+    password = "secret123"
+    first_name = FFaker::Name.first_name
+    last_name = FFaker::Name.last_name
+    confirmed_at = DateTime.now
+    cp = CompanyPerson.new(title: FFaker::Job.title,
+                           email: FFaker::Internet.email,
+                        password: 'qwerty123',
+                      first_name: FFaker::Name.first_name,
+                       last_name: FFaker::Name.last_name,
+                           phone: FFaker::PhoneNumber.short_phone_number,
+                    confirmed_at: DateTime.now,
+                      company_id: known_company.id,
+                      address_id: addresses[n].id,
+                          status: 'Active')
+    cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+    cp.save!
+  end
+
   puts "Company People created: #{CompanyPerson.count}"
 
   #-------------------------- Jobs ----------------------------------------
@@ -153,7 +163,7 @@ if Rails.env.development? || Rails.env.staging?
   jobcategories = JobCategory.all.to_a
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
-  addresses = Address.all.to_a 
+  addresses = Address.all.to_a
   #job
   200.times do |n|
     title = FFaker::Job.title
@@ -170,8 +180,8 @@ if Rails.env.development? || Rails.env.staging?
                company_person_id: companypeople[n].id,
                job_category_id: jobcategories[n].id,
                address_id: addresses[n].id)
-     
- 
+
+
   end
 
   # Create jobs for 'known_company'

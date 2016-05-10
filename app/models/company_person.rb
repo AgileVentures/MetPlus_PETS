@@ -16,6 +16,10 @@ class CompanyPerson < ActiveRecord::Base
 
   validate :not_removing_sole_company_admin, on: :update
 
+  scope :all_company_people, ->(company) {
+    where(company_id: company.id).joins(:user).order('users.last_name')
+  }
+
   def not_removing_sole_company_admin
     # This validation is to prevent the removal of a sole company admin -
     # which would result in no CompanyPerson able to perform the admin role.

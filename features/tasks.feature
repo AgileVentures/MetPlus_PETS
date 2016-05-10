@@ -6,15 +6,7 @@ Feature: Have a task system in the site
 
   Background: seed data added to database and log in as agency admim
 
-    Given the following agency roles exist:
-      | role  |
-      | AA    |
-      | CM    |
-      | JD    |
-
-    Given the following agencies exist:
-      | name    | website     | phone        | email                  | fax          |
-      | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+    Given the default settings are present
 
     Given the following agency people exist:
       | agency  | role      | first_name | last_name | email                | password  |
@@ -22,16 +14,10 @@ Feature: Have a task system in the site
       | MetPlus | CM        | Jane       | Jones     | jane@metplus.org     | qwerty123 |
       | MetPlus | JD        | Jane       | Developer | jane-dev@metplus.org | qwerty123 |
 
-    Given the following jobseekerstatus values exist:
-      | value                | description |
-      | Unemployedlooking    | A jobseeker without any work and looking for a job|
-      | Employedlooking      | A jobseeker with a job and looking for a job      |
-      | Employednotlooking   | A jobseeker with a job and not looking for a job for now.|
-
     Given the following jobseeker exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
-      | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployedlooking |
-      | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employedlooking   |
+      | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
+      | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
     Given the following tasks exist:
       | task_type          | owner                | deferred_date | status      | targets               |
@@ -49,6 +35,7 @@ Feature: Have a task system in the site
     And I login as "jane-dev@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
     Then I go to the tasks page
+    And I wait 1 second
     And I should see "Job Seeker has no assigned Job Developer"
     And I should not see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
     And The task 1 status is "New"
@@ -63,7 +50,7 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see notification "Work on the task started"
     And The task 1 status is "Work in progress"
-    And I wait 1 second
+    And I wait 2 second
     Then I press the done button of the task 1
     And I wait 1 second
     And I should see notification "Work on the task is done"
