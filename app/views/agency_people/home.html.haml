@@ -30,7 +30,7 @@
               = js.full_name
             %td
               - unless js.job_seeker_status.nil?
-                = js.job_seeker_status.value
+                = js.job_seeker_status.short_description
             %td
               - if js.last_sign_in_at.nil?
                 %i never
@@ -60,7 +60,7 @@
                   = js.full_name
                 %td
                   - unless js.job_seeker_status.nil?
-                    = js.job_seeker_status.value
+                    = js.job_seeker_status.short_description
                 %td
                   - if js.last_sign_in_at.nil?
                     %i never
@@ -121,7 +121,7 @@
                 = js.full_name
               %td
                 - unless js.job_seeker_status.nil?
-                  = js.job_seeker_status.value
+                  = js.job_seeker_status.short_description
               %td
                 - if js.last_sign_in_at.nil?
                   %i never
