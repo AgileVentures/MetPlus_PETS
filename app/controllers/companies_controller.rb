@@ -1,4 +1,3 @@
-
 class CompaniesController < ApplicationController
 
   def show

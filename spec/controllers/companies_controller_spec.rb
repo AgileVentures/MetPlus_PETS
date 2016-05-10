@@ -54,9 +54,7 @@ RSpec.describe CompaniesController, type: :controller do
         expect(@company.email).to eq('info@widgets.com')
         expect(@company.fax).to eq('510 555-1212')
       end
-
     end
-
   end
 
 end

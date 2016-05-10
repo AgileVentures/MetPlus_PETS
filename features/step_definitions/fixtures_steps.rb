@@ -53,6 +53,18 @@ Given(/^the following agency people exist:$/) do |table|
   end
 end
 
+Given(/^the following agency relations exist:$/) do |table|
+  table.hashes.each do |hash|
+    job_seeker    = User.find_by_email(hash['job_seeker']).actable
+    agency_person = User.find_by_email(hash['agency_person']).actable
+    if hash['role'] == 'JD'
+      job_seeker.assign_job_developer agency_person, agency_person.agency
+    else
+      job_seeker.assign_case_manager agency_person, agency_person.agency
+    end
+  end
+end
+
 Given(/^the following company people exist:$/) do |table|
   table.hashes.each do |hash|
     company_name = hash.delete 'company'

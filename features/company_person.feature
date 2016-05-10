@@ -119,3 +119,13 @@ Feature: Company Person
     And I should not see "Cook"
     And I should not see "Doctor"
     And I should see "software developer"
+
+  @selenium
+  Scenario: verify people listing in home page
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    And I should be on the Company Person 'ca@widgets.com' Home page
+    And I wait 2 seconds
+    And I should see "Smith, John"
+    And I should see "Smith, Jane"
+    And I should not see "Daniel, Charles"

@@ -134,6 +134,28 @@ if Rails.env.development? || Rails.env.staging?
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
 
+  # Create more company people for 'known company'
+  21.times do |n|
+    title = FFaker::Job.title
+    email = FFaker::Internet.email
+    password = "secret123"
+    first_name = FFaker::Name.first_name
+    last_name = FFaker::Name.last_name
+    confirmed_at = DateTime.now
+    cp = CompanyPerson.new(title: FFaker::Job.title,
+                           email: FFaker::Internet.email,
+                        password: 'qwerty123',
+                      first_name: FFaker::Name.first_name,
+                       last_name: FFaker::Name.last_name,
+                           phone: FFaker::PhoneNumber.short_phone_number,
+                    confirmed_at: DateTime.now,
+                      company_id: known_company.id,
+                      address_id: addresses[n].id,
+                          status: 'Active')
+    cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+    cp.save!
+  end
+
   puts "Company People created: #{CompanyPerson.count}"
 
   #-------------------------- Jobs ----------------------------------------

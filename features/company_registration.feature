@@ -27,7 +27,7 @@ Background: seed data added to database
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
 
   Given I am on the home page
-  And I click the "Become a hiring partner!" link
+  And I click the "request PETS registration" link
   And I wait 1 second
   Then I should see "Company Registration"
   And I fill in the fields:
@@ -149,7 +149,7 @@ Scenario: attempt login after registration is denied
 Scenario: duplicate EIN for Company
   And I click the "Create" button
   Given I am on the home page
-  And I click the "Become a hiring partner!" link
+  And I click the "request PETS registration" link
   And I wait 1 second
   Then I should see "Company Registration"
   And I fill in the fields:

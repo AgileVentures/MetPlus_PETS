@@ -11,18 +11,9 @@ class AgencyPeopleController < ApplicationController
   end
 
   def home
-    # for the homepage
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
-    # for Tasks partial
-    @task_type_t1 = 'mine-open'
-    @render_modal = true
-    @tasks_t1 = display_tasks @task_type_t1
-    # commented out because unsure if this feature is fully working yet
-    # @task_type_t2 = 'mine-closed'
-    # @render_modal = true
-    # @tasks_t2 = display_tasks @task_type_t2
-    # for JobSeeker Relationships
+    @task_type = 'mine-open'
     @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
     @js_without_cm = JobSeeker.paginate(:page=> params[:js_without_cm_page], :per_page=>5).js_without_cm
     @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd_page], :per_page=> 5).your_jobseekers_jd(@agency_person)
