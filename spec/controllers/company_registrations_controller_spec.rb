@@ -147,6 +147,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
 
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         registration_params[:name] = nil
         registration_params[:phone] = '222-333-12345'
@@ -158,6 +160,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       end
       it 'renders new template' do
         expect(response).to render_template('new')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)

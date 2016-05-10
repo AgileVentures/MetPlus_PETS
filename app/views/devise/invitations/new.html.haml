@@ -1,6 +1,5 @@
 %h2= t "devise.invitations.new.header"
 = form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f|
-  -# = devise_error_messages!
   .col-sm-6
     = render 'shared/error_messages', object: resource
     %br

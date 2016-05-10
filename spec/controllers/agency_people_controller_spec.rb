@@ -113,6 +113,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
     end
 
     context 'remove admin role for sole agency admin' do
+      render_views
+
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
         person_hash[:agency_role_ids] = []
@@ -123,6 +125,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       it 'renders edit template' do
         expect(response).to render_template('edit')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)

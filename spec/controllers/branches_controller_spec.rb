@@ -43,6 +43,8 @@ RSpec.describe BranchesController, type: :controller do
     end
 
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
@@ -56,6 +58,9 @@ RSpec.describe BranchesController, type: :controller do
       end
       it 'renders new template' do
         expect(response).to render_template('new')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)
@@ -125,6 +130,8 @@ RSpec.describe BranchesController, type: :controller do
     end
 
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         branch2.assign_attributes(code: branch1.code)
         branch2.address.assign_attributes(zipcode: '123456')
@@ -137,6 +144,9 @@ RSpec.describe BranchesController, type: :controller do
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)

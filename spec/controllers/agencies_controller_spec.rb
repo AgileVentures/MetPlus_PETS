@@ -59,6 +59,8 @@ RSpec.describe AgenciesController, type: :controller do
       end
     end
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         @agency = FactoryGirl.create(:agency)
         @agency.assign_attributes(phone: '', website: 'nodomain')
@@ -70,6 +72,9 @@ RSpec.describe AgenciesController, type: :controller do
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)
