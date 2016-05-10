@@ -13,7 +13,7 @@ Feature: Have a task system in the site
       | MetPlus | AA,CM,JD  | John       | Smith     | 555-111-2222 | aa@metplus.org       | qwerty123 |
       | MetPlus | CM        | Jane       | Jones     | 555-111-2222 | jane@metplus.org     | qwerty123 |
       | MetPlus | JD        | Jane       | Developer | 555-111-2222 | jane-dev@metplus.org | qwerty123 |
-      | MetPlus | JD        | Bill       | Developer | 555-111-2222 | bill@metplus.org | qwerty123 |
+      | MetPlus | JD        | Bill       | Developer | 555-111-2222 | bill@metplus.org     | qwerty123 |
 
     Given the following jobseeker exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |

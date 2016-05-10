@@ -40,35 +40,35 @@
     .clearfix
 
 
-%h3 Job Seekers Without a Case Manager
-- if @js_without_cm.empty?
-  %i All job seekers have a Case Manager at the moment.
--else
-  .col-sm-9
-    %table.table.table-hover
-      %thead
-        %tr
-          %td
-            %strong Name
-          %td
-            %strong Status
-          %td
-            %strong Last Login
-      %tbody
-        - @js_without_cm.each do |js|
+  %h3 Job Seekers Without a Case Manager
+  - if @js_without_cm.empty?
+    %i All job seekers have a Case Manager at the moment.
+  -else
+    .col-sm-9
+      %table.table.table-hover
+        %thead
           %tr
             %td
-              = js.full_name
+              %strong Name
             %td
-              - unless js.job_seeker_status.nil?
-                = js.job_seeker_status.short_description
+              %strong Status
             %td
-              - if js.last_sign_in_at.nil?
-                %i never
-              - else
-                = js.last_sign_in_at
-    = will_paginate @js_without_jd, param_name: 'js_without_cm_page'
-  .clearfix
+              %strong Last Login
+        %tbody
+          - @js_without_cm.each do |js|
+            %tr
+              %td
+                = js.full_name
+              %td
+                - unless js.job_seeker_status.nil?
+                  = js.job_seeker_status.short_description
+              %td
+                - if js.last_sign_in_at.nil?
+                  %i never
+                - else
+                  = js.last_sign_in_at
+      = will_paginate @js_without_jd, param_name: 'js_without_cm_page'
+    .clearfix
 
 - if @agency_person.is_job_developer?(@agency)
   %h3 Your Job Seekers

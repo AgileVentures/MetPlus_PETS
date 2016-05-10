@@ -68,7 +68,6 @@ Scenario: attempt login while registration is pending
 Scenario: company registration approval
   And I click the "Create" button
   Given I am logged in as agency admin
-  And I wait for 3 seconds
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
@@ -86,7 +85,6 @@ Scenario: company registration approval
 Scenario: company registration delete
   And I click the "Create" button
   Given I am logged in as agency admin
-  And I wait for 3 seconds
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
@@ -98,7 +96,6 @@ Scenario: company registration delete
 Scenario: attempt login after registration is deleted
   And I click the "Create" button
   Given I am logged in as agency admin
-  And I wait for 3 seconds
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
@@ -113,7 +110,6 @@ Scenario: attempt login after registration is deleted
 Scenario: company registration denial
   And I click the "Create" button
   Given I am logged in as agency admin
-  And I wait for 3 seconds
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
@@ -130,7 +126,6 @@ Scenario: company registration denial
 Scenario: attempt login after registration is denied
   And I click the "Create" button
   Given I am logged in as agency admin
-  And I wait for 3 seconds
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
@@ -138,7 +133,7 @@ Scenario: attempt login after registration is denied
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  And I wait for 3 seconds
+  And I wait 3 seconds
   Then I should see "Registration Denied"
   And I log out
   And I wait 1 second
