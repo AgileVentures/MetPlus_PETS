@@ -42,6 +42,8 @@ class CruncherService
   end
   
   def self.create_job(jobId, title, description)
+    
+    retry_create = true
     begin
       result = RestClient.post(service_url + '/job/create',
               { 'jobId'   => jobId,
@@ -55,6 +57,10 @@ class CruncherService
     rescue RestClient::Unauthorized   # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
+      if retry_create
+         retry_create = false
+         retry
+      end
       raise
     end
 
