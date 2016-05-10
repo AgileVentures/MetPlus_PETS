@@ -45,16 +45,7 @@ Feature: Have a task system in the site
     And I should not see "Jane"
     And I should see "Samantha"
 
-  Scenario: Case Manager with tasks on home page
-    Given I am on the home page
-    And I login as "jane@metplus.org" with password "qwerty123"
-    And I should be on the Agency Person 'jane@metplus.org' Home page
-    And I should see "Your Open Tasks"
-    And I should see "Job Seeker has no assigned Case Manager"
-    And I should see "Work In Progress"
-    And I should not see "You have no open tasks at this time"
-
-  Scenario: Job Developer without tasks from home page
+  Scenario: Job Developer login without tasks from home page
     Given I am on the home page
     And I login as "bill@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'bill@metplus.org' Home page
@@ -63,3 +54,50 @@ Feature: Have a task system in the site
     And I should see "Your Job Seekers"
     And I should see "There are no job seekers assigned to you yet."
     And I should not see "Job Seekers Without a Case Manager"
+
+  @selenium
+  Scenario: Case Manager with tasks on home page
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'jane@metplus.org' Home page
+    And I wait 2 seconds
+    And I should see "Your Open Tasks"
+    And I should see "Job Seeker has no assigned Case Manager"
+    And I should see "Work in progress( Jones, Jane )"
+    And I should not see "You have no open tasks at this time"
+    Then I press the done button of the task 4
+    And I wait 1 second
+    And I should see notification "Work on the task is done"
+
+  @selenium
+  Scenario: Job Developer with tasks on home page
+    Given I am on the home page
+    And I login as "jane-dev@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'jane-dev@metplus.org' Home page
+    And I should see "Your Open Tasks"
+    And I should see "Job Seeker has no assigned Job Developer"
+    And I should not see "Job Seeker has no assigned Case Manager"
+    And The task 3 status is "Assigned"
+    Then I press the wip button of the task 3
+    And I wait 5 seconds
+    And I should see notification "Work on the task started"
+    And The task 3 status is "Work in progress"
+    Then I press the done button of the task 3
+    And I wait 1 second
+    And I should see notification "Work on the task is done"
+
+
+  @selenium
+  Scenario: Agency admin assign task to other JD and task is removed from his view
+    Given I am on the home page
+    And I login as "aa@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'aa@metplus.org' Home page
+    And I wait 2 seconds
+    And The tasks 1,2,5,6 are present
+    Then I press the assign button of the task 2
+    And I should see "Select the user to assign the task to:"
+    And I select2 "Jones, Jane" from "task_assign_select"
+    Then I press "Assign"
+    And I wait 1 second
+    And I should see notification "Task assigned"
+    And The task 2 is not present
