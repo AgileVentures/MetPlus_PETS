@@ -40,6 +40,26 @@ class CruncherService
       raise
     end
   end
+  
+  def self.create_job(jobId, title, description)
+    begin
+      result = RestClient.post(service_url + '/job/create',
+              { 'jobId'   => jobId,
+                'title'   => title,
+                'description' => description },
+              { 'Accept' => 'application/json',
+                'X-Auth-Token' => auth_token })
+                 
+      return JSON.parse(result)['resultCode'] == 'SUCCESS'
+
+    rescue RestClient::Unauthorized   # most likely expired token
+      # Retry and force refresh of cached auth_token
+      self.auth_token = nil
+      raise
+    end
+
+
+  end
 
   def self.auth_token
     return @@auth_token if @@auth_token
