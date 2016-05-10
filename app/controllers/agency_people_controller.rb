@@ -67,7 +67,6 @@ class AgencyPeopleController < ApplicationController
 
         @agency_person.job_seekers = []
       end
-      @model_errors = @agency_person.errors
       render :edit
     end
   end
@@ -84,7 +83,6 @@ class AgencyPeopleController < ApplicationController
       flash[:notice] = "Your profile was updated successfully."
       redirect_to root_path
     else
-      @model_errors = @agency_person.errors
       render :edit_profile
     end
 

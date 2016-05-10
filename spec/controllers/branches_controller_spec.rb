@@ -17,13 +17,13 @@ RSpec.describe BranchesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-  
+
   describe "POST #create" do
-    
+
     let(:agency)   { FactoryGirl.create(:agency) }
     let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
     let(:branch2)  { FactoryGirl.build(:branch, agency: agency, code: branch1.code) }
-    
+
     context 'valid attributes' do
       before(:each) do
         post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
@@ -41,24 +41,26 @@ RSpec.describe BranchesController, type: :controller do
         expect(response).to redirect_to(agency_admin_home_path)
       end
     end
-    
+
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
         branch_hash = FactoryGirl.attributes_for(:branch, code: branch1.code)
-        branch_hash[:address_attributes] = 
+        branch_hash[:address_attributes] =
                   FactoryGirl.attributes_for(:address, zipcode: '123456')
         post :create, agency_id: agency, branch: branch_hash
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
       end
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).to eq branch2.errors.full_messages
-      end
       it 'renders new template' do
         expect(response).to render_template('new')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)
@@ -67,10 +69,10 @@ RSpec.describe BranchesController, type: :controller do
   end
 
   describe "GET #new" do
-    
+
     let(:agency)        { FactoryGirl.create(:agency) }
     let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
-    
+
     before(:each) do
       sign_in agency_admin
       get :new, agency_id: agency
@@ -85,9 +87,9 @@ RSpec.describe BranchesController, type: :controller do
   end
 
   describe "GET #edit" do
-    
+
     let(:branch)  { FactoryGirl.create(:branch) }
-    
+
     before(:each) do
       get :edit, id: branch
     end
@@ -103,11 +105,11 @@ RSpec.describe BranchesController, type: :controller do
   end
 
   describe "PATCH #update" do
-    
+
     let(:agency)   { FactoryGirl.create(:agency) }
     let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
     let(:branch2)  { FactoryGirl.create(:branch, agency: agency) }
-    
+
     context 'valid attributes' do
       before(:each) do
         patch :update, branch: FactoryGirl.attributes_for(:branch),
@@ -126,35 +128,37 @@ RSpec.describe BranchesController, type: :controller do
         expect(response).to redirect_to(branch_path(branch1))
       end
     end
-    
+
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         branch2.assign_attributes(code: branch1.code)
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
         branch_hash = FactoryGirl.attributes_for(:branch, code: branch1.code)
-        branch_hash[:address_attributes] = 
+        branch_hash[:address_attributes] =
                   FactoryGirl.attributes_for(:address, zipcode: '123456')
-                  
+
         patch :update, branch: branch_hash, id: branch2
-      end
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).to eq branch2.errors.full_messages
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)
       end
     end
-    
+
   end
 
   describe "DELETE #destroy" do
-    
+
     let(:branch)  { FactoryGirl.create(:branch) }
-    
+
     before(:each) do
       delete :destroy, id: branch
     end

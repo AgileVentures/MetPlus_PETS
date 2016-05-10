@@ -59,20 +59,22 @@ RSpec.describe AgenciesController, type: :controller do
       end
     end
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         @agency = FactoryGirl.create(:agency)
         @agency.assign_attributes(phone: '', website: 'nodomain')
         @agency.valid?
         agency_admin = FactoryGirl.create(:agency_admin, agency: @agency)
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency, 
+        patch :update, agency: FactoryGirl.attributes_for(:agency,
                         phone: '', website: 'nodomain'), id: @agency
-      end
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).to eq @agency.errors.full_messages
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)

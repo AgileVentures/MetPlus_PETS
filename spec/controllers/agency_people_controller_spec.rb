@@ -137,6 +137,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
     end
 
     context 'remove admin role for sole agency admin' do
+      render_views
+
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
         person_hash[:agency_role_ids] = []
@@ -145,12 +147,11 @@ RSpec.describe AgencyPeopleController, type: :controller do
         patch :update, id: aa_person, agency_person: person_hash
       end
 
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).
-                to eq ["Agency admin cannot be unset for sole agency admin."]
-      end
       it 'renders edit template' do
         expect(response).to render_template('edit')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)

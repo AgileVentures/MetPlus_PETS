@@ -1,5 +1,9 @@
 = form_for company_person, url: url, method: method,           |
           html: {class: 'form-horizontal'} do |person_form|    |
+  .col-sm-offset-2.col-sm-6
+    = render 'shared/error_messages', object: company_person
+    %br
+  .clearfix
 
   -# company_roles assignment  (has_and_belongs_to_many)
   .form-group
