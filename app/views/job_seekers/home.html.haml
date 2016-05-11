@@ -71,15 +71,19 @@
             - else
               = @jobseeker.job_developer.full_name(last_name_first: false)
 
+.row
+  .col-sm-12
+    %h3 Your Applications
+    %i This feature has not been built yet
 
-%h3 Your Applications
-%i This feature has not been built yet
+.row
+  .col-sm-12
+    %h3 Job Opportunities - Best Match to your résumé
+  .col-sm-12
+    = render partial: 'jobs/compact_list', locals: {jobs: @past_week}
 
-%h3 Job Opportunities - Best Match
-%div
-  = render partial: 'jobs/compact_list', locals: {jobs: @past_week}
-.clearfix
-%h3 Job Opportunities - New
-%div
-  = render partial: 'jobs/compact_list', locals: {jobs: @newjobs}
-.clearfix
+.row
+  .col-sm-12
+    %h3 Job Opportunities - New
+  .col-sm-12
+    = render partial: 'jobs/compact_list', locals: {jobs: @newjobs}
