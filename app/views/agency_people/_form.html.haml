@@ -1,5 +1,9 @@
-= form_for agency_person, url: url, method: method,            |
-          html: {class: 'form-horizontal'} do |person_form|    |
+= form_for agency_person, url: url, method: method,
+          html: {class: 'form-horizontal'} do |person_form|
+  .col-sm-offset-2.col-sm-8
+    = render 'shared/error_messages', object: agency_person
+    %br
+  .clearfix
 
   -# branch assignment (belongs_to)
   .form-group

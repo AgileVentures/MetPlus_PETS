@@ -1,4 +1,8 @@
 = form_tag agency_path(agency), :method => :put, class: 'form-horizontal' do
+  .col-sm-offset-2.col-sm-6
+    = render 'shared/error_messages', object: agency
+    %br
+  .clearfix
   .form-group
     = label :agency, :name, 'Name', class: 'control-label col-sm-2'
     .col-sm-6

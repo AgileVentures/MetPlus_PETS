@@ -95,7 +95,7 @@ Scenario: errors for edit agency information
   And I fill in "Phone" with ""
   And I fill in "Website" with "nodomain"
   And I click "Update Agency" button
-  Then I should see "errors prevented this record from being saved:"
+  Then I should see "The form contains 3 errors"
   And I should see "Phone can't be blank"
   And I should see "Phone incorrect format"
   And I should see "Website is not a valid website address"
@@ -131,7 +131,7 @@ Scenario: error for edit branch
   And I fill in "Branch Code" with "002"
   And I fill in "Zipcode" with "1234567"
   And I click the "Update" button
-  Then I should see "2 errors prevented this record from being saved:"
+  Then I should see "The form contains 2 errors"
   And I should see "Code has already been taken"
   And I should see "Address zipcode should be in form of 12345 or 12345-1234"
 

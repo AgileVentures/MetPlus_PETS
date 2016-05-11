@@ -48,8 +48,6 @@ class PeopleInvitationsController < Devise::InvitationsController
       end
       session[:person_type] = nil
       session[:org_id]      = nil
-    else
-      @model_errors = user.errors
     end
     user
   end

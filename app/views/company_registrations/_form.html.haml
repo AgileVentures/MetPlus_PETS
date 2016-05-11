@@ -1,5 +1,9 @@
 = form_for company, url: url, method: method,                    |
                       html: {class: 'form-horizontal'} do |f|    |
+  .col-sm-offset-2.col-sm-6
+    = render 'shared/error_messages', object: company
+    %br
+  .clearfix
   - @address_form = f
   = render 'companies/subform'
 
