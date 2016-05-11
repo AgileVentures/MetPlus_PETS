@@ -41,8 +41,15 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
   
-  def save!
-   super
-   JobCruncher.create_job(id, title, description)
+  def save
+      return false if not super
+      begin
+        return true if JobCruncher.create_job(id, title, description)
+      rescue 
+        errors.add(:job, 'could not be created -please try again')
+        destroy
+        raise
+      end
+      false
   end
 end
