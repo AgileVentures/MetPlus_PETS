@@ -37,11 +37,5 @@ RSpec.describe JobCruncher, type: :model do
               'description of the job')).to be true
     end
   end
-  
-  
  end
-
-
-
-
-    
+   
