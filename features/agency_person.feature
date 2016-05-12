@@ -1,38 +1,33 @@
-Feature: Agency Person
+Feature: Have a task system in the site
 
-  As a user
-  I want to login
-  So that I can edit my information
+  As an user
+  I want to login to PETS
+  And manage my tasks
 
-  Background:
-    Given the following agency roles exist:
-      | role  |
-      | AA    |
-      | CM    |
-      | JD    |
+  Background: seed data added to database and log in as agency admim
 
-    Given the following agencies exist:
-      | name    | website     | phone        | email                  | fax          |
-      | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+    Given the default settings are present
 
     Given the following agency people exist:
-      | agency  | role  | first_name | last_name | email            | password  |  phone       |
-      | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 | 555-222-3334 |
-      | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 | 555-222-3334 |
+      | agency  | role      | first_name | last_name | phone        | email                | password  |
+      | MetPlus | AA,CM,JD  | John       | Smith     | 555-111-2222 | aa@metplus.org       | qwerty123 |
+      | MetPlus | CM        | Jane       | Jones     | 555-111-2222 | jane@metplus.org     | qwerty123 |
+      | MetPlus | JD        | Jane       | Developer | 555-111-2222 | jane-dev@metplus.org | qwerty123 |
 
-    Given the following company roles exist:
-      | role  |
-      | CA    |
-      | CC    |
+    Given the following jobseeker exist:
+      | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
+      | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
+      | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
-    Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-
-    Given the following company people exist:
-      | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    Given the following tasks exist:
+      | task_type          | owner                | deferred_date | status      | targets               |
+      | need_job_developer | MetPlus,JD           | 2016-03-10    | NEW         | john-seeker@gmail.com |
+      | need_case_manager  | MetPlus,CM           | 2016-03-10    | NEW         | john-seeker@gmail.com |
+      | need_job_developer | jane-dev@metplus.org | 2016-03-10    | ASSIGNED    | john-worker@gmail.com |
+      | need_case_manager  | jane@metplus.org     | 2016-03-10    | ASSIGNED    | john-worker@gmail.com |
+      | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+      | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
+      | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
 
   Scenario: Agency Person login and edit from home page
     Given I am on the home page
@@ -47,3 +42,22 @@ Feature: Agency Person
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Samantha"
+
+    Scenario: Case Manager with tasks on home page
+      Given I am on the home page
+      And I login as "jane@metplus.org" with password "qwerty123"
+      And I should be on the Agency Person 'jane@metplus.org' Home page
+      And I should see "Tasks that need your attention"
+      And I should see "Job Seeker has no assigned Case Manager"
+      And I should see "Work In Progress"
+      And I should not see "You have no open tasks at this time"
+
+    Scenario: Job Developer without tasks from home page
+      Given I am on the home page
+      And I login as "jane-dev@metplus.org" with password "qwerty123"
+      And I should be on the Agency Person 'jane-dev@metplus.org' Home page
+      And I should see "Tasks that need your attention"
+      And I should not see "Job Seeker has no assigned Job Developer"
+      And I should see "Your Job Seekers"
+      And I should see "There are no job seekers assigned to you yet."
+      And I should not see "Job Seekers Without a Case Manager"
