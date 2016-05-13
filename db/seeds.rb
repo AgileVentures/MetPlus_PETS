@@ -229,6 +229,13 @@ if Rails.env.development? || Rails.env.staging?
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
 
+  # Add résumeé to this job seeker
+  file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')
+  resume = Resume.new(file: file,
+                      file_name: 'Admin-Assistant-Resume.pdf',
+                      job_seeker_id: js1.id)
+  resume.save
+
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
                         email: 'mary@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
@@ -316,6 +323,11 @@ if Rails.env.development? || Rails.env.staging?
   agency_cm_and_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
                          job_seeker: js1)
+
+  agency_cm_and_jd.agency_relations <<
+      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+                         job_seeker: js1)
+
   agency_cm_and_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
                          job_seeker: js2)

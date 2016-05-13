@@ -72,17 +72,24 @@
               = @jobseeker.job_developer.full_name(last_name_first: false)
 
 .row
+  %hr
   .col-sm-12
-    %h3 Your Applications
+    %h3 Your Job Applications
     %i This feature has not been built yet
 
 .row
+  %hr
   .col-sm-12
-    %h3 Job Opportunities - Best Match to your résumé
+    %h3 Job Opportunities - Best Match to your Résumé
   .col-sm-12
-    = render partial: 'jobs/compact_list', locals: {jobs: @past_week}
+    - jobs = Job.new_jobs(Time.now - 1.day).   |
+              where("id <= ?", 20).includes(:company).  |
+              paginate(:page => params[:matched_jobs_page], :per_page => 5) |
+    = render partial: 'jobs/matched_job_list',
+                locals: {jobs: jobs}
 
 .row
+  %hr
   .col-sm-12
     %h3 Job Opportunities - New
   .col-sm-12
