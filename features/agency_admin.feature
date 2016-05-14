@@ -61,10 +61,10 @@ Scenario: toggle data tables - job properties page
   And I click the "Job Properties" link
   And I wait 1 second
   And I should see "Software Engineer - RoR"
-  Then I click the "Hide Job Categories" link
+  Then I click the "Hide Job Specialties" link
   And I wait 1 second
   Then "Software Engineer - RoR" should not be visible
-  Then I click the "Show Job Categories" link
+  Then I click the "Show Job Specialties" link
   And I wait 1 second
   Then "Software Engineer - RoR" should be visible
 
@@ -204,62 +204,62 @@ Scenario: non-admin does not see 'admin' in menu
   And I should not see "Admin"
 
 @selenium
-Scenario: add job category
+Scenario: add job specialty
   And I click the "Job Properties" link
-  And I click the "Add Job Category" button
+  And I click the "Add Job Specialty" button
   And I wait 2 seconds
-  And I fill in "Name:" with "Test Job Category"
-  And I fill in "Description:" with "Description of Test Job Category"
-  And I click the "Add Category" button
+  And I fill in "Name:" with "Test Job Specialty"
+  And I fill in "Description:" with "Description of Test Job Specialty"
+  And I click the "Add Specialty" button
   And I wait 2 seconds
-  Then I should see "Test Job Category"
-  And I should see "Description of Test Job Category"
+  Then I should see "Test Job Specialty"
+  And I should see "Description of Test Job Specialty"
 
 @selenium
-Scenario: cancel add job category
+Scenario: cancel add job specialty
   And I click the "Job Properties" link
-  And I click the "Add Job Category" button
+  And I click the "Add Job Specialty" button
   And I wait 2 seconds
-  And I fill in "Name:" with "Test Job Category"
+  And I fill in "Name:" with "Test Job Specialty"
   And I click the "Cancel" button
   And I wait 2 seconds
-  Then I should not see "Test Job Category"
-  And I should not see "Description of Test Job Category"
+  Then I should not see "Test Job Specialty"
+  And I should not see "Description of Test Job Specialty"
 
 @selenium
-Scenario: show job category model validation errors
+Scenario: show job specialty model validation errors
   And I click the "Job Properties" link
-  And I click the "Add Job Category" button
+  And I click the "Add Job Specialty" button
   And I wait 2 seconds
-  And I click the "Add Category" button
+  And I click the "Add Specialty" button
   And I wait 2 seconds
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
-  Then I fill in "Name:" with "Test Job Category"
-  And I fill in "Description:" with "Description of Test Job Category"
-  And I click the "Add Category" button
+  Then I fill in "Name:" with "Test Job Specialty"
+  And I fill in "Description:" with "Description of Test Job Specialty"
+  And I click the "Add Specialty" button
   And I wait 2 seconds
-  Then I should see "Test Job Category"
-  And I should see "Description of Test Job Category"
+  Then I should see "Test Job Specialty"
+  And I should see "Description of Test Job Specialty"
 
 @selenium
-Scenario: update job category
+Scenario: update job specialty
   And I click the "Job Properties" link
   And I click the "Software Engineer - RoR" link
   And I wait 2 seconds
   And I fill in "Description:" with ""
-  And I click the "Update Category" button
+  And I click the "Update Specialty" button
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
-  And I click the "Update Category" button
+  And I click the "Update Specialty" button
   And I wait 2 seconds
-  Then "Update Job Category" should not be visible
+  Then "Update Job Specialty" should not be visible
   And I should see "Backend RoR Development"
 
 @selenium
-Scenario: delete job category
+Scenario: delete job specialty
   And I click the "Job Properties" link
   And I click the link with url "/job_categories/1"
   And I wait 2 seconds
   Then I should not see "Software Engineer - RoR"
-  And I should see "There are no job categories."
+  And I should see "There are no job specialties."
