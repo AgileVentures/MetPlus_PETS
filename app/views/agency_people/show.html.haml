@@ -1,3 +1,69 @@
-%h3 Agency Person
+.row
+  .col-sm-3
+    %h3
+      = @agency_person.full_name(last_name_first: false)
 
-= render @agency_person
+  .col-sm-9
+    %table{:class => 'table table-hover', style: 'margin-top: 20px;'}
+      %tbody
+        %tr
+          %td
+            %strong Agency:
+          %td
+            = @agency_person.agency.name
+        %tr
+          %td
+            %strong Branch:
+          %td
+            = @agency_person.branch ? @agency_person.branch.code : 'Not Assigned'
+        %tr
+          %td
+            %strong Email:
+          %td
+            = mail_to @agency_person.email
+        %tr
+          %td
+            %strong Phone:
+          %td
+            = @agency_person.phone
+        %tr
+          %td
+            %strong Status:
+          %td
+            - if @agency_person.status
+              = @agency_person.status
+              = link_to '(Invite Again)',                                             |
+                    user_invitation_path(user: {email: @agency_person.email,           |
+                                           first_name: @agency_person.first_name,      |
+                                            last_name: @agency_person.last_name} ),    |
+                                                          method: :post if            |
+                    @agency_person.status == AgencyPerson::STATUS[:IVT]                |
+.row
+  .col-sm-2
+    %h4 Agency roles:
+
+    - if @agency_person.agency_roles.empty?
+      There are no roles assigned to this person.
+    - else
+      -# %div{:class => 'row'}
+      -#   %div{:class => 'panel panel-default'}
+      -# %h4 Agency roles:
+      %ul
+        -# %h4 Agency roles:
+      - @agency_person.agency_roles.each do |role|
+        %li
+          = role.role
+
+  .col-sm-5
+    %h4 Job specialties:
+    .col-sm-12.panel.pre-scrollable.panel-default
+      .panel-body.input-panel-body
+      - if @agency_person.job_categories.empty?
+        There are no job categories assigned to
+        = @agency_person.first_name
+      - else
+        -# %ul
+        - @agency_person.job_categories.each do |category|
+          -# %li
+          = category.name
+          %br

@@ -2,15 +2,15 @@
   %table.table.table-hover
     %thead
       %tr
-        %td
+        %th
           %strong Code
-        %td
+        %th
           %strong State
-        %td
+        %th
           %strong City
-        %td
+        %th
           %strong Street
-        %td
+        %th
           %strong Zipcode
     %tbody
       - @branches.each do |branch|
@@ -19,7 +19,7 @@
             = link_to "#{branch.code}", branch_path(branch)
           - if branch.address
             %td
-              = branch.address.state          
+              = branch.address.state
             %td
               = branch.address.city
             %td
