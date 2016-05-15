@@ -77,26 +77,22 @@
     .col-sm-12
       = person_form.label :job_categories, 'Job Specialties:', class: 'control-label'
       .col-sm-12.panel.pre-scrollable.panel-default
-        .table.table-hover
-          -# .panel-body.input-panel-body
+        %table.table.table-hover
           %thead
             %tr
-              %td
+              %th
                 %b Name
-            %tr
-              %td
+              %th
                 %b Description
           %tbody
-            = person_form.collection_check_boxes(:job_category_ids,
-                        JobCategory.order(:name), :id, :name) do |box|
-              = box.label(class: 'checkbox col-sm-12 normal-label') do
-                %tr
-                  %td
-                    = box.check_box
-                    = box.text
-                %tr
-                  %td
-                    some text here ....
+            - JobCategory.order(:name).each do |cat|
+              %tr
+                %td
+                  = check_box_tag 'agency_person[job_category_ids][]', cat.id,
+                              agency_person.job_category_ids.include?(cat.id)
+                  = cat.name
+                %td
+                  = cat.description
 
 
   .form-group
