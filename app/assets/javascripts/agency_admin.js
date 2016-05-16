@@ -281,27 +281,27 @@ var AgencyData = {
   },
 
   setup_branches: function () {
-    $('#toggle_branches').click(AgencyData.toggle);
+    $('#toggle_branches').click(ManageData.toggle);
     $('#branches_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_people: function () {
-    $('#toggle_people').click(AgencyData.toggle);
+    $('#toggle_people').click(ManageData.toggle);
     $('#people_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_companies: function () {
-    $('#toggle_companies').click(AgencyData.toggle);
+    $('#toggle_companies').click(ManageData.toggle);
     $('#companies_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_job_categories: function () {
-    $('#toggle_job_categories').click(AgencyData.toggle);
+    $('#toggle_job_categories').click(ManageData.toggle);
     $('#job_categories_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_skills: function () {
-    $('#toggle_skills').click(AgencyData.toggle);
+    $('#toggle_skills').click(ManageData.toggle);
     $('#skills_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
