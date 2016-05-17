@@ -15,9 +15,16 @@ class JobsController < ApplicationController
 			@jobs = @cp_or_jd.company.jobs.paginate(:page => params[:page],
 				                                        :per_page => 32)
 		else
-			@jobs = Job.paginate(:page => params[:page],
+			@jobs = Job.order(:title).paginate(:page => params[:page],
 				               :per_page => 32).includes(:company)
 		end
+	end
+
+	def search
+		debugger
+		@query = Job.ransack(params[:q])
+		@jobs  = @query.result.includes(:skills).includes(:company).
+														 includes(:address)  if @query
 	end
 
 	def new

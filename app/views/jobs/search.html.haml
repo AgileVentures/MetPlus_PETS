@@ -1,0 +1,18 @@
+-provide(:title, 'Jobs Search')
+
+%h2  Search Jobs
+
+= search_form_for @query, method: :get, url: search_jobs_path,
+																		class: 'form-horizontal' do |f|
+
+	.form-group
+		= f.label :title_cont, class: 'control-label col-sm-3'
+		.col-sm-6
+			= f.search_field :title_cont, class: 'form-control'
+
+	.form-group
+		= f.label :description_cont, class: 'control-label col-sm-3'
+		.col-sm-6
+			= f.search_field :description_cont, class: 'form-control'
+
+	= f.submit
