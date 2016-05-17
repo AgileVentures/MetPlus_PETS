@@ -106,7 +106,6 @@ RSpec.describe Job, type: :model do
       stub_request(:post, CruncherService.service_url + '/job/create').
           to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
           :headers => {'Content-Type'=> 'application/json'})
-      
       expect(JobCruncher.create_job(10,'SoftwareEngineer','description of the job')).to be true
     end
   end
