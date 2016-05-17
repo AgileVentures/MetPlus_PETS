@@ -19,7 +19,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And I fill in the fields:
 		| Title                  | cashier|
 		| Job id                 | KARK12 |
-		| Description            | Atleast two years work experience|
+		| Description            | At least two years work experience|
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
