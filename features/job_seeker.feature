@@ -52,9 +52,9 @@ Scenario: jobseeker homepage with no agency relations
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully."
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
-  And I should see "First Name: vijaya"
-  And I should see "Case Manager: None assigned"
-  And I should see "Job Developer: None assigned"
+  And I should see "Name vijaya karumudi"
+  And I should see "Case Manager None assigned"
+  And I should see "Job Developer None assigned"
 
 Scenario: edit Js Registration
   Given I am on the home page

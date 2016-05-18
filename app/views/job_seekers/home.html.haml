@@ -1,34 +1,75 @@
-%h3 Your Information
-%div{:class => 'container'}
-  %div{class: 'div_align_left'}
-    %b First Name:
-    = @jobseeker.first_name
-    %br
-    %b Last Name:
-    = @jobseeker.last_name
-    %br
-    %b Status:
-    %br
-    = @jobseeker.status.short_description
-    %b Last Login:
-    - unless @jobseeker.last_sign_in_at.nil?
-      = @jobseeker.last_sign_in_at.strftime('%x')
+.row
+  .col-sm-3
+    %h3
+      Your Information
+      = link_to edit_job_seeker_path(@jobseeker),
+        :title => 'Edit information',
+        :id => 'edit-information' do
+        %i.fa.fa-pencil-square-o.fa-1
+    %a(id='toggle_info' href='#info_table' class='text-danger'
+                style='padding-left: 10px;')
+      Hide Your Information
 
-  %div{class: 'div_align_left'}
-    %b Case Manager:
-    - if @jobseeker.case_manager.nil?
-      %i None assigned
-    - else
-      = @jobseeker.case_manager.full_name
-    %br
-    %b Job Developer:
-    - if @jobseeker.job_developer.nil?
-      %i None assigned
-    - else
-      = @jobseeker.job_developer.full_name
-    %br
-  %div{class: 'div_align_left'}
-    = link_to 'Update your information', edit_job_seeker_path, class: 'btn btn-primary'
+  .col-sm-9
+    %table.table.table-hover#info_table
+      %tbody
+        %tr
+          %td
+            %strong Name
+          %td
+            = @jobseeker.full_name(last_name_first: false)
+        %tr
+          %td
+            %strong Email
+          %td
+            = @jobseeker.email
+        %tr
+          %td
+            %strong Phone
+          %td
+            = @jobseeker.phone
+        %tr
+          %td
+            %strong Address
+          %td
+            = single_line_address(@jobseeker.address)
+        %tr
+          %td
+            %strong Status
+          %td
+            = @jobseeker.status.short_description
+        %tr
+          %td
+            %strong Résumé
+          %td
+            - if @jobseeker.resumes.empty?
+              %i No résumé on file
+            - else
+              - resume = @jobseeker.resumes[0]
+              = resume.file_name
+              &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
+        %tr
+          %td
+            %strong Last Login
+          %td
+            - unless @jobseeker.last_sign_in_at.nil?
+              = @jobseeker.last_sign_in_at.strftime('%x')
+        %tr
+          %td
+            %strong Case Manager
+          %td
+            - if @jobseeker.case_manager.nil?
+              %i None assigned
+            - else
+              = @jobseeker.case_manager.full_name(last_name_first: false)
+        %tr
+          %td
+            %strong Job Developer
+          %td
+            - if @jobseeker.job_developer.nil?
+              %i None assigned
+            - else
+              = @jobseeker.job_developer.full_name(last_name_first: false)
 
 
 %h3 Your Applications
