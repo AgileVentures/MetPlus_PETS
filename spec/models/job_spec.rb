@@ -145,10 +145,3 @@ RSpec.describe Job, type: :model do
   end 
 end
 
-
-
-
-
-
-
-

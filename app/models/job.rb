@@ -53,6 +53,5 @@ class Job < ActiveRecord::Base
         errors.add(:job, 'could not be created, please try again')
         raise ActiveRecord::RecordInvalid.new(self)
       end
-      
   end
 end
