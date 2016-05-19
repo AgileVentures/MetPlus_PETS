@@ -1,8 +1,8 @@
 class JobSkill < ActiveRecord::Base
   belongs_to :job
   belongs_to :skill
-  belongs_to :skill_level
-  
+  # belongs_to :skill_level
+
   validates_presence_of :job, :skill
   validates :required, inclusion: { in: [true, false] }
   validates_numericality_of :min_years, only_integer: true,

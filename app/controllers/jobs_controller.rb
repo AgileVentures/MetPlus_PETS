@@ -22,8 +22,9 @@ class JobsController < ApplicationController
 
 	def search
 		@query = Job.ransack(params[:q])
-		@jobs  = @query.result.includes(:skills).includes(:company).
-														 includes(:address)  if @query
+		@jobs  = @query.result(distinct: true).includes(:job_skills).
+									  includes(:skills).includes(:company).
+									 	includes(:address)  if @query
 	end
 
 	def new
