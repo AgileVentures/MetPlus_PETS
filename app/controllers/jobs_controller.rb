@@ -21,7 +21,6 @@ class JobsController < ApplicationController
 	end
 
 	def search
-		debugger
 		@query = Job.ransack(params[:q])
 		@jobs  = @query.result.includes(:skills).includes(:company).
 														 includes(:address)  if @query

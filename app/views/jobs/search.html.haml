@@ -15,4 +15,63 @@
 		.col-sm-6
 			= f.search_field :description_cont, class: 'form-control'
 
-	= f.submit
+	.form-group
+		= f.label :company_name_eq, 'Company Name', class: 'control-label col-sm-3'
+		.col-sm-6
+			= f.collection_select :company_id_eq, Company.order(:name), :id,
+														:name, {include_blank: true},
+														class: 'form-control'
+
+	.form-group
+		= f.label :shift_eq, 'Shift', class: 'control-label col-sm-3'
+		.col-sm-6
+			= f.collection_select :shift_eq, Job::SHIFT_OPTIONS, :to_s,
+														:to_s, {include_blank: true},
+														class: 'form-control'
+
+	.form-group
+		= f.label :fulltime_eq, 'Fulltime', class: 'control-label col-sm-3'
+		.col-sm-6
+			= f.check_box :fulltime, class: 'form-control'
+
+	.form-group
+		= f.label :address_city_eq, 'City', class: 'control-label col-sm-3'
+		.col-sm-6
+			= f.collection_select :address_city_eq,
+					Job.joins(:address).order('addresses.city').pluck(:city).uniq,
+					:to_s, :to_s,
+					{include_blank: true, multiple: true},
+														class: 'form-control'
+
+	-# = f.submit
+	.form-group
+		.col-sm-3.col-sm-offset-3
+			= submit_tag 'Search Jobs', class: 'btn btn-primary'
+
+
+%table.table.table-hover
+	%thead
+		%tr
+			%th
+				= sort_link(@query, :title)
+			%th
+				= sort_link(@query, :description)
+			%th
+				= sort_link(@query, :company)
+			%th
+				= sort_link(@query, :shift)
+			%th
+				= sort_link(@query, :fulltime)
+	%tbody
+		- @jobs.each do |job|
+			%tr
+				%td
+					= job.title
+				%td
+					= job.description
+				%td
+					= job.company.name
+				%td
+					= job.shift
+				%td
+					= job.fulltime
