@@ -6,7 +6,7 @@
 		Search Jobs
 	%a(id='toggle_search_form' href='#job_search_form' class='text-danger'
 	                style='padding-left: 10px;')
-		Hide Search Form
+		Show Search Form
 
 #job_search_form
 	= search_form_for @query, method: :get, url: search_jobs_path,
@@ -84,6 +84,7 @@
 			.col-sm-3.col-sm-offset-3
 				= submit_tag 'Search Jobs', class: 'btn btn-primary'
 
+%hr
 
 %table.table.table-hover
 	%thead
@@ -121,3 +122,4 @@
 				%td
 					-if job.address
 						= job.address.city
+= will_paginate @jobs

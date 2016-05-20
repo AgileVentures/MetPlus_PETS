@@ -24,7 +24,8 @@ class JobsController < ApplicationController
 		@query = Job.ransack(params[:q])
 		@jobs  = @query.result(distinct: true).
 											includes(:company).
-									 		includes(:address)  if @query
+									 		includes(:address).
+											page(params[:page]).per_page(10)
 	end
 
 	def new
