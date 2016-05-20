@@ -20,12 +20,12 @@ class JobsController < ApplicationController
 		end
 	end
 
-	def search
+	def list_search_jobs
 		@query = Job.ransack(params[:q])
 		@jobs  = @query.result(distinct: true).
 											includes(:company).
 									 		includes(:address).
-											page(params[:page]).per_page(10)
+											page(params[:page]).per_page(5)
 	end
 
 	def new
