@@ -1,81 +1,88 @@
 -provide(:title, 'Jobs Search')
 
-%h2  Search Jobs
+.row
+	.col-sm-3
+	%h2
+		Search Jobs
+	%a(id='toggle_search_form' href='#job_search_form' class='text-danger'
+	                style='padding-left: 10px;')
+		Hide Search Form
 
-= search_form_for @query, method: :get, url: search_jobs_path,
-																		class: 'form-horizontal' do |f|
+#job_search_form
+	= search_form_for @query, method: :get, url: search_jobs_path,
+																				class: 'form-horizontal' do |f|
 
-	.form-group
-		= f.label :title_cont, class: 'control-label col-sm-3'
-		.col-sm-6
-			= f.search_field :title_cont, class: 'form-control'
+		.form-group
+			= f.label :title_cont, class: 'control-label col-sm-3'
+			.col-sm-6
+				= f.search_field :title_cont, class: 'form-control'
 
-	.form-group
-		= f.label :description_cont, class: 'control-label col-sm-3'
-		.col-sm-6
-			= f.search_field :description_cont, class: 'form-control'
+		.form-group
+			= f.label :description_cont, class: 'control-label col-sm-3'
+			.col-sm-6
+				= f.search_field :description_cont, class: 'form-control'
 
-	.form-group
-		= f.label :company_name_eq, 'Company', class: 'control-label col-sm-3'
-		.col-sm-6
-			= f.collection_select :company_id_eq, Company.order(:name), :id,
-														:name, {include_blank: true},
-														class: 'form-control'
+		.form-group
+			= f.label :company_name_eq, 'Company', class: 'control-label col-sm-3'
+			.col-sm-6
+				= f.collection_select :company_id_eq, Company.order(:name), :id,
+															:name, {include_blank: true},
+															class: 'form-control'
 
-	.form-group
-		= f.label :shift_eq, 'Shift', class: 'control-label col-sm-3'
-		.col-sm-6
-			= f.collection_select :shift_eq, Job::SHIFT_OPTIONS, :to_s,
-														:to_s, {include_blank: true},
-														class: 'form-control'
+		.form-group
+			= f.label :shift_eq, 'Shift', class: 'control-label col-sm-3'
+			.col-sm-6
+				= f.collection_select :shift_eq, Job::SHIFT_OPTIONS, :to_s,
+															:to_s, {include_blank: true},
+															class: 'form-control'
 
-	-# .form-group
-	-# 	= f.label :fulltime_eq, 'Fulltime', class: 'control-label col-sm-3'
-	-# 	.col-sm-6
-	-# 		= f.check_box :fulltime, class: 'form-control'
+		-# .form-group
+		-# 	= f.label :fulltime_eq, 'Fulltime', class: 'control-label col-sm-3'
+		-# 	.col-sm-6
+		-# 		= f.check_box :fulltime, class: 'form-control'
 
-	-# .form-group
-	-# 	= f.label :address_state_eq, 'State', class: 'control-label col-sm-3'
-	-# 	.col-sm-6
-	-# 		= f.collection_select :address_state_eq,
-	-# 				Job.joins(:address).order('addresses.state').pluck(:state).uniq,
-	-# 				:to_s, :to_s,
-	-# 				{include_blank: true}, {class: 'form-control'}
+		-# .form-group
+		-# 	= f.label :address_state_eq, 'State', class: 'control-label col-sm-3'
+		-# 	.col-sm-6
+		-# 		= f.collection_select :address_state_eq,
+		-# 				Job.joins(:address).order('addresses.state').pluck(:state).uniq,
+		-# 				:to_s, :to_s,
+		-# 				{include_blank: true}, {class: 'form-control'}
 
-	-# .form-group
-	-# 	= f.label :address_city_in, 'City', class: 'control-label col-sm-3'
-	-# 	.col-sm-6
-	-# 		= f.collection_select :address_city_in,
-	-# 				Job.joins(:address).order('addresses.city').pluck(:city).uniq,
-	-# 				:to_s, :to_s,
-	-# 				{include_blank: true}, {multiple: true, class: 'form-control'}
+		-# .form-group
+		-# 	= f.label :address_city_in, 'City', class: 'control-label col-sm-3'
+		-# 	.col-sm-6
+		-# 		= f.collection_select :address_city_in,
+		-# 				Job.joins(:address).order('addresses.city').pluck(:city).uniq,
+		-# 				:to_s, :to_s,
+		-# 				{include_blank: true}, {multiple: true, class: 'form-control'}
 
-	.form-group
-		- states = Job.joins(:address).order('addresses.state').pluck(:state).uniq
-		- states_and_cities = []
-		- states.each do |state|
-			- cities_in_state = Job.joins(:address).                  |
-										where('addresses.state = ?', state).        |
-										order('addresses.city').pluck(:city).uniq   |
-			- states_and_cities << [state, cities_in_state]
+		.form-group
+			- states = Job.joins(:address).order('addresses.state').pluck(:state).uniq
+			- states_and_cities = []
+			- states.each do |state|
+				- cities_in_state = Job.joins(:address).                  |
+											where('addresses.state = ?', state).        |
+											order('addresses.city').pluck(:city).uniq   |
+				- states_and_cities << [state, cities_in_state]
 
-		= f.label :address_city_in, 'City', class: 'control-label col-sm-3'
-		.col-sm-6
-			= f.grouped_collection_select :address_city_in, states_and_cities,
-					:second, :first, :to_s, :to_s, {include_blank: true},
-					{multiple: true, size: 10, class: 'form-control'}
+			= f.label :address_city_in, 'City', class: 'control-label col-sm-3'
+			.col-sm-6
+				= f.grouped_collection_select :address_city_in, states_and_cities,
+						:second, :first, :to_s, :to_s, {include_blank: true},
+						{multiple: true, size: 10, class: 'form-control'}
 
-	.form-group
-		= f.label :skills_id_in, 'Skills', class: 'control-label col-sm-3'
-		.col-sm-6
-			= f.collection_select :skills_id_in, Skill.order(:name),
-											:id, :name, {include_blank: true},
-											{multiple: true, size: 10, class: 'form-control'}
+		.form-group
+			= f.label :skills_id_in, 'Skills', class: 'control-label col-sm-3'
+			.col-sm-6
+				= f.collection_select :skills_id_in, Skill.order(:name),
+												:id, :name, {include_blank: true},
+												{multiple: true, size: 10, class: 'form-control'}
 
-	-# = f.submit
-	.form-group
-		.col-sm-3.col-sm-offset-3
-			= submit_tag 'Search Jobs', class: 'btn btn-primary'
+		-# = f.submit
+		.form-group
+			.col-sm-3.col-sm-offset-3
+				= submit_tag 'Search Jobs', class: 'btn btn-primary'
 
 
 %table.table.table-hover
@@ -95,8 +102,6 @@
 				= sort_link(@query, :address_state)
 			%th
 				= sort_link(@query, :address_city)
-			%th
-				= sort_link(@query, :job_skill)
 	%tbody
 		- @jobs.each do |job|
 			%tr
@@ -116,6 +121,3 @@
 				%td
 					-if job.address
 						= job.address.city
-				%td
-					-unless job.job_skills.empty?
-						= job.job_skills[0].skill.name
