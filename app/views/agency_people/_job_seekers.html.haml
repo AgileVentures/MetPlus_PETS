@@ -1,5 +1,4 @@
-#jobseekers_table
-%h3 This is a partial!
+
 %table.table.table-hover
   %thead
     %tr
@@ -10,7 +9,7 @@
       %td
         %strong Last Login
   %tbody
-    - job_seekers.each do |js|
+    - jobseekers.each do |js|
       %tr
         %td
           = js.full_name
@@ -22,4 +21,5 @@
             %i never
           - else
             = js.last_sign_in_at
-= will_paginate job_seekers, param_name: 'job_seekers_page'
+= will_paginate jobseekers
+.clearfix
