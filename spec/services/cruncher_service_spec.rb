@@ -16,6 +16,16 @@ RSpec.describe CruncherService, type: :request do
         'X-Auth-Token' => JSON.parse(auth_result)['token'],
         'Content-Type' => 'application/pdf' })}
 
+  let(:job_result) {RestClient.post(CruncherService.service_url +
+        '/job/create',
+      { 'jobId'   => 10,
+        'title'   => 'Software Engineer',
+        'description' => 'description of the job' },
+      { 'Accept' => 'application/json',
+        'X-Auth-Token' => JSON.parse(auth_result)['token']
+        })}
+
+
   describe 'Initialization' do
     it 'Establishes service URL' do
       expect(CruncherService.service_url).to eq ENV['CRUNCHER_SERVICE_URL']
@@ -71,7 +81,28 @@ RSpec.describe CruncherService, type: :request do
         expect(JSON.parse(upload_result)['resultCode']).to eq 'SUCCESS'
       end
     end
-  end
+
+    describe 'create job' do
+
+      before(:each) do
+
+        stub_request(:post, CruncherService.service_url + '/authenticate').
+            to_return(body: "{\"token\": \"12345\"}", status: 200,
+            :headers => {'Content-Type'=> 'application/json'})
+        stub_request(:post, CruncherService.service_url + '/job/create').
+            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+            :headers => {'Content-Type'=> 'application/json'})
+      end
+
+      it 'returns HTTP success' do
+        expect(job_result.code).to eq 200
+      end
+
+      it 'returns cruncher success message' do
+        expect(JSON.parse(job_result)['resultCode']).to eq 'SUCCESS'
+      end
+    end
+   end
 
   context 'CruncherService API calls' do
 
@@ -135,6 +166,31 @@ RSpec.describe CruncherService, type: :request do
                       to raise_error(RuntimeError)
       end
     end
+
+    describe 'create job' do
+      it 'returns success (true) for valid create job' do
+
+        stub_request(:post, CruncherService.service_url + '/job/create').
+            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+            :headers => {'Content-Type'=> 'application/json'})
+
+        
+        expect(JobCruncher.create_job(10,'Software Engineer',
+              'description of the job')).to be true
+      end
+
+      it 'raises error for invalid job id' do
+
+        stub_request(:post, CruncherService.service_url + '/job/create').
+            to_raise(RuntimeError)
+
+        
+        expect{ CruncherService.create_job('jobId',
+                                    'title',
+                                    'description') }.
+                      to raise_error(RuntimeError)
+      end
+    end
   end
 
   context 'Cruncher service recover expired token' do
@@ -157,7 +213,8 @@ RSpec.describe CruncherService, type: :request do
       file = fixture_file_upload('files/Janitor-Resume.doc')
       expect(CruncherService.upload_file(file,
                                   'Janitor-Resume.doc',
-                                  'test_id')).to be true
+                                 'test_id')).to be true
+                          
     end
   end
-end
+ end

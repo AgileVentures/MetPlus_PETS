@@ -97,4 +97,51 @@ RSpec.describe Job, type: :model do
       end
     end
   end
+  describe 'Create Job method(AR model and CruncherService)' do
+    
+    before(:each) do
+      stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+    end
+    
+    it 'is succeeds with all parameters' do
+
+      stub_request(:post, CruncherService.service_url + '/job/create').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+       
+      job = FactoryGirl.build(:job)
+
+      expect(job.save).to be true
+      expect(Job.count).to eq 1
+    end
+
+    it 'fails with invalid model parameters' do
+
+      stub_request(:post, CruncherService.service_url + '/job/create').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+       
+      job = FactoryGirl.build(:job, title: nil)
+
+      expect(job.save).to be false
+      expect(job.errors.full_messages).to include("Title can't be blank")
+      expect(Job.count).to eq 0
+   end
+   
+   it 'fails with valid model but cruncher create failure' do 
+
+      stub_request(:post, CruncherService.service_url + '/job/create').
+         to_raise(RuntimeError)
+     
+      job = FactoryGirl.build(:job)
+
+     
+      expect(job.save).to be false
+      expect(Job.count).to eq 0
+      
+   end
+  end 
 end
+

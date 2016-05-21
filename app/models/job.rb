@@ -1,4 +1,5 @@
 class Job < ActiveRecord::Base
+  after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
   belongs_to :address
@@ -39,5 +40,18 @@ class Job < ActiveRecord::Base
 
   def last_application_by_job_seeker(job_seeker)
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
+  end
+  
+  
+  def save_job_to_cruncher()
+      begin
+        if self.id_changed?
+          return true if JobCruncher.create_job(id, title, description)
+        end
+        
+      rescue 
+        errors.add(:job, 'could not be created, please try again')
+        raise ActiveRecord::RecordInvalid.new(self)
+      end
   end
 end
