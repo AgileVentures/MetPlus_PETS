@@ -1,84 +1,99 @@
-= form_for agency_person, url: url, method: method,            |
-          html: {class: 'form-horizontal'} do |person_form|    |
+= form_for agency_person, url: url, method: method do |person_form|
+
+  .col-sm-offset-2.col-sm-8
+    = render 'shared/error_messages', object: agency_person
+    %br
+  .clearfix
 
   -# branch assignment (belongs_to)
   .form-group
-    = person_form.label :branch_id, 'Branch', class: 'control-label col-sm-2'
-    .col-sm-4
-      = person_form.collection_select(:branch_id, Branch.all, :id, :code, |
-            {include_blank: true}, class: 'form-control')     |
+    = person_form.label :branch_id, 'Branch', class: 'col-sm-2'
+    = person_form.collection_select(:branch_id, Branch.all, :id, :code,
+          {include_blank: true, class: 'form-control'})
 
   -# agency_roles assignment  (has_and_belongs_to_many)
   .form-group
-    = person_form.label :agency_roles, 'Roles', class: 'control-label col-sm-2'
-    .col-sm-8
-      = person_form.collection_check_boxes(:agency_role_ids,        |
-                             AgencyRole.all, :id, :role) do |box|   |
-        = box.label(class: 'checkbox disabled col-sm-8 normal-label') do
-          - if disable_agency_admin?(agency_person, box.text)
-            = box.check_box(disabled: true)
-            = box.text
-            = hidden_field(:agency_person, :agency_role_ids,        |
-                    multiple: true, value: "#{box.value}", id: nil)          |
-          - else
-            = box.check_box
-            = box.text
-          -# NOTE: the insertion of the 'hidden_field' input above is to overcome a
-          -# behavior of Rails (and/or HTML): the value of any disabled
-          -# form control is NOT included in the params hash.  The checkbox for
-          -# agency admin role is disabled if this (person) is the sole agency
-          -# admin (so the user cannot remove that role from this person).
-          -# However, the controller does not receive the role id in the list of
-          -# role id's sent in the params, and thus it appears that the
-          -# agency admin checkbox has been unset.  This causes a model
-          -# validation error when no such error has been caused by the user.
-          -# This fix is described here:
-          -# http://stackoverflow.com/questions/4727974/
-          -# how-to-post-submit-an-input-checkbox-that-is-disabled
-          -# (see the second solution listed)
+    = person_form.label :agency_roles, 'Roles', class: 'col-sm-2'
+    = person_form.collection_check_boxes(:agency_role_ids,
+                           AgencyRole.all, :id, :role) do |box|
+      = box.label(class: 'checkbox-inline disabled normal-label') do
+        - if disable_agency_admin?(agency_person, box.text)
+          = box.check_box(disabled: true)
+          = box.text
+          = hidden_field(:agency_person, :agency_role_ids,
+                  multiple: true, value: "#{box.value}", id: nil)
+        - else
+          = box.check_box
+          = box.text
+        -# NOTE: the insertion of the 'hidden_field' input above is to overcome a
+        -# behavior of Rails (and/or HTML): the value of any disabled
+        -# form control is NOT included in the params hash.  The checkbox for
+        -# agency admin role is disabled if this (person) is the sole agency
+        -# admin (so the user cannot remove that role from this person).
+        -# However, the controller does not receive the role id in the list of
+        -# role id's sent in the params, and thus it appears that the
+        -# agency admin checkbox has been unset.  This causes a model
+        -# validation error when no such error has been caused by the user.
+        -# This fix is described here:
+        -# http://stackoverflow.com/questions/4727974/
+        -# how-to-post-submit-an-input-checkbox-that-is-disabled
+        -# (see the second solution listed)
 
-  -# job_categories  (has_and_belongs_to_many)
   .form-group
-    = person_form.label :job_categories, 'Job Categories', class: 'control-label col-sm-2'
-    .col-sm-8.panel.pre-scrollable.panel-default
-      .panel-body.input-panel-body
-        = person_form.collection_check_boxes(:job_category_ids,         |
-                                JobCategory.all, :id, :name) do |box|   |
-          = box.label(class: 'checkbox col-sm-8 normal-label') do
-            = box.check_box
-            = box.text
-
-  -# job_seekers <> Job Developer association (has_many, through: :agency_relations)
-  .form-group
-    = person_form.label :job_seekers,                                 |
-              'Job Seekers for Job Developer role',                   |
-              {class: 'control-label col-sm-2',                       |
-              'data-toggle' => 'tooltip', 'data-placement' => 'top',  |
-              title: "Must have 'Job Developer' role"}                |
-    .col-sm-8.panel.pre-scrollable.panel-default
-      .panel-body.input-panel-body
-        = person_form.collection_check_boxes(:as_jd_job_seeker_ids,     |
-              eligible_job_seekers_for_role(agency_person, :JD),        |
-                                            :id, :full_name) do |box|   |
-          = box.label(class: 'checkbox col-sm-8 normal-label') do
-            = box.check_box
-            = box.text
+    .col-sm-6
+      = person_form.label :job_seekers,
+                'Job Seekers for Job Developer role:',
+                {class: 'control-label',
+                'data-toggle' => 'tooltip', 'data-placement' => 'top',
+                title: "Must have 'Job Developer' role"}
+      .col-sm-12.panel.pre-scrollable.panel-default
+        .panel-body.input-panel-body
+          = person_form.collection_check_boxes(:as_jd_job_seeker_ids,
+                eligible_job_seekers_for_role(agency_person, :JD),
+                                              :id, :full_name) do |box|
+            = box.label(class: 'checkbox col-sm-12 normal-label') do
+              = box.check_box
+              = box.text
 
   -# job_seekers <> Case manager association (has_many, through: :agency_relations)
   .form-group
-    = person_form.label :job_seekers,                                 |
-              'Job Seekers for Case Manager role',                    |
-              {class: 'control-label col-sm-2',                       |
-              'data-toggle' => 'tooltip', 'data-placement' => 'top',  |
-              title: "Must have 'Case Manager' role"}                 |
-    .col-sm-8.panel.pre-scrollable.panel-default
-      .panel-body.input-panel-body
-        = person_form.collection_check_boxes(:as_cm_job_seeker_ids,     |
-              eligible_job_seekers_for_role(agency_person, :CM),        |
-                                           :id, :full_name) do |box|    |
-          = box.label(class: 'checkbox col-sm-8 normal-label') do
-            = box.check_box
-            = box.text
+    .col-sm-6
+      = person_form.label :job_seekers,
+                'Job Seekers for Case Manager role:',
+                {class: 'control-label',
+                'data-toggle' => 'tooltip', 'data-placement' => 'top',
+                title: "Must have 'Case Manager' role"}
+      .col-sm-12.panel.pre-scrollable.panel-default
+        .panel-body.input-panel-body
+          = person_form.collection_check_boxes(:as_cm_job_seeker_ids,
+                eligible_job_seekers_for_role(agency_person, :CM),
+                                             :id, :full_name) do |box|
+            = box.label(class: 'checkbox col-sm-12 normal-label') do
+              = box.check_box
+              = box.text
+
+  -# job_specialities  (has_and_belongs_to_many)
+  .form-group
+    .col-sm-12
+      = person_form.label :job_categories, 'Job Specialties:', class: 'control-label'
+      .col-sm-12.panel.pre-scrollable.panel-default
+        %table.table.table-hover
+          %thead
+            %tr
+              %th
+                %b Name
+              %th
+                %b Description
+          %tbody
+            - JobCategory.order(:name).each do |cat|
+              %tr
+                %td
+                  = check_box_tag 'agency_person[job_category_ids][]', cat.id,
+                              agency_person.job_category_ids.include?(cat.id)
+                  = cat.name
+                %td
+                  = cat.description
+
 
   .form-group
     .col-sm-2.col-sm-offset-2

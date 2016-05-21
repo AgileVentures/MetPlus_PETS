@@ -147,17 +147,22 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
 
     context 'invalid attributes' do
+      render_views
+
       before(:each) do
         registration_params[:name] = nil
         registration_params[:phone] = '222-333-12345'
         post :create, company: registration_params
       end
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).
+      it 'assigns model errors' do
+        expect(assigns(:company).errors.full_messages).
             to match_array ["Name can't be blank", "Phone incorrect format"]
       end
       it 'renders new template' do
         expect(response).to render_template('new')
+      end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)

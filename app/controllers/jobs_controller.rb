@@ -80,12 +80,13 @@ class JobsController < ApplicationController
 
 		@job_seeker = JobSeeker.find_by_id params[:user_id]
 		if @job_seeker == nil
-			flash[:alert] = "Unable to find the user that want to apply."
+			flash[:alert] = "Unable to find the user who wants to apply."
 			redirect_to job_path(@job)
 			return
 		end
 		begin
 			@job.apply @job_seeker
+			Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
 		rescue Exception => e
 			flash[:alert] = "Unable to apply at this moment, please try again."
 			redirect_to job_path(@job)

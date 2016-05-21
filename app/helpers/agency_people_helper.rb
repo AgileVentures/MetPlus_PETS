@@ -20,24 +20,29 @@ module AgencyPeopleHelper
     # NOTE: this logic assumes *one* agency in the system - will need
     # refactoring if we extend to multiple agencies per instance
 
-    seekers = job_seekers_without_agency_person_in_role(role_key)
     role_id = AgencyRole.find_by_role(AgencyRole::ROLE[role_key]).id
 
-    agency_person.agency_relations.each do |relation|
-      # Seekers already assigned to this person in this role
-      seekers << relation.job_seeker if relation.agency_role_id == role_id
-    end
+    seekers_with_role = JobSeeker.joins(:agency_relations).
+                where("agency_relations.agency_role_id = ?", role_id)
+
+    seekers = JobSeeker.where.not(id: seekers_with_role)
+
+    seekers += seekers_with_role.joins(:agency_relations).
+                where("agency_relations.agency_person_id = ?", agency_person.id)
+
     seekers.sort {|js1, js2| js1.last_name <=> js2.last_name }
   end
 
+  def job_seekers_assigned_for_role(agency_person, role_key)
+    # Inputs:
+    #  agency_person: AgencyPerson instance
+    #  role_key:      key for AgencyPersonRole::ROLE hash (e.g. :JD, :CM, etc.)
 
-  def job_seekers_without_agency_person_in_role(role_key)
-    seekers = []
-    JobSeeker.all.each do |job_seeker|
-      # Seekers not assigned to any person in this role
-      seekers << job_seeker if job_seeker.agency_relations.in_role_of(role_key).empty?
-    end
-    seekers
+    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[role_key]).id
+
+    JobSeeker.joins(:agency_relations).
+            where(agency_relations: {agency_role_id: role_id,
+                                     agency_person_id: agency_person.id} )
   end
 
 end

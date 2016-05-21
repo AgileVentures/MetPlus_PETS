@@ -7,4 +7,7 @@ if defined? Bullet
   Bullet.add_whitelist type: :unused_eager_loading,
                  class_name: 'Company',
                 association: :addresses
+  Bullet.add_whitelist type: :unused_eager_loading,
+                 class_name: 'AgencyPerson',
+                association: :user
 end

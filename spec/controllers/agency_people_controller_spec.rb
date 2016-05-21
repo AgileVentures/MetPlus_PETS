@@ -13,6 +13,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
     let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
 
+
     before(:each) do
       adam.assign_job_developer(jd_person, agency)
       bob.assign_case_manager(cm_person, agency)
@@ -31,15 +32,38 @@ RSpec.describe AgencyPeopleController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it "returns job developer's jobseekers" do
-      expect(assigns(:your_jobseekers_jd)).to include(adam)
-    end
+    context 'job developer scenarios' do
+      before(:each) do
+        adam.assign_job_developer(jd_person, agency)
+        bob.assign_case_manager(cm_person, agency)
+        get :home, id: jd_person
+      end
 
-   it "returns a list of jobseekers without a job developer" do
-     expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
+      it "returns job developer's jobseekers" do
+        expect(assigns(:your_jobseekers_jd)).to include(adam)
+      end
+
+     it "returns a list of jobseekers without a job developer" do
+       expect(assigns(:js_without_jd)).to match_array([bob, charles, dave])
+     end
    end
 
+   context 'case manager scenarios' do
+     before(:each) do
+       adam.assign_job_developer(jd_person, agency)
+       bob.assign_case_manager(cm_person, agency)
+       get :home, id: cm_person
+     end
 
+     it "returns case_manager's jobseekers" do
+       expect(assigns(:your_jobseekers_cm)).to include(bob)
+     end
+
+     it "returns a list of jobseekers without a case manager" do
+       expect(assigns(:js_without_cm)).to match_array([adam, charles, dave])
+     end
+
+   end
   end
 
 
@@ -76,18 +100,15 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe "PATCH #update" do
-    let(:aa_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
+    let(:aa_role)  { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
     let!(:jd_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD]) }
     let!(:cm_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM]) }
 
-    let(:agency)  { FactoryGirl.create(:agency) }
+    let(:agency)     { FactoryGirl.create(:agency) }
 
-    let(:aa_person) do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << aa_role
-      $person.save
-      $person
-    end
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+
+    let(:aa_person)  { FactoryGirl.create(:agency_admin, agency: agency) }
 
     context 'valid attributes' do
       before(:each) do
@@ -113,6 +134,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
     end
 
     context 'remove admin role for sole agency admin' do
+      render_views
+
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
         person_hash[:agency_role_ids] = []
@@ -121,10 +144,31 @@ RSpec.describe AgencyPeopleController, type: :controller do
         patch :update, id: aa_person, agency_person: person_hash
       end
 
-      it 'assigns @model_errors for error display in layout' do
-        expect(assigns(:model_errors).full_messages).
-                to eq ["Agency admin cannot be unset for sole agency admin."]
+      it 'renders edit template' do
+        expect(response).to render_template('edit')
       end
+      it 'renders partial for errors' do
+        expect(response).to render_template(partial: 'shared/_error_messages')
+      end
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'assign as job developer fails when not in that role' do
+      before(:each) do
+        person_hash = aa_person.attributes.merge(aa_person.user.attributes)
+        person_hash[:agency_role_ids] = []
+        person_hash[:as_jd_job_seeker_ids] = [job_seeker.id]
+        person_hash[:as_cm_job_seeker_ids] = []
+        patch :update, id: aa_person, agency_person: person_hash
+      end
+
+      it 'sets model error message' do
+        expect(assigns(:agency_person).errors[:person]).
+          to include('cannot be assigned as Job Developer unless person has that role.')
+      end
+
       it 'renders edit template' do
         expect(response).to render_template('edit')
       end
@@ -132,6 +176,29 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(response).to have_http_status(:success)
       end
     end
+
+    context 'assign as case manager fails when not in that role' do
+      before(:each) do
+        person_hash = aa_person.attributes.merge(aa_person.user.attributes)
+        person_hash[:agency_role_ids] = []
+        person_hash[:as_jd_job_seeker_ids] = []
+        person_hash[:as_cm_job_seeker_ids] = [job_seeker.id]
+        patch :update, id: aa_person, agency_person: person_hash
+      end
+
+      it 'sets model error message' do
+        expect(assigns(:agency_person).errors[:person]).
+          to include('cannot be assigned as Case Manager unless person has that role.')
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template('edit')
+      end
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+    end
+
   end
 
   describe "GET #destroy" do

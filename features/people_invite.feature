@@ -38,7 +38,7 @@ Scenario: invite (and reinvite) new agency person
   And I should see "An invitation email has been sent to adam@metplus.org."
   And I should see "Edit Agency Person: Adam Powell"
   And I click the "Cancel" link
-  Then I should see "Agency Person"
+  Then I should see "Adam Powell"
   And I click the "Invite Again" link
   And I should see "An invitation email has been sent to adam@metplus.org."
   Then "adam@metplus.org" should receive 2 emails with subject "Invitation instructions"

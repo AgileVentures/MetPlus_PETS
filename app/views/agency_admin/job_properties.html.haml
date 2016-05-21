@@ -2,11 +2,11 @@
 
 .row
   .col-sm-3
-    %h4 Job Categories
+    %h4 Job Specialties
 
   - if @job_categories.empty?
     .col-sm-3
-      %h5 There are no job categories.
+      %h5 There are no job specialties.
   - else
     .col-sm-9
       = render partial: 'job_properties', object: @job_categories,
@@ -17,10 +17,10 @@
     .clearfix
     .col-sm-3.col-sm-offset-3
       %a(id='toggle_job_categories' href='#job_categories_table' class='text-danger')
-        Hide Job Categories
+        Hide Job Specialties
 
   .col-sm-3.col-sm-offset-3.table_action_button
-    - text_modal_button 'Add Job Category', 'add_job_category',
+    - text_modal_button 'Add Job Specialty', 'add_job_category',
                         'btn btn-primary btn-sm pull-right'
 
 .row
@@ -48,13 +48,13 @@
 
 = render partial: 'property_modal',
           locals: {modal_id:     'add_job_category',
-                   modal_title:  'Add Job Category',
-                   modal_submit: 'Add Category'}
+                   modal_title:  'Add Job Specialty',
+                   modal_submit: 'Add Specialty'}
 
 = render partial: 'property_modal',
           locals: {modal_id:     'update_job_category',
-                   modal_title:  'Update Job Category',
-                   modal_submit: 'Update Category'}
+                   modal_title:  'Update Job Specialty',
+                   modal_submit: 'Update Specialty'}
 
 = render partial: 'property_modal',
           locals: {modal_id:     'add_skill',

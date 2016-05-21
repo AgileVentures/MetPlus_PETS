@@ -11,7 +11,8 @@ Background: seed data added to database
   | role  |
   | AA    |
   | JD    |
-  | CM |
+  | CM    |
+
 
   Given the following company roles exist:
   | role  |
@@ -26,7 +27,7 @@ Background: seed data added to database
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
 
   Given I am on the home page
-  And I click the "Become a hiring partner!" link
+  And I click the "request PETS registration" link
   And I wait 1 second
   Then I should see "Company Registration"
   And I fill in the fields:
@@ -80,18 +81,19 @@ Scenario: company registration approval
   When "hughjobs@widgets.com" opens the email with subject "Confirmation instructions"
   Then they should see "You can confirm your account email through the link below:" in the email body
 
-@javascript
+@selenium
 Scenario: company registration delete
   And I click the "Create" button
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
+  Then I wait 2 seconds
   And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
   Then I should see "Registration for 'Widgets, Inc.' deleted."
 
-@javascript
+@selenium
 Scenario: attempt login after registration is deleted
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -105,7 +107,7 @@ Scenario: attempt login after registration is deleted
   And I login as "hughjobs@widgets.com" with password "qwerty123"
   Then I should see "Invalid email or password."
 
-@javascript
+@selenium
 Scenario: company registration denial
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -121,7 +123,7 @@ Scenario: company registration denial
   Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
 
-@javascript
+@selenium
 Scenario: attempt login after registration is denied
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -143,7 +145,7 @@ Scenario: attempt login after registration is denied
 Scenario: duplicate EIN for Company
   And I click the "Create" button
   Given I am on the home page
-  And I click the "Become a hiring partner!" link
+  And I click the "request PETS registration" link
   And I wait 1 second
   Then I should see "Company Registration"
   And I fill in the fields:

@@ -31,6 +31,7 @@
                                                   method: :post if            |
             agency_person.status == AgencyPerson::STATUS[:IVT]                |
 
+
 %h4
   = "#{agency_person.first_name} has these roles:"
 
@@ -44,7 +45,7 @@
           %li
             = role.role
 %h4
-  = "#{agency_person.first_name} focuses on these job categories:"
+  = "#{agency_person.first_name} focuses on these job specialties:"
 
 - if agency_person.job_categories.empty?
   There are no job categories assigned to this person.
@@ -64,9 +65,9 @@
   %div{:class => 'row'}
     %div{:class => 'panel panel-default'}
       %ul
-        - agency_person.agency_relations.in_role_of(:JD).each do |relation|
+        - job_seekers_assigned_for_role(agency_person, :JD).each do |job_seeker|
           %li
-            = link_to relation.job_seeker.full_name, job_seeker_path(relation.job_seeker.id)
+            = link_to job_seeker.full_name, job_seeker_path(job_seeker.id)
 
 %h4
   = "#{agency_person.first_name} is the Case Manager for these people:"
@@ -77,9 +78,9 @@
   %div{:class => 'row'}
     %div{:class => 'panel panel-default'}
       %ul
-        - agency_person.agency_relations.in_role_of(:CM).each do |relation|
+        - job_seekers_assigned_for_role(agency_person, :CM).each do |job_seeker|
           %li
-            = link_to relation.job_seeker.full_name, job_seeker_path(relation.job_seeker.id)
+            = link_to job_seeker.full_name, job_seeker_path(job_seeker.id)
 
 %br
 %br
