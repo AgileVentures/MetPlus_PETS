@@ -82,7 +82,7 @@
   .col-sm-12
     %h3 Job Opportunities - Best Match to your Résumé
   .col-sm-12
-    - jobs = Job.new_jobs(Time.now - 1.week).   |
+    - jobs = Job.new_jobs(Time.now - 2.weeks).   |
               where("id <= ?", 20).includes(:company).  |
               paginate(:page => params[:matched_jobs_page], :per_page => 5) |
     = render partial: 'jobs/matched_job_list',

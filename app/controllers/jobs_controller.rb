@@ -28,6 +28,10 @@ class JobsController < ApplicationController
 											page(params[:page]).per_page(5)
 	end
 
+	def searched_jobs
+		
+	end
+
 	def new
 		@job = Job.new(:company_id => params[:company_id],
 			           :company_person_id => params[:company_person_id])
