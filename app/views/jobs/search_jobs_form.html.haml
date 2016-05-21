@@ -9,7 +9,7 @@
 		Show Search Form
 
 #job_search_form
-	= search_form_for @query, method: :get, url: list_search_jobs_path,
+	= search_form_for @query, method: :get, url: search_jobs_form_path,
 																				class: 'form-horizontal' do |f|
 
 		.form-group
@@ -86,7 +86,8 @@
 
 %hr
 
-= render partial: 'searched_job_list'
+.pagination-div{id: "jobs-#{@job_type}",
+								data: {url: search_jobs_list_path}}
 
 -# %table.table.table-hover
 -# 	%thead

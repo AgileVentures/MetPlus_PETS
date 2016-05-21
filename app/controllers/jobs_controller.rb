@@ -9,6 +9,7 @@ class JobsController < ApplicationController
 
 	helper_method :job_fields
 
+	@@query = nil
 
 	def index
 		if company_p_or_job_d? && @cp_or_jd.is_a?(CompanyPerson)
@@ -20,16 +21,24 @@ class JobsController < ApplicationController
 		end
 	end
 
-	def list_search_jobs
+	def search_jobs_form
+		@job_type    = 'search-results'
 		@query = Job.ransack(params[:q])
-		@jobs  = @query.result(distinct: true).
-											includes(:company).
-									 		includes(:address).
-											page(params[:page]).per_page(5)
+		@@query = @query
+		# @jobs = display_jobs @job_type
 	end
 
-	def searched_jobs
-		
+	def search_jobs_list
+		raise 'Unsupported request' if not request.xhr?
+
+		@job_type = 'search-results'
+
+		@jobs = []
+		@jobs = display_jobs @job_type, 5, @@query
+
+		@query = @@query
+
+		render partial: 'search_jobs_list'
 	end
 
 	def new
