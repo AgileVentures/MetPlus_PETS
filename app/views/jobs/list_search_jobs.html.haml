@@ -9,7 +9,7 @@
 		Show Search Form
 
 #job_search_form
-	= search_form_for @query, method: :get, url: search_jobs_form_path,
+	= search_form_for @query, method: :get, url: list_search_jobs_path,
 																				class: 'form-horizontal' do |f|
 
 		.form-group
@@ -36,27 +36,6 @@
 															:to_s, {include_blank: true},
 															class: 'form-control'
 
-		-# .form-group
-		-# 	= f.label :fulltime_eq, 'Fulltime', class: 'control-label col-sm-3'
-		-# 	.col-sm-6
-		-# 		= f.check_box :fulltime, class: 'form-control'
-
-		-# .form-group
-		-# 	= f.label :address_state_eq, 'State', class: 'control-label col-sm-3'
-		-# 	.col-sm-6
-		-# 		= f.collection_select :address_state_eq,
-		-# 				Job.joins(:address).order('addresses.state').pluck(:state).uniq,
-		-# 				:to_s, :to_s,
-		-# 				{include_blank: true}, {class: 'form-control'}
-
-		-# .form-group
-		-# 	= f.label :address_city_in, 'City', class: 'control-label col-sm-3'
-		-# 	.col-sm-6
-		-# 		= f.collection_select :address_city_in,
-		-# 				Job.joins(:address).order('addresses.city').pluck(:city).uniq,
-		-# 				:to_s, :to_s,
-		-# 				{include_blank: true}, {multiple: true, class: 'form-control'}
-
 		.form-group
 			- states = Job.joins(:address).order('addresses.state').pluck(:state).uniq
 			- states_and_cities = []
@@ -79,50 +58,10 @@
 												:id, :name, {include_blank: true},
 												{multiple: true, size: 10, class: 'form-control'}
 
-		-# = f.submit
 		.form-group
 			.col-sm-3.col-sm-offset-3
 				= submit_tag 'Search Jobs', class: 'btn btn-primary'
 
 %hr
 
-.pagination-div{id: "jobs-#{@job_type}",
-								data: {url: search_jobs_list_path}}
-
--# %table.table.table-hover
--# 	%thead
--# 		%tr
--# 			%th
--# 				= sort_link(@query, :title)
--# 			%th
--# 				= sort_link(@query, :description)
--# 			%th
--# 				= sort_link(@query, :company_name, 'Company')
--# 			%th
--# 				= sort_link(@query, :shift)
--# 			-# %th
--# 			-# 	= sort_link(@query, :fulltime)
--# 			%th
--# 				= sort_link(@query, :address_state)
--# 			%th
--# 				= sort_link(@query, :address_city)
--# 	%tbody
--# 		- @jobs.each do |job|
--# 			%tr
--# 				%td
--# 					= job.title
--# 				%td
--# 					= job.description
--# 				%td
--# 					= job.company.name
--# 				%td
--# 					= job.shift
--# 				-# %td
--# 				-# 	= job.fulltime
--# 				%td
--# 					-if job.address
--# 						= job.address.state
--# 				%td
--# 					-if job.address
--# 						= job.address.city
--# = will_paginate @jobs
+= render partial: 'searched_job_list'

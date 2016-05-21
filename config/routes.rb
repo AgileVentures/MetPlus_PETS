@@ -104,10 +104,8 @@ Rails.application.routes.draw do
 # ------------------------------ Jobs ----------------------------------------
   get 'jobs/list/:job_type'         => 'jobs#list',   as: :list_jobs
   get 'jobs/:job_id/apply/:user_id' => 'jobs#apply',  as: :apply_job
-  get 'jobs/search_jobs_form'       => 'jobs#search_jobs_form',
-                                        as: :search_jobs_form
-  get 'jobs/search_jobs_list'       => 'jobs#search_jobs_list',
-                                        as: :search_jobs_list
+  get 'jobs/list_search_jobs'       => 'jobs#list_search_jobs',
+                                        as: :list_search_jobs
   resources :jobs
   # --------------------------------------------------------------------------
 

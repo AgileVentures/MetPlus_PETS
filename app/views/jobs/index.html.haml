@@ -1,28 +1,14 @@
 -provide(:title, 'List of jobs')
 
--# %div{class: "input-group col-sm-offset-7 col-sm-3", id: "search-id"}
--# 	=search_field_tag 'search', 'Job title-e.g, accountant, sales',
--# 		class: "form-control"
-
-	-# %span{class: "input-group-btn"}
-		-# =button_tag "search", class: "btn btn-default"
-
--# %button{class: 'btn btn-default', 'data-toggle': 'modal',
--# 							'data-target': '#job_search_modal'}
--# 	Search Jobs
-
 %div{class: "well well-sm col-sm-offset-2 col-sm-8", 	id: "jobs-well-lg"}
 	-# %div{:class => 'row'}
 	%div{class: 'col-sm-6'}
 		%h4{id: 'list-header'} List of job opportunities
 
 	.col-sm-6
-		= button_to 'Search Jobs', search_jobs_form_path,
+		= button_to 'Search Jobs', list_search_jobs_path,
 								 method: :get, class: 'btn btn-primary pull-right',
 								 style: 'margin-top: 20px;'
-		-# %button{class: 'btn btn-default pull-right', style: 'margin-top: 20px;',
-		-# 					'data-toggle': 'modal', 'data-target': '#job_search_modal'}
-		-# 	Search Jobs
 
 - if @jobs.empty?
 	%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
@@ -34,27 +20,3 @@
 			= render job
 %div{class: "col-sm-offset-4 col-sm-6"}
 	= will_paginate @jobs
-
-#job_search_modal.modal.fade(role='dialog' tabindex='-1')
-	.modal-dialog(role='document')
-		.modal-content
-			.modal-header
-				%button.close(type='button' class='close' data-dismiss='modal')
-					%span(aria-hidden='true') &times;
-				%h4.modal-title Jobs Search
-			.modal-body
-				%p
-					Enter search words for job title and/or description below.
-				.form-group
-					%label(for='title_words' class='control-label')
-						Title contains:
-					%text(class='form-control' id='title_words')
-				.form-group
-					%label(for='desc_words' class='control-label')
-						Description contains:
-					%textarea(class='form-control' id='desc_words')
-			.modal-footer
-				%button(type='button' class='btn btn-default'
-	                               data-dismiss='modal') Cancel
-				%button(type='button' class='btn btn-primary'
-	              id='send_button' data-dismiss='modal') Search Jobs

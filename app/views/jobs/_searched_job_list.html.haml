@@ -34,6 +34,4 @@
 				%td
 					-if job.address
 						= job.address.city
-= will_paginate @jobs, param_name: 'job_search_page',
-											 params: {controller: 'jobs',
-															  action: 'search_jobs_list'}
+= will_paginate @jobs
