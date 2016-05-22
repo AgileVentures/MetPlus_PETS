@@ -13,28 +13,38 @@
 																				class: 'form-horizontal' do |f|
 
 		.form-group
-			= f.label :title_cont, class: 'control-label col-sm-3'
+			= f.label :title_cont_any, class: 'control-label col-sm-3'
 			.col-sm-6
-				= f.search_field :title_cont, class: 'form-control'
+				= f.search_field :title_cont_any, class: 'form-control'
 
 		.form-group
-			= f.label :description_cont, class: 'control-label col-sm-3'
+			= f.label :title_cont_all, class: 'control-label col-sm-3'
 			.col-sm-6
-				= f.search_field :description_cont, class: 'form-control'
+				= f.search_field :title_cont_all, class: 'form-control'
 
 		.form-group
-			= f.label :company_name_eq, 'Company', class: 'control-label col-sm-3'
+			= f.label :description_cont_any, class: 'control-label col-sm-3'
 			.col-sm-6
-				= f.collection_select :company_id_eq, Company.order(:name), :id,
-															:name, {include_blank: true},
-															class: 'form-control'
+				= f.search_field :description_cont_any, class: 'form-control'
 
 		.form-group
-			= f.label :shift_eq, 'Shift', class: 'control-label col-sm-3'
+			= f.label :description_cont_all, class: 'control-label col-sm-3'
 			.col-sm-6
-				= f.collection_select :shift_eq, Job::SHIFT_OPTIONS, :to_s,
-															:to_s, {include_blank: true},
-															class: 'form-control'
+				= f.search_field :description_cont_all, class: 'form-control'
+
+		-# .form-group
+		-# 	= f.label :company_name_eq, 'Company', class: 'control-label col-sm-3'
+		-# 	.col-sm-6
+		-# 		= f.collection_select :company_id_eq, Company.order(:name), :id,
+		-# 													:name, {include_blank: true},
+		-# 													class: 'form-control'
+
+		-# .form-group
+		-# 	= f.label :shift_eq, 'Shift', class: 'control-label col-sm-3'
+		-# 	.col-sm-6
+		-# 		= f.collection_select :shift_eq, Job::SHIFT_OPTIONS, :to_s,
+		-# 													:to_s, {include_blank: true},
+		-# 													class: 'form-control'
 
 		.form-group
 			- states = Job.joins(:address).order('addresses.state').pluck(:state).uniq
@@ -62,6 +72,14 @@
 			.col-sm-3.col-sm-offset-3
 				= submit_tag 'Search Jobs', class: 'btn btn-primary'
 
-%hr
+%table(style='width: 100%')
+	%tr
+		%td
+			%hr
+		%td(style='width: 1px; padding: 0 10px; white-space: nowrap; font-weight: bold;')
+			= "#{pluralize(@jobs.count, 'Job')} Found"
+		%td
+			%hr
+
 
 = render partial: 'searched_job_list'

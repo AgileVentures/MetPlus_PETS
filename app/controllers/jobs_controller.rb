@@ -21,8 +21,34 @@ class JobsController < ApplicationController
 	end
 
 	def list_search_jobs
-		@query = Job.ransack(params[:q])
-		@jobs  = @query.result(distinct: true).
+
+		# Make a copy of q params since we will strip out any commas separating
+		# words - need to retain any commas in the form (so user is not surprised)
+		q_params = params[:q].dup
+
+		# Ransack returns a string with all terms entered by the user in
+		# a text field.  For "any" or "all" word(s) queries, need to convert
+		# that single string into an array of individual words for SQL search.
+
+		q_params[:title_cont_any] =
+						q_params[:title_cont_any].split(/(?:,\s*|\s+)/) if
+								q_params && q_params[:title_cont_any]
+
+		q_params[:title_cont_all] =
+						q_params[:title_cont_all].split(/(?:,\s*|\s+)/) if
+								q_params && q_params[:title_cont_all]
+
+		q_params[:description_cont_any] =
+						q_params[:description_cont_any].split(/(?:,\s*|\s+)/) if
+								q_params && q_params[:description_cont_any]
+
+		q_params[:description_cont_all] =
+						q_params[:description_cont_all].split(/(?:,\s*|\s+)/) if
+								q_params && q_params[:description_cont_all]
+
+		@query = Job.ransack(params[:q]) # For form display of entered values
+
+		@jobs  = Job.ransack(q_params).result(distinct: true).
 											includes(:company).
 									 		includes(:address).
 											page(params[:page]).per_page(5)
