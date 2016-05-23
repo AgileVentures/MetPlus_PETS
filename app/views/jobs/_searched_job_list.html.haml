@@ -19,9 +19,9 @@
 		- @jobs.each do |job|
 			%tr
 				%td
-					= link_to job.title, job_path(job)
+					= link_to highlight(job.title, @title_words), job_path(job)
 				%td
-					= job.description
+					= highlight(truncate(job.description, length: 200), @description_words)
 				%td
 					= job.company.name
 				%td

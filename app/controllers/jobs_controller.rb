@@ -30,21 +30,31 @@ class JobsController < ApplicationController
 		# a text field.  For "any" or "all" word(s) queries, need to convert
 		# that single string into an array of individual words for SQL search.
 
-		q_params[:title_cont_any] =
-						q_params[:title_cont_any].split(/(?:,\s*|\s+)/) if
-								q_params && q_params[:title_cont_any]
+		@title_words = []
+		if q_params && q_params[:title_cont_any]
+			q_params[:title_cont_any] =
+							q_params[:title_cont_any].split(/(?:,\s*|\s+)/)
+			@title_words = q_params[:title_cont_any]
+		end
 
-		q_params[:title_cont_all] =
-						q_params[:title_cont_all].split(/(?:,\s*|\s+)/) if
-								q_params && q_params[:title_cont_all]
+		if q_params && q_params[:title_cont_all]
+			q_params[:title_cont_all] =
+							q_params[:title_cont_all].split(/(?:,\s*|\s+)/)
+			@title_words += q_params[:title_cont_all]
+		end
 
-		q_params[:description_cont_any] =
-						q_params[:description_cont_any].split(/(?:,\s*|\s+)/) if
-								q_params && q_params[:description_cont_any]
+		@description_words = []
+		if q_params && q_params[:description_cont_any]
+			q_params[:description_cont_any] =
+							q_params[:description_cont_any].split(/(?:,\s*|\s+)/)
+			@description_words = q_params[:description_cont_any]
+		end
 
-		q_params[:description_cont_all] =
-						q_params[:description_cont_all].split(/(?:,\s*|\s+)/) if
-								q_params && q_params[:description_cont_all]
+		if q_params && q_params[:description_cont_all]
+			q_params[:description_cont_all] =
+							q_params[:description_cont_all].split(/(?:,\s*|\s+)/)
+			@description_words += @description_words + q_params[:description_cont_all]
+		end
 
 		@query = Job.ransack(params[:q]) # For form display of entered values
 
