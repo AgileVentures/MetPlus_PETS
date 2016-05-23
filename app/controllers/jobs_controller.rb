@@ -53,7 +53,7 @@ class JobsController < ApplicationController
 		if q_params && q_params[:description_cont_all]
 			q_params[:description_cont_all] =
 							q_params[:description_cont_all].split(/(?:,\s*|\s+)/)
-			@description_words += @description_words + q_params[:description_cont_all]
+			@description_words += q_params[:description_cont_all]
 		end
 
 		@query = Job.ransack(params[:q]) # For form display of entered values
