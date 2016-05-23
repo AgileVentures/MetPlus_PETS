@@ -35,20 +35,6 @@
 			.col-sm-6
 				= f.search_field :description_cont_all, class: 'form-control'
 
-		-# .form-group
-		-# 	= f.label :company_name_eq, 'Company', class: 'control-label col-sm-3'
-		-# 	.col-sm-6
-		-# 		= f.collection_select :company_id_eq, Company.order(:name), :id,
-		-# 													:name, {include_blank: true},
-		-# 													class: 'form-control'
-
-		-# .form-group
-		-# 	= f.label :shift_eq, 'Shift', class: 'control-label col-sm-3'
-		-# 	.col-sm-6
-		-# 		= f.collection_select :shift_eq, Job::SHIFT_OPTIONS, :to_s,
-		-# 													:to_s, {include_blank: true},
-		-# 													class: 'form-control'
-
 		.form-group
 			- states = Job.joins(:address).order('addresses.state').pluck(:state).uniq
 			- states_and_cities = []

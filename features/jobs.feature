@@ -46,6 +46,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Then I should see "cab-driver has been deleted successfully."
 
 	And I am on the Job edit page with given record:
+	And I wait 10 seconds
 	And  I fill in the fields:
 		| Title                  | cashier|
 		| Job id                 |  |
