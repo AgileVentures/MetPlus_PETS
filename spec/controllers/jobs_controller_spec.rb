@@ -190,11 +190,15 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #list_search_jobs' do
 
-    let(:job) { FactoryGirl.create(:job,
+    let(:job1) { FactoryGirl.create(:job,
                       title: 'Customer Manager',
                       description: 'Provide resposive customer service') }
 
-    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job) }
+    let(:job2) { FactoryGirl.create(:job) }
+
+    let!(:job_skill1) { FactoryGirl.create(:job_skill, job: job1) }
+    let!(:job_skill2) { FactoryGirl.create(:job_skill, job: job2,
+                        skill: FactoryGirl.create(:skill, name: 'New Skill')) }
 
     before(:each) do
       get :list_search_jobs,
@@ -220,8 +224,12 @@ RSpec.describe JobsController, type: :controller do
             to match ['responsive', 'service']
     end
 
-    it 'assigns matching jobs' do
-      expect(assigns(:jobs)[0]).to eq job
+    it 'assigns matching job' do
+      expect(assigns(:jobs)[0]).to eq job1
+    end
+
+    it 'does not assign non-matching job' do
+      expect(assigns(:jobs)[0]).to_not eq job2
     end
 
   end
