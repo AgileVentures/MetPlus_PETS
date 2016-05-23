@@ -24,7 +24,7 @@ class JobsController < ApplicationController
 
 		# Make a copy of q params since we will strip out any commas separating
 		# words - need to retain any commas in the form (so user is not surprised)
-		q_params = params[:q].dup
+		q_params = params[:q] ? params[:q].dup : params[:q]
 
 		# Ransack returns a string with all terms entered by the user in
 		# a text field.  For "any" or "all" word(s) queries, need to convert
