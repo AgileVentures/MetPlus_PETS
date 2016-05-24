@@ -91,10 +91,6 @@ class JobSeekersController < ApplicationController
 
   end
 
-  def match_jobs
-    @job_seeker = JobSeeker.find(params[:id])
-  end
-
   def index
     @jobseeker = JobSeeker.all
   end

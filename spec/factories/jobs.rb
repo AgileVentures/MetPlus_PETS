@@ -8,7 +8,7 @@ FactoryGirl.define do
     # job_category_id 1
     company_job_id "KRKE12"
     shift 'Day'
-    fulltime true
+    fulltime true 
   end
-
+  
 end
