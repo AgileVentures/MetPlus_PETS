@@ -35,7 +35,7 @@ Feature: Agency Person
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'jane@metplus.org' Home page
-    And I should see "Your Job Seekers (as Case Manager)"
+    And I should see "Your Job Seekers (Case Manager)"
     And I should not see "Job Seekers Without a Job Developer"
     Then I press "edit-profile"
     And I should see "Jane"
