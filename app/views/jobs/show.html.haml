@@ -1,6 +1,6 @@
 -provide(:title, @job.title)
 
-%div{class: "col-sm-offset-1 col-sm-10"}
+%div{class: "col-sm-offset-3 col-sm-6"}
 	%div{class: "pull-right", id: "job-show-links-id"}
 		-if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
 			=link_to "Delete", job_path(@job), method: :delete,
@@ -11,21 +11,6 @@
 		=link_to "Return To Jobs", jobs_path
 		|
 		=link_to "Send this job to a friend", '#'
-		-if pets_user and pets_user.is_job_seeker?
-			&nbsp; &nbsp &nbsp; &nbsp &nbsp; &nbsp
-			%button{class: 'btn', 'data-toggle': 'modal',
-										'data-target': '#job_match_modal'}
-				Match against my résumé
-		-elsif pets_user and pets_user.is_job_developer?(current_agency)
-			&nbsp; &nbsp &nbsp; &nbsp &nbsp; &nbsp
-			= collection_select(:job_seeker, :id,
-							JobSeeker.joins(:user).order('users.last_name'),
-													:id, :full_name)
-			%button{class: 'btn', 'data-toggle': 'modal',
-										'data-target': '#job_match_modal'}
-				Match against résumé
-
-
 	.clearfix
 	%div{class: "panel panel-default", id: "show-panel-id"}
 		%div{class: "panel-heading", id: "panel-heading-show-id" }
@@ -33,12 +18,10 @@
 	%table{class: "table table-bordered"}
 		%tbody
 			%tr
-				%td
-					%b Job title:
+				%td Job title:
 				%td=@job.title
 			%tr
-				%td
-					%b Location:
+				%td Location:
 				- if @job.address
 					%td
 						=@job.address.street
@@ -49,52 +32,29 @@
 					%td No address for this job
 
 			%tr
-				%td
-					%b Job category:
+				%td Job category:
 				/ %td=@job.job_category.name
 				%td Walmart co. placeholder
 			%tr
-				%td
-					%b Full time:
+				%td Full time:
 				%td=@job.fulltime ? "Yes" : "No"
 			%tr
-				%td
-					%b Job ID:
+				%td Job ID:
 				%td=@job.company_job_id
 			%tr
-				%td
-					%b Shift:
+				%td Shift:
 				%td=@job.shift
 			%tr
-				%td
-					%b Contact information:
+				%td Contact information:
 				%td
 					Contact: Place Holder
 					%br
 					Email: #{mail_to('placeholder@gmail.com')}
 			%tr
-				%td
-					%b Job Details:
+				%td Job Details:
 				%td=@job.description
 	- if not pets_user.nil? and policy(@job).apply?
 		=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
 					data: { :toggle => 'modal',
 									:target => '#applyJobModal'}
 		=render partial: 'apply_modal', :locals => {:job => @job}
-
-#job_match_modal.modal.fade(role='dialog' tabindex='-1')
-	.modal-dialog
-		.modal-content
-			.modal-header
-				%button.close(type='button' class='close' data-dismiss='modal')
-					%span(aria-hidden='true') &times;
-				%h4.modal-title
-				Job Match against résumé
-			.modal-body
-				%span.glyphicon.glyphicon-star
-				.glyphicon.glyphicon-star
-				.glyphicon.glyphicon-star
-				%p
-					This job matches against your résumé with 3 stars out of 5 (good match)
-			.modal-footer
-				%button.btn.btn-default(type='button' data-dismiss='modal') Close
