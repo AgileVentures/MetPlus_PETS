@@ -8,7 +8,7 @@
 			|
 			=link_to "Edit Job", edit_job_path(@job)
 			|
-		=link_to "Return To Jobs", jobs_path
+		=link_to "Back", :back
 		|
 		=link_to "Send this job to a friend", '#'
 		-if pets_user and pets_user.is_job_seeker?
