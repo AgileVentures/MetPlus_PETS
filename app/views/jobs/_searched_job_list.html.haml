@@ -9,8 +9,6 @@
 				= sort_link(@query, :company_name, 'Company')
 			%th
 				= sort_link(@query, :shift)
-			-# %th
-			-# 	= sort_link(@query, :fulltime)
 			%th
 				= sort_link(@query, :address_state)
 			%th
@@ -26,8 +24,6 @@
 					= job.company.name
 				%td
 					= job.shift
-				-# %td
-				-# 	= job.fulltime
 				%td
 					-if job.address
 						= job.address.state

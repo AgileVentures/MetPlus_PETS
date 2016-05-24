@@ -95,34 +95,38 @@
 				%br
 				%br
 
-				%table.table.table-hover
+				%table.table.table-hover(style='margin-bottom: 0px;')
 					%tbody
 						%tr
 							%td
 								%strong Title contains any
 							%td
 								Will match any title that contains one or more of the
-								entered words.  Separate words with spaces or commas.
+								entered words.
+								%br Separate words with spaces or commas.
 						%tr
 							%td
 								%strong Title contains all
 							%td
 								Will match any title that contains
 								%i all
-								of the entered words.  Separate words with spaces or commas.
+								of the entered words.
+								%br Separate words with spaces or commas.
 						%tr
 							%td
 								%strong Description contains any
 							%td
 								Will match any description that contains one or more of the
-								entered words.  Separate words with spaces or commas.
+								entered words.
+								%br Separate words with spaces or commas.
 						%tr
 							%td
 								%strong Description contains all
 							%td
 								Will match any description that contains
 								%i all
-								of the entered words.  Separate words with spaces or commas.
+								of the entered words.
+								%br Separate words with spaces or commas.
 						%tr
 							%td
 								%strong City
@@ -133,7 +137,7 @@
 								%br
 								%i On a Windows PC:
 								Hold down the
-								%b "option"
+								%b "control"
 								key while clicking on a city.
 								%br
 								%i On a Mac:
@@ -141,8 +145,8 @@
 								%b "command"
 								key while clicking on a city.
 								%br
-								NOTE: To unselect all selected cities, click on the blank
-								line at the top of the selection list.
+								%b NOTE: To unselect all selected cities, click on the blank
+								%b line at the top of the selection list.
 						%tr
 							%td
 								%strong Skills
@@ -153,7 +157,7 @@
 								%br
 								%i On a Windows PC:
 								Hold down the
-								%b "option"
+								%b "control"
 								key while clicking on a skill.
 								%br
 								%i On a Mac:
@@ -161,10 +165,8 @@
 								%b "command"
 								key while clicking on a skill.
 								%br
-								NOTE: To unselect all selected skills, click on the blank
-								line at the top of the selection list.
-
-
+								%b NOTE: To unselect all selected skills, click on the blank
+								%b line at the top of the selection list.
 
 			.modal-footer
 				%button.btn.btn-default(type='button' data-dismiss='modal') Close
