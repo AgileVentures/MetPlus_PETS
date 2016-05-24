@@ -159,22 +159,22 @@ end
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
     company_name  = hash.delete 'company'
-    company_person_email = hash.delete 'company_person'
+    creator_email = hash.delete 'creator'
     skills = hash.delete 'skills'
     city = hash.delete 'city'
 
     job = FactoryGirl.build(:job, hash)
 
     job.company = Company.find_by_name company_name
-    job.company_person = User.find_by_email(company_person_email).pets_user
+    job.company_person = User.find_by_email(creator_email).pets_user
 
-    unless city.empty?
+    if city and not city.empty?
       job.address = FactoryGirl.create(:address, city: city)
     end
 
     job.save!
 
-    unless skills.empty?
+    if skills and not skills.empty?
       skills.split(/(?:,\s*|\s+)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
                         required: true, min_years: 1, max_years: 20)

@@ -32,7 +32,7 @@ Background: adding jobs data to DB
 		| Skill3     | Long haul driver with Class C license  |
 
 	Given the following jobs exist:
-		| title | description | company      | company_person   | shift   | skills         | city  |
+		| title | description | company      | creator          | shift   | skills         | city  |
 		| Job1  | About job1. | Widgets Inc. | jane@widgets.com | Day     | Skill1, Skill2 | city1 |
 		| Job2  | About job2. | Widgets Inc. | ca@widgets.com   | Day     | Skill3         | city2 |
 		| Job3  | About job3. | Feature Inc. | ca@widgets.com   | Evening | Skill1, Skill3 | city3 |
