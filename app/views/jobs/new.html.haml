@@ -1,13 +1,14 @@
 -provide(:title, 'Post new job')
 
-%h2{class: 'page-header text-center', id: "new-job-header"} Post new job
+.page-header.text-center#new-job-header
+	%h2 Create New Job
 
-=form_for @job do |f| 
-	.form-horizontal 
+=form_for @job do |f|
+	.form-horizontal
 		= render partial: 'form', locals: {f: f}
 		.form-group
 			%div{class: "col-sm-offset-3 col-sm-6"}
-				= f.submit "Create", class: "btn btn-primary btn-block", 
+				= f.submit "Create", class: "btn btn-primary btn-block",
 					id: "new-job-submit"
-= link_to "Cancel", jobs_path, class: "col-sm-offset-3 col-sm-6",  
+= link_to "Cancel", jobs_path, class: "col-sm-offset-3 col-sm-6",
 id: "new-job-links-id"

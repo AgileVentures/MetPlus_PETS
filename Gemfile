@@ -67,6 +67,8 @@ gem 'delayed_job_active_record'
 gem 'json'
 gem 'rest-client'
 
+gem 'cocoon'
+
 # later we can strict the faker
 # to staging && development
 gem 'ffaker'

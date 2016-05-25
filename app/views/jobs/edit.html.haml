@@ -1,17 +1,17 @@
 -provide(:title, "Edit #{@job.title}")
 
-%h2{class: 'page-header text-center', id: "edit-job-header"} Edit job
-=form_for @job do |f| 
-	.form-horizontal 
+.page-header.text-center#edit-job-header
+	%h2 Edit Job
+
+=form_for @job do |f|
+	.form-horizontal
 		= render partial: 'form', locals: {f: f}
 		.form-group
 			%div{class: "col-sm-offset-3 col-sm-6"}
-				= f.submit "Update", class: "btn btn-primary btn-block", 
+				= f.submit "Update", class: "btn btn-primary btn-block",
 				id: "edit-job-submit"
-%div{class: "col-sm-offset-3 col-sm-6",  id: "edit-job-links-id"} 
+%div{class: "col-sm-offset-3 col-sm-6",  id: "edit-job-links-id"}
 
 	= link_to "Cancel", job_path(@job)
-	| 
-	= link_to "jobs", jobs_path 
-	
-
+	|
+	= link_to "Jobs", jobs_path

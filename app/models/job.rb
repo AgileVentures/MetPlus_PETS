@@ -4,8 +4,12 @@ class Job < ActiveRecord::Base
   belongs_to :company_person
   belongs_to :address
   belongs_to :job_category
+
   has_many   :job_skills
   has_many   :skills, through: :job_skills
+  accepts_nested_attributes_for :job_skills, allow_destroy: true,
+                                reject_if: :all_blank
+
   has_many   :required_skills, -> {where job_skills: {required: true}},
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :nice_to_have_skills, -> {where job_skills: {required: false}},
@@ -41,15 +45,15 @@ class Job < ActiveRecord::Base
   def last_application_by_job_seeker(job_seeker)
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
-  
-  
+
+
   def save_job_to_cruncher()
       begin
         if self.id_changed?
           return true if JobCruncher.create_job(id, title, description)
         end
-        
-      rescue 
+
+      rescue
         errors.add(:job, 'could not be created, please try again')
         raise ActiveRecord::RecordInvalid.new(self)
       end
