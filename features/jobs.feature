@@ -3,7 +3,9 @@ Feature: Manage Jobs
 As a company person or job developer
 I want to create, update, and delete jobs
 
-Background: adding job to database
+Background: seed data added to database and log in as agency admim
+
+	Given the default settings are present
 
 	Given the following agency roles exist:
 		| role  |
@@ -100,7 +102,6 @@ Scenario: Job Developer Creating, Updating, and Deleting Job successfully and un
 	And I fill in the fields:
 		| Title                  | cashier|
 	And  I select "Widgets, Inc." in select list "Company Name"
-	And  I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
 	And I fill in the fields:
 		| Job id                 | KARK12 |
 		| Description            | Atleast two years work experience|
@@ -124,7 +125,6 @@ Scenario: Job Developer Creating, Updating, and Deleting Job successfully and un
 	And  I fill in the fields:
 		| Title                  |  |
 	And  I select "Widgets, Inc." in select list "Company Name"
-	And I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
 	And I fill in the fields:
 		| Job id                 |  |
 		| Description            |  |
