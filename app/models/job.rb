@@ -5,7 +5,7 @@ class Job < ActiveRecord::Base
   belongs_to :address
   belongs_to :job_category
 
-  has_many   :job_skills, inverse_of: :job
+  has_many   :job_skills, inverse_of: :job, dependent: :destroy
   has_many   :skills, through: :job_skills
   accepts_nested_attributes_for :job_skills, allow_destroy: true,
                                 reject_if: :all_blank
