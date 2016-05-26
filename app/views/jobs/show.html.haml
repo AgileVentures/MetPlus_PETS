@@ -1,6 +1,6 @@
 -provide(:title, @job.title)
 
-%div{class: "col-sm-offset-2 col-sm-8"}
+%div{class: "col-sm-offset-1 col-sm-10"}
 	%div{class: "pull-right", id: "job-show-links-id"}
 		-if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
 			=link_to "Delete", job_path(@job), method: :delete,
@@ -59,7 +59,7 @@
 					- if @job.job_skills.empty?
 						%i None
 					- else
-						%table.table.table-hover
+						%table.table.table-hover{style: 'padding-left: 0px; padding-right: 0px;'}
 							%thead
 								%tr
 									%th
@@ -70,17 +70,17 @@
 										%b Min Years
 									%th
 										%b Max Years
-							-# %tbody
-							-# 	- @job.job_skills.includes(:skill).each do |job_skill|
-							-# 		%tr
-							-# 			%td
-							-# 				= job_skill.skill.name
-							-# 			%td
-							-# 				= 'Yes' if job_skill.required
-							-# 			%td
-							-# 				= job_skill.min_years if job_skill.min_years
-							-# 			%td
-							-# 				= job_skill.max_years if job_skill.max_years
+							%tbody
+								- @job.job_skills.includes(:skill).each do |job_skill|
+									%tr
+										%td
+											= job_skill.skill.name
+										%td
+											= 'Yes' if job_skill.required
+										%td
+											= job_skill.min_years if job_skill.min_years
+										%td
+											= job_skill.max_years if job_skill.max_years
 
 
 	- if not pets_user.nil? and policy(@job).apply?
