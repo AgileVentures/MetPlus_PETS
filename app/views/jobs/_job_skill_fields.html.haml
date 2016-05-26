@@ -1,18 +1,19 @@
 .nested-fields
-  -# .field
-  = f.label :name, 'Name:', class: 'job-skill-label'
-  = f.collection_select(:skill_id, Skill.order(:name), :id, :name,
-                      {include_blank: true, class: 'form-control'})
-  &nbsp
-  = f.label :required, 'Required:', class: 'job-skill-label'
-  = f.check_box :required
-  &nbsp
-  = f.label :min_years, 'Years min:', class: 'job-skill-label'
-  = f.collection_select(:min_years, ['']+(0..20).to_a, :to_s, :to_s,
-                      {class: 'form-control'})
-  &nbsp
-  = f.label :max_years, 'max:', class: 'job-skill-label'
-  = f.collection_select(:max_years, ['']+(0..20).to_a, :to_s, :to_s,
-                      {class: 'form-control'})
-  &nbsp
-  = link_to_remove_association 'remove job skill', f
+  %ul(class='list-inline')
+    %li
+      = f.label :name, 'Name:', class: 'job-skill-label'
+      = f.collection_select(:skill_id, Skill.order(:name), :id, :name,
+                          {include_blank: true})
+    %li
+      = f.label :required, 'Required:', class: 'job-skill-label'
+      = f.check_box :required
+    %li
+      = f.label :min_years, 'Min years:', class: 'job-skill-label'
+      %div
+        = f.collection_select(:min_years, ['']+(0..20).to_a, :to_s, :to_s)
+    %li
+      = f.label :max_years, 'Max years:', class: 'job-skill-label'
+      %div
+        = f.collection_select(:max_years, ['']+(0..20).to_a, :to_s, :to_s)
+    %li
+      = link_to_remove_association 'remove job skill', f
