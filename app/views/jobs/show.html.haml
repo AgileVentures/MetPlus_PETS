@@ -59,28 +59,29 @@
 					- if @job.job_skills.empty?
 						%i None
 					- else
-						%table.table.table-hover{style: 'padding-left: 0px; padding-right: 0px;'}
-							%thead
-								%tr
-									%th
-										%b Name
-									%th
-										%b Required
-									%th
-										%b Min Years
-									%th
-										%b Max Years
-							%tbody
-								- @job.job_skills.includes(:skill).each do |job_skill|
+						%div(style='overflow: auto; height: 200px;')
+							%table.table.table-hover{style: 'padding-left: 0px; padding-right: 0px;'}
+								%thead
 									%tr
-										%td
-											= job_skill.skill.name
-										%td
-											= 'Yes' if job_skill.required
-										%td
-											= job_skill.min_years if job_skill.min_years
-										%td
-											= job_skill.max_years if job_skill.max_years
+										%th
+											%b Name
+										%th
+											%b Required
+										%th
+											%b Min Years
+										%th
+											%b Max Years
+								%tbody
+									- @job.job_skills.includes(:skill).each do |job_skill|
+										%tr
+											%td
+												= job_skill.skill.name
+											%td
+												= 'Yes' if job_skill.required
+											%td
+												= job_skill.min_years if job_skill.min_years
+											%td
+												= job_skill.max_years if job_skill.max_years
 
 
 	- if not pets_user.nil? and policy(@job).apply?
