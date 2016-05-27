@@ -65,13 +65,17 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    let!(:skill)  { FactoryGirl.create(:skill) }
+    let(:skill)     { FactoryGirl.create(:skill) }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
 
     context 'skill found' do
-
       it 'deletes skill' do
         expect { xhr :delete, :destroy, id: skill }.
             to change(Skill, :count).by(-1)
+      end
+      it 'deletes associated job_skill' do
+        expect { xhr :delete, :destroy, id: skill }.
+            to change(JobSkill, :count).by(-1)
       end
       it "returns http success" do
         xhr :delete, :destroy, id: skill
