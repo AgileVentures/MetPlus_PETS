@@ -11,8 +11,6 @@ RSpec.describe JobsController, type: :controller do
       @job_2 = FactoryGirl.create(:job)
       @address = FactoryGirl.create(:address)
       @skill = FactoryGirl.create(:skill)
-      # Note that :job_skill factory also creates a job
-      # @job_skill = FactoryGirl.create(:job_skill, skill: @skill)
   end
 
   describe "permit params to create and update job" do
