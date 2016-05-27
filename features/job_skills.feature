@@ -42,7 +42,8 @@ Scenario: Create job with associated skills
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
   And I click the "Add Job Skill" link
-  And I select "Skill1" in select list "job[job_skills_attributes][0][skill_id]"
+  And I select "Skill1" in select list "Name:"
   And I check "Required:"
+  And I select "2" in select list "Min years:"
 	And  I press "new-job-submit"
 	# Then I should see "cashier has been created successfully."

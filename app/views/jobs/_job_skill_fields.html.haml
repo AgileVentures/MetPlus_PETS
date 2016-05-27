@@ -1,7 +1,7 @@
 .nested-fields
   %ul(class='list-inline')
     %li
-      = f.label :name, 'Name:', class: 'job-skill-label'
+      = f.label :skill_id, 'Name:', class: 'job-skill-label'
       = f.collection_select(:skill_id, Skill.order(:name), :id, :name,
                           {include_blank: true})
     %li
