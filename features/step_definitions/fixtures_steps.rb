@@ -183,6 +183,12 @@ Given(/^the following jobs exist:$/) do |table|
   end
 end
 
+Given(/^the following job skills exist:$/) do |table|
+  table.hashes.each do |hash|
+    Skill.create!(hash)
+  end
+end
+
 Given(/^the default settings are present$/) do
   [
     { :short_description => 'Unemployed Seeking',
