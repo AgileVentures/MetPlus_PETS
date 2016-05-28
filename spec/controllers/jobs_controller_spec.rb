@@ -188,6 +188,52 @@ RSpec.describe JobsController, type: :controller do
 
   end
 
+  describe 'GET #list_search_jobs' do
+
+    let(:job1) { FactoryGirl.create(:job,
+                      title: 'Customer Manager',
+                      description: 'Provide resposive customer service') }
+
+    let(:job2) { FactoryGirl.create(:job) }
+
+    let!(:job_skill1) { FactoryGirl.create(:job_skill, job: job1) }
+    let!(:job_skill2) { FactoryGirl.create(:job_skill, job: job2,
+                        skill: FactoryGirl.create(:skill, name: 'New Skill')) }
+
+    before(:each) do
+      get :list_search_jobs,
+          {q: {'title_cont_any': 'customer manager',
+               'description_cont_any': 'responsive service'}}
+    end
+
+    it 'returns success status' do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders 'list_search_jobs' template" do
+      expect(response).to render_template('list_search_jobs')
+    end
+
+    it 'assigns title words for view' do
+      expect(assigns(:title_words)).
+            to match ['customer', 'manager']
+    end
+
+    it 'assigns description words for view' do
+      expect(assigns(:description_words)).
+            to match ['responsive', 'service']
+    end
+
+    it 'assigns matching job' do
+      expect(assigns(:jobs)[0]).to eq job1
+    end
+
+    it 'does not assign non-matching job' do
+      expect(assigns(:jobs)[0]).to_not eq job2
+    end
+
+  end
+
   describe 'GET #edit authorized user' do
 
     before(:example){ patch :edit, :id => @job.id }

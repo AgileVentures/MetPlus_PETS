@@ -119,6 +119,12 @@ Given(/^the following job categories exist:$/) do |table|
   end
 end
 
+Given(/^the following job skills exist:$/) do |table|
+  table.hashes.each do |hash|
+    Skill.create!(hash)
+  end
+end
+
 Given(/^the following tasks exist:$/) do |table|
   table.hashes.each do |hash|
 
@@ -152,16 +158,28 @@ end
 
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
-
     company_name  = hash.delete 'company'
     creator_email = hash.delete 'creator'
+    skills = hash.delete 'skills'
+    city = hash.delete 'city'
 
     job = FactoryGirl.build(:job, hash)
 
     job.company = Company.find_by_name company_name
     job.company_person = User.find_by_email(creator_email).pets_user
 
+    if city and not city.empty?
+      job.address = FactoryGirl.create(:address, city: city)
+    end
+
     job.save!
+
+    if skills and not skills.empty?
+      skills.split(/(?:,\s*|\s+)/).each do |skill|
+        JobSkill.create(job: job, skill: Skill.find_by_name(skill),
+                        required: true, min_years: 1, max_years: 20)
+      end
+    end
   end
 end
 

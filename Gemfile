@@ -72,6 +72,8 @@ gem 'rest-client'
 gem 'ffaker'
 gem 'faker'
 
+gem 'ransack'
+
 group :development do
   gem 'haml-rails'
   gem 'bullet'

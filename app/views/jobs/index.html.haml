@@ -1,18 +1,14 @@
 -provide(:title, 'List of jobs')
 
-%div{class: "input-group col-sm-offset-7 col-sm-3", id: "search-id"}
-	=search_field_tag 'search', 'Job title-e.g, accountant, sales',
-		class: "form-control"
-	%span{class: "input-group-btn"}
-		=button_tag "search", class: "btn btn-default"
-%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "jobs-well-lg"}
-	%div{:class => 'row'}
-		%div{class: 'col-xs-4 lead'}
-			%h4{id: 'list-header'} List of job opportunities
-		%div{class: 'col-xs-8 lead text-right'}
-			%h5{id: 'hire-header'}
-				=link_to 'Are you hiring? Become a hiring partner!',
-				new_company_registration_path
+%div{class: "well well-sm col-sm-offset-2 col-sm-8", 	id: "jobs-well-lg"}
+	%div{class: 'col-sm-6'}
+		%h4{id: 'list-header'} List of job opportunities
+
+	.col-sm-6
+		= button_to 'Search Jobs', list_search_jobs_path,
+								 method: :get, class: 'btn btn-primary pull-right',
+								 style: 'margin-top: 20px;'
+
 - if @jobs.empty?
 	%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
 		%strong{class: "text-center"}
