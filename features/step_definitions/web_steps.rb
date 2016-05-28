@@ -90,7 +90,7 @@ When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
     if Capybara.current_driver == :poltergeist
       all(:link, link)[index].trigger('click')
     else
-      click_link all(:link, link)[index].trigger
+      all(:link, link)[index].click
     end
   end
 
