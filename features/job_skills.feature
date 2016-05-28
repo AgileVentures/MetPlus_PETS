@@ -45,5 +45,16 @@ Scenario: Create job with associated skills
   And I select "Skill1" in select list "Name:"
   And I check "Required:"
   And I select "2" in select list "Min years:"
+  And I select "10" in select list "Max years:"
+  Then I click the "Add Job Skill" link
+  And I select "Skill2" in second select list "Name:"
+  And I check second "Required:"
+  And I select "5" in second select list "Min years:"
+  And I select "12" in second select list "Max years:"
 	And  I press "new-job-submit"
-	# Then I should see "cashier has been created successfully."
+	Then I should see "cashier has been created successfully."
+  And I should be on the jobs page
+  Then I click the "cashier" link
+  And I wait 1 second
+  And I should see "Skill1"
+  And I should see "Skill2"

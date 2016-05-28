@@ -108,12 +108,38 @@ When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
   end
 end
 
-When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
-  find(:select, list).find(:option, item).select_option
+When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, ordinal, list|
+  # use 'ordinal' when selecting among select lists all of which
+  # have the same selector (e.g., same label)
+  case ordinal
+  when nil
+    find(:select, list).find(:option, item).select_option
+  when ' first'
+    all(:select, list)[0].find(:option, item).select_option
+  when ' second'
+    all(:select, list)[1].find(:option, item).select_option
+  when ' third'
+    all(:select, list)[2].find(:option, item).select_option
+  else
+    raise 'do not understand ordinal value'
+  end
 end
 
-And(/^(?:I|they) check "([^"]*)"$/) do |item|
-  check(item)
+And(/^(?:I|they) check( \w*)? "([^"]*)"$/) do |ordinal, item|
+  # use 'ordinal' when selecting among select checkboxes all of which
+  # have the same selector (e.g., same label)
+  case ordinal
+  when nil
+    check(item)
+  when ' first'
+    all(:checkbox, item)[0].set(true)
+  when ' second'
+    all(:checkbox, item)[1].set(true)
+  when ' third'
+    all(:checkbox, item)[2].set(true)
+  else
+    raise 'do not understand ordinal value'
+  end
 end
 
 And(/^the selection "([^"]*)" should be disabled$/) do |item|

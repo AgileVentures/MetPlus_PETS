@@ -10,6 +10,8 @@ def page_translator name
       return root_path
     when 'tasks'
       return tasks_path
+    when 'jobs'
+      return jobs_path
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
       return home_job_seeker_path(User.find_by_email(user[1]).pets_user)
