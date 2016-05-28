@@ -10,25 +10,23 @@ Background: adding job to database
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | ein        | status |
     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-    | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
     | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
-    | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
-
-  Given the following jobs exist:
-    | title               | company_job_id | shift  | fulltime | description    | company      | creator        |
-    | software developer  | JOB01         | Day    | true     | build apps     | Widgets Inc. | ca@widgets.com |
-    | dish washer         | JOB02         | Morning| true     | wash dishes    | Widgets Inc. | ca@widgets.com |
-    | project manager     | JOB03         | Evening| true     | manage projects| Widgets Inc. | ca@widgets.com |
 
   Given the following job skills exist:
     | name       | description                            |
     | Skill1     | Topo planning for construction         |
     | Skill2     | Promote tourism for region or location |
     | Skill3     | Long haul driver with Class C license  |
+
+  Given the following jobs exist:
+    | title | description | company      | creator          | shift   | skills         | city  |
+    | Job1  | About job1. | Widgets Inc. | jane@widgets.com | Day     | Skill1, Skill2 | city1 |
+    | Job2  | About job2. | Widgets Inc. | ca@widgets.com   | Day     | Skill3         | city2 |
+
 
 @javascript
 Scenario: Create job with associated skills
@@ -51,10 +49,30 @@ Scenario: Create job with associated skills
   And I check second "Required:"
   And I select "5" in second select list "Min years:"
   And I select "12" in second select list "Max years:"
-	And  I press "new-job-submit"
+	And  I press "Create"
 	Then I should see "cashier has been created successfully."
   And I should be on the jobs page
   Then I click the "cashier" link
   And I wait 1 second
   And I should see "Skill1"
   And I should see "Skill2"
+
+@javascript
+Scenario: Edit job and change associated skills
+  Given I am on the home page
+	And I am logged in as "ca@widgets.com" with password "qwerty123"
+  And I click the "Jobs" link
+  Then I click the "Job1" link
+  And I wait 1 second
+  And I should see "Skill1"
+  And I should see "Skill2"
+  Then I click the "Edit Job" link
+  And I wait 1 second
+  And I click the second "remove job skill" link
+  And I click the "Add Job Skill" link
+  And I select "Skill3" in second select list "Name:"
+  And  I press "Update"
+	Then I should see "Job1 has been updated successfully."
+  And I should see "Skill1"
+  And I should see "Skill3"
+  And I should not see "Skill2"

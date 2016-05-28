@@ -66,12 +66,34 @@ When(/^(?:I|they) fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
   fill_in field, with: value
 end
 
-When(/^(?:I|they) click the "([^"]*)" link$/) do |link|
-  if Capybara.current_driver == :poltergeist
-    find_link(link).trigger('click')
+When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
+  # use 'ordinal' when selecting among select lists all of which
+  # have the same selector (e.g., same label)
+
+  if not ordinal
+    if Capybara.current_driver == :poltergeist
+      find_link(link).trigger('click')
+    else
+      click_link link
+    end
   else
-    click_link link
+    case ordinal
+    when ' first'
+      index = 0
+    when ' second'
+      index = 1
+    when ' third'
+      index = 2
+    else
+      raise 'do not understand ordinal value'
+    end
+    if Capybara.current_driver == :poltergeist
+      all(:link, link)[index].trigger('click')
+    else
+      click_link all(:link, link)[index].trigger
+    end
   end
+
   # see discussion here:
   # https://github.com/teampoltergeist/poltergeist/issues/520
 end
