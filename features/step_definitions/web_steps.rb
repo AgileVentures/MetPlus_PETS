@@ -67,7 +67,7 @@ When(/^(?:I|they) fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
 end
 
 When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
-  # use 'ordinal' when selecting among select lists all of which
+  # use 'ordinal' when selecting among select links all of which
   # have the same selector (e.g., same label)
 
   if not ordinal

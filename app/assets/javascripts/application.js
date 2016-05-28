@@ -16,13 +16,12 @@
 //= require turbolinks
 //= require js.cookie
 //= require_self
-//= require cocoon
 //= require_tree .
 
 PETS = {
     /**
      * Create an object that abstracts the spinner used by the application
-     *
+     * 
      * To start the spinner:
      * var mySpinner = PETS.spinner($('.placeholder'));
      * mySpinner.start();
