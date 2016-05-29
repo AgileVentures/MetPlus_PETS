@@ -208,9 +208,10 @@ RSpec.describe JobsController, type: :controller do
 
     let(:job2) { FactoryGirl.create(:job) }
 
-    let!(:job_skill1) { FactoryGirl.create(:job_skill, job: job1) }
+    let!(:job_skill1) { FactoryGirl.create(:job_skill, job: job1,
+                        skill: FactoryGirl.create(:skill, name: 'New Skill 1')) }
     let!(:job_skill2) { FactoryGirl.create(:job_skill, job: job2,
-                        skill: FactoryGirl.create(:skill, name: 'New Skill')) }
+                        skill: FactoryGirl.create(:skill, name: 'New Skill 2')) }
 
     before(:each) do
       get :list_search_jobs,
