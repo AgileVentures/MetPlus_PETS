@@ -114,6 +114,9 @@ Rails.application.routes.draw do
      get 'home', on: :member, as: :home
      get 'match_jobs', on: :member, as: :match_jobs
   end
+
+  get 'job_seekers/applied_jobs/:application_type' =>
+                'job_seekers#applied_jobs', as: :applied_jobs_job_seeker
   # --------------------------------------------------------------------------
 
 
