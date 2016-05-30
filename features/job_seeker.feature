@@ -9,8 +9,43 @@ Background: seed data added to database
   Given the default settings are present
 
   Given the following jobseeker exist:
-  | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
-  | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
+    | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | thomas    | jones    | tommy@gmail.com           | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+
+  Given the following companies exist:
+    | agency  | name         | website     | phone        | email            | ein        | status |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+
+  Given the following company people exist:
+    | company      | role  | first_name | last_name | email            | password  | phone        |
+    | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+
+  Given the following jobs exist:
+    | title   | shift  | fulltime | description | company      | creator        |
+    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | ca@widgets.com |
+    | Trucker | Day    | true     | drive truck | Widgets Inc. | ca@widgets.com |
+    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | ca@widgets.com |
+    | Clerk   | Day    | true     | service     | Widgets Inc. | ca@widgets.com |
+    | Mime    | Day    | true     | freeze      | Widgets Inc. | ca@widgets.com |
+
+  Given the following job applications exist:
+    | job title  | job seeker                |
+    | SW dev     | vijaya.karumudi@gmail.com |
+    | Trucker    | vijaya.karumudi@gmail.com |
+    | Doctor     | vijaya.karumudi@gmail.com |
+    | Clerk      | tommy@gmail.com           |
+    | Doctor     | tommy@gmail.com           |
+    | Mime       | tommy@gmail.com           |
+
+  Given the following agency people exist:
+    | agency  | role  | first_name | last_name | phone        | email          | password  |
+    | MetPlus | AA,JD | John       | Smith     | 555-111-2222 | aa@metplus.org | qwerty123 |
+
+  Given the following agency relations exist:
+  	| job_seeker      | agency_person    | role |
+  	| tommy@gmail.com | aa@metplus.org   | JD   |
 
 Scenario: new Js Registration
   Given I am on the Jobseeker Registration page
@@ -40,12 +75,17 @@ Scenario: Invalid résumé file type
   Then I click the "Create Job seeker" button
   Then I should see "File name unsupported file type"
 
-Scenario: login action as jobseeker
+@javascript
+Scenario: login jobseeker, land on home page, see applied jobs
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully."
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
+  And show me the page
   And I should see "vijaya"
+  And I should see "SW dev" before "Job Opportunities - Best Match"
+  And I should see "Trucker" before "Job Opportunities - Best Match"
+  And I should see "Doctor" before "Job Opportunities - Best Match"
 
 Scenario: jobseeker homepage with no agency relations
   Given I am on the home page
@@ -85,11 +125,25 @@ Scenario: edit Js Registration without password change
 @javascript
 Scenario: delete jobseeker
   Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
-  Then I click and accept the "Delete Jobseeker" button
+  Then I click and accept the "Delete Job Seeker" button
   And I wait for 1 seconds
   Then I should see "Jobseeker was deleted successfully."
 
-Scenario:cancel redirect to homepage
-  Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
+Scenario: cancel redirects to homepage
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  And I should see "Your Information"
+  Then I click the "vijaya" link
   Then I click the "Cancel" link
-  Then I should be on the home page
+  And I should be on the home page
+
+@javascript
+Scenario: Job Developer sees job seeker's job applications
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I should see "Welcome back to PETS, John Smith"
+  Then I am on the JobSeeker Show page for "tommy@gmail.com"
+  And I should see "Clerk"
+  And I should see "Doctor"
+  And I should see "Mime"
+  And I should not see "Trucker"

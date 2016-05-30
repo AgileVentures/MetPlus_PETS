@@ -183,6 +183,16 @@ Given(/^the following jobs exist:$/) do |table|
   end
 end
 
+Given(/^the following job applications exist:$/) do |table|
+  table.hashes.each do |hash|
+    job = Job.find_by_title(hash['job title'])
+    job_seeker = User.find_by_email(hash['job seeker']).actable
+
+    JobApplication.create!(job: job, job_seeker: job_seeker)
+  end
+end
+
+
 Given(/^the default settings are present$/) do
   [
     { :short_description => 'Unemployed Seeking',
