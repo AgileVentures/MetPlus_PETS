@@ -13,14 +13,14 @@
   Job Applications for
   = "#{@jobseeker.full_name(last_name_first: false)}"
 .pagination-div{id: "applications-#{@application_type}",
-                data: {url: applied_jobs_job_seeker_path(@application_type)}}
+                data: {url: applied_jobs_job_seeker_path(@jobseeker,
+                                                         @application_type)}}
 
 %br
-%br
-%div{class: 'row'}
+.row
   .col-sm-2
-  = button_to 'Delete Jobseeker', job_seeker_path(@jobseeker), method: :delete,            |
-      data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
-%br
+    = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker), method: :delete,            |
+        data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
+
   .col-sm-2
-  =link_to 'Cancel',root_path, class: 'btn btn-link'
+    =link_to 'Back', :back, class: 'btn btn-link'

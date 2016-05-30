@@ -15,7 +15,8 @@
 
 %h3 Your Applications
 .pagination-div{id: "applications-#{@application_type}",
-                data: {url: applied_jobs_job_seeker_path(@application_type)}}
+                data: {url: applied_jobs_job_seeker_path(@jobseeker,
+                                                         @application_type)}}
 
 %h3 Job Opportunities - Best Match
 %div
