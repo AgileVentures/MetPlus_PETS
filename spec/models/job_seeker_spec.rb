@@ -27,6 +27,27 @@ describe JobSeeker, type: :model do
 
   end
 
+  describe "#latest_application" do
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job1)       { FactoryGirl.create(:job) }
+    let(:job2)       { FactoryGirl.create(:job) }
+
+    it 'returns last application for job seeker' do
+      
+      stub_request(:post,CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+           :headers => {'Content-Type' => 'application/json'})
+      stub_request(:post, CruncherService.service_url + '/job/create').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}" , status: 200,
+           :headers => {'Content-Type' => 'application/json'})
+
+      job1.apply job_seeker
+      expect(job_seeker.latest_application).to eq job1.job_applications[0]
+      job2.apply job_seeker
+      expect(job_seeker.latest_application).to eq job2.job_applications[0]
+    end
+  end
+
   context "#acting_as?" do
     it "returns true for supermodel class and name" do
       expect(JobSeeker.acting_as? :user).to be true

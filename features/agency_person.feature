@@ -35,8 +35,8 @@ Feature: Agency Person
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'jane@metplus.org' Home page
-    And I should see "Your Job Seekers (Case Manager)"
-    And I should not see "Job Seekers Without a Job Developer"
+    And I should see "Your Job Seekers (as case manager)"
+    And I should not see "Job Seekers without a Job Developer"
     Then I press "edit-profile"
     And I should see "Jane"
     And I fill in "First Name" with "Samantha"
@@ -51,9 +51,9 @@ Feature: Agency Person
     And I should be on the Agency Person 'bill@metplus.org' Home page
     And I should see "Your Open Tasks"
     And I should not see "Job Seeker has no assigned Job Developer"
-    And I should see "Your Job Seekers"
+    And I should see "Your Job Seekers (as job developer)"
     And I should see "There are no job seekers assigned to you yet."
-    And I should not see "Job Seekers Without a Case Manager"
+    And I should not see "Job Seekers without a Case Manager"
 
   @selenium
   Scenario: Case Manager with tasks on home page
