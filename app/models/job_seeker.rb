@@ -37,11 +37,16 @@ class JobSeeker < ActiveRecord::Base
 
   def self.your_jobseekers_jd(job_developer)
     # this method serves the Job Developer home page, hence the "your"
-    where(:id => AgencyRelation.in_role_of(:JD).
-                    where(:agency_person => job_developer).
-                    pluck(:job_seeker_id)).
-          includes(:job_seeker_status, :job_applications).
-          order("users.last_name")
+
+    where(id: self.with_ap_in_role(:JD, job_developer)).
+            includes(:job_seeker_status, :job_applications).
+            order("users.last_name")
+  end
+
+  def self.with_ap_in_role(role_key, agency_person)
+    AgencyRelation.in_role_of(role_key).
+                  where(:agency_person => agency_person).
+                  pluck(:job_seeker_id)
   end
 
   def job_developer
@@ -62,9 +67,8 @@ class JobSeeker < ActiveRecord::Base
 
   def self.your_jobseekers_cm(case_manager)
     # this method serves the Job Developer home page, hence the "your"
-    where(:id => AgencyRelation.in_role_of(:CM).
-                    where(:agency_person => case_manager).
-                    pluck(:job_seeker_id)).
+
+    where(id: self.with_ap_in_role(:CM, case_manager)).
           includes(:job_seeker_status, :job_applications).
           order("users.last_name")
   end
