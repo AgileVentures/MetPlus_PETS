@@ -1,4 +1,4 @@
-module JobSeekersViewer
+module JobApplicationsViewer
   extend ActiveSupport::Concern
 
   def display_job_applications application_type, per_page=10, js_id=nil

@@ -1,7 +1,7 @@
 class JobSeekersController < ApplicationController
 
   include UserParameters
-  include JobSeekersViewer
+  include JobApplicationsViewer
 
   def new
     @jobseeker = JobSeeker.new

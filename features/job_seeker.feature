@@ -81,7 +81,6 @@ Scenario: login jobseeker, land on home page, see applied jobs
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully."
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
-  And show me the page
   And I should see "vijaya"
   And I should see "SW dev" before "Job Opportunities - Best Match"
   And I should see "Trucker" before "Job Opportunities - Best Match"
