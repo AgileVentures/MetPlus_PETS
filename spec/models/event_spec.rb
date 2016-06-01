@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'agency_mailer'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
@@ -85,6 +86,11 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'jobseeker_applied event' do
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
 
     it 'triggers a Pusher message' do
       allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'

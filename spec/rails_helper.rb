@@ -10,6 +10,7 @@ require 'byebug'
 require 'shoulda/matchers'
 require 'capybara/poltergeist'
 require 'devise'
+require 'support/service_stub_helpers'
 Capybara.javascript_driver = :poltergeist
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -58,6 +59,9 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+
+  # Include service stub helpers
+  config.include ServiceStubHelpers
 end
 
 Shoulda::Matchers.configure do |config|

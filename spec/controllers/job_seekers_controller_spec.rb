@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekersController, type: :controller do
 
@@ -323,6 +324,9 @@ RSpec.describe JobSeekersController, type: :controller do
     end
 
     it "returns jobs posted since last login" do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+
       @newjob = FactoryGirl.create(:job)
       @newjob.assign_attributes(created_at: Time.now)
       @oldjob = FactoryGirl.create(:job)
