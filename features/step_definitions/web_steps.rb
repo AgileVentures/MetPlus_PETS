@@ -43,9 +43,9 @@ end
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
   regex = /#{toSearch}.+#{last}/
   if not_see
-    step %{I should not see "#{regex}"}
+    expect(page.text).not_to match regex
   else
-    step %{I should see "#{regex}"}
+    expect(page.text).to match regex
   end
 end
 

@@ -11,69 +11,12 @@
       Hide Your Information
 
   .col-sm-9
-    %table.table.table-hover#info_table
-      %tbody
-        %tr
-          %td
-            %strong Name
-          %td
-            = @jobseeker.full_name(last_name_first: false)
-        %tr
-          %td
-            %strong Email
-          %td
-            = @jobseeker.email
-        %tr
-          %td
-            %strong Phone
-          %td
-            = @jobseeker.phone
-        %tr
-          %td
-            %strong Address
-          %td
-            = single_line_address(@jobseeker.address)
-        %tr
-          %td
-            %strong Status
-          %td
-            = @jobseeker.status.short_description
-        %tr
-          %td
-            %strong Résumé
-          %td
-            - if @jobseeker.resumes.empty?
-              %i No résumé on file
-            - else
-              - resume = @jobseeker.resumes[0]
-              = resume.file_name
-              &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
-        %tr
-          %td
-            %strong Last Login
-          %td
-            - unless @jobseeker.last_sign_in_at.nil?
-              = @jobseeker.last_sign_in_at.strftime('%x')
-        %tr
-          %td
-            %strong Case Manager
-          %td
-            - if @jobseeker.case_manager.nil?
-              %i None assigned
-            - else
-              = @jobseeker.case_manager.full_name(last_name_first: false)
-        %tr
-          %td
-            %strong Job Developer
-          %td
-            - if @jobseeker.job_developer.nil?
-              %i None assigned
-            - else
-              = @jobseeker.job_developer.full_name(last_name_first: false)
-
+    = render partial: 'info', locals: {job_seeker: @jobseeker}
 
 %h3 Your Applications
-%i This feature has not been built yet
+.pagination-div{id: "applications-#{@application_type}",
+                data: {url: applied_jobs_job_seeker_path(@jobseeker,
+                                                         @application_type)}}
 
 %h3 Job Opportunities - Best Match
 %div
