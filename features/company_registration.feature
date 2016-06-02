@@ -87,10 +87,11 @@ Scenario: company registration delete
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  And I wait 2 seconds
   Then I click the "Widgets, Inc." link
-  Then I wait 2 seconds
   And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
+  And I wait 1 second
   Then I should see "Registration for 'Widgets, Inc.' deleted."
 
 @selenium
@@ -99,6 +100,7 @@ Scenario: attempt login after registration is deleted
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  And I wait 2 seconds
   Then I click the "Widgets, Inc." link
   Then I click and accept the "Delete Registration" button
   And I log out
@@ -113,13 +115,14 @@ Scenario: company registration denial
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  And I wait 2 seconds
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
   Then I should see "Explanation for registration denial"
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  And I wait 3 seconds
+  And I wait 2 seconds
   Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
 
@@ -129,12 +132,13 @@ Scenario: attempt login after registration is denied
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  And I wait 2 seconds
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  And I wait 3 seconds
+  And I wait 2 seconds
   Then I should see "Registration Denied"
   And I log out
   And I wait 1 second

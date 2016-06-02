@@ -42,8 +42,7 @@ class CompanyRegistrationsController < ApplicationController
     if @company.save
       flash.notice = "Thank you for your registration request. " +
          " We will review your request and get back to you shortly."
-      CompanyMailer.pending_approval(@company,
-                                     @company.company_people[0]).deliver_now
+
       Event.create(:COMP_REGISTER, @company)
 
       render :confirmation
@@ -99,8 +98,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.approved = true
     company_person.save
 
-    # Send notice of registration acceptance (CompanyMailer)
-    CompanyMailer.registration_approved(company, company_person).deliver_now
+    Event.create(:COMP_APPROVED, company)
 
     # Send account confirmation email (Devise)
     company_person.user.send_confirmation_instructions
@@ -122,9 +120,10 @@ class CompanyRegistrationsController < ApplicationController
     render :partial => 'companies/company_status',
            :locals => {company: company} if request.xhr?
 
-    # Send notice of registration denial
-    CompanyMailer.registration_denied(company,
-                  company_person, params[:email_text]).deliver_now
+    # Anonymous class to contain company and reason for denial
+    obj = Struct.new(:company, :reason)
+
+    Event.create(:COMP_DENIED, obj.new(company, params[:email_text]))
   end
 
   private
