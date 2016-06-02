@@ -24,13 +24,29 @@ class JobSeeker < ActiveRecord::Base
     true
   end
 
+  def latest_application
+    job_applications.order(:created_at).last
+  end
+
   def self.js_without_jd
-    where("job_seekers.id not in (?)", AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).order("users.last_name")
+    where("job_seekers.id not in (?)",
+          AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
+        includes(:job_seeker_status, :job_applications).
+        order("users.last_name")
   end
 
   def self.your_jobseekers_jd(job_developer)
     # this method serves the Job Developer home page, hence the "your"
-    where(:id => AgencyRelation.in_role_of(:JD).where(:agency_person => job_developer).pluck(:job_seeker_id)).order("users.last_name")
+
+    where(id: self.with_ap_in_role(:JD, job_developer)).
+            includes(:job_seeker_status, :job_applications).
+            order("users.last_name")
+  end
+
+  def self.with_ap_in_role(role_key, agency_person)
+    AgencyRelation.in_role_of(role_key).
+                  where(:agency_person => agency_person).
+                  pluck(:job_seeker_id)
   end
 
   def job_developer
@@ -43,12 +59,18 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def self.js_without_cm
-    where("job_seekers.id not in (?)", AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).order("users.last_name")
+    where("job_seekers.id not in (?)",
+          AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
+          includes(:job_seeker_status, :job_applications).
+          order("users.last_name")
   end
 
   def self.your_jobseekers_cm(case_manager)
     # this method serves the Job Developer home page, hence the "your"
-    where(:id => AgencyRelation.in_role_of(:CM).where(:agency_person => case_manager).pluck(:job_seeker_id)).order("users.last_name")
+
+    where(id: self.with_ap_in_role(:CM, case_manager)).
+          includes(:job_seeker_status, :job_applications).
+          order("users.last_name")
   end
 
   def case_manager
