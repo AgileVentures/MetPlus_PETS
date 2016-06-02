@@ -37,6 +37,10 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'agency_people/:id/list_js_cm/:people_type' => 
+             'agency_people#list_js_cm', as: :list_js_cm_agency_people
+  
+
   # --------------------------------------------------------------------------
 
   # ----------------------- Company Registration -----------------------------
