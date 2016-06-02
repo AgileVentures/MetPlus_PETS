@@ -155,7 +155,6 @@ Given(/^the following tasks exist:$/) do |table|
   end
 end
 
-
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
     company_name  = hash.delete 'company'
