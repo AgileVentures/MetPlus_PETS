@@ -12,6 +12,8 @@ class Event
 
   EVT_TYPE = {JS_REGISTER:   'js_registered',
               COMP_REGISTER: 'company_registered',
+              COMP_APPROVED: 'company_registration_approved',
+              COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied'}
 
   # Add events as required below.  Each event may have business rules around
@@ -37,6 +39,10 @@ class Event
       Task.new_js_registration_task(evt_obj, Agency.first)
 
     when :COMP_REGISTER                     # evt_obj = company
+      # Business rules:
+      #    Notify agency people (pop-up and email)
+      #    Send email to company contact
+      #    Add task to review company registration
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:COMP_REGISTER],
                      {id: evt_obj.id, name: evt_obj.name})
@@ -46,7 +52,25 @@ class Event
                      EVT_TYPE[:COMP_REGISTER],
                      evt_obj)
 
+      CompanyMailer.pending_approval(evt_obj,
+                                     evt_obj.company_people[0]).deliver_now
+
       Task.new_review_company_registration_task(evt_obj, evt_obj.agencies[0])
+
+    when :COMP_APPROVED                     # evt_obj = company
+      # Business rules:
+      #    Send email to company contact
+
+      CompanyMailer.registration_approved(evt_obj,
+                                          evt_obj.company_people[0]).deliver_now
+
+    when :COMP_DENIED                     # evt_obj = struct(company, reason)
+      # Business rules:
+      #    Send email to company contact
+
+      CompanyMailer.registration_denied(evt_obj.company,
+                                        evt_obj.company.company_people[0],
+                                        evt_obj.reason).deliver_now
 
     when :JS_APPLY                          # evt_obj = job application
       # Business rules:
@@ -54,7 +78,7 @@ class Event
       #    Notify job seeker's job developer
       #    Notify company contact associated with the job
       #    Create task for 'job application' (application to be reviewed)
-      
+
       notify_list = notify_list_for_js_apply_event(evt_obj)
 
       unless notify_list.empty?
