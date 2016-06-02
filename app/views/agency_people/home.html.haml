@@ -13,17 +13,15 @@
   - if @your_jobseekers_jd.empty?
     %i There are no job seekers assigned to you yet.
   - else
-    .col-sm-9
     = render partial: 'job_seekers' , :locals => {jobseekers: @your_jobseekers_jd}
 
 - if @agency_person.is_case_manager?(@agency)
-  %h3 Your Job Seekers (as case manager)
+  %h3 Your Job Seekers ( as Case Manager)
+  .pagination-div{id: "agency_person-#{@people_type}",
+                data: {url: list_js_cm_agency_people_path(@agency.id, @people_type)}}
   - if @your_jobseekers_cm.empty?
     %i There are no job seekers assigned to you yet.
-  - else
-    .col-sm-9
-    = render partial: 'job_seekers' , :locals => {jobseekers: @your_jobseekers_cm}
-
+ 
 - if @agency_person.is_job_developer?(@agency)
   %h3 Job Seekers without a Job Developer
   - if @js_without_jd.empty?
