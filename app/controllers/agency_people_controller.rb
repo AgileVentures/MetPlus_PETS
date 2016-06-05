@@ -56,7 +56,7 @@ class AgencyPeopleController < ApplicationController
         obj = Struct.new(:job_seeker, :job_developer)
         Event.create(:JS_ASSIGN_JD, obj.new(JobSeeker.find(js_id),
                                             @agency_person))
-      end
+      end if new_jd_job_seeker_ids
 
       flash[:notice] = "Agency person was successfully updated."
       redirect_to agency_person_path(@agency_person)
