@@ -15,10 +15,34 @@ RSpec.describe NotifyEmailJob, type: :job do
     Delayed::Worker.delay_jobs = false
   end
 
-  it 'adds email to job queue' do
+  it 'job seeker registered event' do
     expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
                  perform_later(Agency.all_agency_people_emails,
                  Event::EVT_TYPE[:JS_REGISTER],
+                 {name: 'Joe Newseeker', id: 1}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
+  it 'company registered event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later(Agency.all_agency_people_emails,
+                 Event::EVT_TYPE[:COMP_REGISTER],
+                 {name: 'Newco', id: 1}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
+  it 'job seeker applied to job event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later(Agency.all_agency_people_emails,
+                 Event::EVT_TYPE[:JS_APPLY],
+                 {name: 'Joe Newseeker', id: 1}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
+  it 'job seeker assigned to job developer event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later('job_developer@gmail.com',
+                 Event::EVT_TYPE[:JS_ASSIGN_JD],
                  {name: 'Joe Newseeker', id: 1}) }.
       to change(Delayed::Job, :count).by(+1)
   end
