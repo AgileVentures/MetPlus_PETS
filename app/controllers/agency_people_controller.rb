@@ -26,6 +26,16 @@ class AgencyPeopleController < ApplicationController
     jd_job_seeker_ids = model_params.delete(:as_jd_job_seeker_ids)
     cm_job_seeker_ids = model_params.delete(:as_cm_job_seeker_ids)
 
+    # Find newly-assigned job seekers for notifying the agency person (as JD)
+    unless jd_job_seeker_ids.empty?
+      new_jd_job_seeker_ids = jd_job_seeker_ids.map { |id| id.to_i }
+      new_jd_job_seeker_ids.delete(0)
+      current_jd_ids = @agency_person.as_jd_job_seeker_ids
+      new_jd_job_seeker_ids.keep_if do |js_id|
+        not current_jd_ids.include? js_id
+      end
+    end
+
     @agency_person.assign_attributes(model_params)
 
     @agency_person.agency_relations.delete_all
@@ -47,6 +57,13 @@ class AgencyPeopleController < ApplicationController
     end
 
     if @agency_person.save
+      # notify job developer of new JS assignments
+      new_jd_job_seeker_ids.each do |js_id|
+        obj = Struct.new(:job_seeker, :job_developer)
+        Event.create(:JS_ASSIGN_JD, obj.new(JobSeeker.find(js_id),
+                                            @agency_person))
+      end
+
       flash[:notice] = "Agency person was successfully updated."
       redirect_to agency_person_path(@agency_person)
     else

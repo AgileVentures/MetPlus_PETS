@@ -41,9 +41,19 @@ var PusherControl = {
       if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
         Notification.info_notification('Job Seeker: ' +
             "<a href='/job_seekers/" + data.js_id +
-            " target='_blank'>" + data.js_name + "</a>" +
+            "' target='_blank'>" + data.js_name + "</a>" +
             " has applied to <a href='/jobs/" + data.job_id +
             "' target='_blank'>this job</a>");
+      }
+    });
+
+    channel.bind('jobseeker_assigned_jd', function(data) {
+      // Process event if I am logged in and I am the job developer
+      if (parseInt(Cookies('user_id')) === data.jd_user_id) {
+        Notification.info_notification('Job Seeker: ' +
+            "<a href='/job_seekers/" + data.js_id +
+            "' target='_blank'>" + data.js_name + "</a>" +
+            " has been assigned to you as Job Developer");
       }
     });
   }
