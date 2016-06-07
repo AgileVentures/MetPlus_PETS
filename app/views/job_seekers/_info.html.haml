@@ -53,7 +53,7 @@
       %td
         %strong Job Developer
       %td
-        - if job_seeker.job_developer.nil?
-          %i None assigned
-        - else
-          = job_seeker.job_developer.full_name(last_name_first: false)
+        = render :partial => 'assigned_agency_person',
+                      :locals => {agency_person: current_user.actable,
+                                  job_seeker: job_seeker,
+                                  agency_role: 'JD'}
