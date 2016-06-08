@@ -24,15 +24,14 @@ Rails.application.routes.draw do
   # ----------------------- Agency People ------------------------------------
   # Agency admin can edit and delete an agency person
   resources :agency_people, path: '/admin/agency_people',
-                       only: [:edit, :update, :destroy]
+                       only: [:show, :edit, :update, :destroy]
 
   resources :agency_people, only: [] do
     member do
-      get :show
       get :home
       get :edit_profile,   to: 'agency_people#edit_profile'
-      get :update_profile, to: 'agency_people#update_profile'
-      patch 'assign_job_seeker/:job_seeker_id',
+      patch :update_profile, to: 'agency_people#update_profile'
+      patch 'assign_job_seeker/:job_seeker_id/:agency_role',
                         to: 'agency_people#assign_job_seeker',
                         as: 'assign_job_seeker'
     end

@@ -63,6 +63,45 @@ class AgencyPeopleController < ApplicationController
     end
   end
 
+  def assign_job_seeker
+    # Assign agency person, in specified role, to the job seeker
+
+    @agency_person = AgencyPerson.find(params[:id])
+    @job_seeker    = JobSeeker.find(params[:job_seeker_id])
+
+    role_key = params[:agency_role].to_sym
+
+    # confirm that agency person has this role and assign person to job seeker
+    case role_key
+    when :JD
+      return render(json: {:message => 'Agency Person is not a job developer'},
+                    status: 403) unless
+                    @agency_person.is_job_developer? @agency_person.agency
+
+      @job_seeker.assign_job_developer(@agency_person, @agency_person.agency)
+
+    when :CM
+      return render(json: {:message => 'Agency Person is not a case manager'},
+                    status: 403) unless
+                    @agency_person.is_case_manager? @agency_person.agency
+
+      @job_seeker.assign_case_manager(@agency_person, @agency_person.agency)
+
+    else
+      return render(json: {:message => 'Unknown agency role specified'},
+                    status: 400)
+    end
+
+    if request.xhr?
+      render :partial => 'job_seekers/assigned_agency_person',
+             :locals => {job_seeker: @job_seeker,
+                         agency_person: @agency_person,
+                         agency_role: params[:agency_role]}
+    else
+      redirect_to job_seeker_path(@job_seeker)
+    end
+  end
+
   def edit_profile
     @agency_person = AgencyPerson.find(params[:id])
   end

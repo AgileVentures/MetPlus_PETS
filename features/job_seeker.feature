@@ -123,7 +123,9 @@ Scenario: edit Js Registration without password change
 
 @javascript
 Scenario: delete jobseeker
-  Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
   Then I click and accept the "Delete Job Seeker" button
   And I wait for 1 seconds
   Then I should see "Jobseeker was deleted successfully."

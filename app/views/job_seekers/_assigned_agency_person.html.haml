@@ -1,8 +1,9 @@
 - if job_seeker.job_developer.nil?
-  %i None assigned
-  = link_to 'Assign Myself',
-      assign_job_seeker_agency_person_path(agency_person,
-                                           job_seeker, agency_role),
-            method: :patch, class: 'btn btn-success btn-xs'
+  %i None assigned &nbsp &nbsp
+  - if pets_user.is_job_developer? current_agency
+    %button.btn.btn-success.btn-xs{id: 'assign_jd',
+                data: {url: assign_job_seeker_agency_person_path(agency_person,
+                                              job_seeker, agency_role)}}
+      Assign Myself
 - else
   = job_seeker.job_developer.full_name(last_name_first: false)

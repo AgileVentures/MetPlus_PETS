@@ -116,9 +116,21 @@ end
     let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
     let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
 
+    FactoryGirl.create(:agency_role)
+    FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+
     before(:each) do
       adam.assign_case_manager(cm_person, agency)
       dave.assign_job_developer(jd_person, agency)
+    end
+
+    describe 'class methods for job seekers agency relations' do
+      it '.js_without_jd returns job seekers with no job developer' do
+        expect(JobSeeker.js_without_jd).to match([adam, bob, charles])
+      end
+      it '.js_without_cm returns job seekers with no job developer' do
+        expect(JobSeeker.js_without_cm).to match([bob, charles, dave])
+      end
     end
 
     describe '#assign_case_manager' do

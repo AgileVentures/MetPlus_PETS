@@ -101,3 +101,16 @@ Feature: Agency Person
     And I wait 1 second
     And I should see notification "Task assigned"
     And The task 2 is not present
+
+  @javascript
+  Scenario: Job developer assigns self to job seeker
+    Given I am on the home page
+    And I login as "bill@metplus.org" with password "qwerty123"
+    And I click the "Worker, John" link
+    And I wait 1 second
+    And I should not see "Bill Developer"
+    And I should see "Assign Myself"
+    And I click the "Assign Myself" button
+    And I wait 1 second
+    Then I should see "Bill Developer"
+    And I should not see "Assign Myself"

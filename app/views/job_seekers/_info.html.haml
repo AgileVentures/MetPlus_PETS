@@ -53,7 +53,8 @@
       %td
         %strong Job Developer
       %td
-        = render :partial => 'assigned_agency_person',
-                      :locals => {agency_person: current_user.actable,
-                                  job_seeker: job_seeker,
-                                  agency_role: 'JD'}
+        #assigned_job_developer
+          = render :partial => 'assigned_agency_person',
+                        :locals => {agency_person: pets_user,
+                                    job_seeker: job_seeker,
+                                    agency_role: 'JD'}
