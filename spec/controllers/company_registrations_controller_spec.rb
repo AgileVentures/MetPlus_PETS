@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe CompanyRegistrationsController, type: :controller do
 
+  before(:each) do
+    allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
+  end
   describe "GET #show" do
     let(:company_person) do
       $cp = FactoryGirl.create(:company_person)

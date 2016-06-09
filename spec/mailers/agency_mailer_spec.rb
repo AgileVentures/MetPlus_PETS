@@ -1,4 +1,5 @@
 require "rails_helper"
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe AgencyMailer, type: :mailer do
   describe 'Job Seeker registered' do
@@ -59,6 +60,11 @@ RSpec.describe AgencyMailer, type: :mailer do
 
     let(:mail) { AgencyMailer.job_seeker_applied(agency_person.email,
                                     application) }
+
+    before :each do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
 
     it "renders the headers" do
       expect(mail.subject).to eq 'Job seeker applied'

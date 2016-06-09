@@ -1,20 +1,17 @@
 require 'rails_helper'
 include ActionDispatch::TestProcess
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe ResumeCruncher, type: :model do
 
   before(:each) do
-    stub_request(:post, CruncherService.service_url + '/authenticate').
-        to_return(body: "{\"token\": \"12345\"}", status: 200,
-        :headers => {'Content-Type'=> 'application/json'})
+    stub_cruncher_authenticate
   end
 
   describe 'File upload' do
     it 'returns success (true) for valid file type' do
 
-      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+      stub_cruncher_file_upload
 
       file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
       expect(ResumeCruncher.upload_resume(file,
@@ -24,9 +21,8 @@ RSpec.describe ResumeCruncher, type: :model do
 
     it 'returns fail (false) for invalid file type' do
 
-      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-          to_raise(RuntimeError)
-          
+      stub_cruncher_file_upload_error
+
       file = fixture_file_upload('files/Test File.zzz')
       expect{ ResumeCruncher.upload_resume(file,
                                   'Test File.zzz',

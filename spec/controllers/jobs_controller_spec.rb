@@ -1,8 +1,11 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobsController, type: :controller do
 
   before(:example) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
 
       @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -709,6 +712,8 @@ RSpec.describe JobsController, type: :controller do
     end
     describe 'successful application' do
       before :each do
+        allow(Pusher).to receive(:trigger)
+
         allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id

@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Job, type: :model do
   describe 'Fixtures' do
@@ -50,7 +51,7 @@ RSpec.describe Job, type: :model do
     it { should allow_value('', nil).for(:fulltime).on(:create) }
     it { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
-    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])}
+    it { is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])}
   end
 
   describe 'Class methods' do
@@ -61,6 +62,11 @@ RSpec.describe Job, type: :model do
       let(:job) {FactoryGirl.create(:job)}
       let(:job_seeker) {FactoryGirl.create(:job_seeker)}
       let(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
 
       it 'success - first application' do
         num_applications = job.number_applicants

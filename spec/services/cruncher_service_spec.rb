@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe CruncherService, type: :request do
 
@@ -35,9 +36,7 @@ RSpec.describe CruncherService, type: :request do
   context 'Cruncher HTTP calls' do
     describe 'authentication success' do
       before(:each) do
-        stub_request(:post, CruncherService.service_url + '/authenticate').
-            to_return(body: "{\"token\": \"12345\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
+        stub_cruncher_authenticate
       end
       it 'returns HTTP success' do
         expect(auth_result.code).to eq 200
@@ -50,8 +49,7 @@ RSpec.describe CruncherService, type: :request do
     describe 'authentication failure' do
       it 'raises error with invalid credentials' do
 
-        stub_request(:post, CruncherService.service_url + '/authenticate').
-            to_raise(RuntimeError)
+        stub_cruncher_authenticate_error
 
         expect {RestClient.post(CruncherService.service_url +
                           '/authenticate', {},
@@ -64,13 +62,8 @@ RSpec.describe CruncherService, type: :request do
     describe 'upload file' do
 
       before(:each) do
-
-        stub_request(:post, CruncherService.service_url + '/authenticate').
-            to_return(body: "{\"token\": \"12345\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
-        stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
+        stub_cruncher_authenticate
+        stub_cruncher_file_upload
       end
 
       it 'returns HTTP success' do
@@ -85,13 +78,8 @@ RSpec.describe CruncherService, type: :request do
     describe 'create job' do
 
       before(:each) do
-
-        stub_request(:post, CruncherService.service_url + '/authenticate').
-            to_return(body: "{\"token\": \"12345\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
-        stub_request(:post, CruncherService.service_url + '/job/create').
-            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
       end
 
       it 'returns HTTP success' do
@@ -107,9 +95,7 @@ RSpec.describe CruncherService, type: :request do
   context 'CruncherService API calls' do
 
     before(:each) do
-      stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+      stub_cruncher_authenticate
     end
 
     describe 'Cruncher authentication' do
@@ -131,10 +117,7 @@ RSpec.describe CruncherService, type: :request do
 
     describe 'File upload' do
       it 'returns success (true) for valid file type' do
-
-        stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
+        stub_cruncher_file_upload
 
         file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
         expect(CruncherService.upload_file(file,
@@ -143,9 +126,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'raises error for invalid file type' do
-
-        stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-            to_raise(RuntimeError)
+        stub_cruncher_file_upload_error
 
         file = fixture_file_upload('files/Example Excel File.xls')
         expect{ CruncherService.upload_file(file,
@@ -155,9 +136,6 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'raises error for unknown MIME type' do
-
-        stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-            to_raise(RuntimeError)
 
         file = fixture_file_upload('files/Test File.zzz')
         expect{ CruncherService.upload_file(file,
@@ -169,22 +147,15 @@ RSpec.describe CruncherService, type: :request do
 
     describe 'create job' do
       it 'returns success (true) for valid create job' do
+        stub_cruncher_job_create
 
-        stub_request(:post, CruncherService.service_url + '/job/create').
-            to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-            :headers => {'Content-Type'=> 'application/json'})
-
-        
         expect(JobCruncher.create_job(10,'Software Engineer',
               'description of the job')).to be true
       end
 
       it 'raises error for invalid job id' do
+        stub_cruncher_job_create_error
 
-        stub_request(:post, CruncherService.service_url + '/job/create').
-            to_raise(RuntimeError)
-
-        
         expect{ CruncherService.create_job('jobId',
                                     'title',
                                     'description') }.
@@ -195,17 +166,10 @@ RSpec.describe CruncherService, type: :request do
 
   context 'Cruncher service recover expired token' do
     it 'retries for expired auth_token' do
+      stub_cruncher_authenticate
+      stub_cruncher_file_upload_retry_auth
 
       CruncherService.auth_token = 'expired'
-
-      stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
-
-      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-          to_raise(RestClient::Unauthorized).then.
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
 
       expect(CruncherService).to receive(:auth_token).
                     twice.and_call_original
@@ -214,7 +178,7 @@ RSpec.describe CruncherService, type: :request do
       expect(CruncherService.upload_file(file,
                                   'Janitor-Resume.doc',
                                  'test_id')).to be true
-                          
+
     end
   end
  end

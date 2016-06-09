@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Task, type: :model do
   describe 'Fixtures' do
@@ -137,6 +138,9 @@ RSpec.describe Task, type: :model do
   end
   describe 'Setting target of the task' do
     before :each do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      
       @job_seeker = FactoryGirl.create(:job_seeker)
       @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
       @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
