@@ -45,10 +45,11 @@
       %td
         %strong Case Manager
       %td
-        - if job_seeker.case_manager.nil?
-          %i None assigned
-        - else
-          = job_seeker.case_manager.full_name(last_name_first: false)
+        #assigned_case_manager
+          = render :partial => 'assigned_agency_person',
+                        :locals => {agency_person: pets_user,
+                                    job_seeker: job_seeker,
+                                    agency_role: 'CM'}
     %tr
       %td
         %strong Job Developer

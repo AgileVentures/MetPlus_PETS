@@ -1,5 +1,5 @@
 var AssignAgencyPerson = {
-  // assign an agency person, as a job developer, to a job seeker
+  // assign an agency person, as a job developer or case manager, to a job seeker
   assign_action: function () {
 
     // 'this' is the element (button) that was clicked
@@ -17,6 +17,8 @@ var AssignAgencyPerson = {
               // check if JD or CM assignment
               if (/jd/.test(id)) {
                 $('#assigned_job_developer').html(data);
+              } else if (/cm/.test(id)) {
+                $('#assigned_case_manager').html(data);
               }
             }});
 
@@ -24,6 +26,7 @@ var AssignAgencyPerson = {
   },
   setup: function () {
     $('#assign_jd').click(AssignAgencyPerson.assign_action);
+    $('#assign_cm').click(AssignAgencyPerson.assign_action);
   }
 };
 

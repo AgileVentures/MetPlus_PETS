@@ -12,8 +12,7 @@
       - @agency_people.each do |person|
         %tr
           %td
-            = link_to person.full_name, agency_person_path(person),
-                      method: :get
+            = link_to person.full_name, agency_person_path(person)
           %td
             = person.agency_roles.pluck(:role).join(', ')
           %td
