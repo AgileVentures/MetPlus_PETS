@@ -56,6 +56,16 @@ var PusherControl = {
             " has been assigned to you as Job Developer");
       }
     });
+
+    channel.bind('jobseeker_assigned_cm', function(data) {
+      // Process event if I am logged in and I am the case manager
+      if (parseInt(Cookies('user_id')) === data.cm_user_id) {
+        Notification.info_notification('Job Seeker: ' +
+            "<a href='/job_seekers/" + data.js_id +
+            "' target='_blank'>" + data.js_name + "</a>" +
+            " has been assigned to you as Case Manager");
+      }
+    });
   }
 };
 
