@@ -27,14 +27,8 @@ class AgencyPeopleController < ApplicationController
     cm_job_seeker_ids = model_params.delete(:as_cm_job_seeker_ids)
 
     # Find newly-assigned job seekers for notifying the agency person (as JD)
-    unless jd_job_seeker_ids.empty?
-      new_jd_job_seeker_ids = jd_job_seeker_ids.map { |id| id.to_i }
-      new_jd_job_seeker_ids.delete(0)
-      current_jd_ids = @agency_person.as_jd_job_seeker_ids
-      new_jd_job_seeker_ids.keep_if do |js_id|
-        not current_jd_ids.include? js_id
-      end
-    end
+    new_jd_job_seeker_ids = new_job_seeker_ids(@agency_person,
+                                               jd_job_seeker_ids, :JD)
 
     @agency_person.assign_attributes(model_params)
 
@@ -116,5 +110,27 @@ class AgencyPeopleController < ApplicationController
                           as_jd_job_seeker_ids: [],
                           as_cm_job_seeker_ids: [])
   end
+
+  def new_job_seeker_ids agency_person, job_seeker_ids, role_key
+    # job_seeker_ids comes in from params.  Find and return the ids of
+    # job seekers who are represented in params but not yet associated
+    # with the agency person in the indicated role
+
+    unless job_seeker_ids.empty?
+      new_job_seeker_ids = job_seeker_ids.map { |id| id.to_i }
+      new_job_seeker_ids.delete(0)
+      case role_key
+      when :JD
+        current_js_ids = agency_person.as_jd_job_seeker_ids
+      when :CM
+        current_js_ids = agency_person.as_cm_job_seeker_ids
+      end
+      new_job_seeker_ids.keep_if do |js_id|
+        not current_js_ids.include? js_id
+      end
+    end
+    return new_job_seeker_ids
+  end
+
 
 end
