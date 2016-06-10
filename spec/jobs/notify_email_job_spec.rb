@@ -47,4 +47,12 @@ RSpec.describe NotifyEmailJob, type: :job do
       to change(Delayed::Job, :count).by(+1)
   end
 
+  it 'job seeker assigned to case manager event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later('case_manager@gmail.com',
+                 Event::EVT_TYPE[:JS_ASSIGN_CM],
+                 {name: 'Joe Newseeker', id: 1}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
 end

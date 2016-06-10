@@ -7,7 +7,7 @@ class Event
   end
 
   def self.delay_seconds
-    @@delay
+    @@delay ||= 10
   end
 
   EVT_TYPE = {JS_REGISTER:   'js_registered',
@@ -15,7 +15,8 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
-              JS_ASSIGN_JD:  'jobseeker_assigned_jd'}
+              JS_ASSIGN_JD:  'jobseeker_assigned_jd',
+              JS_ASSIGN_CM:  'jobseeker_assigned_cm'}
 
   # Add events as required below.  Each event may have business rules around
   # 1) who is to be notified of the event occurence, and/or 2) task(s)
@@ -98,7 +99,7 @@ class Event
 
       Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
 
-    when :JS_ASSIGN_JD       # evt_obj = struct(:job_seeker, :job_developer)
+    when :JS_ASSIGN_JD       # evt_obj = struct(:job_seeker, :agency_person)
       # Business rules:
       #    Notify job developer (email and popup)
 
@@ -106,11 +107,26 @@ class Event
                      EVT_TYPE[:JS_ASSIGN_JD],
                      {js_id:   evt_obj.job_seeker.id,
                       js_name: evt_obj.job_seeker.full_name(last_name_first: false),
-                      jd_user_id: evt_obj.job_developer.user.id})
+                      jd_user_id: evt_obj.agency_person.user.id})
 
       NotifyEmailJob.set(wait: @@delay.seconds).
-                     perform_later(evt_obj.job_developer.email,
+                     perform_later(evt_obj.agency_person.email,
                      EVT_TYPE[:JS_ASSIGN_JD],
+                     evt_obj.job_seeker)
+
+    when :JS_ASSIGN_CM       # evt_obj = struct(:job_seeker, :agency_person)
+      # Business rules:
+      #    Notify case manager (email and popup)
+
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JS_ASSIGN_CM],
+                     {js_id:   evt_obj.job_seeker.id,
+                      js_name: evt_obj.job_seeker.full_name(last_name_first: false),
+                      cm_user_id: evt_obj.agency_person.user.id})
+
+      NotifyEmailJob.set(wait: @@delay.seconds).
+                     perform_later(evt_obj.agency_person.email,
+                     EVT_TYPE[:JS_ASSIGN_CM],
                      evt_obj.job_seeker)
     end
   end

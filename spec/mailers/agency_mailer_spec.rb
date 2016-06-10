@@ -102,4 +102,24 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
   end
 
+  describe 'Job seeker assigned to case manager' do
+    let(:case_manager)  { FactoryGirl.create(:case_manager) }
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+
+    let(:mail) { AgencyMailer.job_seeker_assigned_cm(case_manager.email,
+                                    job_seeker) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq 'Job seeker assigned cm'
+      expect(mail.to).to eq(["#{case_manager.email}"])
+      expect(mail.from).to eq(["from@example.com"])
+    end
+    it "renders the body" do
+      expect(mail).to have_body_text("A job seeker has been assigned to you as Case Manager:")
+    end
+    it "includes link to show job seeker" do
+      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+    end
+  end
+
 end

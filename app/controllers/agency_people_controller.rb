@@ -30,6 +30,10 @@ class AgencyPeopleController < ApplicationController
     new_jd_job_seeker_ids = new_job_seeker_ids(@agency_person,
                                                jd_job_seeker_ids, :JD)
 
+    # Find newly-assigned job seekers for notifying the agency person (as JD)
+    new_cm_job_seeker_ids = new_job_seeker_ids(@agency_person,
+                                               cm_job_seeker_ids, :CM)
+
     @agency_person.assign_attributes(model_params)
 
     @agency_person.agency_relations.delete_all
@@ -51,12 +55,12 @@ class AgencyPeopleController < ApplicationController
     end
 
     if @agency_person.save
-      # notify job developer of new JS assignments
-      new_jd_job_seeker_ids.each do |js_id|
-        obj = Struct.new(:job_seeker, :job_developer)
-        Event.create(:JS_ASSIGN_JD, obj.new(JobSeeker.find(js_id),
-                                            @agency_person))
-      end if new_jd_job_seeker_ids
+      # notify agency person of new JS assignments
+      notify_ap_new_js_assignments @agency_person,
+                                   new_jd_job_seeker_ids, :JD
+
+      notify_ap_new_js_assignments @agency_person,
+                                   new_cm_job_seeker_ids, :CM
 
       flash[:notice] = "Agency person was successfully updated."
       redirect_to agency_person_path(@agency_person)
@@ -132,5 +136,20 @@ class AgencyPeopleController < ApplicationController
     return new_job_seeker_ids
   end
 
+  def notify_ap_new_js_assignments agency_person, job_seeker_ids, role_key
+    if job_seeker_ids
+      job_seeker_ids.each do |js_id|
+        obj = Struct.new(:job_seeker, :agency_person)
+        case role_key
+        when :JD
+          Event.create(:JS_ASSIGN_JD, obj.new(JobSeeker.find(js_id),
+                                              @agency_person))
+        when :CM
+          Event.create(:JS_ASSIGN_CM, obj.new(JobSeeker.find(js_id),
+                                              @agency_person))
+        end
+      end
+    end
+  end
 
 end
