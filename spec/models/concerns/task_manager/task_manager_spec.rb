@@ -2,8 +2,15 @@ require 'rails_helper'
 class TaskTester
   include TaskManager::TaskManager
 end
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe TaskManager::TaskManager do
+
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   describe 'Class methods' do
 
     before :each do

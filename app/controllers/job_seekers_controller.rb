@@ -1,6 +1,7 @@
 class JobSeekersController < ApplicationController
 
   include UserParameters
+  include JobApplicationsViewer
 
   def new
     @jobseeker = JobSeeker.new
@@ -89,6 +90,7 @@ class JobSeekersController < ApplicationController
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
     @past_week = Job.new_jobs(Time.now - 3.weeks).paginate(:page => params[:page], :per_page => 5)
 
+    @application_type = params[:application_type] || 'my-applied'
   end
 
   def index
@@ -97,7 +99,21 @@ class JobSeekersController < ApplicationController
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
+    @application_type = params[:application_type] || 'js-applied'
   end
+
+  def applied_jobs
+    raise 'Unsupported request' if not request.xhr?
+
+    @application_type = params[:application_type] || 'my-applied'
+
+    @job_applications = []
+    @job_applications = display_job_applications @application_type, 5,
+                                                 params[:id]
+    render partial: 'jobs/applied_job_list',
+          :locals => {job_applications: @job_applications,
+                      application_type: @application_type}
+	end
 
   def destroy
     @jobseeker = JobSeeker.find(params[:id])

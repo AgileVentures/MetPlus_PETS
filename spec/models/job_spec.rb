@@ -1,8 +1,9 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Job, type: :model do
   describe 'Fixtures' do
-    xit 'should have a valid factory' do
+    it 'should have a valid factory' do
       expect(FactoryGirl.build(:job)).to be_valid
     end
   end
@@ -12,7 +13,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to belong_to :company_person }
     it  { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
-    it { is_expected.to have_many :job_skills }
+    it { is_expected.to have_many(:job_skills).dependent(:destroy) }
+    it { is_expected.to accept_nested_attributes_for(:job_skills).
+                              allow_destroy(true) }
     it { is_expected.to have_many(:skills).through(:job_skills) }
     it { is_expected.to have_many(:required_skills).through(:job_skills).
           conditions(job_skills: {required: true}).
@@ -36,7 +39,6 @@ RSpec.describe Job, type: :model do
 
     it { is_expected.to have_db_column :company_person_id }
     it { is_expected.to have_db_column :address_id }
-    xit { is_expected.to have_db_column :job_category_id }
   end
 
   describe 'Validations' do
@@ -49,8 +51,7 @@ RSpec.describe Job, type: :model do
     it { should allow_value('', nil).for(:fulltime).on(:create) }
     it { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
-    xit { is_expected.to validate_presence_of :job_category_id }
-    it{ is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])}
+    it { is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])}
   end
 
   describe 'Class methods' do
@@ -61,6 +62,11 @@ RSpec.describe Job, type: :model do
       let(:job) {FactoryGirl.create(:job)}
       let(:job_seeker) {FactoryGirl.create(:job_seeker)}
       let(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
 
       it 'success - first application' do
         num_applications = job.number_applicants
@@ -96,5 +102,51 @@ RSpec.describe Job, type: :model do
                         to eq second_appl
       end
     end
+  end
+  describe 'Create Job method(AR model and CruncherService)' do
+
+    before(:each) do
+      stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+    end
+
+    it 'is succeeds with all parameters' do
+
+      stub_request(:post, CruncherService.service_url + '/job/create').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
+      job = FactoryGirl.build(:job)
+
+      expect(job.save).to be true
+      expect(Job.count).to eq 1
+    end
+
+    it 'fails with invalid model parameters' do
+
+      stub_request(:post, CruncherService.service_url + '/job/create').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+
+      job = FactoryGirl.build(:job, title: nil)
+
+      expect(job.save).to be false
+      expect(job.errors.full_messages).to include("Title can't be blank")
+      expect(Job.count).to eq 0
+   end
+
+   it 'fails with valid model but cruncher create failure' do
+
+      stub_request(:post, CruncherService.service_url + '/job/create').
+         to_raise(RuntimeError)
+
+      job = FactoryGirl.build(:job)
+
+
+      expect(job.save).to be false
+      expect(Job.count).to eq 0
+
+   end
   end
 end

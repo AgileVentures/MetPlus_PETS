@@ -1,8 +1,11 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobsController, type: :controller do
 
   before(:example) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
 
       @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -10,6 +13,7 @@ RSpec.describe JobsController, type: :controller do
       @job =  FactoryGirl.create(:job)
       @job_2 = FactoryGirl.create(:job)
       @address = FactoryGirl.create(:address)
+      @skill = FactoryGirl.create(:skill)
   end
 
   describe "permit params to create and update job" do
@@ -25,12 +29,17 @@ RSpec.describe JobsController, type: :controller do
           company_id: @company_person.company.id,
           company_job_id: @job.company_job_id,
           company_person_id:  @company_person.id,
-          address_id: @address.id
+          address_id: @address.id,
+          job_skills_attributes: {
+            '0' => {skill_id: @skill.id, required: 1,
+                  min_years: 2, max_years: 5, _destroy: false}
+          }
         }
       }
-
       should permit(:description, :shift, :title, :company_person_id,
-                    :company_job_id, :fulltime, :company_id, :address_id).
+                    :company_job_id, :fulltime, :company_id, :address_id,
+                    job_skills_attributes: [:id, :_destroy, :skill_id,
+                          :required, :min_years, :max_years] ).
         for(:create, params: params).
         on(:job)
     end
@@ -47,11 +56,17 @@ RSpec.describe JobsController, type: :controller do
             company_id: @company_person.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
-            address_id: @address.id
+            address_id: @address.id,
+            job_skills_attributes: {
+              '0' => {skill_id: @skill.id, required: 1,
+                    min_years: 2, max_years: 5, _destroy: false}
+            }
         }
       }
       should permit(:description, :shift, :title, :address_id,
-                    :company_job_id, :company_id, :company_person_id, :fulltime).
+                    :company_job_id, :company_id, :company_person_id, :fulltime,
+                    job_skills_attributes: [:id, :_destroy, :skill_id,
+                          :required, :min_years, :max_years] ).
         for(:update, params: params).on(:job)
     end
   end
@@ -188,6 +203,53 @@ RSpec.describe JobsController, type: :controller do
 
   end
 
+  describe 'GET #list_search_jobs' do
+
+    let(:job1) { FactoryGirl.create(:job,
+                      title: 'Customer Manager',
+                      description: 'Provide resposive customer service') }
+
+    let(:job2) { FactoryGirl.create(:job) }
+
+    let!(:job_skill1) { FactoryGirl.create(:job_skill, job: job1,
+                        skill: FactoryGirl.create(:skill, name: 'New Skill 1')) }
+    let!(:job_skill2) { FactoryGirl.create(:job_skill, job: job2,
+                        skill: FactoryGirl.create(:skill, name: 'New Skill 2')) }
+
+    before(:each) do
+      get :list_search_jobs,
+          {q: {'title_cont_any': 'customer manager',
+               'description_cont_any': 'responsive service'}}
+    end
+
+    it 'returns success status' do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders 'list_search_jobs' template" do
+      expect(response).to render_template('list_search_jobs')
+    end
+
+    it 'assigns title words for view' do
+      expect(assigns(:title_words)).
+            to match ['customer', 'manager']
+    end
+
+    it 'assigns description words for view' do
+      expect(assigns(:description_words)).
+            to match ['responsive', 'service']
+    end
+
+    it 'assigns matching job' do
+      expect(assigns(:jobs)[0]).to eq job1
+    end
+
+    it 'does not assign non-matching job' do
+      expect(assigns(:jobs)[0]).to_not eq job2
+    end
+
+  end
+
   describe 'GET #edit authorized user' do
 
     before(:example){ patch :edit, :id => @job.id }
@@ -240,11 +302,15 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'successful POST #create' do
 
-    it "has 2 jobs at the start" do
+    it "has 2 jobs and 0 job_skills at the start" do
       expect(Job.count).to eq(2)
+      expect(JobSkill.count).to eq(0)
     end
 
-    it 'redirects to the jobs index and increased by 1 count' do
+    it 'redirects to index, increase job and job_skills by 1' do
+
+      @skill = FactoryGirl.create(:skill, name: 'Expert at chess')
+
       post :create, :job => {:title => "Ruby on Rails",
                              :fulltime => true,
                              description: "passionate",
@@ -252,10 +318,16 @@ RSpec.describe JobsController, type: :controller do
                              address_id: '2',
                              company_person_id: 3,
                              :shift => "Evening",
-                             company_job_id: "WERRR123"}
+                             company_job_id: "WERRR123",
+                             job_skills_attributes: {
+                               '0' => {skill_id: @skill.id,
+                                       required: 1, min_years: 2,
+                                       max_years: 5, _destroy: false}} }
+
       expect(response).to redirect_to(:action => 'index')
       should set_flash
       expect(Job.count).to eq(3)
+      expect(JobSkill.count).to eq(1)
       expect(response.status).to  eq(302)
     end
 
@@ -270,24 +342,51 @@ RSpec.describe JobsController, type: :controller do
     end
   end
 
-  describe 'PATCh #update' do
+  describe 'PATCH #update' do
 
-     it "has 2 jobs at the start" do
-      expect(Job.count).to eq(2)
+    let(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
+
+    it 'has 3 jobs and 1 job_skill at the start' do
+      expect(Job.count).to eq(3)
+      expect(JobSkill.count).to eq(1)
     end
 
-    it 'should have 2 jobs after update and redirects to the show page' do
-      patch :update, id: @job.id , :job => {:title => "Ruby on Rails",
-                             :fulltime => true, description: "passionate",
-                             company_id: '3',
-                             :shift => "Evening", company_job_id: "WERRR123"}
+    it 'add job_skill: redirects to show, increase job_skills by 1' do
+
+      patch :update, id: @job.id ,
+                  :job => {title: "Ruby on Rails",
+                           fulltime: true,
+                           description: "passionate",
+                           shift: "Evening",
+                           company_job_id: "WERRR123",
+                           job_skills_attributes: {
+                               '0' => {skill_id: @skill.id,
+                                       required: 1, min_years: 2,
+                                       max_years: 5, _destroy: false}} }
 
       expect(response).to redirect_to(:action => 'show')
       should set_flash
-      expect(Job.count).to eq(2)
+      expect(Job.count).to eq(3)
+      expect(JobSkill.count).to eq(2)
       expect(response.status).to  eq(302)
-
      end
+
+
+     it 'remove job_skill: redirects to show, decrease job_skills by 1' do
+
+       expect(JobSkill.count).to eq(1)
+
+       patch :update, id: job_skill.job.id ,
+            :job => job_skill.job.attributes.
+                 merge(job_skills_attributes: {'0' =>
+                    {id: job_skill.id.to_s, _destroy: '1'}})
+
+       expect(response).to redirect_to(:action => 'show')
+       should set_flash
+       expect(JobSkill.count).to eq(0)
+       expect(response.status).to  eq(302)
+      end
 
      it 'unsuccessful PATCH' do
       patch :update, id: @job.id , :job => {:title => " ",
@@ -296,10 +395,22 @@ RSpec.describe JobsController, type: :controller do
                              :shift => "Evening", company_job_id: "WERRR123"}
 
       expect(response).to render_template('edit')
-      expect(Job.count).to eq(2)
+      expect(Job.count).to eq(3)
       expect(response.status).to  eq(200)
      end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill) }
+
+    it 'destroys job and associated job_skill' do
+      expect { delete :destroy, :id => job_skill.job.id }.
+        to change(Job, :count).by -1
+    end
+
+  end
+
   describe 'DELETE #destroy sad path, for different company_person ' do
 
     before(:example){ delete :destroy, :id => @job.id}
@@ -601,6 +712,8 @@ RSpec.describe JobsController, type: :controller do
     end
     describe 'successful application' do
       before :each do
+        allow(Pusher).to receive(:trigger)
+
         allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id

@@ -8,8 +8,7 @@ RSpec.describe Skill, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_and_belong_to_many :job_categories }
-    it { is_expected.to have_many :job_skills }
+    it { is_expected.to have_many(:job_skills).dependent(:destroy) }
     it { is_expected.to have_many(:jobs).through(:job_skills) }
   end
 

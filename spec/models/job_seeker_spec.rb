@@ -27,6 +27,64 @@ describe JobSeeker, type: :model do
 
   end
 
+  describe "#latest_application" do
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job1)       { FactoryGirl.create(:job) }
+    let(:job2)       { FactoryGirl.create(:job) }
+
+    it 'returns last application for job seeker' do
+
+      stub_request(:post,CruncherService.service_url + '/authenticate').
+          to_return(body: "{\"token\": \"12345\"}", status: 200,
+           :headers => {'Content-Type' => 'application/json'})
+      stub_request(:post, CruncherService.service_url + '/job/create').
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}" , status: 200,
+           :headers => {'Content-Type' => 'application/json'})
+
+      job1.apply job_seeker
+      expect(job_seeker.latest_application).to eq job1.job_applications[0]
+      job2.apply job_seeker
+      expect(job_seeker.latest_application).to eq job2.job_applications[0]
+    end
+  end
+
+  describe "#with_ap_in_role" do
+    let!(:jd_role) { FactoryGirl.create(:agency_role,
+                                       role: AgencyRole::ROLE[:JD])}
+    let!(:cm_role) { FactoryGirl.create(:agency_role,
+                                       role: AgencyRole::ROLE[:CM])}
+
+    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker3) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker4) { FactoryGirl.create(:job_seeker) }
+
+    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:case_manager)  { FactoryGirl.create(:case_manager) }
+
+    before(:each) do
+      FactoryGirl.create(:agency_relation, job_seeker: job_seeker1,
+                          agency_person: job_developer, agency_role: jd_role)
+      FactoryGirl.create(:agency_relation, job_seeker: job_seeker2,
+                          agency_person: job_developer, agency_role: jd_role)
+
+      FactoryGirl.create(:agency_relation, job_seeker: job_seeker3,
+                          agency_person: case_manager, agency_role: cm_role)
+      FactoryGirl.create(:agency_relation, job_seeker: job_seeker4,
+                          agency_person: case_manager, agency_role: cm_role)
+    end
+
+    it 'returns IDs of job seekers assigned to this job developer' do
+      expect(JobSeeker.with_ap_in_role(:JD, job_developer)).
+            to contain_exactly(job_seeker1.id, job_seeker2.id)
+    end
+    it 'returns IDs of job seekers assigned to this case manager' do
+      expect(JobSeeker.with_ap_in_role(:CM, case_manager)).
+            to contain_exactly(job_seeker3.id, job_seeker4.id)
+    end
+end
+
+
   context "#acting_as?" do
     it "returns true for supermodel class and name" do
       expect(JobSeeker.acting_as? :user).to be true

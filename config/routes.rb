@@ -101,14 +101,22 @@ Rails.application.routes.draw do
 
   get 'company/home', path: '/company/:id'
 
+# ------------------------------ Jobs ----------------------------------------
+  get 'jobs/list/:job_type'         => 'jobs#list',   as: :list_jobs
+  get 'jobs/:job_id/apply/:user_id' => 'jobs#apply',  as: :apply_job
+  get 'jobs/list_search_jobs'       => 'jobs#list_search_jobs',
+                                        as: :list_search_jobs
   resources :jobs
-  get 'jobs/list/:job_type' => 'jobs#list', as: :list_jobs
-  get 'jobs/:job_id/apply/:user_id' => 'jobs#apply', as: :apply_job
+  # --------------------------------------------------------------------------
 
-  # ----------------------------Job Seekers-----------------------------------
+  # ---------------------------- Job Seekers ---------------------------------
   resources :job_seekers do
      get 'home', on: :member, as: :home
+     get 'match_jobs', on: :member, as: :match_jobs
   end
+
+  get 'job_seekers/:id/applied_jobs/:application_type' =>
+                'job_seekers#applied_jobs', as: :applied_jobs_job_seeker
   # --------------------------------------------------------------------------
 
 

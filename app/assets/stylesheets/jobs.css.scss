@@ -6,6 +6,11 @@ $state-danger-text: #a94442;
 
 /*ONLY JOB RELATED CSS*/
 
+.job-skill-label {
+	font-style: italic;
+	font-weight: normal;
+}
+
 .modal-content#job-delete-modal-id{
 	background-color: $light-blue;
 }
@@ -25,7 +30,7 @@ $state-danger-text: #a94442;
 		a{
 			text-decoration: underline;
 		}
-	
+
 }
 .panel.panel-default#show-panel-id{
 	margin-bottom: 0px;
@@ -59,12 +64,12 @@ $state-danger-text: #a94442;
 
 .btn.btn-primary.btn-xs#jobs-delete-link{
 	margin-left: 7px;
-	background: $light-blue; 
+	background: $light-blue;
 }
 .btn.btn-primary.btn-xs#jobs-edit-link{
-	background: $light-blue; 
+	background: $light-blue;
 }
-.input-group#search-id{ 
+.input-group#search-id{
 	margin-top: 60px;
 }
 .btn.btn-primary.btn-block#edit-job-submit{
@@ -72,16 +77,18 @@ $state-danger-text: #a94442;
 }
 .btn.btn-primary.btn-block#new-job-submit{
 	background: $light-blue;
-	
+
 }
 .page-header#new-job-header {
 	border-bottom: 2px solid $light-blue;
-	margin-bottom: 70px;
+	margin-bottom: 15px;
+	margin-top: 10px;
 
 }
 .page-header#edit-job-header {
 	border-bottom: 2px solid $light-blue;
-	margin-bottom: 70px;
+	margin-bottom: 15px;
+	margin-top: 10px;
 }
 
 .well#jobs-well-lg{

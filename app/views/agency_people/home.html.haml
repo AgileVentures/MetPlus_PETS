@@ -8,124 +8,34 @@
 %h3 Your Open Tasks
 = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
 
-- if @agency_person.is_case_manager?(@agency)
-  %h3 Your Job Seekers (Case Manager)
-  - if @your_jobseekers_cm.empty?
-    %i There are no job seekers assigned to you yet.
-  - else
-    .col-sm-9
-    %table.table.table-hover
-      %thead
-        %tr
-          %td
-            %strong Name
-          %td
-            %strong Status
-          %td
-            %strong Last Login
-      %tbody
-        - @your_jobseekers_cm.each do |js|
-          %tr
-            %td
-              = js.full_name
-            %td
-              - unless js.job_seeker_status.nil?
-                = js.job_seeker_status.short_description
-            %td
-              - if js.last_sign_in_at.nil?
-                %i never
-              - else
-                = js.last_sign_in_at
-    = will_paginate @your_jobseekers_cm, param_name: 'your_jobseekers_cm_page'
-    .clearfix
-
-
-  %h3 Job Seekers Without a Case Manager
-  - if @js_without_cm.empty?
-    %i All job seekers have a Case Manager at the moment.
-  -else
-    .col-sm-9
-      %table.table.table-hover
-        %thead
-          %tr
-            %td
-              %strong Name
-            %td
-              %strong Status
-            %td
-              %strong Last Login
-        %tbody
-          - @js_without_cm.each do |js|
-            %tr
-              %td
-                = js.full_name
-              %td
-                - unless js.job_seeker_status.nil?
-                  = js.job_seeker_status.short_description
-              %td
-                - if js.last_sign_in_at.nil?
-                  %i never
-                - else
-                  = js.last_sign_in_at
-      = will_paginate @js_without_jd, param_name: 'js_without_cm_page'
-    .clearfix
-
 - if @agency_person.is_job_developer?(@agency)
-  %h3 Your Job Seekers
+  %h3 Your Job Seekers (as job developer)
   - if @your_jobseekers_jd.empty?
     %i There are no job seekers assigned to you yet.
   - else
     .col-sm-9
-      %table.table.table-hover
-        %thead
-          %tr
-            %td
-              %strong Name
-            %td
-              %strong Status
-            %td
-              %strong Last Login
-        %tbody
-          - @your_jobseekers_jd.each do |js|
-            %tr
-              %td
-                = js.full_name
-              %td
-                - unless js.job_seeker_status.nil?
-                  = js.job_seeker_status.short_description
-              %td
-                - if js.last_sign_in_at.nil?
-                  %i never
-                - else
-                  = js.last_sign_in_at
-      = will_paginate @your_jobseekers_jd, param_name: 'your_jobseekers_jd_page'
-    .clearfix
+    = render partial: 'job_seekers' , :locals => {jobseekers: @your_jobseekers_jd}
 
-  %h3 Job Seekers Without a Job Developer
-  - if @js_without_jd.empty?
-    %i All job seekers have a Case Manager at the moment.
+- if @agency_person.is_case_manager?(@agency)
+  %h3 Your Job Seekers (as case manager)
+  - if @your_jobseekers_cm.empty?
+    %i There are no job seekers assigned to you yet.
   - else
     .col-sm-9
-      %table.table.table-hover
-        %thead
-          %tr
-            %td
-              %strong Name
-            %td
-              %strong Status
-            %td
-              %strong Last Login
-        %tbody
-          - @js_without_jd.each do |js|
-            %tr
-              %td
-                = js.full_name
-              %td
-                - unless js.job_seeker_status.nil?
-                  = js.job_seeker_status.short_description
-              %td
-                - if js.last_sign_in_at.nil?
-                  %i never
-                - else
-                  = js.last_sign_in_at
-    = will_paginate @js_without_jd, param_name: 'js_without_jd_page'
+    = render partial: 'job_seekers' , :locals => {jobseekers: @your_jobseekers_cm}
+
+- if @agency_person.is_job_developer?(@agency)
+  %h3 Job Seekers without a Job Developer
+  - if @js_without_jd.empty?
+    %i All job seekers have a Job Developer at the moment.
+  - else
+    .col-sm-9
+    = render partial: 'job_seekers' , :locals => {jobseekers: @js_without_jd}
+
+- if @agency_person.is_case_manager?(@agency)
+  %h3 Job Seekers without a Case Manager
+  - if @js_without_cm.empty?
+    %i All job seekers have a Case Manager at the moment.
+  -else
+    .col-sm-9
+    = render partial: 'job_seekers' , :locals => {jobseekers: @js_without_cm}

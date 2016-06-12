@@ -229,6 +229,18 @@ if Rails.env.development? || Rails.env.staging?
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
 
+  # Add résumé to this job seeker
+  file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')
+  resume = Resume.new(file: file,
+                      file_name: 'Admin-Assistant-Resume.pdf',
+                      job_seeker_id: js1.id)
+  resume.save
+
+  # Add job applications for this job seeker
+  Job.limit(50).each do |job|
+    JobApplication.create(job: job, job_seeker: js1)
+  end
+
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
                         email: 'mary@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
@@ -257,6 +269,8 @@ if Rails.env.development? || Rails.env.staging?
                                address: create_address)
 
   puts "Job Seekers created: #{JobSeeker.count}"
+
+  puts "Job Applications created: #{JobApplication.count}"
 
   #-------------------------- Agency Branches -----------------------------
   addresses = Address.all.to_a
@@ -316,6 +330,11 @@ if Rails.env.development? || Rails.env.staging?
   agency_cm_and_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:CM]),
                          job_seeker: js1)
+
+  agency_cm_and_jd.agency_relations <<
+      AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
+                         job_seeker: js1)
+
   agency_cm_and_jd.agency_relations <<
       AgencyRelation.new(agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]),
                          job_seeker: js2)

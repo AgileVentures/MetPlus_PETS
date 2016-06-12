@@ -1,12 +1,13 @@
 require 'rails_helper'
 require 'agency_mailer'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
-  let(:company_person) { FactoryGirl.create(:company_person, company: company) }
+  let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:job)            { FactoryGirl.create(:job, company: company,
                                             company_person: company_person) }
   let(:application) do
@@ -54,10 +55,10 @@ RSpec.describe Event, type: :model do
                          {name: company.name, id: company.id})
     end
 
-    it 'sends event notification email' do
+    it 'sends event notification email to company person and agency people' do
       allow(Pusher).to receive(:trigger)
       expect { Event.create(:COMP_REGISTER, company) }.
-                    to change(all_emails, :count).by(+1)
+                    to change(all_emails, :count).by(+2)
     end
 
     it 'creates one task' do
@@ -67,7 +68,29 @@ RSpec.describe Event, type: :model do
     end
   end
 
+  describe 'company_registration_approved event' do
+    it 'sends approval notification email to company person' do
+      expect { Event.create(:COMP_APPROVED, company) }.
+                    to change(all_emails, :count).by(+1)
+    end
+  end
+
+  describe 'company_registration_denied event' do
+    it 'sends denial notification email to company person' do
+      obj = Struct.new(:company, :reason).new
+      obj.company = company
+      obj.reason = 'We are unable to accept new partners at this time'
+      expect { Event.create(:COMP_DENIED, obj) }.
+                    to change(all_emails, :count).by(+1)
+    end
+  end
+
   describe 'jobseeker_applied event' do
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
 
     it 'triggers a Pusher message' do
       allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'

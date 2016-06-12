@@ -1,19 +1,22 @@
-#jobseekers_table
-%h3 This is a partial!
+
 %table.table.table-hover
   %thead
     %tr
-      %td
+      %th
         %strong Name
-      %td
+      %th
         %strong Status
-      %td
+      %th
         %strong Last Login
+      %th
+        %strong Job Applications
+      %th
+        %strong Latest Application
   %tbody
-    - job_seekers.each do |js|
+    - jobseekers.each do |js|
       %tr
         %td
-          = js.full_name
+          = link_to js.full_name, job_seeker_path(js)
         %td
           - unless js.job_seeker_status.nil?
             = js.job_seeker_status.short_description
@@ -21,5 +24,17 @@
           - if js.last_sign_in_at.nil?
             %i never
           - else
-            = js.last_sign_in_at
-= will_paginate job_seekers, param_name: 'job_seekers_page'
+            = "#{time_ago_in_words(js.last_sign_in_at)} ago"
+        %td
+          - if js.job_applications.empty?
+            %i none
+          - else
+            = js.job_applications.count
+        %td
+          - if js.job_applications.empty?
+            %i none
+          - else
+            = "#{time_ago_in_words(js.latest_application.created_at)} ago"
+
+= will_paginate jobseekers
+.clearfix

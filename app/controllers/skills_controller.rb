@@ -46,7 +46,7 @@ class SkillsController < ApplicationController
     rescue
       render nothing: true, status: 404
     else
-      skill.delete
+      skill.destroy
       render json: { skill_count: Skill.count }
     end
   end
@@ -60,5 +60,5 @@ class SkillsController < ApplicationController
   def confirm_xhr
     raise 'Not an XHR request' unless request.xhr?
   end
-  
+
 end

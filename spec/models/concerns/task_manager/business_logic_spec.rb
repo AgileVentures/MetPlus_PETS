@@ -3,6 +3,7 @@ class TaskTester
   include TaskManager::TaskManager
   include TaskManager::BusinessLogic
 end
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe TaskManager::BusinessLogic do
   describe 'No Case Manager Assigned to Job Seeker' do
@@ -82,6 +83,11 @@ RSpec.describe TaskManager::BusinessLogic do
                                               company_person: company_admin) }
 
     describe '#new_review_job_application_task' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
+
       subject {TaskTester.new_review_job_application_task job, company}
       it('owner is company admin'){expect(subject.task_owner).to eq([company_admin])}
       it('target application'){expect(subject.target).to eq(job)}

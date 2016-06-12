@@ -43,9 +43,9 @@ end
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
   regex = /#{toSearch}.+#{last}/
   if not_see
-    step %{I should not see "#{regex}"}
+    expect(page.text).not_to match regex
   else
-    step %{I should see "#{regex}"}
+    expect(page.text).to match regex
   end
 end
 
@@ -66,12 +66,34 @@ When(/^(?:I|they) fill in "([^"]*)" with "([^"]*)"$/) do |field, value|
   fill_in field, with: value
 end
 
-When(/^(?:I|they) click the "([^"]*)" link$/) do |link|
-  if Capybara.current_driver == :poltergeist
-    find_link(link).trigger('click')
+When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
+  # use 'ordinal' when selecting among select links all of which
+  # have the same selector (e.g., same label)
+
+  if not ordinal
+    if Capybara.current_driver == :poltergeist
+      find_link(link).trigger('click')
+    else
+      click_link link
+    end
   else
-    click_link link
+    case ordinal
+    when ' first'
+      index = 0
+    when ' second'
+      index = 1
+    when ' third'
+      index = 2
+    else
+      raise 'do not understand ordinal value'
+    end
+    if Capybara.current_driver == :poltergeist
+      all(:link, link)[index].trigger('click')
+    else
+      all(:link, link)[index].click
+    end
   end
+
   # see discussion here:
   # https://github.com/teampoltergeist/poltergeist/issues/520
 end
@@ -108,12 +130,38 @@ When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
   end
 end
 
-When(/^(?:I|they) select "([^"]*)" in select list "([^"]*)"$/) do |item, list|
-  find(:select, list).find(:option, item).select_option
+When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, ordinal, list|
+  # use 'ordinal' when selecting among select lists all of which
+  # have the same selector (e.g., same label)
+  case ordinal
+  when nil
+    find(:select, list).find(:option, item).select_option
+  when ' first'
+    all(:select, list)[0].find(:option, item).select_option
+  when ' second'
+    all(:select, list)[1].find(:option, item).select_option
+  when ' third'
+    all(:select, list)[2].find(:option, item).select_option
+  else
+    raise 'do not understand ordinal value'
+  end
 end
 
-And(/^(?:I|they) check "([^"]*)"$/) do |item|
-  check(item)
+And(/^(?:I|they) check( \w*)? "([^"]*)"$/) do |ordinal, item|
+  # use 'ordinal' when selecting among select checkboxes all of which
+  # have the same selector (e.g., same label)
+  case ordinal
+  when nil
+    check(item)
+  when ' first'
+    all(:checkbox, item)[0].set(true)
+  when ' second'
+    all(:checkbox, item)[1].set(true)
+  when ' third'
+    all(:checkbox, item)[2].set(true)
+  else
+    raise 'do not understand ordinal value'
+  end
 end
 
 And(/^the selection "([^"]*)" should be disabled$/) do |item|

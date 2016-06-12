@@ -15,9 +15,53 @@ class JobsController < ApplicationController
 			@jobs = @cp_or_jd.company.jobs.paginate(:page => params[:page],
 				                                        :per_page => 32)
 		else
-			@jobs = Job.paginate(:page => params[:page],
+			@jobs = Job.order(:title).paginate(:page => params[:page],
 				               :per_page => 32).includes(:company)
 		end
+	end
+
+	def list_search_jobs
+
+		# Make a copy of q params since we will strip out any commas separating
+		# words - need to retain any commas in the form (so user is not surprised)
+		q_params = params[:q] ? params[:q].dup : params[:q]
+
+		# Ransack returns a string with all terms entered by the user in
+		# a text field.  For "any" or "all" word(s) queries, need to convert
+		# that single string into an array of individual words for SQL search.
+
+		@title_words = []
+		if q_params && q_params[:title_cont_any]
+			q_params[:title_cont_any] =
+							q_params[:title_cont_any].split(/(?:,\s*|\s+)/)
+			@title_words = q_params[:title_cont_any]
+		end
+
+		if q_params && q_params[:title_cont_all]
+			q_params[:title_cont_all] =
+							q_params[:title_cont_all].split(/(?:,\s*|\s+)/)
+			@title_words += q_params[:title_cont_all]
+		end
+
+		@description_words = []
+		if q_params && q_params[:description_cont_any]
+			q_params[:description_cont_any] =
+							q_params[:description_cont_any].split(/(?:,\s*|\s+)/)
+			@description_words = q_params[:description_cont_any]
+		end
+
+		if q_params && q_params[:description_cont_all]
+			q_params[:description_cont_all] =
+							q_params[:description_cont_all].split(/(?:,\s*|\s+)/)
+			@description_words += q_params[:description_cont_all]
+		end
+
+		@query = Job.ransack(params[:q]) # For form display of entered values
+
+		@jobs  = Job.ransack(q_params).result(distinct: true).
+											includes(:company).
+									 		includes(:address).
+											page(params[:page]).per_page(5)
 	end
 
 	def new
@@ -141,7 +185,9 @@ class JobsController < ApplicationController
 			#   :company_person_id, :fulltime, :company_job_id, :job_category_id, :title)
 			params.require(:job).permit(:description, :shift, :company_job_id,
 			                            :fulltime, :company_id, :title, :address_id,
-			                            :company_person_id)
+			                            :company_person_id,
+									job_skills_attributes: [:id, :_destroy, :skill_id,
+																					:required, :min_years, :max_years])
 		end
 
 

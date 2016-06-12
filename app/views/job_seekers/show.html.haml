@@ -1,37 +1,26 @@
-%div{:class => 'container'}
-  %div{class: 'div_align_left', id: 'bold_text'}
-    %br
-    First Name:
-    %br
-    Last Name:
-    %br
-    Email:
-    %br
-    Phone:
-    %br
-    Year of Birth:
-    %br
-    Status:
-  %div{class: 'div_align_right'}
-    %br
-    = @jobseeker.first_name
-    %br
-    = @jobseeker.last_name
-    %br
-    = @jobseeker.email
-    %br
-    = @jobseeker.phone
-    %br
-    = @jobseeker.year_of_birth
+.row
+  .col-sm-3
+    %h3
+      Job Seeker
+    %a(id='toggle_info' href='#info_table' class='text-danger'
+                style='padding-left: 10px;')
+      Hide Job Seeker Information
 
-    %br
-    = @jobseeker.status.short_description
+  .col-sm-9
+    = render partial: 'info', locals: {job_seeker: @jobseeker}
+
+%h3
+  Job Applications for
+  = "#{@jobseeker.full_name(last_name_first: false)}"
+.pagination-div{id: "applications-#{@application_type}",
+                data: {url: applied_jobs_job_seeker_path(@jobseeker,
+                                                         @application_type)}}
+
 %br
-%br
-%div{class: 'row'}
+.row
   .col-sm-2
-  = button_to 'Delete Jobseeker', job_seeker_path(@jobseeker), method: :delete,            |
-      data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
-%br
+    = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker), method: :delete,            |
+        data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
+
   .col-sm-2
-  =link_to 'Cancel',root_path, class: 'btn btn-link'
+    =link_to 'Back', :back, class: 'btn btn-link'
