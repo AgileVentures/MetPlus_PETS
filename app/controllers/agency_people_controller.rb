@@ -30,7 +30,7 @@ class AgencyPeopleController < ApplicationController
     new_jd_job_seeker_ids = new_job_seeker_ids(@agency_person,
                                                jd_job_seeker_ids, :JD)
 
-    # Find newly-assigned job seekers for notifying the agency person (as JD)
+    # Find newly-assigned job seekers for notifying the agency person (as CM)
     new_cm_job_seeker_ids = new_job_seeker_ids(@agency_person,
                                                cm_job_seeker_ids, :CM)
 
