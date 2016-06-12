@@ -12,6 +12,10 @@ class AgencyMailer < ApplicationMailer
     send_notification_mail(email_list, job_application, 'Job Application')
   end
 
+  def job_seeker_assigned_jd(email_list, job_seeker)
+    send_notification_mail(email_list, job_seeker, 'Job Seeker Assigned JD')
+  end
+
   private
 
   def send_notification_mail(email_list, obj, obj_type)

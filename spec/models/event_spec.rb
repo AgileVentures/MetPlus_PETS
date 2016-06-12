@@ -6,10 +6,18 @@ RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
+  let(:job_developer)  { FactoryGirl.create(:job_developer) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:job)            { FactoryGirl.create(:job, company: company,
                                             company_person: company_person) }
+
+  let(:evt_obj) do
+    obj_class = Struct.new(:job_seeker, :job_developer)
+    obj = obj_class.new(job_seeker, job_developer)
+    obj
+  end
+
   let(:application) do
     job.apply job_seeker
     job.last_application_by_job_seeker(job_seeker)
@@ -115,5 +123,26 @@ RSpec.describe Event, type: :model do
       expect { Event.create(:JS_APPLY, application) }.
                     to change(Task, :count).by(+1)
     end
+  end
+
+  describe 'jobseeker_assigned_jd event' do
+
+    it 'triggers a Pusher message' do
+      allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
+      Event.create(:JS_ASSIGN_JD, evt_obj)
+      expect(Pusher).to have_received(:trigger).
+                    with('pusher_control',
+                         'jobseeker_assigned_jd',
+                         {js_id:   job_seeker.id,
+                          js_name: job_seeker.full_name(last_name_first: false),
+                          jd_user_id: job_developer.user.id})
+    end
+
+    it 'sends event notification email' do
+      allow(Pusher).to receive(:trigger)
+      expect { Event.create(:JS_ASSIGN_JD, evt_obj) }.
+                    to change(all_emails, :count).by(+1)
+    end
+
   end
 end

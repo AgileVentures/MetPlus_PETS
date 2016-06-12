@@ -63,7 +63,7 @@ Feature: Have a task system in the site
     Then I go to the tasks page
     And The tasks 1,2,5,6,7 are present
     And I should see "Job Seeker has no assigned Job Developer"
-    And I should not see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
+    And I should see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
     Then I press the assign button of the task 2
     And I should see "Select the user to assign the task to:"
     And I select2 "Jones, Jane" from "task_assign_select"

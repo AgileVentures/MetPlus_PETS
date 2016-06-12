@@ -108,7 +108,11 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
 
-    let(:aa_person)  { FactoryGirl.create(:agency_admin, agency: agency) }
+    let!(:aa_person)  { FactoryGirl.create(:agency_admin, agency: agency) }
+
+    let!(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
+
+    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
 
     context 'valid attributes' do
       before(:each) do
@@ -196,6 +200,27 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
       it "returns http success" do
         expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'assign job seekers to job developer' do
+
+      let(:person_hash) do
+        person_hash = jd_person.attributes
+        person_hash[:agency_role_ids] = [jd_role.id]
+        person_hash[:as_jd_job_seeker_ids] = [job_seeker.id, adam.id]
+        person_hash[:as_cm_job_seeker_ids] = []
+        person_hash
+      end
+
+      it 'assigns job seekers to the job developer' do
+        patch :update, id: jd_person, agency_person: person_hash
+        expect(assigns(:agency_person).as_jd_job_seeker_ids).
+            to eq [job_seeker.id, adam.id]
+      end
+      it 'sends notification email to JD for each job seeker' do
+        expect { patch :update, id: jd_person, agency_person: person_hash }.
+                      to change(all_emails, :count).by(+2)
       end
     end
 
