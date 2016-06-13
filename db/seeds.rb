@@ -324,6 +324,16 @@ if Rails.env.development? || Rails.env.staging?
   agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_jd.save!
 
+  agency_cm = AgencyPerson.new(first_name: 'Kevin', last_name: 'Caseman',
+                               agency_id: agency.id, email: 'kevin@metplus.org',
+                               password: 'qwerty123', confirmed_at: Time.now,
+
+                               branch_id: agency.branches[2].id,
+                               status: AgencyPerson::STATUS[:ACT])
+
+  agency_cm.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
+  agency_cm.save!
+
   puts "AgencyPeople created: #{AgencyPerson.count}"
 
   #-------------------------- Agency Relations ----------------------------

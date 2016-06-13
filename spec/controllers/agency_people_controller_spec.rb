@@ -226,6 +226,93 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
   end
 
+  describe 'PATCH #assign_job_seeker' do
+
+    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:case_manager)  { FactoryGirl.create(:case_manager) }
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+
+    context 'assign job developer to job seeker' do
+
+      before do |example|
+        unless example.metadata[:skip_before]
+          xhr :patch, :assign_job_seeker, id: job_developer.id,
+                      job_seeker_id: job_seeker.id, agency_role: 'JD'
+        end
+      end
+
+      it 'assigns agency_person instance var' do
+        expect(assigns(:agency_person)).to eq job_developer
+      end
+      it 'assigns job_seeker instance var' do
+        expect(assigns(:job_seeker)).to eq job_seeker
+      end
+      it 'returns error if unknown agency_role specified', :skip_before do
+        xhr :patch, :assign_job_seeker, id: job_developer.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'XYZ'
+
+        expect(response).to have_http_status(:bad_request)
+      end
+      it 'returns error if attempt to assign JD role to CM', :skip_before do
+        xhr :patch, :assign_job_seeker, id: case_manager.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'JD'
+
+        expect(response).to have_http_status(:forbidden)
+      end
+      it 'increases agency_role count', :skip_before do
+        expect {xhr :patch, :assign_job_seeker, id: job_developer.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'JD'}.
+            to change(AgencyRelation, :count).by(+1)
+      end
+      it 'assigns job developer to job seeker' do
+        expect(assigns(:job_seeker).job_developer).to eq job_developer
+      end
+      it 'renders partial' do
+        expect(response).to render_template(partial: '_assigned_agency_person')
+      end
+    end
+
+    context 'assign case manager to job seeker' do
+
+      before do |example|
+        unless example.metadata[:skip_before]
+          xhr :patch, :assign_job_seeker, id: case_manager.id,
+                      job_seeker_id: job_seeker.id, agency_role: 'CM'
+        end
+      end
+
+      it 'assigns agency_person instance var' do
+        expect(assigns(:agency_person)).to eq case_manager
+      end
+      it 'assigns job_seeker instance var' do
+        expect(assigns(:job_seeker)).to eq job_seeker
+      end
+      it 'returns error if unknown agency_role specified', :skip_before do
+        xhr :patch, :assign_job_seeker, id: case_manager.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'XYZ'
+
+        expect(response).to have_http_status(:bad_request)
+      end
+      it 'returns error if attempt to assign CM role to JD', :skip_before do
+        xhr :patch, :assign_job_seeker, id: job_developer.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'CM'
+
+        expect(response).to have_http_status(:forbidden)
+      end
+      it 'increases agency_role count', :skip_before do
+        expect {xhr :patch, :assign_job_seeker, id: case_manager.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'CM'}.
+            to change(AgencyRelation, :count).by(+1)
+      end
+      it 'assigns case manager to job seeker' do
+        expect(assigns(:job_seeker).case_manager).to eq case_manager
+      end
+      it 'renders partial' do
+        expect(response).to render_template(partial: '_assigned_agency_person')
+      end
+    end
+  end
+
   describe "GET #destroy" do
 
     let(:person) { FactoryGirl.create(:agency_person) }

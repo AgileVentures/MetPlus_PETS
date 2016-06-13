@@ -19,6 +19,7 @@ Feature: Agency Person
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
       | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
       | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Wanda     | Worker   | wanda-worker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
 
     Given the following tasks exist:
@@ -101,3 +102,29 @@ Feature: Agency Person
     And I wait 1 second
     And I should see notification "Task assigned"
     And The task 2 is not present
+
+  @javascript
+  Scenario: Job developer assigns self to job seeker
+    Given I am on the home page
+    And I login as "bill@metplus.org" with password "qwerty123"
+    And I click the "Worker, John" link
+    And I wait 1 second
+    And I should not see "Bill Developer"
+    And I should see "Assign Myself"
+    And I click the "Assign Myself" button
+    And I wait 1 second
+    Then I should see "Bill Developer"
+    And I should not see "Assign Myself"
+
+  @javascript
+  Scenario: Case manager assigns self to job seeker
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    And I click the "Worker, Wanda" link
+    And I wait 1 second
+    And I should not see "Jane Jones"
+    And I should see "Assign Myself"
+    And I click the "Assign Myself" button
+    And I wait 1 second
+    Then I should see "Jane Jones"
+    And I should not see "Assign Myself"
