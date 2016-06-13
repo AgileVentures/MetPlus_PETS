@@ -1,0 +1,40 @@
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th
+        %strong Name
+      %th
+        %strong Status
+      %th
+        %strong Last Login
+      %th
+        %strong Job Applications
+      %th
+        %strong Latest Application
+  %tbody
+    - jobseekers.each do |js|
+      %tr
+        %td
+          = link_to js.full_name, job_seeker_path(js)
+        %td
+          - unless js.job_seeker_status.nil?
+            = js.job_seeker_status.short_description
+        %td
+          - if js.last_sign_in_at.nil?
+            %i never
+          - else
+            = "#{time_ago_in_words(js.last_sign_in_at)} ago"
+        %td
+          - if js.job_applications.empty?
+            %i none
+          - else
+            = js.job_applications.count
+        %td
+          - if js.job_applications.empty?
+            %i none
+          - else
+            = "#{time_ago_in_words(js.latest_application.created_at)} ago"
+
+= will_paginate jobseekers
+.clearfix

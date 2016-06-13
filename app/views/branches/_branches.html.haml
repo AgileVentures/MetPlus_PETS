@@ -1,0 +1,34 @@
+#branches_table
+  %table.table.table-hover
+    %thead
+      %tr
+        %th
+          %strong Code
+        %th
+          %strong State
+        %th
+          %strong City
+        %th
+          %strong Street
+        %th
+          %strong Zipcode
+    %tbody
+      - @branches.each do |branch|
+        %tr
+          %td
+            = link_to "#{branch.code}", branch_path(branch)
+          - if branch.address
+            %td
+              = branch.address.state
+            %td
+              = branch.address.city
+            %td
+              = branch.address.street
+            %td
+              = branch.address.zipcode
+          - else
+            %td
+            %td
+            %td
+  = will_paginate @branches, param_name: 'branches_page', |
+                     params: {data_type: 'branches'}      |

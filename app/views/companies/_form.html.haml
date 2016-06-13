@@ -1,0 +1,15 @@
+
+= form_for company, url: company_path, method: :patch,                   |
+                              html: {class: 'form-horizontal'} do |f|    |
+  .col-sm-offset-2.col-sm-6
+    = render 'shared/error_messages', object: company
+    %br
+  .clearfix
+  - @address_form = f
+  = render partial: 'subform'
+
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      = submit_tag 'Submit', method: :patch, class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-2
+      = link_to 'Cancel', :back, class: 'btn btn-danger'

@@ -1,0 +1,6 @@
+%h2
+  = "Edit Agency Person: #{@agency_person.full_name(last_name_first: false)}"
+%br
+= render partial: 'form', locals: {agency_person: @agency_person, method: :patch, |
+          submit: 'Update', url: agency_person_path(@agency_person),             |
+          cancel_url: agency_person_path(@agency_person)}                        |

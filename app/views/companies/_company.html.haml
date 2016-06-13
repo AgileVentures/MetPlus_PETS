@@ -1,0 +1,35 @@
+.row
+  .col-sm-2.text-right
+    %strong Name:
+  .col-sm-8
+    = company.name
+.row
+  .col-sm-2.text-right
+    %strong Website:
+  .col-sm-8
+    = company.website
+.row
+  .col-sm-2.text-right
+    %strong Email:
+  .col-sm-8
+    = company.email
+.row
+  .col-sm-2.text-right
+    %strong Fax:
+  .col-sm-8
+    = company.fax
+.row
+  .col-sm-2.text-right
+    %strong Description:
+  .col-sm-8
+    = truncate(company.description, length: 300)
+.row
+  .col-sm-2.text-right
+    %strong Status:
+  .col-sm-8#company_status
+    = render :partial => 'companies/company_status', :locals => {company: company}
+
+.row.margin-top
+  = render partial: 'company_people/company_people',    |
+      object: @company.company_people,                  |
+      locals: {company_status: @company.status}         |

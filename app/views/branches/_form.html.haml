@@ -1,0 +1,18 @@
+= form_for branch, url: url, method: method, html: {class: 'form-horizontal'} do |branch_form|
+  .col-sm-offset-2.col-sm-6
+    = render 'shared/error_messages', object: branch
+    %br
+  .clearfix
+  .form-group
+    = label :branch, :code, 'Branch Code', class: 'control-label col-sm-2'
+    .col-sm-3
+      = branch_form.text_field :code, size: 8, class: 'form-control'
+
+  - @address_form = branch_form
+  = render partial: 'address/addressform', locals: {fields_for_name: 'address'}
+
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      = submit_tag submit, method: :patch, class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-1
+      = link_to 'Cancel', cancel_url, class: 'btn btn-danger'

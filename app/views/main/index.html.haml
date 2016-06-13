@@ -1,0 +1,78 @@
+.row
+  .col-sm-7
+    .lead{style: 'margin-top: 15px;'}
+      Welcome to MET|PLUS PETS
+
+    = image_tag('MetPlus_Logo.png', size: '120x120',
+                  style: 'float:left; margin: 0 30px 30px 0;')
+    %p{style: 'text-align: justify; margin-right: 10px;'}
+      Michigan Employment & Training Plus, (MET|PLUS) is a 501(c)(3)
+      Vocational Training non-profit organization that strives to assist
+      Michigan job seekers with invaluable training and job development that
+      will put them on a career path to success. Our focus is helping dedicated
+      job seekers with free career information, job insight, skill building and
+      resources needed to effectively help them join the workforce and provide a
+      more fruitful life for them and their families.
+      Our organization intends to not just reach one goal but multiple goals.
+      We want to contribute our knowledge and talents to the rebuilding of
+      Michigan's neglected and damaged communities with various MET|PLUS projects.
+      %br
+      %br
+      Learn more about
+      %a{href: 'http://www.metplus.org', target: '_blank'} MET|PLUS.
+
+  .col-sm-5.panel.panel-primary.fixed-panel(style='margin-top: 50px;')
+    .panel-heading(style='text-align: center;')
+      .panel-title  Public Employment Tracking System (PETS)
+    -# Using background color causes loss of background radius
+    -# (rounded corners for panel) - reset those to recover
+    .panel-body.bg-info(style='border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;')
+      PETS (this website) is a platform used for multiple purposes:
+      %ul
+        %li Assist job seekers in finding employment
+        %li Assist employers in finding qualified personnel
+        %li
+          Help MET|PLUS agency personnel manage the job of bringing
+          job seekers and employers together
+      If you already have a PETS account, click the "Log In" button above.
+      If not, check out the benefits of joining PETS and register
+      using the appropriate link.
+
+.row
+  .col-sm-6
+    .h4 How MET|PLUS can help Employers
+    %p
+      MET|PLUS partners with you to help find quality employees you can
+      for you from our list of job seekers.  Let us help with:
+      %ul
+        %li Prescreening Job Seekers
+        %li Recruiting and Tracking
+        %li Job Fair Facilitation
+        %li Statistical Research
+        %li PETS resources, such as job posting, job seeker matching, and others
+      To get started,
+      = link_to 'request PETS registration', new_company_registration_path
+      of your company.
+      Your request will be reviewed promptly and, if accepted, you will
+      receive further instructions on how to proceed.
+
+  .col-sm-6
+    .h4 How MET|PLUS can help Job Seekers
+    %p
+      Michigan’s Employment Bureau of Labor studies (Michigan.gov, 2015)
+      indicate that between 2012-2022 the employment rate will grow
+      by over 371,000 jobs (8.7 percent).
+      As employment grows in the next years will you be ready?
+      Let METPLUS help you get ready by providing you with:
+      %ul
+        %li Hands-on Job Training
+        %li Employment Services
+        %li Job Skill Enhancement
+        %li Entrepreneurial Guidance
+        %li PETS resources, including job postings and online applications
+      In order to benefit from MET|PLUS and PETS,
+      = link_to 'register as a job seeker', new_job_seeker_path
+      on PETS and start working with us immediately.
+
+-# = render partial: 'jobs/list'
+-# = yield

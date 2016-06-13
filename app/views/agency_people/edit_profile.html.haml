@@ -1,0 +1,16 @@
+%h2 Update Your Profile
+%br
+= form_for @agency_person, url: update_profile_agency_person_path(@agency_person), html: {method: 'patch', class: 'form-horizontal'} do |ap|
+	.col-sm-offset-2.col-sm-6
+		= render 'shared/error_messages', object: @agency_person
+		%br
+	.clearfix
+	- @user_form = ap
+	= render partial: 'users/subform'
+	.form-group
+		.col-sm-2.col-sm-offset-2
+			=@user_form.submit class: 'btn btn-primary'
+		.col-sm-2.col-sm-offset-1
+			=link_to 'Cancel', root_path, class: 'btn btn-danger'
+%i (leave password blank, if you don't want to change it)
+%br

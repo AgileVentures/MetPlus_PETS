@@ -1,0 +1,5 @@
+%h2 Edit Company
+
+= render partial: 'form', locals: {company: @company, method: :patch, |
+                submit: 'Update', url: company_path(@company),        |
+                cancel_url: company_path(@company)}                   |
