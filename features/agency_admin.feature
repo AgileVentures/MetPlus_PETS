@@ -203,6 +203,25 @@ Scenario: assign job seeker to job developer
   When "mike@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
+Scenario: assign job seeker to case manager
+  And I click the "Agency and Partner Companies" link
+  Then I should see "Agency Personnel"
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I check second "Seeker, Sam"
+  And I check second "Terrific, Tom"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
+  And I should see "Terrific, Tom" after "Job Seekers for Case Manager role:"
+  Then "jane@metplus.org" should receive 2 emails with subject "Job seeker assigned cm"
+  When "jane@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
+  When "jane@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+
+
 Scenario: cannot remove sole agency admin
   And I click the "Agency and Partner Companies" link
   And I click the "Smith, John" link

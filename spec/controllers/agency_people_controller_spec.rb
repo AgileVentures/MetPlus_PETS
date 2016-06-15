@@ -110,7 +110,11 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
     let!(:aa_person)  { FactoryGirl.create(:agency_admin, agency: agency) }
 
-    let!(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
+    let!(:jd_person) {FactoryGirl.create(:job_developer,
+              first_name: 'John', last_name: 'Developer', agency: agency)}
+
+    let!(:cm_person) {FactoryGirl.create(:case_manager,
+              first_name: 'Kevin', last_name: 'Caseman', agency: agency)}
 
     let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
 
@@ -220,6 +224,27 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
       it 'sends notification email to JD for each job seeker' do
         expect { patch :update, id: jd_person, agency_person: person_hash }.
+                      to change(all_emails, :count).by(+2)
+      end
+    end
+
+    context 'assign job seekers to case manager' do
+
+      let(:person_hash) do
+        person_hash = cm_person.attributes
+        person_hash[:agency_role_ids] = [cm_role.id]
+        person_hash[:as_jd_job_seeker_ids] = []
+        person_hash[:as_cm_job_seeker_ids] = [job_seeker.id, adam.id]
+        person_hash
+      end
+
+      it 'assigns job seekers to the case manager' do
+        patch :update, id: cm_person, agency_person: person_hash
+        expect(assigns(:agency_person).as_cm_job_seeker_ids).
+            to eq [job_seeker.id, adam.id]
+      end
+      it 'sends notification email to CM for each job seeker' do
+        expect { patch :update, id: cm_person, agency_person: person_hash }.
                       to change(all_emails, :count).by(+2)
       end
     end
