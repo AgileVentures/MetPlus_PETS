@@ -12,7 +12,9 @@ RSpec.describe Company, type: :model do
     it { is_expected.to have_many :company_people }
     it { is_expected.to have_many :addresses }
     it { is_expected.to have_many :jobs }
-    it {is_expected.to have_and_belong_to_many :agencies }
+    it { is_expected.to have_and_belong_to_many :agencies }
+    it { is_expected.to accept_nested_attributes_for(:addresses).
+                              allow_destroy(true) }
   end
 
   describe 'Database schema' do

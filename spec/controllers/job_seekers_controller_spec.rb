@@ -61,13 +61,8 @@ RSpec.describe JobSeekersController, type: :controller do
 
     context "valid attributes and resume file upload" do
      before(:each) do
-       stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
-
-       stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+       stub_cruncher_authenticate
+       stub_cruncher_file_upload
 
        ActionMailer::Base.deliveries.clear
 
@@ -122,14 +117,8 @@ RSpec.describe JobSeekersController, type: :controller do
  describe "PATCH #update" do
    context "valid attributes and initial résumé upload" do
      before(:each) do
-
-       stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
-
-       stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+       stub_cruncher_authenticate
+       stub_cruncher_file_upload
 
        @jobseeker =  FactoryGirl.create(:job_seeker)
      end
@@ -178,14 +167,8 @@ RSpec.describe JobSeekersController, type: :controller do
 
    context "valid attributes and résumé file update" do
      before(:each) do
-
-       stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
-
-       stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+       stub_cruncher_authenticate
+       stub_cruncher_file_upload
 
        js_status = FactoryGirl.create(:job_seeker_status)
        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
@@ -274,13 +257,8 @@ RSpec.describe JobSeekersController, type: :controller do
 
   describe "GET #edit" do
     before(:each) do
-      stub_request(:post, CruncherService.service_url + '/authenticate').
-         to_return(body: "{\"token\": \"12345\"}", status: 200,
-         :headers => {'Content-Type'=> 'application/json'})
-
-      stub_request(:post, CruncherService.service_url + '/curriculum/upload').
-         to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-         :headers => {'Content-Type'=> 'application/json'})
+      stub_cruncher_authenticate
+      stub_cruncher_file_upload
 
       js_status = FactoryGirl.create(:job_seeker_status)
       @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
@@ -389,6 +367,8 @@ RSpec.describe JobSeekersController, type: :controller do
       end
 
       it 'assigns jobs for view' do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
         expect(assigns(:job_applications)).to include(app1, app2, app3)
         expect(assigns(:job_applications)).not_to include(app4)
       end
@@ -408,6 +388,8 @@ RSpec.describe JobSeekersController, type: :controller do
       end
 
       it 'assigns jobs for view' do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
         expect(assigns(:job_applications)).to include(app1, app2, app3)
         expect(assigns(:job_applications)).not_to include(app4)
       end

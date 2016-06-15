@@ -217,6 +217,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
         person_hash
       end
 
+      before(:each) do
+        allow(Pusher).to receive(:trigger)
+      end
+
       it 'assigns job seekers to the job developer' do
         patch :update, id: jd_person, agency_person: person_hash
         expect(assigns(:agency_person).as_jd_job_seeker_ids).

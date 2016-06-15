@@ -36,23 +36,37 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe "PATCH #update" do
+    let(:company)  { FactoryGirl.create(:company) }
 
-    before(:each) do
-      @company = FactoryGirl.create(:company)
+    let(:hash_params) do
+      company.attributes.merge(addresses_attributes:
+                      {'0' => attributes_for(:address)})
     end
 
     context 'valid attributes' do
       it 'locates the requested company' do
-        patch :update, id: @company, company: attributes_for(:company)
-        expect(assigns(:company)).to eq(@company)
+        patch :update, id: company, company: hash_params
+        expect(assigns(:company)).to eq(company)
       end
 
       it 'changes the company attributes' do
-        patch :update, id: @company, company: attributes_for(:company,
-          email: 'info@widgets.com', fax:'510 555-1212')
-        @company.reload
-        expect(@company.email).to eq('info@widgets.com')
-        expect(@company.fax).to eq('510 555-1212')
+        params_hash = attributes_for(:company,
+          email: 'info@widgets.com', fax:'510 555-1212').
+          merge(addresses_attributes:
+                          {'0' => attributes_for(:address),
+                           '1' => attributes_for(:address) })
+
+        patch :update, id: company, company: params_hash
+        company.reload
+        expect(company.email).to eq('info@widgets.com')
+        expect(company.fax).to eq('510 555-1212')
+        expect(company.addresses.count).to eq 2
+      end
+      it 'deletes company address' do
+        hash_params[:addresses_attributes]['0']['_destroy'] = true
+        patch :update, id: company, company: hash_params
+        company.reload
+        expect(company.addresses.count).to eq 0
       end
     end
   end

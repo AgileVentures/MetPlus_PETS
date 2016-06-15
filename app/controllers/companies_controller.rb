@@ -34,6 +34,6 @@ class CompaniesController < ApplicationController
     :website, :ein, :description,
     company_people_attributes: [:id, :first_name, :last_name, :phone, :email,
                                 :password, :password_confirmation],
-    addresses_attributes: [:id, :street, :city, :zipcode, :state])
+    addresses_attributes: [:id, :street, :city, :zipcode, :state, :_destroy])
   end
 end

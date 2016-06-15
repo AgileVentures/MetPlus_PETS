@@ -1,8 +1,13 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSkill, type: :model do
   describe 'Fixtures' do
+
     it 'should have a valid factory' do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+
       expect(FactoryGirl.create(:job_skill)).to be_valid
     end
   end
@@ -24,6 +29,11 @@ RSpec.describe JobSkill, type: :model do
   end
 
   describe 'Validations' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
     let(:job)   { FactoryGirl.create(:job) }
     let(:skill) { FactoryGirl.create(:skill) }
     subject { FactoryGirl.build(:job_skill, job: job, skill: skill) }
@@ -43,6 +53,11 @@ RSpec.describe JobSkill, type: :model do
   end
 
   describe 'Job Skill' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+    
     it 'is valid with all required fields' do
       job = FactoryGirl.create(:job)
       skill = FactoryGirl.create(:skill)

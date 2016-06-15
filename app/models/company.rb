@@ -5,7 +5,8 @@ class Company < ActiveRecord::Base
   has_many :jobs
 
   has_many :addresses, as: :location, dependent: :destroy
-    accepts_nested_attributes_for :addresses
+    accepts_nested_attributes_for :addresses, reject_if: :all_blank,
+                                  allow_destroy: true
 
   has_and_belongs_to_many :agencies
 

@@ -39,8 +39,8 @@ Background: seed data added to database
   | Job Email                      | jobs@widgets.com    |
   | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
-  | Company Website                | www.widgets.com     |
-  | Employer Identification Number | 12-3456789          |
+  | Website                        | www.widgets.com     |
+  | EIN                            | 12-3456789          |
   | Description                    | Widgets are us!     |
   | Title                          | HR Director         |
   | First Name                     | Hugh                |
@@ -160,8 +160,8 @@ Scenario: duplicate EIN for Company
   | Email                          | contact@widgets.com |
   | Phone                          | 222-333-4567        |
   | Fax                            |                     |
-  | Company Website                | www.widgets.com     |
-  | Employer Identification Number | 12-3456789          |
+  | Website                        | www.widgets.com     |
+  | EIN                            | 12-3456789          |
   | Description                    | Widgets are us!     |
   | Title                          | HR Director         |
   | First Name                     | Hugh                |
