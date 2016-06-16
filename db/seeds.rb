@@ -65,7 +65,11 @@ if Rails.env.development? || Rails.env.staging?
     end
     cmp.save!
 
-    create_address(cmp)
+    if n < 10
+      10.times { create_address(cmp) }
+    else
+      create_address(cmp)
+    end
   end
 
   # Create a known company person for dev/test purposes
@@ -75,6 +79,8 @@ if Rails.env.development? || Rails.env.staging?
                                  website: 'www.widgets.com',
                                  name: 'Widgets, Inc.',
                                  status: Company::STATUS[:ACT])
+
+  15.times { create_address(known_company) }
 
   puts "Companies created: #{Company.count}"
 
@@ -193,7 +199,7 @@ if Rails.env.development? || Rails.env.staging?
                fulltime: [false, true][r.rand(2)],
                company_id: known_company.id,
                company_person_id: known_company_person.id,
-               job_category_id: JobCategory.find(n+1).id)
+               address_id: known_company.addresses[r.rand(15)].id)
   end
 
   puts "Jobs created: #{Job.count}"

@@ -561,6 +561,32 @@ RSpec.describe JobsController, type: :controller do
 
   end
 
+  describe 'GET #update_addresses' do
+    render_views
+
+    let(:address1) { FactoryGirl.create(:address) }
+    let(:address2) { FactoryGirl.create(:address, street: '12 Main') }
+
+    before(:each) do
+      company = FactoryGirl.create(:company)
+      company.addresses = [address1, address2]
+      xhr :get, :update_addresses, company_id: company.id
+    end
+
+    it "returns success status" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders 'jobs/_address_select' template" do
+      expect(response).to render_template('jobs/_address_select')
+    end
+
+    it "returns option tags for addresses" do
+      expect(response.body).to have_content("#{address1.street}")
+      expect(response.body).to have_content("#{address2.street}")
+    end
+  end
+
   describe 'GET #list' do
 
     before :each do

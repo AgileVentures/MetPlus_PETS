@@ -35,7 +35,7 @@ Scenario: Create job with associated skills
 	When I click the "Post jobs" link
 	And I fill in the fields:
 		| Title                  | cashier|
-		| Job id                 | JOB3   |
+		| Company Job ID         | JOB3   |
 		| Description            | Must have experience with POS terminals |
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
