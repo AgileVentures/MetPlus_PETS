@@ -31,6 +31,7 @@ Background: seed data added to database and log in as agency admim
 
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
+  And I wait 1 second
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link

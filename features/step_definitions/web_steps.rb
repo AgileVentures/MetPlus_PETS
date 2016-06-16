@@ -106,8 +106,26 @@ When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
   end
 end
 
-When(/^(?:I|they) click(?: the)? "([^"]*)" button$/) do |button|
-  click_button button
+When(/^(?:I|they) click(?: the)?( \w*)? "([^"]*)" button$/) do |ordinal, button|
+  if not ordinal
+    click_button button
+  else
+    case ordinal
+    when ' first'
+      index = 0
+    when ' second'
+      index = 1
+    when ' third'
+      index = 2
+    else
+      raise 'do not understand ordinal value'
+    end
+    if Capybara.current_driver == :poltergeist
+      all(:button, text: button)[index].trigger('click')
+    else
+      all(:button, text: button)[index].click
+    end
+  end
 end
 
 When(/^(?:I|they) fill in the fields:$/) do |table|
@@ -130,18 +148,18 @@ When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
   end
 end
 
-When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, ordinal, list|
+When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, ordinal, lst|
   # use 'ordinal' when selecting among select lists all of which
   # have the same selector (e.g., same label)
   case ordinal
   when nil
-    find(:select, list).find(:option, item).select_option
+    find(:select, lst).find(:option, item).select_option
   when ' first'
-    all(:select, list)[0].find(:option, item).select_option
+    all(:select, lst)[0].find(:option, item).select_option
   when ' second'
-    all(:select, list)[1].find(:option, item).select_option
+    all(:select, lst)[1].find(:option, item).select_option
   when ' third'
-    all(:select, list)[2].find(:option, item).select_option
+    all(:select, lst)[2].find(:option, item).select_option
   else
     raise 'do not understand ordinal value'
   end
