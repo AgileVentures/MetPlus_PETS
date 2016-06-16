@@ -1,7 +1,7 @@
 $(function () {
   $('#toggle_search_form').click(ManageData.toggle);
   $('#job_search_form').hide();
-  $(document).on('change', '#job_company_id', function(evt) {
+  $(document).on('change', '#job_company_id', function() {
     $.ajax({url: '/jobs/update_addresses',
             type: 'GET',
             data: {
@@ -11,8 +11,8 @@ $(function () {
               Notification.error_notification('Ajax Error: ' + textStatus);
             },
             success: function (data) {
-              $('#address_select').html(data)
+              $('#address_select').html(data);
             }
           });
     });
-  })
+  });
