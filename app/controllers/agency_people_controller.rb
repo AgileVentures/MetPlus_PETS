@@ -1,7 +1,7 @@
 class AgencyPeopleController < ApplicationController
 
   include UserParameters
-  include AgencyPeopleViewer
+  include JobSeekersViewer
 
   def show
     @agency_person = AgencyPerson.find(params[:id])
@@ -150,17 +150,17 @@ class AgencyPeopleController < ApplicationController
   def list_js_cm
     raise 'Unsupported request' if not request.xhr?
 
-    @agency = Agency.find(params[:agency_id])
+    @agency_person= AgencyPerson.find(params[:id])
 
     @people_type = params[:people_type] || 'jobseeker-cm'
 
     @people = []
-    @people = display_agency_people @people_type
+    @people = display_job_seekers @people_type, 5, @agency_person
 
-    render :partial => 'agency_people/job_seekers',
-                       locals: {people: @people,
+    render :partial => 'agency_people/assigned_job_seekers',
+                       locals: {jobseekers: @people,
                                 people_type: @people_type,
-                                agency: @agency}
+                                agency_person: @agency_person}
   end
 
   private
