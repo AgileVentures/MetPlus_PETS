@@ -23,7 +23,9 @@
           - if js.last_sign_in_at.nil?
             %i never
           - else
-            = "#{time_ago_in_words(js.last_sign_in_at)} ago"
+
+            = "#{time-ago_in_words(js.last_sign_in_at)} ago"
+
         %td
           - if js.job_applications.empty?
             %i none
@@ -33,7 +35,8 @@
           - if js.job_applications.empty?
             %i none
           - else
-            = "#{time_ago_in_words(js.latest_application.created_at)} ago"
+
+            = "#{time-ago_in_words(js.latest_application.created_at)} ago"
 
 = will_paginate jobseekers
 .clearfix
