@@ -132,9 +132,9 @@ Feature: Company Person
     And I login as "ca@widgets.com" with password "qwerty123"
     And I should be on the Company Person 'ca@widgets.com' Home page
     And I wait for 5 seconds
-    And I should not see "Cook"
+    And I should see "Cook"
     And I should not see "Doctor"
-    And I should see "software developer"
+    And I should not see "software developer"
 
   @selenium
   Scenario: verify people listing in home page

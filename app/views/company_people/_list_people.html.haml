@@ -20,7 +20,7 @@
         - case field
           - when :full_name
             %td.col-md-4
-              = person.full_name
+              = link_to person.full_name, company_person_path(person.id)
           - when :email
             %td.col-md-2
               = person.email
