@@ -52,11 +52,17 @@ Rails.application.routes.draw do
 
   # ----------------------- Company ------------------------------------------
   # Company admin (and agency admin) can edit a company
-  resources :companies, path: 'company_admin/companies',
-                                only: [:edit, :update, :show]
+  # resources :companies, path: 'company_admin/companies',
+  #                               only: [:edit, :update, :show]
   # Only the agency admin can delete a company
-  resources :companies, path: 'admin/companies',
-                                only: [:destroy, :list]
+  # resources :companies, path: 'admin/companies',
+  #                               only: [:destroy, :list]
+
+  get   'companies/:id/:admin_type'      => 'companies#show', as: :company
+  patch 'companies/:id/:admin_type'      => 'companies#update'
+  delete 'companies/:id'  => 'companies#destroy'
+  get   'companies/:id/edit/:admin_type' => 'companies#edit',
+                            as: :edit_company
 
   # --------------------------------------------------------------------------
 

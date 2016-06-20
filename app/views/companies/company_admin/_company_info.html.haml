@@ -45,5 +45,5 @@
         %strong Company Admin(s)
       %td
         - @company_admins.each do |ca|
-          = ca.full_name(last_name_first: false)
+          = mail_to ca.email, ca.full_name(last_name_first: false)
           = ', ' if ca != @company_admins.last
