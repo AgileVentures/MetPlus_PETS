@@ -12,6 +12,15 @@
                     edit_company_path(id: @company),
                     method: :get, class: 'btn btn-primary btn-sm pull-right'
 
+.clearfix
+.col-sm-3
+  %h4 Company Information
+  %a(id='toggle_company_info' href='#company_info_table' class='text-danger'
+              style='padding-left: 10px;')
+    Hide Company Information
+.col-sm-9
+  = render partial: 'companies/company_info'
+
 .col-sm-12
   %h3 Tasks that need your attention
   = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
