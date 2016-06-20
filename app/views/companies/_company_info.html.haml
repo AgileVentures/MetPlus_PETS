@@ -1,0 +1,49 @@
+%table.table.table-hover#company_info_table(style='margin-top: 5px;')
+  %tbody
+    %tr
+      %td
+        %strong Name
+      %td
+        = @company.name
+    %tr
+      %td
+        %strong EIN
+      %td
+        = @company.ein
+    %tr
+      %td
+        %strong Website
+      %td
+        = @company.website
+    %tr
+      %td
+        %strong Phone
+      %td
+        = @company.phone
+    %tr
+      %td
+        %strong Fax
+      %td
+        = @company.fax
+    %tr
+      %td
+        %strong Corporate Email
+      %td
+        = @company.email
+    %tr
+      %td
+        %strong Jobs Email
+      %td
+        = @company.job_email
+    %tr
+      %td
+        %strong Description
+      %td
+        = @company.description
+    %tr
+      %td
+        %strong Company Admin(s)
+      %td
+        - @company_admins.each do |ca|
+          = ca.full_name(last_name_first: false)
+          = ', ' if ca != @company_admins.last
