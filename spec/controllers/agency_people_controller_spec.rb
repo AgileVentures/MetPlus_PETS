@@ -442,10 +442,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
     
     let(:case_manager) { FactoryGirl.create(:case_manager) }
     
-    let(:job_seeker)  { FactoryGirl.create(:job_seeker, first_name: 'Bob', last_name: 'Smith') }
+    let(:job_seeker)  { FactoryGirl.create(:job_seeker, first_name: 'Bob',      last_name: 'Smith') }
     
-    
-    
+      
     before(:each) do
       
       sign_in case_manager
@@ -463,6 +462,4 @@ RSpec.describe AgencyPeopleController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-
- 
 end

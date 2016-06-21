@@ -27,4 +27,3 @@ module JobSeekersViewer
   end
 end
 
-
