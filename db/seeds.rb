@@ -72,7 +72,7 @@ if Rails.env.development? || Rails.env.staging?
     end
   end
 
-  # Create a known company person for dev/test purposes
+  # Create a known company for dev/test purposes
   known_company = Company.create(ein: Faker::Company.ein,
                                  phone: '111-222-3333',
                                  email: 'contact@widgets.com',
@@ -127,7 +127,7 @@ if Rails.env.development? || Rails.env.staging?
     cp.save!
   end
 
-  # Create a known company person for dev/test purposes
+  # Create a known company admin for dev/test purposes
   known_company_person = CompanyPerson.new(title: 'HR Director',
                                            email: 'hr@widgets.com',
                                            password: 'qwerty123',
@@ -139,6 +139,19 @@ if Rails.env.development? || Rails.env.staging?
                                            status: 'Active')
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
+
+  # Create a known company contact for dev/test purposes
+  known_company_contact = CompanyPerson.new(title: 'Treasurer',
+                                           email: 'finance@widgets.com',
+                                           password: 'qwerty123',
+                                           first_name: 'Mya',
+                                           last_name: 'Cash',
+                                           confirmed_at: DateTime.now,
+                                           company_id: known_company.id,
+                                           address_id: Address.find(1).id,
+                                           status: 'Active')
+  known_company_contact.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+  known_company_contact.save!
 
   # Create more company people for 'known company'
   21.times do |n|

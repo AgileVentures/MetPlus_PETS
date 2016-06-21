@@ -66,6 +66,7 @@ class CompanyPeopleController < ApplicationController
     @job_type    = 'my-company-all'
     @people_type = 'my-company-all'
     @company     = pets_user.company
+    @company_person = pets_user
   end
 
   def list_people

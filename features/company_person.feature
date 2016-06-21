@@ -60,6 +60,22 @@ Feature: Company Person
       | Cook                | KRK19K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
       | Cook                | KRK20K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
 
+  Scenario: company admin edits company info
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    And I should see "Edit Company Info"
+    Then I click the "Edit Company Info" link
+    Then I should see "Edit Company"
+    And I fill in "Website" with "www.widgets-inc.com"
+    And I click the "Submit" button
+    Then I should see "company was successfully updated."
+
+  Scenario: company contact cannot edit company nor invite person_type
+    Given I am on the home page
+    And I login as "jane@widgets.com" with password "qwerty123"
+    And I should not see "Edit Company Info"
+    And I should not see "Invite Colleague"
+
   Scenario: company admin login and edit profile from home page
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
@@ -97,7 +113,7 @@ Feature: Company Person
     And I should not see "Jane"
     And I should see "Mary"
 
-  Scenario: company contact login and edit profile from name
+  Scenario: company admin login and edit profile from name
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
     And I should be on the Company Person 'ca@widgets.com' Home page

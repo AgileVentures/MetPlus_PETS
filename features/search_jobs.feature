@@ -44,6 +44,7 @@ Scenario: Go to jobs search page, see all jobs, search by title
 	Given I am on the home page
 	And I click the "Jobs" link
 	And I click the "Search Jobs" button
+  And I wait 1 second
 	Then I should see "Job1"
 	And I should see "Job2"
 	And I should see "Job3"
@@ -52,6 +53,7 @@ Scenario: Go to jobs search page, see all jobs, search by title
 	Then I should see "Title contains any"
 	And I fill in "Title contains any" with "Job1 Job3"
 	And I click the "Search Jobs" button
+  And I wait 1 second
 	Then I should see "Job1"
 	And I should see "Job3"
 	And I should not see "Job2"
