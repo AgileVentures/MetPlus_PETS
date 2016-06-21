@@ -5,39 +5,65 @@ I want to create, update, and delete jobs
 
 Background: adding job to database
 
-	Given the following agency roles exist:
-		| role  |
-		| AA    |
-		| CM    |
-		| JD    |
+	Given the default settings are present
+
+  Given the following agency people exist:
+  | agency  | role  | first_name | last_name | email            | password  | phone        |
+  | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 | 555-222-3334 |
+  | MetPlus | JD    | Hugh       | Jobs      | hr@metplus.org   | qwerty123 | 555-222-3334 |
+
+  Given the following companies exist:
+  | agency  | name         | website     | phone        | email            | ein        | status |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+  | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | 12-3456791 | Active |
+
+  Given the following company people exist:
+  | company      | role  | first_name | last_name | email            | password  | phone        |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+
+  Given the following jobs exist:
+  | title         | company_job_id  | shift  | fulltime | description | company      | creator          |
+  | software dev  | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@widgets.com |
+
+  Given the following company addresses exist:
+  | company      | street       | city    | state    | zipcode |
+  | Widgets Inc. | 10 Spring    | Detroit | Michigan | 02034   |
+  | Widgets Inc. | 13 Summer    | Detroit | Michigan | 02054   |
+  | Widgets Inc. | 16 Fall      | Detroit | Michigan | 02074   |
+  | Widgets Inc. | 19 Winter    | Detroit | Michigan | 02094   |
+  | Gadgets Inc. | 2 Ford Drive | Detroit | Michigan | 02094   |
+
 
 @selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
-	Given I am logged in as company person
+  Given I am on the home page
+	And I login as "jane@widgets.com" with password "qwerty123"
 	When I click the "Post jobs" link
 	And I wait 1 second
 	And I fill in the fields:
-		| Title                  | cashier|
-		| Job id                 | KARK12 |
-		| Description            | At least two years work experience|
-	And  I select "Day" in select list "Shift"
-	And  I check "Fulltime"
-	And  I press "new-job-submit"
+		| Title            | cashier|
+		| Company Job ID   | KARK12 |
+		| Description      | At least two years work experience|
+	And I select "Day" in select list "Shift"
+  And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
+	And I check "Fulltime"
+	And I press "new-job-submit"
 	Then I should see "cashier has been created successfully."
 
-	When I click the "jobs-edit-link" link
+	Then I click the first "edit" link
 	And I fill in the fields:
 		| Title                  | cab-driver|
-		| Job id                 | KRT123 |
+		| Company Job ID         | KRT123    |
 		| Description            | Atleast two years work experience|
 	And  I select "Day" in select list "Shift"
+  And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
 	Then I check "Fulltime"
 	And I press "Update"
 	Then I should see "cab-driver has been updated successfully."
 	And I should verify the change of title "cab-driver", shift "Day" and jobId "KRT123"
 
 	When I click the "Return To Jobs" link
-	And I click the "delete" button
+	And I click the first "delete" button
 	And I wait 1 second
 	Then I should see a popup with the following job information
 	And I wait 1 second
@@ -45,10 +71,12 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And I wait 2 seconds
 	Then I should see "cab-driver has been deleted successfully."
 
-	And I am on the Job edit page with given record:
+  Then I go to the Company Person 'jane@widgets.com' Home page
+  And I click the "software dev" link
+  And I click the "Edit Job" link
 	And  I fill in the fields:
 		| Title                  | cashier|
-		| Job id                 |  |
+		| Company Job ID         |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
@@ -58,7 +86,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	When I click the "Post jobs" link
 	And  I fill in the fields:
 		| Title                  |  |
-		| Job id                 |  |
+		| Company Job ID         |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
@@ -69,27 +97,36 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 
 @selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
-	Given I am logged in as job developer
-	And the Widgets, Inc. company name with address exist in the record
+  Given I am on the home page
+	And I login as "hr@metplus.org" with password "qwerty123"
 	When I click the "Post jobs" link
 	And I wait 1 second
 	And I fill in the fields:
 		| Title                  | cashier|
-	And  I select "Widgets, Inc." in select list "Company Name"
-	And  I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
+	And  I select "Widgets Inc." in select list "Company Name"
+	And  I select "13 Summer Detroit, Michigan 02054" in select list "Job Location"
 	And I fill in the fields:
-		| Job id                 | KARK12 |
-		| Description            | Atleast two years work experience|
+		| Company Job ID         | KARK12 |
+		| Description            | At least two years work experience|
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
 	Then I should see "cashier has been created successfully."
 
+  Then I click the "Jobs" link
+  And I click the "software dev" link
+  And I click the "Edit Job" link
+  And  I select "Gadgets Inc." in select list "Company Name"
+	And  I select "2 Ford Drive Detroit, Michigan 02094" in select list "Job Location"
+  And  I press "edit-job-submit"
+  Then  I should see "software dev has been updated successfully."
 
-	And I am on the Job edit page with given record:
+  Then I click the "Jobs" link
+  And I click the "cashier" link
+  And I click the "Edit Job" link
 	And  I fill in the fields:
 		| Title                  | cashier|
-		| Job id                 |  |
+		| Company Job ID         |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
@@ -99,10 +136,10 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	When I click the "Post jobs" link
 	And  I fill in the fields:
 		| Title                  |  |
-	And  I select "Widgets, Inc." in select list "Company Name"
-	And I select "3940 Main Street Detroit, Michigan 92105" in select list "Company Address"
+	And  I select "Widgets Inc." in select list "Company Name"
+	And I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
 	And I fill in the fields:
-		| Job id                 |  |
+		| Company Job ID         |  |
 		| Description            |  |
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"

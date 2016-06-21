@@ -98,7 +98,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       $params[:company_people_attributes] =
                 [FactoryGirl.attributes_for(:user)]
       $params[:addresses_attributes] =
-                [FactoryGirl.attributes_for(:address)]
+                [FactoryGirl.attributes_for(:address),
+                 FactoryGirl.attributes_for(:address)]
       $params
     end
 
@@ -130,6 +131,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       end
       it "sets job_email on the model" do
         expect(Company.find_by_job_email(registration_params[:job_email])).not_to be nil
+      end
+      it "creates associated addresses" do
+        expect(assigns(:company).addresses.count).to eq 2
       end
       it 'sets flash message' do
         expect(flash[:notice]).to match "Thank you for your registration request."
@@ -258,9 +262,12 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:registration_params) do
       $params = FactoryGirl.attributes_for(:company, :job_email => 'jobs@widgets.com')
       $params[:company_people_attributes] =
-                [FactoryGirl.attributes_for(:user, :password => 'testing1234', :password_confirmation => 'testing1234')]
+                {'0' => FactoryGirl.attributes_for(:user,
+                          :password => 'testing1234',
+                          :password_confirmation => 'testing1234')}
       $params[:addresses_attributes] =
-                [FactoryGirl.attributes_for(:address)]
+                {'0' => FactoryGirl.attributes_for(:address),
+                 '1' => FactoryGirl.attributes_for(:address)}
       $params
     end
     let!(:prior_name) { registration_params[:name] }
@@ -322,6 +329,21 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
       company.reload
       expect(company.job_email).to eq('jobs@sprockets.org')
+    end
+
+    it 'deletes company address' do
+      company = Company.find_by_name(prior_name)
+      registration_params[:addresses_attributes]['0']['_destroy'] = true
+      registration_params[:addresses_attributes]['0']['id'] =
+                            company.addresses.first.id
+      registration_params[:addresses_attributes]['1']['id'] =
+                            company.addresses.second.id
+      registration_params[:company_people_attributes] =
+                {'0' => FactoryGirl.attributes_for(:user,
+                    first_name: 'Fred', last_name: 'Flintstone')}
+      patch :update, company: registration_params, id: company.id
+      company.reload
+      expect(company.addresses.count).to eq 1
     end
 
     it 'update company person without password change' do

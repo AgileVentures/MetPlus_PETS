@@ -82,6 +82,13 @@ Given(/^the following company people exist:$/) do |table|
   end
 end
 
+Given(/^the following company addresses exist:$/) do |table|
+  table.hashes.each do |hash|
+    company = Company.find_by_name(hash.delete('company'))
+    company.addresses << Address.create!(hash)
+  end
+end
+
 Given(/^the following agency branches exist:$/) do |table|
   table.hashes.each do |hash|
     agency_name = hash.delete 'agency'

@@ -121,11 +121,13 @@ Scenario: edit Js Registration without password change
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
-@javascript
+@selenium
 Scenario: delete jobseeker
-  Given I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
   Then I click and accept the "Delete Job Seeker" button
-  And I wait for 1 seconds
+  And I wait 1 second
   Then I should see "Jobseeker was deleted successfully."
 
 Scenario: cancel redirects to homepage

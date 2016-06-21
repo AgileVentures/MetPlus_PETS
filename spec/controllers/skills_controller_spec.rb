@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe SkillsController, type: :controller do
 
@@ -65,10 +66,17 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
     let(:skill)     { FactoryGirl.create(:skill) }
     let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
 
     context 'skill found' do
+
       it 'deletes skill' do
         expect { xhr :delete, :destroy, id: skill }.
             to change(Skill, :count).by(-1)

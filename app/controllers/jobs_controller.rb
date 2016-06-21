@@ -12,7 +12,7 @@ class JobsController < ApplicationController
 
 	def index
 		if company_p_or_job_d? && @cp_or_jd.is_a?(CompanyPerson)
-			@jobs = @cp_or_jd.company.jobs.paginate(:page => params[:page],
+			@jobs = @cp_or_jd.company.jobs.order(:title).paginate(:page => params[:page],
 				                                        :per_page => 32)
 		else
 			@jobs = Job.order(:title).paginate(:page => params[:page],
@@ -111,6 +111,18 @@ class JobsController < ApplicationController
     @jobs = display_jobs @job_type
     render partial: 'list_all', :locals => {all_jobs: @jobs, job_type: @job_type}
 	end
+
+  def update_addresses
+    # used to create collection_select of addresses for the company
+    # (company is selected in another select list)
+    raise 'Unsupported request' if not request.xhr?
+
+    addresses = Address.where(location_type: 'Company',
+                               location_id: params[:company_id]).
+                               order(:state)
+
+    render partial: 'address_select', locals: {addresses: addresses}
+  end
 
 	def apply
 		@job = Job.find_by_id params[:job_id]

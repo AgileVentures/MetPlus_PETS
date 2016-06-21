@@ -133,7 +133,7 @@ class CompanyRegistrationsController < ApplicationController
     company_people_attributes: [:id, :first_name, :last_name,
                         :phone, :email, :title,
                         :password, :password_confirmation],
-    addresses_attributes: [:id, :street, :city, :zipcode, :state])
+    addresses_attributes: [:id, :street, :city, :zipcode, :state, :_destroy])
   end
 
 end

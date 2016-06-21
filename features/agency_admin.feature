@@ -6,20 +6,13 @@ Feature: agency admin logs in and performs admin functions
 
 Background: seed data added to database and log in as agency admim
 
-  Given the following agency roles exist:
-  | role  |
-  | AA    |
-  | CM    |
-  | JD    |
-
-  Given the following agencies exist:
-  | name    | website     | phone        | email                  | fax          |
-  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+  Given the default settings are present
 
   Given the following agency people exist:
   | agency  | role  | first_name | last_name | email            | password  | phone        |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 | 555-222-3334 |
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 | 555-222-3334 |
+  | MetPlus | JD    | Mike       | Check     | mike@metplus.org | qwerty123 | 555-222-3334 |
 
   Given the following agency branches exist:
   | agency  | state     | city     | street              | zipcode | code |
@@ -31,8 +24,14 @@ Background: seed data added to database and log in as agency admim
   | name                      | description                         |
   | Software Engineer - RoR   | Develop website using Ruby on Rails |
 
+  Given the following jobseeker exist:
+  | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
+  | Sam       | Seeker   | sam@gmail.com | 222-333-4444| password   |password             | 1990          |Unemployed Seeking |
+  | Tom       | Terrific | tom@gmail.com | 333-444-5555| password   |password             | 1990          |Unemployed Seeking |
+
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
+  And I wait 1 second
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
@@ -186,6 +185,43 @@ Scenario: delete agency person
   Then I click and accept the "Delete Person" button
   And I wait for 3 seconds
   Then I should see "Person 'Jane Jones' deleted."
+
+Scenario: assign job seeker to job developer
+  And I click the "Agency and Partner Companies" link
+  Then I should see "Agency Personnel"
+  And I click the "Check, Mike" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Mike Check"
+  Then I check first "Seeker, Sam"
+  And I check first "Terrific, Tom"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Job Developer role:"
+  And I should see "Terrific, Tom" after "Job Seekers for Job Developer role:"
+  Then "mike@metplus.org" should receive 2 emails with subject "Job seeker assigned jd"
+  When "mike@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Job Developer:" in the email body
+  When "mike@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+
+Scenario: assign job seeker to case manager
+  And I click the "Agency and Partner Companies" link
+  Then I should see "Agency Personnel"
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I check second "Seeker, Sam"
+  And I check second "Terrific, Tom"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
+  And I should see "Terrific, Tom" after "Job Seekers for Case Manager role:"
+  Then "jane@metplus.org" should receive 2 emails with subject "Job seeker assigned cm"
+  When "jane@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
+  When "jane@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+
 
 Scenario: cannot remove sole agency admin
   And I click the "Agency and Partner Companies" link

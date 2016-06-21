@@ -108,7 +108,15 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
 
-    let(:aa_person)  { FactoryGirl.create(:agency_admin, agency: agency) }
+    let!(:aa_person)  { FactoryGirl.create(:agency_admin, agency: agency) }
+
+    let!(:jd_person) {FactoryGirl.create(:job_developer,
+              first_name: 'John', last_name: 'Developer', agency: agency)}
+
+    let!(:cm_person) {FactoryGirl.create(:case_manager,
+              first_name: 'Kevin', last_name: 'Caseman', agency: agency)}
+
+    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
 
     context 'valid attributes' do
       before(:each) do
@@ -199,6 +207,139 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
     end
 
+    context 'assign job seekers to job developer' do
+
+      let(:person_hash) do
+        person_hash = jd_person.attributes
+        person_hash[:agency_role_ids] = [jd_role.id]
+        person_hash[:as_jd_job_seeker_ids] = [job_seeker.id, adam.id]
+        person_hash[:as_cm_job_seeker_ids] = []
+        person_hash
+      end
+
+      before(:each) do
+        allow(Pusher).to receive(:trigger)
+      end
+
+      it 'assigns job seekers to the job developer' do
+        patch :update, id: jd_person, agency_person: person_hash
+        expect(assigns(:agency_person).as_jd_job_seeker_ids).
+            to eq [job_seeker.id, adam.id]
+      end
+      it 'sends notification email to JD for each job seeker' do
+        expect { patch :update, id: jd_person, agency_person: person_hash }.
+                      to change(all_emails, :count).by(+2)
+      end
+    end
+
+    context 'assign job seekers to case manager' do
+
+      let(:person_hash) do
+        person_hash = cm_person.attributes
+        person_hash[:agency_role_ids] = [cm_role.id]
+        person_hash[:as_jd_job_seeker_ids] = []
+        person_hash[:as_cm_job_seeker_ids] = [job_seeker.id, adam.id]
+        person_hash
+      end
+
+      it 'assigns job seekers to the case manager' do
+        patch :update, id: cm_person, agency_person: person_hash
+        expect(assigns(:agency_person).as_cm_job_seeker_ids).
+            to eq [job_seeker.id, adam.id]
+      end
+      it 'sends notification email to CM for each job seeker' do
+        expect { patch :update, id: cm_person, agency_person: person_hash }.
+                      to change(all_emails, :count).by(+2)
+      end
+    end
+
+  end
+
+  describe 'PATCH #assign_job_seeker' do
+
+    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:case_manager)  { FactoryGirl.create(:case_manager) }
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+
+    context 'assign job developer to job seeker' do
+
+      before do |example|
+        unless example.metadata[:skip_before]
+          xhr :patch, :assign_job_seeker, id: job_developer.id,
+                      job_seeker_id: job_seeker.id, agency_role: 'JD'
+        end
+      end
+
+      it 'assigns agency_person instance var' do
+        expect(assigns(:agency_person)).to eq job_developer
+      end
+      it 'assigns job_seeker instance var' do
+        expect(assigns(:job_seeker)).to eq job_seeker
+      end
+      it 'returns error if unknown agency_role specified', :skip_before do
+        xhr :patch, :assign_job_seeker, id: job_developer.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'XYZ'
+
+        expect(response).to have_http_status(:bad_request)
+      end
+      it 'returns error if attempt to assign JD role to CM', :skip_before do
+        xhr :patch, :assign_job_seeker, id: case_manager.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'JD'
+
+        expect(response).to have_http_status(:forbidden)
+      end
+      it 'increases agency_role count', :skip_before do
+        expect {xhr :patch, :assign_job_seeker, id: job_developer.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'JD'}.
+            to change(AgencyRelation, :count).by(+1)
+      end
+      it 'assigns job developer to job seeker' do
+        expect(assigns(:job_seeker).job_developer).to eq job_developer
+      end
+      it 'renders partial' do
+        expect(response).to render_template(partial: '_assigned_agency_person')
+      end
+    end
+
+    context 'assign case manager to job seeker' do
+
+      before do |example|
+        unless example.metadata[:skip_before]
+          xhr :patch, :assign_job_seeker, id: case_manager.id,
+                      job_seeker_id: job_seeker.id, agency_role: 'CM'
+        end
+      end
+
+      it 'assigns agency_person instance var' do
+        expect(assigns(:agency_person)).to eq case_manager
+      end
+      it 'assigns job_seeker instance var' do
+        expect(assigns(:job_seeker)).to eq job_seeker
+      end
+      it 'returns error if unknown agency_role specified', :skip_before do
+        xhr :patch, :assign_job_seeker, id: case_manager.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'XYZ'
+
+        expect(response).to have_http_status(:bad_request)
+      end
+      it 'returns error if attempt to assign CM role to JD', :skip_before do
+        xhr :patch, :assign_job_seeker, id: job_developer.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'CM'
+
+        expect(response).to have_http_status(:forbidden)
+      end
+      it 'increases agency_role count', :skip_before do
+        expect {xhr :patch, :assign_job_seeker, id: case_manager.id,
+                    job_seeker_id: job_seeker.id, agency_role: 'CM'}.
+            to change(AgencyRelation, :count).by(+1)
+      end
+      it 'assigns case manager to job seeker' do
+        expect(assigns(:job_seeker).case_manager).to eq case_manager
+      end
+      it 'renders partial' do
+        expect(response).to render_template(partial: '_assigned_agency_person')
+      end
+    end
   end
 
   describe "GET #destroy" do

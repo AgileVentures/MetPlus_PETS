@@ -26,11 +26,17 @@ Rails.application.routes.draw do
   resources :agency_people, path: '/admin/agency_people',
                        only: [:show, :edit, :update, :destroy]
 
-  resources :agency_people do
-    get 'edit_profile', on: :member, as: :edit_profile
-    patch 'update_profile', on: :member, as: :update_profile
-    get 'home', on: :member, as: :home
+  resources :agency_people, only: [] do
+    member do
+      get :home
+      get :edit_profile,   to: 'agency_people#edit_profile'
+      patch :update_profile, to: 'agency_people#update_profile'
+      patch 'assign_job_seeker/:job_seeker_id/:agency_role',
+                        to: 'agency_people#assign_job_seeker',
+                        as: 'assign_job_seeker'
+    end
   end
+
   # --------------------------------------------------------------------------
 
   # ----------------------- Company Registration -----------------------------
@@ -106,6 +112,8 @@ Rails.application.routes.draw do
   get 'jobs/:job_id/apply/:user_id' => 'jobs#apply',  as: :apply_job
   get 'jobs/list_search_jobs'       => 'jobs#list_search_jobs',
                                         as: :list_search_jobs
+  get 'jobs/update_addresses'       => 'jobs#update_addresses',
+                                        as: :update_addresses
   resources :jobs
   # --------------------------------------------------------------------------
 

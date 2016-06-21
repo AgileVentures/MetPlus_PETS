@@ -29,8 +29,7 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def self.js_without_jd
-    where("job_seekers.id not in (?)",
-          AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
+    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
         includes(:job_seeker_status, :job_applications).
         order("users.last_name")
   end
@@ -59,10 +58,9 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def self.js_without_cm
-    where("job_seekers.id not in (?)",
-          AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
-          includes(:job_seeker_status, :job_applications).
-          order("users.last_name")
+    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
+        includes(:job_seeker_status, :job_applications).
+        order("users.last_name")
   end
 
   def self.your_jobseekers_cm(case_manager)

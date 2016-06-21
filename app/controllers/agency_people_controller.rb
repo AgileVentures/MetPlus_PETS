@@ -26,6 +26,14 @@ class AgencyPeopleController < ApplicationController
     jd_job_seeker_ids = model_params.delete(:as_jd_job_seeker_ids)
     cm_job_seeker_ids = model_params.delete(:as_cm_job_seeker_ids)
 
+    # Find newly-assigned job seekers for notifying the agency person (as JD)
+    new_jd_job_seeker_ids = new_job_seeker_ids(@agency_person,
+                                               jd_job_seeker_ids, :JD)
+
+    # Find newly-assigned job seekers for notifying the agency person (as CM)
+    new_cm_job_seeker_ids = new_job_seeker_ids(@agency_person,
+                                               cm_job_seeker_ids, :CM)
+
     @agency_person.assign_attributes(model_params)
 
     @agency_person.agency_relations.delete_all
@@ -47,6 +55,13 @@ class AgencyPeopleController < ApplicationController
     end
 
     if @agency_person.save
+      # notify agency person of new JS assignments
+      notify_ap_new_js_assignments @agency_person,
+                                   new_jd_job_seeker_ids, :JD
+
+      notify_ap_new_js_assignments @agency_person,
+                                   new_cm_job_seeker_ids, :CM
+
       flash[:notice] = "Agency person was successfully updated."
       redirect_to agency_person_path(@agency_person)
     else
@@ -60,6 +75,45 @@ class AgencyPeopleController < ApplicationController
         @agency_person.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
       end
       render :edit
+    end
+  end
+
+  def assign_job_seeker
+    # Assign agency person, in specified role, to the job seeker
+
+    @agency_person = AgencyPerson.find(params[:id])
+    @job_seeker    = JobSeeker.find(params[:job_seeker_id])
+
+    role_key = params[:agency_role].to_sym
+
+    # confirm that agency person has this role and assign person to job seeker
+    case role_key
+    when :JD
+      return render(json: {:message => 'Agency Person is not a job developer'},
+                    status: 403) unless
+                    @agency_person.is_job_developer? @agency_person.agency
+
+      @job_seeker.assign_job_developer(@agency_person, @agency_person.agency)
+
+    when :CM
+      return render(json: {:message => 'Agency Person is not a case manager'},
+                    status: 403) unless
+                    @agency_person.is_case_manager? @agency_person.agency
+
+      @job_seeker.assign_case_manager(@agency_person, @agency_person.agency)
+
+    else
+      return render(json: {:message => 'Unknown agency role specified'},
+                    status: 400)
+    end
+
+    if request.xhr?
+      render :partial => 'job_seekers/assigned_agency_person',
+             :locals => {job_seeker: @job_seeker,
+                         agency_person: @agency_person,
+                         agency_role: params[:agency_role]}
+    else
+      redirect_to job_seeker_path(@job_seeker)
     end
   end
 
@@ -98,6 +152,43 @@ class AgencyPeopleController < ApplicationController
                           agency_role_ids: [], job_category_ids: [],
                           as_jd_job_seeker_ids: [],
                           as_cm_job_seeker_ids: [])
+  end
+
+  def new_job_seeker_ids agency_person, job_seeker_ids, role_key
+    # job_seeker_ids comes in from params.  Find and return the ids of
+    # job seekers who are represented in params but not yet associated
+    # with the agency person in the indicated role
+
+    unless job_seeker_ids.empty?
+      new_job_seeker_ids = job_seeker_ids.map { |id| id.to_i }
+      new_job_seeker_ids.delete(0)
+      case role_key
+      when :JD
+        current_js_ids = agency_person.as_jd_job_seeker_ids
+      when :CM
+        current_js_ids = agency_person.as_cm_job_seeker_ids
+      end
+      new_job_seeker_ids.keep_if do |js_id|
+        not current_js_ids.include? js_id
+      end
+    end
+    return new_job_seeker_ids
+  end
+
+  def notify_ap_new_js_assignments agency_person, job_seeker_ids, role_key
+    if job_seeker_ids
+      job_seeker_ids.each do |js_id|
+        obj = Struct.new(:job_seeker, :agency_person)
+        case role_key
+        when :JD
+          Event.create(:JS_ASSIGN_JD, obj.new(JobSeeker.find(js_id),
+                                              @agency_person))
+        when :CM
+          Event.create(:JS_ASSIGN_CM, obj.new(JobSeeker.find(js_id),
+                                              @agency_person))
+        end
+      end
+    end
   end
 
 end
