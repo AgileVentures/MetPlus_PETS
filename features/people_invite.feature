@@ -86,7 +86,7 @@ Scenario: invite (and reinvite) new Company person
   And I should see "An invitation email has been sent to newguy@widgets.com."
   And I should see "Edit Company Person: New Guy"
   And I click the "Cancel" link
-  Then I should see "Company Person"
+  Then I should see "New Guy"
   And I click the "Invite Again" link
   And I should see "An invitation email has been sent to newguy@widgets.com."
   Then "newguy@widgets.com" should receive 2 emails with subject "Invitation instructions"

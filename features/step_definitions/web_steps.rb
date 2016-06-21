@@ -23,6 +23,14 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^(?:I|they) should( not)? see button "([^"]*)"$/) do |not_see, button|
+  unless not_see
+    expect(page).to have_button button
+  else
+    expect(page).to_not have_button button
+  end
+end
+
 Then(/^"([^"]*)" should( not)? be visible$/) do |string, not_see|
   unless not_see
     expect(has_text?(:visible, string)).to be true
