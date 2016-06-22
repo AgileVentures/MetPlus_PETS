@@ -10,7 +10,6 @@
           - when :last_sign_in_at
             %th.strong Last Login
   %tbody
-
   - jobseekers.each do |js|
     %tr
       - job_seeker_fields(people_type).each do |field|
@@ -31,5 +30,4 @@
                             :action => 'list_js_cm',
                             :id => agency_person.id,
                             :people_type => people_type}
-  
   

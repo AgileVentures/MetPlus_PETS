@@ -455,8 +455,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
     it 'assigns @people to collection of casemanager to jobseeker people' do
       expect(assigns(:people)).to include job_seeker
     end
-    it 'renders agency_people/assigned_job_seeker template' do
-      expect(response).to render_template('agency_people_assigned_job_seekers')
+    it 'renders agency_people/assigned_job_seekers template' do
+      expect(response).to render_template('agency_people/_assigned_job_seekers')
     end
     it "returns http success" do
       expect(response).to have_http_status(:success)
