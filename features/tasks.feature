@@ -33,7 +33,7 @@ Feature: Have a task system in the site
       | need_case_manager  | MetPlus,CM           | 2016-03-10    | NEW         | john-seeker@gmail.com |
       | need_job_developer | jane-dev@metplus.org | 2016-03-10    | ASSIGNED    | john-worker@gmail.com |
       | need_case_manager  | jane@metplus.org     | 2016-03-10    | WIP         | john-worker@gmail.com |
-      | need_case_manager  | aa@metplus.org       | 2016-03-10    | NEW    | john-seeker@gmail.com |
+      | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
       | company_registration | aa@metplus.org     | 2016-03-10    | NEW         | Widgets Inc.          |
