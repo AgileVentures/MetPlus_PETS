@@ -38,7 +38,7 @@
             - if not task.company.nil?
               %p
                 Company:
-                = link_to(task.company.name, company_home_path(task.company))
+                = link_to(task.company.name, company_registration_path(task.company))
           %td
             = task.updated_at.strftime('%F')
           %td
