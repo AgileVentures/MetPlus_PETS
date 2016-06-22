@@ -36,7 +36,7 @@ Feature: Have a task system in the site
       | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
-      | company_registration | aa@metplus.org     | 2016-03-10    | NEW         | Widgets Inc.          |
+      | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
 
 
   @selenium
