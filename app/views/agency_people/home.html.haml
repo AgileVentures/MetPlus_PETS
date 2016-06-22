@@ -22,7 +22,7 @@
      data: {url: list_js_cm_agency_people_path(@agency_person.id,@people_type)}}
   - if @your_jobseekers_cm.empty?
     %i There are no job seekers assigned to you at.
- 
+
 - if @agency_person.is_job_developer?(@agency)
   %h3 Job Seekers without a Job Developer
   - if @js_without_jd.empty?
