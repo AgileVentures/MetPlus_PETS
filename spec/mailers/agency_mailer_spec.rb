@@ -42,7 +42,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
     it "includes link to show company" do
       expect(mail).
-          to have_body_text(/#{company_url(id: 1)}/)
+          to have_body_text(/#{company_url(id: 1, admin_type: 'AA')}/)
     end
   end
 

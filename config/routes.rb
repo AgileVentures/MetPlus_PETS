@@ -51,12 +51,17 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # ----------------------- Company ------------------------------------------
-  # Company admin (and agency admin) can edit a company
-  resources :companies, path: 'company_admin/companies',
-                                only: [:edit, :update, :show]
-  # Only the agency admin can delete a company
-  resources :companies, path: 'admin/companies',
-                                only: [:destroy, :list]
+  # Most company actions can be performed by a company admin or an
+  # agency admin.  Redirect logic after actions can be different
+  # depending on which admin type is performing the action.
+  # (delete of a company can only be performed by an agency admin, but
+  # 'admin_type param is still used to conform to Rails path conventions')
+
+  get    'companies/:id/:admin_type'  => 'companies#show', as: :company
+  patch  'companies/:id/:admin_type'  => 'companies#update'
+  delete 'companies/:id/:admin_type'  => 'companies#destroy'
+  get    'companies/:id/edit/:admin_type' => 'companies#edit',
+                            as: :edit_company
 
   # --------------------------------------------------------------------------
 

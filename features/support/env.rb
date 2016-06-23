@@ -67,6 +67,10 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.default_max_wait_time = 5
 
+Before '@selenium' do
+  Capybara.current_session.current_window.resize_to(1024, 768)
+end
+
 if ENV['IN_BROWSER']
   # On demand: non-headless tests via Selenium/WebDriver
   # To run the scenarios in browser (default: Firefox), use the following command line:

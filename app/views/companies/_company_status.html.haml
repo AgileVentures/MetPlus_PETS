@@ -1,7 +1,6 @@
 = company.status
 - if company.status == Company::STATUS[:PND]
-  = link_to 'Approve',                                                 |
-      approve_company_registration_path(company), method: :patch,      |
-      class: 'btn btn-success btn-xs',                                 |
-      id: 'company_approve_link'                                       |
+  = link_to 'Approve',
+      approve_company_registration_path(company),
+      method: :patch, class: 'btn btn-success btn-xs', id: 'company_approve_link'
   - text_modal_button 'Deny', 'deny_registration'
