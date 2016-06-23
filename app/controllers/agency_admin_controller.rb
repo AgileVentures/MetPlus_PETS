@@ -8,9 +8,12 @@ class AgencyAdminController < ApplicationController
                         find(Agency.this_agency(current_user).id)
 
     @agency_admins = Agency.agency_admins(@agency)
-    @branches      = @agency.branches.page(params[:branches_page]).per_page(10)
-    @agency_people = @agency.agency_people.page(params[:people_page]).per_page(10)
-    @companies     = @agency.companies.page(params[:companies_page]).per_page(10)
+    @branches      = @agency.branches.order(:code).
+                        page(params[:branches_page]).per_page(10)
+    @agency_people = @agency.agency_people.joins(:user).order('users.last_name').
+                        page(params[:people_page]).per_page(10)
+    @companies     = @agency.companies.order(:name).
+                        page(params[:companies_page]).per_page(10)
 
     if request.xhr?
       case params[:data_type]

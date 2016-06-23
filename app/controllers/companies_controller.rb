@@ -1,7 +1,11 @@
 class CompaniesController < ApplicationController
 
+  include CompanyPeopleViewer
+
   def show
-    @company = Company.find(params[:id])
+    @company        = Company.find(params[:id])
+    @company_admins = Company.company_admins(@company)
+    @people_type    = 'company-all'
   end
 
   def destroy

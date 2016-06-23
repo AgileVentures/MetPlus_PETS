@@ -1,5 +1,6 @@
 class CompanyRegistrationsController < ApplicationController
   include UserParameters
+  include CompanyPeopleViewer
 
   def new
     @company = Company.new
@@ -8,7 +9,9 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def show
-    @company = Company.find(params[:id])
+    @company        = Company.find(params[:id])
+    @company_admins = Company.company_admins(@company)
+    @people_type    = 'company-all'
   end
 
   def destroy

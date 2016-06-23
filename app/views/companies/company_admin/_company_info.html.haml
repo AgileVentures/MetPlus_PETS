@@ -47,3 +47,9 @@
         - @company_admins.each do |ca|
           = mail_to ca.email, ca.full_name(last_name_first: false)
           = ', ' if ca != @company_admins.last
+    %tr
+      %td
+        %strong Status
+      %td#company_status
+        = render :partial => 'companies/company_status',
+                 :locals => {company: @company}

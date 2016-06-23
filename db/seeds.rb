@@ -73,12 +73,14 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   # Create a known company for dev/test purposes
-  known_company = Company.create(ein: Faker::Company.ein,
-                                 phone: '111-222-3333',
-                                 email: 'contact@widgets.com',
-                                 website: 'www.widgets.com',
-                                 name: 'Widgets, Inc.',
-                                 status: Company::STATUS[:ACT])
+  known_company = Company.new(ein: Faker::Company.ein,
+                              phone: '111-222-3333',
+                              email: 'contact@widgets.com',
+                              website: 'www.widgets.com',
+                              name: 'Widgets, Inc.',
+                              status: Company::STATUS[:ACT])
+  known_company.agencies << agency
+  known_company.save
 
   15.times { create_address(known_company) }
 
