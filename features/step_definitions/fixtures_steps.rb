@@ -157,6 +157,8 @@ Given(/^the following tasks exist:$/) do |table|
     end
     if targets =~ /@/
       task.target = User.find_by_email targets
+    else
+      task.target = Company.find_by_name targets
     end
     task.save!
   end
