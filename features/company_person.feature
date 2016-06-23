@@ -70,6 +70,36 @@ Feature: Company Person
     And I click the "Submit" button
     Then I should see "company was successfully updated."
 
+  @javascript
+  Scenario: company admin can edit and delete company person
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    And I wait 1 second
+    Then I click the "Smith, Jane" link
+    And I should see button "Edit Person"
+    And I should see button "Delete Person"
+
+  @javascript
+  Scenario: company admin can edit but not delete himself
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    And I wait 1 second
+    Then I click the "Smith, Jane" link
+    And I should see button "Edit Person"
+    And I should see button "Delete Person"
+
+  @javascript
+  Scenario: agency admin can edit and delete company person
+    Given I am on the home page
+    And I login as "aa@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    And I click the "Admin" link
+    And I click the "Agency and Partner Companies" link
+    Then I click the "Widgets Inc." link
+    Then I click the "Smith, Jane" link
+    And I should see button "Edit Person"
+    And I should see button "Delete Person"
+
   Scenario: company contact cannot edit company nor invite person_type
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
@@ -126,7 +156,7 @@ Feature: Company Person
     And I should not see "John"
     And I should see "Tom"
 
-  @selenium
+  @javascript
   Scenario: verify job listing in home page
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
@@ -136,7 +166,7 @@ Feature: Company Person
     And I should not see "Doctor"
     And I should not see "software developer"
 
-  @selenium
+  @javascript
   Scenario: verify people listing in home page
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
