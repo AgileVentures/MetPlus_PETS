@@ -155,7 +155,7 @@ class AgencyPeopleController < ApplicationController
     @people_type = params[:people_type] || 'jobseeker-cm'
 
     @people = []
-    @people = display_job_seekers @people_type, 5, @agency_person
+    @people = display_job_seekers @people_type, @agency_person
 
     render :partial => 'agency_people/assigned_job_seekers',
                        locals: {jobseekers: @people,

@@ -1,7 +1,7 @@
 module JobSeekersViewer
   extend ActiveSupport::Concern
 
-  def display_job_seekers people_type, per_page = 10, agency_person
+  def display_job_seekers people_type, agency_person, per_page = 5
     case people_type
     when 'jobseeker-cm'
       return  JobSeeker.paginate(page: params[:jobseekers_cm_page],
