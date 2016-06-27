@@ -4,8 +4,6 @@ class CompanyPeopleController < ApplicationController
 
   include CompanyPeopleViewer
 
-  helper_method :company_people_fields
-
   def show
     @company_person = CompanyPerson.find(params[:id])
   end
@@ -78,7 +76,7 @@ class CompanyPeopleController < ApplicationController
     @people_type = params[:people_type] || 'my-company-all'
 
     @people = []
-    @people = display_company_people @people_type
+    @people = display_company_people @people_type, @company
 
     render :partial => 'company_people/list_people',
                        locals: {people: @people,
