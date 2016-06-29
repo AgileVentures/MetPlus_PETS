@@ -380,6 +380,7 @@ RSpec.describe JobSeekersController, type: :controller do
 
     context 'JS show page view' do
       before(:each) do
+        sign_in job_seeker
         xhr :get, :applied_jobs, id: job_seeker.id, application_type: 'js-applied'
       end
 

@@ -232,7 +232,7 @@ if Rails.env.development? || Rails.env.staging?
     resume = FFaker::Lorem.word
     job_seeker_status = jobseekerstatus[r.rand(3)]
 
-    JobSeeker.create(first_name: first_name,
+    job_seeker = JobSeeker.create(first_name: first_name,
                      last_name: last_name,
                      email: email,
                      password: password,
@@ -242,6 +242,10 @@ if Rails.env.development? || Rails.env.staging?
                      phone: phone,
                      confirmed_at: DateTime.now,
                      address: create_address)
+
+    # Add job application for known_company
+    job = Job.where(company: known_company)[r.rand(25)]
+    JobApplication.create(job: job, job_seeker: job_seeker)
   end
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
@@ -249,6 +253,11 @@ if Rails.env.development? || Rails.env.staging?
                 year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
+
+  # Have this JS apply to all known_company jobs
+  Job.where(company: known_company).each do |job|
+    JobApplication.create(job: job, job_seeker: js1)
+  end
 
   # Add résumé to this job seeker
   file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')
