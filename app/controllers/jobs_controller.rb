@@ -1,8 +1,10 @@
 class JobsController < ApplicationController
 
 	include JobsViewer
+  include JobApplicationsViewer
 
-	before_action :find_job,	only: [:show, :edit, :update, :destroy]
+	before_action :find_job,	only: [:show, :edit, :update, :destroy,
+                :applications, :applications_list]
 	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy]
 	before_action :is_right_company_person, only: [:edit, :destroy, :update]
 	before_action :user_logged!, only: [:apply]
@@ -101,6 +103,21 @@ class JobsController < ApplicationController
 		flash[:alert] = "#{@job.title} has been deleted successfully."
 		redirect_to jobs_url
 	end
+
+  def applications
+    @application_type = params[:application_type] || 'job-applied'
+  end
+
+  def applications_list
+    raise 'Unsupported request' if not request.xhr?
+
+    @application_type = params[:application_type] || 'job-applied'
+
+    @applications = []
+    @applications = display_job_applications @application_type, 5, nil, @job.id
+
+    render partial: 'job_applications'
+  end
 
 	def list
     raise 'Unsupported request' if not request.xhr?

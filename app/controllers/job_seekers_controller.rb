@@ -108,8 +108,14 @@ class JobSeekersController < ApplicationController
     @application_type = params[:application_type] || 'my-applied'
 
     @job_applications = []
-    @job_applications = display_job_applications @application_type, 5,
-                                                 params[:id]
+
+    if User.is_company_person? pets_user
+      @job_applications = display_job_applications @application_type, 5,
+                                      params[:id], nil, pets_user.company.id
+    else
+      @job_applications = display_job_applications @application_type, 5,
+                                      params[:id]
+    end
     render partial: 'jobs/applied_job_list',
           :locals => {job_applications: @job_applications,
                       application_type: @application_type}

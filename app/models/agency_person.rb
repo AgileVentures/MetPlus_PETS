@@ -111,7 +111,10 @@ class AgencyPerson < ActiveRecord::Base
     has_role?(:AA)
   end
 
-
+  def is_agency_person? agency
+    self.agency == agency
+  end
+  
 
   private
   def has_role? role

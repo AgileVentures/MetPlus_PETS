@@ -10,7 +10,7 @@
           - when :poster
             %td.strong Poster
           - when :num_applicants
-            %td.strong Number of applications
+            %td.strong Applications
   %tbody
     - all_jobs.each do |job|
       %tr
@@ -24,9 +24,12 @@
               = job.updated_at.strftime('%F')
           - when :poster
             %td.col-md-3
-              = link_to(job.company_person.full_name, company_person_path(job.company_person))
+              = link_to(job.company_person.full_name,
+                        company_person_path(job.company_person))
           - when :num_applicants
             %td.col-md-2
-              = job.number_applicants
+              = link_to_unless(job.number_applicants == 0,
+                               job.number_applicants,
+                               applications_job_path(job.id))
 .row.text-center
   = will_paginate all_jobs, param_name: 'jobs_page', :params => {:controller => 'jobs', :action => 'list', :job_type => job_type}

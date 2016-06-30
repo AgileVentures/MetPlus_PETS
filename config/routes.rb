@@ -123,7 +123,12 @@ Rails.application.routes.draw do
                                         as: :list_search_jobs
   get 'jobs/update_addresses'       => 'jobs#update_addresses',
                                         as: :update_addresses
-  resources :jobs
+  get 'jobs/:id/applications_list/:application_type'  =>
+                'jobs#applications_list', as: :applications_list
+
+  resources :jobs do
+    get 'applications', on: :member, as: :applications
+  end
   # --------------------------------------------------------------------------
 
   # ---------------------------- Job Seekers ---------------------------------

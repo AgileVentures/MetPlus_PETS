@@ -9,7 +9,7 @@
       %td
         %strong Email
       %td
-        = job_seeker.email
+        = mail_to job_seeker.email
     %tr
       %td
         %strong Phone
@@ -22,11 +22,6 @@
         = single_line_address(job_seeker.address)
     %tr
       %td
-        %strong Status
-      %td
-        = job_seeker.status.short_description
-    %tr
-      %td
         %strong Résumé
       %td
         - if job_seeker.resumes.empty?
@@ -37,17 +32,11 @@
           &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
     %tr
       %td
-        %strong Last Login
-      %td
-        - unless job_seeker.last_sign_in_at.nil?
-          = job_seeker.last_sign_in_at.strftime('%x')
-    %tr
-      %td
         %strong Case Manager
       %td
         #assigned_case_manager
           = render :partial => 'assigned_agency_person',
-                        :locals => {agency_person: pets_user,
+                        :locals => {person: pets_user,
                                     job_seeker: job_seeker,
                                     agency_role: 'CM'}
     %tr
@@ -56,6 +45,19 @@
       %td
         #assigned_job_developer
           = render :partial => 'assigned_agency_person',
-                        :locals => {agency_person: pets_user,
+                        :locals => {person: pets_user,
                                     job_seeker: job_seeker,
                                     agency_role: 'JD'}
+
+    - if pets_user.is_agency_person? current_agency
+      %tr
+        %td
+          %strong Status
+        %td
+          = job_seeker.status.short_description
+      %tr
+        %td
+          %strong Last Login
+        %td
+          - unless job_seeker.last_sign_in_at.nil?
+            = job_seeker.last_sign_in_at.strftime('%x')

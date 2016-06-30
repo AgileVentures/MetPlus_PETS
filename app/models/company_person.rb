@@ -55,6 +55,10 @@ class CompanyPerson < ActiveRecord::Base
     has_role?(:CC)
   end
 
+  def is_company_person? company
+    self.company == company
+  end
+
   private
   def has_role? role
     company_roles.pluck(:role).include?CompanyRole::ROLE[role]
