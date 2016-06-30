@@ -1,6 +1,7 @@
 class AgencyPeopleController < ApplicationController
 
   include UserParameters
+  include JobSeekersViewer
 
   def show
     @agency_person = AgencyPerson.find(params[:id])
@@ -14,6 +15,7 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
     @task_type = 'mine-open'
+    @people_type = 'jobseeker-cm'
     @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
     @js_without_cm = JobSeeker.paginate(:page=> params[:js_without_cm_page], :per_page=>5).js_without_cm
     @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd_page], :per_page=> 5).your_jobseekers_jd(@agency_person)
@@ -143,6 +145,22 @@ class AgencyPeopleController < ApplicationController
       flash[:alert] = "You cannot delete yourself."
     end
     redirect_to agency_admin_home_path
+  end
+
+  def list_js_cm
+    raise 'Unsupported request' if not request.xhr?
+
+    @agency_person= AgencyPerson.find(params[:id])
+
+    @people_type = params[:people_type] || 'jobseeker-cm'
+
+    @people = []
+    @people = display_job_seekers @people_type, @agency_person
+
+    render :partial => 'agency_people/assigned_job_seekers',
+                       locals: {jobseekers: @people,
+                                people_type: @people_type,
+                                agency_person: @agency_person}
   end
 
   private
