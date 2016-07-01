@@ -6,6 +6,7 @@ RSpec.describe JobsController, type: :controller do
   before(:example) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      allow(Pusher).to receive(:trigger)
 
       @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]

@@ -2,6 +2,7 @@ require "rails_helper"
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe AgencyMailer, type: :mailer do
+
   describe 'Job Seeker registered' do
     let!(:agency) { FactoryGirl.create(:agency) }
     let!(:agency_person) { FactoryGirl.create(:agency_person, agency: agency) }
@@ -119,6 +120,31 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
     it "includes link to show job seeker" do
       expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+    end
+  end
+
+  describe 'New job posted' do
+
+    let(:job)           { FactoryGirl.create(:job) }
+    let(:job_developer) { FactoryGirl.create(:job_developer)}
+
+    let(:mail) do
+      allow(Pusher).to receive(:trigger)
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      AgencyMailer.job_posted(job_developer.email, job)
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq 'Job posted'
+      expect(mail.to).to eq(["#{job_developer.email}"])
+      expect(mail.from).to eq(["from@example.com"])
+    end
+    it "renders the body" do
+      expect(mail).to have_body_text(/A new job \(\n.*#{Regexp.quote(job.title)}.*\n\) has been posted for company: #{Regexp.quote(job.company.name)}\./)
+    end
+    it "includes link to show job" do
+      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
   end
 

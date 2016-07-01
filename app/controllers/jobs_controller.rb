@@ -74,10 +74,13 @@ class JobsController < ApplicationController
 	def create
 		@job = Job.new(job_params)
 
-		@job.address = @cp_or_jd.address if pets_user.is_a?(CompanyPerson)
 		if @job.save
 			flash[:notice] = "#{@job.title} has been created successfully."
-			redirect_to jobs_url
+
+      obj = Struct.new(:job, :agency)
+      Event.evt_job_posted(:JOB_POSTED, obj.new(@job, current_agency))
+
+			redirect_to jobs_path
 		else
 			render :new
 		end

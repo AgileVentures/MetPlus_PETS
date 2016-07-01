@@ -18,6 +18,9 @@ class NotifyEmailJob < ActiveJob::Base
     when Event::EVT_TYPE[:JS_ASSIGN_CM]
       AgencyMailer.job_seeker_assigned_cm(email_addresses, evt_obj).deliver_later
 
+    when Event::EVT_TYPE[:JOB_POSTED]
+      AgencyMailer.job_posted(email_addresses, evt_obj).deliver_later
+
     end
   end
 end

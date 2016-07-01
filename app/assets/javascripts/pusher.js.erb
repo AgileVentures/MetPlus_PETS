@@ -66,6 +66,16 @@ var PusherControl = {
             " has been assigned to you as Case Manager");
       }
     });
+
+    channel.bind('job_posted', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
+        Notification.info_notification('New job (' +
+            "<a href='/jobs/" + data.job_id +
+            "' target='_blank'>" + data.job_title + '</a>)' +
+            " posted for company: " + data.company_name);
+      }
+    });
   }
 };
 
