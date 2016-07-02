@@ -116,5 +116,4 @@ Scenario: new job posted in PETS
 	Then I should see "Cashier has been created successfully."
   Then "dave@metplus.org" should receive an email with subject "Job posted"
   Then I am in Job Developer's browser
-  And show me the page
   And I should see "New job (Cashier) posted for company: Widgets Inc."
