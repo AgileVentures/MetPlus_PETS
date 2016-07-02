@@ -106,14 +106,14 @@ Scenario: new job posted in PETS
   And I login as "jane@widgets.com" with password "qwerty123"
   Then I click the "Post jobs" link
   And I fill in the fields:
-		| Title            | Cashier       |
-		| Company Job ID   | KARK12        |
-		| Description      | Grocery Store |
-	And I select "Day" in select list "Shift"
+    | Title            | Cashier       |
+    | Company Job ID   | KARK12        |
+    | Description      | Grocery Store |
+  And I select "Day" in select list "Shift"
   And  I select "10 Spring Street Detroit, Michigan 02034" in select list "Job Location"
-	And I check "Fulltime"
-	And I press "new-job-submit"
-	Then I should see "Cashier has been created successfully."
+  And I check "Fulltime"
+  And I press "new-job-submit"
+  Then I should see "Cashier has been created successfully."
   Then "dave@metplus.org" should receive an email with subject "Job posted"
   Then I am in Job Developer's browser
   And I should see "New job (Cashier) posted for company: Widgets Inc."

@@ -27,7 +27,6 @@ RSpec.describe JobsController, type: :controller do
           shift: @job.shift,
           fulltime: @job.fulltime,
           title: @job.title,
-          # company_id: @company_person.company.id,
           company_id: @job.company.id,
           company_job_id: @job.company_job_id,
           company_person_id:  @company_person.id,
