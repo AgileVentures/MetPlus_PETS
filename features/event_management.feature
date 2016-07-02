@@ -26,7 +26,7 @@ Background: seed data
   | company      | street           | city    | state    | zipcode |
   | Widgets Inc. | 10 Spring Street | Detroit | Michigan | 02034   |
 
-@javascript
+@selenium
 Scenario: Job Seeker registers in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -56,7 +56,7 @@ Scenario: Job Seeker registers in PETS
   And I wait for 1 second
   And I should see "Job Seeker has no assigned Job Developer"
 
-@javascript
+@selenium
 Scenario: Company registration request in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -96,7 +96,7 @@ Scenario: Company registration request in PETS
   And I wait for 1 second
   And I should see "Review company registration"
 
-@javascript
+@selenium
 Scenario: new job posted in PETS
   When I am in Job Developer's browser
   Given I am on the home page
