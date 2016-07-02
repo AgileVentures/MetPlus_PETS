@@ -11,8 +11,8 @@ RSpec.describe JobsController, type: :controller do
       @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in @company_person
-      @job =  FactoryGirl.create(:job)
-      @job_2 = FactoryGirl.create(:job)
+      @job =  FactoryGirl.create(:job, company: @company_person.company)
+      @job_2 = FactoryGirl.create(:job, company: @company_person.company)
       @address = FactoryGirl.create(:address)
       @skill = FactoryGirl.create(:skill)
   end
@@ -27,7 +27,8 @@ RSpec.describe JobsController, type: :controller do
           shift: @job.shift,
           fulltime: @job.fulltime,
           title: @job.title,
-          company_id: @company_person.company.id,
+          # company_id: @company_person.company.id,
+          company_id: @job.company.id,
           company_job_id: @job.company_job_id,
           company_person_id:  @company_person.id,
           address_id: @address.id,
@@ -54,7 +55,7 @@ RSpec.describe JobsController, type: :controller do
             shift: @job.shift,
             fulltime: @job.fulltime,
             title: @job.title,
-            company_id: @company_person.company.id,
+            company_id: @job.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
             address_id: @address.id,
@@ -345,8 +346,9 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'PATCH #update' do
 
-    let(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
+    let(:skill)      { FactoryGirl.create(:skill, name: 'test skill') }
+    let(:job3)       { FactoryGirl.create(:job, company: @company_person.company) }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job3, skill: skill)}
 
     it 'has 3 jobs and 1 job_skill at the start' do
       expect(Job.count).to eq(3)
@@ -403,7 +405,8 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'DELETE #destroy' do
     let!(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill) }
+    let(:job3)       { FactoryGirl.create(:job, company: @company_person.company) }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job3, skill: skill)}
 
     it 'destroys job and associated job_skill' do
       expect { delete :destroy, :id => job_skill.job.id }.

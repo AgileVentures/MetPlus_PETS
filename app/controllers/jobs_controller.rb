@@ -11,7 +11,6 @@ class JobsController < ApplicationController
 
 	helper_method :job_fields
 
-
 	def index
 		if company_p_or_job_d? && @cp_or_jd.is_a?(CompanyPerson)
 			@jobs = @cp_or_jd.company.jobs.order(:title).paginate(:page => params[:page],
@@ -213,8 +212,6 @@ class JobsController < ApplicationController
 		end
 
 		def job_params
-			# params.require(:job).permit(:description, :company_id, :shift,
-			#   :company_person_id, :fulltime, :company_job_id, :job_category_id, :title)
 			params.require(:job).permit(:description, :shift, :company_job_id,
 			                            :fulltime, :company_id, :title, :address_id,
 			                            :company_person_id,
