@@ -25,16 +25,14 @@ class AgencyMailerPreview < ActionMailer::Preview
   end
 
   def job_seeker_assigned_jd
-    job_seeker    = User.find_by_email('tom@gmail.com').actable
-    job_developer = User.find_by_email('chet@metplus.org').actable
-
-    AgencyMailer.job_seeker_assigned_jd(job_developer.email, job_seeker)
+    job_seeker    = JobSeeker.first
+    agency_person = AgencyPerson.first
+    AgencyMailer.job_seeker_assigned_jd(agency_person.email, job_seeker)
   end
 
   def job_seeker_assigned_cm
-    job_seeker    = User.find_by_email('tom@gmail.com').actable
-    case_manager  = User.find_by_email('chet@metplus.org').actable
-
+    job_seeker    = JobSeeker.first
+    agency_person = AgencyPerson.first
     AgencyMailer.job_seeker_assigned_cm(case_manager.email, job_seeker)
   end
 
