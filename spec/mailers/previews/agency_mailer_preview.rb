@@ -33,7 +33,7 @@ class AgencyMailerPreview < ActionMailer::Preview
   def job_seeker_assigned_cm
     job_seeker    = JobSeeker.first
     agency_person = AgencyPerson.first
-    AgencyMailer.job_seeker_assigned_cm(case_manager.email, job_seeker)
+    AgencyMailer.job_seeker_assigned_cm(agency_person.email, job_seeker)
   end
 
   def job_posted
