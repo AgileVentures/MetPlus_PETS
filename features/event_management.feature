@@ -26,6 +26,11 @@ Background: seed data
   | company      | street           | city    | state    | zipcode |
   | Widgets Inc. | 10 Spring Street | Detroit | Michigan | 02034   |
 
+  Given the following jobseekers exist:
+  | first_name| last_name| email         | phone       | password  | year_of_birth |job_seeker_status  |
+  | Sam       | Seeker   | sam@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
+  | Tom       | Terrific | tom@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
+
 @selenium
 Scenario: Job Seeker registers in PETS
   When I am in Admin's browser
@@ -97,23 +102,79 @@ Scenario: Company registration request in PETS
   And I should see "Review company registration"
 
 @selenium
-Scenario: new job posted in PETS
+Scenario: Job developer assigned to job seeker
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
   When I am in Job Developer's browser
   Given I am on the home page
   And I login as "dave@metplus.org" with password "qwerty123"
-  Then I am in Company Contact's browser
+  Then I should see "Signed in successfully."
+  When I am in Admin's browser
   Given I am on the home page
-  And I login as "jane@widgets.com" with password "qwerty123"
-  Then I click the "Post jobs" link
-  And I fill in the fields:
-    | Title            | Cashier       |
-    | Company Job ID   | KARK12        |
-    | Description      | Grocery Store |
-  And I select "Day" in select list "Shift"
-  And  I select "10 Spring Street Detroit, Michigan 02034" in select list "Job Location"
-  And I check "Fulltime"
-  And I press "new-job-submit"
-  Then I should see "Cashier has been created successfully."
-  Then "dave@metplus.org" should receive an email with subject "Job posted"
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
+  And I wait 1 second
+  Then I should see "Agency Personnel"
+  And I click the "Developer, Dave" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Dave Developer"
+  Then I check first "Seeker, Sam"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Job Developer role:"
+  Then I am in Job Seeker's browser
+  And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
   Then I am in Job Developer's browser
-  And I should see "New job (Cashier) posted for company: Widgets Inc."
+  And I should see "Job Seeker: Sam Seeker has been assigned to you as Job Developer"
+  And "sam@gmail.com" should receive an email with subject "Job developer assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Dave Developer" in the email body
+  And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
+  And "dave@metplus.org" should receive an email with subject "Job seeker assigned jd"
+  When "dave@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Job Developer:" in the email body
+  When "dave@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+
+@selenium
+Scenario: Case manager assigned to job seeker
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Case Manager's browser
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Admin's browser
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
+  And I wait 1 second
+  Then I should see "Agency Personnel"
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I check second "Seeker, Sam"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
+  Then I am in Job Seeker's browser
+  And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
+  Then I am in Case Manager's browser
+  And I should see "Job Seeker: Sam Seeker has been assigned to you as Case Manager"
+  And "sam@gmail.com" should receive an email with subject "Case manager assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Jane Jones" in the email body
+  And they should see "has been assigned to you as your MetPlus Case Manager" in the email body
+  And "jane@metplus.org" should receive an email with subject "Job seeker assigned cm"
+  When "jane@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
+  When "jane@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"

@@ -226,9 +226,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(assigns(:agency_person).as_jd_job_seeker_ids).
             to eq [job_seeker.id, adam.id]
       end
-      it 'sends notification email to JD for each job seeker' do
+      it 'sends notification emails to job seekers and to JD for each job seeker' do
         expect { patch :update, id: jd_person, agency_person: person_hash }.
-                      to change(all_emails, :count).by(+2)
+                      to change(all_emails, :count).by(+4)
       end
     end
 
@@ -251,9 +251,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(assigns(:agency_person).as_cm_job_seeker_ids).
             to eq [job_seeker.id, adam.id]
       end
-      it 'sends notification email to CM for each job seeker' do
+      it 'sends notification emails to job seekers and to CM for each job seeker' do
         expect { patch :update, id: cm_person, agency_person: person_hash }.
-                      to change(all_emails, :count).by(+2)
+                      to change(all_emails, :count).by(+4)
       end
     end
 
@@ -441,16 +441,16 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #list_js_cm' do
-    
+
     let(:case_manager) { FactoryGirl.create(:case_manager) }
-    
+
     let(:job_seeker)  { FactoryGirl.create(:job_seeker, first_name: 'Bob',      last_name: 'Smith') }
-    
-      
+
+
     before(:each) do
-      
+
       sign_in case_manager
       job_seeker.assign_case_manager(case_manager,case_manager.agency)
       xhr :get, :list_js_cm, id: case_manager.id,

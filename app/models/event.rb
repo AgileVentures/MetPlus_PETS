@@ -132,13 +132,21 @@ class Event
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JS_ASSIGN_JD],
                    {js_id:   evt_obj.job_seeker.id,
+                    js_user_id: evt_obj.job_seeker.user.id,
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false),
-                    jd_user_id: evt_obj.agency_person.user.id})
+                    jd_name: evt_obj.agency_person.full_name(last_name_first: false),
+                    jd_user_id: evt_obj.agency_person.user.id,
+                    agency_name: evt_obj.agency_person.agency.name})
 
     NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(evt_obj.agency_person.email,
                    EVT_TYPE[:JS_ASSIGN_JD],
                    evt_obj.job_seeker)
+
+    JobSeekerEmailJob.set(wait: delay_seconds.seconds).
+                   perform_later(EVT_TYPE[:JS_ASSIGN_JD],
+                                 evt_obj.job_seeker,
+                                 evt_obj.agency_person)
   end
 
   def self.evt_js_assign_cm(evt_type, evt_obj)
@@ -148,14 +156,22 @@ class Event
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JS_ASSIGN_CM],
-                   {js_id:   evt_obj.job_seeker.id,
+                   {js_id:      evt_obj.job_seeker.id,
+                    js_user_id: evt_obj.job_seeker.user.id,
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false),
-                    cm_user_id: evt_obj.agency_person.user.id})
+                    cm_name: evt_obj.agency_person.full_name(last_name_first: false),
+                    cm_user_id: evt_obj.agency_person.user.id,
+                    agency_name: evt_obj.agency_person.agency.name})
 
     NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(evt_obj.agency_person.email,
                    EVT_TYPE[:JS_ASSIGN_CM],
                    evt_obj.job_seeker)
+
+    JobSeekerEmailJob.set(wait: delay_seconds.seconds).
+                   perform_later(EVT_TYPE[:JS_ASSIGN_CM],
+                                 evt_obj.job_seeker,
+                                 evt_obj.agency_person)
   end
 
   def self.evt_job_posted(evt_type, evt_obj)

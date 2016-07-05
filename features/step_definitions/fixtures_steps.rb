@@ -105,7 +105,7 @@ Given(/^the following jobseekerstatus values exist:$/) do |table|
   end
 end
 
-Given(/^the following jobseeker exist:$/) do |table|
+Given(/^the following jobseeker(?:s?) exist:$/) do |table|
   table.hashes.each do |hash|
     jobseeker = hash.delete 'jobseeker'
     hash['actable_type'] = 'JobSeeker'
