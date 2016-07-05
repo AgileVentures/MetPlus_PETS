@@ -12,6 +12,19 @@ Background: seed data
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+  | MetPlus | JD    | Dave       | Developer | dave@metplus.org | qwerty123 |
+
+  Given the following companies exist:
+  | agency  | name         | website     | phone        | email            | ein        | status |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456799 | Active |
+
+  Given the following company people exist:
+  | company      | role  | first_name | last_name | email            | password  | phone        |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+
+  Given the following company addresses exist:
+  | company      | street           | city    | state    | zipcode |
+  | Widgets Inc. | 10 Spring Street | Detroit | Michigan | 02034   |
 
 @selenium
 Scenario: Job Seeker registers in PETS
@@ -82,3 +95,25 @@ Scenario: Company registration request in PETS
   Then I go to the tasks page
   And I wait for 1 second
   And I should see "Review company registration"
+
+@selenium
+Scenario: new job posted in PETS
+  When I am in Job Developer's browser
+  Given I am on the home page
+  And I login as "dave@metplus.org" with password "qwerty123"
+  Then I am in Company Contact's browser
+  Given I am on the home page
+  And I login as "jane@widgets.com" with password "qwerty123"
+  Then I click the "Post jobs" link
+  And I fill in the fields:
+    | Title            | Cashier       |
+    | Company Job ID   | KARK12        |
+    | Description      | Grocery Store |
+  And I select "Day" in select list "Shift"
+  And  I select "10 Spring Street Detroit, Michigan 02034" in select list "Job Location"
+  And I check "Fulltime"
+  And I press "new-job-submit"
+  Then I should see "Cashier has been created successfully."
+  Then "dave@metplus.org" should receive an email with subject "Job posted"
+  Then I am in Job Developer's browser
+  And I should see "New job (Cashier) posted for company: Widgets Inc."

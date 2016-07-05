@@ -6,7 +6,7 @@ RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
-  let(:job_developer)  { FactoryGirl.create(:job_developer) }
+  let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
   let(:case_manager)   { FactoryGirl.create(:case_manager) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
@@ -17,12 +17,19 @@ RSpec.describe Event, type: :model do
   let(:evt_obj_jd)    { evt_obj_class.new(job_seeker, job_developer) }
   let(:evt_obj_cm)    { evt_obj_class.new(job_seeker, case_manager) }
 
+  let(:evt_obj_jobpost_class) { Struct.new(:job, :agency) }
+  let(:evt_obj_jobpost) { evt_obj_jobpost_class.new(job, agency) }
+
   let(:application) do
     job.apply job_seeker
     job.last_application_by_job_seeker(job_seeker)
   end
 
   before(:each) do
+    allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+
     3.times do |n|
       FactoryGirl.create(:agency_person, agency: agency)
     end
@@ -30,7 +37,6 @@ RSpec.describe Event, type: :model do
 
   describe 'js_registered event' do
     it 'triggers a Pusher message' do
-      allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
       Event.create(:JS_REGISTER, job_seeker)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
@@ -40,13 +46,11 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification email' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:JS_REGISTER, job_seeker) }.
                     to change(all_emails, :count).by(+1)
     end
 
     it 'creates two tasks' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:JS_REGISTER, job_seeker) }.
                     to change(Task, :count).by(+2)
     end
@@ -54,7 +58,6 @@ RSpec.describe Event, type: :model do
 
   describe 'company_registered event' do
     it 'triggers a Pusher message' do
-      allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
       Event.create(:COMP_REGISTER, company)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
@@ -63,13 +66,11 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification email to company person and agency people' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:COMP_REGISTER, company) }.
                     to change(all_emails, :count).by(+2)
     end
 
     it 'creates one task' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:COMP_REGISTER, company) }.
                     to change(Task, :count).by(+1)
     end
@@ -94,13 +95,7 @@ RSpec.describe Event, type: :model do
 
   describe 'jobseeker_applied event' do
 
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
-    end
-
     it 'triggers a Pusher message' do
-      allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
       Event.create(:JS_APPLY, application)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
@@ -112,13 +107,11 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification email' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:JS_APPLY, application) }.
                     to change(all_emails, :count).by(+1)
     end
 
     it 'creates one task' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:JS_APPLY, application) }.
                     to change(Task, :count).by(+1)
     end
@@ -127,7 +120,6 @@ RSpec.describe Event, type: :model do
   describe 'jobseeker_assigned_jd event' do
 
     it 'triggers a Pusher message' do
-      allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
       Event.create(:JS_ASSIGN_JD, evt_obj_jd)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
@@ -138,7 +130,6 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification email' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:JS_ASSIGN_JD, evt_obj_jd) }.
                     to change(all_emails, :count).by(+1)
     end
@@ -147,7 +138,6 @@ RSpec.describe Event, type: :model do
   describe 'jobseeker_assigned_cm event' do
 
     it 'triggers a Pusher message' do
-      allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
       Event.create(:JS_ASSIGN_CM, evt_obj_cm)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
@@ -158,8 +148,27 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification email' do
-      allow(Pusher).to receive(:trigger)
       expect { Event.create(:JS_ASSIGN_CM, evt_obj_cm) }.
+                    to change(all_emails, :count).by(+1)
+    end
+  end
+
+  describe 'job_posted event' do
+
+    it 'triggers a Pusher message' do
+      Event.create(:JOB_POSTED, evt_obj_jobpost)
+
+      expect(Pusher).to have_received(:trigger).
+                    with('pusher_control',
+                         'job_posted',
+                         {job_id:    job.id,
+                          job_title: job.title,
+                          company_name: company.name,
+                          notify_list: [job_developer.user.id]})
+    end
+
+    it 'sends event notification email' do
+      expect { Event.create(:JOB_POSTED, evt_obj_jobpost) }.
                     to change(all_emails, :count).by(+1)
     end
   end

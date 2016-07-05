@@ -144,6 +144,7 @@ Scenario: Job Developer sees job seeker's job applications
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Welcome back to PETS, John Smith"
   Then I am on the JobSeeker Show page for "tommy@gmail.com"
+  And I wait 1 second
   And I should see "Clerk"
   And I should see "Doctor"
   And I should see "Mime"

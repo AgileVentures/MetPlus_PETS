@@ -16,7 +16,8 @@ class Event
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
               JS_ASSIGN_JD:  'jobseeker_assigned_jd',
-              JS_ASSIGN_CM:  'jobseeker_assigned_cm'}
+              JS_ASSIGN_CM:  'jobseeker_assigned_cm',
+              JOB_POSTED:    'job_posted'}
 
   # Add events as required below.  Each event may have business rules around
   # 1) who is to be notified of the event occurence, and/or 2) task(s)
@@ -40,6 +41,8 @@ class Event
       evt_js_assign_jd(evt_type, evt_obj)
     when :JS_ASSIGN_CM
       evt_js_assign_cm(evt_type, evt_obj)
+    when :JOB_POSTED
+      evt_job_posted(evt_type, evt_obj)
     end
   end
 
@@ -153,6 +156,32 @@ class Event
                    perform_later(evt_obj.agency_person.email,
                    EVT_TYPE[:JS_ASSIGN_CM],
                    evt_obj.job_seeker)
+  end
+
+  def self.evt_job_posted(evt_type, evt_obj)
+    # evt_obj = struct(:job, :agency)
+    # Business rules:
+    #    Notify all job developers in agency (email and popup)
+
+    job_developers = Agency.job_developers(evt_obj.agency)
+
+    unless job_developers.empty?
+
+      jd_ids    = job_developers.collect {|jd| jd.user.id}
+      jd_emails = job_developers.collect {|jd| jd.email}
+
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JOB_POSTED],
+                     {job_id:       evt_obj.job.id,
+                      job_title:    evt_obj.job.title,
+                      company_name: evt_obj.job.company.name,
+                      notify_list:  jd_ids})
+
+      NotifyEmailJob.set(wait: delay_seconds.seconds).
+                     perform_later(jd_emails,
+                     EVT_TYPE[:JOB_POSTED],
+                     evt_obj.job)
+    end
   end
 
   def self.notify_list_for_js_apply_event(appl)
