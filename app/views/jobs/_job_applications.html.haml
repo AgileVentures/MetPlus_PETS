@@ -1,0 +1,42 @@
+-# partial for job applications for a specific job
+
+- if @applications.empty?
+  %span(style='padding-left: 10px;') None
+- else
+  %table.table.table-hover
+    %thead
+      %tr
+        - application_fields(@application_type).each do |field|
+          - case field
+            - when :name
+              %th.strong Name
+            - when :js_status
+              %th.strong Job Seeker Status
+            - when :updated_at
+              %th.strong Applied
+            - when :status
+              %th.strong Application Status
+    %tbody
+      - @applications.each do |job_application|
+        %tr
+          - application_fields(@application_type).each do |field|
+            - case field
+              - when :name
+                %td
+                  = link_to job_application.job_seeker.full_name,
+                            job_seeker_path(job_application.job_seeker)
+              - when :js_status
+                %td
+                  = job_application.job_seeker.job_seeker_status.short_description
+              - when :updated_at
+                %td
+                  = "#{time_ago_in_words(job_application.updated_at, )} ago"
+              - when :status
+                %td
+                  = job_application.status_name
+
+  = will_paginate @applications, param_name: 'applications_page',
+                               params: {controller: 'jobs',
+                                        action: 'applications_list',
+                                        id: @job.id,
+                                        application_type: @application_type}

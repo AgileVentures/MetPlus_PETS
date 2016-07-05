@@ -1,23 +1,44 @@
-%h2
-  = "Welcome back to PETS, #{pets_user.full_name}"
-  = link_to edit_profile_company_person_path(pets_user),
-    :title => 'Edit profile',
-    :id => 'edit-profile' do
-    %i.fa.fa-pencil-square-o.fa-1
+.col-sm-9
+  %h2
+    = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
+    = link_to edit_profile_company_person_path(pets_user),
+      :title => 'Edit profile',
+      :id => 'edit-profile' do
+      %i.fa.fa-pencil-square-o.fa-1
+.col-sm-3
+  - if @company_person.is_company_admin? @company
+    .col-sm-3.col-sm-offset-9{style: 'margin-top: 20px;'}
+      = link_to 'Edit Company Info',
+                    edit_company_path(id: @company.id, admin_type: 'CA'),
+                    method: :get, class: 'btn btn-primary btn-sm pull-right'
 
-%h3 Tasks that need your attention
-= render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
+.clearfix
+.col-sm-3
+  %h4 Company Information
+  %a(id='toggle_company_info' href='#company_info_table' class='text-danger'
+              style='padding-left: 10px;')
+    Hide Company Information
+.col-sm-9
+  = render partial: 'companies/company_admin/company_info'
 
+.col-sm-12
+  %h3 Tasks that need your attention
+  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
 
-%h3 All #{@company.name} jobs
-.pagination-div{id: "jobs-#{@job_type}",
-                data: {url: list_jobs_path(@job_type)}}
+.col-sm-12
+  %h3 All #{@company.name} jobs
+  .pagination-div{id: "jobs-#{@job_type}",
+                  data: {url: list_jobs_path(@job_type)}}
 
-%h3 All #{@company.name} people who are on PETS
-.pagination-div{id: "people-#{@people_type}",
-                data: {url: list_company_people_path(@company.id, @people_type)}}
+.col-sm-9
+  %h3 All #{@company.name} people who are on PETS
+- if @company_person.is_company_admin? @company
+  .col-sm-3{style: 'margin-top: 20px;'}
+    = link_to 'Invite Colleague',
+                  new_user_invitation_path(person_type: 'CompanyPerson',
+                  org_id: pets_user.company.id),
+                  method: :get, class: 'btn btn-primary btn-sm pull-right'
 
-= link_to 'Invite Colleague',
-              new_user_invitation_path(person_type: 'CompanyPerson',
-              org_id: pets_user.company.id),
-              method: :get, class: 'btn btn-primary'
+.col-sm-12
+  .pagination-div{id: "people-#{@people_type}",
+                  data: {url: list_company_people_path(@company.id, @people_type)}}

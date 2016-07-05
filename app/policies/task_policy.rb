@@ -6,7 +6,11 @@ class TaskPolicy < ApplicationPolicy
     record.task_owner == user
   end
   def assign?
-    record.task_owner.include? user
+    if record.task_owner.is_a? Array
+      record.task_owner.include? user
+    else
+      record.task_owner == user
+    end
   end
   def tasks?
     not user.nil?

@@ -1,3 +1,57 @@
-%h3 Company Person
+.col-sm-3
+  %h3
+    = @company_person.full_name(last_name_first: false)
 
-= render @company_person
+.col-sm-9
+  %table{:class => 'table table-hover', style: 'margin-top: 10px;'}
+    %tbody
+      %tr
+        %td
+          %strong Company:
+        %td
+          = @company_person.company.name
+      %tr
+        %td
+          %strong Title:
+        %td
+          = @company_person.title
+      %tr
+        %td
+          %strong Email:
+        %td
+          = mail_to @company_person.email
+      %tr
+        %td
+          %strong Phone:
+        %td
+          = @company_person.phone
+      %tr
+        %td
+          %strong Status:
+        %td
+          = @company_person.status
+          - if User.is_agency_admin?(pets_user) || User.is_company_admin?(pets_user)
+            = link_to '(Invite Again)',
+              user_invitation_path(user: {email: @company_person.email,
+                                   first_name: @company_person.first_name,
+                                   last_name: @company_person.last_name} ),
+              method: :post if @company_person.status == CompanyPerson::STATUS[:IVT]
+
+      %tr
+        %td
+          %strong Role(s):
+        %td
+          = @company_person.company_roles.pluck(:role).join(', ') unless |
+            @company_person.company_roles.empty?   |
+
+.clearfix
+%br
+- if User.is_agency_admin?(pets_user) || User.is_company_admin?(pets_user)
+  .col-sm-2.col-sm-offset-3
+    = button_to 'Edit Person', edit_company_person_path(@company_person),
+            method: :get, class: 'btn btn-primary'
+
+  .col-sm-2.col-sm-offset-1
+    = button_to 'Delete Person', company_person_path(@company_person),
+      method: :delete, data: {confirm: "Delete this Person?"},
+       class: 'btn btn-danger' unless @company_person == pets_user

@@ -4,15 +4,15 @@
       - company_people_fields(people_type).each do |field|
         - case field
           - when :full_name
-            %td.strong Name
+            %th.strong Name
           - when :email
-            %td.strong Email
+            %th.strong Email
           - when :phone
-            %td.strong Phone
+            %th.strong Phone
           - when :roles
-            %td.strong Role
+            %th.strong Role
           - when :status
-            %td.strong Status
+            %th.strong Status
   %tbody
     - people.each do |person|
       %tr
@@ -20,7 +20,7 @@
         - case field
           - when :full_name
             %td.col-md-4
-              = person.full_name
+              = link_to person.full_name, company_person_path(person.id)
           - when :email
             %td.col-md-2
               = person.email

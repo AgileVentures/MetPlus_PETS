@@ -1,26 +1,29 @@
-.row
-  .col-sm-3
-    %h3
-      Job Seeker
-    %a(id='toggle_info' href='#info_table' class='text-danger'
-                style='padding-left: 10px;')
-      Hide Job Seeker Information
+.col-sm-3
+  %h3
+    Job Seeker
+  %a(id='toggle_info' href='#info_table' class='text-danger'
+              style='padding-left: 10px;')
+    Hide Job Seeker Information
 
-  .col-sm-9
-    = render partial: 'info', locals: {job_seeker: @jobseeker}
+.col-sm-9
+  = render partial: 'info', locals: {job_seeker: @jobseeker}
 
-%h3
-  Job Applications for
-  = "#{@jobseeker.full_name(last_name_first: false)}"
-.pagination-div{id: "applications-#{@application_type}",
-                data: {url: applied_jobs_job_seeker_path(@jobseeker,
+.col-sm-12
+  %h3
+    Job Applications for
+    = "#{@jobseeker.full_name(last_name_first: false)}"
+  .pagination-div{id: "applications-#{@application_type}",
+                  data: {url: applied_jobs_job_seeker_path(@jobseeker,
                                                          @application_type)}}
-
-%br
-.row
+- if pets_user.is_agency_admin? current_agency
+  .clearfix
+  %br
   .col-sm-2
-    = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker), method: :delete,            |
-        data: {confirm: "Delete Jobseeker #{@jobseeker.first_name}?"}, class: 'btn btn-danger'   |
+    = button_to 'Edit Job Seeker', edit_job_seeker_path(@jobseeker),
+        method: :get, class: 'btn btn-primary'
 
-  .col-sm-2
-    =link_to 'Back', :back, class: 'btn btn-link'
+  .com-sm-2.col-sm-offset-4
+    = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
+        method: :delete,
+        data: {confirm: "Delete Jobseeker #{@jobseeker.full_name}?"},
+        class: 'btn btn-danger'

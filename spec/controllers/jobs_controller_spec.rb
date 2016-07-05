@@ -597,7 +597,8 @@ RSpec.describe JobsController, type: :controller do
       @ca1 = FactoryGirl.create(:company_admin, :company => company1)
       @job.destroy
       31.times.each do |i|
-        FactoryGirl.create(:job, :title => "Awesome job #{i}", :company => company, :company_person => @ca)
+        title = i < 10 ? "Awesome job 0#{i}" : "Awesome job #{i}"
+        FactoryGirl.create(:job, :title => title, :company => company, :company_person => @ca)
       end
       4.times.each do |i|
         FactoryGirl.create(:job, :title => "Awesome new job #{i}", :company => company1, :company_person => @ca1)
@@ -629,8 +630,8 @@ RSpec.describe JobsController, type: :controller do
         # paginate is also called
         assigns(:jobs).each do end
         expect(assigns(:jobs).all.size).to be 10
-        expect(assigns(:jobs).first.title).to eq 'Awesome job 0'
-        expect(assigns(:jobs).last.title).to eq 'Awesome job 9'
+        expect(assigns(:jobs).first.title).to eq 'Awesome job 00'
+        expect(assigns(:jobs).last.title).to eq 'Awesome job 09'
       end
 
       it { should_not set_flash }

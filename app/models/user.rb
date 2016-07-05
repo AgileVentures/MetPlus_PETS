@@ -28,6 +28,10 @@ class User < ActiveRecord::Base
       user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:AA]
     end
 
+    def self.is_agency_person?(user)
+      is_job_developer?(user) || is_case_manager?(user) || is_agency_admin?(user)
+    end
+
     def self.is_company_admin?(user)
       return false unless user.actable_type == "CompanyPerson"
       user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
@@ -36,6 +40,10 @@ class User < ActiveRecord::Base
     def self.is_company_contact?(user)
       return false unless user.actable_type == "CompanyPerson"
       user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CC]
+    end
+
+    def self.is_company_person?(user)
+      is_company_contact?(user) || is_company_admin?(user)
     end
 
     def full_name(order={:last_name_first => true})
@@ -71,11 +79,19 @@ class User < ActiveRecord::Base
     false
   end
 
+  def is_agency_person? agency
+    false
+  end
+
   def is_company_admin? company
     false
   end
 
   def is_company_contact? company
+    false
+  end
+
+  def is_company_person? company
     false
   end
 

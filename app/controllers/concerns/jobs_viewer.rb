@@ -4,7 +4,9 @@ module JobsViewer
   def display_jobs job_type, per_page = 10
     case job_type
       when 'my-company-all'
-        return Job.paginate(:page => params[:jobs_page], :per_page => per_page).find_by_company(pets_user.company)
+        return Job.order(:title).
+            paginate(:page => params[:jobs_page], :per_page => per_page).
+            find_by_company(pets_user.company)
     end
   end
 

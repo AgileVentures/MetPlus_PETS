@@ -49,7 +49,7 @@ class Event
                    {id: evt_obj.id,
                     name: evt_obj.full_name(last_name_first: false)})
 
-    NotifyEmailJob.set(wait: @@delay.seconds).
+    NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(Agency.all_agency_people_emails,
                    EVT_TYPE[:JS_REGISTER],
                    evt_obj)
@@ -67,7 +67,7 @@ class Event
                    EVT_TYPE[:COMP_REGISTER],
                    {id: evt_obj.id, name: evt_obj.name})
 
-    NotifyEmailJob.set(wait: @@delay.seconds).
+    NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(Agency.all_agency_people_emails,
                    EVT_TYPE[:COMP_REGISTER],
                    evt_obj)
@@ -112,7 +112,7 @@ class Event
                       js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                       notify_list: notify_list[0]})
 
-      NotifyEmailJob.set(wait: @@delay.seconds).
+      NotifyEmailJob.set(wait: delay_seconds.seconds).
                      perform_later(notify_list[1],
                      EVT_TYPE[:JS_APPLY],
                      evt_obj)
@@ -132,7 +132,7 @@ class Event
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                     jd_user_id: evt_obj.agency_person.user.id})
 
-    NotifyEmailJob.set(wait: @@delay.seconds).
+    NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(evt_obj.agency_person.email,
                    EVT_TYPE[:JS_ASSIGN_JD],
                    evt_obj.job_seeker)
@@ -149,7 +149,7 @@ class Event
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                     cm_user_id: evt_obj.agency_person.user.id})
 
-    NotifyEmailJob.set(wait: @@delay.seconds).
+    NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(evt_obj.agency_person.email,
                    EVT_TYPE[:JS_ASSIGN_CM],
                    evt_obj.job_seeker)

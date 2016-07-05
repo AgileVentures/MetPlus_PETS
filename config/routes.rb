@@ -37,6 +37,10 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'agency_people/:id/list_js_cm/:people_type' => 
+             'agency_people#list_js_cm', as: :list_js_cm_agency_people
+  
+
   # --------------------------------------------------------------------------
 
   # ----------------------- Company Registration -----------------------------
@@ -51,12 +55,17 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # ----------------------- Company ------------------------------------------
-  # Company admin (and agency admin) can edit a company
-  resources :companies, path: 'company_admin/companies',
-                                only: [:edit, :update, :show]
-  # Only the agency admin can delete a company
-  resources :companies, path: 'admin/companies',
-                                only: [:destroy, :list]
+  # Most company actions can be performed by a company admin or an
+  # agency admin.  Redirect logic after actions can be different
+  # depending on which admin type is performing the action.
+  # (delete of a company can only be performed by an agency admin, but
+  # 'admin_type param is still used to conform to Rails path conventions')
+
+  get    'companies/:id/:admin_type'  => 'companies#show', as: :company
+  patch  'companies/:id/:admin_type'  => 'companies#update'
+  delete 'companies/:id/:admin_type'  => 'companies#destroy'
+  get    'companies/:id/edit/:admin_type' => 'companies#edit',
+                            as: :edit_company
 
   # --------------------------------------------------------------------------
 
@@ -114,7 +123,12 @@ Rails.application.routes.draw do
                                         as: :list_search_jobs
   get 'jobs/update_addresses'       => 'jobs#update_addresses',
                                         as: :update_addresses
-  resources :jobs
+  get 'jobs/:id/applications_list/:application_type'  =>
+                'jobs#applications_list', as: :applications_list
+
+  resources :jobs do
+    get 'applications', on: :member, as: :applications
+  end
   # --------------------------------------------------------------------------
 
   # ---------------------------- Job Seekers ---------------------------------

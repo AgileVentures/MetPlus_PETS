@@ -19,6 +19,14 @@ Feature: Have a task system in the site
       | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
       | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
+    Given the following companies exist:
+      | agency  | name         | website     | phone        | email            | ein        | status |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Pending Registration |
+
+    Given the following company people exist:
+      | company      | role  | first_name | last_name | email            | password  | phone        |
+      | Widgets Inc. | CA    | Steve      | Jobs      | ca@widgets.com   | qwerty123 | 555-222-3334 |
+
     Given the following tasks exist:
       | task_type          | owner                | deferred_date | status      | targets               |
       | need_job_developer | MetPlus,JD           | 2016-03-10    | NEW         | john-seeker@gmail.com |
@@ -28,6 +36,8 @@ Feature: Have a task system in the site
       | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
+      | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
+
 
   @selenium
   Scenario: Job Developer assigns tasks and complete it
@@ -61,7 +71,7 @@ Feature: Have a task system in the site
     And I login as "aa@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
     Then I go to the tasks page
-    And The tasks 1,2,5,6,7 are present
+    And The tasks 1,2,5,6,7,8 are present
     And I should see "Job Seeker has no assigned Job Developer"
     And I should see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
     Then I press the assign button of the task 2
@@ -71,6 +81,18 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see notification "Task assigned"
     And The task 2 is not present
+
+  @selenium
+  Scenario: Agency admin can see company registration
+    Given I am on the home page
+    And I login as "aa@metplus.org" with password "qwerty123"
+    Then I should see "Signed in successfully."
+    Then I go to the tasks page
+    And I wait 2 seconds
+    And I should see "Widgets Inc."
+    And I click the "Widgets Inc." link
+    And I wait 1 second
+    And I should see "Company Information"
 
   @selenium
   Scenario: Case Manager open and closes assign modal

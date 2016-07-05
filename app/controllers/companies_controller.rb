@@ -1,7 +1,11 @@
 class CompaniesController < ApplicationController
 
+  include CompanyPeopleViewer
+
   def show
-    @company = Company.find(params[:id])
+    @company        = Company.find(params[:id])
+    @company_admins = Company.company_admins(@company)
+    @people_type    = 'company-all'
   end
 
   def destroy
@@ -13,7 +17,7 @@ class CompaniesController < ApplicationController
 
   def edit
     @company = Company.find(params[:id])
-
+    @admin_type = params[:admin_type]
   end
 
   def update
@@ -22,8 +26,14 @@ class CompaniesController < ApplicationController
     if @company.valid?
       @company.save
       flash[:notice] = "company was successfully updated."
-      redirect_to company_path(@company)
+      case params[:admin_type]
+      when 'CA'
+        redirect_to home_company_person_path(pets_user)
+      when 'AA'
+        redirect_to company_path(@company, admin_type: 'AA')
+      end
     else
+      @admin_type = params[:admin_type]
       render :edit
     end
   end

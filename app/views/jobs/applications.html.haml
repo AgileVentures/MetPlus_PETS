@@ -1,0 +1,13 @@
+-# List applications to a specific job
+-# Instance vars:
+-#   @job - the specific job
+-#   @applications - collection of applications to the job
+
+.col-sm-12
+  = render partial: 'job_info'
+
+.col-sm-12
+  %h3
+    Applications for this Job
+  .pagination-div{id: "applications-#{@application_type}",
+                  data: {url: applications_list_path(@job, @application_type)}}

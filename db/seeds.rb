@@ -72,13 +72,15 @@ if Rails.env.development? || Rails.env.staging?
     end
   end
 
-  # Create a known company person for dev/test purposes
-  known_company = Company.create(ein: Faker::Company.ein,
-                                 phone: '111-222-3333',
-                                 email: 'contact@widgets.com',
-                                 website: 'www.widgets.com',
-                                 name: 'Widgets, Inc.',
-                                 status: Company::STATUS[:ACT])
+  # Create a known company for dev/test purposes
+  known_company = Company.new(ein: Faker::Company.ein,
+                              phone: '111-222-3333',
+                              email: 'contact@widgets.com',
+                              website: 'www.widgets.com',
+                              name: 'Widgets, Inc.',
+                              status: Company::STATUS[:ACT])
+  known_company.agencies << agency
+  known_company.save
 
   15.times { create_address(known_company) }
 
@@ -127,7 +129,7 @@ if Rails.env.development? || Rails.env.staging?
     cp.save!
   end
 
-  # Create a known company person for dev/test purposes
+  # Create a known company admin for dev/test purposes
   known_company_person = CompanyPerson.new(title: 'HR Director',
                                            email: 'hr@widgets.com',
                                            password: 'qwerty123',
@@ -139,6 +141,19 @@ if Rails.env.development? || Rails.env.staging?
                                            status: 'Active')
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
+
+  # Create a known company contact for dev/test purposes
+  known_company_contact = CompanyPerson.new(title: 'Treasurer',
+                                           email: 'finance@widgets.com',
+                                           password: 'qwerty123',
+                                           first_name: 'Mya',
+                                           last_name: 'Cash',
+                                           confirmed_at: DateTime.now,
+                                           company_id: known_company.id,
+                                           address_id: Address.find(1).id,
+                                           status: 'Active')
+  known_company_contact.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
+  known_company_contact.save!
 
   # Create more company people for 'known company'
   21.times do |n|
@@ -217,7 +232,7 @@ if Rails.env.development? || Rails.env.staging?
     resume = FFaker::Lorem.word
     job_seeker_status = jobseekerstatus[r.rand(3)]
 
-    JobSeeker.create(first_name: first_name,
+    job_seeker = JobSeeker.create(first_name: first_name,
                      last_name: last_name,
                      email: email,
                      password: password,
@@ -227,6 +242,10 @@ if Rails.env.development? || Rails.env.staging?
                      phone: phone,
                      confirmed_at: DateTime.now,
                      address: create_address)
+
+    # Add job application for known_company
+    job = Job.where(company: known_company)[r.rand(25)]
+    JobApplication.create(job: job, job_seeker: job_seeker)
   end
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
@@ -234,6 +253,11 @@ if Rails.env.development? || Rails.env.staging?
                 year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
+
+  # Have this JS apply to all known_company jobs
+  Job.where(company: known_company).each do |job|
+    JobApplication.create(job: job, job_seeker: js1)
+  end
 
   # Add résumé to this job seeker
   file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')

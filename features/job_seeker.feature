@@ -130,13 +130,13 @@ Scenario: delete jobseeker
   And I wait 1 second
   Then I should see "Jobseeker was deleted successfully."
 
-Scenario: cancel redirects to homepage
+Scenario: cancel redirects to JS home page
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   And I should see "Your Information"
   Then I click the "vijaya" link
   Then I click the "Cancel" link
-  And I should be on the home page
+  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
 
 @javascript
 Scenario: Job Developer sees job seeker's job applications

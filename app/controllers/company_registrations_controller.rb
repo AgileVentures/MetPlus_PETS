@@ -1,5 +1,6 @@
 class CompanyRegistrationsController < ApplicationController
   include UserParameters
+  include CompanyPeopleViewer
 
   def new
     @company = Company.new
@@ -8,7 +9,9 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def show
-    @company = Company.find(params[:id])
+    @company        = Company.find(params[:id])
+    @company_admins = Company.company_admins(@company)
+    @people_type    = 'company-all'
   end
 
   def destroy
@@ -104,7 +107,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_path(company.id)
+    redirect_to company_path(company.id, admin_type: 'AA')
 
   end
 
