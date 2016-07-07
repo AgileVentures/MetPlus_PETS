@@ -120,7 +120,7 @@ RSpec.describe Event, type: :model do
   describe 'jobseeker_assigned_jd event' do
 
     it 'triggers Pusher messages to job developer and job seeker' do
-      Event.create(:JS_ASSIGN_JD, evt_obj_jd)
+      Event.create(:JD_ASSIGNED_JS, evt_obj_jd)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
                          'jobseeker_assigned_jd',
@@ -133,7 +133,7 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification emails to job developer and job seeker' do
-      expect { Event.create(:JS_ASSIGN_JD, evt_obj_jd) }.
+      expect { Event.create(:JD_ASSIGNED_JS, evt_obj_jd) }.
                     to change(all_emails, :count).by(+2)
     end
 
@@ -142,7 +142,7 @@ RSpec.describe Event, type: :model do
   describe 'jobseeker_assigned_cm event' do
 
     it 'triggers Pusher messages to case manager and job seeker' do
-      Event.create(:JS_ASSIGN_CM, evt_obj_cm)
+      Event.create(:CM_ASSIGNED_JS, evt_obj_cm)
       expect(Pusher).to have_received(:trigger).
                     with('pusher_control',
                          'jobseeker_assigned_cm',
@@ -155,7 +155,7 @@ RSpec.describe Event, type: :model do
     end
 
     it 'sends event notification emails to case manager and job seeker' do
-      expect { Event.create(:JS_ASSIGN_CM, evt_obj_cm) }.
+      expect { Event.create(:CM_ASSIGNED_JS, evt_obj_cm) }.
                     to change(all_emails, :count).by(+2)
     end
   end
@@ -176,6 +176,42 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email' do
       expect { Event.create(:JOB_POSTED, evt_obj_jobpost) }.
+                    to change(all_emails, :count).by(+1)
+    end
+  end
+
+  describe 'jd_self_assigned_js event' do
+
+    it 'triggers Pusher message to job seeker' do
+      Event.create(:JD_SELF_ASSIGN_JS, evt_obj_jd)
+      expect(Pusher).to have_received(:trigger).
+                    with('pusher_control',
+                         'jd_self_assigned_js',
+                         {js_user_id: job_seeker.user.id,
+                          jd_name: job_developer.full_name(last_name_first: false),
+                          agency_name: job_developer.agency.name})
+    end
+
+    it 'sends event notification email to job seeker' do
+      expect { Event.create(:JD_SELF_ASSIGN_JS, evt_obj_jd) }.
+                    to change(all_emails, :count).by(+1)
+    end
+  end
+
+  describe 'cm_self_assigned_js event' do
+
+    it 'triggers Pusher message to job seeker' do
+      Event.create(:CM_SELF_ASSIGN_JS, evt_obj_cm)
+      expect(Pusher).to have_received(:trigger).
+                    with('pusher_control',
+                         'cm_self_assigned_js',
+                         {js_user_id: job_seeker.user.id,
+                          cm_name: case_manager.full_name(last_name_first: false),
+                          agency_name: case_manager.agency.name})
+    end
+
+    it 'sends event notification email to job seeker' do
+      expect { Event.create(:CM_SELF_ASSIGN_JS, evt_obj_jd) }.
                     to change(all_emails, :count).by(+1)
     end
   end

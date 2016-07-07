@@ -57,7 +57,7 @@ class AgencyPeopleController < ApplicationController
     end
 
     if @agency_person.save
-      # notify agency person of new JS assignments
+      # notify agency person, and job seekers, of new JS assignments
       notify_ap_new_js_assignments @agency_person,
                                    new_jd_job_seeker_ids, :JD
 
@@ -86,6 +86,8 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @job_seeker    = JobSeeker.find(params[:job_seeker_id])
 
+    obj = Struct.new(:job_seeker, :agency_person)
+
     role_key = params[:agency_role].to_sym
 
     # confirm that agency person has this role and assign person to job seeker
@@ -97,12 +99,18 @@ class AgencyPeopleController < ApplicationController
 
       @job_seeker.assign_job_developer(@agency_person, @agency_person.agency)
 
+      # Notify job seeker of job developer assignment
+      Event.create(:JD_SELF_ASSIGN_JS, obj.new(@job_seeker, @agency_person))
+
     when :CM
       return render(json: {:message => 'Agency Person is not a case manager'},
                     status: 403) unless
                     @agency_person.is_case_manager? @agency_person.agency
 
       @job_seeker.assign_case_manager(@agency_person, @agency_person.agency)
+
+      # Notify job seeker of case manager assignment
+      Event.create(:CM_SELF_ASSIGN_JS, obj.new(@job_seeker, @agency_person))
 
     else
       return render(json: {:message => 'Unknown agency role specified'},
@@ -199,10 +207,10 @@ class AgencyPeopleController < ApplicationController
         obj = Struct.new(:job_seeker, :agency_person)
         case role_key
         when :JD
-          Event.create(:JS_ASSIGN_JD, obj.new(JobSeeker.find(js_id),
+          Event.create(:JD_ASSIGNED_JS, obj.new(JobSeeker.find(js_id),
                                               @agency_person))
         when :CM
-          Event.create(:JS_ASSIGN_CM, obj.new(JobSeeker.find(js_id),
+          Event.create(:CM_ASSIGNED_JS, obj.new(JobSeeker.find(js_id),
                                               @agency_person))
         end
       end

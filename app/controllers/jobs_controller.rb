@@ -77,7 +77,7 @@ class JobsController < ApplicationController
 			flash[:notice] = "#{@job.title} has been created successfully."
 
       obj = Struct.new(:job, :agency)
-      Event.evt_job_posted(:JOB_POSTED, obj.new(@job, current_agency))
+      Event.create(:JOB_POSTED, obj.new(@job, current_agency))
 
 			redirect_to jobs_path
 		else

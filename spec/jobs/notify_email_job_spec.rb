@@ -42,7 +42,7 @@ RSpec.describe NotifyEmailJob, type: :job do
   it 'job seeker assigned to job developer event' do
     expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
                  perform_later('job_developer@gmail.com',
-                 Event::EVT_TYPE[:JS_ASSIGN_JD],
+                 Event::EVT_TYPE[:JD_ASSIGNED_JS],
                  {name: 'Joe Newseeker', id: 1}) }.
       to change(Delayed::Job, :count).by(+1)
   end
@@ -50,7 +50,7 @@ RSpec.describe NotifyEmailJob, type: :job do
   it 'job seeker assigned to case manager event' do
     expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
                  perform_later('case_manager@gmail.com',
-                 Event::EVT_TYPE[:JS_ASSIGN_CM],
+                 Event::EVT_TYPE[:CM_ASSIGNED_JS],
                  {name: 'Joe Newseeker', id: 1}) }.
       to change(Delayed::Job, :count).by(+1)
   end
