@@ -39,6 +39,9 @@ Rails.application.routes.draw do
 
   get 'agency_people/:id/list_js_cm/:people_type' => 
              'agency_people#list_js_cm', as: :list_js_cm_agency_people
+
+  get 'agency_people/:id/list_js_jd/:people_type' => 
+             'agency_people#list_js_jd', as: :list_js_jd_agency_people
   
 
   # --------------------------------------------------------------------------
