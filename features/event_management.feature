@@ -102,7 +102,7 @@ Scenario: Company registration request in PETS
   And I should see "Review company registration"
 
 @selenium
-Scenario: Job developer assigned to job seeker
+Scenario: Job developer assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
   And I login as "sam@gmail.com" with password "qwerty123"
@@ -141,7 +141,7 @@ Scenario: Job developer assigned to job seeker
   Then they should see "Sam Seeker" after "Name"
 
 @selenium
-Scenario: Case manager assigned to job seeker
+Scenario: Case manager assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
   And I login as "sam@gmail.com" with password "qwerty123"
@@ -178,3 +178,53 @@ Scenario: Case manager assigned to job seeker
   Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
   When "jane@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
+
+@selenium
+Scenario: Job developer assigns self to job seeker
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Job Developer's browser
+  Given I am on the home page
+  And I login as "dave@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should see "Seeker, Sam" after "Job Seekers without a Job Developer"
+  And I click the "Seeker, Sam" link
+  And I wait 1 second
+  And I should see "Assign Myself"
+  And I click the "Assign Myself" button
+  And I wait 1 second
+  And I should see "Dave Developer" after "Job Developer"
+  And I should not see "Assign Myself"
+  Then I am in Job Seeker's browser
+  And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
+  And "sam@gmail.com" should receive an email with subject "Job developer assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Dave Developer" in the email body
+  And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
+
+@selenium
+Scenario: Case manager assigns self to job seeker
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Case Manager's browser
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should see "Seeker, Sam" after "Job Seekers without a Case Manager"
+  And I click the "Seeker, Sam" link
+  And I wait 1 second
+  And I should see "Assign Myself"
+  And I click the "Assign Myself" button
+  And I wait 1 second
+  And I should see "Jane Jones" after "Case Manager"
+  And I should not see "Assign Myself"
+  Then I am in Job Seeker's browser
+  And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
+  And "sam@gmail.com" should receive an email with subject "Case manager assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Jane Jones" in the email body
+  And they should see "has been assigned to you as your MetPlus Case Manager" in the email body
