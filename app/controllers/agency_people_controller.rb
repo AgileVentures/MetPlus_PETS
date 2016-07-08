@@ -162,6 +162,23 @@ class AgencyPeopleController < ApplicationController
                                 people_type: @people_type,
                                 agency_person: @agency_person}
   end
+ 
+  def list_js_jd
+    raise 'Unsupported request' if not request.xhr?
+
+    @agency_person= AgencyPerson.find(params[:id])
+
+    @people_type = params[:people_type] || 'jobseeker-jd'
+
+    @people = []
+    @people = display_job_seekers @people_type, @agency_person
+
+    render :partial => 'agency_people/assigned_job_seekers_jd',
+                       locals: {jobseekers: @people,
+                                people_type: @people_type,
+                                agency_person: @agency_person}
+  end
+
 
   private
 
