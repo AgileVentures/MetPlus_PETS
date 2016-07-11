@@ -1,26 +1,18 @@
-/ %footer{:class => 'footer'}
-/   %div{:class => 'container'}
-/     %center
-/       = "® Met Plus #{Date.today.year}"
-/ %div{class: "container", id: "footer-container-id"} 
-/ .navbar.navbar-fixed-bottom
-%div{class: "panel panel-default", id: "panel-default-id"}
-	%div{class: "panel panel-default panel-footer footer text-center"}
-		%div{class: "row text-center", id: "footer-text-color"}
-			For employers:
-			-if pets_user.is_a?(CompanyPerson)
-				
-				=link_to "Post jobs", new_job_path(company_id: current_user.try(:actable).try(:company_id), company_person_id: current_user.try(:actable_id))
-				|
-				=link_to "Search Resumes", '#'
-				|
-			-elsif pets_user.try(:agency)  && pets_user.is_job_developer?(pets_user.try(:agency))
+%div{class: "footer text-center"}
+	For employers:
+	-if pets_user.is_a?(CompanyPerson)
+
+		=link_to "Post jobs", new_job_path(company_id: current_user.try(:actable).try(:company_id), company_person_id: current_user.try(:actable_id))
+		|
+		=link_to "Search Resumes", '#'
+		|
+	-elsif pets_user.try(:agency)  && pets_user.is_job_developer?(pets_user.try(:agency))
 			
-				=link_to "Post jobs", new_job_path
-				|
-				=link_to "Search Resumes", '#'
-				|
+		=link_to "Post jobs", new_job_path
+		|
+		=link_to "Search Resumes", '#'
+		|
 
-			#{ link_to "Partner with Us", new_company_registration_path}
-
-		%strong="&reg;".html_safe+" MetPlus #{Date.today.year}"
+	#{ link_to "Partner with Us", new_company_registration_path}
+	%br
+	%strong="&reg;".html_safe+" MetPlus #{Date.today.year}"
