@@ -24,7 +24,7 @@ RSpec.describe Agency, type: :model do
   end
 
   describe 'Validations' do
-    describe 'Validate presence' do
+    describe 'Validate presence'
       it { is_expected.to validate_presence_of :name }
       it { is_expected.to validate_length_of(:name).is_at_most(100) }
       it { is_expected.to validate_presence_of :website }
@@ -35,19 +35,22 @@ RSpec.describe Agency, type: :model do
 
     describe 'phone' do
        subject {FactoryGirl.build(:agency)}
-       it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
-       it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234',
-               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
+
+       it { should_not allow_value('asd', '123456', '123 123 12345',
+               '123 1231  1234', '1123 123 1234', ' 123 123 1234').for(:phone)}
+
+       it { should allow_value('+1 123 123 1234', '123 123 1234',
+               '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:phone)}
      end
 
      describe 'fax' do
        subject {FactoryGirl.build(:agency)}
-       it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)}
-       it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234',
+
+       it { should_not allow_value('+1 123 123 1234', 'asd', '123456', '123 123 12345',
+               '123 1231  1234', '1123 123 1234', ' 123 123 1234',
+               '(234 1234 1234', '786) 1243 3578').for(:fax)}
+
+       it { should allow_value('123 123 1234', '(123) 123 1234', '1231231234',
                '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:fax)}
      end
 
