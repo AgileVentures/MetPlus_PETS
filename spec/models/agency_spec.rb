@@ -24,7 +24,7 @@ RSpec.describe Agency, type: :model do
   end
 
   describe 'Validations' do
-    describe 'Validate presence'
+    describe 'Validate presence' do
       it { is_expected.to validate_presence_of :name }
       it { is_expected.to validate_length_of(:name).is_at_most(100) }
       it { is_expected.to validate_presence_of :website }
@@ -134,5 +134,4 @@ RSpec.describe Agency, type: :model do
         to eq [person1.email, person2.email, person3.email]
     end
   end
-
 end
