@@ -4,13 +4,13 @@ module JobSeekersViewer
   def display_job_seekers people_type, agency_person, per_page = 5
     case people_type
     when 'jobseeker-cm'
-      return  JobSeeker.paginate(page: params[:jobseekers_cm_page],
+      return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
                                      your_jobseekers_cm(agency_person)
     end
     case people_type
     when 'jobseeker-jd'
-      return  JobSeeker.paginate(page: params[:jobseekers_jd_page],
+      return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
                                      your_jobseekers_jd(agency_person)
     end
