@@ -25,11 +25,12 @@
   .col-sm-6
     = @address_form.phone_field :phone, size: 30, class: 'form-control', placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
-.form-group              
+.form-group
   .col-sm-2.control-label
     = label :company, :fax, 'Fax'
-  .col-sm-6
-    = @address_form.phone_field :fax, size: 30, class: 'form-control', placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
+  .col-sm-4
+    = @address_form.phone_field :fax, size: 30, class: 'form-control',
+    placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
 .form-group
   .col-sm-2.control-label
@@ -37,7 +38,7 @@
   .col-sm-6
     = @address_form.text_field :website, size: 30, class: 'form-control'
 
-.form-group    
+.form-group
   .col-sm-2.control-label
     = label :company, :ein, 'EIN'
   .col-sm-6
