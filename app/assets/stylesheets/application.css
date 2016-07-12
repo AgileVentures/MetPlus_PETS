@@ -92,17 +92,18 @@ html {
   min-height: 100%;
 }
 body {
-  margin-bottom: 20px;
+  /*Should be same as the footer height*/
+  margin-bottom: 45px;
 }
 .footer {
     position: absolute;
     bottom: 0px;
     width: 100%;
     height: 45px;
-    background-color: #0C7BA1;
+    background-color: #0C7BA1;    
 }
 
-.footer > a {
+.footer > .container > a {
     color: #fff;
     text-decoration: underline;     
 }
