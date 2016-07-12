@@ -25,7 +25,8 @@
   .col-sm-1.control-label
     = label :company, :fax, 'Fax'
   .col-sm-4
-    = @address_form.phone_field :fax, size: 30, class: 'form-control'
+    = @address_form.phone_field :fax, size: 30, class: 'form-control',
+    placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
 .form-group
   .col-sm-2.control-label
