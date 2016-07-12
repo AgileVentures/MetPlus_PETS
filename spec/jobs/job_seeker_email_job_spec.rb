@@ -17,14 +17,14 @@ RSpec.describe JobSeekerEmailJob, type: :job do
 
   it 'job developer assigned to job seeker event' do
     expect{ JobSeekerEmailJob.set(wait: Event.delay_seconds.seconds).
-                 perform_later(Event::EVT_TYPE[:JS_ASSIGN_JD],
+                 perform_later(Event::EVT_TYPE[:JD_ASSIGNED_JS],
                  job_seeker, job_developer) }.
       to change(Delayed::Job, :count).by(+1)
   end
 
   it 'case manager assigned to job seeker event' do
     expect{ JobSeekerEmailJob.set(wait: Event.delay_seconds.seconds).
-                 perform_later(Event::EVT_TYPE[:JS_ASSIGN_CM],
+                 perform_later(Event::EVT_TYPE[:CM_ASSIGNED_JS],
                  job_seeker, case_manager) }.
       to change(Delayed::Job, :count).by(+1)
   end
