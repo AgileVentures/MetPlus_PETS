@@ -9,7 +9,7 @@ class Agency < ActiveRecord::Base
   validates :phone, :phone => true
   validates :email, :email => true
   validates :website, :website => true
-  validates :fax, :phone => true, allow_blank: true
+  validates :fax, :fax => true, allow_blank: true
 
   def self.agency_admins(agency)
     find_users_with_role(agency, AgencyRole::ROLE[:AA])
