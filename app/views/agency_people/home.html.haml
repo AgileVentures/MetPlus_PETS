@@ -14,7 +14,7 @@
     %i There are no job seekers assigned to you yet.
   - else
     .pagination-div{id: "agency_person-#{@people_type}",
-     data: {url: list_js_jd_agency_people_path(@agency_person.id,@people_type)}}
+     data: {url: list_js_jd_agency_people_path(@agency_person.id,@people_type_jd)}}
     
 - if @agency_person.is_case_manager?(@agency)
   %h3 Your Job Seekers (as case manager)
@@ -22,7 +22,7 @@
     %i There are no job seekers assigned to you yet.
   - else
     .pagination-div{id: "agency_person-#{@people_type}",
-     data: {url: list_js_cm_agency_people_path(@agency_person.id,@people_type)}}
+     data: {url: list_js_cm_agency_people_path(@agency_person.id,@people_type_cm)}}
     
 - if @agency_person.is_job_developer?(@agency)
   %h3 Job Seekers without a Job Developer
