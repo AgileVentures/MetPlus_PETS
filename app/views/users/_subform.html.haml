@@ -14,7 +14,8 @@
 .form-group
 	=@user_form.label :phone, 'Phone', class:'control-label col-sm-2'
 	.col-sm-6
-		=@user_form.text_field :phone, size: 30, class:'form-control'
+		=@user_form.text_field :phone, size: 30, class:'form-control',
+		placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
 .form-group
 
