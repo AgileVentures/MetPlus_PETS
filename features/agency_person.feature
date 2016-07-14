@@ -128,3 +128,21 @@ Feature: Agency Person
     And I wait 1 second
     Then I should see "Jane Jones"
     And I should not see "Assign Myself"
+   
+  @javascript
+  Scenario: Job seekers assigned to person as job developer
+    Given I am on the home page
+    And I login as "bill@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'bill@metplus.org' Home page
+    And I wait 1 second
+    And I should see "Your Job Seekers (as job developer)"
+  
+  @javascript
+  Scenario: Job seekers assigned to person as Case manager
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'jane@metplus.org' Home page
+    And I wait 1 second
+    And I should see "Your Job Seekers (as case manager)"
+
+

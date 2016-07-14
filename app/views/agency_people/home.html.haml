@@ -13,7 +13,7 @@
   - if @your_jobseekers_jd.empty?
     %i There are no job seekers assigned to you yet.
   - else
-    .pagination-div{id: "agency_person-#{@people_type}",
+    .pagination-div{id: "agency_person-#{@people_type_jd}",
      data: {url: list_js_jd_agency_people_path(@agency_person.id,@people_type_jd)}}
     
 - if @agency_person.is_case_manager?(@agency)
@@ -21,7 +21,7 @@
   - if @your_jobseekers_cm.empty?
     %i There are no job seekers assigned to you yet.
   - else
-    .pagination-div{id: "agency_person-#{@people_type}",
+    .pagination-div{id: "agency_person-#{@people_type_cm}",
      data: {url: list_js_cm_agency_people_path(@agency_person.id,@people_type_cm)}}
     
 - if @agency_person.is_job_developer?(@agency)
