@@ -109,8 +109,12 @@ var TaskModal = {
                       Notification.error_notification(xhrObj.responseJSON['message']);
                   }
               });
+              $("#task_assign_select")[0].selectedIndex = -1;    
               return false;
           });
+          $('#cancelTaskModal_button').off('click').click( function() {
+              $("#task_assign_select")[0].selectedIndex = -1;
+          });          
       });
       $('#assignTaskModal').on('hidden.bs.modal', function (e) {
           $('#assignTaskModal_button').unbind('click');
