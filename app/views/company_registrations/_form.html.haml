@@ -28,7 +28,8 @@
     .form-group
       = company_person_f.label :phone, 'Contact Phone', class: 'control-label col-sm-2'
       .col-sm-6
-        = company_person_f.phone_field :phone, size: 30, class: 'form-control'
+        = company_person_f.phone_field :phone, size: 30, class: 'form-control',
+        placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
     .form-group
       = company_person_f.label :email, 'Contact Email', class: 'control-label col-sm-2'

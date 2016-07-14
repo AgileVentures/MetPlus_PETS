@@ -44,11 +44,11 @@ RSpec.describe Company, type: :model do
 
      describe 'phone' do
        subject {FactoryGirl.build(:company)}
-       it { should_not allow_value('asd', '123456', '123 123 12345',
-               '123 1231  1234', '1123 123 1234', ' 123 123 1234').for(:phone)}
-
-       it { should allow_value('+1 123 123 1234', '123 123 1234',
-               '(123) 123 1234', '1231231234', '+1 (123) 1231234').for(:phone)}
+       it { should_not allow_value('+1 123 123 1234', 'asd', '123456', '123 123 12345',
+               '123 1231  1234', '1123 123 1234', ' 123 123 1234', 
+               '(234 1234 1234', '786) 1243 3578').for(:phone)}
+       it { should allow_value('123 123 1234', '(123) 123 1234', '1231231234',
+               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
      end
 
      describe 'fax' do
