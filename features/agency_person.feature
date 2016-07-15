@@ -14,12 +14,16 @@ Feature: Agency Person
       | MetPlus | CM        | Jane       | Jones     | 555-111-2222 | jane@metplus.org     | qwerty123 |
       | MetPlus | JD        | Jane       | Developer | 555-111-2222 | jane-dev@metplus.org | qwerty123 |
       | MetPlus | JD        | Bill       | Developer | 555-111-2222 | bill@metplus.org     | qwerty123 |
+      | MetPlus | JD,CM     | Mark       | Smith     | 555-111-2222 | mark@metplus.org     | qwerty123 |
+
 
     Given the following jobseeker exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
       | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
       | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
       | Wanda     | Worker   | wanda-worker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Tom     | Seeker   | tom-seeker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Mary    | Jones   | Mary-jones@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
 
     Given the following tasks exist:
@@ -31,6 +35,12 @@ Feature: Agency Person
       | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
+
+Given the following agency relations exist:
+  	| job_seeker      | agency_person    | role |
+  	| tom-seeker@gmail.com | mark@metplus.org   | JD   |
+  	| mary-jones@gmail.com | mark@metplus.org   | CM   |
+       
 
   Scenario: Case Manager login and edit from home page
     Given I am on the home page
@@ -128,21 +138,13 @@ Feature: Agency Person
     And I wait 1 second
     Then I should see "Jane Jones"
     And I should not see "Assign Myself"
-   
-  @javascript
-  Scenario: Job seekers assigned to person as job developer
-    Given I am on the home page
-    And I login as "bill@metplus.org" with password "qwerty123"
-    And I should be on the Agency Person 'bill@metplus.org' Home page
-    And I wait 1 second
-    And I should see "Your Job Seekers (as job developer)"
-  
-  @javascript
-  Scenario: Job seekers assigned to person as Case manager
-    Given I am on the home page
-    And I login as "jane@metplus.org" with password "qwerty123"
-    And I should be on the Agency Person 'jane@metplus.org' Home page
-    And I wait 1 second
-    And I should see "Your Job Seekers (as case manager)"
 
+  @selenium
+  Scenario: Job seekers assigned to person as Job developer and case manager
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'mark@metplus.org' Home page
+    And I wait 1 second
+    And I should see "Seeker, Tom" between "Your Job Seekers (as job developer)" and "Your Job Seekers (as case manager)"
+    And I should see "Jones, Mary" after "Your Job Seekers (as case manager)"
 

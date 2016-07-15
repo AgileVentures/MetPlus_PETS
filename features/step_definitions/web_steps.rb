@@ -218,3 +218,4 @@ end
 When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
   expect(page).to have_field(field, with: value)
 end
+
