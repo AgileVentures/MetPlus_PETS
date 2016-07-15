@@ -3,6 +3,7 @@ var TaskManager = function (holder_id, task_type) {
     var self = this;
 
     this.load_assign_modal = function (event) {
+		    $('#task_assign_select').val('');
         var task_id = $(this).data("task-id");
         $("#task_assign_select").select2({
             placeholder: "Select the user",
@@ -109,12 +110,8 @@ var TaskModal = {
                       Notification.error_notification(xhrObj.responseJSON['message']);
                   }
               });
-              $("#task_assign_select")[0].selectedIndex = -1;    
               return false;
           });
-          $('#cancelTaskModal_button').off('click').click( function() {
-              $("#task_assign_select")[0].selectedIndex = -1;
-          });          
       });
       $('#assignTaskModal').on('hidden.bs.modal', function (e) {
           $('#assignTaskModal_button').unbind('click');
