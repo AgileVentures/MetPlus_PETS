@@ -139,7 +139,7 @@ Given the following agency relations exist:
     Then I should see "Jane Jones"
     And I should not see "Assign Myself"
 
-  @selenium
+  @javascript
   Scenario: Job seekers assigned to person as Job developer and case manager
     Given I am on the home page
     And I login as "mark@metplus.org" with password "qwerty123"
