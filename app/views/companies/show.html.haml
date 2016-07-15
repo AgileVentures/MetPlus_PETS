@@ -4,11 +4,11 @@
 %br
 
 .col-sm-2.col-sm-offset-2
-  = button_to 'Edit Company',
+  = button_to('Edit Company',
               edit_company_path(@company, admin_type: 'AA'),
-              method: :get, class: 'btn btn-primary'
+              method: :get, class: 'btn btn-primary') if @admin_type == 'AA'
 
 .col-sm-2.col-sm-offset-4
-  = button_to 'Delete Company', company_path(@company, admin_type: 'AA'),
+  = button_to('Delete Company', company_path(@company, admin_type: 'AA'),
     method: :delete, data: {confirm: "Delete company #{@company.name}?"},
-                    class: 'btn btn-danger'
+                    class: 'btn btn-danger') if @admin_type == 'AA'

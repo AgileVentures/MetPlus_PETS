@@ -6,6 +6,7 @@ class CompaniesController < ApplicationController
     @company        = Company.find(params[:id])
     @company_admins = Company.company_admins(@company)
     @people_type    = 'company-all'
+    @admin_type     = params[:admin_type]
   end
 
   def destroy

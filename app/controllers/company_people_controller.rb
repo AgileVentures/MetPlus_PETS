@@ -58,7 +58,7 @@ class CompanyPeopleController < ApplicationController
     else
       flash[:alert] = "You cannot delete yourself."
     end
-    redirect_to company_path(person.company)
+    redirect_to home_company_person_path(person.id)
   end
 
   def home
