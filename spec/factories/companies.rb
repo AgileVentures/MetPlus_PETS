@@ -14,6 +14,7 @@ FactoryGirl.define do
     job_email   'jobs@widgets.com'
     website 'http://www.widgets-r-us.com'
     status  Company::STATUS[:PND]
+    agencies { [FactoryGirl.create(:agency)] }
   end
 
 end

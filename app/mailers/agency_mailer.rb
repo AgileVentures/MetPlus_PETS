@@ -20,6 +20,10 @@ class AgencyMailer < ApplicationMailer
     send_notification_mail(email_list, job_seeker, 'Job Seeker Assigned CM')
   end
 
+  def job_posted(email_list, job)
+    send_notification_mail(email_list, job, 'New Job Posted')
+  end
+
   private
 
   def send_notification_mail(email_list, obj, obj_type)

@@ -11,7 +11,7 @@ RSpec.describe Job, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :company }
     it { is_expected.to belong_to :company_person }
-    it  { is_expected.to belong_to :address }
+    it { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
     it { is_expected.to have_many(:job_skills).dependent(:destroy) }
     it { is_expected.to accept_nested_attributes_for(:job_skills).
@@ -36,9 +36,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :shift}
     it { is_expected.to have_db_column :fulltime}
     it { is_expected.to have_db_column :company_id }
-
     it { is_expected.to have_db_column :company_person_id }
     it { is_expected.to have_db_column :address_id }
+    it { is_expected.to have_db_column :status }
   end
 
   describe 'Validations' do
@@ -51,7 +51,10 @@ RSpec.describe Job, type: :model do
     it { should allow_value('', nil).for(:fulltime).on(:create) }
     it { is_expected.to validate_presence_of :company_id }
     xit { is_expected.to validate_presence_of :company_person_id }
-    it { is_expected.to validate_inclusion_of(:shift).in_array(%w[Day Evening Morning])}
+    it { is_expected.to validate_inclusion_of(:shift).
+                                      in_array(%w[Day Evening Morning]) }
+    it { is_expected.to validate_inclusion_of(:status).
+                                      in_array(Job::STATUS.values) }
   end
 
   describe 'Class methods' do
@@ -103,7 +106,7 @@ RSpec.describe Job, type: :model do
       end
     end
   end
-  describe 'Create Job method(AR model and CruncherService)' do
+  describe 'Create Job method (AR model and CruncherService)' do
 
     before(:each) do
       stub_request(:post, CruncherService.service_url + '/authenticate').
@@ -111,7 +114,7 @@ RSpec.describe Job, type: :model do
           :headers => {'Content-Type'=> 'application/json'})
     end
 
-    it 'is succeeds with all parameters' do
+    it 'succeeds with all parameters' do
 
       stub_request(:post, CruncherService.service_url + '/job/create').
           to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,

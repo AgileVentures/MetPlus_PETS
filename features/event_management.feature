@@ -12,6 +12,24 @@ Background: seed data
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+  | MetPlus | JD    | Dave       | Developer | dave@metplus.org | qwerty123 |
+
+  Given the following companies exist:
+  | agency  | name         | website     | phone        | email            | ein        | status |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456799 | Active |
+
+  Given the following company people exist:
+  | company      | role  | first_name | last_name | email            | password  | phone        |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+
+  Given the following company addresses exist:
+  | company      | street           | city    | state    | zipcode |
+  | Widgets Inc. | 10 Spring Street | Detroit | Michigan | 02034   |
+
+  Given the following jobseekers exist:
+  | first_name| last_name| email         | phone       | password  | year_of_birth |job_seeker_status  |
+  | Sam       | Seeker   | sam@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
+  | Tom       | Terrific | tom@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
 
 @selenium
 Scenario: Job Seeker registers in PETS
@@ -82,3 +100,131 @@ Scenario: Company registration request in PETS
   Then I go to the tasks page
   And I wait for 1 second
   And I should see "Review company registration"
+
+@selenium
+Scenario: Job developer assigned to job seeker by agency admin
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Job Developer's browser
+  Given I am on the home page
+  And I login as "dave@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Admin's browser
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
+  And I wait 1 second
+  Then I should see "Agency Personnel"
+  And I click the "Developer, Dave" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Dave Developer"
+  Then I check first "Seeker, Sam"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Job Developer role:"
+  Then I am in Job Seeker's browser
+  And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
+  Then I am in Job Developer's browser
+  And I should see "Job Seeker: Sam Seeker has been assigned to you as Job Developer"
+  And "sam@gmail.com" should receive an email with subject "Job developer assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Dave Developer" in the email body
+  And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
+  And "dave@metplus.org" should receive an email with subject "Job seeker assigned jd"
+  When "dave@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Job Developer:" in the email body
+  When "dave@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+
+@selenium
+Scenario: Case manager assigned to job seeker by agency admin
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Case Manager's browser
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Admin's browser
+  Given I am on the home page
+  And I login as "aa@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I click the "Admin" link
+  And I click the "Agency and Partner Companies" link
+  And I wait 1 second
+  Then I should see "Agency Personnel"
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I check second "Seeker, Sam"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
+  Then I am in Job Seeker's browser
+  And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
+  Then I am in Case Manager's browser
+  And I should see "Job Seeker: Sam Seeker has been assigned to you as Case Manager"
+  And "sam@gmail.com" should receive an email with subject "Case manager assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Jane Jones" in the email body
+  And they should see "has been assigned to you as your MetPlus Case Manager" in the email body
+  And "jane@metplus.org" should receive an email with subject "Job seeker assigned cm"
+  When "jane@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
+  When "jane@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+
+@selenium
+Scenario: Job developer assigns self to job seeker
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Job Developer's browser
+  Given I am on the home page
+  And I login as "dave@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should see "Seeker, Sam" after "Job Seekers without a Job Developer"
+  And I click the "Seeker, Sam" link
+  And I wait 1 second
+  And I should see "Assign Myself"
+  And I click the "Assign Myself" button
+  And I wait 1 second
+  And I should see "Dave Developer" after "Job Developer"
+  And I should not see "Assign Myself"
+  Then I am in Job Seeker's browser
+  And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
+  And "sam@gmail.com" should receive an email with subject "Job developer assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Dave Developer" in the email body
+  And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
+
+@selenium
+Scenario: Case manager assigns self to job seeker
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "sam@gmail.com" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  When I am in Case Manager's browser
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should see "Seeker, Sam" after "Job Seekers without a Case Manager"
+  And I click the "Seeker, Sam" link
+  And I wait 1 second
+  And I should see "Assign Myself"
+  And I click the "Assign Myself" button
+  And I wait 1 second
+  And I should see "Jane Jones" after "Case Manager"
+  And I should not see "Assign Myself"
+  Then I am in Job Seeker's browser
+  And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
+  And "sam@gmail.com" should receive an email with subject "Case manager assigned"
+  When "sam@gmail.com" opens the email
+  Then they should see "Jane Jones" in the email body
+  And they should see "has been assigned to you as your MetPlus Case Manager" in the email body

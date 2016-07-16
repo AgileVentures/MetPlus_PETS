@@ -4,13 +4,13 @@
       - job_fields(job_type).each do |field|
         - case field
           - when :title
-            %td.strong Title
+            %th.strong Title
           - when :updated_at
-            %td.strong Last update
+            %th.strong Last update
           - when :poster
-            %td.strong Poster
+            %th.strong Poster
           - when :num_applicants
-            %td.strong Applications
+            %th.strong Applications
   %tbody
     - all_jobs.each do |job|
       %tr

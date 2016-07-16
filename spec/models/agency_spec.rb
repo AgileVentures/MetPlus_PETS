@@ -24,12 +24,53 @@ RSpec.describe Agency, type: :model do
   end
 
   describe 'Validations' do
-    it { is_expected.to validate_presence_of :name }
-    it { is_expected.to validate_length_of(:name).is_at_most(100) }
-    it { is_expected.to validate_presence_of :website }
-    it { is_expected.to validate_length_of(:website).is_at_most(200) }
-    it { is_expected.to validate_presence_of :phone }
-    it { is_expected.to validate_presence_of :email }
+    describe 'Validate presence' do
+      it { is_expected.to validate_presence_of :name }
+      it { is_expected.to validate_length_of(:name).is_at_most(100) }
+      it { is_expected.to validate_presence_of :website }
+      it { is_expected.to validate_length_of(:website).is_at_most(200) }
+      it { is_expected.to validate_presence_of :phone }
+      it { is_expected.to validate_presence_of :email }
+    end
+
+    describe 'phone' do
+       subject {FactoryGirl.build(:agency)}
+       it { should_not allow_value('+1 123 123 1234', 'asd', '123456', '123 123 12345',
+               '123 1231  1234', '1123 123 1234', ' 123 123 1234', 
+               '(234 1234 1234', '786) 1243 3578').for(:phone)}
+       it { should allow_value('123 123 1234', '(123) 123 1234', '1231231234',
+               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
+     end
+
+     describe 'fax' do
+       subject {FactoryGirl.build(:agency)}
+       it { should_not allow_value('+1 123 123 1234', 'asd', '123456', '123 123 12345',
+               '123 1231  1234', '1123 123 1234', ' 123 123 1234', 
+               '(234 1234 1234', '786) 1243 3578').for(:fax)}
+
+       it { should allow_value('123 123 1234', '(123) 123 1234', '1231231234',
+               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:fax)}
+     end
+
+     describe 'Email' do
+       subject {FactoryGirl.build(:agency)}
+       it { should_not allow_value('asd', 'john@company').for(:email)}
+       it { should allow_value('johndoe@company.com').for(:email)}
+     end
+
+
+     describe 'Website' do
+       subject {FactoryGirl.build(:agency)}
+       it { should_not allow_value('asd', 'ftp://company.com', 'http:',
+                 'http://','https',  'https:', 'https://',
+                 'http://place.com###Bammm').for(:website)}
+
+       it { should allow_value('http://company.com',
+                               'https://company.com',
+                               'http://w.company.com/info',
+                               'https://comp.com:10/test/1/wasd',
+                               'http://company.com/').for(:website)}
+     end
   end
 
   describe 'Agency model' do
@@ -93,5 +134,4 @@ RSpec.describe Agency, type: :model do
         to eq [person1.email, person2.email, person3.email]
     end
   end
-
 end

@@ -55,6 +55,14 @@ var PusherControl = {
             "' target='_blank'>" + data.js_name + "</a>" +
             " has been assigned to you as Job Developer");
       }
+
+      PusherControl.notify_job_seeker(data.js_user_id, data.jd_name, data.agency_name,
+                        ' Job Developer.');
+    });
+
+    channel.bind('jd_self_assigned_js', function(data) {
+      PusherControl.notify_job_seeker(data.js_user_id, data.jd_name, data.agency_name,
+                        ' Job Developer.');
     });
 
     channel.bind('jobseeker_assigned_cm', function(data) {
@@ -65,7 +73,32 @@ var PusherControl = {
             "' target='_blank'>" + data.js_name + "</a>" +
             " has been assigned to you as Case Manager");
       }
+
+      PusherControl.notify_job_seeker(data.js_user_id, data.cm_name, data.agency_name,
+                        ' Case Manager.');
     });
+
+    channel.bind('cm_self_assigned_js', function(data) {
+      PusherControl.notify_job_seeker(data.js_user_id, data.cm_name, data.agency_name,
+                        ' Case Manager.');
+    });
+
+    channel.bind('job_posted', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
+        Notification.info_notification('New job (' +
+            "<a href='/jobs/" + data.job_id +
+            "' target='_blank'>" + data.job_title + '</a>)' +
+            " posted for company: " + data.company_name);
+      }
+    });
+  },
+  notify_job_seeker: function (user_id, agency_person_name, agency, role_str) {
+    // Process event if I am logged in and I am the job seeker
+    if (parseInt(Cookies('user_id')) === user_id) {
+      Notification.info_notification(agency_person_name +
+          ' has been assigned to you as your ' + agency + role_str);
+    }
   }
 };
 
