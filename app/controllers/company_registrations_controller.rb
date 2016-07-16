@@ -121,7 +121,7 @@ class CompanyRegistrationsController < ApplicationController
     company.save
 
     render :partial => 'companies/company_status',
-           :locals => {company: company} if request.xhr?
+           :locals => {company: company, admin_type: 'AA'} if request.xhr?
 
     # Anonymous class to contain company and reason for denial
     obj = Struct.new(:company, :reason)

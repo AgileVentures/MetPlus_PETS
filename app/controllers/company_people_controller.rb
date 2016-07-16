@@ -68,6 +68,7 @@ class CompanyPeopleController < ApplicationController
     @company     = pets_user.company
     @company_admins = Company.company_admins(@company)
     @company_person = pets_user
+    @admin_type = pets_user.is_company_admin?(@company) ? 'CA' : 'NONE'
   end
 
   def list_people

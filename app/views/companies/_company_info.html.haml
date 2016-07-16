@@ -4,52 +4,52 @@
       %td
         %strong Name
       %td
-        = @company.name
+        = company.name
     %tr
       %td
         %strong EIN
       %td
-        = @company.ein
+        = company.ein
     %tr
       %td
         %strong Website
       %td
-        = @company.website
+        = company.website
     %tr
       %td
         %strong Phone
       %td
-        = @company.phone
+        = company.phone
     %tr
       %td
         %strong Fax
       %td
-        = @company.fax
+        = company.fax
     %tr
       %td
         %strong Corporate Email
       %td
-        = @company.email
+        = company.email
     %tr
       %td
         %strong Jobs Email
       %td
-        = @company.job_email
+        = company.job_email
     %tr
       %td
         %strong Description
       %td
-        = @company.description
+        = company.description
     %tr
       %td
         %strong Company Admin(s)
       %td
-        - @company_admins.each do |ca|
+        - company_admins.each do |ca|
           = mail_to ca.email, ca.full_name(last_name_first: false)
-          = ', ' if ca != @company_admins.last
+          = ', ' if ca != company_admins.last
     %tr
       %td
         %strong Status
       %td#company_status
         = render :partial => 'companies/company_status',
-                 :locals => {company: @company}
+                 :locals => {company: company, admin_type: admin_type}
