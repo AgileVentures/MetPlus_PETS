@@ -15,11 +15,12 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
     @task_type = 'mine-open'
-    @people_type = 'jobseeker-cm'
+    @people_type_cm = 'jobseeker-cm'
+    @people_type_jd = 'jobseeker-jd'
     @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
     @js_without_cm = JobSeeker.paginate(:page=> params[:js_without_cm_page], :per_page=>5).js_without_cm
-    @your_jobseekers_jd = JobSeeker.paginate(:page=> params[:your_jobseekers_jd_page], :per_page=> 5).your_jobseekers_jd(@agency_person)
-    @your_jobseekers_cm = JobSeeker.paginate(:page=> params[:your_jobseekers_cm_page], :per_page=> 5).your_jobseekers_cm(@agency_person)
+    @your_jobseekers_jd = JobSeeker.your_jobseekers_jd(@agency_person)
+    @your_jobseekers_cm = JobSeeker.your_jobseekers_cm(@agency_person)
   end
 
   def update
@@ -160,16 +161,35 @@ class AgencyPeopleController < ApplicationController
 
     @agency_person= AgencyPerson.find(params[:id])
 
-    @people_type = params[:people_type] || 'jobseeker-cm'
+    @people_type_cm = params[:people_type] || 'jobseeker-cm'
 
     @people = []
-    @people = display_job_seekers @people_type, @agency_person
+    @people = display_job_seekers @people_type_cm, @agency_person
 
     render :partial => 'agency_people/assigned_job_seekers',
                        locals: {jobseekers: @people,
-                                people_type: @people_type,
+                                controller_action:'list_js_cm',
+                                people_type: @people_type_cm,
                                 agency_person: @agency_person}
   end
+ 
+  def list_js_jd
+    raise 'Unsupported request' if not request.xhr?
+
+    @agency_person= AgencyPerson.find(params[:id])
+
+    @people_type_jd = params[:people_type] || 'jobseeker-jd'
+
+    @people = []
+    @people = display_job_seekers @people_type_jd, @agency_person
+
+    render :partial => 'agency_people/assigned_job_seekers',
+                       locals: {jobseekers: @people,
+                                controller_action:'list_js_jd',
+                                people_type: @people_type_jd,
+                                agency_person: @agency_person}
+  end
+
 
   private
 
