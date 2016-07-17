@@ -7,6 +7,13 @@ class CompaniesController < ApplicationController
     @company_admins = Company.company_admins(@company)
     @people_type    = 'company-all'
     @admin_type     = params[:admin_type]
+    if @admin_type == 'NONE'
+      if pets_user.is_company_admin? @company
+        @admin_type = 'CA'
+      elsif pets_user.is_agency_admin? current_agency
+        @admin_type = 'AA'
+      end
+    end
   end
 
   def destroy
