@@ -14,7 +14,7 @@ RSpec.describe JobApplication, type: :model do
   describe 'Validations' do
     let(:job_seeker){FactoryGirl.create(:job_seeker)}
     let(:job){FactoryGirl.create(:job, company: FactoryGirl.create(:company))}
-    subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :pending)}
+    subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :active)}
 
     before(:each) do
       stub_cruncher_authenticate
@@ -25,17 +25,17 @@ RSpec.describe JobApplication, type: :model do
        it 'Status -1 should generate exception' do
          expect{subject.status = -1}.to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
        end
-       it 'Status 0 should be pending' do
+       it 'Status 0 should be active' do
          subject.status = 0
-         expect(subject.status).to eq 'pending'
+         expect(subject.status).to eq 'active'
        end
-       it 'Status 1 should be rejected' do
+       it 'Status 1 should be accepted' do
          subject.status = 1
-         expect(subject.status).to eq 'rejected'
+         expect(subject.status).to eq 'accepted'
        end
-       it 'Status 2 should be hired' do
+       it 'Status 2 should be not_accepted' do
          subject.status = 2
-         expect(subject.status).to eq 'hired'
+         expect(subject.status).to eq 'not_accepted'
        end
        it 'Status 3 should generate exception' do
          expect{subject.status = 3}.to raise_error(ArgumentError).with_message('\'3\' is not a valid status')
@@ -51,18 +51,18 @@ RSpec.describe JobApplication, type: :model do
 
     let(:job_seeker){FactoryGirl.create(:job_seeker)}
     let(:job){FactoryGirl.create(:job, company: FactoryGirl.create(:company))}
-    subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :pending)}
-    it 'Status 0 should be Pending' do
+    subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :active)}
+    it 'Status 0 should be Active' do
       subject.status = 0
-      expect(subject.status_name).to eq 'Pending'
+      expect(subject.status_name).to eq 'Active'
     end
-    it 'Status 1 should be Rejected' do
+    it 'Status 1 should be Accepted' do
       subject.status = 1
-      expect(subject.status_name).to eq 'Rejected'
+      expect(subject.status_name).to eq 'Accepted'
     end
-    it 'Status 2 should be Hired' do
+    it 'Status 2 should be NotAccepted' do
       subject.status = 2
-      expect(subject.status_name).to eq 'Hired'
+      expect(subject.status_name).to eq 'NotAccepted'
     end
   end
 end

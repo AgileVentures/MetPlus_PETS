@@ -25,9 +25,9 @@
               = js.last_sign_in_at
          
 .row.text-center
-  = will_paginate jobseekers, param_name: 'jobseekers_cm_page',
+  = will_paginate jobseekers, param_name: 'jobseekers_page',
                             :params => {:controller => 'agency_people',
-                            :action => 'list_js_cm',
+                            :action => controller_action,
                             :id => agency_person.id,
                             :people_type => people_type}
   
