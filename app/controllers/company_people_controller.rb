@@ -25,7 +25,7 @@ class CompanyPeopleController < ApplicationController
     if @company_person.update_attributes(person_params)
       sign_in :user, @company_person.user, bypass: true
       flash[:notice] = "Your profile was updated successfully."
-      redirect_to company_person_path(@company_person)
+      redirect_to @company_person
     else
       render :edit_profile
     end
