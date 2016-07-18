@@ -7,42 +7,46 @@
 .form-group
   .col-sm-2.control-label
     = label :company, :email, 'Email'
-  .col-sm-4
+  .col-sm-6
     = @address_form.email_field :email, size: 30, class: 'form-control'
+
+.form-group
   .col-sm-2.control-label
     = label :company, :phone, 'Phone'
-  .col-sm-4
-    = @address_form.phone_field :phone, size: 30, class: 'form-control',
-    placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
+  .col-sm-6
+    = @address_form.phone_field :phone, size: 30, class: 'form-control'
 
 .form-group
   .col-sm-2.control-label
     = label :company, :job_email, 'Job Email'
-  .col-sm-4
-    = @address_form.email_field :job_email, size: 30, class: 'form-control'
+  .col-sm-6
+    = @address_form.email_field :job_email, size: 30, class: 'form-control', placeholder: 'Job applications will be sent to this mail'
   .col-sm-1
     %i.fa.fa-question-circle{data_toggle: 'tooltip', data_placement: 'top',
               title: 'Email where job applications will be sent'}
-  .col-sm-1.control-label
+
+.form-group              
+  .col-sm-2.control-label
     = label :company, :fax, 'Fax'
-  .col-sm-4
-    = @address_form.phone_field :fax, size: 30, class: 'form-control',
-    placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
+  .col-sm-6
+    = @address_form.phone_field :fax, size: 30, class: 'form-control'
 
 .form-group
   .col-sm-2.control-label
     = label :company, :website, 'Website'
-  .col-sm-4
+  .col-sm-6
     = @address_form.text_field :website, size: 30, class: 'form-control'
+
+.form-group    
   .col-sm-2.control-label
     = label :company, :ein, 'EIN'
-  .col-sm-4
+  .col-sm-6
     = @address_form.text_field :ein, size: 30, class: 'form-control'
 
 .form-group
   = label :company, :description, 'Description', class: 'control-label col-sm-2'
-  .col-sm-10
-    = @address_form.text_area :description, cols: 90, rows: 5, class: 'form-control'
+  .col-sm-8
+    = @address_form.text_area :description, cols: 90, rows: 5, class: 'form-control', placeholder: 'please provide a short descrpition of your company'
 
 .form-group
   .col-sm-2.control-label
