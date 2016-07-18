@@ -1,12 +1,6 @@
-# Usage:
-# 	I do not have an address
-# 	I have an address with "full address"
-And /^I(?: do not)? have an address(?: with "([^"]*)")?/ do |address|
-	if address
-		page.has_select?('Address', :selected => "#{address}")
-	else
-		expect(page.find('#company_person_address_id')).not_to have_css("selected")
-	end
+
+And /^I do not have an address$/ do
+	expect(page.find('#company_person_address_id')).not_to have_css("selected")
 end
 
 # Usage:

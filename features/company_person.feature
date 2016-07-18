@@ -173,7 +173,7 @@ Feature: Company Person
     And I select "12 Main Street Detroit, Michigan 02034" in select list "company_person_address_id"
     Then I click "Update Company person" button
     And I should be on the Company person 'ca@widgets.com' show page
-    And I have an address with "12 Main Street Detroit, Michigan 02034"
+    And I should see "12 Main Street Detroit, Michigan 02034"
 
   Scenario: company contact can update address
     Given I am on the home page
@@ -185,7 +185,7 @@ Feature: Company Person
     And I select "12 Main Street Detroit, Michigan 02034" in select list "company_person_address_id"
     Then I click "Update Company person" button
     And I should be on the Company person 'jane@widgets.com' show page
-    And I have an address with "12 Main Street Detroit, Michigan 02034"
+    And I should see "12 Main Street Detroit, Michigan 02034"
 
   @javascript
   Scenario: verify job listing in home page
