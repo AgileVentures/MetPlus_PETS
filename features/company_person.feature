@@ -30,6 +30,13 @@ Feature: Company Person
       | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
       | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
 
+    Given the following company addresses exist:
+      | company       | street           | city    | zipcode | state      |
+      | Widgets Inc.  | 12 Main Street   | Detroit | 02034   | Michigan   |
+      | Widgets Inc.  | 14 Main Street   | Detroit | 02034   | Michigan   |
+      | Feature Inc.  | 100 River Valley | Utah    | 12334   | New Jersey |
+      | Feature Inc.  | 111 River Valley | Utah    | 12334   | New Jersey |
+
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
       | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
@@ -117,7 +124,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
-
+     
   Scenario: company contact login and edit profile from home page
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
@@ -155,6 +162,30 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
+
+  Scenario: company admin can update address
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    Then I press "edit-profile"
+    And I do not have an address
+    And I should see selections of "Widgets Inc." addresses 
+    And I should not see selections of "Feature Inc." addresses 
+    And I select "12 Main Street Detroit, Michigan 02034" in select list "company_person_address_id"
+    Then I click "Update Company person" button
+    And I press "John"
+    And I have an address with "12 Main Street Detroit, Michigan 02034"
+
+  Scenario: company contact can update address
+    Given I am on the home page
+    And I login as "jane@widgets.com" with password "qwerty123"
+    Then I press "edit-profile"
+    And I do not have an address
+    And I should see selections of "Widgets Inc." addresses 
+    And I should not see selections of "Feature Inc." addresses 
+    And I select "12 Main Street Detroit, Michigan 02034" in select list "company_person_address_id"
+    Then I click "Update Company person" button
+    And I press "Jane"
+    And I have an address with "12 Main Street Detroit, Michigan 02034"
 
   @javascript
   Scenario: verify job listing in home page
