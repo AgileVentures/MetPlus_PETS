@@ -21,8 +21,6 @@ RSpec.describe ResumeCruncher, type: :model do
 
     it 'returns fail (false) for invalid file type' do
 
-      stub_cruncher_file_upload_error
-
       file = fixture_file_upload('files/Test File.zzz')
       expect{ ResumeCruncher.upload_resume(file,
                                   'Test File.zzz',
