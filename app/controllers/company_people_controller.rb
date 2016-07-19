@@ -14,16 +14,18 @@ class CompanyPeopleController < ApplicationController
 
   def edit_profile
     @company_person = CompanyPerson.find(params[:id])
+    @company_addresses = Company.find(@company_person.company_id).addresses
   end
-
 
   def update_profile
     @company_person = CompanyPerson.find(params[:id])
+    @company_addresses = Company.find(@company_person.company_id).addresses
+  
     person_params = handle_user_form_parameters company_person_params
     if @company_person.update_attributes(person_params)
       sign_in :user, @company_person.user, bypass: true
       flash[:notice] = "Your profile was updated successfully."
-      redirect_to root_path
+      redirect_to @company_person
     else
       render :edit_profile
     end
@@ -88,6 +90,6 @@ class CompanyPeopleController < ApplicationController
 
   def company_person_params
     params.require(:company_person).permit(:title, :first_name, :last_name, :phone,
-                :email, :password, :password_confirmation, company_role_ids: [])
+                :email, :password, :password_confirmation, :address_id, company_role_ids: [])
   end
 end
