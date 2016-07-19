@@ -12,12 +12,6 @@
 
 .form-group
   .col-sm-2.control-label
-    = label :company, :phone, 'Phone'
-  .col-sm-6
-    = @address_form.phone_field :phone, size: 30, class: 'form-control'
-
-.form-group
-  .col-sm-2.control-label
     = label :company, :job_email, 'Job Email'
   .col-sm-6
     = @address_form.email_field :job_email, size: 30, class: 'form-control', placeholder: 'Job applications will be sent to this mail'
@@ -25,11 +19,17 @@
     %i.fa.fa-question-circle{data_toggle: 'tooltip', data_placement: 'top',
               title: 'Email where job applications will be sent'}
 
+.form-group
+  .col-sm-2.control-label
+    = label :company, :phone, 'Phone'
+  .col-sm-6
+    = @address_form.phone_field :phone, size: 30, class: 'form-control', placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
+
 .form-group              
   .col-sm-2.control-label
     = label :company, :fax, 'Fax'
   .col-sm-6
-    = @address_form.phone_field :fax, size: 30, class: 'form-control'
+    = @address_form.phone_field :fax, size: 30, class: 'form-control', placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
 .form-group
   .col-sm-2.control-label
