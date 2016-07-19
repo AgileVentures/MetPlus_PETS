@@ -170,7 +170,7 @@ Feature: Company Person
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses 
     And I should not see selections of "Feature Inc." addresses 
-    And I select "12 Main Street Detroit, Michigan 02034" in select list "company_person_address_id"
+    And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
     And I should be on the Company person 'ca@widgets.com' show page
     And I should see "12 Main Street Detroit, Michigan 02034"
@@ -182,7 +182,7 @@ Feature: Company Person
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses 
     And I should not see selections of "Feature Inc." addresses 
-    And I select "12 Main Street Detroit, Michigan 02034" in select list "company_person_address_id"
+    And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
     And I should be on the Company person 'jane@widgets.com' show page
     And I should see "12 Main Street Detroit, Michigan 02034"

@@ -13,7 +13,7 @@
 	- @user_form = cp
 	= render partial: 'users/subform'
 	.form-group
-		= cp.label :address, 'Address', class: 'control-label col-sm-2'
+		= cp.label :address_id, 'Address', class: 'control-label col-sm-2'
 		.col-sm-6
 			= cp.select(:address_id, @company_addresses.collect { |a| [a.full_address, a.id] }, {include_blank: true}, class: 'form-control')
 
@@ -22,5 +22,4 @@
 			=@user_form.submit class: 'btn btn-primary'
 		.col-sm-2.col-sm-offset-1
 			=link_to 'Cancel', root_path, class: 'btn btn-danger'
-%i (leave password blank, if you don't want to change it)
 %br
