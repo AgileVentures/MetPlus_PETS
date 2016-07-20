@@ -1,9 +1,9 @@
 .col-sm-3
-  %h4 Company Information
+  %h4 Company Registration Information
 .col-sm-9
   = render partial: 'companies/company_info',
            locals: {company: @company,
-                    admin_type: 'AA',
+                    admin_aa: true,
                     company_admins: @company_admins}
 
 .clearfix

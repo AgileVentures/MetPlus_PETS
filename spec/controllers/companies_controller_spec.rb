@@ -3,8 +3,10 @@ require 'rails_helper'
 RSpec.describe CompaniesController, type: :controller do
   describe "GET #show" do
     let(:company)   { FactoryGirl.create(:company) }
+    let(:company_admin) { FactoryGirl.create(:company_admin) }
     before(:each) do
-      get :show, id: company, admin_type: 'AA'
+      sign_in company_admin
+      get :show, id: company
     end
     it 'assigns @company for view' do
       expect(assigns(:company)).to eq company

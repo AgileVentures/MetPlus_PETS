@@ -107,7 +107,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_path(company.id, admin_type: 'AA')
+    redirect_to company_path(company.id)
 
   end
 

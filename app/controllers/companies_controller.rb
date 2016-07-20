@@ -6,14 +6,7 @@ class CompaniesController < ApplicationController
     @company        = Company.find(params[:id])
     @company_admins = Company.company_admins(@company)
     @people_type    = 'company-all'
-    @admin_type     = params[:admin_type]
-    if @admin_type == 'NONE'
-      if pets_user.is_company_admin? @company
-        @admin_type = 'CA'
-      elsif pets_user.is_agency_admin? current_agency
-        @admin_type = 'AA'
-      end
-    end
+    @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
   def destroy
@@ -25,7 +18,6 @@ class CompaniesController < ApplicationController
 
   def edit
     @company = Company.find(params[:id])
-    @admin_type = params[:admin_type]
   end
 
   def update
@@ -34,14 +26,13 @@ class CompaniesController < ApplicationController
     if @company.valid?
       @company.save
       flash[:notice] = "company was successfully updated."
-      case params[:admin_type]
-      when 'CA'
+      admin_aa, admin_ca = determine_if_admin(pets_user)
+      if admin_ca
         redirect_to home_company_person_path(pets_user)
-      when 'AA'
-        redirect_to company_path(@company, admin_type: 'AA')
+      else
+        redirect_to company_path(@company)
       end
     else
-      @admin_type = params[:admin_type]
       render :edit
     end
   end

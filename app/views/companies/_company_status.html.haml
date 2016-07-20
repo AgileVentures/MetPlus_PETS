@@ -1,5 +1,5 @@
 = company.status
-- if defined?(admin_type) && admin_type == 'AA'
+- if admin_aa
   - if company.status == Company::STATUS[:PND]
     &nbsp &nbsp
     = link_to 'Approve',

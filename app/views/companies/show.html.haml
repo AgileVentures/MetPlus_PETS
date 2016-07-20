@@ -6,14 +6,15 @@
 .col-sm-9
   = render partial: 'company_info',
            locals: {company: @company,
-                    admin_type: @admin_type,
+                    admin_aa: @admin_aa,
+                    admin_ca: @admin_ca
                     company_admins: @company_admins}
 
 .clearfix
 .col-sm-9
   %h4 All company people who are on PETS
 .col-sm-3
-  - if defined?(@admin_type) && @admin_type == 'AA' || @admin_type == 'CA'
+  - if @admin_aa || @admin_ca
     - if @company.status == Company::STATUS[:ACT]
       = link_to 'Invite Person',
                     new_user_invitation_path(person_type: 'CompanyPerson',
@@ -26,15 +27,14 @@
 .clearfix
 %br
 
-- if defined?(@admin_type)
-  - if @admin_type == 'AA' || @admin_type == 'CA'
+- if @admin_aa || @admin_ca
     .col-sm-2.col-sm-offset-2
       = button_to('Edit Company',
-                  edit_company_path(@company, admin_type: 'AA'),
+                  edit_company_path(@company),
                   method: :get, class: 'btn btn-primary')
 
-  - if @admin_type == 'AA'
+  - if @admin_aa
     .col-sm-2.col-sm-offset-4
-      = button_to('Delete Company', company_path(@company, admin_type: 'AA'),
+      = button_to('Delete Company', company_path(@company),
         method: :delete, data: {confirm: "Delete company #{@company.name}?"},
                         class: 'btn btn-danger')

@@ -20,7 +20,7 @@ class CompanyPeopleController < ApplicationController
   def update_profile
     @company_person = CompanyPerson.find(params[:id])
     @company_addresses = Company.find(@company_person.company_id).addresses
-  
+
     person_params = handle_user_form_parameters company_person_params
     if @company_person.update_attributes(person_params)
       sign_in :user, @company_person.user, bypass: true
@@ -68,7 +68,7 @@ class CompanyPeopleController < ApplicationController
     @company     = pets_user.company
     @company_admins = Company.company_admins(@company)
     @company_person = pets_user
-    @admin_type = pets_user.is_company_admin?(@company) ? 'CA' : 'NONE'
+    @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
   def list_people
