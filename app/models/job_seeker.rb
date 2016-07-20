@@ -28,20 +28,6 @@ class JobSeeker < ActiveRecord::Base
     job_applications.order(:created_at).last
   end
 
-  def self.js_without_jd
-    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
-        includes(:job_seeker_status, :job_applications).
-        order("users.last_name")
-  end
-
-  def self.your_jobseekers_jd(job_developer)
-    # this method serves the Job Developer home page, hence the "your"
-
-    where(id: self.with_ap_in_role(:JD, job_developer)).
-            includes(:job_seeker_status, :job_applications).
-            order("users.last_name")
-  end
-
   def self.with_ap_in_role(role_key, agency_person)
     AgencyRelation.in_role_of(role_key).
                   where(:agency_person => agency_person).
@@ -55,20 +41,6 @@ class JobSeeker < ActiveRecord::Base
   def assign_job_developer(job_developer, agency)
     raise "User #{job_developer.full_name} is not a Job Developer" unless job_developer.is_job_developer? agency
     assign_agency_person(job_developer, :JD)
-  end
-
-  def self.js_without_cm
-    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
-        includes(:job_seeker_status, :job_applications).
-        order("users.last_name")
-  end
-
-  def self.your_jobseekers_cm(case_manager)
-    # this method serves the Job Developer home page, hence the "your"
-
-    where(id: self.with_ap_in_role(:CM, case_manager)).
-          includes(:job_seeker_status, :job_applications).
-          order("users.last_name")
   end
 
   def case_manager
