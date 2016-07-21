@@ -7,7 +7,7 @@
   = render partial: 'company_info',
            locals: {company: @company,
                     admin_aa: @admin_aa,
-                    admin_ca: @admin_ca
+                    admin_ca: @admin_ca,
                     company_admins: @company_admins}
 
 .clearfix
@@ -28,13 +28,13 @@
 %br
 
 - if @admin_aa || @admin_ca
-    .col-sm-2.col-sm-offset-2
-      = button_to('Edit Company',
-                  edit_company_path(@company),
-                  method: :get, class: 'btn btn-primary')
+  .col-sm-2.col-sm-offset-2
+    = button_to('Edit Company',
+                edit_company_path(@company),
+                method: :get, class: 'btn btn-primary')
 
-  - if @admin_aa
-    .col-sm-2.col-sm-offset-4
-      = button_to('Delete Company', company_path(@company),
-        method: :delete, data: {confirm: "Delete company #{@company.name}?"},
-                        class: 'btn btn-danger')
+- if @admin_aa
+  .col-sm-2.col-sm-offset-4
+    = button_to('Delete Company', company_path(@company),
+      method: :delete, data: {confirm: "Delete company #{@company.name}?"},
+                      class: 'btn btn-danger')

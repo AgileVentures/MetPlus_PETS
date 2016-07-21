@@ -1,11 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe CompaniesController, type: :controller do
+  let(:company_admin) { FactoryGirl.create(:company_admin) }
+
+  before(:each) do
+    sign_in company_admin
+  end
+
   describe "GET #show" do
     let(:company)   { FactoryGirl.create(:company) }
-    let(:company_admin) { FactoryGirl.create(:company_admin) }
     before(:each) do
-      sign_in company_admin
       get :show, id: company
     end
     it 'assigns @company for view' do
@@ -46,6 +50,7 @@ RSpec.describe CompaniesController, type: :controller do
     end
 
     context 'valid attributes' do
+
       it 'locates the requested company' do
         patch :update, id: company, admin_type: 'AA', company: hash_params
         expect(assigns(:company)).to eq(company)
@@ -66,6 +71,7 @@ RSpec.describe CompaniesController, type: :controller do
       end
       it 'deletes company address' do
         hash_params[:addresses_attributes]['0']['_destroy'] = true
+
         patch :update, admin_type: 'AA', id: company, company: hash_params
         company.reload
         expect(company.addresses.count).to eq 0
