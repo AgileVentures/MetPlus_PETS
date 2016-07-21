@@ -7,14 +7,12 @@ module JobSeekersViewer
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
                                      your_jobseekers_cm(agency_person)
-    end
-    case people_type
+    
     when 'jobseeker-jd'
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
                                      your_jobseekers_jd(agency_person)
-    end
-    case people_type
+    
     when 'jobseeker-without-jd'
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
@@ -27,10 +25,8 @@ module JobSeekersViewer
   FIELDS_IN_PEOPLE_TYPE = {
        'jobseeker-cm':[:full_name, :job_seeker_status_short_description,:last_sign_in_at],
        'jobseeker-jd':[:full_name, :job_seeker_status_short_description,:last_sign_in_at],
-        'jobseeker-without-jd':
+       'jobseeker-without-jd':
 [:full_name, :job_seeker_status_short_description,:last_sign_in_at]
-
-
 
 }
 

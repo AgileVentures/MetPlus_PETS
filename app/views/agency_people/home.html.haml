@@ -30,7 +30,7 @@
     %i All job seekers have a Job Developer at the moment.
   - else
     .pagination-div{id: "agency_person-#{@people_type_js_without_jd}",
-     data: {url: list_js_without_jd_agency_people_path(@people_type_without_jd)}}
+     data: {url: list_js_without_jd_agency_people_path(@agency_person.id,@people_type_without_jd)}}
 
 - if @agency_person.is_case_manager?(@agency)
   %h3 Job Seekers without a Case Manager
