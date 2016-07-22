@@ -92,7 +92,7 @@ Feature: Have a task system in the site
     And I should see "Widgets Inc."
     And I click the "Widgets Inc." link
     And I wait 1 second
-    And I should see "Company Information"
+    And I should see "Company Registration Information"
 
   @selenium
   Scenario: Case Manager open and closes assign modal
