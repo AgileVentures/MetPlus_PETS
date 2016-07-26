@@ -1,5 +1,6 @@
 class AgencyPerson < ActiveRecord::Base
   acts_as :user
+  
 
   belongs_to :agency
   belongs_to :branch
@@ -56,15 +57,18 @@ class AgencyPerson < ActiveRecord::Base
   def job_seekers_as_job_developer(job_developer)
     # this method serves the Job Developer home page, hence the "your"
 
-    where(id: self.with_ap_in_role(:JD, job_developer)).
-            includes(:job_seeker_status, :job_applications).
-            order("users.last_name")
+    #self.where(id: JobSeeker.with_ap_in_role(:JD, self)).
+           # includes(:job_seeker_status, :job_applications).
+            #order("users.last_name")
+
+     AgencyRelation.in_role_of(:JD).
+                  where(:agency_person => self)
   end
  
   def job_seekers_as_case_manager(case_manager)
     # this method serves the Job Developer home page, hence the "your"
 
-    where(id: self.with_ap_in_role(:CM, case_manager)).
+    where(id: JobSeeker.with_ap_in_role(:CM, case_manager)).
           includes(:job_seeker_status, :job_applications).
           order("users.last_name")
   end
