@@ -56,8 +56,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
       it 'returns redirect status' do
          expect(response).to have_http_status(:redirect)
       end
-      it 'redirects to mainpage' do
-         expect(response).to redirect_to(root_path)
+      it 'redirects to showpage' do
+         expect(response).to redirect_to @companyperson
       end
     end
     context "valid attributes without password change" do
@@ -94,8 +94,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
        it 'returns redirect status' do
          expect(response).to have_http_status(:redirect)
        end
-       it 'redirects to mainpage' do
-         expect(response).to redirect_to(root_path)
+       it 'redirects to showpage' do
+         expect(response).to redirect_to @companyperson
        end
      end
   end

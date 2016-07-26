@@ -113,7 +113,7 @@ Given the following agency relations exist:
     And I should see notification "Task assigned"
     And The task 2 is not present
 
-  @javascript
+  @selenium
   Scenario: Job developer assigns self to job seeker
     Given I am on the home page
     And I login as "bill@metplus.org" with password "qwerty123"
@@ -122,11 +122,11 @@ Given the following agency relations exist:
     And I should not see "Bill Developer"
     And I should see "Assign Myself"
     And I click the "Assign Myself" button
-    And I wait 1 second
+    And I wait 2 seconds
     Then I should see "Bill Developer"
     And I should not see "Assign Myself"
 
-  @javascript
+  @selenium
   Scenario: Case manager assigns self to job seeker
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
@@ -135,7 +135,7 @@ Given the following agency relations exist:
     And I should not see "Jane Jones"
     And I should see "Assign Myself"
     And I click the "Assign Myself" button
-    And I wait 1 second
+    And I wait 2 seconds
     Then I should see "Jane Jones"
     And I should not see "Assign Myself"
 

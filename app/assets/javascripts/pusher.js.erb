@@ -29,8 +29,8 @@ var PusherControl = {
       // Process event if I am logged in and am an agency_person
       if (Cookies('person_type') === 'AgencyPerson') {
         Notification.info_notification('Company: ' +
-            "<a href='/company_admin/companies/" +
-            data.id + "' target='_blank'>" + data.name + "</a>" +
+            "<a href='/companies/" + data.id +
+            " ' target='_blank'>" + data.name + "</a>" +
             ' has registered in PETS.');
 
       }

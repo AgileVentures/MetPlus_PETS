@@ -107,7 +107,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_path(company.id, admin_type: 'AA')
+    redirect_to company_path(company.id)
 
   end
 
@@ -121,7 +121,7 @@ class CompanyRegistrationsController < ApplicationController
     company.save
 
     render :partial => 'companies/company_status',
-           :locals => {company: company} if request.xhr?
+           :locals => {company: company, admin_aa: true} if request.xhr?
 
     # Anonymous class to contain company and reason for denial
     obj = Struct.new(:company, :reason)

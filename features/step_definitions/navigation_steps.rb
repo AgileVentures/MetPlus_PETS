@@ -30,6 +30,9 @@ def page_translator name
     when /agency '(.+)' edit/
       agency = name.match(/'(.+)'/)
       return edit_agency_path(Agency.find_by_name(agency[1]))
+    when /Company person '(.+)' show/
+      user = name.match(/'(.+)'/)
+      return company_person_path(User.find_by_email(user[1]).pets_user)
     when /activation for user '.+'/
       user = name.match(/'(.+)'/)
       if user[1] =~ /@/

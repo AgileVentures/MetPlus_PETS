@@ -106,6 +106,13 @@ When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
   # https://github.com/teampoltergeist/poltergeist/issues/520
 end
 
+When(/^(?:I|they) click the "([^"]*)" link and switch to the new window$/) do |link|
+  new_window = window_opened_by do
+    click_link link
+  end
+  switch_to_window new_window
+end
+
 When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
   if Capybara.current_driver == :poltergeist
     find_link('', {href: url}).trigger('click')
