@@ -29,6 +29,13 @@
   = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
 
 .col-sm-12
+  %h3 Company's open tasks
+  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_open_tasks}
+
+  %h3 Company's closed tasks
+  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_closed_tasks}
+
+.col-sm-12
   %h3 All #{@company.name} jobs
   .pagination-div{id: "jobs-#{@job_type}",
                   data: {url: list_jobs_path(@job_type)}}

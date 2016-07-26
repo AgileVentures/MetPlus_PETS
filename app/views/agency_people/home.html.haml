@@ -5,6 +5,12 @@
     :id => 'edit-profile' do
     %i.fa.fa-pencil-square-o.fa-1
 
+- if @agency_person.is_agency_admin?(@agency)
+  %h3 Agency's Open Tasks
+  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @admin_task_open}
+  %h3 Agency's Closed Tasks
+  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @admin_task_closed}
+
 %h3 Your Open Tasks
 = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
 
