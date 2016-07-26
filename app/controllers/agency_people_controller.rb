@@ -15,6 +15,8 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
     @task_type = 'mine-open'
+    @admin_task_open = 'agency-open'
+    @admin_task_closed = 'agency-closed'
     @people_type_cm = 'jobseeker-cm'
     @people_type_jd = 'jobseeker-jd'
     @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
