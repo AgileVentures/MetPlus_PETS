@@ -1,0 +1,80 @@
+Feature: Manage job status by UI
+
+	As a job developer / company person
+	So that there is no job application on expired job
+	I want to inform other job developer about a job status
+
+Background: data is added to database 
+
+	Given the default settings are present
+	
+	Given the following agency people exist:
+    | agency  | role      | first_name | last_name | email                | password  |
+    | MetPlus | JD        | John       | Smith     | john@metplus.org     | qwerty123 |
+    | MetPlus | CM        | Jane       | Jones     | jane@metplus.org     | qwerty123 |
+
+  Given the following companies exist:
+  	| agency  | name         | website     | phone        | email            | ein        | status |
+  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+  	| MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
+
+  Given the following company people exist:
+  	| company      | role  | first_name | last_name | email            | password  | phone        |
+  	| Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
+  	| Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+  	| Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
+
+  Given the following jobseeker exist:
+  	| first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
+  	| John       | Seeker    | john@seek.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+
+  Given the following jobs exist:
+    | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
+    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | ca@widgets.com | revoked |
+    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
+    | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
+  
+  @selenium
+	Scenario: company person revoke a job
+		Given I am on the home page
+	  And I login as "ca@widgets.com" with password "qwerty123"
+	  And I wait 2 seconds
+	  And I visit the jobs page
+	  And I wait 5 seconds
+	  And I should not see "Revoked" span corresponds to "hr manager"
+	  But I should see "revoke" button corresponds to "hr manager"
+	  Then I click the "revoke" button belongs to "hr manager"
+	  And I wait 5 seconds
+	  
+	  Then I click the "Revoke" confirmation corresponds to "hr manager"
+	  And I wait 1 second
+	  And I should see "Revoked" span corresponds to "hr manager"
+
+	Scenario: job developer revoke a job
+		Given I am on the home page
+		And I login as "john@metplus.org" with password "qwerty123"
+	  And I visit the jobs page
+	  And I should see "Revoked" span corresponds to "hr assistant"
+	  Then I click the "hr assistant" link to job show page
+	  And I should not see "Revoke" link on the page
+ 	  Then I return to jobs page   
+ 	  And I should not see "Revoked" span corresponds to "hr associate"  
+	  Then I click the "hr associate" link to job show page 
+	  And I should see "Revoke" link on the page
+	  Then I click the first "Revoke" link
+	  And I should see a "revoke" confirmation
+	  Then I click the "Revoke" confirmation corresponds to "hr associate"
+	  And I should see "Revoked" span corresponds to "hr associate"
+
+	Scenario: job seeker view job listed
+		Given I am on the home page
+		And I login as "john@seek.com" with password "qwerty123"
+		And I visit the jobs page
+	  And I should see "Revoked" span corresponds to "hr assistant"
+	  Then I click the "hr assistant" link to job show page
+	  And I should not see "Click Here To Apply Online"
+	  Then I return to jobs page
+	  And I should not see "Revoked" span corresponds to "hr manager"
+	  Then I click the "hr manager" link to job show page
+	  And I should see "Click Here To Apply Online"
+	
