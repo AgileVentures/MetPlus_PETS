@@ -34,8 +34,9 @@ class JobSeeker < ActiveRecord::Base
                   #pluck(:job_seeker_id)
      AgencyRelation.in_role_of(role_key).
                   where(:agency_person => agency_person).
-                  includes(:job_seeker_status, :job_applications).order("users.last_name")
+                 includes(:job_seeker_status, :job_applications).order("users.last_name")
   end
+  
 
   def job_developer
     find_agency_person(:JD)
