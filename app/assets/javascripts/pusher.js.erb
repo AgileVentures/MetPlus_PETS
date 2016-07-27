@@ -92,6 +92,16 @@ var PusherControl = {
             " posted for company: " + data.company_name);
       }
     });
+
+    channel.bind('job_revoked', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
+        Notification.info_notification('Job (' +
+            "<a href='/jobs/" + data.job_id +
+            "' target='_blank'>" + data.job_title + '</a>)' +
+            " revoked for company: " + data.company_name);
+      }
+    });
   },
   notify_job_seeker: function (user_id, agency_person_name, agency, role_str) {
     // Process event if I am logged in and I am the job seeker

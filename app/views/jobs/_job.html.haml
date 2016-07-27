@@ -1,12 +1,18 @@
-%h4
-	=link_to job.title, job_path(job)
-%h5= job.company.name
-%small
-	= "#{time_ago_in_words(job.created_at, )} ago"
-	=render partial: 'modal', locals: {job: job}
-	-if pets_user.is_a?(CompanyPerson) || (pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)) 
-		%button.btn.btn-primary.btn-xs.pull-right#jobs-delete-link{"data-target" => "#myModal",
-		 "data-toggle" => "modal", :type => "button"}
-			delete
-		=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", 
-		       id: "jobs-edit-link"
+%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
+	%h4
+		=link_to job.title, job_path(job)
+		-if job.status == 'revoked' 
+			%span{class: 'label label-info'} Revoked
+	%h5= job.company.name
+	%small
+		= "#{time_ago_in_words(job.created_at, )} ago"
+		
+		-if job.status == 'active'
+			-if pets_user.is_a?(CompanyPerson) || (pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)) 
+				=link_to "revoke", '#', data: { :toggle => 'modal', :target => '#revokeModal' }
+				=render partial: 'revoke_modal', locals: { job: job }
+				
+				%button.btn.btn-primary.btn-xs.pull-right(data-target="#revokeModal" data-toggle="modal" type="button")revoke
+				=render partial: 'revoke_modal', locals: { job: job }
+				=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", 
+				       id: "jobs-edit-link"

@@ -64,4 +64,13 @@ RSpec.describe NotifyEmailJob, type: :job do
       to change(Delayed::Job, :count).by(+1)
   end
 
+  it 'job revoked' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later('job_developer@gmail.com',
+                 Event::EVT_TYPE[:JOB_REVOKED],
+                 {job: {title: 'test job'},
+                  agency: {name: 'MetPlus'}}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
 end

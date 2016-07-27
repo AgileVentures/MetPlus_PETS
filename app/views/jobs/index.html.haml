@@ -14,8 +14,7 @@
 		%strong{class: "text-center"}
 			%h3 There are no jobs available.
 - else
-	- @jobs.each do |job|
-		%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
-			= render job
+	= render partial: "job", collection: @jobs 
+	
 %div{class: "col-sm-offset-4 col-sm-6"}
 	= will_paginate @jobs

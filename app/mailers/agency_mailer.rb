@@ -24,6 +24,10 @@ class AgencyMailer < ApplicationMailer
     send_notification_mail(email_list, job, 'New Job Posted')
   end
 
+  def job_revoked(email_list, job)
+    send_notification_mail(email_list, job, 'Job Revoked')
+  end
+
   private
 
   def send_notification_mail(email_list, obj, obj_type)
