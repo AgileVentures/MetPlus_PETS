@@ -192,7 +192,7 @@ class AgencyPeopleController < ApplicationController
   end
 
   def list_js_without_jd
-    raise 'Unsupported request' if not request.xhr?
+     raise 'Unsupported request' if not request.xhr?  
     
     @agency_person= AgencyPerson.find(params[:id])
 
