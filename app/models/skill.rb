@@ -8,4 +8,9 @@ class Skill < ActiveRecord::Base
   has_many :job_skills, dependent: :destroy
   
   has_many :jobs, through: :job_skills
+
+  def has_job?
+  	jobs.any?
+  end
+  
 end

@@ -9,7 +9,7 @@
         %th
           %strong Delete
     %tbody
-      - job_properties.each do |job_prop|
+      - job_specialties.each do |job_prop|
         %tr
           %td
             = link_to "#{job_prop.name}", send(show_property_path, job_prop), method: :edit
@@ -17,7 +17,7 @@
             = job_prop.description
           %td
             = link_to send(delete_property_path, job_prop), method: :delete do
-              %span.glyphicon.glyphicon-remove
+              %span.glyphicon.glyphicon-remove          
 
-  = will_paginate job_properties, param_name: "#{data_type}_page",
+  = will_paginate job_specialties, param_name: "#{data_type}_page",
                      params: {data_type: data_type}
