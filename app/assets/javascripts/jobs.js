@@ -14,5 +14,20 @@ $(function () {
               $('#address_select').html(data);
             }
           });
-    });
   });
+
+  
+  $('button[data-action="revoke"], #revoke_link').on('click', function() {
+    var id = $(this).attr('data-job-id');
+    var title = $(this).attr('data-job-title');
+    var companyJobId = $(this).attr('data-job-companyJobId');
+    
+    $('#revokeModal').find('#title').html('job title: ' + title);
+    $('#revokeModal').find('#company_job_id').html('company job id: ' + companyJobId);
+    $('#revokeModal').find('#confirm_revoke').attr('href','/jobs/' + id + '/revoke');
+    $('#revokeModal').modal();
+    
+  });
+ 
+
+});

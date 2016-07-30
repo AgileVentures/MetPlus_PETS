@@ -17,7 +17,7 @@ Given(/^the Widgets, Inc\. company name with address exist in the record$/) do
 	FactoryGirl.create(:company)
 end
 
-Then(/^I (?:visit|return to) the jobs page$/) do
+Then(/^I (?:visit the |return to )jobs page$/) do 
 	@job = nil
 	visit jobs_path
 end
@@ -37,20 +37,18 @@ Then(/^I should see a "([^"]*)" confirmation$/) do |action|
 	expect(page).to have_content("Are you sure you want 
  		         to #{action} the following job: 
                  job title:  #{@job.title}
-                 job id: #{@job.company_job_id}")
+                 company job id: #{@job.company_job_id}")
 end 
 
 Then(/^I click the "revoke" button belongs to "hr manager"/) do
 	job = Job.find_by(title: "hr manager")
-	step %(I click the third "revoke" button)
-	byebug
-	find("#job-#{job.id} > button[data-target='#revokeModal']").click 
+	find("#job-#{job.id} > button[data-action='revoke']").click 
 end
 
 Then(/^I click the "([^"]*)" confirmation corresponds to "([^"]*)"$/) do |tag_name, job_title|
 	@job ||= Job.find_by(title: job_title)
-	step %{I click the "##{tag_name.downcase}-job-#{@job.id}" link}
-	# find("##{tag_name.downcase}-job-#{@job.id}").click
+	# step %{I click the "#confirm_revoke" link}
+	find("#confirm_revoke").click
 end
 
 Then(/^I click the "([^"]*)" link to job show page$/) do |job_title|
@@ -60,9 +58,9 @@ end
 
 Then(/^I should( not)? see "Revoke" link on the page$/) do |negate|
 	if negate
-		expect(page).not_to have_css('a[data-target="#revokeModal"]', text: 'Revoke')
+		expect(page).not_to have_css('a#revoke_link', text: 'Revoke')
 	else
-		expect(page).to have_css('a[data-target="#revokeModal"]', text: 'Revoke')
+		expect(page).to have_css('a#revoke_link', text: 'Revoke')
 	end
 end
 

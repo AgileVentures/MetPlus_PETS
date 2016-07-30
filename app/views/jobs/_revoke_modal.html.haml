@@ -10,11 +10,10 @@
         %p
           Are you sure you want to revoke the following job: 
           %ul{class: "list-unstyled"}
-            %li job title: #{job.title}
-            %li job id: #{job.company_job_id}
+            %li#title
+            %li#company_job_id
 
       .modal-footer
         %button.btn.btn-default{"data-dismiss" => "modal",
-        :type => "button"} Close
-        =link_to "Revoke", revoke_job_path(job), method: :patch,
-        class: "btn btn-danger", id: "revoke-job-#{job.id}"
+        :type => "button"} Cancel
+        %a.btn.btn-danger#confirm_revoke{rel: "nofollow", data: { method: "patch"}} Revoke

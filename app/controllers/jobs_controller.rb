@@ -177,7 +177,7 @@ class JobsController < ApplicationController
 
 	def revoke
 		if @job.status == 'active' && @job.update(status: 'revoked')
-			flash[:alert] = "Job is revoked successfully"
+			flash[:alert] = "#{@job.title} is revoked successfully."
 			obj = Struct.new(:job, :agency)
 			Event.create(:JOB_REVOKED, obj.new(@job, Agency.first))
 		else

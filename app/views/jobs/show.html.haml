@@ -4,8 +4,8 @@
 	%div{class: "pull-right", id: "job-show-links-id"}
 		-if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
 			-if @job.status == "active" 
-				=link_to "Revoke", '#', data: { :toggle => 'modal', :target => '#revokeModal' }
-				=render partial: 'revoke_modal', locals: { job: @job }
+				=render partial: 'revoke_modal'
+				=link_to "Revoke", '#', id: 'revoke_link', data: { "job-id" => "#{@job.id}", "job-title" => "#{@job.title}", "job-companyJobId" => "#{@job.company_job_id}"  }
 				|
 			=link_to "Edit Job", edit_job_path(@job)
 			|

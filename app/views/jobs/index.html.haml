@@ -14,6 +14,7 @@
 		%strong{class: "text-center"}
 			%h3 There are no jobs available.
 - else
+	= render partial: "revoke_modal"
 	= render partial: "job", collection: @jobs 
 	
 %div{class: "col-sm-offset-4 col-sm-6"}

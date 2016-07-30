@@ -38,31 +38,32 @@ Background: data is added to database
 	Scenario: company person revoke a job
 		Given I am on the home page
 	  And I login as "ca@widgets.com" with password "qwerty123"
-	  And I wait 2 seconds
 	  And I visit the jobs page
-	  And I wait 5 seconds
 	  And I should not see "Revoked" span corresponds to "hr manager"
 	  But I should see "revoke" button corresponds to "hr manager"
 	  Then I click the "revoke" button belongs to "hr manager"
-	  And I wait 5 seconds
-	  
-	  Then I click the "Revoke" confirmation corresponds to "hr manager"
 	  And I wait 1 second
+	  And I should see a "revoke" confirmation
+	  Then I click the "Revoke" confirmation corresponds to "hr manager"
 	  And I should see "Revoked" span corresponds to "hr manager"
 
+	@selenium
 	Scenario: job developer revoke a job
 		Given I am on the home page
 		And I login as "john@metplus.org" with password "qwerty123"
 	  And I visit the jobs page
 	  And I should see "Revoked" span corresponds to "hr assistant"
 	  Then I click the "hr assistant" link to job show page
+	  And I wait 1 second
 	  And I should not see "Revoke" link on the page
  	  Then I return to jobs page   
+ 	  And I wait 1 second
  	  And I should not see "Revoked" span corresponds to "hr associate"  
 	  Then I click the "hr associate" link to job show page 
 	  And I should see "Revoke" link on the page
-	  Then I click the first "Revoke" link
-	  And I should see a "revoke" confirmation
+	  Then I click the "Revoke" link
+	  And I wait 1 second
+		And I should see a "revoke" confirmation
 	  Then I click the "Revoke" confirmation corresponds to "hr associate"
 	  And I should see "Revoked" span corresponds to "hr associate"
 

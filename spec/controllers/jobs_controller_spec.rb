@@ -871,6 +871,11 @@ RSpec.describe JobsController, type: :controller do
         patch :revoke, id: @job.id
       end
 
+      it 'flash[:alert]' do
+        patch :revoke, id: @job.id
+        expect(flash[:alert]).to be_present.and eq "#{@job.title} is revoked successfully."
+      end
+
       it 'redirects to jobs_path' do
         patch :revoke, id: @job.id
         expect(response).to redirect_to(jobs_path)
@@ -884,7 +889,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'flash[:alert]' do
-        expect(flash[:alert]).to be_present
+        expect(flash[:alert]).to be_present.and eq "Only active job can be revoked."
       end
 
       it 'redirects to jobs_path' do
