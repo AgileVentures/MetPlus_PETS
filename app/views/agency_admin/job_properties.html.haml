@@ -2,14 +2,14 @@
 
 .row
   .col-sm-3
-    %h4 Job Specialities
+    %h4 Job Specialties
 
   - if @job_categories.empty?
     .col-sm-3
-      %h5 There are no job specialities.
+      %h5 There are no job specialties.
   - else
     .col-sm-9
-      = render partial: 'job_specialities', object: @job_categories,
+      = render partial: 'job_specialties', object: @job_categories,
                 locals: {data_type:  'job_categories',
                          partial_id: 'job_categories_table',
                          show_property_path:   :job_category_path,
@@ -17,10 +17,10 @@
     .clearfix
     .col-sm-3.col-sm-offset-3
       %a(id='toggle_job_categories' href='#job_categories_table' class='text-danger')
-        Hide Job Specialities
+        Hide Job Specialties
 
   .col-sm-3.col-sm-offset-3.table_action_button
-    - text_modal_button 'Add Job Speciality', 'add_job_category',
+    - text_modal_button 'Add Job Specialty', 'add_job_category',
                         'btn btn-primary btn-sm pull-right'
 
 .row

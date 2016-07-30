@@ -34,7 +34,7 @@ class AgencyAdminController < ApplicationController
         @job_categories = JobCategory.order(:name).
                     page(params[:job_categories_page]).per_page(10)
 
-        render partial: 'job_specialities', object: @job_categories,
+        render partial: 'job_specialties', object: @job_categories,
                 locals: {data_type:  'job_categories',
                          partial_id: 'job_categories_table',
                          show_property_path:   :job_category_path,
