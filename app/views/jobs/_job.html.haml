@@ -9,6 +9,6 @@
 		
 	-if job.status == 'active'
 		-if pets_user.is_a?(CompanyPerson) || (pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency))
-			%button.btn.btn-primary.btn-xs.pull-right{ type: "button", data: { action: 'revoke', job: { id: "#{job.id}", title: "#{job.title}", companyJobId: "#{job.company_job_id}" } } }revoke
+			%button.btn.btn-primary.btn-xs.pull-right.jobs-revoke-button{ type: "button", data: { action: 'revoke', job: { id: "#{job.id}", title: "#{job.title}", companyJobId: "#{job.company_job_id}" } } }revoke
 			=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", 
 			       id: "jobs-edit-link"

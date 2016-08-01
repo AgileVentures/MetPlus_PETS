@@ -22,6 +22,7 @@ $(function () {
     var title = $(this).attr('data-job-title');
     var companyJobId = $(this).attr('data-job-companyJobId');
     
+    $('#revokeModal').find('.modal-title').html(title);
     $('#revokeModal').find('#title').html('job title: ' + title);
     $('#revokeModal').find('#company_job_id').html('company job id: ' + companyJobId);
     $('#revokeModal').find('#confirm_revoke').attr('href','/jobs/' + id + '/revoke');

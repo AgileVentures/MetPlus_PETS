@@ -39,43 +39,47 @@ Background: data is added to database
 		Given I am on the home page
 	  And I login as "ca@widgets.com" with password "qwerty123"
 	  And I visit the jobs page
-	  And I should not see "Revoked" span corresponds to "hr manager"
-	  But I should see "revoke" button corresponds to "hr manager"
-	  Then I click the "revoke" button belongs to "hr manager"
+	  And I should not see "Revoked" next to "hr manager"
+	  But I should see "revoke" button for "hr manager"
+	  Then I click the "revoke" button for "hr manager"
 	  And I wait 1 second
 	  And I should see a "revoke" confirmation
-	  Then I click the "Revoke" confirmation corresponds to "hr manager"
-	  And I should see "Revoked" span corresponds to "hr manager"
+	  Then I click the Revoke confirmation for "hr manager"
+	  And I should see "Revoked" next to "hr manager"
 
 	@selenium
 	Scenario: job developer revoke a job
 		Given I am on the home page
 		And I login as "john@metplus.org" with password "qwerty123"
 	  And I visit the jobs page
-	  And I should see "Revoked" span corresponds to "hr assistant"
+	  And I should see "Revoked" next to "hr assistant"
 	  Then I click the "hr assistant" link to job show page
 	  And I wait 1 second
+	  And I should see the job status is "revoked"
 	  And I should not see "Revoke" link on the page
  	  Then I return to jobs page   
  	  And I wait 1 second
- 	  And I should not see "Revoked" span corresponds to "hr associate"  
+ 	  And I should not see "Revoked" next to "hr associate"  
 	  Then I click the "hr associate" link to job show page 
+	  And I should see the job status is "active"
 	  And I should see "Revoke" link on the page
 	  Then I click the "Revoke" link
 	  And I wait 1 second
 		And I should see a "revoke" confirmation
-	  Then I click the "Revoke" confirmation corresponds to "hr associate"
-	  And I should see "Revoked" span corresponds to "hr associate"
+	  Then I click the Revoke confirmation for "hr associate"
+	  And I should see "Revoked" next to "hr associate"
 
 	Scenario: job seeker view job listed
 		Given I am on the home page
 		And I login as "john@seek.com" with password "qwerty123"
 		And I visit the jobs page
-	  And I should see "Revoked" span corresponds to "hr assistant"
+	  And I should see "Revoked" next to "hr assistant"
 	  Then I click the "hr assistant" link to job show page
+	  And I should see the job status is "revoked"
 	  And I should not see "Click Here To Apply Online"
 	  Then I return to jobs page
-	  And I should not see "Revoked" span corresponds to "hr manager"
+	  And I should not see "Revoked" next to "hr manager"
 	  Then I click the "hr manager" link to job show page
+	  And I should see the job status is "active"
 	  And I should see "Click Here To Apply Online"
 	
