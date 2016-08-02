@@ -166,7 +166,8 @@ class AgencyPeopleController < ApplicationController
 
     @people = []
     @people = display_job_seekers @people_type_cm, @agency_person
-
+     
+   
     render :partial => 'agency_people/assigned_job_seekers',
                        locals: {jobseekers: @people,
                                 controller_action:'list_js_cm',
@@ -192,22 +193,26 @@ class AgencyPeopleController < ApplicationController
   end
 
   def list_js_without_jd
-     raise 'Unsupported request' if not request.xhr?  
-    
+
+    raise 'Unsupported request' if not request.xhr?
+       
     @agency_person= AgencyPerson.find(params[:id])
 
     @people_type_without_jd = params[:people_type] || 'jobseeker-without-jd'
 
     @people = []
-    @people = display_job_seekers @people_type_without_jd,@agency_person
+    @people = display_job_seekers @people_type_without_jd, @agency_person
+    
+    
 
-    render :partial => 'agency_people/assigned_job_seekers', 
+     render :partial => 'agency_people/assigned_job_seekers', 
                        locals: {jobseekers: @people,
                                 controller_action:'list_js_without_jd',
                                 people_type: @people_type_without_jd,
                                 agency_person:@agency_person}
+   
                                                             
-                                
+                               
   end
 
 
