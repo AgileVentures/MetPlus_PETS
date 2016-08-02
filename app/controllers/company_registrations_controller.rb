@@ -79,8 +79,10 @@ class CompanyRegistrationsController < ApplicationController
       # Send pending-approval email to company contact if the contact
       # email address was changed
       if changed_email
-        CompanyMailer.pending_approval(@company,
-                                @company.company_people[0]).deliver_now
+        CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
+                         perform_later(Event::EVT_TYPE[:COMP_REGISTER],
+                         @company,
+                         @company.company_people[0])
       end
       redirect_to agency_admin_home_path
     else
