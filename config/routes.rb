@@ -124,6 +124,7 @@ Rails.application.routes.draw do
 
   resources :jobs do
     get 'applications', on: :member, as: :applications
+    patch 'revoke', on: :member, as: :revoke
   end
   # --------------------------------------------------------------------------
 
