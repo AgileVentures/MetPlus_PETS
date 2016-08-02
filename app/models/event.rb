@@ -84,8 +84,10 @@ class Event
                    EVT_TYPE[:COMP_REGISTER],
                    evt_obj)
 
-    CompanyMailer.pending_approval(evt_obj,
-                                   evt_obj.company_people[0]).deliver_now
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                     perform_later(EVT_TYPE[:COMP_REGISTER],
+                     evt_obj,
+                     evt_obj.company_people[0])
 
     Task.new_review_company_registration_task(evt_obj, evt_obj.agencies[0])
   end
@@ -94,17 +96,21 @@ class Event
     # Business rules:
     #    Send email to company contact
 
-    CompanyMailer.registration_approved(evt_obj,
-                                        evt_obj.company_people[0]).deliver_now
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                     perform_later(EVT_TYPE[:COMP_APPROVED],
+                     evt_obj,
+                     evt_obj.company_people[0])
   end
 
   def self.evt_comp_denied(evt_obj) # evt_obj = struct(company, reason)
     # Business rules:
     #    Send email to company contact
 
-    CompanyMailer.registration_denied(evt_obj.company,
-                                      evt_obj.company.company_people[0],
-                                      evt_obj.reason).deliver_now
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                  perform_later(EVT_TYPE[:COMP_DENIED],
+                  evt_obj.company,
+                  evt_obj.company.company_people[0],
+                  evt_obj.reason)
   end
 
   def self.evt_js_apply(evt_obj)  # evt_obj = job application
