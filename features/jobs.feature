@@ -62,15 +62,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	Then I should see "cab-driver has been updated successfully."
 	And I should verify the change of title "cab-driver", shift "Day" and jobId "KRT123"
 
-	When I click the "Return To Jobs" link
-	And I click the first "delete" button
-	And I wait 1 second
-	Then I should see a popup with the following job information
-	And I wait 1 second
-	And I click the "modal-delete-id" link
-	And I wait 2 seconds
-	Then I should see "cab-driver has been deleted successfully."
-
   Then I go to the Company Person 'jane@widgets.com' Home page
   And I click the "software dev" link
   And I click the "Edit Job" link
@@ -96,7 +87,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 
 
 @selenium
-Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
+Scenario: Creating and Updating Job successfully and unsuccessfully
   Given I am on the home page
 	And I login as "hr@metplus.org" with password "qwerty123"
 	When I click the "Post jobs" link

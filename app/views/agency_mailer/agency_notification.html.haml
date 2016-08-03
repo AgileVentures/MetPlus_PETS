@@ -33,6 +33,11 @@
     A new job (
     = link_to @obj.title, job_url(id: @obj.id)
     ) has been posted for company: #{@obj.company.name}.
+
+  - elsif @obj_type == 'Job Revoked'
+    A job (
+    = link_to @obj.title, job_url(id: @obj.id)
+    ) has been revoked for company: #{@obj.company.name}.
 %p
   If you have any questions please contact the PETS administrator at:
   = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',

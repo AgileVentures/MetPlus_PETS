@@ -79,8 +79,10 @@ class CompanyRegistrationsController < ApplicationController
       # Send pending-approval email to company contact if the contact
       # email address was changed
       if changed_email
-        CompanyMailer.pending_approval(@company,
-                                @company.company_people[0]).deliver_now
+        CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
+                         perform_later(Event::EVT_TYPE[:COMP_REGISTER],
+                         @company,
+                         @company.company_people[0])
       end
       redirect_to agency_admin_home_path
     else
@@ -107,7 +109,7 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_path(company.id, admin_type: 'AA')
+    redirect_to company_path(company.id)
 
   end
 
@@ -121,7 +123,7 @@ class CompanyRegistrationsController < ApplicationController
     company.save
 
     render :partial => 'companies/company_status',
-           :locals => {company: company} if request.xhr?
+           :locals => {company: company, admin_aa: true} if request.xhr?
 
     # Anonymous class to contain company and reason for denial
     obj = Struct.new(:company, :reason)

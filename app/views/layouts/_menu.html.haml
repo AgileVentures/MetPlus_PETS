@@ -21,9 +21,9 @@
                          id: 'dd_menu', 'aria-expanded' => 'false'}
                   = ("Admin" + "<span class='caret'></span>").html_safe
                 %ul.dropdown-menu{'aria-labelledby' => 'dd_menu'}
-                  %li.bg-primary
+                  %li
                     = link_to('Agency and Partner Companies', agency_admin_home_path)
-                  %li.bg-primary
+                  %li
                     = link_to('Job Properties',                 |
                             agency_admin_job_properties_path)   |
       %ul{:class => 'nav navbar-nav navbar-right'}

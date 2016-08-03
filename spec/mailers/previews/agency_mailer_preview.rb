@@ -47,4 +47,15 @@ class AgencyMailerPreview < ActionMailer::Preview
     AgencyMailer.job_posted(job_developer.email, job)
   end
 
+  def job_revoked
+    job = Job.create(title: 'Software Engineer',
+                  company: Company.first,
+                  company_job_id: 'XYZ',
+                  shift: Job::SHIFT_OPTIONS[0],
+                  description: 'description of test job')
+    job_developer = User.find_by_email('chet@metplus.org').actable
+
+    AgencyMailer.job_revoked(job_developer.email, job)
+  end
+
 end

@@ -43,7 +43,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
     it "includes link to show company" do
       expect(mail).
-          to have_body_text(/#{company_url(id: 1, admin_type: 'AA')}/)
+          to have_body_text(/#{company_url(id: 1)}/)
     end
   end
 
@@ -142,6 +142,31 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
     it "renders the body" do
       expect(mail).to have_body_text(/A new job \(\n.*#{Regexp.quote(job.title)}.*\n\) has been posted for company: #{Regexp.quote(job.company.name)}\./)
+    end
+    it "includes link to show job" do
+      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+    end
+  end
+
+  describe 'Job revoked' do
+
+    let(:job)           { FactoryGirl.create(:job) }
+    let(:job_developer) { FactoryGirl.create(:job_developer)}
+
+    let(:mail) do
+      allow(Pusher).to receive(:trigger)
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      AgencyMailer.job_revoked(job_developer.email, job)
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq 'Job revoked'
+      expect(mail.to).to eq(["#{job_developer.email}"])
+      expect(mail.from).to eq(["from@example.com"])
+    end
+    it "renders the body" do
+      expect(mail).to have_body_text(/A job \(\n.*#{Regexp.quote(job.title)}.*\n\) has been revoked for company: #{Regexp.quote(job.company.name)}\./)
     end
     it "includes link to show job" do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)

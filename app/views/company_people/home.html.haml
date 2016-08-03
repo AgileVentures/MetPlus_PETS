@@ -6,10 +6,10 @@
       :id => 'edit-profile' do
       %i.fa.fa-pencil-square-o.fa-1
 .col-sm-3
-  - if @company_person.is_company_admin? @company
+  - if @admin_ca
     .col-sm-3.col-sm-offset-9{style: 'margin-top: 20px;'}
       = link_to 'Edit Company Info',
-                    edit_company_path(id: @company.id, admin_type: 'CA'),
+                    edit_company_path(id: @company.id),
                     method: :get, class: 'btn btn-primary btn-sm pull-right'
 
 .clearfix
@@ -19,7 +19,10 @@
               style='padding-left: 10px;')
     Hide Company Information
 .col-sm-9
-  = render partial: 'companies/company_admin/company_info'
+  = render partial: 'companies/company_info',
+            locals: {company: @company,
+                     admin_aa: @admin_aa,
+                     company_admins: @company_admins}
 
 .col-sm-12
   %h3 Tasks that need your attention
