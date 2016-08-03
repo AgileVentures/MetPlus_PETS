@@ -66,8 +66,13 @@ class CompanyPeopleController < ApplicationController
     @job_type    = 'my-company-all'
     @people_type = 'my-company-all'
     @company     = pets_user.company
+<<<<<<< HEAD
     @company_open_tasks = 'company-open'
     @company_closed_tasks = 'company-closed'
+=======
+    @company_task_open = 'company-open'
+    @company_task_closed = 'company-closed'
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
     @company_admins = Company.company_admins(@company)
     @company_person = pets_user
     @admin_aa, @admin_ca = determine_if_admin(pets_user)

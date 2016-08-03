@@ -377,7 +377,11 @@ RSpec.describe Task, type: :model do
         expect(Task.find_by_owner_user_open @agency_admin).to eq [@task_aa_new]
       end
       it 'agency' do
+<<<<<<< HEAD
         expect(Task.find_by_agency_open @agency_admin).to eq [@task_jd_new, @task_aa_new]
+=======
+        expect(Task.find_by_agency_open @agency_admin).to eq [@task_jd_new, @task_cm_new, @task_aa_new]
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
       end
       it 'company admin user' do
         expect(Task.find_by_owner_user_open @company_admin).to eq [@task_ca_new]
@@ -400,7 +404,11 @@ RSpec.describe Task, type: :model do
         expect(Task.find_by_owner_user_closed @agency_admin).to eq [@task_aa_closed]
       end
       it 'agency' do
+<<<<<<< HEAD
         expect(Task.find_by_agency_closed @agency_admin).to eq [@task_jd_closed, @task_aa_closed]
+=======
+        expect(Task.find_by_agency_closed @agency_admin).to eq [@task_jd_closed, @task_cm_closed, @task_aa_closed]
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
       end
       it 'company admin user' do
         expect(Task.find_by_owner_user_closed @company_admin).to eq [@task_ca_closed]
