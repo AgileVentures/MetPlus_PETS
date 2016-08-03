@@ -23,6 +23,10 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^I should not see the "(.*?)" link$/) do |link|
+  expect(page.body).to_not have_link link
+end
+
 Then(/^(?:I|they) should( not)? see button "([^"]*)"$/) do |not_see, button|
   unless not_see
     expect(page).to have_button button

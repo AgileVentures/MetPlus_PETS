@@ -17,7 +17,7 @@
             = job_prop.description
           %td
             - if job_prop.has_job?
-              %span.glyphicon.glyphicon-remove
+              %span (in use)
             - else
               = link_to send(delete_property_path, job_prop), method: :delete do
                 %span.glyphicon.glyphicon-remove          
