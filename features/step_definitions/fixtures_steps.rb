@@ -181,9 +181,9 @@ Given(/^the following jobs exist:$/) do |table|
     end
 
     job.save!
-
+    
     if skills and not skills.empty?
-      skills.split(/(?:,\s*|\s+)/).each do |skill|
+      skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
                         required: true, min_years: 1, max_years: 20)
       end

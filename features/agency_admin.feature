@@ -24,6 +24,24 @@ Background: seed data added to database and log in as agency admim
   | name                      | description                         |
   | Software Engineer - RoR   | Develop website using Ruby on Rails |
 
+  Given the following job skills exist:
+  | name                      | description                         |
+  | Web Research              | Hic deleniti explicabo inventore delectus veritatis mollitia. |
+  | Visual Analysis           | Incidunt aut magni perferendis atque qui dolor.               |
+
+  Given the following companies exist:
+    | agency  | name         | website     | phone        | email            | ein        | status |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+    | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | 12-3456791 | Active |
+
+  Given the following company people exist:
+    | company      | role  | first_name | last_name | email            | password  | phone        |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+
+  Given the following jobs exist:
+  | title         | company_job_id  | shift  | fulltime | description | company      | creator          | skills    |
+  | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@widgets.com | Web Research |
+
   Given the following jobseeker exist:
   | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
   | Sam       | Seeker   | sam@gmail.com | 222-333-4444| password   |password             | 1990          |Unemployed Seeking |
@@ -299,3 +317,68 @@ Scenario: delete job specialty
   And I wait 2 seconds
   Then I should not see "Software Engineer - RoR"
   And I should see "There are no job specialties."
+
+  @selenium
+  Scenario: add job skill
+    And I click the "Job Properties" link
+    And I click the "Add Job Skill" button
+    And I wait 2 seconds
+    And I fill in "Name:" with "Test Job Skill"
+    And I fill in "Description:" with "Description of Test Job Skill"
+    And I click the "Add Skill" button
+    And I wait 2 seconds
+    Then I should see "Test Job Skill"
+    And I should see "Description of Test Job Skill"
+
+  @selenium
+  Scenario: cancel add job skill
+    And I click the "Job Properties" link
+    And I click the "Add Job Skill" button
+    And I wait 2 seconds
+    And I fill in "Name:" with "Test Job Skill"
+    And I click the "Cancel" button
+    And I wait 2 seconds
+    Then I should not see "Test Job Skill"
+    And I should not see "Description of Test Job Skill"
+
+  @selenium
+  Scenario: show job skill model validation errors
+    And I click the "Job Properties" link
+    And I click the "Add Job Skill" button
+    And I wait 2 seconds
+    And I click the "Add Skill" button
+    And I wait 2 seconds
+    Then I should see "Name can't be blank"
+    And I should see "Description can't be blank"
+    Then I fill in "Name:" with "Test Job Skill"
+    And I fill in "Description:" with "Description of Test Job Skill"
+    And I click the "Add Skill" button
+    And I wait 2 seconds
+    Then I should see "Test Job Skill"
+    And I should see "Description of Test Job Skill"
+
+  @selenium
+  Scenario: update job skill
+    And I click the "Job Properties" link
+    And I click the "Web Research" link
+    And I wait 2 seconds
+    And I fill in "Description:" with ""
+    And I click the "Update Skill" button
+    And I should see "Description can't be blank"
+    And I fill in "Description:" with "Anaytics using web data"
+    And I click the "Update Skill" button
+    And I wait 2 seconds
+    Then "Update Job Skill" should not be visible
+    And I should see "Anaytics using web data"
+
+  @selenium
+  Scenario: delete job skill not associated with a job
+    And I click the "Job Properties" link
+    And I click the link with url "/skills/2"
+    And I wait 2 seconds
+    Then I should not see "Visual Analysis"
+
+  @selenium
+  Scenario: attempt to delete job skill associated with a job
+    And I click the "Job Properties" link
+    And I should not see the "/skills/1" link
