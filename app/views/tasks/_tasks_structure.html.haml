@@ -1,4 +1,4 @@
-%div{:id => "tasks-#{task_type}", :class => 'pagination-div', :data => {:url => list_tasks_path(task_type)}}
+%div{:id => "tasks-#{task_type}", :class => 'pagination-div tasks', :data => {:url => list_tasks_path(task_type)}}
 
 - unless defined? @modal_rendered
   - @modal_rendered = true
