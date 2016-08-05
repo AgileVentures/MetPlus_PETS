@@ -55,6 +55,7 @@ if Rails.env.development? || Rails.env.staging?
     cmp = Company.new(ein: ein,
                       phone: phone,
                       email: email,
+                      job_email: email,
                       website: website,
                       name: name)
     cmp.agencies << agency
@@ -76,11 +77,12 @@ if Rails.env.development? || Rails.env.staging?
   known_company = Company.new(ein: Faker::Company.ein,
                               phone: '111-222-3333',
                               email: 'contact@widgets.com',
+                              job_email: 'hr@widgets.com',
                               website: 'www.widgets.com',
                               name: 'Widgets, Inc.',
                               status: Company::STATUS[:ACT])
   known_company.agencies << agency
-  known_company.save
+  known_company.save!
 
   15.times { create_address(known_company) }
 

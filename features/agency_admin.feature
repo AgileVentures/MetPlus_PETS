@@ -30,9 +30,9 @@ Background: seed data added to database and log in as agency admim
   | Visual Analysis           | Incidunt aut magni perferendis atque qui dolor.               |
 
   Given the following companies exist:
-    | agency  | name         | website     | phone        | email            | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-    | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | 12-3456791 | Active |
+    | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
+    | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | corp@gadgets.com | 12-3456791 | Active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
