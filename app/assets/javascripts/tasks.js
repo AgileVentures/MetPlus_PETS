@@ -103,7 +103,6 @@ var TaskModal = {
                   timeout: 5000,
                   success: function () {
                       Notification.success_notification('Task assigned');
-                      console.log("location");
                       $('.tasks').each(function () {
                         TaskManagerHolder($(this).attr('id'), "").refresh_tasks();
                       });

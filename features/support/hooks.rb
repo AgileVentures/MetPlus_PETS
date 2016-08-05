@@ -19,8 +19,3 @@ After('@javascript') do
   Capybara.reset_sessions!
   Capybara.current_driver = :rack_test
 end
-
-AfterStep('@pause') do
-  print "Press Return to continue"
-  STDIN.getc
-end
