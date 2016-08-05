@@ -253,15 +253,11 @@ RSpec.describe Task, type: :model do
       @task_jd = FactoryGirl.create(:task, :task_owner => {:user => @job_developer1})
       @task_jd_today = FactoryGirl.create(:task, :deferred_date => Date.today, :task_owner => {:user => @job_developer1})
       @task_jd_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @job_developer1})
-      @task_all_jd = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
-      @task_all_jd_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:agency => {agency: @agency, role: :JD}})
-
+      
       @task_cm = FactoryGirl.create(:task, :task_owner => {:user => @case_manager1})
       @task_cm_today = FactoryGirl.create(:task, :deferred_date => Date.today, :task_owner => {:user => @case_manager1})
       @task_cm_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @case_manager1})
-      @task_all_cm = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
-      @task_all_cm_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:agency => {agency: @agency, role: :CM}})
-
+      
       @task_aa = FactoryGirl.create(:task, :task_owner => {:user => @agency_admin1})
       @task_aa_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:user => @agency_admin1})
       @task_all_aa = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
@@ -282,19 +278,27 @@ RSpec.describe Task, type: :model do
       expect(Task.find_by_owner_user @job_seeker).to eq [@task_js]
     end
     it 'job developer user' do
-      expect(Task.find_by_owner_user @job_developer1).to eq [@task_jd, @task_jd_today, @task_all_jd]
+      expect(Task.find_by_owner_user @job_developer1).to eq [@task_jd, @task_jd_today]
     end
     it 'case manager user' do
-      expect(Task.find_by_owner_user @case_manager1).to eq [@task_cm, @task_cm_today, @task_all_cm]
+      expect(Task.find_by_owner_user @case_manager1).to eq [@task_cm, @task_cm_today]
     end
     it 'agency admin user' do
-      expect(Task.find_by_owner_user @agency_admin1).to eq [@task_aa, @task_all_aa]
+      expect(Task.find_by_owner_user @agency_admin1).to eq [@task_aa]
+    end
+    it 'agency' do
+      expect(Task.find_by_agency @agency_admin1).to eq [@task_jd, @task_jd_today,
+                                        @task_cm, @task_cm_today, @task_aa, @task_all_aa ]
     end
     it 'company admin user' do
-      expect(Task.find_by_owner_user @company_admin1).to eq [@task_ca, @task_ca_today, @task_all_ca]
+      expect(Task.find_by_owner_user @company_admin1).to eq [@task_ca, @task_ca_today]
     end
     it 'company contact user' do
-      expect(Task.find_by_owner_user @company_contact1).to eq [@task_cc, @task_all_cc]
+      expect(Task.find_by_owner_user @company_contact1).to eq [@task_cc]
+    end
+    it 'company' do
+      expect(Task.find_by_company @company_admin1).to eq [@task_ca, @task_ca_today, @task_all_ca,
+                                                                     @task_cc, @task_all_cc]
     end
   end
   describe 'Find all tasks for a owner' do
@@ -328,30 +332,35 @@ RSpec.describe Task, type: :model do
       @task_js_closed.complete
 
       @task_jd_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
+      @task_jd_new.assign @job_developer
       @task_jd_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
       @task_jd_closed.assign @job_developer
       @task_jd_closed.work_in_progress
       @task_jd_closed.complete
 
       @task_cm_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
+      @task_cm_new.assign @case_manager
       @task_cm_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
       @task_cm_closed.assign @case_manager
       @task_cm_closed.work_in_progress
       @task_cm_closed.complete
 
       @task_aa_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
+      @task_aa_new.assign @agency_admin
       @task_aa_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
       @task_aa_closed.assign @agency_admin
       @task_aa_closed.work_in_progress
       @task_aa_closed.complete
 
       @task_ca_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
+      @task_ca_new.assign @company_admin
       @task_ca_closed = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
       @task_ca_closed.assign @company_admin
       @task_ca_closed.work_in_progress
       @task_ca_closed.complete
 
       @task_cc_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
+      @task_cc_new.assign @company_contact
       @task_cc_closed = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
       @task_cc_closed.assign @company_contact
       @task_cc_closed.work_in_progress
@@ -367,11 +376,21 @@ RSpec.describe Task, type: :model do
       it 'agency admin user' do
         expect(Task.find_by_owner_user_open @agency_admin).to eq [@task_aa_new]
       end
+      it 'agency' do
+<<<<<<< HEAD
+        expect(Task.find_by_agency_open @agency_admin).to eq [@task_jd_new, @task_aa_new]
+=======
+        expect(Task.find_by_agency_open @agency_admin).to eq [@task_jd_new, @task_cm_new, @task_aa_new]
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
+      end
       it 'company admin user' do
         expect(Task.find_by_owner_user_open @company_admin).to eq [@task_ca_new]
       end
       it 'company contact user' do
         expect(Task.find_by_owner_user_open @company_contact).to eq [@task_cc_new]
+      end
+      it 'company' do
+        expect(Task.find_by_company_open @company_admin).to eq [@task_ca_new, @task_cc_new]
       end
     end
     describe 'close tasks' do
@@ -384,11 +403,21 @@ RSpec.describe Task, type: :model do
       it 'agency admin user' do
         expect(Task.find_by_owner_user_closed @agency_admin).to eq [@task_aa_closed]
       end
+      it 'agency' do
+<<<<<<< HEAD
+        expect(Task.find_by_agency_closed @agency_admin).to eq [@task_jd_closed, @task_aa_closed]
+=======
+        expect(Task.find_by_agency_closed @agency_admin).to eq [@task_jd_closed, @task_cm_closed, @task_aa_closed]
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
+      end
       it 'company admin user' do
         expect(Task.find_by_owner_user_closed @company_admin).to eq [@task_ca_closed]
       end
       it 'company contact user' do
         expect(Task.find_by_owner_user_closed @company_contact).to eq [@task_cc_closed]
+      end
+      it 'company' do
+        expect(Task.find_by_company_closed @company_admin).to eq [@task_ca_closed, @task_cc_closed]
       end
     end
   end

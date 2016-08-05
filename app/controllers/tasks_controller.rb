@@ -5,10 +5,12 @@ class TasksController < ApplicationController
 
   def index
     @task_type_t1 = 'mine-open'
+    @task_type_t3 = 'mine-assignable'
     @task_type_t2 = 'mine-closed'
     @render_modal = true
     @tasks_t1 = display_tasks @task_type_t1
     @tasks_t2 = display_tasks @task_type_t2
+    @tasks_t3 = display_tasks @task_type_t3
   end
 
   def assign

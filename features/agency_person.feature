@@ -80,7 +80,7 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
-  @selenium
+  @selenium 
   Scenario: Job Developer with tasks on home page
     Given I am on the home page
     And I login as "jane-dev@metplus.org" with password "qwerty123"
@@ -100,18 +100,18 @@ Given the following agency relations exist:
 
   @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
-    Given I am on the home page
+    Given I am on the home page   
     And I login as "aa@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'aa@metplus.org' Home page
     And I wait 2 seconds
-    And The tasks 1,2,5,6 are present
+    And The tasks 1,2,3,4,5,6 are present
     Then I press the assign button of the task 2
     And I should see "Select the user to assign the task to:"
     And I select2 "Jones, Jane" from "task_assign_select"
     Then I press "Assign"
     And I wait 1 second
     And I should see notification "Task assigned"
-    And The task 2 is not present
+    And The task 2 status is "Assigned"
 
   @selenium
   Scenario: Job developer assigns self to job seeker

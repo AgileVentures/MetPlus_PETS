@@ -103,7 +103,10 @@ var TaskModal = {
                   timeout: 5000,
                   success: function () {
                       Notification.success_notification('Task assigned');
-                      TaskManagerHolder($('#assignTaskModal_button').data('location'), "").refresh_tasks();
+                      console.log("location");
+                      $('.tasks').each(function () {
+                        TaskManagerHolder($(this).attr('id'), "").refresh_tasks();
+                      });
                       $("#assignTaskModal").modal('hide');
                   },
                   error: function (xhrObj, status, exception) {

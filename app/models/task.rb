@@ -17,17 +17,22 @@ class Task < ActiveRecord::Base
 
   scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today + 1)}
   scope :open_tasks, -> {today_tasks.where('status != ?', STATUS[:DONE])}
+  scope :new_tasks, -> {today_tasks.where('status = ?', STATUS[:NEW])}
+  scope :active_tasks, -> {today_tasks.where('status != ? and status != ?', STATUS[:DONE], STATUS[:NEW])}
   scope :closed_tasks, -> {where('status = ?', STATUS[:DONE])}
   scope :user_tasks, -> (user) {where('owner_user_id=?', user.user.id)}
-  scope :js_tasks, ->(job_seeker) {where('owner_user_id=?', job_seeker.user.id)}
-  scope :agency_person_tasks, ->(agency_person) {where('owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))',
-                                                         agency_person.user.id,
+<<<<<<< HEAD
+  scope :agency_tasks, -> (user) {where('owner_agency_id = ? or owner_user_id in (?) and owner_user_id != ?',  
+                          user.agency.id, user.agency.agency_people.map{|a| a.acting_as.id}.collect, user.id)}
+  scope :agency_person_tasks, ->(agency_person) {where('(owner_agency_id=? and owner_agency_role in (?))',
                                                          agency_person.agency.id,
                                                          agency_person.agency_roles.pluck(:role).collect{|role| AgencyRole::ROLE.key(role)})}
-  scope :company_person_tasks, ->(company_person) {where('owner_user_id=? or (owner_company_id=? and owner_company_role in (?))',
-                                                         company_person.user.id,
-                                                         company_person.company.id,
-                                                         company_person.company_roles.pluck(:role).collect{|role| CompanyRole::ROLE.key(role)})}
+=======
+  scope :agency_tasks, -> (user) {where('owner_agency_id = ? or owner_user_id in (?)',  
+                          user.agency.id, user.agency.agency_people.map{|a| a.acting_as.id}.collect)}
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
+  scope :company_tasks, -> (user) {where('owner_company_id = ? or owner_user_id in (?)',  
+                          user.company.id, user.company.company_people.map{|a| a.acting_as.id}.collect)}
 
   def task_owner
     return owner.pets_user if owner != nil
@@ -46,26 +51,59 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_owner_user user
-    return today_tasks.js_tasks(user) \
-                if user.is_a? JobSeeker
-    return today_tasks.agency_person_tasks(user) \
-                   if user.is_a? AgencyPerson
-    return today_tasks.company_person_tasks(user) \
-                   if user.is_a? CompanyPerson
+    today_tasks.user_tasks(user)
   end
 
   def self.find_by_owner_user_open user
-    return open_tasks.js_tasks(user) \
-                if user.is_a? JobSeeker
-    return open_tasks.agency_person_tasks(user) \
-                   if user.is_a? AgencyPerson
-    return open_tasks.company_person_tasks(user) \
-                   if user.is_a? CompanyPerson
+    open_tasks.user_tasks(user)
   end
 
   def self.find_by_owner_user_closed user
     closed_tasks.user_tasks(user)
   end
+
+<<<<<<< HEAD
+  def self.find_by_owner_user_assignable user
+    new_tasks.agency_person_tasks(user)
+  end
+
+=======
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
+  def self.find_by_agency user
+    today_tasks.agency_tasks(user)
+  end
+
+  def self.find_by_agency_open user
+    open_tasks.agency_tasks(user)
+  end
+
+<<<<<<< HEAD
+  def self.find_by_agency_new user
+    new_tasks.agency_tasks(user)
+  end
+
+  def self.find_by_agency_active user
+    active_tasks.agency_tasks(user)
+  end
+
+=======
+>>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
+  def self.find_by_agency_closed user
+    closed_tasks.agency_tasks(user)
+  end
+
+  def self.find_by_company user
+    today_tasks.company_tasks(user)
+  end
+  
+  def self.find_by_company_open user
+    open_tasks.company_tasks(user)
+  end
+
+  def self.find_by_company_closed user
+    closed_tasks.company_tasks(user)
+  end
+  
 
   def target
     return person unless person.nil?
