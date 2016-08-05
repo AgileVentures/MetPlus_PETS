@@ -6,17 +6,10 @@
     %i.fa.fa-pencil-square-o.fa-1
 
 - if @agency_person.is_agency_admin?(@agency)
-<<<<<<< HEAD
   %h3 Agency's Tasks that need your attention
   = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_task_new}
   %h3 Agency's Remaining Tasks
   = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_task}
-=======
-  %h3 Agency's Open Tasks
-  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @admin_task_open}
-  %h3 Agency's Closed Tasks
-  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @admin_task_closed}
->>>>>>> f4e3dc00925f2f5f445635995768a58aedb69398
 
 %h3 Your Open Tasks
 = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
