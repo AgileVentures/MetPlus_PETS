@@ -102,6 +102,44 @@ class CruncherService
 
   end
 
+  def self.match_jobs(resume_id)
+
+    # Define retry_search to true outside the begin block
+    # otherwise retry_search would be set to true everytime
+    # we retry the block. Can also set it inside the begin block
+    # like retry_search ||= true so that its set only the first
+    # time
+
+    retry_search = true
+
+    begin
+      result = RestClient.get(service_url + '/job/match/' + resume_id.to_s,
+                              { 'X-Auth-Token': auth_token })
+
+      result_hash = JSON.parse(result)
+
+      # Set matching jobs to nil if resume couldn't be found
+      matching_jobs = nil
+
+      if result_hash['resultCode'] == 'SUCCESS'
+        # May or may not contain jobs matching the resume
+        matching_jobs = result_hash['jobs']
+
+        #convert job ids returned by the matcher into ints
+        matching_jobs.transform_values! { |arr| arr.map(&:to_i) }
+
+      end
+    rescue RestClient::Unauthorized
+      self.auth_token = nil
+      if retry_search
+        retry_search = false
+        retry
+      end
+      raise
+    end
+    matching_jobs
+  end
+
   def self.auth_token
     return @@auth_token if @@auth_token
 

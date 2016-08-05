@@ -34,6 +34,11 @@ RSpec.describe CruncherService, type: :request do
         'X-Auth-Token' => JSON.parse(auth_result)['token']
         })}
 
+  let(:match_jobs_result) { RestClient.get(CruncherService.service_url +
+        '/job/match/1',
+        { 'X-Auth-Token': JSON.parse(auth_result)['token'] }
+        )}
+
 
   describe 'Initialization' do
     it 'Establishes service URL' do
@@ -147,6 +152,22 @@ RSpec.describe CruncherService, type: :request do
         expect(JSON.parse(job_result)['resultCode']).to eq 'SUCCESS'
       end
     end
+
+    describe 'match jobs' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_match_jobs
+      end
+
+      it 'returns HTTP success' do
+        expect(match_jobs_result.code).to eq 200
+      end
+
+      it 'returns success message' do
+        expect(JSON.parse(match_jobs_result)['resultCode']).to eq 'SUCCESS'
+      end
+    end
+
    end
 
   context 'CruncherService API calls' do
@@ -232,6 +253,21 @@ RSpec.describe CruncherService, type: :request do
                       to raise_error(RuntimeError)
       end
     end
+
+    describe 'match jobs' do
+
+      it 'returns matching jobs for a valid request' do
+        stub_cruncher_match_jobs
+        expect{ CruncherService.match_jobs(1).not_to be nil }
+      end
+
+      it 'returns nil for a wrong resume_id' do
+        stub_cruncher_match_jobs_fail('RESUME_NOT_FOUND')
+
+        expect { CruncherService.match_jobs(1).to be nil }
+      end
+    end
+
   end
 
   context 'Cruncher service recover expired token' do
