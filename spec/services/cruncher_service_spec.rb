@@ -39,6 +39,12 @@ RSpec.describe CruncherService, type: :request do
         { 'X-Auth-Token': JSON.parse(auth_result)['token'] }
         )}
 
+  let(:match_resumes_result) { RestClient.get(CruncherService.service_url +
+          '/curriculum/match/1',
+        { 'Accept': 'application/json',
+          'X-Auth-Token': JSON.parse(auth_result)['token'] }
+        )}
+
 
   describe 'Initialization' do
     it 'Establishes service URL' do
@@ -168,6 +174,24 @@ RSpec.describe CruncherService, type: :request do
       end
     end
 
+
+    describe 'match resumes' do
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_match_resumes
+      end
+
+      it 'returns HTTP success' do
+        expect(match_resumes_result.code).to eq 200
+      end
+
+      it 'returns success message in response' do
+        expect(JSON.parse(match_resumes_result)['resultCode']).to eq 'SUCCESS'
+      end
+
+    end
+
    end
 
   context 'CruncherService API calls' do
@@ -266,6 +290,17 @@ RSpec.describe CruncherService, type: :request do
 
         expect { CruncherService.match_jobs(1).to be nil }
       end
+    end
+
+
+    describe 'match resumes' do
+
+      it 'returns success' do
+        stub_cruncher_match_resumes
+
+        expect(CruncherService.match_resumes(1)).not_to be nil
+      end
+
     end
 
   end

@@ -41,6 +41,7 @@ class CruncherService
     end
   end
 
+
   def self.download_file(file_id)
     # Download the contents of the file which was stored in the Cruncher
     # using the file_id (e.g. resume.id).
@@ -75,6 +76,7 @@ class CruncherService
       raise
     end
   end
+
 
   def self.create_job(jobId, title, description)
 
@@ -139,6 +141,34 @@ class CruncherService
     end
     matching_jobs
   end
+
+
+  def self.match_resumes(job_id)
+
+    retry_match = true
+
+    begin
+      result = RestClient.get(service_url + '/curriculum/match/' + job_id.to_s,
+                { 'Accept': 'application/json',
+                  'X-Auth-Token': auth_token })
+      matching_resumes = JSON.parse(result)['resumes']
+
+      # convert the resume ids to integers
+      matching_resumes.transform_values! { |arr| arr.map(&:to_i) }
+
+    rescue RestClient::Unauthorized
+      if retry_match
+        self.auth_token = nil
+        retry_match = false
+        retry
+      end
+      raise
+    end
+
+    matching_resumes
+
+  end
+
 
   def self.auth_token
     return @@auth_token if @@auth_token

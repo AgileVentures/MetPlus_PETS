@@ -68,6 +68,7 @@ module ServiceStubHelpers
       stub_request(:post, CruncherService.service_url + '/job/create').
           to_raise(RuntimeError)
     end
+
     def stub_cruncher_match_jobs
       stub_request(:get, CruncherService.service_url + '/job/match/1').
         to_return(body: "{\"resultCode\": \"SUCCESS\", \"jobs\":\"{}\"}", status:200,
@@ -78,6 +79,13 @@ module ServiceStubHelpers
         to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status:200,
         headers: {'Content-Type': 'application/json'})
     end
+
+    def stub_cruncher_match_resumes
+      stub_request(:get, CruncherService.service_url + '/curriculum/match/1').
+          to_return(body: "{ \"resultCode\":\"SUCCESS\", \"resumes\":{}}", status: 200,
+          headers: { 'Content-Type': 'application/json' })
+    end
+
   end
 
 end

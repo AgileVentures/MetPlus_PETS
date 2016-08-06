@@ -45,4 +45,15 @@ RSpec.describe ResumeCruncher, type: :model do
     end
   end
 
+
+  describe 'match resumes' do
+
+    it 'returns success' do
+
+      stub_cruncher_match_resumes
+      expect(ResumeCruncher.match_resumes(1)).not_to be nil
+    end
+
+  end
+
 end
