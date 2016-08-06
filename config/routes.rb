@@ -72,10 +72,12 @@ Rails.application.routes.draw do
   resources :company_people, path: '/company_admin/company_people',
                        only: [:show, :edit, :update, :destroy]
 
-  resources :company_people do
-     get 'edit_profile', on: :member, as: :edit_profile
-     patch 'update_profile', on: :member, as: :update_profile
-     get 'home', on: :member, as: :home
+  resources :company_people, only: [] do
+    member do
+      get 'edit_profile', as: :edit_profile
+      patch 'update_profile', as: :update_profile
+      get 'home', as: :home
+    end
   end
 
   get 'company_people/:company_id/list_people/:people_type' =>
