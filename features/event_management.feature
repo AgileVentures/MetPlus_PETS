@@ -15,8 +15,8 @@ Background: seed data
   | MetPlus | JD    | Dave       | Developer | dave@metplus.org | qwerty123 |
 
   Given the following companies exist:
-  | agency  | name         | website     | phone        | email            | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456799 | Active |
+  | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456799 | Active |
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
@@ -78,6 +78,7 @@ Scenario: Company registration request in PETS
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
   | Email                          | contact@widgets.com |
+  | Job Email                      | hr@widgets.com      |
   | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
   | Website                        | www.widgets.com     |
