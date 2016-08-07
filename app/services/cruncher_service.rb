@@ -44,8 +44,8 @@ class CruncherService
   def self.download_file(file_id)
     # Download the contents of the file which was stored in the Cruncher
     # using the file_id (e.g. resume.id).
-    # Save the contents to a tempfile, and close file.
-    # Return the File instance if successful, nil otherwise.
+    # Save the contents to a Tempfile, and close file.
+    # Return the Tempfile instance if successful, nil otherwise.
 
     retry_download = true
     begin
