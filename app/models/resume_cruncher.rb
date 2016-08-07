@@ -14,4 +14,11 @@ class ResumeCruncher
     CruncherService.upload_file(file, file_name, file_id)
   end
 
+  def self.download_resume(file_id)
+    # Returns Tempfile instance if success, nil otherwise
+    # NOTE: Caller is responsible for deleting tempfile (#unlink)
+
+    CruncherService.download_file(file_id)
+  end
+
 end
