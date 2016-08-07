@@ -6,4 +6,18 @@ class JobApplication < ActiveRecord::Base
   def status_name
     status.to_s.camelcase
   end
+
+  def active?
+    super && job.status == 'active'
+  end
+
+  def accept
+    accepted!
+		reject_applications = job.job_applications.where.not(id: self.id)
+		reject_applications.each do |application| 
+			application.not_accepted!
+		end
+    job.filled
+  end
+
 end

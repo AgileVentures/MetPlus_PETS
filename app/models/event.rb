@@ -15,6 +15,7 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
+              APP_ACCEPTED:  'job_application_accepted', 
               JOB_POSTED:    'job_posted',
               JOB_REVOKED:   'job_revoked', 
               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
@@ -40,6 +41,8 @@ class Event
       evt_comp_denied(evt_obj)
     when :JS_APPLY
       evt_js_apply(evt_obj)
+    when :APP_ACCEPTED
+      evt_app_accepted(evt_obj)
     when :JOB_POSTED
       evt_job_posted(evt_obj)
     when :JOB_REVOKED
@@ -137,6 +140,24 @@ class Event
     end
 
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
+  end
+
+  def self.evt_app_accepted(evt_obj)
+    # evt_obj = job application
+    # Business rules:
+    #    Notify job seeker's job developer (email and popup)
+
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:APP_ACCEPTED],
+                   {id: evt_obj.id,
+                    jd_user_id: evt_obj.job_seeker.job_developer.user.id,
+                    job_title:   evt_obj.job.title,
+                    js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+                    })
+    NotifyEmailJob.set(wait: delay_seconds.seconds).
+                   perform_later(evt_obj.job_seeker.job_developer.user.email,
+                   EVT_TYPE[:APP_ACCEPTED],
+                   evt_obj)
   end
 
   def self.evt_jd_assigned_js(evt_obj)

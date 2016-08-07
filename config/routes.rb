@@ -132,6 +132,13 @@ Rails.application.routes.draw do
   end
   # --------------------------------------------------------------------------
 
+  # --------------------------- Job Applications -----------------------------
+  patch 'job_applications/:id/accept'    => 'job_applications#accept', 
+                                             as: :accept_application
+  get 'job_applications/:id'             => 'job_applications#show',
+                                             as: :application
+  # --------------------------------------------------------------------------
+  
   # ---------------------------- Job Seekers ---------------------------------
   resources :job_seekers do
      get 'home', on: :member, as: :home

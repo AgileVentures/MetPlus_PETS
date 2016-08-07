@@ -12,6 +12,9 @@ class NotifyEmailJob < ActiveJob::Base
     when Event::EVT_TYPE[:JS_APPLY]
       AgencyMailer.job_seeker_applied(email_addresses, evt_obj).deliver_later
 
+    when Event::EVT_TYPE[:APP_ACCEPTED]
+      AgencyMailer.job_application_accepted(email_addresses, evt_obj).deliver_later
+
     when Event::EVT_TYPE[:JD_ASSIGNED_JS]
       AgencyMailer.job_seeker_assigned_jd(email_addresses, evt_obj).deliver_later
 

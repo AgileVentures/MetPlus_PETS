@@ -1,5 +1,4 @@
 -# partial for job applications for a specific job
-
 - if @applications.empty?
   %span(style='padding-left: 10px;') None
 - else
@@ -14,8 +13,8 @@
               %th.strong Job Seeker Status
             - when :updated_at
               %th.strong Applied
-            - when :status
-              %th.strong Application Status
+            - when :action
+              %th.strong Action
     %tbody
       - @applications.each do |job_application|
         %tr
@@ -24,16 +23,19 @@
               - when :name
                 %td
                   = link_to job_application.job_seeker.full_name,
-                            job_seeker_path(job_application.job_seeker)
+                            application_path(job_application)
               - when :js_status
                 %td
                   = job_application.job_seeker.job_seeker_status.short_description
               - when :updated_at
                 %td
                   = "#{time_ago_in_words(job_application.updated_at, )} ago"
-              - when :status
+              - when :action
                 %td
-                  = job_application.status_name
+                  - if job_application.active?
+                    = link_to "accept", accept_application_path(job_application), method: :patch, class: "btn btn-default", id: "#{job_application.id}-#{job_application.status}"
+                  - else
+                    = link_to "#{job_application.status}", accept_application_path(job_application), method: :patch, class: "btn btn-default disabled", id: "#{job_application.id}-#{job_application.status}"
 
   = will_paginate @applications, param_name: 'applications_page',
                                params: {controller: 'jobs',
