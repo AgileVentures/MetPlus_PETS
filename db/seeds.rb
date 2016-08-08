@@ -266,7 +266,7 @@ if Rails.env.development? || Rails.env.staging?
   resume = Resume.new(file: file,
                       file_name: 'Admin-Assistant-Resume.pdf',
                       job_seeker_id: js1.id)
-  resume.save
+  resume.save!
 
   # Add job applications for this job seeker
   Job.limit(50).each do |job|

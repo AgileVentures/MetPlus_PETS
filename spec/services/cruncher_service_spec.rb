@@ -8,10 +8,18 @@ RSpec.describe CruncherService, type: :request do
                     {'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
                      'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD']})}
 
+  let(:testfile_pdf)     {'files/Admin-Assistant-Resume.pdf'}
+  let(:testfile_word)    {'files/Janitor-Resume.doc'}
+  let(:testfile_wordxml) {'files/Sales-Manager-Resume.docx'}
+
+  let(:download_result) {RestClient.get(CruncherService.service_url +
+        '/curriculum/1',
+        'X-Auth-Token' => JSON.parse(auth_result)['token'])}
+
   let(:upload_result) {RestClient.post(CruncherService.service_url +
         '/curriculum/upload',
-      { 'file'   => fixture_file_upload('files/Admin-Assistant-Resume.pdf'),
-        'name'   => 'Admin-Assistant-Resume.pdf',
+      { 'file'   => fixture_file_upload(testfile_pdf),
+        'name'   => testfile_pdf,
         'userId' => 'test_id' },
       { 'Accept' => 'application/json',
         'X-Auth-Token' => JSON.parse(auth_result)['token'],
@@ -75,6 +83,55 @@ RSpec.describe CruncherService, type: :request do
       end
     end
 
+    describe 'download file: PDF' do
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_file_download(testfile_pdf)
+      end
+
+      it 'returns HTTP success' do
+        expect(download_result.code).to eq 200
+      end
+
+      it 'returns file contents' do
+        file = fixture_file_upload(testfile_pdf)
+        expect(download_result).to eq file.read.force_encoding(Encoding::UTF_8)
+      end
+    end
+    describe 'download file: MS Word' do
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_file_download(testfile_word)
+      end
+
+      it 'returns HTTP success' do
+        expect(download_result.code).to eq 200
+      end
+
+      it 'returns file contents' do
+        file = fixture_file_upload(testfile_word)
+        expect(download_result).to eq file.read.force_encoding(Encoding::UTF_8)
+      end
+    end
+    describe 'download file: MS Word - XML' do
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_file_download(testfile_wordxml)
+      end
+
+      it 'returns HTTP success' do
+        expect(download_result.code).to eq 200
+      end
+
+      it 'returns file contents' do
+        file = fixture_file_upload(testfile_wordxml)
+        expect(download_result).to eq file.read.force_encoding(Encoding::UTF_8)
+      end
+    end
+
     describe 'create job' do
 
       before(:each) do
@@ -119,9 +176,9 @@ RSpec.describe CruncherService, type: :request do
       it 'returns success (true) for valid file type' do
         stub_cruncher_file_upload
 
-        file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
+        file = fixture_file_upload(testfile_pdf)
         expect(CruncherService.upload_file(file,
-                                    'Admin-Assistant-Resume.pdf',
+                                    testfile_pdf,
                                     'test_id')).to be true
       end
 
@@ -145,6 +202,19 @@ RSpec.describe CruncherService, type: :request do
       end
     end
 
+    describe 'File download' do
+      it 'returns Tempfile instance when successful' do
+        stub_cruncher_file_download(testfile_pdf)
+
+        expect(CruncherService.download_file(1).class).to be Tempfile
+      end
+      it 'returns nil if résumé is not found' do
+        stub_cruncher_file_download_notfound
+
+        expect(CruncherService.download_file(2)).to be_nil
+      end
+    end
+
     describe 'create job' do
       it 'returns success (true) for valid create job' do
         stub_cruncher_job_create
@@ -165,7 +235,7 @@ RSpec.describe CruncherService, type: :request do
   end
 
   context 'Cruncher service recover expired token' do
-    it 'retries for expired auth_token' do
+    it 'retries for expired auth_token - file upload' do
       stub_cruncher_authenticate
       stub_cruncher_file_upload_retry_auth
 
@@ -179,6 +249,19 @@ RSpec.describe CruncherService, type: :request do
                                   'Janitor-Resume.doc',
                                  'test_id')).to be true
 
+    end
+    it 'retries for expired auth_token - file download' do
+      stub_cruncher_authenticate
+      stub_cruncher_file_download_retry_auth(testfile_pdf)
+
+      CruncherService.auth_token = 'expired'
+
+      expect(CruncherService).to receive(:auth_token).
+                    twice.and_call_original
+
+      file = fixture_file_upload(testfile_pdf)
+      expect(CruncherService.download_file(1).open.read).
+                        to eq file.read.force_encoding(Encoding::UTF_8)
     end
   end
  end

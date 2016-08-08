@@ -31,6 +31,29 @@ module ServiceStubHelpers
       stub_request(:post, CruncherService.service_url + '/curriculum/upload').
           to_raise(RuntimeError)
     end
+    def stub_cruncher_file_download(testfile)
+      file = fixture_file_upload(testfile)
+
+      stub_request(:get, CruncherService.service_url + '/curriculum/1').
+          to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
+          :headers => {'Content-Disposition'=>
+                        'inline; filename="Admin-Assistant-Resume.pdf"'})
+    end
+    def stub_cruncher_file_download_notfound
+      stub_request(:get, CruncherService.service_url + '/curriculum/2').
+          to_return(body: "{\"resultCode\":\"RESUME_NOT_FOUND\",
+                            \"message\":\"Unable to find the user '2'\"}",
+                    status: 200)
+    end
+    def stub_cruncher_file_download_retry_auth(testfile)
+      file = fixture_file_upload(testfile)
+
+      stub_request(:get, CruncherService.service_url + '/curriculum/1').
+          to_raise(RestClient::Unauthorized).then.
+          to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
+          :headers => {'Content-Disposition'=>
+                        'inline; filename="Admin-Assistant-Resume.pdf"'})
+    end
     def stub_cruncher_job_create
       stub_request(:post, CruncherService.service_url + '/job/create').
           to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
