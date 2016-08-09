@@ -30,6 +30,9 @@ class ApplicationController < ActionController::Base
     stored_location_for(resource) || request.referer || root_path
   end
 
+  def redirect_back_or_default(default = root_path)
+    redirect_to (request.referer.present? ? :back : default)
+  end
 
   protected
 

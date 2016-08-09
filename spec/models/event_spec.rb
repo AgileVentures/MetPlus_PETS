@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'agency_mailer'
 include ServiceStubHelpers::Cruncher
-
+ 
 RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
@@ -20,9 +20,18 @@ RSpec.describe Event, type: :model do
   let(:evt_obj_jobpost_class) { Struct.new(:job, :agency) }
   let(:evt_obj_jobpost) { evt_obj_jobpost_class.new(job, agency) }
 
-  let(:application) do
+  let(:application) do 
     job.apply job_seeker
     job.last_application_by_job_seeker(job_seeker)
+  end
+  
+  let(:job_application) do
+    js = FactoryGirl.create(:job_seeker)
+    jd = FactoryGirl.create(:job_developer)
+    jd.agency_relations << FactoryGirl.create(:agency_relation, 
+                           job_seeker: js,
+                           agency_role_id: 1)
+    FactoryGirl.create(:job_application, job_seeker: js, job: job) 
   end
 
   before(:each) do
@@ -114,6 +123,24 @@ RSpec.describe Event, type: :model do
     it 'creates one task' do
       expect { Event.create(:JS_APPLY, application) }.
                     to change(Task, :count).by(+1)
+    end
+  end
+
+  describe 'job_application_accepted event' do
+    it 'triggers Pusher message to primary job developer' do
+      Event.create(:APP_ACCEPTED, job_application)
+      expect(Pusher).to have_received(:trigger).
+                        with('pusher_control',
+                             'job_application_accepted',
+                             {id: job_application.id,
+                              jd_user_id: job_application.job_seeker.job_developer.user.id,
+                              job_title: job.title,
+                              js_name: job_application.job_seeker.full_name(last_name_first: false)
+                              })
+    end
+    it 'sends a notification email to primary job developer' do
+      expect { Event.create(:APP_ACCEPTED, job_application) }.
+                    to change(all_emails, :count).by(+1)
     end
   end
 

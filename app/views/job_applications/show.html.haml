@@ -1,7 +1,12 @@
 .col-sm-offset-1.col-sm-10
-	.pull-right#job-show-links-id
+	.pull-right#application-show-links
 		- if @job_application.status == 'active'
-			=link_to "Accept", accept_application_path(@job_application), method: :patch, id: "accept-#{@job_application.id}-button"
+			= render partial: 'accept_modal'
+			= link_to "Accept", '#', class: "accept_link", 
+			  data: { "application-id" => "#{@job_application.id}", 
+			 				  "job-title" => "#{@job_application.job.title}", 
+			 				  "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
+			 				  "job-companyJobId" => "#{@job_application.job.company_job_id}" }
 			|
 		=link_to "Return To Applications", applications_job_path(@job_application.job_id)
 

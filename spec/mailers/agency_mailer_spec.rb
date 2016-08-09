@@ -83,6 +83,31 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
   end
 
+  describe 'Job Application accepted' do
+    let(:job) { FactoryGirl.create(:job) }
+    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) } 
+    let(:app) { FactoryGirl.create(:job_application, job_seeker: job_seeker, job: job) }
+    let(:mail) { AgencyMailer.job_application_accepted(job_developer.email, app) }
+
+    before :each do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq 'Job application accepted'
+      expect(mail.to).to eq(["#{job_developer.email}"])
+      expect(mail.from).to eq(["from@example.com"])
+    end
+    it "renders the body" do
+      expect(mail).to have_body_text("A job application is accepted:")
+    end
+    it "includes link to show job application" do
+      expect(mail).to have_body_text(/#{application_url(id: 1)}/)
+    end
+  end
+
   describe 'Job seeker assigned to job developer' do
     let(:job_developer) { FactoryGirl.create(:job_developer) }
     let(:job_seeker)    { FactoryGirl.create(:job_seeker) }

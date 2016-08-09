@@ -65,4 +65,56 @@ RSpec.describe JobApplication, type: :model do
       expect(subject.status_name).to eq 'NotAccepted'
     end
   end
+
+  describe '#active?' do
+    let(:active_job) { FactoryGirl.create(:job) }
+    let(:inactive_job) { FactoryGirl.create(:job, status: Job::STATUS[:FILLED])}
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:valid_application) { FactoryGirl.create(:job_application, 
+                              job: active_job, job_seeker: job_seeker) }
+    let(:invalid_application1) { FactoryGirl.create(:job_application, 
+                                 job: inactive_job, job_seeker: job_seeker) }
+    let(:invalid_application2) { FactoryGirl.create(:job_application, 
+                                 job: active_job, job_seeker: job_seeker, 
+                                 status: 'accepted') }
+
+    context 'with active job and active application status' do
+      it 'returns true' do
+        expect(valid_application.active?).to be true
+      end
+    end
+    context 'with inactive job and active application status' do
+      it 'returns false' do
+        expect(invalid_application1.active?).to be false
+      end
+    end
+    context 'with inactive job and inactive application status' do
+      it 'returns false' do
+        expect(invalid_application2.active?).to be false
+      end
+    end
+  end
+
+  describe '#accept' do
+    let(:active_job) { FactoryGirl.create(:job) }
+    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let(:application1) { FactoryGirl.create(:job_application, 
+                         job: active_job, job_seeker: job_seeker1) }
+    let(:application2) { FactoryGirl.create(:job_application, 
+                         job: active_job, job_seeker: job_seeker2) }
+
+    it 'updates the selected application status to be accepted' do
+      expect { application1.accept }.to change{application1.status}.from('active').to('accepted')
+    end
+    it 'updates unselected application status to be not accepted' do
+      expect { application1.accept }.to change{application1.job.job_applications.
+                                               find(application2.id).status}.
+                                               from('active').to('not_accepted')
+    end
+    it 'updates the selected job status to be filled' do
+      expect { application1.accept }.to change{application1.job.status}.from('active').to('filled')
+    end
+  end
+    
 end

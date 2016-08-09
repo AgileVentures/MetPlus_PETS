@@ -7,13 +7,9 @@ class JobApplicationsController < ApplicationController
 		unless @job_application.active? 
 			flash[:alert] = "Invalid action on inactive job application."
 		else
-			begin
-				@job_application.accept
-				Event.create(:APP_ACCEPTED, @job_application)
-				flash[:info] = "Job application accepted."
-			rescue Exception => e
-				flash[:alert] = "Unable to accept at this moment, please try again."
-			end
+			@job_application.accept
+			Event.create(:APP_ACCEPTED, @job_application) if @job_application.job_seeker.job_developer
+			flash[:info] = "Job application accepted."
 		end
 		redirect_to applications_job_url(@job_application.job)
 	end
@@ -22,7 +18,11 @@ class JobApplicationsController < ApplicationController
 	end
 
 	def find_application
-		@job_application = JobApplication.find(params[:id])
-		flash[:alert] = "Job Application Entry not found." unless @job_application
+		begin
+			@job_application = JobApplication.find(params[:id])
+		rescue
+			flash[:alert] = "Job Application Entry not found."
+			redirect_back_or_default
+		end
 	end
 end
