@@ -12,8 +12,8 @@ Background: data is added to database
     | MetPlus | JD        | Dave       | Smith     | dave@metplus.org     | qwerty123 |
 
   Given the following companies exist:
-  	| agency  | name         | website     | phone        | email            | ein        | status |
-  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+  	| agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
 
   Given the following company people exist:
   	| company      | role  | first_name | last_name | email            | password  | phone        |
@@ -32,8 +32,8 @@ Background: data is added to database
 		| june@seek.com | dave@metplus.org | JD   |
 
   Given the following jobs exist:
-    | title        | company_job_id | shift | fulltime | description | company      | creator        | skills  |
-    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com | leadership  |
+    | title        | company_job_id | shift | fulltime | description | company      | creator          |
+    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com | 
     
 	Given the following job applications exist:
 		| job title 	 | job seeker 	 | status 			|

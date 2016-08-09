@@ -25,9 +25,9 @@ Feature: Company Person Jobs View
       | CC    |
 
     Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-      | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
+      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
+      | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | Active |
 
     Given the following company addresses exist:
       | company       | street           | city    | zipcode | state      |
