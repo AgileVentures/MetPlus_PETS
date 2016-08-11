@@ -231,7 +231,6 @@ if Rails.env.development? || Rails.env.staging?
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
                                                        .join}-#{(1..9).to_a.shuffle[0..3].join}"
     year_of_birth = 2016 - r.rand(100)
-    resume = FFaker::Lorem.word
     job_seeker_status = jobseekerstatus[r.rand(3)]
 
     job_seeker = JobSeeker.create(first_name: first_name,
@@ -240,7 +239,6 @@ if Rails.env.development? || Rails.env.staging?
                      password: password,
                      year_of_birth: year_of_birth,
                      job_seeker_status: job_seeker_status,
-                     resume: resume,
                      phone: phone,
                      confirmed_at: DateTime.now,
                      address: create_address)
@@ -252,7 +250,7 @@ if Rails.env.development? || Rails.env.staging?
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                         email: 'tom@gmail.com', password: 'qwerty123',
-                year_of_birth: '1980', resume: 'text', phone: '111-222-3333',
+                year_of_birth: '1980', phone: '111-222-3333',
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
 
@@ -275,19 +273,19 @@ if Rails.env.development? || Rails.env.staging?
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
                         email: 'mary@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+                year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss2, confirmed_at: Time.now,
                       address: create_address)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                         email: 'frank@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+                year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
                         email: 'henry@gmail.com', password: 'qwerty123',
-                year_of_birth: '1970', resume: 'text', phone: '111-222-3333',
+                year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
 
