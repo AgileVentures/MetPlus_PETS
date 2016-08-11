@@ -1,8 +1,8 @@
 %div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "job-#{job.id}"}
 	%h4
 		=link_to job.title, job_path(job)
-		-if job.status == 'revoked' 
-			%span{class: 'label label-info'} Revoked
+		-if job.status != 'active' 
+			%span{class: 'label label-info'}= "#{job.status.capitalize}"
 	%h5= job.company.name
 	%small
 		= "#{time_ago_in_words(job.created_at, )} ago"

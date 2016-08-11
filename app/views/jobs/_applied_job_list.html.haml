@@ -20,7 +20,7 @@
               %th.strong Status
     %tbody
       - job_applications.each do |job_application|
-        %tr
+        %tr{id: "applications-#{job_application.id}"}
           - application_fields(application_type).each do |field|
             - case field
               - when :title

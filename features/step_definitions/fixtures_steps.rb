@@ -196,7 +196,12 @@ Given(/^the following job applications exist:$/) do |table|
     job = Job.find_by_title(hash['job title'])
     job_seeker = User.find_by_email(hash['job seeker']).actable
 
-    JobApplication.create!(job: job, job_seeker: job_seeker)
+    unless hash[:status]
+      JobApplication.create!(job: job, job_seeker: job_seeker)
+    else
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
+                         status: hash[:status])
+    end
   end
 end
 

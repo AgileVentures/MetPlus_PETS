@@ -6,6 +6,10 @@ class ApplicationController < ActionController::Base
   end
 
   protect_from_forgery with: :exception
+  def redirect_back_or_default(default = root_path)
+    redirect_to (request.referer.present? ? :back : default)
+  end
+  
   helper_method :pets_user, :current_agency, :determine_if_admin
 
   include Pundit
@@ -29,7 +33,6 @@ class ApplicationController < ActionController::Base
     end
     stored_location_for(resource) || request.referer || root_path
   end
-
 
   protected
 
