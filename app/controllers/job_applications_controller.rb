@@ -25,9 +25,5 @@ class JobApplicationsController < ApplicationController
 			redirect_back_or_default
 		end
 	end
-
-	def redirect_back_or_default(default = root_path)
-    redirect_to (request.referer.present? ? :back : default)
-  end
   
 end

@@ -4,10 +4,14 @@ include ServiceStubHelpers::Cruncher
  
 RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
-  let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
   let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:case_manager)   { FactoryGirl.create(:case_manager) }
+  let!(:case_manager)   { FactoryGirl.create(:case_manager) }
+  let(:job_seeker) do
+    js = FactoryGirl.create(:job_seeker)
+    js.assign_job_developer(job_developer, agency)
+    js
+  end
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:job)            { FactoryGirl.create(:job, company: company,
@@ -23,15 +27,6 @@ RSpec.describe Event, type: :model do
   let(:application) do 
     job.apply job_seeker
     job.last_application_by_job_seeker(job_seeker)
-  end
-  
-  let(:job_application) do
-    js = FactoryGirl.create(:job_seeker)
-    jd = FactoryGirl.create(:job_developer)
-    jd.agency_relations << FactoryGirl.create(:agency_relation, 
-                           job_seeker: js,
-                           agency_role_id: 1)
-    FactoryGirl.create(:job_application, job_seeker: js, job: job) 
   end
 
   before(:each) do
@@ -112,7 +107,7 @@ RSpec.describe Event, type: :model do
                          {job_id:  job.id,
                           js_id:   job_seeker.id,
                           js_name: job_seeker.full_name(last_name_first: false),
-                          notify_list: [company_person.user.id]})
+                          notify_list: [job_seeker.job_developer.user.id, company_person.user.id]})
     end
 
     it 'sends event notification email' do
@@ -128,18 +123,18 @@ RSpec.describe Event, type: :model do
 
   describe 'job_application_accepted event' do
     it 'triggers Pusher message to primary job developer' do
-      Event.create(:APP_ACCEPTED, job_application)
+      Event.create(:APP_ACCEPTED, application)
       expect(Pusher).to have_received(:trigger).
                         with('pusher_control',
                              'job_application_accepted',
-                             {id: job_application.id,
-                              jd_user_id: job_application.job_seeker.job_developer.user.id,
+                             {id: application.id,
+                              jd_user_id: application.job_seeker.job_developer.user.id,
                               job_title: job.title,
-                              js_name: job_application.job_seeker.full_name(last_name_first: false)
+                              js_name: application.job_seeker.full_name(last_name_first: false)
                               })
     end
     it 'sends a notification email to primary job developer' do
-      expect { Event.create(:APP_ACCEPTED, job_application) }.
+      expect { Event.create(:APP_ACCEPTED, application) }.
                     to change(all_emails, :count).by(+1)
     end
   end

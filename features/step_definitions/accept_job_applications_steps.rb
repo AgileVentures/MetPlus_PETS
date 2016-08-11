@@ -32,10 +32,23 @@ And(/^I click the "([^"]*)" confirmation$/) do |action|
 	find("a[href='/job_applications/#{@job_app.id}/#{action.downcase}']").click
 end 
 
-And(/^I should see "3" active applications for the job$/) do 
+And(/^I should see "([^"]*)" active applications for the job$/) do |count|
 	@app_ids = JobApplication.select(:id).where(status: 'active')
+	expect(@app_ids.count).to eq count.to_i
+end
+
+And(/^I should see "([^"]*)" application changes to accepted$/) do |email|
+	job_seeker = User.find_by_email(email).actable
+	@app_accepted = JobApplication.find_by(job_seeker: job_seeker)
+	within("#applications-#{@app_accepted.id}") { expect(page).to have_content("accepted") }
+end 
+
+# this step can only be used in a scenario that includes steps line:35 and line:42
+# which define @app_ids, @app_accepted
+And(/^other applications change to not accepted$/) do 
 	@app_ids.each do |app|
-		expect(page.find("#applications-#{app.id}")).to have_content("accept")
+		expect(page.find("#applications-#{app.id}")).
+		to have_content("not_accepted") unless app.id == @app_accepted.id
 	end
 end
 
@@ -53,18 +66,6 @@ And(/^I should see "([^"]*)" application is listed first$/) do |email|
 	within(".pagination-div > table > tbody > tr:first-child") { expect(page).to have_content("#{job_seeker.first_name}") }
 end
 
-And(/^I should see "([^"]*)" application changes to accepted$/) do |email|
-	job_seeker = User.find_by_email(email).actable
-	@app_accepted = JobApplication.find_by(job_seeker: job_seeker)
-	within("#applications-#{@app_accepted.id}") { expect(page).to have_content("accepted") }
-end 
-
-And(/^other applications change to not accepted$/) do 
-	@app_ids.each do |app|
-		expect(page.find("#applications-#{app.id}")).
-		to have_content("not_accepted") unless app.id == @app_accepted.id
-	end
-end
 
 And(/^I should see "([^"]*)" job changes to status filled/) do |job_title|
 	find("#job-status") { expect(page).to have_content("filled") }
