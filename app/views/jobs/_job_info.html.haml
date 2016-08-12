@@ -5,7 +5,10 @@
   %tbody
     %tr
       %td Job title:
-      %td=@job.title
+      %td#job-title=@job.title
+    %tr
+      %td Job status:
+      %td#job-status=@job.status
     %tr
       %td Location:
       - if @job.address

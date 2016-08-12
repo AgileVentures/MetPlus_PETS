@@ -105,7 +105,7 @@ Given(/^the following jobseekerstatus values exist:$/) do |table|
   end
 end
 
-Given(/^the following jobseeker exist:$/) do |table|
+Given(/^the following jobseeker(?:s?) exist:$/) do |table|
   table.hashes.each do |hash|
     jobseeker = hash.delete 'jobseeker'
     hash['actable_type'] = 'JobSeeker'
@@ -181,9 +181,9 @@ Given(/^the following jobs exist:$/) do |table|
     end
 
     job.save!
-
+    
     if skills and not skills.empty?
-      skills.split(/(?:,\s*|\s+)/).each do |skill|
+      skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
                         required: true, min_years: 1, max_years: 20)
       end
@@ -196,7 +196,12 @@ Given(/^the following job applications exist:$/) do |table|
     job = Job.find_by_title(hash['job title'])
     job_seeker = User.find_by_email(hash['job seeker']).actable
 
-    JobApplication.create!(job: job, job_seeker: job_seeker)
+    unless hash[:status]
+      JobApplication.create!(job: job, job_seeker: job_seeker)
+    else
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
+                         status: hash[:status])
+    end
   end
 end
 

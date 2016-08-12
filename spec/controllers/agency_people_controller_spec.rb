@@ -226,9 +226,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(assigns(:agency_person).as_jd_job_seeker_ids).
             to eq [job_seeker.id, adam.id]
       end
-      it 'sends notification email to JD for each job seeker' do
+      it 'sends notification emails to job seekers and to JD for each job seeker' do
         expect { patch :update, id: jd_person, agency_person: person_hash }.
-                      to change(all_emails, :count).by(+2)
+                      to change(all_emails, :count).by(+4)
       end
     end
 
@@ -242,14 +242,18 @@ RSpec.describe AgencyPeopleController, type: :controller do
         person_hash
       end
 
+      before(:each) do
+        allow(Pusher).to receive(:trigger)
+      end
+
       it 'assigns job seekers to the case manager' do
         patch :update, id: cm_person, agency_person: person_hash
         expect(assigns(:agency_person).as_cm_job_seeker_ids).
             to eq [job_seeker.id, adam.id]
       end
-      it 'sends notification email to CM for each job seeker' do
+      it 'sends notification emails to job seekers and to CM for each job seeker' do
         expect { patch :update, id: cm_person, agency_person: person_hash }.
-                      to change(all_emails, :count).by(+2)
+                      to change(all_emails, :count).by(+4)
       end
     end
 
@@ -437,20 +441,45 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #list_js_cm' do
-    
+
     let(:case_manager) { FactoryGirl.create(:case_manager) }
-    
+
     let(:job_seeker)  { FactoryGirl.create(:job_seeker, first_name: 'Bob',      last_name: 'Smith') }
-    
-      
+
+
     before(:each) do
-      
+
       sign_in case_manager
       job_seeker.assign_case_manager(case_manager,case_manager.agency)
       xhr :get, :list_js_cm, id: case_manager.id,
                 people_type: 'jobseeker-cm'
+    end
+    it 'assigns @people to collection of casemanager to jobseeker people' do
+      expect(assigns(:people)).to include job_seeker
+    end
+    it 'renders agency_people/assigned_job_seekers template' do
+      expect(response).to render_template('agency_people/_assigned_job_seekers')
+    end
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET #list_js_jd' do
+
+    let(:job_developer) { FactoryGirl.create(:job_developer) }
+
+    let(:job_seeker)  { FactoryGirl.create(:job_seeker, first_name: 'Dave',      last_name: 'Smith') }
+
+
+    before(:each) do
+
+      sign_in job_developer
+      job_seeker.assign_job_developer(job_developer,job_developer.agency)
+      xhr :get, :list_js_jd, id: job_developer.id,
+                people_type: 'jobseeker-jd'
     end
     it 'assigns @people to collection of casemanager to jobseeker people' do
       expect(assigns(:people)).to include job_seeker

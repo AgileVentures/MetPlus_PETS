@@ -16,12 +16,14 @@
   .form-group
     = label :agency, :phone, 'Phone', class: 'control-label col-sm-2'
     .col-sm-6
-      = phone_field :agency, :phone, size: 30, class: 'form-control'
+      = phone_field :agency, :phone, size: 30, class: 'form-control',
+      placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
   .form-group
     = label :agency, :fax, 'Fax', class: 'control-label col-sm-2'
     .col-sm-6
-      = phone_field :agency, :fax, size: 30, class: 'form-control'
+      = phone_field :agency, :fax, size: 30, class: 'form-control',
+        placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
   .form-group
     = label :agency, :email, 'Email', class: 'control-label col-sm-2'

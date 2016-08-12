@@ -9,7 +9,7 @@
       %h5 There are no job specialties.
   - else
     .col-sm-9
-      = render partial: 'job_properties', object: @job_categories,
+      = render partial: 'job_specialties', object: @job_categories,
                 locals: {data_type:  'job_categories',
                          partial_id: 'job_categories_table',
                          show_property_path:   :job_category_path,
@@ -32,7 +32,7 @@
       %h5 There are no job skills.
   - else
     .col-sm-9
-      = render partial: 'job_properties', object: @skills,
+      = render partial: 'job_skills', object: @skills,
                 locals: {data_type:  'skills',
                          partial_id: 'skills_table',
                          show_property_path:   :skill_path,

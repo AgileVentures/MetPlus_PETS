@@ -1,17 +1,30 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
+RSpec::Matchers.define :evt_obj do |*attributes|
+  match do |actual| 
+    if actual.is_a?(Struct)
+      attributes.each do |attribute|
+        return false unless actual.respond_to?(attribute)
+      end
+      return true
+    end
+    false
+  end
+end
+
 RSpec.describe JobsController, type: :controller do
 
   before(:example) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      allow(Pusher).to receive(:trigger)
 
       @company_person = FactoryGirl.create(:company_person)
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in @company_person
-      @job =  FactoryGirl.create(:job)
-      @job_2 = FactoryGirl.create(:job)
+      @job =  FactoryGirl.create(:job, company: @company_person.company)
+      @job_2 = FactoryGirl.create(:job, company: @company_person.company)
       @address = FactoryGirl.create(:address)
       @skill = FactoryGirl.create(:skill)
   end
@@ -26,7 +39,7 @@ RSpec.describe JobsController, type: :controller do
           shift: @job.shift,
           fulltime: @job.fulltime,
           title: @job.title,
-          company_id: @company_person.company.id,
+          company_id: @job.company.id,
           company_job_id: @job.company_job_id,
           company_person_id:  @company_person.id,
           address_id: @address.id,
@@ -53,7 +66,7 @@ RSpec.describe JobsController, type: :controller do
             shift: @job.shift,
             fulltime: @job.fulltime,
             title: @job.title,
-            company_id: @company_person.company.id,
+            company_id: @job.company.id,
             company_job_id: @job.company_job_id,
             company_person_id:  @company_person.id,
             address_id: @address.id,
@@ -344,8 +357,9 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'PATCH #update' do
 
-    let(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
+    let(:skill)      { FactoryGirl.create(:skill, name: 'test skill') }
+    let(:job3)       { FactoryGirl.create(:job, company: @company_person.company) }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job3, skill: skill)}
 
     it 'has 3 jobs and 1 job_skill at the start' do
       expect(Job.count).to eq(3)
@@ -402,8 +416,9 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'DELETE #destroy' do
     let!(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill) }
-
+    let(:job3)       { FactoryGirl.create(:job, company: @company_person.company) }
+    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job3, skill: skill)}
+   
     it 'destroys job and associated job_skill' do
       expect { delete :destroy, :id => job_skill.job.id }.
         to change(Job, :count).by -1
@@ -721,6 +736,21 @@ RSpec.describe JobsController, type: :controller do
         expect(flash[:alert]).to eq "Unable to find the job the user is trying to apply to."
       end
     end
+
+    describe 'not active job' do
+      before :each do
+        revoked_job = FactoryGirl.create(:job, status: 'revoked')
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => revoked_job.id, :user_id => job_seeker.id
+      end
+      it "redirected to list of jobs" do
+        expect(response).to redirect_to(:action => 'index')
+      end
+      it 'check set flash' do
+        expect(flash[:alert]).to eq "Unable to apply. Job has either been filled or revoked."
+      end
+    end
+
     describe 'unknown job seeker' do
       before :each do
         allow(controller).to receive(:current_user).and_return(job_seeker)
@@ -821,5 +851,50 @@ RSpec.describe JobsController, type: :controller do
         expect(flash[:alert]).to eq "You are not authorized to perform this action."
       end
     end
+  end
+
+  describe 'PATCH #revoke' do
+
+    context 'active job' do
+      before :each do
+        @job = FactoryGirl.create(:job)
+      end
+
+      it 'changes job status from active to revoked' do
+        patch :revoke, id: @job.id
+        @job.reload
+        expect(@job.status).to eq('revoked')
+      end
+
+      it 'creates a job_revoked event' do
+        expect(Event).to receive(:create).with(:JOB_REVOKED, evt_obj(:job, :agency))
+        patch :revoke, id: @job.id
+      end
+
+      it 'flash[:alert]' do
+        patch :revoke, id: @job.id
+        expect(flash[:alert]).to be_present.and eq "#{@job.title} is revoked successfully."
+      end
+
+      it 'redirects to jobs_path' do
+        patch :revoke, id: @job.id
+        expect(response).to redirect_to(jobs_path)
+      end
+    end
+
+    context 'revoked job' do
+      before :each do
+        @job = FactoryGirl.create(:job, status: 'revoked')
+        patch :revoke, id: @job.id
+      end
+
+      it 'flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Only active job can be revoked."
+      end
+
+      it 'redirects to jobs_path' do
+        expect(response).to redirect_to(jobs_path)
+      end
+    end  
   end
 end

@@ -14,7 +14,6 @@ class Job < ActiveRecord::Base
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :nice_to_have_skills, -> {where job_skills: {required: false}},
                 through: :job_skills, class_name: 'Skill', source: :skill
-  has_many   :skill_levels, through: :job_skills
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
@@ -29,9 +28,14 @@ class Job < ActiveRecord::Base
   validates_length_of   :description, maximum: 10000
   validates_presence_of :company_id
   validates_presence_of :company_person_id, allow_nil: true
-  #validates_presence_of :job_category_id
   scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
   scope :find_by_company, ->(company) {where(:company => company)}
+
+  STATUS = {ACTIVE:  'active',
+            FILLED:  'filled',
+            REVOKED: 'revoked'}
+  validates_inclusion_of :status, :in => STATUS.values,
+       :message => "must be one of: #{STATUS.values.join(', ')}"
 
   def number_applicants
     job_applications.size
@@ -40,6 +44,10 @@ class Job < ActiveRecord::Base
   def apply job_seeker
     job_seekers << job_seeker
     save!
+  end
+
+  def filled
+    update_attribute(:status, STATUS[:FILLED])
   end
 
   def last_application_by_job_seeker(job_seeker)

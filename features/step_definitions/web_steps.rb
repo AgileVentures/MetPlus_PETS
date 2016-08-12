@@ -23,6 +23,10 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^I should not see the "(.*?)" link$/) do |link|
+  expect(page.body).to_not have_link link
+end
+
 Then(/^(?:I|they) should( not)? see button "([^"]*)"$/) do |not_see, button|
   unless not_see
     expect(page).to have_button button
@@ -44,12 +48,12 @@ And(/^I press "([^"]*)"$/) do |name|
 end
 
 Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, first, last|
-  regex = /#{first}.+#{toSearch}.+#{last}/
+  regex = /#{Regexp.quote("#{first}")}.+#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
   search_text regex
 end
 
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
-  regex = /#{toSearch}.+#{last}/
+  regex = /#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
   if not_see
     expect(page.text).not_to match regex
   else
@@ -58,7 +62,7 @@ Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, 
 end
 
 Then(/^(?:I|they) should( not)? see "([^"]*)" after "([^"]*)"$/) do |not_see, toSearch, first|
-  regex = /#{first}.+#{toSearch}/
+  regex = /#{Regexp.quote("#{first}")}.+#{Regexp.quote("#{toSearch}")}/
   if not_see
     expect(page.text).not_to match regex
   else
@@ -104,6 +108,13 @@ When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
 
   # see discussion here:
   # https://github.com/teampoltergeist/poltergeist/issues/520
+end
+
+When(/^(?:I|they) click the "([^"]*)" link and switch to the new window$/) do |link|
+  new_window = window_opened_by do
+    click_link link
+  end
+  switch_to_window new_window
 end
 
 When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
@@ -218,3 +229,4 @@ end
 When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
   expect(page).to have_field(field, with: value)
 end
+

@@ -37,10 +37,15 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'agency_people/:id/list_js_cm/:people_type' => 
+  get 'agency_people/:id/list_js_cm/:people_type' =>
              'agency_people#list_js_cm', as: :list_js_cm_agency_people
-  
 
+  get 'agency_people/:id/list_js_jd/:people_type' =>
+             'agency_people#list_js_jd', as: :list_js_jd_agency_people
+
+  get 'agency_people/:id/list_js_without_jd/:people_type' => 
+              'agency_people#list_js_without_jd',as: :list_js_without_jd_agency_people
+                    
   # --------------------------------------------------------------------------
 
   # ----------------------- Company Registration -----------------------------
@@ -56,16 +61,9 @@ Rails.application.routes.draw do
 
   # ----------------------- Company ------------------------------------------
   # Most company actions can be performed by a company admin or an
-  # agency admin.  Redirect logic after actions can be different
-  # depending on which admin type is performing the action.
-  # (delete of a company can only be performed by an agency admin, but
-  # 'admin_type param is still used to conform to Rails path conventions')
+  # agency admin. Delete of a company can only be performed by an agency admin.
 
-  get    'companies/:id/:admin_type'  => 'companies#show', as: :company
-  patch  'companies/:id/:admin_type'  => 'companies#update'
-  delete 'companies/:id/:admin_type'  => 'companies#destroy'
-  get    'companies/:id/edit/:admin_type' => 'companies#edit',
-                            as: :edit_company
+  resources :companies, only: [:show, :edit, :update, :destroy]
 
   # --------------------------------------------------------------------------
 
@@ -74,10 +72,12 @@ Rails.application.routes.draw do
   resources :company_people, path: '/company_admin/company_people',
                        only: [:show, :edit, :update, :destroy]
 
-  resources :company_people do
-     get 'edit_profile', on: :member, as: :edit_profile
-     patch 'update_profile', on: :member, as: :update_profile
-     get 'home', on: :member, as: :home
+  resources :company_people, only: [] do
+    member do
+      get 'edit_profile', as: :edit_profile
+      patch 'update_profile', as: :update_profile
+      get 'home', as: :home
+    end
   end
 
   get 'company_people/:company_id/list_people/:people_type' =>
@@ -128,9 +128,17 @@ Rails.application.routes.draw do
 
   resources :jobs do
     get 'applications', on: :member, as: :applications
+    patch 'revoke', on: :member, as: :revoke
   end
   # --------------------------------------------------------------------------
 
+  # --------------------------- Job Applications -----------------------------
+  patch 'job_applications/:id/accept'    => 'job_applications#accept', 
+                                             as: :accept_application
+  get 'job_applications/:id'             => 'job_applications#show',
+                                             as: :application
+  # --------------------------------------------------------------------------
+  
   # ---------------------------- Job Seekers ---------------------------------
   resources :job_seekers do
      get 'home', on: :member, as: :home

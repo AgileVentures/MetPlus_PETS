@@ -15,14 +15,12 @@ RSpec.describe JobSkill, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :job }
     it { is_expected.to belong_to :skill }
-    it { is_expected.to belong_to :skill_level }
   end
 
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :job_id }
     it { is_expected.to have_db_column :skill_id }
-    it { is_expected.to have_db_column :skill_level_id }
     it { is_expected.to have_db_column :required }
     it { is_expected.to have_db_column :min_years }
     it { is_expected.to have_db_column :max_years }

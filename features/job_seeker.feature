@@ -14,8 +14,8 @@ Background: seed data added to database
     | thomas    | jones    | tommy@gmail.com           | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
   Given the following companies exist:
-    | agency  | name         | website     | phone        | email            | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
+    | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
@@ -144,6 +144,7 @@ Scenario: Job Developer sees job seeker's job applications
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Welcome back to PETS, John Smith"
   Then I am on the JobSeeker Show page for "tommy@gmail.com"
+  And I wait 1 second
   And I should see "Clerk"
   And I should see "Doctor"
   And I should see "Mime"
