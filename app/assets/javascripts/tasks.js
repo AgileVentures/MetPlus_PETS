@@ -3,6 +3,7 @@ var TaskManager = function (holder_id, task_type) {
     var self = this;
 
     this.load_assign_modal = function (event) {
+		    $('#task_assign_select').val('');
         var task_id = $(this).data("task-id");
         $("#task_assign_select").select2({
             placeholder: "Select the user",

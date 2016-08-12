@@ -1,7 +1,6 @@
 class JobSkill < ActiveRecord::Base
   belongs_to :job, inverse_of: :job_skills
   belongs_to :skill
-  belongs_to :skill_level
 
   validates_presence_of :job, :skill
   validates_uniqueness_of :skill_id, scope: :job_id

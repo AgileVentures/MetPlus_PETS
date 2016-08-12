@@ -15,7 +15,9 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
+              APP_ACCEPTED:  'job_application_accepted', 
               JOB_POSTED:    'job_posted',
+              JOB_REVOKED:   'job_revoked', 
               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
               CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
               JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
@@ -39,8 +41,12 @@ class Event
       evt_comp_denied(evt_obj)
     when :JS_APPLY
       evt_js_apply(evt_obj)
+    when :APP_ACCEPTED
+      evt_app_accepted(evt_obj)
     when :JOB_POSTED
       evt_job_posted(evt_obj)
+    when :JOB_REVOKED
+      evt_job_revoked(evt_obj)
     when :JD_ASSIGNED_JS
       evt_jd_assigned_js(evt_obj)
     when :CM_ASSIGNED_JS
@@ -81,8 +87,10 @@ class Event
                    EVT_TYPE[:COMP_REGISTER],
                    evt_obj)
 
-    CompanyMailer.pending_approval(evt_obj,
-                                   evt_obj.company_people[0]).deliver_now
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                     perform_later(EVT_TYPE[:COMP_REGISTER],
+                     evt_obj,
+                     evt_obj.company_people[0])
 
     Task.new_review_company_registration_task(evt_obj, evt_obj.agencies[0])
   end
@@ -91,17 +99,21 @@ class Event
     # Business rules:
     #    Send email to company contact
 
-    CompanyMailer.registration_approved(evt_obj,
-                                        evt_obj.company_people[0]).deliver_now
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                     perform_later(EVT_TYPE[:COMP_APPROVED],
+                     evt_obj,
+                     evt_obj.company_people[0])
   end
 
   def self.evt_comp_denied(evt_obj) # evt_obj = struct(company, reason)
     # Business rules:
     #    Send email to company contact
 
-    CompanyMailer.registration_denied(evt_obj.company,
-                                      evt_obj.company.company_people[0],
-                                      evt_obj.reason).deliver_now
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                  perform_later(EVT_TYPE[:COMP_DENIED],
+                  evt_obj.company,
+                  evt_obj.company.company_people[0],
+                  evt_obj.reason)
   end
 
   def self.evt_js_apply(evt_obj)  # evt_obj = job application
@@ -128,6 +140,24 @@ class Event
     end
 
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
+  end
+
+  def self.evt_app_accepted(evt_obj)
+    # evt_obj = job application
+    # Business rules:
+    #    Notify job seeker's job developer (email and popup)
+
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:APP_ACCEPTED],
+                   {id: evt_obj.id,
+                    jd_user_id: evt_obj.job_seeker.job_developer.user.id,
+                    job_title:   evt_obj.job.title,
+                    js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+                    })
+    NotifyEmailJob.set(wait: delay_seconds.seconds).
+                   perform_later(evt_obj.job_seeker.job_developer.user.email,
+                   EVT_TYPE[:APP_ACCEPTED],
+                   evt_obj)
   end
 
   def self.evt_jd_assigned_js(evt_obj)
@@ -242,6 +272,31 @@ class Event
       NotifyEmailJob.set(wait: delay_seconds.seconds).
                      perform_later(jd_emails,
                      EVT_TYPE[:JOB_POSTED],
+                     evt_obj.job)
+    end
+  end
+
+  def self.evt_job_revoked(evt_obj)
+    # evt_obj = struct(:job, :agency)
+    # Notify all job developers in agency (email and popup)
+
+    job_developers = Agency.job_developers(evt_obj.agency)
+
+    unless job_developers.empty?
+
+      jd_ids     = job_developers.collect {|jd| jd.user.id}
+      jd_emails  = job_developers.collect {|jd| jd.email}
+
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JOB_REVOKED],
+                     {job_id:       evt_obj.job.id,
+                      job_title:    evt_obj.job.title,
+                      company_name: evt_obj.job.company.name,
+                      notify_list:  jd_ids})
+
+      NotifyEmailJob.set(wait: delay_seconds.seconds).
+                     perform_later(jd_emails,
+                     EVT_TYPE[:JOB_REVOKED],
                      evt_obj.job)
     end
   end

@@ -3,9 +3,10 @@
 %div{class: "col-sm-offset-1 col-sm-10"}
 	%div{class: "pull-right", id: "job-show-links-id"}
 		-if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
-			=link_to "Delete", job_path(@job), method: :delete,
-				data: {confirm: "Are you sure you want to delete: #{@job.title}"}
-			|
+			-if @job.status == "active" 
+				=render partial: 'revoke_modal'
+				=link_to "Revoke", '#', id: 'revoke_link', data: { "job-id" => "#{@job.id}", "job-title" => "#{@job.title}", "job-companyJobId" => "#{@job.company_job_id}"  }
+				|
 			=link_to "Edit Job", edit_job_path(@job)
 			|
 		=link_to "Return To Jobs", jobs_path
@@ -16,8 +17,9 @@
 
 	= render partial: 'job_info'
 
-	- if not pets_user.nil? and policy(@job).apply?
-		=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
-					data: { :toggle => 'modal',
-									:target => '#applyJobModal'}
-		=render partial: 'apply_modal', :locals => {:job => @job}
+	-if @job.status == "active" 
+		-if not pets_user.nil? and policy(@job).apply?
+			=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
+						data: { :toggle => 'modal',
+										:target => '#applyJobModal'}
+			=render partial: 'apply_modal', :locals => {:job => @job}

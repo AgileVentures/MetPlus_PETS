@@ -16,7 +16,7 @@
         - case field
           - when :full_name
             %td.col-md-4
-              = link_to(js.full_name)
+              = link_to(js.full_name,job_seeker_path(js))
           - when :job_seeker_status_short_description
             %td.col-md-2
               = js.job_seeker_status.short_description
@@ -25,9 +25,9 @@
               = js.last_sign_in_at
          
 .row.text-center
-  = will_paginate jobseekers, param_name: 'jobseekers_cm_page',
+  = will_paginate jobseekers, param_name: 'jobseekers_page',
                             :params => {:controller => 'agency_people',
-                            :action => 'list_js_cm',
+                            :action => controller_action,
                             :id => agency_person.id,
                             :people_type => people_type}
   

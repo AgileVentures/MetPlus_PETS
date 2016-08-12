@@ -9,12 +9,10 @@ describe JobSeeker, type: :model do
   describe 'Database schema' do
     it {is_expected.to have_db_column :year_of_birth}
     it {is_expected.to have_db_column :job_seeker_status_id }
-    it {is_expected.to have_db_column :resume }
     it {is_expected.to have_db_column :address_id }
   end
   describe 'check model restrictions' do
     it {is_expected.to validate_presence_of(:year_of_birth)}
-    xit {is_expected.to validate_presence_of(:resume)}
     it {is_expected.to validate_presence_of(:job_seeker_status)}
     it {is_expected.to have_many(:agency_people).through(:agency_relations)}
     it {is_expected.to have_many(:job_applications)}

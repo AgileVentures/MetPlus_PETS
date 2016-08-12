@@ -7,18 +7,18 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
   describe "GET #show" do
     let(:company_person) do
-      $cp = FactoryGirl.create(:company_person)
-      $cp.company_roles << FactoryGirl.create(:company_role,
+      cp = FactoryGirl.create(:company_person)
+      cp.company_roles << FactoryGirl.create(:company_role,
                                 role: CompanyRole::ROLE[:CA])
-      $cp.save
-      $cp
+      cp.save
+      cp
     end
 
     let!(:company) do
-      $comp = FactoryGirl.build(:company)
-      $comp.company_people << company_person
-      $comp.save
-      $comp
+      comp = FactoryGirl.build(:company)
+      comp.company_people << company_person
+      comp.save
+      comp
     end
 
     before(:each) do
@@ -37,17 +37,17 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
   describe "DELETE #destroy" do
     let(:company_person) do
-      $cp = FactoryGirl.create(:company_person)
-      $cp.company_roles << FactoryGirl.create(:company_role,
+      cp = FactoryGirl.create(:company_person)
+      cp.company_roles << FactoryGirl.create(:company_role,
                                 role: CompanyRole::ROLE[:CA])
-      $cp.save
-      $cp
+      cp.save
+      cp
     end
     let!(:company) do
-      $comp = FactoryGirl.build(:company)
-      $comp.company_people << company_person
-      $comp.save
-      $comp
+      comp = FactoryGirl.build(:company)
+      comp.company_people << company_person
+      comp.save
+      comp
     end
 
     before(:each) do
@@ -64,20 +64,20 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
   describe 'DELETE registration also deletes associated objects' do
     let(:company_person) do
-      $cp = FactoryGirl.create(:company_person)
-      $cp.company_roles << FactoryGirl.create(:company_role,
+      cp = FactoryGirl.create(:company_person)
+      cp.company_roles << FactoryGirl.create(:company_role,
                                 role: CompanyRole::ROLE[:CA])
-      $cp.save
-      $cp
+      cp.save
+      cp
     end
     let(:address1) { FactoryGirl.create(:address) }
     let(:address2) { FactoryGirl.create(:address, city: 'Detroit') }
     let!(:company) do
-      $comp = FactoryGirl.build(:company)
-      $comp.company_people << company_person
-      $comp.addresses << address1 << address2
-      $comp.save
-      $comp
+      comp = FactoryGirl.build(:company)
+      comp.company_people << company_person
+      comp.addresses << address1 << address2
+      comp.save
+      comp
     end
     it ' delete company person(s)' do
       expect { delete :destroy, id: company }.
@@ -94,13 +94,13 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:agency)   { FactoryGirl.create(:agency) }
 
     let!(:registration_params) do
-      $params = FactoryGirl.attributes_for(:company)
-      $params[:company_people_attributes] =
+      params = FactoryGirl.attributes_for(:company)
+      params[:company_people_attributes] =
                 [FactoryGirl.attributes_for(:user)]
-      $params[:addresses_attributes] =
+      params[:addresses_attributes] =
                 [FactoryGirl.attributes_for(:address),
                  FactoryGirl.attributes_for(:address)]
-      $params
+      params
     end
 
     let!(:company_role) { FactoryGirl.create(:company_role,
@@ -181,12 +181,12 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:agency)   { FactoryGirl.create(:agency) }
 
     let!(:registration_params) do
-      $params = FactoryGirl.attributes_for(:company)
-      $params[:company_people_attributes] =
+      params = FactoryGirl.attributes_for(:company)
+      params[:company_people_attributes] =
                 [FactoryGirl.attributes_for(:user)]
-      $params[:addresses_attributes] =
+      params[:addresses_attributes] =
                 [FactoryGirl.attributes_for(:address)]
-      $params
+      params
     end
 
     # controller :create action requires a 'CA' role to be present in the DB
@@ -222,12 +222,12 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:agency)   { FactoryGirl.create(:agency) }
 
     let!(:registration_params) do
-      $params = FactoryGirl.attributes_for(:company)
-      $params[:company_people_attributes] =
+      params = FactoryGirl.attributes_for(:company)
+      params[:company_people_attributes] =
                 [FactoryGirl.attributes_for(:user)]
-      $params[:addresses_attributes] =
+      params[:addresses_attributes] =
                 [FactoryGirl.attributes_for(:address)]
-      $params
+      params
     end
 
     # controller :create action requires a 'CA' role to be present in the DB
@@ -260,15 +260,15 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:agency)   { FactoryGirl.create(:agency) }
 
     let!(:registration_params) do
-      $params = FactoryGirl.attributes_for(:company, :job_email => 'jobs@widgets.com')
-      $params[:company_people_attributes] =
+      params = FactoryGirl.attributes_for(:company)
+      params[:company_people_attributes] =
                 {'0' => FactoryGirl.attributes_for(:user,
                           :password => 'testing1234',
                           :password_confirmation => 'testing1234')}
-      $params[:addresses_attributes] =
+      params[:addresses_attributes] =
                 {'0' => FactoryGirl.attributes_for(:address),
                  '1' => FactoryGirl.attributes_for(:address)}
-      $params
+      params
     end
     let!(:prior_name) { registration_params[:name] }
 
@@ -276,20 +276,20 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                                   role: CompanyRole::ROLE[:CA])}
     let(:previous_parameters) do
       company = Company.find_by_name(prior_name)
-      $params = FactoryGirl.attributes_for(:company,
+      params = FactoryGirl.attributes_for(:company,
                                   name: 'Sprockets Corporation')
-      $params[:company_people_attributes] =
+      params[:company_people_attributes] =
           {'0' => FactoryGirl.attributes_for(:user,
                                              first_name: 'Fred', last_name: 'Flintstone',
                                              password: '', password_confirmation: '')}
-      $params[:company_people_attributes]['0'][:id] =
+      params[:company_people_attributes]['0'][:id] =
           company.company_people[0].id
-      $params[:addresses_attributes] =
+      params[:addresses_attributes] =
           {'0' => FactoryGirl.attributes_for(:address,
                                              city: 'Boston')}
-      $params[:addresses_attributes]['0'][:id] =
+      params[:addresses_attributes]['0'][:id] =
           company.addresses[0].id
-      $params
+      params
     end
     let(:company_id) {Company.find_by_name(prior_name).id}
 
@@ -384,14 +384,14 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     end
     describe 'job email field' do
-      it 'to be empty' do
+      it 'cannot be set to empty' do
         previous_parameters[:job_email] = ''
         patch :update, company: previous_parameters,
              id: company_id
         company = Company.find_by_id company_id
-        expect(company.job_email).to eq ''
+        expect(company.job_email).to eq registration_params[:job_email]
       end
-      it 'to have changed' do
+      it 'can be changed to another valid address' do
         previous_parameters[:job_email] = 'jobs@real.com'
         patch :update, company: previous_parameters,
               id: company_id

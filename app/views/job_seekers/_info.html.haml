@@ -35,7 +35,7 @@
         %strong Case Manager
       %td
         #assigned_case_manager
-          = render :partial => 'assigned_agency_person',
+          = render :partial => 'job_seekers/assigned_agency_person',
                         :locals => {person: pets_user,
                                     job_seeker: job_seeker,
                                     agency_role: 'CM'}
@@ -44,7 +44,7 @@
         %strong Job Developer
       %td
         #assigned_job_developer
-          = render :partial => 'assigned_agency_person',
+          = render :partial => 'job_seekers/assigned_agency_person',
                         :locals => {person: pets_user,
                                     job_seeker: job_seeker,
                                     agency_role: 'JD'}
