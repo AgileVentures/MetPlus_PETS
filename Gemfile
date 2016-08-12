@@ -119,4 +119,5 @@ group :production do
   gem 'pg'
   gem 'rails_12factor'
   gem 'puma'
+  gem 'airbrake', '~> 5.4'
 end
