@@ -9,5 +9,7 @@
 .col-sm-12
   %h3
     Applications for this Job
+    
+  = render partial: 'job_applications/accept_modal'
   .pagination-div{id: "applications-#{@application_type}",
                   data: {url: applications_list_path(@job, @application_type)}}

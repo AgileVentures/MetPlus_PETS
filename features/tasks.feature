@@ -20,8 +20,8 @@ Feature: Have a task system in the site
       | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
     Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Pending Registration |
+      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Pending Registration |
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
@@ -92,7 +92,7 @@ Feature: Have a task system in the site
     And I should see "Widgets Inc."
     And I click the "Widgets Inc." link
     And I wait 1 second
-    And I should see "Company Information"
+    And I should see "Company Registration Information"
 
   @selenium
   Scenario: Case Manager open and closes assign modal

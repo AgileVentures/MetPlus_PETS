@@ -263,4 +263,22 @@ body {
 .warning-text {
   color: red;
 }
+/*-- change navbar dropdown color --*/
+ul.dropdown-menu{
+    color: #ffffff;
+    background-color: #0C7BA1;
+    border:0px;
+    outline:0px;
+      
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    color: #ffffff;
+    background-color: #0C7BA1;
+}
+
+.dropdown-toggle:active, .open .dropdown-toggle {
+  background:#0C7BA1 !important; 
+  color:#ffffff !important;
+}
 /* Warning text end */

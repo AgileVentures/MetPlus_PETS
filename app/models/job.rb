@@ -14,7 +14,6 @@ class Job < ActiveRecord::Base
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :nice_to_have_skills, -> {where job_skills: {required: false}},
                 through: :job_skills, class_name: 'Skill', source: :skill
-  has_many   :skill_levels, through: :job_skills
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
@@ -45,6 +44,10 @@ class Job < ActiveRecord::Base
   def apply job_seeker
     job_seekers << job_seeker
     save!
+  end
+
+  def filled
+    update_attribute(:status, STATUS[:FILLED])
   end
 
   def last_application_by_job_seeker(job_seeker)

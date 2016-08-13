@@ -6,7 +6,11 @@ class ApplicationController < ActionController::Base
   end
 
   protect_from_forgery with: :exception
-  helper_method :pets_user, :current_agency
+  def redirect_back_or_default(default = root_path)
+    redirect_to (request.referer.present? ? :back : default)
+  end
+  
+  helper_method :pets_user, :current_agency, :determine_if_admin
 
   include Pundit
 
@@ -29,7 +33,6 @@ class ApplicationController < ActionController::Base
     end
     stored_location_for(resource) || request.referer || root_path
   end
-
 
   protected
 
@@ -86,5 +89,14 @@ class ApplicationController < ActionController::Base
         ## This branch need to be changed when we have multi agencies
         return Agency.first
       end
+    end
+
+    def determine_if_admin person
+      # returns 1) true/false depending on whether or not person is agency admin,
+      #         2) true/false depending on whether or not person is company admin
+      aa = person.is_agency_admin?(current_agency)
+      ca = aa ? false : person.is_company_admin?(@company)
+
+      return aa, ca
     end
 end

@@ -29,8 +29,8 @@ var PusherControl = {
       // Process event if I am logged in and am an agency_person
       if (Cookies('person_type') === 'AgencyPerson') {
         Notification.info_notification('Company: ' +
-            "<a href='/company_admin/companies/" +
-            data.id + "' target='_blank'>" + data.name + "</a>" +
+            "<a href='/companies/" + data.id +
+            " ' target='_blank'>" + data.name + "</a>" +
             ' has registered in PETS.');
 
       }
@@ -44,6 +44,15 @@ var PusherControl = {
             "' target='_blank'>" + data.js_name + "</a>" +
             " has applied to <a href='/jobs/" + data.job_id +
             "' target='_blank'>this job</a>");
+      }
+    });
+
+    channel.bind('job_application_accepted', function(data) {
+      if (parseInt(Cookies('user_id')) === data.jd_user_id) {
+        Notification.info_notification("Job Application: " +
+          "<a href='/job_applications/" + data.id + 
+          "' target='_blank'>" + data.job_title + " by " +
+          data.js_name + "</a>" + " is accepted.");
       }
     });
 
@@ -90,6 +99,16 @@ var PusherControl = {
             "<a href='/jobs/" + data.job_id +
             "' target='_blank'>" + data.job_title + '</a>)' +
             " posted for company: " + data.company_name);
+      }
+    });
+
+    channel.bind('job_revoked', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if ($.inArray(parseInt(Cookies('user_id')), data.notify_list) != -1) {
+        Notification.info_notification('Job (' +
+            "<a href='/jobs/" + data.job_id +
+            "' target='_blank'>" + data.job_title + '</a>)' +
+            " revoked for company: " + data.company_name);
       }
     });
   },

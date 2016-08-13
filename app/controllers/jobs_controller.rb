@@ -4,7 +4,7 @@ class JobsController < ApplicationController
   include JobApplicationsViewer
 
 	before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                :applications, :applications_list]
+                :applications, :applications_list, :revoke]
 	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy]
 	before_action :is_right_company_person, only: [:edit, :destroy, :update]
 	before_action :user_logged!, only: [:apply]
@@ -145,8 +145,15 @@ class JobsController < ApplicationController
 
 	def apply
 		@job = Job.find_by_id params[:job_id]
+
 		if @job == nil
 			flash[:alert] = "Unable to find the job the user is trying to apply to."
+			redirect_to jobs_url
+			return
+		end
+
+		if @job.status != 'active'
+			flash[:alert] = "Unable to apply. Job has either been filled or revoked."
 			redirect_to jobs_url
 			return
 		end
@@ -167,6 +174,18 @@ class JobsController < ApplicationController
 			redirect_to job_path(@job)
 		end
 	end
+
+	def revoke
+		if @job.status == 'active' && @job.update(status: 'revoked')
+			flash[:alert] = "#{@job.title} is revoked successfully."
+			obj = Struct.new(:job, :agency)
+			Event.create(:JOB_REVOKED, obj.new(@job, Agency.first))
+		else
+			flash[:alert] = "Only active job can be revoked."
+		end
+		redirect_to jobs_path
+	end
+
 
 	private
 
