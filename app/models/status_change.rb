@@ -19,16 +19,20 @@ class StatusChange < ActiveRecord::Base
                      status_change_to: entity.class.statuses[to_status])
   end
 
-  def self.status_change_time(entity, to_status)
-    # Returns time when entity transitioned to specific status.
-    # Returns nil if to_status is not found.
-    # NOTE: this assumes that an entity assume the specified status
-    #       only once in its life cycle.  If this changes, this code
-    #       must be changed as well.
+  def self.status_change_time(entity, to_status, which = :latest)
+    # Returns time(s) when entity transitioned to specific status.
+    # If 'which' == :latest, returns latest time that entity status == to_status
+    # If 'which' == :all, returns an array of times that entity status
+    #             == to_status (in ascending order)
+    # Returns nil if to_status is not found
+    # Raises exception if 'which' is invalid
 
-    change = entity.status_changes.
-        where(status_change_to: entity.class.statuses[to_status])[0]
-    return change.created_at if change
-    nil
+    change_times = entity.status_changes.
+        where(status_change_to: entity.class.statuses[to_status]).
+              order(:created_at).pluck(:created_at)
+
+    return change_times.last if which == :latest
+    return change_times      if which == :all
+    raise ArgumentError.new("Invalid 'which' argument")
   end
 end
