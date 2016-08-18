@@ -47,6 +47,14 @@ RSpec.describe NotifyEmailJob, type: :job do
       to change(Delayed::Job, :count).by(+1)
   end
 
+  it 'job application rejected event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+        perform_later('job_developer@gmail.com',
+                      Event::EVT_TYPE[:APP_REJECTED],
+                      {name: 'Joe Newseeker', id: 1}) }.
+        to change(Delayed::Job, :count).by(+1)
+  end
+
   it 'job seeker assigned to job developer event' do
     expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
                  perform_later('job_developer@gmail.com',

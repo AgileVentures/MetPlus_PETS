@@ -14,6 +14,19 @@ class JobApplicationsController < ApplicationController
 		redirect_to applications_job_url(@job_application.job)
 	end
 
+  def reject
+		unless @job_application.active?
+			flash[:alert] = "Invalid action on inactive job application."
+    else
+      @job_application.reason_for_rejection = params[:reason_for_rejection]
+      @job_application.save
+			@job_application.reject
+      Event.create(:APP_REJECTED, @job_application) if @job_application.job_seeker.job_developer
+			flash[:info] = "Job application rejected."
+		end
+		redirect_to applications_job_url(@job_application.job)
+	end
+
 	def show
 	end
 
