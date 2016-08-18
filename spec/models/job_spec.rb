@@ -148,6 +148,8 @@ RSpec.describe Job, type: :model do
 
       expect(job.save).to be false
       expect(Job.count).to eq 0
+      expect(job.errors.full_messages).
+          to include('Job could not be created in Cruncher, please try again.')
 
    end
   end
