@@ -37,8 +37,14 @@ RSpec.describe StatusChange, type: :model do
 
     it 'returns status change time for an entity' do
       StatusChange.update_status_history(ja, nil, :active)
+      sleep(1)
+      StatusChange.update_status_history(ja, :active, :accepted)
+
       expect(StatusChange.status_change_time(ja, :active)).
           to eq StatusChange.first.created_at
+
+      expect(StatusChange.status_change_time(ja, :accepted)).
+          to eq StatusChange.second.created_at
     end
   end
 
