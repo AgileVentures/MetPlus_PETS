@@ -1,4 +1,4 @@
-#acceptModal.modal.fade{:role => "dialog", :tabindex => "-1"}
+#rejectModal.modal.fade{:role => "dialog", :tabindex => "-1"}
   .modal-dialog{:role => "document"}
     .modal-content
       .modal-header
@@ -7,13 +7,16 @@
         %h4.modal-title.text-center
       .modal-body.text-center
         %p
-          Are you sure you want to accept the following application: 
+          Are you sure you want to reject the following application:
           %ul{class: "list-unstyled"}
             %li#job_seeker
             %li#title
             %li#company_job_id
+          %br
+          Please provide the reason for rejection:
+          %textarea#reason_for_rejection{class: "form-control", rows: "2"}
 
       .modal-footer
         %button.btn.btn-default{"data-dismiss" => "modal",
         :type => "button"} Cancel
-        %a.btn.btn-success#confirm_accept{rel: "nofollow", data: { method: "patch"}} Accept
+        %a.btn.btn-danger#confirm_reject{rel: "nofollow", data: { method: "patch"}} Reject

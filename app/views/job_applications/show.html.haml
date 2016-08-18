@@ -2,9 +2,16 @@
 	.pull-right#application-show-links
 		- if @job_application.status == 'active'
 			= render partial: 'accept_modal'
+			= render partial: 'reject_modal'
 			= link_to "Accept", '#', class: "accept_link", 
 			  data: { "application-id" => "#{@job_application.id}", 
 			 				  "job-title" => "#{@job_application.job.title}", 
+			 				  "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
+			 				  "job-companyJobId" => "#{@job_application.job.company_job_id}" }
+			|
+			= link_to "Reject", '#', class: "reject_link",
+  			  data: { "application-id" => "#{@job_application.id}",
+			 				  "job-title" => "#{@job_application.job.title}",
 			 				  "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
 			 				  "job-companyJobId" => "#{@job_application.job.company_job_id}" }
 			|
