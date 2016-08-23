@@ -98,9 +98,9 @@ Scenario: Company registration request in PETS
   And "jane@metplus.org" should receive an email with subject "Company registered"
   Then I am in Admin's browser
   And I should see "Company: Widgets, Inc. has registered in PETS."
-  Then I click the "Widgets, Inc." link and switch to the new window
-  And I should see "Company Information"
-  And I should see "Widgets, Inc."
+  # Then I click the "Widgets, Inc." link and switch to the new window
+  # And I should see "Company Information"
+  # And I should see "Widgets, Inc."
   Then I go to the tasks page
   And I wait for 1 second
   And I should see "Review company registration"
