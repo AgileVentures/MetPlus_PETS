@@ -25,9 +25,9 @@ module JobApplicationsViewer
   end
 
   FIELDS_IN_APPLICATION_TYPE = {
-      'my-applied': [:title, :description, :company, :updated_at, :status],
-      'js-applied': [:title, :description, :company, :updated_at, :status],
-      'job-applied': [:name, :js_status, :updated_at, :action]
+      'my-applied': [:title, :description, :company, :applied_at, :status],
+      'js-applied': [:title, :description, :company, :applied_at, :status],
+      'job-applied': [:name, :js_status, :applied_at, :action]
   }
 
   def application_fields application_type

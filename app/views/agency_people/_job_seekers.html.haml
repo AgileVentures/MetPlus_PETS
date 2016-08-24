@@ -34,7 +34,8 @@
           - if js.job_applications.empty?
             %i none
           - else
-            = "#{time_ago_in_words(js.latest_application.created_at)} ago"
+            - applied_at = js.latest_application.status_change_time(:active)
+            = "#{time_ago_in_words(applied_at)} ago"
 
 = will_paginate jobseekers
 .clearfix
