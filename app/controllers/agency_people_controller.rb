@@ -21,7 +21,6 @@ class AgencyPeopleController < ApplicationController
     @people_type_without_cm = 'jobseeker-without-cm'
     @js_without_jd = JobSeeker.js_without_jd
     @js_without_cm = JobSeeker.js_without_cm
-    #@js_without_cm = JobSeeker.paginate(:page=> params#[:js_without_cm_page], :per_page=>5).js_without_cm
     @your_jobseekers_jd = JobSeeker.your_jobseekers_jd(@agency_person)
     @your_jobseekers_cm = JobSeeker.your_jobseekers_cm(@agency_person)
   end
@@ -233,7 +232,6 @@ class AgencyPeopleController < ApplicationController
                                 controller_action:'list_js_without_cm',
                                 people_type: people_type_without_cm,
                                 agency_person: agency_person}
-   
                                                             
                                
   end
