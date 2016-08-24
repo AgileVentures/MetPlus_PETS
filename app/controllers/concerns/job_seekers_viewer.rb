@@ -23,7 +23,6 @@ module JobSeekersViewer
                                      js_without_cm
     end
 
-
   end
   
   FIELDS_IN_PEOPLE_TYPE = {
