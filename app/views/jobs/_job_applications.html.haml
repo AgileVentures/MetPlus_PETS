@@ -11,7 +11,7 @@
               %th.strong Name
             - when :js_status
               %th.strong Job Seeker Status
-            - when :updated_at
+            - when :applied_at
               %th.strong Applied
             - when :action
               %th.strong Action
@@ -29,13 +29,14 @@
                   = job_application.job_seeker.job_seeker_status.short_description
               - when :updated_at
                 %td
-                  = "#{time_ago_in_words(job_application.updated_at, )} ago"
+                  - applied_at = job_application.status_change_time(:active)
+                  = "#{time_ago_in_words(applied_at, )} ago"
               - when :action
                 %td
                   - if job_application.active?
-                    = link_to "accept", '#', class: "accept_link btn btn-default", 
-                      data: { "application-id" => "#{job_application.id}", 
-                              "job-title" => "#{job_application.job.title}", 
+                    = link_to "accept", '#', class: "accept_link btn btn-default",
+                      data: { "application-id" => "#{job_application.id}",
+                              "job-title" => "#{job_application.job.title}",
                               "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
                               "job-companyJobId" => "#{job_application.job.company_job_id}" }
                   - else

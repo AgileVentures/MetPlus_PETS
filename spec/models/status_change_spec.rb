@@ -1,5 +1,16 @@
 require 'rails_helper'
 
+class TestEntity < ActiveRecord::Base
+  # This class allows for testing of StatusChange.  It is piggy-backing
+  # on the job_applications table since the tests require the instantiation
+  # of the enum :status field in the DB
+  self.table_name = 'job_applications'
+
+  enum status: [:hello, :goodbye, :still_here]
+
+  has_many :status_changes, as: :entity, dependent: :destroy
+end
+
 RSpec.describe StatusChange, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
@@ -27,53 +38,54 @@ RSpec.describe StatusChange, type: :model do
   end
 
   describe 'Class methods' do
-    let(:ja1) { FactoryGirl.create(:job_application) }
-    let(:ja2) { FactoryGirl.create(:job_application) }
+    let(:entity1) { TestEntity.create }
+    let(:entity2) { TestEntity.create }
 
     it 'adds a status change record for an entity' do
-      expect{ StatusChange.update_status_history(ja1, nil, :active) }.
+      expect{ StatusChange.update_status_history(entity1, nil, :hello) }.
             to change(StatusChange, :count).by 1
-      expect(ja1.status_changes.count).to eq 1
+      expect(entity1.status_changes.count).to eq 1
     end
 
     it 'returns status change time for an entity' do
-      StatusChange.update_status_history(ja1, nil, :active)
+      StatusChange.update_status_history(entity1, nil, :hello)
       sleep(1)
-      StatusChange.update_status_history(ja2, nil, :active)
-      StatusChange.update_status_history(ja1, :active, :accepted)
+      StatusChange.update_status_history(entity2, nil, :hello)
+      
+      StatusChange.update_status_history(entity1, :hello, :goodbye)
       sleep(1)
-      StatusChange.update_status_history(ja2, :active, :accepted)
+      StatusChange.update_status_history(entity2, :hello, :still_here)
 
-      expect(StatusChange.status_change_time(ja1, :active)).
+      expect(StatusChange.status_change_time(entity1, :hello)).
           to eq StatusChange.first.created_at
 
-      expect(StatusChange.status_change_time(ja1, :accepted)).
+      expect(StatusChange.status_change_time(entity1, :goodbye)).
           to eq StatusChange.third.created_at
 
-      expect(StatusChange.status_change_time(ja2, :active)).
+      expect(StatusChange.status_change_time(entity2, :hello)).
           to eq StatusChange.second.created_at
-      expect(StatusChange.status_change_time(ja2, :accepted)).
+      expect(StatusChange.status_change_time(entity2, :still_here)).
           to eq StatusChange.last.created_at
     end
 
     it 'returns an array of times for multiple occurences of status' do
-      t1 = StatusChange.update_status_history(ja1, nil, :active).
+      t1 = StatusChange.update_status_history(entity1, nil, :hello).
                       last.created_at
-      t2 = StatusChange.update_status_history(ja1, :active, :accepted).
+      t2 = StatusChange.update_status_history(entity1, :hello, :goodbye).
                       last.created_at
-      t3 = StatusChange.update_status_history(ja1, :accepted, :active).
+      t3 = StatusChange.update_status_history(entity1, :goodbye, :hello).
                       last.created_at
 
-      change_times = StatusChange.status_change_time(ja1, :active, :all)
+      change_times = StatusChange.status_change_time(entity1, :hello, :all)
 
       expect(change_times).to eq [t1, t3]
     end
 
     it 'raises exception with invalid time(s) selector' do
-      StatusChange.update_status_history(ja1, nil, :active)
-      StatusChange.update_status_history(ja1, :active, :accepted)
+      StatusChange.update_status_history(entity1, nil, :hello)
+      StatusChange.update_status_history(entity1, :hello, :good_bye)
 
-      expect {StatusChange.status_change_time(ja1, :active, :unknown)}.
+      expect {StatusChange.status_change_time(entity1, :hello, :unknown)}.
                   to raise_error(ArgumentError, "Invalid 'which' argument")
     end
   end
