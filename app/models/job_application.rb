@@ -6,7 +6,7 @@ class JobApplication < ActiveRecord::Base
   has_many :status_changes, as: :entity, dependent: :destroy
 
   after_create do
-    StatusChange.update_status_history(self, nil, :active)
+    StatusChange.update_status_history(self, :active)
   end
 
   def status_name
@@ -23,11 +23,11 @@ class JobApplication < ActiveRecord::Base
 
   def accept
     accepted!
-    StatusChange.update_status_history(self, :active, :accepted)
+    StatusChange.update_status_history(self, :accepted)
 		reject_applications = job.job_applications.where.not(id: self.id)
 		reject_applications.each do |application|
 			application.not_accepted!
-      StatusChange.update_status_history(application, :active, :not_accepted)
+      StatusChange.update_status_history(application, :not_accepted)
 		end
     job.filled
   end

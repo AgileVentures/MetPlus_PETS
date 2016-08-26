@@ -35,7 +35,7 @@ class Job < ActiveRecord::Base
   has_many :status_changes, as: :entity, dependent: :destroy
 
   after_create do
-    StatusChange.update_status_history(self, nil, :active)
+    StatusChange.update_status_history(self, :active)
   end
 
   def number_applicants
@@ -53,12 +53,12 @@ class Job < ActiveRecord::Base
 
   def filled
     update_attribute(:status, :filled)
-    StatusChange.update_status_history(self, :active, :filled)
+    StatusChange.update_status_history(self, :filled)
   end
 
   def revoked
     if update_attribute(:status, :revoked)
-      StatusChange.update_status_history(self, :active, :revoked)
+      StatusChange.update_status_history(self, :revoked)
       return true
     end
     false
