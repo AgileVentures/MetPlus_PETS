@@ -18,7 +18,7 @@
 	= render partial: 'job_info'
 	
 	%div{id: 'apply_job'}
-	-if @job.status == "active" 
+	-if pets_user && @job.status == "active"
 		-if pets_user.is_job_developer?(current_agency)
 			=link_to 'Click Here to Submit an Application for Job Seeker', '#', 
 								class: 'col-sm-offset-4',
