@@ -1,4 +1,4 @@
-Feature: Apply to a job
+Feature: Job developer submit application for his job seeker
 
 As a job developer
 I want to apply a job for my job seeker
@@ -11,7 +11,6 @@ Background: data is added to database
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | JD,CM | Jane       | Jones     | jane@metplus.org | qwerty123 |
-  | MetPlus | CM    | Mike       | Manager   | mike@metplus.org | qwerty123 |
 	
 	Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
@@ -37,36 +36,30 @@ Background: data is added to database
 	| john.seeker@places.com | jane@metplus.org | JD   |
 	| june.seeker@places.com | jane@metplus.org | JD   |
 	| july.seeker@places.com | jane@metplus.org | CM   |
-	| john.seeker@places.com | mike@metplus.org | CM   |
 
-	@selenium
-	Scenario: Job developer apply for his job seeker
+	@javascript
+	Scenario: Successful application for his job seeker
 		When I am in Company Admin's browser
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
-    Then I should see "Signed in successfully."
 
     When I am in Job Seeker's browser
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
-    Then I should see "Signed in successfully"
 
   	Then I am in Job Developer's browser
 	  Given I am on the home page
 	  And I login as "jane@metplus.org" with password "qwerty123"
-	  Then I should see "Signed in successfully."
 
 		Then I visit the jobs page
 		Then I click the "software developer" link
 		Then I click the "Click Here to Submit an Application for Job Seeker" link
     And I should see "Select your job seeker for the above job:"
-    And I wait 1 second
     Then I select2 "Seeker, John" from "jd_apply_job_select"
     Then I press "Proceed"
     And I wait 1 second
     And I should see "John Seeker"
     Then I press "Apply Now"
-    And I wait 1 second
     And I should see "Job is successfully applied for Seeker, John"
 
     Then I am in Job Seeker's browser
@@ -83,6 +76,24 @@ Background: data is added to database
     And I am on the Company Person 'ca@widgets.com' Home page
     And I should see "Review job application"
     And I should see "Job: software developer"
+
+  Scenario: job developer not logged in
+    Given I am on the home page
+    And I visit the jobs page
+    Then I click the "software developer" link
+    And I should not see "Click Here to Submit an Application for Job Seeker"
+
+  @javascript
+  Scenario: job developer cannot apply for his job seeker with CM role
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+
+    Then I visit the jobs page
+    Then I click the "software developer" link
+    Then I click the "Click Here to Submit an Application for Job Seeker" link
+    Then I cannot select2 "Seeker, July" from "jd_apply_job_select"
+    
+
 
 		
 
