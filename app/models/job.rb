@@ -62,7 +62,7 @@ class Job < ActiveRecord::Base
         end
 
       rescue
-        errors.add(:job, 'could not be created, please try again')
+        errors.add(:job, 'could not be created in Cruncher, please try again.')
         raise ActiveRecord::RecordInvalid.new(self)
       end
   end

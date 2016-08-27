@@ -99,6 +99,7 @@ Scenario: Company registration request in PETS
   Then I am in Admin's browser
   And I should see "Company: Widgets, Inc. has registered in PETS."
   Then I click the "Widgets, Inc." link and switch to the new window
+  And I wait 2 seconds
   And I should see "Company Information"
   And I should see "Widgets, Inc."
   Then I go to the tasks page

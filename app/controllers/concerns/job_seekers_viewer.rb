@@ -17,8 +17,11 @@ module JobSeekersViewer
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
                                      js_without_jd
+    when 'jobseeker-without-cm'
+      return  JobSeeker.paginate(page: params[:jobseekers_page],
+                                     per_page: per_page).
+                                     js_without_cm
     end
-
 
   end
   
@@ -26,7 +29,11 @@ module JobSeekersViewer
        'jobseeker-cm':[:full_name, :job_seeker_status_short_description,:last_sign_in_at],
        'jobseeker-jd':[:full_name, :job_seeker_status_short_description,:last_sign_in_at],
        'jobseeker-without-jd':
+[:full_name, :job_seeker_status_short_description,:last_sign_in_at],
+       'jobseeker-without-cm':
 [:full_name, :job_seeker_status_short_description,:last_sign_in_at]
+
+
 
 }
 
