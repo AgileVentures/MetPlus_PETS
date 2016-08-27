@@ -1,17 +1,18 @@
 require 'rails_helper'
 require 'agency_mailer'
 include ServiceStubHelpers::Cruncher
- 
+
 RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
   let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
   let!(:case_manager)   { FactoryGirl.create(:case_manager) }
-  let(:job_seeker) do
+  let!(:job_seeker) do
     js = FactoryGirl.create(:job_seeker)
     js.assign_job_developer(job_developer, agency)
     js
   end
+  let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:job)            { FactoryGirl.create(:job, company: company,
@@ -24,10 +25,12 @@ RSpec.describe Event, type: :model do
   let(:evt_obj_jobpost_class) { Struct.new(:job, :agency) }
   let(:evt_obj_jobpost) { evt_obj_jobpost_class.new(job, agency) }
 
-  let(:application) do 
+  let(:application) do
     job.apply job_seeker
     job.last_application_by_job_seeker(job_seeker)
   end
+
+  let(:testfile_resume) { 'files/Janitor-Resume.doc'}
 
   before(:each) do
     allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
@@ -98,6 +101,10 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'jobseeker_applied event' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_file_download(testfile_resume)
+    end
 
     it 'triggers a Pusher message' do
       Event.create(:JS_APPLY, application)
@@ -110,9 +117,9 @@ RSpec.describe Event, type: :model do
                           notify_list: [job_seeker.job_developer.user.id, company_person.user.id]})
     end
 
-    it 'sends event notification email' do
+    it 'sends event notification email and application received email' do
       expect { Event.create(:JS_APPLY, application) }.
-                    to change(all_emails, :count).by(+1)
+                    to change(all_emails, :count).by(+2)
     end
 
     it 'creates one task' do

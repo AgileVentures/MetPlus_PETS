@@ -21,4 +21,11 @@ class CompanyMailerPreview < ActionMailer::Preview
             "Your EIN is not valid and we think you're a scam operation.")
   end
 
+  def application_received
+    company = Company.last
+    job_application = JobApplication.last
+    CompanyMailer.application_received(company, job_application,
+        "#{Rails.root}/spec/fixtures/files/Janitor-Resume.doc")
+  end
+
 end

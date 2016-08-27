@@ -1,7 +1,8 @@
 class CompanyMailerJob < ActiveJob::Base
   queue_as :default
 
-  def perform(evt_type, company, company_person, reason = nil)
+  def perform(evt_type, company, company_person, reason = nil, application = nil,
+    resume_file_path = nil)
     case evt_type
       when Event::EVT_TYPE[:COMP_REGISTER]
         CompanyMailer.pending_approval(company, company_person).deliver_later
@@ -9,6 +10,8 @@ class CompanyMailerJob < ActiveJob::Base
         CompanyMailer.registration_approved(company, company_person).deliver_later
       when Event::EVT_TYPE[:COMP_DENIED]
         CompanyMailer.registration_denied(company, company_person, reason).deliver_later
+      when Event::EVT_TYPE[:JS_APPLY]
+        CompanyMailer.application_received(company, application, resume_file_path).deliver_later
     end
   end
 

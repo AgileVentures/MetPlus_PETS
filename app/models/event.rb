@@ -15,9 +15,9 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
-              APP_ACCEPTED:  'job_application_accepted', 
+              APP_ACCEPTED:  'job_application_accepted',
               JOB_POSTED:    'job_posted',
-              JOB_REVOKED:   'job_revoked', 
+              JOB_REVOKED:   'job_revoked',
               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
               CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
               JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
@@ -132,12 +132,24 @@ class Event
                       js_id:   evt_obj.job_seeker.id,
                       js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                       notify_list: notify_list[0]})
-
       NotifyEmailJob.set(wait: delay_seconds.seconds).
                      perform_later(notify_list[1],
                      EVT_TYPE[:JS_APPLY],
                      evt_obj)
     end
+
+    # Download resume from the Cruncher
+    resume_id = evt_obj.job_seeker.resumes[0].id
+    temp_file = ResumeCruncher.download_resume(resume_id)
+
+    # Send mail to the company with the attached resume
+    CompanyMailerJob.set(wait: delay_seconds.seconds).
+                     perform_later(EVT_TYPE[:JS_APPLY],
+                      evt_obj.job.company,
+                      nil, nil, evt_obj, temp_file.path)
+
+    # Remove the temp file
+    temp_file.unlink
 
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
   end

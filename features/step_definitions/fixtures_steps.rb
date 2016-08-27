@@ -164,6 +164,16 @@ Given(/^the following tasks exist:$/) do |table|
   end
 end
 
+Given(/^the following resume exist:$/) do |table|
+  table.hashes.each do |hash|
+    job_seeker = JobSeeker.find_by(email: hash[:job_seeker])
+    resume = FactoryGirl.create(:resume,
+                                file_name: hash[:file_name],
+                                job_seeker: job_seeker)
+  end
+end
+
+
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
     company_name  = hash.delete 'company'
@@ -181,7 +191,7 @@ Given(/^the following jobs exist:$/) do |table|
     end
 
     job.save!
-    
+
     if skills and not skills.empty?
       skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),

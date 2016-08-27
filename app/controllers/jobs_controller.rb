@@ -170,6 +170,7 @@ class JobsController < ApplicationController
 			@job.apply @job_seeker
 			Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
 		rescue Exception => e
+			puts "Exception", e
 			flash[:alert] = "Unable to apply at this moment, please try again."
 			redirect_to job_path(@job)
 		end
