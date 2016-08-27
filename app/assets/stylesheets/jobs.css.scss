@@ -114,3 +114,9 @@ $state-danger-text: #a94442;
     	color: $white;
     }
 }
+
+/* Scrollable fixed height modal */
+.modal .modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+}

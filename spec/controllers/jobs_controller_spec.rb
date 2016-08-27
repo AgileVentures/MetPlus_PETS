@@ -767,7 +767,7 @@ RSpec.describe JobsController, type: :controller do
         expect(flash[:alert]).to eq "Unable to find the user who wants to apply."
       end
     end
-    describe 'successful application' do
+    describe 'successful application as job seeker' do
       before :each do
         allow(Pusher).to receive(:trigger)
 
@@ -793,7 +793,7 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JS_APPLY, application)
       end
     end
-    describe 'error applications' do
+    describe 'error applications as job seeker' do
       let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
       before :each do
         expect(Job).to receive(:find_by_id).and_return(job)
@@ -812,6 +812,45 @@ RSpec.describe JobsController, type: :controller do
         should set_flash
         expect(flash[:alert]).to be_present
         expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
+      end
+    end
+    describe 'successful application as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        allow(Pusher).to receive(:trigger)
+        allow(Event).to receive(:create).and_call_original
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'job applicantion is created' do
+        @job.reload
+        expect(@job.job_seekers).to include job_seeker
+      end
+      it 'creates :JD_APPLY event' do
+        application = @job.job_applications.last
+        expect(Event).to have_received(:create).with(:JD_APPLY, application)
+      end
+      it 'show flash[:info]' do
+        expect(flash[:info]).to be_present.and eq "Job is successfully applied for #{job_seeker.full_name}"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
+      end
+    end
+    describe 'invalid application as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'show flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Invalid application for not your job seekers"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
       end
     end
     describe 'user not logged in' do

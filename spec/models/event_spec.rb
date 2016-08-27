@@ -121,6 +121,28 @@ RSpec.describe Event, type: :model do
     end
   end
 
+  describe 'job_applied_by_job_developer event' do
+   
+    it 'triggers a Pusher message' do
+      Event.create(:JD_APPLY, application)
+      expect(Pusher).to have_received(:trigger).
+                    with('pusher_control',
+                         'job_applied_by_job_developer',
+                         {job_id:  job.id,
+                          js_user_id:   job_seeker.user.id})
+    end
+
+    it 'sends event notification email' do
+      expect { Event.create(:JD_APPLY, application) }.
+                    to change(all_emails, :count).by(+1)
+    end
+
+    it 'creates one task' do
+      expect { Event.create(:JD_APPLY, application) }.
+                    to change(Task, :count).by(+1)
+    end
+  end
+
   describe 'job_application_accepted event' do
     it 'triggers Pusher message to primary job developer' do
       Event.create(:APP_ACCEPTED, application)
