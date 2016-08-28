@@ -51,7 +51,7 @@ var PusherControl = {
       // Process event if I am logged in and I am in notify list
       if (parseInt(Cookies('user_id')) === data.js_user_id) {
         Notification.info_notification('Your job developer ' +
-            " has applied <a href='/jobs/" + data.job_id +
+            " has applied to <a href='/jobs/" + data.job_id +
             "' target='_blank'>this job</a>" + ' for you.');
       }
     });

@@ -105,7 +105,8 @@ class JobSeekersController < ApplicationController
   def preview_info
     raise 'Unsupported request' if not request.xhr?
     @jobseeker = JobSeeker.find(params[:id])
-    render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker }
+    render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
+                                                   preview_mode: true }
   end
 
   def applied_jobs
