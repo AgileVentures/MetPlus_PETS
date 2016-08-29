@@ -824,7 +824,7 @@ RSpec.describe JobsController, type: :controller do
         allow(controller).to receive(:current_user).and_return(job_developer)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
-      it 'job applicantion is created' do
+      it 'creates a job application' do
         @job.reload
         expect(@job.job_seekers).to include job_seeker
       end
@@ -847,7 +847,7 @@ RSpec.describe JobsController, type: :controller do
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it 'show flash[:alert]' do
-        expect(flash[:alert]).to be_present.and eq "Invalid application for not your job seekers"
+        expect(flash[:alert]).to be_present.and eq "Invalid application: You are not the Job Developer for this job seeker"
       end
       it "redirect to job " do
         expect(response).to redirect_to(job_path(@job))

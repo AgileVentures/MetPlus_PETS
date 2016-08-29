@@ -54,7 +54,7 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     end
     it "renders the body" do
       expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
-      expect(mail).to have_body_text("has applied for you the job")
+      expect(mail).to have_body_text("has submitted an application on your behalf to the job:")
     end
     it "includes link to show job" do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)

@@ -19,14 +19,14 @@ class JobSeekerMailer < ApplicationMailer
   end
 
   def job_applied_by_job_developer(job_seeker, job_developer, job)
-    send_job_seeker_mail(job_seeker: job_seeker, job_developer: job_developer, job: job)
+    send_job_seeker_mail(job_seeker: job_seeker, job_developer: job_developer, 
+                         job: job, template: 'job_applied_by_job_developer')
   end
 
   private
 
   def send_job_seeker_mail(options = {})
-    # user template name as stated or the previous method name
-    template = options.delete(:template) || caller_locations(1,1)[0].label
+    template = options.delete(:template)
     options.each { |key, value| instance_variable_set("@#{key}", value) }
     mail to: options[:job_seeker].email, template_name: template
   end

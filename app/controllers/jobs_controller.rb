@@ -181,7 +181,7 @@ class JobsController < ApplicationController
 			flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
 			redirect_to job_path(@job)
 		else
-			flash[:alert] = "Invalid application for not your job seekers"
+			flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
 			redirect_to job_path(@job)
 		end
 	

@@ -149,6 +149,7 @@ class Event
     # Job is applied by job developer for his job seeker
     # Business rules:
     #    Notify job seeker
+    #    Notify company contact associated with the job
     #    Create task for 'job application' (application to be reviewed)
 
     Pusher.trigger('pusher_control',
@@ -159,6 +160,20 @@ class Event
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                     perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
                                   evt_obj.job_seeker.job_developer, evt_obj.job)
+
+    if evt_obj.job.company_person
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JS_APPLY],
+                     {job_id:  evt_obj.job.id,
+                      js_id:   evt_obj.job_seeker.id,
+                      js_name: evt_obj.job_seeker.full_name(last_name_first: false),
+                      notify_list: [evt_obj.job.company_person.user.id]})
+
+      NotifyEmailJob.set(wait: delay_seconds.seconds).
+                       perform_later([evt_obj.job.company_person.user.email],
+                       EVT_TYPE[:JS_APPLY],
+                       evt_obj)
+    end
 
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
   end

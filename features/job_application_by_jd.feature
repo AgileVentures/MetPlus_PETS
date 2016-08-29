@@ -1,7 +1,7 @@
 Feature: Job developer submit application for his job seeker
 
 As a job developer
-I want to apply a job for my job seeker
+I want to apply to a job for my job seeker
 
 Background: data is added to database 
 
@@ -37,7 +37,7 @@ Background: data is added to database
 	| june.seeker@places.com | jane@metplus.org | JD   |
 	| july.seeker@places.com | jane@metplus.org | CM   |
 
-	@javascript
+	@selenium
 	Scenario: Successful application for his job seeker
 		When I am in Company Admin's browser
     Given I am on the home page
@@ -63,19 +63,25 @@ Background: data is added to database
     And I should see "Job is successfully applied for Seeker, John"
 
     Then I am in Job Seeker's browser
-    And I should see "Your job developer has applied this job for you"
+    And I should see "Your job developer has applied to this job for you"
     Then "john.seeker@places.com" should receive an email with subject "Job applied by job developer"
     When "john.seeker@places.com" opens the email
     Then they should see "your job developer," in the email body
     Then they should see "Jane Jones" in the email body
-    Then they should see "has applied for you the job:" in the email body
+    Then they should see "has submitted an application on your behalf to the job:" in the email body
     Then they should see "software developer" in the email body
-    Then they should see ", in company: Widgets Inc." in the email body
+    Then they should see "in company: Widgets Inc." in the email body
 
     Then I am in Company Admin's browser
+    And I should see "Job Seeker: John Seeker has applied to this job"
     And I am on the Company Person 'ca@widgets.com' Home page
     And I should see "Review job application"
     And I should see "Job: software developer"
+    Then "ca@widgets.com" should receive an email with subject "Job seeker applied"
+    When "ca@widgets.com" opens the email
+    Then they should see "A job seeker has applied to this job:" in the email body
+    And "ca@widgets.com" follows "software developer" in the email
+    Then they should see "Widgets Inc."
 
   Scenario: job developer not logged in
     Given I am on the home page

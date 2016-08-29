@@ -56,7 +56,6 @@ RSpec.describe AgencyMailer, type: :mailer do
                                               company_person: company_person) }
     let(:application) do
       job.apply job_seeker
-      job.last_application_by_job_seeker(job_seeker)
     end
 
     let(:mail) { AgencyMailer.job_seeker_applied(agency_person.email,

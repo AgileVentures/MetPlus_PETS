@@ -8,13 +8,13 @@
 %p
   This is to let you know that
   %strong
-    your job developer,
+    your job developer, &nbsp
     = mail_to(@job_developer.email,
       "#{@job_developer.full_name(last_name_first: false)}",
       subject: "My Job Application")
-    has applied for you the job: 
+    , &nbsp has submitted an application on your behalf to the job: &nbsp
     = link_to @job.title, job_url(id: @job.id)
-    , in company: #{@job.company.name}
+    , &nbsp in company: #{@job.company.name}
 %p
   In the meantime, if you have any other questions about the use of PETS
   then please contact the PETS administrator at:
