@@ -6,22 +6,21 @@ module JobSeekersViewer
     when 'jobseeker-cm'
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
-
-                                     your_jobseekers_cm(agency_person)
+                                     job_seekers_as_case_manager(agency_person)
     
     when 'jobseeker-jd'
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
-                                     your_jobseekers_jd(agency_person)
+                                     job_seekers_as_job_developer(agency_person)
     
     when 'jobseeker-without-jd'
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
-                                     js_without_jd
+                                     job_seekers_without_job_developer
     when 'jobseeker-without-cm'
       return  JobSeeker.paginate(page: params[:jobseekers_page],
                                      per_page: per_page).
-                                     js_without_cm
+                                     job_seekers_without_case_manager
 
     end
 
