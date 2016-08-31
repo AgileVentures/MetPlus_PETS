@@ -1,6 +1,5 @@
 class AddStatusToJob < ActiveRecord::Migration
   def change
-    add_column :jobs, :status, :string,
-                      default: Job::STATUS[:ACTIVE]
+    add_column :jobs, :status, :string
   end
 end

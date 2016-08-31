@@ -68,7 +68,7 @@ RSpec.describe JobApplication, type: :model do
 
   describe '#active?' do
     let(:active_job) { FactoryGirl.create(:job) }
-    let(:inactive_job) { FactoryGirl.create(:job, status: Job::STATUS[:FILLED])}
+    let(:inactive_job) { FactoryGirl.create(:job, status: :filled) }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:valid_application) { FactoryGirl.create(:job_application,
                               job: active_job, job_seeker: job_seeker) }
@@ -118,7 +118,8 @@ RSpec.describe JobApplication, type: :model do
   end
 
   describe 'tracking status change history' do
-    let!(:ja1) { FactoryGirl.create(:job_application) }
+    let(:job)  { FactoryGirl.create(:job) }
+    let!(:ja1) { FactoryGirl.create(:job_application, job: job) }
 
     before(:each) do
       sleep(1)
@@ -126,16 +127,16 @@ RSpec.describe JobApplication, type: :model do
     end
 
     it 'adds a status change record for a new application' do
-      expect{ FactoryGirl.create(:job_application) }.
+      expect{ FactoryGirl.create(:job_application, job: job) }.
             to change(StatusChange, :count).by 1
     end
 
     it 'tracks status change times for an application' do
       expect(ja1.status_change_time(:active)).
-          to eq StatusChange.first.created_at
+          to eq StatusChange.second.created_at
 
       expect(ja1.status_change_time(:accepted)).
-          to eq StatusChange.second.created_at
+          to eq StatusChange.third.created_at
     end
   end
 
