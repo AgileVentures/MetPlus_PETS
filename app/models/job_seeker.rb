@@ -56,6 +56,20 @@ class JobSeeker < ActiveRecord::Base
     assign_agency_person(case_manager, :CM)
   end
 
+  def self.job_seekers_without_job_developer
+    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
+        includes(:job_seeker_status, :job_applications).
+        order("users.last_name")
+    
+  end
+
+  def self.job_seekers_without_case_manager
+    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
+        includes(:job_seeker_status, :job_applications).
+        order("users.last_name")
+    
+  end
+
   private
   # Helper methods for associating job seekers with agency people
   # These business rules are enforced:
