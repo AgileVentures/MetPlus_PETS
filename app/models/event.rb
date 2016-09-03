@@ -15,6 +15,7 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
+              JD_APPLY:      'job_applied_by_job_developer', 
               APP_ACCEPTED:  'job_application_accepted', 
               JOB_POSTED:    'job_posted',
               JOB_REVOKED:   'job_revoked', 
@@ -41,6 +42,8 @@ class Event
       evt_comp_denied(evt_obj)
     when :JS_APPLY
       evt_js_apply(evt_obj)
+    when :JD_APPLY
+      evt_jd_apply(evt_obj)
     when :APP_ACCEPTED
       evt_app_accepted(evt_obj)
     when :JOB_POSTED
@@ -142,6 +145,40 @@ class Event
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
   end
 
+  def self.evt_jd_apply(evt_obj)  # evt_obj = job_app
+    # Job is applied by job developer for his job seeker
+    # Business rules:
+    #    Notify job seeker
+    #    Notify company contact associated with the job
+    #    Create task for 'job application' (application to be reviewed)
+
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:JD_APPLY],
+                   {job_id:  evt_obj.job.id,
+                    js_user_id: evt_obj.job_seeker.user.id})
+
+    JobSeekerEmailJob.set(wait: delay_seconds.seconds).
+                    perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
+                                  evt_obj.job_seeker.job_developer, evt_obj.job)
+
+    if evt_obj.job.company_person
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JS_APPLY],
+                     {job_id:  evt_obj.job.id,
+                      js_id:   evt_obj.job_seeker.id,
+                      js_name: evt_obj.job_seeker.full_name(last_name_first: false),
+                      notify_list: [evt_obj.job.company_person.user.id]})
+
+      NotifyEmailJob.set(wait: delay_seconds.seconds).
+                       perform_later([evt_obj.job.company_person.user.email],
+                       EVT_TYPE[:JS_APPLY],
+                       evt_obj)
+    end
+
+    Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
+  end
+
+
   def self.evt_app_accepted(evt_obj)
     # evt_obj = job application
     # Business rules:
@@ -184,8 +221,7 @@ class Event
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(EVT_TYPE[:JD_ASSIGNED_JS],
-                                 evt_obj.job_seeker,
-                                 evt_obj.agency_person)
+                                 evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_jd_self_assigned_js(evt_obj)
@@ -201,8 +237,7 @@ class Event
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(EVT_TYPE[:JD_SELF_ASSIGN_JS],
-                                 evt_obj.job_seeker,
-                                 evt_obj.agency_person)
+                                 evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_cm_self_assigned_js(evt_obj)
@@ -218,8 +253,7 @@ class Event
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(EVT_TYPE[:CM_SELF_ASSIGN_JS],
-                                 evt_obj.job_seeker,
-                                 evt_obj.agency_person)
+                                 evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_cm_assigned_js(evt_obj)
@@ -246,8 +280,7 @@ class Event
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(EVT_TYPE[:CM_ASSIGNED_JS],
-                                 evt_obj.job_seeker,
-                                 evt_obj.agency_person)
+                                 evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_job_posted(evt_obj)

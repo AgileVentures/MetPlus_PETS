@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   get 'agency_people/:id/list_js_without_cm/:people_type' => 
               'agency_people#list_js_without_cm',as: :list_js_without_cm_agency_people
 
+  get 'agency_people/:id/my_js_as_jd' => 'agency_people#my_js_as_jd', as: :my_js_as_jd
                     
   # --------------------------------------------------------------------------
 
@@ -151,6 +152,7 @@ Rails.application.routes.draw do
 
   get 'job_seekers/:id/applied_jobs/:application_type' =>
                 'job_seekers#applied_jobs', as: :applied_jobs_job_seeker
+  get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
   # --------------------------------------------------------------------------
 
 

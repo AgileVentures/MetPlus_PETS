@@ -166,13 +166,25 @@ class JobsController < ApplicationController
 			redirect_to job_path(@job)
 			return
 		end
-		begin
-			@job.apply @job_seeker
-			Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
-		rescue Exception => e
-			flash[:alert] = "Unable to apply at this moment, please try again."
+
+		if pets_user == @job_seeker
+			begin
+				@job.apply @job_seeker
+				Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
+			rescue Exception => e
+				flash[:alert] = "Unable to apply at this moment, please try again."
+				redirect_to job_path(@job)
+			end
+		elsif pets_user == @job_seeker.job_developer
+			job_app = @job.apply @job_seeker
+			Event.create(:JD_APPLY, job_app)
+			flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
+			redirect_to job_path(@job)
+		else
+			flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
 			redirect_to job_path(@job)
 		end
+	
 	end
 
 	def revoke
@@ -185,7 +197,6 @@ class JobsController < ApplicationController
 		end
 		redirect_to jobs_path
 	end
-
 
 	private
 

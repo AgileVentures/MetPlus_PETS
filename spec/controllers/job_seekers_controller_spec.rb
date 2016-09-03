@@ -341,6 +341,16 @@ RSpec.describe JobSeekersController, type: :controller do
     end
   end
 
+  describe "GET #preview_info" do
+    before(:each) do
+      @jobseeker = FactoryGirl.create(:job_seeker)
+      xhr :get, :preview_info, id: @jobseeker
+    end
+    it "it renders job seeker's info partial" do
+      expect(response).to render_template(:partial => '_info')
+    end
+  end
+
   describe 'GET #applied_jobs' do
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:job1) { FactoryGirl.create(:job) }

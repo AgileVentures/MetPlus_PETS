@@ -45,6 +45,7 @@ class Job < ActiveRecord::Base
   def apply job_seeker
     job_seekers << job_seeker
     save!
+    last_application_by_job_seeker(job_seeker)
   end
 
   def status_change_time(status, which = :latest)

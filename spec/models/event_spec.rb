@@ -16,6 +16,8 @@ RSpec.describe Event, type: :model do
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:job)            { FactoryGirl.create(:job, company: company,
                                             company_person: company_person) }
+  let(:job_wo_cp)      { FactoryGirl.create(:job, company: company,
+                                            company_person: nil) }
 
   let(:evt_obj_class) { Struct.new(:job_seeker, :agency_person) }
   let(:evt_obj_jd)    { evt_obj_class.new(job_seeker, job_developer) }
@@ -24,10 +26,8 @@ RSpec.describe Event, type: :model do
   let(:evt_obj_jobpost_class) { Struct.new(:job, :agency) }
   let(:evt_obj_jobpost) { evt_obj_jobpost_class.new(job, agency) }
 
-  let(:application) do 
-    job.apply job_seeker
-    job.last_application_by_job_seeker(job_seeker)
-  end
+  let(:application) { job.apply job_seeker }
+  let(:application_wo_cp) { job_wo_cp.apply job_seeker}
 
   before(:each) do
     allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
@@ -118,6 +118,62 @@ RSpec.describe Event, type: :model do
     it 'creates one task' do
       expect { Event.create(:JS_APPLY, application) }.
                     to change(Task, :count).by(+1)
+    end
+  end
+
+  describe 'job_applied_by_job_developer event' do
+
+    describe 'job without company person' do
+      it 'triggers a Pusher message to Job Seeker' do
+        Event.create(:JD_APPLY, application_wo_cp)
+        expect(Pusher).to have_received(:trigger).
+                      with('pusher_control',
+                           'job_applied_by_job_developer',
+                           {job_id:  job_wo_cp.id,
+                            js_user_id:   job_seeker.user.id})
+      end
+
+      it 'sends event notification email to Job seeker' do
+        expect { Event.create(:JD_APPLY, application_wo_cp) }.
+                      to change(all_emails, :count).by(+1)
+      end
+
+      it 'creates one task' do
+        expect { Event.create(:JD_APPLY, application_wo_cp) }.
+                      to change(Task, :count).by(+1)
+      end
+    end
+
+    describe 'job with company person' do
+      it 'triggers a Pusher message to Job Seeker' do
+        Event.create(:JD_APPLY, application)
+        expect(Pusher).to have_received(:trigger).
+                      with('pusher_control',
+                           'job_applied_by_job_developer',
+                           {job_id:  job.id,
+                            js_user_id:   job_seeker.user.id})
+      end
+
+      it 'triggers a Pusher message to Company Person' do
+        Event.create(:JD_APPLY, application)
+        expect(Pusher).to have_received(:trigger).
+                      with('pusher_control',
+                           'jobseeker_applied',
+                           {job_id:  job.id,
+                            js_id:   job_seeker.id,
+                            js_name: job_seeker.full_name(last_name_first: false),
+                            notify_list: [company_person.user.id]})
+      end
+
+      it 'sends event notification email to Job seeker and company person' do
+        expect { Event.create(:JD_APPLY, application) }.
+                      to change(all_emails, :count).by(+2)
+      end
+
+      it 'creates one task' do
+        expect { Event.create(:JD_APPLY, application) }.
+                      to change(Task, :count).by(+1)
+      end
     end
   end
 
