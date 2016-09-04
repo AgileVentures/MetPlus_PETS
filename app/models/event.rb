@@ -113,7 +113,7 @@ class Event
                   perform_later(EVT_TYPE[:COMP_DENIED],
                   evt_obj.company,
                   evt_obj.company.company_people[0],
-                  evt_obj.reason)
+                  reason: evt_obj.reason)
   end
 
   def self.evt_js_apply(evt_obj)  # evt_obj = job application
@@ -137,19 +137,6 @@ class Event
                      EVT_TYPE[:JS_APPLY],
                      evt_obj)
     end
-
-    # Download resume from the Cruncher
-    resume_id = evt_obj.job_seeker.resumes[0].id
-    temp_file = ResumeCruncher.download_resume(resume_id)
-
-    # Send mail to the company with the attached resume
-    CompanyMailerJob.set(wait: delay_seconds.seconds).
-                     perform_later(EVT_TYPE[:JS_APPLY],
-                      evt_obj.job.company,
-                      nil, nil, evt_obj, temp_file.path)
-
-    # Remove the temp file
-    temp_file.unlink
 
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
   end

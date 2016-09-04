@@ -18,7 +18,7 @@ class CompanyMailerPreview < ActionMailer::Preview
     company        = Company.first
     company_person = CompanyPerson.first
     CompanyMailer.registration_denied(company, company_person,
-            "Your EIN is not valid and we think you're a scam operation.")
+            reason: "Your EIN is not valid and we think you're a scam operation.")
   end
 
   def application_received

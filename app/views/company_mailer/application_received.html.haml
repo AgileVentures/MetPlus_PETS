@@ -1,5 +1,10 @@
-%p
-  Hello, this is to let you know that you have received a job application for the job title
-  #{ @job.title } from #{ @job_seeker.full_name(last_name_first: false) }.
+%p Hello,
 
-%p  Please find the resume of the applicant attached with this email.
+%p
+  This is to let you know that you have received an application for the job with title
+  = link_to @job.title, job_url(@job)
+  from
+  = link_to @job_seeker.full_name(last_name_first: false), job_seeker_url(@job_seeker)
+
+%p
+  Please find the resume of the applicant attached with this email.

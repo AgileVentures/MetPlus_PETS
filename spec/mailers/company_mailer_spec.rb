@@ -1,5 +1,7 @@
 require "rails_helper"
 
+include ServiceStubHelpers::Cruncher
+
 RSpec.describe CompanyMailer, type: :mailer do
   describe "registration cycle" do
     let(:company)         { FactoryGirl.create(:company) }
@@ -42,14 +44,19 @@ RSpec.describe CompanyMailer, type: :mailer do
   end
 
   describe 'Job application process' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create # To avoid creating job in the cruncher
+    end
 
     let!(:company) { FactoryGirl.create(:company) }
     let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:job) { FactoryGirl.create(:job) }
     let!(:job_application) {
       FactoryGirl.create(:job_application,
         job_seeker: job_seeker,
-        job: FactoryGirl.create(:job)
+        job: job
     )}
 
     let!(:mail) {
@@ -66,7 +73,12 @@ RSpec.describe CompanyMailer, type: :mailer do
 
     it 'renders the body' do
       expect(mail).
-      to have_body_text("you have received a job application for the job title #{job_application.job.title }")
+      to have_body_text("you have received an application")
+    end
+
+    it 'renders links for job title and job seeker' do
+      expect(mail.body.encoded).to have_link('', href: job_url(job))
+      expect(mail.body.encoded).to have_link('', href: job_seeker_url(job_seeker))
     end
 
     it 'renders the attachment' do

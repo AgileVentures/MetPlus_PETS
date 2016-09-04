@@ -80,12 +80,16 @@ RSpec.describe Job, type: :model do
   describe 'Instance methods' do
     describe '#apply' do
       let(:job) {FactoryGirl.create(:job)}
-      let(:job_seeker) {FactoryGirl.create(:job_seeker)}
-      let(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+      let!(:job_seeker) {FactoryGirl.create(:job_seeker)}
+      let!(:job_seeker_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker)}
+      let!(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+      let!(:job_seeker2_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker2)}
+      let!(:test_file) {'../fixtures/files/Admin-Assistant-Resume.pdf'}
 
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_job_create
+        stub_cruncher_file_download test_file
       end
 
       it 'success - first application' do

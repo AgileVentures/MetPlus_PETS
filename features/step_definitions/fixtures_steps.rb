@@ -164,7 +164,7 @@ Given(/^the following tasks exist:$/) do |table|
   end
 end
 
-Given(/^the following resume exist:$/) do |table|
+Given(/^the following resumes exist:$/) do |table|
   table.hashes.each do |hash|
     job_seeker = JobSeeker.find_by(email: hash[:job_seeker])
     resume = FactoryGirl.create(:resume,

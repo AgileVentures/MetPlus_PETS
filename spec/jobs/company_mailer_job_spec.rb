@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+include ServiceStubHelpers::Cruncher
+
 RSpec.describe CompanyMailerJob, type: :job do
   let!(:company)        { FactoryGirl.create(:company) }
   let(:company_person)  { FactoryGirl.create(:company_person,
@@ -43,11 +45,14 @@ RSpec.describe CompanyMailerJob, type: :job do
                               perform_later(Event::EVT_TYPE[:COMP_DENIED],
                               company,
                               company_person,
-                              obj.reason) }.
+                              reason: obj.reason) }.
     to change(Delayed::Job, :count).by (+1)
   end
 
   it 'job application receieved event' do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+
     resume_file_path = File.new("#{Rails.root}/spec/fixtures/files/#{resume.file_name}").path
     expect { CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
                               perform_later(Event::EVT_TYPE[:JS_APPLY],

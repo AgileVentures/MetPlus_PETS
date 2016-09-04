@@ -34,7 +34,7 @@ module ServiceStubHelpers
     def stub_cruncher_file_download(testfile)
       file = fixture_file_upload(testfile)
 
-      stub_request(:get, CruncherService.service_url + '/curriculum/1').
+      stub_request(:get, /#{CruncherService.service_url + "/curriculum/"}\d+/).
           to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
           :headers => {'Content-Disposition'=>
                         'inline; filename="Admin-Assistant-Resume.pdf"'})
