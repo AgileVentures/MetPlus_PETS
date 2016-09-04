@@ -16,9 +16,18 @@
 	.clearfix
 
 	= render partial: 'job_info'
-
-	-if @job.status == "active" 
-		-if not pets_user.nil? and policy(@job).apply?
+	
+	%div{id: 'apply_job'}
+	-if pets_user && @job.status == "active"
+		-if pets_user.is_job_developer?(current_agency)
+			=link_to 'Click Here to Submit an Application for Job Seeker', '#', 
+								class: 'col-sm-offset-4',
+								id: 'jd-apply-button',
+								data: { :toggle => 'modal',
+												:target => '#jdApplyJobModal' }
+			=render partial: '/job_applications/jd_apply_job_modal', :locals => {job: @job}
+			=render partial: '/job_applications/preview_modal', :locals => {job: @job}
+		-elsif pets_user.is_job_seeker?
 			=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
 						data: { :toggle => 'modal',
 										:target => '#applyJobModal'}

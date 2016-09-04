@@ -61,6 +61,7 @@ class Job < ActiveRecord::Base
     # Remove the temp file
     temp_file.unlink
 
+    last_application_by_job_seeker(job_seeker)
   end
 
   def status_change_time(status, which = :latest)

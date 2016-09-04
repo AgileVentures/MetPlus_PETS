@@ -58,7 +58,6 @@ RSpec.describe AgencyMailer, type: :mailer do
     let!(:test_file) {'../fixtures/files/Admin-Assistant-Resume.pdf'}
     let(:application) do
       job.apply job_seeker
-      job.last_application_by_job_seeker(job_seeker)
     end
 
     let(:mail) { AgencyMailer.job_seeker_applied(agency_person.email,

@@ -18,8 +18,7 @@ class AgencyMailerPreview < ActionMailer::Preview
     agency_person = User.find_by_email('chet@metplus.org').actable
     company       = Company.find_by_email('contact@widgets.com')
     job           = company.jobs.first
-    job.apply job_seeker
-    application   = job.last_application_by_job_seeker(job_seeker)
+    application   = job.apply job_seeker
 
     AgencyMailer.job_seeker_applied(agency_person.email, application)
   end
@@ -29,8 +28,7 @@ class AgencyMailerPreview < ActionMailer::Preview
     agency_person = User.find_by_email('chet@metplus.org').actable
     company       = Company.find_by_email('contact@widgets.com')
     job           = company.jobs.first
-    job.apply job_seeker
-    application   = job.last_application_by_job_seeker(job_seeker)
+    application   = job.apply job_seeker
 
     AgencyMailer.job_application_accepted(agency_person.email, application)
   end
