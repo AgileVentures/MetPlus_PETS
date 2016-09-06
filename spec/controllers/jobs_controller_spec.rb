@@ -2,7 +2,7 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec::Matchers.define :evt_obj do |*attributes|
-  match do |actual| 
+  match do |actual|
     if actual.is_a?(Struct)
       attributes.each do |attribute|
         return false unless actual.respond_to?(attribute)
@@ -418,7 +418,7 @@ RSpec.describe JobsController, type: :controller do
     let!(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
     let(:job3)       { FactoryGirl.create(:job, company: @company_person.company) }
     let!(:job_skill) { FactoryGirl.create(:job_skill, job: job3, skill: skill)}
-   
+
     it 'destroys job and associated job_skill' do
       expect { delete :destroy, :id => job_skill.job.id }.
         to change(Job, :count).by -1
@@ -716,6 +716,8 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #apply' do
     let!(:job_seeker){FactoryGirl.create(:job_seeker)}
+    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:testfile_resume) { '/files/Janitor-Resume.doc' }
     before :each do
       agency = FactoryGirl.create(:agency)
     end
@@ -773,6 +775,8 @@ RSpec.describe JobsController, type: :controller do
 
         allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_seeker)
+        stub_cruncher_authenticate
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "is a success" do
@@ -822,6 +826,8 @@ RSpec.describe JobsController, type: :controller do
         allow(Pusher).to receive(:trigger)
         allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_developer)
+        stub_cruncher_authenticate
+        stub_cruncher_file_download testfile_resume
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it 'creates a job application' do
@@ -934,6 +940,6 @@ RSpec.describe JobsController, type: :controller do
       it 'redirects to jobs_path' do
         expect(response).to redirect_to(jobs_path)
       end
-    end  
+    end
   end
 end

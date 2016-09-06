@@ -107,7 +107,7 @@ RSpec.describe CruncherService, type: :request do
 
       it 'returns file contents' do
         file = fixture_file_upload(testfile_pdf)
-        expect(download_result).to eq file.read.force_encoding(Encoding::UTF_8)
+        expect(download_result).to eq file.read
       end
     end
     describe 'download file: MS Word' do
@@ -123,7 +123,7 @@ RSpec.describe CruncherService, type: :request do
 
       it 'returns file contents' do
         file = fixture_file_upload(testfile_word)
-        expect(download_result).to eq file.read.force_encoding(Encoding::UTF_8)
+        expect(download_result).to eq file.read
       end
     end
     describe 'download file: MS Word - XML' do
@@ -139,7 +139,7 @@ RSpec.describe CruncherService, type: :request do
 
       it 'returns file contents' do
         file = fixture_file_upload(testfile_wordxml)
-        expect(download_result).to eq file.read.force_encoding(Encoding::UTF_8)
+        expect(download_result).to eq file.read
       end
     end
 

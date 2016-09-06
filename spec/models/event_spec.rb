@@ -1,17 +1,18 @@
 require 'rails_helper'
 require 'agency_mailer'
 include ServiceStubHelpers::Cruncher
- 
+
 RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
   let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
   let!(:case_manager)   { FactoryGirl.create(:case_manager) }
-  let(:job_seeker) do
+  let!(:job_seeker) do
     js = FactoryGirl.create(:job_seeker)
     js.assign_job_developer(job_developer, agency)
     js
   end
+  let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:job)            { FactoryGirl.create(:job, company: company,
@@ -28,6 +29,8 @@ RSpec.describe Event, type: :model do
 
   let(:application) { job.apply job_seeker }
   let(:application_wo_cp) { job_wo_cp.apply job_seeker}
+
+  let(:testfile_resume) { 'files/Admin-Assistant-Resume.pdf'}
 
   before(:each) do
     allow(Pusher).to receive(:trigger)  # stub and spy on 'Pusher'
@@ -98,6 +101,10 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'jobseeker_applied event' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_file_download(testfile_resume)
+    end
 
     it 'triggers a Pusher message' do
       Event.create(:JS_APPLY, application)
@@ -110,9 +117,9 @@ RSpec.describe Event, type: :model do
                           notify_list: [job_seeker.job_developer.user.id, company_person.user.id]})
     end
 
-    it 'sends event notification email' do
+    it 'sends event notification email and application received email' do
       expect { Event.create(:JS_APPLY, application) }.
-                    to change(all_emails, :count).by(+1)
+                    to change(all_emails, :count).by(+2)
     end
 
     it 'creates one task' do
@@ -122,6 +129,11 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'job_applied_by_job_developer event' do
+
+    before do
+        stub_cruncher_authenticate
+        stub_cruncher_file_download  testfile_resume
+    end
 
     describe 'job without company person' do
       it 'triggers a Pusher message to Job Seeker' do
@@ -135,7 +147,7 @@ RSpec.describe Event, type: :model do
 
       it 'sends event notification email to Job seeker' do
         expect { Event.create(:JD_APPLY, application_wo_cp) }.
-                      to change(all_emails, :count).by(+1)
+                      to change(all_emails, :count).by(+2)
       end
 
       it 'creates one task' do
@@ -167,7 +179,7 @@ RSpec.describe Event, type: :model do
 
       it 'sends event notification email to Job seeker and company person' do
         expect { Event.create(:JD_APPLY, application) }.
-                      to change(all_emails, :count).by(+2)
+                      to change(all_emails, :count).by(+3)
       end
 
       it 'creates one task' do
@@ -178,6 +190,12 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'job_application_accepted event' do
+
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_file_download(testfile_resume)
+    end
+
     it 'triggers Pusher message to primary job developer' do
       Event.create(:APP_ACCEPTED, application)
       expect(Pusher).to have_received(:trigger).
@@ -191,7 +209,7 @@ RSpec.describe Event, type: :model do
     end
     it 'sends a notification email to primary job developer' do
       expect { Event.create(:APP_ACCEPTED, application) }.
-                    to change(all_emails, :count).by(+1)
+                    to change(all_emails, :count).by(+2)
     end
   end
 
