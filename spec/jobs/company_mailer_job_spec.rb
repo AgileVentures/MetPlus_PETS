@@ -49,16 +49,16 @@ RSpec.describe CompanyMailerJob, type: :job do
     to change(Delayed::Job, :count).by (+1)
   end
 
-  it 'job application receieved event' do
+  it 'job application received event' do
     stub_cruncher_authenticate
     stub_cruncher_job_create
 
     resume_file_path = File.new("#{Rails.root}/spec/fixtures/files/#{resume.file_name}").path
     expect { CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
                               perform_later(Event::EVT_TYPE[:JS_APPLY],
-                              company, nil, nil,
-                              job_application,
-                              resume_file_path) }.
+                              company, nil,
+                              application: job_application,
+                              resume_file_path: resume_file_path) }.
     to change(Delayed::Job, :count).by (+1)
   end
 end

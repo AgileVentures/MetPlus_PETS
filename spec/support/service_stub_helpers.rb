@@ -35,7 +35,7 @@ module ServiceStubHelpers
       file = fixture_file_upload(testfile)
 
       stub_request(:get, /#{CruncherService.service_url + "/curriculum/"}\d+/).
-          to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
+          to_return(body: file.read, status: 200,
           :headers => {'Content-Disposition'=>
                         'inline; filename="Admin-Assistant-Resume.pdf"'})
     end
@@ -50,7 +50,7 @@ module ServiceStubHelpers
 
       stub_request(:get, CruncherService.service_url + '/curriculum/1').
           to_raise(RestClient::Unauthorized).then.
-          to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
+          to_return(body: file.read, status: 200,
           :headers => {'Content-Disposition'=>
                         'inline; filename="Admin-Assistant-Resume.pdf"'})
     end
