@@ -793,25 +793,17 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JS_APPLY, application)
       end
     end
-    describe 'error applications as job seeker' do
-      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+    describe 'duplicated applications as job seeker' do
       before :each do
-        expect(Job).to receive(:find_by_id).and_return(job)
-        expect(job).to receive(:save!).and_raise(Exception)
-        expect(job).to receive(:id).exactly(4).times.and_return(1)
         allow(controller).to receive(:current_user).and_return(job_seeker)
+        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
-      it "is a redirect" do
-        expect(response).to have_http_status(:redirect)
+      it "shows flash[:alert]" do
+        expect(flash[:alert]).to be_present.and eq "Invalid action due to duplicated application"
       end
-      it "redirected to the job" do
+      it "redirects to job" do
         expect(response).to redirect_to(:action => 'show', :id => @job.id)
-      end
-      it 'check set flash' do
-        should set_flash
-        expect(flash[:alert]).to be_present
-        expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
       end
     end
     describe 'successful application as job developer' do
@@ -837,6 +829,22 @@ RSpec.describe JobsController, type: :controller do
       end
       it "redirect to job " do
         expect(response).to redirect_to(job_path(@job))
+      end
+    end
+    describe 'duplicated applications as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "shows flash[:alert]" do
+        expect(flash[:alert]).to be_present.and eq "Invalid action due to duplicated application"
+      end
+      it "redirects to job" do
+        expect(response).to redirect_to(:action => 'show', :id => @job.id)
       end
     end
     describe 'invalid application as job developer' do

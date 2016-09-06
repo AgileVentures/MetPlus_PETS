@@ -167,24 +167,28 @@ class JobsController < ApplicationController
 			return
 		end
 
-		if pets_user == @job_seeker
-			begin
-				@job.apply @job_seeker
-				Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
-			rescue Exception => e
-				flash[:alert] = "Unable to apply at this moment, please try again."
+		if pets_user == @job_seeker || @job_seeker.job_developer  # to be removed once authorize is set properly
+			begin 
+				job_app = @job.apply @job_seeker
+			# ActiveRecord::RecordInvalid is raised when validation at model level fails
+			# ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+			rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
+				flash[:alert] = "Invalid action due to duplicated application"
 				redirect_to job_path(@job)
+			else
+				if pets_user == @job_seeker
+					Event.create(:JS_APPLY, job_app)
+				elsif pets_user == @job_seeker.job_developer
+					Event.create(:JD_APPLY, job_app)
+					flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
+					redirect_to job_path(@job)
+				end	
 			end
-		elsif pets_user == @job_seeker.job_developer
-			job_app = @job.apply @job_seeker
-			Event.create(:JD_APPLY, job_app)
-			flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
-			redirect_to job_path(@job)
-		else
+		else		 # to be removed once authorize is set properly
 			flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
 			redirect_to job_path(@job)
 		end
-	
+		
 	end
 
 	def revoke
