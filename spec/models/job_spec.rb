@@ -169,6 +169,11 @@ RSpec.describe Job, type: :model do
   end
 
   describe 'tracking status change history' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
     let!(:job) { FactoryGirl.create(:job) }
 
     context 'active to filled' do
