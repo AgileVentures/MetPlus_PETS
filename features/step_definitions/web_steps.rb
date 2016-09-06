@@ -23,6 +23,10 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^I should not see the "(.*?)" link$/) do |link|
+  expect(page.body).to_not have_link link
+end
+
 Then(/^(?:I|they) should( not)? see button "([^"]*)"$/) do |not_see, button|
   unless not_see
     expect(page).to have_button button
@@ -209,12 +213,13 @@ When /^I am in (.*) browser$/ do |name|
   Capybara.session_name = name
 end
 
-Then(/^I select2 "([^"]*)" from "([^"]*)"$/) do |value, select_name|
-
+Then(/^I( cannot)? select2 "([^"]*)" from "([^"]*)"$/) do |cannot, value, select_name|
   find("#select2-#{select_name}-container").click
   find(".select2-search__field").set(value)
-  within ".select2-results" do
-    find("li", text: value).click
+  if cannot
+    within(".select2-results") { expect(page.find("li")).to have_text("No results found") }
+  else
+    within(".select2-results") { find("li", text: value).click }
   end
 end
 

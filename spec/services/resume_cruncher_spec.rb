@@ -4,6 +4,8 @@ include ServiceStubHelpers::Cruncher
 
 RSpec.describe ResumeCruncher, type: :model do
 
+  let(:testfile)     {'files/Admin-Assistant-Resume.pdf'}
+
   before(:each) do
     stub_cruncher_authenticate
   end
@@ -27,6 +29,31 @@ RSpec.describe ResumeCruncher, type: :model do
                                   'test_id') }.
                     to raise_error(RuntimeError)
     end
+  end
+
+  describe 'File download' do
+    it 'returns Tempfile if résumé is found' do
+
+      stub_cruncher_file_download(testfile)
+      expect(ResumeCruncher.download_resume(1).class).to be Tempfile
+    end
+
+    it 'returns nil if résumé is not found' do
+
+      stub_cruncher_file_download_notfound
+      expect(ResumeCruncher.download_resume(2)).to be_nil
+    end
+  end
+
+
+  describe 'match resumes' do
+
+    it 'returns success' do
+
+      stub_cruncher_match_resumes
+      expect(ResumeCruncher.match_resumes(1)).not_to be nil
+    end
+
   end
 
 end

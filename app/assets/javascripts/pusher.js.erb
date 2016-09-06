@@ -47,6 +47,24 @@ var PusherControl = {
       }
     });
 
+    channel.bind('job_applied_by_job_developer', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if (parseInt(Cookies('user_id')) === data.js_user_id) {
+        Notification.info_notification('Your job developer ' +
+            " has applied to <a href='/jobs/" + data.job_id +
+            "' target='_blank'>this job</a>" + ' for you.');
+      }
+    });
+
+    channel.bind('job_application_accepted', function(data) {
+      if (parseInt(Cookies('user_id')) === data.jd_user_id) {
+        Notification.info_notification("Job Application: " +
+          "<a href='/job_applications/" + data.id + 
+          "' target='_blank'>" + data.job_title + " by " +
+          data.js_name + "</a>" + " is accepted.");
+      }
+    });
+
     channel.bind('jobseeker_assigned_jd', function(data) {
       // Process event if I am logged in and I am the job developer
       if (parseInt(Cookies('user_id')) === data.jd_user_id) {

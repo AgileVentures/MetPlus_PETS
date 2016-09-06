@@ -17,8 +17,10 @@ class AgencyPeopleController < ApplicationController
     @task_type = 'mine-open'
     @people_type_cm = 'jobseeker-cm'
     @people_type_jd = 'jobseeker-jd'
-    @js_without_jd = JobSeeker.paginate(:page=> params[:js_without_jd_page], :per_page=>5).js_without_jd
-    @js_without_cm = JobSeeker.paginate(:page=> params[:js_without_cm_page], :per_page=>5).js_without_cm
+    @people_type_without_jd = 'jobseeker-without-jd'
+    @people_type_without_cm = 'jobseeker-without-cm'
+    @js_without_jd = JobSeeker.js_without_jd
+    @js_without_cm = JobSeeker.js_without_cm
     @your_jobseekers_jd = JobSeeker.your_jobseekers_jd(@agency_person)
     @your_jobseekers_cm = JobSeeker.your_jobseekers_cm(@agency_person)
   end
@@ -165,7 +167,8 @@ class AgencyPeopleController < ApplicationController
 
     @people = []
     @people = display_job_seekers @people_type_cm, @agency_person
-
+     
+   
     render :partial => 'agency_people/assigned_job_seekers',
                        locals: {jobseekers: @people,
                                 controller_action:'list_js_cm',
@@ -190,6 +193,67 @@ class AgencyPeopleController < ApplicationController
                                 agency_person: @agency_person}
   end
 
+  def list_js_without_jd
+
+    raise 'Unsupported request' if not request.xhr?
+       
+    agency_person= AgencyPerson.find(params[:id])
+
+    people_type_without_jd = params[:people_type] || 'jobseeker-without-jd'
+
+    people = []
+    people = display_job_seekers people_type_without_jd, agency_person
+    
+    
+     render :partial => 'agency_people/assigned_job_seekers', 
+                       locals: {jobseekers: people,
+                                controller_action:'list_js_without_jd',
+                                people_type: people_type_without_jd,
+                                agency_person: agency_person}
+   
+                                                            
+                               
+  end
+
+  def list_js_without_cm
+
+    raise 'Unsupported request' if not request.xhr?
+       
+    agency_person= AgencyPerson.find(params[:id])
+
+    people_type_without_cm = params[:people_type] || 'jobseeker-without-cm'
+
+    people = []
+    people = display_job_seekers people_type_without_cm, agency_person
+    
+    
+     render :partial => 'agency_people/assigned_job_seekers', 
+                       locals: {jobseekers: people,
+                                controller_action:'list_js_without_cm',
+                                people_type: people_type_without_cm,
+                                agency_person: agency_person}
+                                                            
+                               
+  end
+
+  # my job_seeker list as a logged-in job developer
+  def my_js_as_jd
+    raise 'Unsupported request' if not request.xhr?
+    term = params[:q] || {}
+    term = term[:term] || ''
+    term = term.downcase
+    my_js = pets_user.job_seekers.select { |js| js.job_developer == pets_user }
+    if my_js.blank?
+      render json: {:message => 'You do not have job seekers!'}, status: 403
+    else
+      list_js = []
+      my_js.each do |js|
+        # condition for search term
+        list_js << {id: js.id, text: js.full_name} if js.full_name.downcase =~ /#{term}/
+      end
+      render json: {:results => list_js}
+    end
+  end
 
   private
 

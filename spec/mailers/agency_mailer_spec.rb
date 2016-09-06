@@ -56,7 +56,6 @@ RSpec.describe AgencyMailer, type: :mailer do
                                               company_person: company_person) }
     let(:application) do
       job.apply job_seeker
-      job.last_application_by_job_seeker(job_seeker)
     end
 
     let(:mail) { AgencyMailer.job_seeker_applied(agency_person.email,
@@ -80,6 +79,31 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
     it "includes link to show job seeker" do
       expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+    end
+  end
+
+  describe 'Job Application accepted' do
+    let(:job) { FactoryGirl.create(:job) }
+    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) } 
+    let(:app) { FactoryGirl.create(:job_application, job_seeker: job_seeker, job: job) }
+    let(:mail) { AgencyMailer.job_application_accepted(job_developer.email, app) }
+
+    before :each do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to eq 'Job application accepted'
+      expect(mail.to).to eq(["#{job_developer.email}"])
+      expect(mail.from).to eq(["from@example.com"])
+    end
+    it "renders the body" do
+      expect(mail).to have_body_text("A job application is accepted:")
+    end
+    it "includes link to show job application" do
+      expect(mail).to have_body_text(/#{application_url(id: 1)}/)
     end
   end
 

@@ -26,9 +26,9 @@ Feature: Company Person
       | CC    |
 
     Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-      | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
+      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
+      | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | Active |
 
     Given the following company addresses exist:
       | company       | street           | city    | zipcode | state      |
@@ -42,30 +42,6 @@ Feature: Company Person
       | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
       | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
       | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
-
-    Given the following jobs exist:
-      | title               | company_job_id  | shift  | fulltime | description                 | company      | creator        |
-      | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK02K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK03K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK04K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK05K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK06K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK07K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK08K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK10K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK11K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Doctor              | AAEE1K          | Evening| true     | internship position with pay| Feature Inc. | ca@feature.com |
-      | Cook                | KRK12K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK13K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK14K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK15K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK16K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK17K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK18K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK19K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK20K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
 
   Scenario: company admin edits company info
     Given I am on the home page
@@ -124,7 +100,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
-     
+
   Scenario: company contact login and edit profile from home page
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
@@ -168,8 +144,8 @@ Feature: Company Person
     And I login as "ca@widgets.com" with password "qwerty123"
     Then I press "edit-profile"
     And I do not have an address
-    And I should see selections of "Widgets Inc." addresses 
-    And I should not see selections of "Feature Inc." addresses 
+    And I should see selections of "Widgets Inc." addresses
+    And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
     And I should be on the Company person 'ca@widgets.com' show page
@@ -180,22 +156,12 @@ Feature: Company Person
     And I login as "jane@widgets.com" with password "qwerty123"
     Then I press "edit-profile"
     And I do not have an address
-    And I should see selections of "Widgets Inc." addresses 
-    And I should not see selections of "Feature Inc." addresses 
+    And I should see selections of "Widgets Inc." addresses
+    And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
     And I should be on the Company person 'jane@widgets.com' show page
     And I should see "12 Main Street Detroit, Michigan 02034"
-
-  @javascript
-  Scenario: verify job listing in home page
-    Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'ca@widgets.com' Home page
-    And I wait for 5 seconds
-    And I should see "Cook"
-    And I should not see "Doctor"
-    And I should not see "software developer"
 
   @javascript
   Scenario: verify people listing in home page

@@ -43,7 +43,7 @@ RSpec.describe JobApplication, type: :model do
     end
   end
   describe '#status_name' do
-    
+
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
@@ -65,4 +65,79 @@ RSpec.describe JobApplication, type: :model do
       expect(subject.status_name).to eq 'NotAccepted'
     end
   end
+
+  describe '#active?' do
+    let(:active_job) { FactoryGirl.create(:job) }
+    let(:inactive_job) { FactoryGirl.create(:job, status: :filled) }
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:valid_application) { FactoryGirl.create(:job_application,
+                              job: active_job, job_seeker: job_seeker) }
+    let(:invalid_application1) { FactoryGirl.create(:job_application,
+                                 job: inactive_job, job_seeker: job_seeker) }
+    let(:invalid_application2) { FactoryGirl.create(:job_application,
+                                 job: active_job, job_seeker: job_seeker,
+                                 status: 'accepted') }
+
+    context 'with active job and active application status' do
+      it 'returns true' do
+        expect(valid_application.active?).to be true
+      end
+    end
+    context 'with inactive job and active application status' do
+      it 'returns false' do
+        expect(invalid_application1.active?).to be false
+      end
+    end
+    context 'with inactive job and inactive application status' do
+      it 'returns false' do
+        expect(invalid_application2.active?).to be false
+      end
+    end
+  end
+
+  describe '#accept' do
+    let(:active_job) { FactoryGirl.create(:job) }
+    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let(:application1) { FactoryGirl.create(:job_application,
+                         job: active_job, job_seeker: job_seeker1) }
+    let(:application2) { FactoryGirl.create(:job_application,
+                         job: active_job, job_seeker: job_seeker2) }
+
+    it 'updates the selected application status to be accepted' do
+      expect { application1.accept }.to change{application1.status}.from('active').to('accepted')
+    end
+    it 'updates unselected application status to be not accepted' do
+      expect { application1.accept }.to change{application1.job.job_applications.
+                                               find(application2.id).status}.
+                                               from('active').to('not_accepted')
+    end
+    it 'updates the selected job status to be filled' do
+      expect { application1.accept }.to change{application1.job.status}.from('active').to('filled')
+    end
+  end
+
+  describe 'tracking status change history' do
+    let(:job)  { FactoryGirl.create(:job) }
+    let!(:ja1) { FactoryGirl.create(:job_application, job: job) }
+
+    before(:each) do
+      sleep(1)
+      ja1.accept
+    end
+
+    it 'adds a status change record for a new application' do
+      expect{ FactoryGirl.create(:job_application, job: job) }.
+            to change(StatusChange, :count).by 1
+    end
+
+    it 'tracks status change times for an application' do
+      expect(ja1.status_change_time(:active)).
+          to eq StatusChange.second.created_at
+
+      expect(ja1.status_change_time(:accepted)).
+          to eq StatusChange.third.created_at
+    end
+  end
+
 end

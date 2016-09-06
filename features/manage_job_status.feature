@@ -4,19 +4,19 @@ Feature: Manage job status by UI
 	So that there is no job application on expired job
 	I want to inform other job developer about a job status
 
-Background: data is added to database 
+Background: data is added to database
 
 	Given the default settings are present
-	
+
 	Given the following agency people exist:
     | agency  | role      | first_name | last_name | email                | password  |
     | MetPlus | JD        | John       | Smith     | john@metplus.org     | qwerty123 |
     | MetPlus | CM        | Jane       | Jones     | jane@metplus.org     | qwerty123 |
 
   Given the following companies exist:
-  	| agency  | name         | website     | phone        | email            | ein        | status |
-  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | 12-3456789 | Active |
-  	| MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | 12-3456788 | Active |
+  	| agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
+  	| MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | Active |
 
   Given the following company people exist:
   	| company      | role  | first_name | last_name | email            | password  | phone        |
@@ -33,7 +33,7 @@ Background: data is added to database
     | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | ca@widgets.com | revoked |
     | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
     | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
-  
+
   @selenium
 	Scenario: company person revoke a job
 		Given I am on the home page
@@ -57,10 +57,10 @@ Background: data is added to database
 	  And I wait 1 second
 	  And I should see the job status is "revoked"
 	  And I should not see "Revoke" link on the page
- 	  Then I return to jobs page   
+ 	  Then I return to jobs page
  	  And I wait 1 second
- 	  And I should not see "Revoked" next to "hr associate"  
-	  Then I click the "hr associate" link to job show page 
+ 	  And I should not see "Revoked" next to "hr associate"
+	  Then I click the "hr associate" link to job show page
 	  And I should see the job status is "active"
 	  And I should see "Revoke" link on the page
 	  Then I click the "Revoke" link
@@ -82,4 +82,3 @@ Background: data is added to database
 	  Then I click the "hr manager" link to job show page
 	  And I should see the job status is "active"
 	  And I should see "Click Here To Apply Online"
-	

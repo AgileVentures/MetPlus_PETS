@@ -43,7 +43,14 @@ Rails.application.routes.draw do
   get 'agency_people/:id/list_js_jd/:people_type' =>
              'agency_people#list_js_jd', as: :list_js_jd_agency_people
 
+  get 'agency_people/:id/list_js_without_jd/:people_type' => 
+              'agency_people#list_js_without_jd',as: :list_js_without_jd_agency_people
+  
+  get 'agency_people/:id/list_js_without_cm/:people_type' => 
+              'agency_people#list_js_without_cm',as: :list_js_without_cm_agency_people
 
+  get 'agency_people/:id/my_js_as_jd' => 'agency_people#my_js_as_jd', as: :my_js_as_jd
+                    
   # --------------------------------------------------------------------------
 
   # ----------------------- Company Registration -----------------------------
@@ -70,10 +77,12 @@ Rails.application.routes.draw do
   resources :company_people, path: '/company_admin/company_people',
                        only: [:show, :edit, :update, :destroy]
 
-  resources :company_people do
-     get 'edit_profile', on: :member, as: :edit_profile
-     patch 'update_profile', on: :member, as: :update_profile
-     get 'home', on: :member, as: :home
+  resources :company_people, only: [] do
+    member do
+      get 'edit_profile', as: :edit_profile
+      patch 'update_profile', as: :update_profile
+      get 'home', as: :home
+    end
   end
 
   get 'company_people/:company_id/list_people/:people_type' =>
@@ -128,6 +137,13 @@ Rails.application.routes.draw do
   end
   # --------------------------------------------------------------------------
 
+  # --------------------------- Job Applications -----------------------------
+  patch 'job_applications/:id/accept'    => 'job_applications#accept', 
+                                             as: :accept_application
+  get 'job_applications/:id'             => 'job_applications#show',
+                                             as: :application
+  # --------------------------------------------------------------------------
+  
   # ---------------------------- Job Seekers ---------------------------------
   resources :job_seekers do
      get 'home', on: :member, as: :home
@@ -136,6 +152,7 @@ Rails.application.routes.draw do
 
   get 'job_seekers/:id/applied_jobs/:application_type' =>
                 'job_seekers#applied_jobs', as: :applied_jobs_job_seeker
+  get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
   # --------------------------------------------------------------------------
 
 
