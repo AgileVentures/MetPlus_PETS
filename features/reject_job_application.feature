@@ -50,7 +50,8 @@ Feature: Reject a job application
     And I should see "3" active applications for the job
     Then I reject "jane@seek.com" application
     And I should see an "reject" confirmation
-    Then I click the "Reject" confirmation
+    And I input "Skillset not matching" as the reason for rejection
+    Then I click the "Reject" button
     And I should see "jane@seek.com" application is listed last
     And I should see "jane@seek.com" application changes to not_accepted
 
@@ -66,6 +67,8 @@ Feature: Reject a job application
     Then I click the "Reject" link
     And I should see an "reject" confirmation
     Then I click the "Reject" confirmation
+    And I input "Skillset not matching" as the reason for rejection
+    Then I click the "Reject" button
     And I am returned to "hr manager" job application index page
     And I should see "june@seek.com" application is listed last
     And I should see "june@seek.com" application changes to not_accepted
@@ -84,9 +87,10 @@ Feature: Reject a job application
     Then I click "hr manager" link to job applications index page
     And I reject "john@seek.com" application
     And I click the "Reject" confirmation
+    And I input "Not enough experience" as the reason for rejection
+    And I click the "Reject" button
 
     Then I am in Job Developer's browser
-    And I should see "Job Application: hr manager by John Seeker is rejected"
     And "dave@metplus.org" should receive an email with subject "Job application rejected"
     Then "dave@metplus.org" opens the email
     And I should see "A job application is rejected:" in the email body

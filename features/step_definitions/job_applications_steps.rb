@@ -109,7 +109,7 @@ And(/^I return to my "([^"]*)" home page$/) do |email|
 end
 
 And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
-  step %{I fill in "reason_for_rejection" with "#{reason}"}
+  step %{I fill in "reason_text" with "#{reason}"}
 end
 
 	  
