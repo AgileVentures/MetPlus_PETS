@@ -2,27 +2,35 @@ module JobSeekersViewer
   extend ActiveSupport::Concern
 
   def display_job_seekers people_type, agency_person, per_page = 5
+    collection = nil
     case people_type
     when 'jobseeker-cm'
-      return  AgencyPerson.paginate(page: params[:jobseekers_page],
-                                     per_page: per_page).
-                                     job_seekers_as_case_manager(agency_person)
-    
+      #return  AgencyPerson.paginate(page: params[:jobseekers_page],
+                                     #per_page: per_page).
+                                     #job_seekers_as_case_manager(agency_person)
+      collection = agency_person.job_seekers_as_case_manager    
     when 'jobseeker-jd'
-      return  AgencyPerson.paginate(page: params[:jobseekers_page],
-                                     per_page: per_page).
-                                     job_seekers_as_job_developer(agency_person)
+      #return  AgencyPerson.paginate(page: params[:jobseekers_page],
+                                     #per_page: per_page).
+                                     #job_seekers_as_job_developer(agency_person)
+     collection = agency_person.job_seekers_as_job_developer
     
     when 'jobseeker-without-jd'
-      return  JobSeeker.paginate(page: params[:jobseekers_page],
-                                     per_page: per_page).
-                                     job_seekers_without_job_developer
+      #return  JobSeeker.paginate(page: params[:jobseekers_page],
+                                     #per_page: per_page).
+                                     #job_seekers_without_job_developer
+      collection = JobSeeker.job_seekers_without_job_developer                             
     when 'jobseeker-without-cm'
-      return  JobSeeker.paginate(page: params[:jobseekers_page],
-                                     per_page: per_page).
-                                     job_seekers_without_case_manager
+      #return  JobSeeker.paginate(page: params[:jobseekers_page],
+                                     #per_page: per_page).
+                                     #job_seekers_without_case_manager
+      collection = JobSeeker.job_seekers_without_case_manager
 
     end
+    
+    return collection if collection.nil?
+   
+    collection.paginate(page: params[:jobseeker_page], per_page: per_page)
 
   end
   
