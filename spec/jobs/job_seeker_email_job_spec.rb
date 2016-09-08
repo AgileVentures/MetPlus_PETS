@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekerEmailJob, type: :job do
 
@@ -28,6 +29,11 @@ RSpec.describe JobSeekerEmailJob, type: :job do
                  perform_later(Event::EVT_TYPE[:CM_ASSIGNED_JS],
                  job_seeker, case_manager) }.
       to change(Delayed::Job, :count).by(+1)
+  end
+
+  before do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
   end
 
   it 'job applied by job developer event' do

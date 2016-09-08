@@ -2,6 +2,11 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobApplication, type: :model do
+  before do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   describe 'Database schema' do
     it {is_expected.to have_db_column :job_seeker_id}
     it {is_expected.to have_db_column :job_id }
@@ -15,11 +20,6 @@ RSpec.describe JobApplication, type: :model do
     let(:job_seeker){FactoryGirl.create(:job_seeker)}
     let(:job){FactoryGirl.create(:job, company: FactoryGirl.create(:company))}
     subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :active)}
-
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
-    end
 
     describe 'status' do
        it 'Status -1 should generate exception' do
@@ -43,11 +43,6 @@ RSpec.describe JobApplication, type: :model do
     end
   end
   describe '#status_name' do
-
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
-    end
 
     let(:job_seeker){FactoryGirl.create(:job_seeker)}
     let(:job){FactoryGirl.create(:job, company: FactoryGirl.create(:company))}
