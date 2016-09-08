@@ -184,7 +184,7 @@ class JobsController < ApplicationController
 			flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
 			redirect_to job_path(@job)
 		end
-	
+
 	end
 
 	def revoke

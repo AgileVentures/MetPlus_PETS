@@ -15,10 +15,10 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
-              JD_APPLY:      'job_applied_by_job_developer', 
-              APP_ACCEPTED:  'job_application_accepted', 
+              JD_APPLY:      'job_applied_by_job_developer',
+              APP_ACCEPTED:  'job_application_accepted',
               JOB_POSTED:    'job_posted',
-              JOB_REVOKED:   'job_revoked', 
+              JOB_REVOKED:   'job_revoked',
               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
               CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
               JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
@@ -116,7 +116,7 @@ class Event
                   perform_later(EVT_TYPE[:COMP_DENIED],
                   evt_obj.company,
                   evt_obj.company.company_people[0],
-                  evt_obj.reason)
+                  reason: evt_obj.reason)
   end
 
   def self.evt_js_apply(evt_obj)  # evt_obj = job application
@@ -135,7 +135,6 @@ class Event
                       js_id:   evt_obj.job_seeker.id,
                       js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                       notify_list: notify_list[0]})
-
       NotifyEmailJob.set(wait: delay_seconds.seconds).
                      perform_later(notify_list[1],
                      EVT_TYPE[:JS_APPLY],

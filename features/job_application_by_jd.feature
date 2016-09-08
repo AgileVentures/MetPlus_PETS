@@ -31,6 +31,10 @@ Background: data is added to database
   | June      | Seeker   | june.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
   | July      | Seeker   | july.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
+  Given the following resumes exist:
+  | file_name          | job_seeker             |
+  | Janitor-Resume.doc | john.seeker@places.com |
+
 	Given the following agency relations exist:
 	| job_seeker             | agency_person    | role |
 	| john.seeker@places.com | jane@metplus.org | JD   |
