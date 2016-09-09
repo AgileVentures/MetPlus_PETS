@@ -54,26 +54,11 @@ class AgencyPerson < ActiveRecord::Base
     end
   end
 
-  #def self.job_seekers_as_job_developer(job_developer)
-    # this method serves the Job Developer home page, hence the "your"
-
-    #self.where(id: JobSeeker.with_ap_in_role(:JD, self)).
-           # includes(:job_seeker_status, :job_applications).
-            #order("users.last_name")
-      
-      #job_developer.agency_relations.where(agency_role_id: AgencyRole.find_by_role(AgencyRole::ROLE[:JD]).id).map(&:job_seeker)
+  
   def job_seekers_as_job_developer
     job_seekers.where(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id))
   end
  
-  #def self.job_seekers_as_case_manager(case_manager)
-    # this method serves the Job Developer home page, hence the "your"
-
-    #where(id: JobSeeker.with_ap_in_role(:CM, case_manager)).
-          #includes(:job_seeker_status, :job_applications).
-          #order("users.last_name")
-    
-   # case_manager.agency_relations.where(agency_role_id: #AgencyRole.find_by_role(AgencyRole::ROLE[:CM]).id).map(&:job_seeker)
   def job_seekers_as_case_manager
     job_seekers.where(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id))
   end

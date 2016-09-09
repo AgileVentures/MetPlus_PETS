@@ -29,12 +29,10 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def self.with_ap_in_role(role_key, agency_person)
-    #AgencyRelation.in_role_of(role_key).
-                  #where(:agency_person => agency_person).
-                  #pluck(:job_seeker_id)
-     AgencyRelation.in_role_of(role_key).
+    AgencyRelation.in_role_of(role_key).
                   where(:agency_person => agency_person).
-                 includes(:job_seeker_status, :job_applications).order("users.last_name")
+                  pluck(:job_seeker_id)
+     
   end
   
 
