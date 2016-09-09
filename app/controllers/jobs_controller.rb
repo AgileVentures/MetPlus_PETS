@@ -167,13 +167,13 @@ class JobsController < ApplicationController
 			return
 		end
 
-		if pets_user == @job_seeker || @job_seeker.job_developer  # to be removed once authorize is set properly
+		if pets_user == @job_seeker || pets_user == @job_seeker.job_developer  # to be removed once authorize is set properly
 			begin 
 				job_app = @job.apply @job_seeker
 			# ActiveRecord::RecordInvalid is raised when validation at model level fails
 			# ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
 			rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
-				flash[:alert] = "Invalid action due to duplicated application"
+				flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
 				redirect_to job_path(@job)
 			else
 				if pets_user == @job_seeker

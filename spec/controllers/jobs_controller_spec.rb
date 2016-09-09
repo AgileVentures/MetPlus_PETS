@@ -800,7 +800,7 @@ RSpec.describe JobsController, type: :controller do
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "shows flash[:alert]" do
-        expect(flash[:alert]).to be_present.and eq "Invalid action due to duplicated application"
+        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
       end
       it "redirects to job" do
         expect(response).to redirect_to(:action => 'show', :id => @job.id)
@@ -841,7 +841,7 @@ RSpec.describe JobsController, type: :controller do
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "shows flash[:alert]" do
-        expect(flash[:alert]).to be_present.and eq "Invalid action due to duplicated application"
+        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
       end
       it "redirects to job" do
         expect(response).to redirect_to(:action => 'show', :id => @job.id)
@@ -851,7 +851,9 @@ RSpec.describe JobsController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
-        allow(controller).to receive(:current_user).and_return(job_developer)
+        job_seeker.assign_job_developer(job_developer, agency)
+        job_developer2 = FactoryGirl.create(:job_developer, agency: agency)
+        allow(controller).to receive(:current_user).and_return(job_developer2)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it 'show flash[:alert]' do
