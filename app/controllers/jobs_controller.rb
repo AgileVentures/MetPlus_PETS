@@ -167,12 +167,13 @@ class JobsController < ApplicationController
 			return
 		end
 
-		if pets_user == @job_seeker
-			begin
-				@job.apply @job_seeker
-				Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
-			rescue Exception => e
-				flash[:alert] = "Unable to apply at this moment, please try again."
+		if pets_user == @job_seeker || pets_user == @job_seeker.job_developer  # to be removed once authorize is set properly
+			begin 
+				job_app = @job.apply @job_seeker
+			# ActiveRecord::RecordInvalid is raised when validation at model level fails
+			# ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+			rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
+				flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
 				redirect_to job_path(@job)
 			end
 		elsif pets_user == @job_seeker.job_developer

@@ -806,16 +806,11 @@ RSpec.describe JobsController, type: :controller do
         allow(controller).to receive(:current_user).and_return(job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
-      it "is a redirect" do
-        expect(response).to have_http_status(:redirect)
+      it "shows flash[:alert]" do
+        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
       end
       it "redirected to the job" do
         expect(response).to redirect_to(:action => 'show', :id => @job.id)
-      end
-      it 'check set flash' do
-        should set_flash
-        expect(flash[:alert]).to be_present
-        expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
       end
     end
     describe 'successful application as job developer' do
@@ -845,11 +840,31 @@ RSpec.describe JobsController, type: :controller do
         expect(response).to redirect_to(job_path(@job))
       end
     end
+
+    describe 'duplicated applications as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "shows flash[:alert]" do
+        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
+      end
+      it "redirects to job" do
+        expect(response).to redirect_to(:action => 'show', :id => @job.id)
+      end
+    end
+
     describe 'invalid application as job developer' do
       before :each do
         agency = FactoryGirl.create(:agency)
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
-        allow(controller).to receive(:current_user).and_return(job_developer)
+        job_seeker.assign_job_developer(job_developer, agency)
+        job_developer2 = FactoryGirl.create(:job_developer, agency: agency)
+        allow(controller).to receive(:current_user).and_return(job_developer2)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it 'show flash[:alert]' do
