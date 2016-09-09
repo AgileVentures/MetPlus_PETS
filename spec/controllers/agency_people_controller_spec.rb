@@ -268,6 +268,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign job developer to job seeker' do
 
       before do |example|
+        allow(Pusher).to receive(:trigger)
         unless example.metadata[:skip_before]
           xhr :patch, :assign_job_seeker, id: job_developer.id,
                       job_seeker_id: job_seeker.id, agency_role: 'JD'
@@ -308,6 +309,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign case manager to job seeker' do
 
       before do |example|
+        allow(Pusher).to receive(:trigger)
         unless example.metadata[:skip_before]
           xhr :patch, :assign_job_seeker, id: case_manager.id,
                       job_seeker_id: job_seeker.id, agency_role: 'CM'
@@ -522,7 +524,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
                                                })
       end
     end
-    
+
     context 'job developer without job seeker' do
       before :each do
         @job_developer1 = FactoryGirl.create(:job_developer, agency: agency)

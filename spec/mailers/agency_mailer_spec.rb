@@ -49,11 +49,13 @@ RSpec.describe AgencyMailer, type: :mailer do
 
   describe 'Job seeker applied to job' do
     let!(:agency_person) { FactoryGirl.create(:agency_admin) }
-    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
+    let!(:job_seeker)     { FactoryGirl.create(:job_seeker) }
+    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let!(:company) { FactoryGirl.create(:company) }
     let(:company_person) { FactoryGirl.create(:company_person, company: company) }
     let(:job)            { FactoryGirl.create(:job, company: company,
                                               company_person: company_person) }
+    let!(:test_file) {'../fixtures/files/Admin-Assistant-Resume.pdf'}
     let(:application) do
       job.apply job_seeker
     end
@@ -64,6 +66,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     before :each do
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      stub_cruncher_file_download test_file
     end
 
     it "renders the headers" do
@@ -85,7 +88,7 @@ RSpec.describe AgencyMailer, type: :mailer do
   describe 'Job Application accepted' do
     let(:job) { FactoryGirl.create(:job) }
     let(:job_developer) { FactoryGirl.create(:job_developer) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) } 
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:app) { FactoryGirl.create(:job_application, job_seeker: job_seeker, job: job) }
     let(:mail) { AgencyMailer.job_application_accepted(job_developer.email, app) }
 

@@ -60,7 +60,8 @@ class CruncherService
       # If successful, :content_disposition will be set in the header
       return nil unless contents.headers[:content_disposition]
 
-      tempfile = Tempfile.new("file_id_#{file_id}_", './tmp')
+      tempfile = Tempfile.new("file_id_#{file_id}_", './tmp',
+                              encoding: contents.encoding)
       tempfile.write contents
       tempfile.close
 

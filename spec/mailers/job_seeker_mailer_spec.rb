@@ -1,4 +1,5 @@
 require "rails_helper"
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekerMailer, type: :mailer do
 
@@ -47,6 +48,11 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     let(:job)            { FactoryGirl.create(:job) }
     let(:mail) { JobSeekerMailer.job_applied_by_job_developer(job_seeker, job_developer, job) }
 
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
     it "renders the headers" do
       expect(mail.subject).to eq 'Job applied by job developer'
       expect(mail.to).to eq(["#{job_seeker.email}"])
@@ -59,7 +65,7 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     it "includes link to show job" do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
-  
+
   end
 
 end

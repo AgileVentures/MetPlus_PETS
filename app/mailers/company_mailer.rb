@@ -17,6 +17,14 @@ class CompanyMailer < ApplicationMailer
     send_company_mail(company, company_person, email_text)
   end
 
+  def application_received(company, job_application, resume_file_path)
+    @job = job_application.job
+    @job_seeker = job_application.job_seeker
+    file_name = @job_seeker.resumes.first.file_name
+    attachments[file_name] = File.read(resume_file_path)
+    mail to: company.job_email, subject: 'Job Application received'
+  end
+
   private
 
   def send_company_mail(company, company_person, email_text=nil)
