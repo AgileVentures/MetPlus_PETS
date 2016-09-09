@@ -22,11 +22,8 @@ class AgencyPeopleController < ApplicationController
     @people_type_jd = 'jobseeker-jd'
     @people_type_without_jd = 'jobseeker-without-jd'
     @people_type_without_cm = 'jobseeker-without-cm'
-    #@js_without_jd = AgencyPerson.job_seekers_without_job_developer
     @js_without_jd = JobSeeker.job_seekers_without_job_developer
     @js_without_cm = JobSeeker.job_seekers_without_case_manager
-    #@your_jobseekers_jd = @agency_person.job_seekers_as_job_developer(@agency_person)
-    #@your_jobseekers_cm = @agency_person.job_seekers_as_case_manager(@agency_person)
     @your_jobseekers_jd = @agency_person.job_seekers_as_job_developer
     @your_jobseekers_cm = @agency_person.job_seekers_as_case_manager
 
