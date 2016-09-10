@@ -25,7 +25,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     it 'instance vars for view' do
       expect(assigns(:company)).to eq @companyperson.company
-      expect(assigns(:task_type)).to eq 'mine-open'
+      expect(assigns(:task_type)).to eq 'company-open'
       expect(assigns(:job_type)).to eq 'my-company-all'
       expect(assigns(:people_type)).to eq 'my-company-all'
 

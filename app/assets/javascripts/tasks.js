@@ -29,6 +29,11 @@ var TaskManager = function (holder_id, task_type) {
         self.unsetTaskHolder();
         $("#" + self.holder_id).trigger('pagination:reload');
     };
+    this.refresh_all_task_lists = function() {
+      for (var taskManager in __TaskManagerHolder) {
+        TaskManagerHolder(taskManager).refresh_tasks();
+      }
+    };
     this.wip_task = function(event) {
         event.preventDefault();
         var url = $(this).data("url");
@@ -38,7 +43,7 @@ var TaskManager = function (holder_id, task_type) {
             timeout: 5000,
             success: function (){
                 Notification.success_notification('Work on the task started');
-                self.refresh_tasks();
+                self.refresh_all_task_lists();
             },
             error: function (xhrObj, status, exception) {
                 Notification.error_notification(xhrObj.responseJSON['message']);
@@ -53,7 +58,7 @@ var TaskManager = function (holder_id, task_type) {
             timeout: 5000,
             success: function (){
                 Notification.success_notification('Work on the task is done');
-                self.refresh_tasks();
+                self.refresh_all_task_lists();
             },
             error: function (xhrObj, status, exception) {
                 Notification.error_notification(xhrObj.responseJSON['message']);
@@ -103,7 +108,7 @@ var TaskModal = {
                   timeout: 5000,
                   success: function () {
                       Notification.success_notification('Task assigned');
-                      TaskManagerHolder($('#assignTaskModal_button').data('location'), "").refresh_tasks();
+                      TaskManagerHolder($('#assignTaskModal_button').data('location'), "").refresh_all_task_lists();
                       $("#assignTaskModal").modal('hide');
                   },
                   error: function (xhrObj, status, exception) {

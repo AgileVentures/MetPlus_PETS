@@ -97,14 +97,35 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
+@selenium 
+  Scenario: Agency admin can see all tabs
+    Given I am on the home page
+    And I login as "aa@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'aa@metplus.org' Home page
+    And I wait 2 seconds
+    And I should see "Unassigned Agency Tasks"
+    And I should see "Your Open Tasks"
+    And I should see "All Agency Open Tasks"
+    And I should see "Closed Tasks"
+    And The tasks 5,6 are present
+    And The tasks 1,2,3,4,7 are hidden
+    And I click the "Unassigned Agency Tasks" link
+    And The tasks 1,2 are present
+    And The tasks 3,4,7 are hidden
+    And I click the "All Agency Open Tasks" link
+    And The tasks 3,4,5,6 are present
+    And The tasks 1,2,7 are hidden
+    And I click the "Closed Tasks" link
+    And The task 7 is present
+    And The tasks 1,2,3,4 are hidden
 
-  @selenium
+  @selenium 
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'aa@metplus.org' Home page
     And I wait 2 seconds
-    And The tasks 1,2,5,6 are present
+    And I click the "Unassigned Agency Tasks" link
     Then I press the assign button of the task 2
     And I should see "Select the user to assign the task to:"
     And I select2 "Jones, Jane" from "task_assign_select"
@@ -112,6 +133,8 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Task assigned"
     And The task 2 is not present
+    And I click the "All Agency Open Tasks" link
+    And The task 2 is present
 
   @selenium
   Scenario: Job developer assigns self to job seeker
