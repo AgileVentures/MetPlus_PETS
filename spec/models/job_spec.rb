@@ -99,15 +99,10 @@ RSpec.describe Job, type: :model do
         expect(job.job_seekers).to eq [job_seeker]
         expect(job.number_applicants).to be(num_applications + 1)
       end
-      it 'second application, same job seeker' do
-        num_applications = job.number_applicants
-        first_appl = job.apply job_seeker
-        second_appl = job.apply job_seeker
-        job.reload
-        expect(job.job_seekers).to eq [job_seeker]
-        expect(job.number_applicants).to be(num_applications + 2)
-        expect(job.last_application_by_job_seeker(job_seeker)).
-                        to eq second_appl
+      it 'raise error - second application with same job seeker' do
+        job.apply job_seeker
+        expect{ job.apply job_seeker }.to raise_error(ActiveRecord::RecordInvalid).
+          with_message('Validation failed: Job seeker has already been taken')
       end
       it 'two applications, different job seekers' do
         num_applications = job.number_applicants
