@@ -34,8 +34,12 @@ class Job < ActiveRecord::Base
   enum status: [:active, :filled, :revoked]
   has_many :status_changes, as: :entity, dependent: :destroy
 
+  # `self.status.to_sym` is necessary because sometimes we would need to create
+  #  a job with a status other than `active`(in tests) and we don't want
+  #  to have a mismatch in statuses across `jobs` and `status_changes` tables.
+
   after_create do
-    StatusChange.update_status_history(self, :active)
+    StatusChange.update_status_history(self, self.status.to_sym || :active)
   end
 
   def number_applicants
