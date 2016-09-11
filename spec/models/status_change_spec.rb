@@ -42,19 +42,19 @@ RSpec.describe StatusChange, type: :model do
     let(:entity2) { TestEntity.create }
 
     it 'adds a status change record for an entity' do
-      expect{ StatusChange.update_status_history(entity1, nil, :hello) }.
+      expect{ StatusChange.update_status_history(entity1, :hello) }.
             to change(StatusChange, :count).by 1
       expect(entity1.status_changes.count).to eq 1
     end
 
     it 'returns status change time for an entity' do
-      StatusChange.update_status_history(entity1, nil, :hello)
+      StatusChange.update_status_history(entity1, :hello)
       sleep(1)
-      StatusChange.update_status_history(entity2, nil, :hello)
-      
-      StatusChange.update_status_history(entity1, :hello, :goodbye)
+      StatusChange.update_status_history(entity2, :hello)
+
+      StatusChange.update_status_history(entity1, :goodbye)
       sleep(1)
-      StatusChange.update_status_history(entity2, :hello, :still_here)
+      StatusChange.update_status_history(entity2, :still_here)
 
       expect(StatusChange.status_change_time(entity1, :hello)).
           to eq StatusChange.first.created_at
@@ -69,11 +69,11 @@ RSpec.describe StatusChange, type: :model do
     end
 
     it 'returns an array of times for multiple occurences of status' do
-      t1 = StatusChange.update_status_history(entity1, nil, :hello).
+      t1 = StatusChange.update_status_history(entity1, :hello).
                       last.created_at
-      t2 = StatusChange.update_status_history(entity1, :hello, :goodbye).
+      t2 = StatusChange.update_status_history(entity1, :goodbye).
                       last.created_at
-      t3 = StatusChange.update_status_history(entity1, :goodbye, :hello).
+      t3 = StatusChange.update_status_history(entity1, :hello).
                       last.created_at
 
       change_times = StatusChange.status_change_time(entity1, :hello, :all)
@@ -82,8 +82,8 @@ RSpec.describe StatusChange, type: :model do
     end
 
     it 'raises exception with invalid time(s) selector' do
-      StatusChange.update_status_history(entity1, nil, :hello)
-      StatusChange.update_status_history(entity1, :hello, :good_bye)
+      StatusChange.update_status_history(entity1, :hello)
+      StatusChange.update_status_history(entity1, :good_bye)
 
       expect {StatusChange.status_change_time(entity1, :hello, :unknown)}.
                   to raise_error(ArgumentError, "Invalid 'which' argument")

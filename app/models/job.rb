@@ -31,11 +31,12 @@ class Job < ActiveRecord::Base
   scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
   scope :find_by_company, ->(company) {where(:company => company)}
 
-  STATUS = {ACTIVE:  'active',
-            FILLED:  'filled',
-            REVOKED: 'revoked'}
-  validates_inclusion_of :status, :in => STATUS.values,
-       :message => "must be one of: #{STATUS.values.join(', ')}"
+  enum status: [:active, :filled, :revoked]
+  has_many :status_changes, as: :entity, dependent: :destroy
+
+  after_create do
+    StatusChange.update_status_history(self, :active)
+  end
 
   def number_applicants
     job_applications.size
@@ -44,10 +45,40 @@ class Job < ActiveRecord::Base
   def apply job_seeker
     job_seekers << job_seeker
     save!
+
+    # Download resume from the Cruncher
+    resume_id = job_seeker.resumes[0].id
+    temp_file = ResumeCruncher.download_resume(resume_id)
+    job_application = last_application_by_job_seeker(job_seeker)
+
+    # Send mail to the company with the attached resume
+    CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
+                     perform_later(Event::EVT_TYPE[:JS_APPLY],
+                     self.company,
+                      nil, { application: job_application,
+                      resume_file_path: temp_file.path })
+
+    # Remove the temp file
+    temp_file.unlink
+
+    last_application_by_job_seeker(job_seeker)
+  end
+
+  def status_change_time(status, which = :latest)
+    StatusChange.status_change_time(self, status, which)
   end
 
   def filled
-    update_attribute(:status, STATUS[:FILLED])
+    update_attribute(:status, :filled)
+    StatusChange.update_status_history(self, :filled)
+  end
+
+  def revoked
+    if update_attribute(:status, :revoked)
+      StatusChange.update_status_history(self, :revoked)
+      return true
+    end
+    false
   end
 
   def last_application_by_job_seeker(job_seeker)

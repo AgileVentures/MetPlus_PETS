@@ -268,6 +268,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign job developer to job seeker' do
 
       before do |example|
+        allow(Pusher).to receive(:trigger)
         unless example.metadata[:skip_before]
           xhr :patch, :assign_job_seeker, id: job_developer.id,
                       job_seeker_id: job_seeker.id, agency_role: 'JD'
@@ -308,6 +309,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign case manager to job seeker' do
 
       before do |example|
+        allow(Pusher).to receive(:trigger)
         unless example.metadata[:skip_before]
           xhr :patch, :assign_job_seeker, id: case_manager.id,
                       job_seeker_id: job_seeker.id, agency_role: 'CM'
@@ -489,6 +491,56 @@ RSpec.describe AgencyPeopleController, type: :controller do
     end
     it "returns http success" do
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET #my_js_as_jd' do
+
+    let!(:agency)       { FactoryGirl.create(:agency) }
+
+    context 'job developer cum case manager with job seekers' do
+      before :each do
+        @jd_cm = FactoryGirl.create(:jd_cm, agency: agency)
+        @job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        @js1 = FactoryGirl.create(:job_seeker)
+        @js1.assign_job_developer(@jd_cm, agency)
+        @js2 = FactoryGirl.create(:job_seeker)
+        @js2.assign_job_developer(@jd_cm, agency)
+        @js3 = FactoryGirl.create(:job_seeker)
+        @js3.assign_job_developer(@job_developer, agency)
+        @js3.assign_case_manager(@jd_cm, agency)
+        sign_in @jd_cm
+        xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json
+      end
+
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'check content' do
+        expect(JSON.parse(response.body)).to eq({'results' => [
+                                               {'id' => @js1.id, 'text' => @js1.full_name},
+                                               {'id' => @js2.id, 'text' => @js2.full_name}]
+                                               })
+      end
+    end
+
+    context 'job developer without job seeker' do
+      before :each do
+        @job_developer1 = FactoryGirl.create(:job_developer, agency: agency)
+        @js1 = FactoryGirl.create(:job_seeker)
+        @js2 = FactoryGirl.create(:job_seeker)
+        sign_in @job_developer1
+        xhr :get, :my_js_as_jd , id: @job_developer1.id, :format => :json
+      end
+
+      it 'returns http success' do
+        expect(response).to have_http_status(403)
+      end
+
+      it 'check content' do
+        expect(response.body).to eq({:message => 'You do not have job seekers!'}.to_json)
+      end
     end
   end
 end

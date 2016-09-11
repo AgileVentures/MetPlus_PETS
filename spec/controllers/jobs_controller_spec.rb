@@ -2,7 +2,7 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec::Matchers.define :evt_obj do |*attributes|
-  match do |actual| 
+  match do |actual|
     if actual.is_a?(Struct)
       attributes.each do |attribute|
         return false unless actual.respond_to?(attribute)
@@ -418,7 +418,7 @@ RSpec.describe JobsController, type: :controller do
     let!(:skill)     { FactoryGirl.create(:skill, name: 'test skill') }
     let(:job3)       { FactoryGirl.create(:job, company: @company_person.company) }
     let!(:job_skill) { FactoryGirl.create(:job_skill, job: job3, skill: skill)}
-   
+
     it 'destroys job and associated job_skill' do
       expect { delete :destroy, :id => job_skill.job.id }.
         to change(Job, :count).by -1
@@ -716,6 +716,8 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #apply' do
     let!(:job_seeker){FactoryGirl.create(:job_seeker)}
+    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:testfile_resume) { '/files/Janitor-Resume.doc' }
     before :each do
       agency = FactoryGirl.create(:agency)
     end
@@ -767,12 +769,14 @@ RSpec.describe JobsController, type: :controller do
         expect(flash[:alert]).to eq "Unable to find the user who wants to apply."
       end
     end
-    describe 'successful application' do
+    describe 'successful application as job seeker' do
       before :each do
         allow(Pusher).to receive(:trigger)
 
         allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_seeker)
+        stub_cruncher_authenticate
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "is a success" do
@@ -793,7 +797,7 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JS_APPLY, application)
       end
     end
-    describe 'error applications' do
+    describe 'error applications as job seeker' do
       let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
       before :each do
         expect(Job).to receive(:find_by_id).and_return(job)
@@ -812,6 +816,47 @@ RSpec.describe JobsController, type: :controller do
         should set_flash
         expect(flash[:alert]).to be_present
         expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
+      end
+    end
+    describe 'successful application as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        allow(Pusher).to receive(:trigger)
+        allow(Event).to receive(:create).and_call_original
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        stub_cruncher_authenticate
+        stub_cruncher_file_download testfile_resume
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'creates a job application' do
+        @job.reload
+        expect(@job.job_seekers).to include job_seeker
+      end
+      it 'creates :JD_APPLY event' do
+        application = @job.job_applications.last
+        expect(Event).to have_received(:create).with(:JD_APPLY, application)
+      end
+      it 'show flash[:info]' do
+        expect(flash[:info]).to be_present.and eq "Job is successfully applied for #{job_seeker.full_name}"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
+      end
+    end
+    describe 'invalid application as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'show flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Invalid application: You are not the Job Developer for this job seeker"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
       end
     end
     describe 'user not logged in' do
@@ -895,6 +940,6 @@ RSpec.describe JobsController, type: :controller do
       it 'redirects to jobs_path' do
         expect(response).to redirect_to(jobs_path)
       end
-    end  
+    end
   end
 end

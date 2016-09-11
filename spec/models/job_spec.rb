@@ -25,6 +25,7 @@ RSpec.describe Job, type: :model do
           source(:skill).class_name('Skill')}
     it { is_expected.to have_many(:job_applications) }
     it { is_expected.to have_many(:job_seekers).through(:job_applications) }
+    it { is_expected.to have_many(:status_changes) }
   end
 
   describe 'Database schema' do
@@ -49,11 +50,28 @@ RSpec.describe Job, type: :model do
     it { should allow_value('', nil).for(:fulltime).on(:update) }
     it { should allow_value('', nil).for(:fulltime).on(:create) }
     it { is_expected.to validate_presence_of :company_id }
-    xit { is_expected.to validate_presence_of :company_person_id }
     it { is_expected.to validate_inclusion_of(:shift).
                                       in_array(%w[Day Evening Morning]) }
-    it { is_expected.to validate_inclusion_of(:status).
-                                      in_array(Job::STATUS.values) }
+    describe 'status' do
+       it 'Status -1 should generate exception' do
+         expect{subject.status = -1}.to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
+       end
+       it 'Status 0 should be active' do
+         subject.status = 0
+         expect(subject.status).to eq 'active'
+       end
+       it 'Status 1 should be filled' do
+         subject.status = 1
+         expect(subject.status).to eq 'filled'
+       end
+       it 'Status 2 should be revoked' do
+         subject.status = 2
+         expect(subject.status).to eq 'revoked'
+       end
+       it 'Status 3 should generate exception' do
+         expect{subject.status = 3}.to raise_error(ArgumentError).with_message('\'3\' is not a valid status')
+       end
+    end
   end
 
   describe 'Class methods' do
@@ -62,12 +80,16 @@ RSpec.describe Job, type: :model do
   describe 'Instance methods' do
     describe '#apply' do
       let(:job) {FactoryGirl.create(:job)}
-      let(:job_seeker) {FactoryGirl.create(:job_seeker)}
-      let(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+      let!(:job_seeker) {FactoryGirl.create(:job_seeker)}
+      let!(:job_seeker_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker)}
+      let!(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+      let!(:job_seeker2_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker2)}
+      let!(:test_file) {'../fixtures/files/Admin-Assistant-Resume.pdf'}
 
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_job_create
+        stub_cruncher_file_download test_file
       end
 
       it 'success - first application' do
@@ -79,10 +101,8 @@ RSpec.describe Job, type: :model do
       end
       it 'second application, same job seeker' do
         num_applications = job.number_applicants
-        job.apply job_seeker
-        first_appl = job.last_application_by_job_seeker(job_seeker)
-        job.apply job_seeker
-        second_appl = job.last_application_by_job_seeker(job_seeker)
+        first_appl = job.apply job_seeker
+        second_appl = job.apply job_seeker
         job.reload
         expect(job.job_seekers).to eq [job_seeker]
         expect(job.number_applicants).to be(num_applications + 2)
@@ -91,10 +111,8 @@ RSpec.describe Job, type: :model do
       end
       it 'two applications, different job seekers' do
         num_applications = job.number_applicants
-        job.apply job_seeker
-        first_appl = job.last_application_by_job_seeker(job_seeker)
-        job.apply job_seeker2
-        second_appl = job.last_application_by_job_seeker(job_seeker2)
+        first_appl = job.apply job_seeker
+        second_appl = job.apply job_seeker2
         job.reload
         expect(job.job_seekers).to eq [job_seeker, job_seeker2]
         expect(job.number_applicants).to be(num_applications + 2)
@@ -153,4 +171,50 @@ RSpec.describe Job, type: :model do
 
    end
   end
+
+  describe 'tracking status change history' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    let!(:job) { FactoryGirl.create(:job) }
+
+    context 'active to filled' do
+      before(:each) do
+        sleep(1)
+        job.filled
+      end
+
+      it 'adds a status change record for a new application' do
+        expect{ FactoryGirl.create(:job) }.
+              to change(StatusChange, :count).by 1
+      end
+
+      it 'tracks status change times for the job' do
+        expect(job.status_change_time(:active)).
+            to eq StatusChange.first.created_at
+
+        expect(job.status_change_time(:filled)).
+            to eq StatusChange.second.created_at
+      end
+    end
+
+    context 'active to revoked' do
+      before(:each) do
+        sleep(1)
+        job.revoked
+      end
+
+      it 'tracks status change times for the job' do
+        expect(job.status_change_time(:active)).
+            to eq StatusChange.first.created_at
+
+        expect(job.status_change_time(:revoked)).
+            to eq StatusChange.second.created_at
+      end
+    end
+
+  end
+
 end
