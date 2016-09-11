@@ -8,7 +8,7 @@
 
   - elsif @obj_type == 'Company'
     A company has requested registration in PETS:
-    = link_to @obj.name, company_url(id: @obj.id, admin_type: 'AA')
+    = link_to @obj.name, company_url(id: @obj.id)
 
   - elsif @obj_type == 'Job Application'
     A job seeker has applied to this job:
