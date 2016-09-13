@@ -72,9 +72,12 @@ module ServiceStubHelpers
     def stub_cruncher_match_jobs
 
       body_json = JSON.generate({"resultCode"=>"SUCCESS", "message"=>"Success",
-              "jobs"=>{"matcher1"=>[{"jobId"=>"3", "stars"=>4.7},
-                                    {"jobId"=>"2", "stars"=>3.8},
-                                    {"jobId"=>"6", "stars"=>3.2}]}})
+              "jobs"=>{"matcher1"=>[{"jobId"=>"2", "stars"=>3.8},
+                                    {"jobId"=>"3", "stars"=>4.7},
+                                    {"jobId"=>"6", "stars"=>3.2}],
+                       "matcher2"=>[{"jobId"=>"8", "stars"=>2.8},
+                                    {"jobId"=>"9", "stars"=>2.9},
+                                    {"jobId"=>"6", "stars"=>3.4}]}})
 
       stub_request(:get, CruncherService.service_url + '/job/match/1').
         to_return(body: body_json, status:200,
@@ -89,9 +92,12 @@ module ServiceStubHelpers
 
     def stub_cruncher_match_resumes
       body_json = JSON.generate({"resultCode"=>"SUCCESS", "message"=>"Success",
-              "resumes"=>{"matcher1"=>[{"resumeId"=>"2", "stars"=>2.0},
+           "resumes"=>{"matcher1"=>[{"resumeId"=>"2", "stars"=>2.0},
                                     {"resumeId"=>"7", "stars"=>4.9},
-                                    {"resumeId"=>"5", "stars"=>3.6}]}})
+                                    {"resumeId"=>"5", "stars"=>3.6}],
+                       "matcher2"=>[{"resumeId"=>"8", "stars"=>1.8},
+                                    {"resumeId"=>"5", "stars"=>3.8},
+                                    {"resumeId"=>"6", "stars"=>1.7}]}})
 
       stub_request(:get, CruncherService.service_url + '/resume/match/1').
           to_return(body: body_json, status: 200,

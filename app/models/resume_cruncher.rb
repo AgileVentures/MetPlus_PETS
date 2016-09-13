@@ -1,5 +1,6 @@
 class ResumeCruncher
   include ActiveModel::Model
+  include CruncherUtility
 
   # This provides functionality that mediates between the Cruncher service
   # and other models and controllers, for example:
@@ -22,39 +23,21 @@ class ResumeCruncher
   end
 
   def self.match_resumes(job_id)
-    # If match exists, returns a hash of résumé matches where each
-    # key is résumé id (integer) and value is the score of the résumé
-    # match to the job (float - one digit to right of decimal point).
-    # Otherwise returns nil (in case of job not found)
+    # If match exists, returns an array of résumé matches.  Each match
+    # is represented as an array with 2 values - the first value is
+    # the résumé ID, and the second the match score (a float, with
+    # one digit to right of decimal point).
+    # Otherwise returns nil(in case of job not found)
+
+    # The array is sorted by score (descending)
 
     # Example return value:
-    # {3 => 2.1, 5 => 3.3, 8 => 4.7}
-    # Résumé (ID) 3 matched job with a score of 2.1, résumé 5 with 3.3, etc.
-
-    # Note that the results are not sorted in any order (keys or values)
+    # [ [8, 4.7], [5, 3.3], [3, 2.1] ]
+    # Résumé (ID) 8 matched job with a score of 4.7, résumé 5 with 3.3, etc.
 
     match_results = CruncherService.match_resumes(job_id)
 
-    matching_resumes = {}
-
-    # First level of results is a hash of specific matcher results ....
-    match_results.each_value do |matcher|
-      # Second level is array of resume matching scores (hashes) ....
-      matcher.each do |resume_match|
-        resume_id = resume_match['resumeId'].to_i
-
-        # Have we seen this job from another matcher?
-        # If so, use highest score
-        if matching_resumes[resume_id]
-          matching_resumes[resume_id] = resume_match['stars'] if
-          matching_resumes[resume_id] < resume_match['stars']
-        else
-          matching_resumes[resume_id] = resume_match['stars']
-        end
-      end
-    end
-
-    matching_resumes
+    self.process_match_results match_results
   end
 
 end
