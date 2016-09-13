@@ -28,7 +28,7 @@ require 'webmock/rspec'
 # WebMock.disable!
 
 #  This allows non-mocked external service calls to proceed:
-# WebMock.allow_net_connect!
+WebMock.allow_net_connect!
 
 CodeClimate::TestReporter.start
 RSpec.configure do |config|
