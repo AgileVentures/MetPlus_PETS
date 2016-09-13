@@ -3,7 +3,7 @@ Feature: Accept a job application
 	As a company person
 	I want to accept a job application
 
-Background: data is added to database 
+Background: data is added to database
 
 	Given the default settings are present
 
@@ -33,8 +33,8 @@ Background: data is added to database
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator          |
-    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com | 
-    
+    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com |
+
 	Given the following job applications exist:
 		| job title 	 | job seeker 	 | status 			|
 		| hr manager	 | john@seek.com | active 			|
@@ -46,22 +46,22 @@ Background: data is added to database
 		Given I am on the home page
 	  And I login as "cicil@widgets.com" with password "qwerty123"
 	  And I wait 1 second
-	  Then I click "hr manager" link to job applications index page 
+	  Then I click "hr manager" link to job applications index page
 	  And I should see "3" active applications for the job
 	  Then I accept "jane@seek.com" application
 	  And I should see an "accept" confirmation
 	  Then I click the "Accept" confirmation
 	  And I should see "jane@seek.com" application is listed first
-	  And I should see "jane@seek.com" application changes to accepted 
+	  And I should see "jane@seek.com" application changes to accepted
 	  And other applications change to not accepted
 	  And I should see "hr manager" job changes to status filled
 
-	@javascript
+	@selenium
 	Scenario: company admin accept a job application
 		Given I am on the home page
 	  And I login as "cane@widgets.com" with password "qwerty123"
 	  And I wait 1 second
-	  Then I click "hr manager" link to job applications index page 
+	  Then I click "hr manager" link to job applications index page
 	  And I should see "3" active applications for the job
 	  Then I click "june@seek.com" link to "June's" job application show page
 	  And I should see an "Accept" link
@@ -70,7 +70,7 @@ Background: data is added to database
 	  Then I click the "Accept" confirmation
 	  And I am returned to "hr manager" job application index page
 	  And I should see "june@seek.com" application is listed first
-	  And I should see "june@seek.com" application changes to accepted 
+	  And I should see "june@seek.com" application changes to accepted
 	  And other applications change to not accepted
 	  And I should see "hr manager" job changes to status filled
 	  Then I click "june@seek.com" link to "June's" job application show page
@@ -85,7 +85,7 @@ Background: data is added to database
 	  When I am in Company Admin's browser
 	  Given I am on the home page
 	  And I login as "cane@widgets.com" with password "qwerty123"
-	  Then I click "hr manager" link to job applications index page 
+	  Then I click "hr manager" link to job applications index page
 	  And I accept "john@seek.com" application
 	  And I click the "Accept" confirmation
 
@@ -94,5 +94,3 @@ Background: data is added to database
 	  And "dave@metplus.org" should receive an email with subject "Job application accepted"
 	  Then "dave@metplus.org" opens the email
 	  And I should see "A job application is accepted:" in the email body
-	  
-

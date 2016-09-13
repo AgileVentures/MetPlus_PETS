@@ -47,6 +47,15 @@ var PusherControl = {
       }
     });
 
+    channel.bind('job_applied_by_job_developer', function(data) {
+      // Process event if I am logged in and I am in notify list
+      if (parseInt(Cookies('user_id')) === data.js_user_id) {
+        Notification.info_notification('Your job developer ' +
+            " has applied to <a href='/jobs/" + data.job_id +
+            "' target='_blank'>this job</a>" + ' for you.');
+      }
+    });
+
     channel.bind('job_application_accepted', function(data) {
       if (parseInt(Cookies('user_id')) === data.jd_user_id) {
         Notification.info_notification("Job Application: " +

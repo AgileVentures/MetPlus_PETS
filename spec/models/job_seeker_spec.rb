@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+include ServiceStubHelpers::Cruncher
+
 describe JobSeeker, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
@@ -26,18 +28,17 @@ describe JobSeeker, type: :model do
   end
 
   describe "#latest_application" do
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:job1)       { FactoryGirl.create(:job) }
-    let(:job2)       { FactoryGirl.create(:job) }
+    let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let(:job1)        { FactoryGirl.create(:job) }
+    let(:job2)        { FactoryGirl.create(:job) }
+    let(:test_file)   { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
     it 'returns last application for job seeker' do
 
-      stub_request(:post,CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-           :headers => {'Content-Type' => 'application/json'})
-      stub_request(:post, CruncherService.service_url + '/job/create').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}" , status: 200,
-           :headers => {'Content-Type' => 'application/json'})
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      stub_cruncher_file_download test_file
 
       job1.apply job_seeker
       expect(job_seeker.latest_application).to eq job1.job_applications[0]

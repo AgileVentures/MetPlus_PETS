@@ -34,8 +34,8 @@ module ServiceStubHelpers
     def stub_cruncher_file_download(testfile)
       file = fixture_file_upload(testfile)
 
-      stub_request(:get, CruncherService.service_url + '/curriculum/1').
-          to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
+      stub_request(:get, /#{CruncherService.service_url + "/curriculum/"}\d+/).
+          to_return(body: file.read, status: 200,
           :headers => {'Content-Disposition'=>
                         'inline; filename="Admin-Assistant-Resume.pdf"'})
     end
@@ -50,7 +50,7 @@ module ServiceStubHelpers
 
       stub_request(:get, CruncherService.service_url + '/curriculum/1').
           to_raise(RestClient::Unauthorized).then.
-          to_return(body: file.read.force_encoding(Encoding::UTF_8), status: 200,
+          to_return(body: file.read, status: 200,
           :headers => {'Content-Disposition'=>
                         'inline; filename="Admin-Assistant-Resume.pdf"'})
     end
@@ -68,6 +68,24 @@ module ServiceStubHelpers
       stub_request(:post, CruncherService.service_url + '/job/create').
           to_raise(RuntimeError)
     end
+
+    def stub_cruncher_match_jobs
+      stub_request(:get, CruncherService.service_url + '/job/match/1').
+        to_return(body: "{\"resultCode\": \"SUCCESS\", \"jobs\":\"{}\"}", status:200,
+        headers: {'Content-Type': 'application/json'})
+    end
+    def stub_cruncher_match_jobs_fail(resultCode)
+      stub_request(:get, CruncherService.service_url + '/job/match/1').
+        to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status:200,
+        headers: {'Content-Type': 'application/json'})
+    end
+
+    def stub_cruncher_match_resumes
+      stub_request(:get, CruncherService.service_url + '/curriculum/match/1').
+          to_return(body: "{ \"resultCode\":\"SUCCESS\", \"resumes\":{}}", status: 200,
+          headers: { 'Content-Type': 'application/json' })
+    end
+
   end
 
 end

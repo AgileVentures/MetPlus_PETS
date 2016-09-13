@@ -41,6 +41,7 @@ class CruncherService
     end
   end
 
+
   def self.download_file(file_id)
     # Download the contents of the file which was stored in the Cruncher
     # using the file_id (e.g. resume.id).
@@ -59,7 +60,8 @@ class CruncherService
       # If successful, :content_disposition will be set in the header
       return nil unless contents.headers[:content_disposition]
 
-      tempfile = Tempfile.new("file_id_#{file_id}_", './tmp')
+      tempfile = Tempfile.new("file_id_#{file_id}_", './tmp',
+                              encoding: contents.encoding)
       tempfile.write contents
       tempfile.close
 
@@ -75,6 +77,7 @@ class CruncherService
       raise
     end
   end
+
 
   def self.create_job(jobId, title, description)
 
@@ -101,6 +104,72 @@ class CruncherService
 
 
   end
+
+  def self.match_jobs(resume_id)
+
+    # Define retry_search to true outside the begin block
+    # otherwise retry_search would be set to true everytime
+    # we retry the block. Can also set it inside the begin block
+    # like retry_search ||= true so that its set only the first
+    # time
+
+    retry_search = true
+
+    begin
+      result = RestClient.get(service_url + '/job/match/' + resume_id.to_s,
+                              { 'X-Auth-Token': auth_token })
+
+      result_hash = JSON.parse(result)
+
+      # Set matching jobs to nil if resume couldn't be found
+      matching_jobs = nil
+
+      if result_hash['resultCode'] == 'SUCCESS'
+        # May or may not contain jobs matching the resume
+        matching_jobs = result_hash['jobs']
+
+        #convert job ids returned by the matcher into ints
+        matching_jobs.transform_values! { |arr| arr.map(&:to_i) }
+
+      end
+    rescue RestClient::Unauthorized
+      self.auth_token = nil
+      if retry_search
+        retry_search = false
+        retry
+      end
+      raise
+    end
+    matching_jobs
+  end
+
+
+  def self.match_resumes(job_id)
+
+    retry_match = true
+
+    begin
+      result = RestClient.get(service_url + '/curriculum/match/' + job_id.to_s,
+                { 'Accept': 'application/json',
+                  'X-Auth-Token': auth_token })
+      matching_resumes = JSON.parse(result)['resumes']
+
+      # convert the resume ids to integers
+      matching_resumes.transform_values! { |arr| arr.map(&:to_i) }
+
+    rescue RestClient::Unauthorized
+      if retry_match
+        self.auth_token = nil
+        retry_match = false
+        retry
+      end
+      raise
+    end
+
+    matching_resumes
+
+  end
+
 
   def self.auth_token
     return @@auth_token if @@auth_token

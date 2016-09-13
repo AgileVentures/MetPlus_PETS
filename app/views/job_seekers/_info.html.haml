@@ -1,3 +1,4 @@
+- preview_mode = false unless defined? preview_mode
 %table.table.table-hover#info_table(style='margin-top: 20px;')
   %tbody
     %tr
@@ -38,7 +39,8 @@
           = render :partial => 'job_seekers/assigned_agency_person',
                         :locals => {person: pets_user,
                                     job_seeker: job_seeker,
-                                    agency_role: 'CM'}
+                                    agency_role: 'CM',
+                                    preview_mode: preview_mode}
     %tr
       %td
         %strong Job Developer
@@ -47,7 +49,8 @@
           = render :partial => 'job_seekers/assigned_agency_person',
                         :locals => {person: pets_user,
                                     job_seeker: job_seeker,
-                                    agency_role: 'JD'}
+                                    agency_role: 'JD',
+                                    preview_mode: preview_mode}
 
     - if pets_user.is_agency_person? current_agency
       %tr
