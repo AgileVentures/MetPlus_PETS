@@ -48,10 +48,12 @@ RSpec.describe ResumeCruncher, type: :model do
 
   describe 'match resumes' do
 
-    it 'returns success' do
-
+    it 'returns hash of matching resumes for a valid request' do
       stub_cruncher_match_resumes
-      expect(ResumeCruncher.match_resumes(1)).not_to be nil
+      results = ResumeCruncher.match_resumes(1)
+      expect(results).not_to be nil
+      expect(results.class).to be Hash
+      expect(results[7]).to be 4.9
     end
 
   end

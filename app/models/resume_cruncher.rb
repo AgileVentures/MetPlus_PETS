@@ -22,20 +22,39 @@ class ResumeCruncher
   end
 
   def self.match_resumes(job_id)
-    # If a match exists, returns a hash of resume matches where
-    # key is the matcher id and value is the array of resume ids
-    # If no match exists, returns as an empty hash
+    # If match exists, returns a hash of résumé matches where each
+    # key is résumé id (integer) and value is the score of the résumé
+    # match to the job (float - one digit to right of decimal point).
+    # Otherwise returns nil (in case of job not found)
 
-    # Example return value from CruncherService:
-    # { "matcher2": [3, 2], "matcher1": [1, 2] }
-    # Note that the keys returned are 'matcher1' and 'matcher2'
-    # In the current version of API, we have a single matcher - Word Count
-    # In future releases, additional matchers will be implemented and
-    # the keys might also be modified to reflect the matcher used like
-    # { "expressionCruncher": [3, 2], "naiveBayes": [1, 2] }
-    # The caller can make use of the keys if required
+    # Example return value:
+    # {3 => 2.1, 5 => 3.3, 8 => 4.7}
+    # Résumé (ID) 3 matched job with a score of 2.1, résumé 5 with 3.3, etc.
 
-    CruncherService.match_resumes(job_id)
+    # Note that the results are not sorted in any order (keys or values)
+
+    match_results = CruncherService.match_resumes(job_id)
+
+    matching_resumes = {}
+
+    # First level of results is a hash of specific matcher results ....
+    match_results.each_value do |matcher|
+      # Second level is array of resume matching scores (hashes) ....
+      matcher.each do |resume_match|
+        resume_id = resume_match['resumeId'].to_i
+
+        # Have we seen this job from another matcher?
+        # If so, use highest score
+        if matching_resumes[resume_id]
+          matching_resumes[resume_id] = resume_match['stars'] if
+          matching_resumes[resume_id] < resume_match['stars']
+        else
+          matching_resumes[resume_id] = resume_match['stars']
+        end
+      end
+    end
+
+    matching_resumes
   end
 
 end

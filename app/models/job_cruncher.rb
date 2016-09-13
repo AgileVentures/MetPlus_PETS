@@ -9,19 +9,38 @@ class JobCruncher
   end
 
   def self.match_jobs(resumeId)
-    # If match exists, returns a hash of job matches where
-    # key is the matcher id and value is the array of job ids
+    # If match exists, returns a hash of job matches where each
+    # key is job id (integer) and value is the score of the job
+    # match to the résumé (float - one digit to right of decimal point).
     # Otherwise returns nil(in case of resume not found)
 
-    # Example return value from Cruncher Service:
-    # { "matcher2": [3, 2], "matcher1": [1, 2] }
-    # Note that the keys returned are 'matcher1' and 'matcher2'
-    # In the current version of API, we have a single matcher - Word Count
-    # In future releases, additional matchers will be implemented and
-    # the keys might also be modified to reflect the matcher used likely
-    # { "expressionCruncher": [3, 2], "naiveBayes": [1, 2] }
-    # The caller can make use of the keys if required
+    # Example return value:
+    # {3 => 2.1, 5 => 3.3, 8 => 4.7}
+    # Job (ID) 3 matched résumé with a score of 2.1, job 5 with 3.3, etc.
 
-    CruncherService.match_jobs(resumeId)
+    # Note that the results are not sorted in any order (keys or values)
+
+    match_results = CruncherService.match_jobs(resumeId)
+
+    matching_jobs = {}
+
+    # First level of results is a hash of specific matcher results ....
+    match_results.each_value do |matcher|
+      # Second level is array of job matching scores (hashes) ....
+      matcher.each do |job_match|
+        job_id = job_match['jobId'].to_i
+
+        # Have we seen this job from another matcher?
+        # If so, use highest score
+        if matching_jobs[job_id]
+          matching_jobs[job_id] = job_match['stars'] if
+          matching_jobs[job_id] < job_match['stars']
+        else
+          matching_jobs[job_id] = job_match['stars']
+        end
+      end
+    end
+
+    matching_jobs
   end
 end
