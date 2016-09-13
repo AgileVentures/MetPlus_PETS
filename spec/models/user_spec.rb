@@ -51,12 +51,12 @@ RSpec.describe User, type: :model do
 
      describe 'Phone number format check' do
        subject {FactoryGirl.build(:user)}
-       it { should_not allow_value('asd', '123456', '123 123 12345', '123 1231 1234', '1123 123 1234', ' 123 123 1234').for(:phone)}
-
-       it { should allow_value('123 123 1234', '(123) 123 1234', '(123)-123 1234', '1231231234', '(123) 1231234').for(:phone)}
-
-     end
-  
+       it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
+               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
+       it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
+               '1 231 231 2345', '12312312345',  '1231231234', 
+               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
+     end  
    end
    
    describe 'roles determination' do
