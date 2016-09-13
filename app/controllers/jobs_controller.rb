@@ -175,17 +175,19 @@ class JobsController < ApplicationController
 			rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
 				flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
 				redirect_to job_path(@job)
+			else
+				if pets_user == @job_seeker
+					Event.create(:JS_APPLY, job_app)
+				elsif pets_user == @job_seeker.job_developer
+					Event.create(:JD_APPLY, job_app)
+					flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
+					redirect_to job_path(@job)
+				end
 			end
-		elsif pets_user == @job_seeker.job_developer
-			job_app = @job.apply @job_seeker
-			Event.create(:JD_APPLY, job_app)
-			flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
-			redirect_to job_path(@job)
 		else
 			flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
 			redirect_to job_path(@job)
 		end
-
 	end
 
 	def revoke

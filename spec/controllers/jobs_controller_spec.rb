@@ -797,19 +797,16 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JS_APPLY, application)
       end
     end
-    describe 'error applications as job seeker' do
-      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+    describe 'duplicated applications as job seeker' do
       before :each do
-        expect(Job).to receive(:find_by_id).and_return(job)
-        expect(job).to receive(:save!).and_raise(Exception)
-        expect(job).to receive(:id).exactly(4).times.and_return(1)
         allow(controller).to receive(:current_user).and_return(job_seeker)
+        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "shows flash[:alert]" do
         expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
       end
-      it "redirected to the job" do
+      it "redirects to the job" do
         expect(response).to redirect_to(:action => 'show', :id => @job.id)
       end
     end

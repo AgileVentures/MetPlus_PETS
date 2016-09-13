@@ -5,6 +5,8 @@ class JobApplication < ActiveRecord::Base
 
   has_many :status_changes, as: :entity, dependent: :destroy
 
+  validates_uniqueness_of :job_seeker_id, scope: :job_id
+
   after_create do
     StatusChange.update_status_history(self, :active)
   end
