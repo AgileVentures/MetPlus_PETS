@@ -56,8 +56,7 @@ RSpec.describe User, type: :model do
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
                '1 231 231 2345', '12312312345',  '1231231234', 
                '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
-     end
-  
+     end  
    end
    
    describe 'roles determination' do
