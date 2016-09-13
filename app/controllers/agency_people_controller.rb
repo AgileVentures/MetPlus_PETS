@@ -249,7 +249,13 @@ class AgencyPeopleController < ApplicationController
       list_js = []
       my_js.each do |js|
         # condition for search term
-        list_js << {id: js.id, text: js.full_name} if js.full_name.downcase =~ /#{term}/
+        if js.full_name.downcase =~ /#{term}/
+          if js.resumes.blank?
+            list_js << {id: js.id, text: js.full_name, disabled: "disabled"} 
+          else
+            list_js << {id: js.id, text: js.full_name}
+          end
+        end
       end
       render json: {:results => list_js}
     end
