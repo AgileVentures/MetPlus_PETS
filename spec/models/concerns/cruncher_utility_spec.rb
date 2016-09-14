@@ -5,11 +5,6 @@ end
 
 RSpec.describe CruncherUtility do
 
-  # create job-matching results
-  # create resume-matching results
-
-  # test: pass job results to 'process' method, compare output to expected
-
   let(:job_results) { {"matcher1"=>[{"jobId"=>"3", "stars"=>3.3},
                                     {"jobId"=>"2", "stars"=>2.2},
                                     {"jobId"=>"1", "stars"=>1.0}],
