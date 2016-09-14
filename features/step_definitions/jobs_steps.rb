@@ -74,6 +74,15 @@ Then(/^I click the "([^"]*)" link to job show page$/) do |job_title|
 	find("a[href='/jobs/#{@job.id}']").click
 end
 
+Then(/^I apply to "([^"]*)" from Jobs link(?: again)?$/) do |job_title|
+	step %{I click the "Jobs" link}
+	step %{I click the "#{job_title}" link}
+	step %{I click the "Click Here To Apply Online" link}
+	step %{I wait for 1 second}
+	step %{I should see "Application process"}
+	step %{I click the "Apply Now" link}
+end
+
 
 
 
