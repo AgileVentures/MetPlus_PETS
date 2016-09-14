@@ -4,7 +4,7 @@ Feature: Agency Person
   I want to login to PETS
   And manage my work from my home page
 
-  Background: seed data added to database and log in as agency admim
+  Background: seed data added to database and log in as agency admin
 
     Given the default settings are present
 
