@@ -64,7 +64,7 @@ Background: data is added to database
     And I wait 1 second
     And I should see "John Seeker"
     Then I press "Apply Now"
-    And I wait 5 seconds
+    And I wait 1 second
     And I should see "Job is successfully applied for Seeker, John"
 
     Then I am in Job Seeker's browser
@@ -104,7 +104,7 @@ Background: data is added to database
     Then I click the "Click Here to Submit an Application for Job Seeker" link
     Then I cannot select2 "Seeker, July" from "jd_apply_job_select"
 
-  @selenium
+  @javascript
   Scenario: job developer cannot apply for his job seeker without resume
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
@@ -112,8 +112,10 @@ Background: data is added to database
     Then I visit the jobs page
     Then I click the "software developer" link
     Then I click the "Click Here to Submit an Application for Job Seeker" link
-    And I wait 10 seconds
-    Then I cannot select2 "Seeker, June" from "jd_apply_job_select"
+    And I wait 1 second
+    Then I select2 "Seeker, June" from "jd_apply_job_select"
+    Then I press "Proceed"
+    And I should see "* Job Seeker cannot be empty"
     
 
 
