@@ -149,4 +149,44 @@ RSpec.describe AgencyPerson, type: :model do
       end
     end
   end
+
+  context 'job_seeker / agency_person relationships' do
+    let(:agency) { FactoryGirl.create(:agency) }
+    let(:agency_person) { FactoryGirl.create(:agency_person) }
+    
+   
+    let(:cm_person) {FactoryGirl.create(:case_manager, first_name: 'John',      last_name: 'Manager', agency: agency)}
+    let(:cm_person2) {FactoryGirl.create(:case_manager, first_name: 'Jane', last_name: 'Manager2', agency: agency)}
+    let(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
+    let(:aa_person) {FactoryGirl.create(:agency_admin, first_name: 'John', last_name: 'Admin', agency: agency)}
+
+    let(:steve)    { FactoryGirl.create(:job_seeker, first_name: 'Steve', last_name: 'Smith') }
+    let(:Mark)     { FactoryGirl.create(:job_seeker, first_name: 'Mark', last_name: 'Smith') }
+    let(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
+    let(:dave) { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
+
+    FactoryGirl.create(:agency_role)
+    FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+    FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
+
+    before(:each) do
+      
+      agency_person = steve.assign_case_manager(cm_person, agency)
+      agency_person= dave.assign_job_developer(jd_person, agency)
+    
+    end
+    
+    describe 'instance methods for job seekers agency relations' do
+      it 'job_seekers_as_job_developer returns job seekers with job developer' do
+        
+        expect(agency_person.job_seekers_as_job_developer)==(:job_seeker_id)
+      end
+    end
+   describe 'instance methods for job seekers agency relations' do
+      it 'job_seekers_as_case_manager returns job seekers with case manager' do
+        #expect(agency_person.job_seekers_as_case_manager)==(:job_seeker_id)
+        expect(agency_person.job_seekers_as_case_manager)==([:job_seeker_id,:job_seeker_id])
+      end
+   end
+  end
 end
