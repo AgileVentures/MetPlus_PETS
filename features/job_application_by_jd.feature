@@ -64,7 +64,6 @@ Background: data is added to database
     And I wait 1 second
     And I should see "John Seeker"
     Then I press "Apply Now"
-    And I wait 1 second
     And I should see "Job is successfully applied for Seeker, John"
 
     Then I am in Job Seeker's browser

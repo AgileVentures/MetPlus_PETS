@@ -507,7 +507,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         @js1 = FactoryGirl.create(:job_seeker, user: @user1)
         @js1.assign_job_developer(@jd_cm, agency)
 
-        @user2 = FactoryGirl.create(:user, first_name: 'John', last_name: "Doe")
+        @user2 = FactoryGirl.create(:user, first_name: 'Jack', last_name: "Doe")
         @js2 = FactoryGirl.create(:job_seeker, user: @user2)
         @js2.assign_job_developer(@jd_cm, agency)
 
@@ -548,7 +548,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
                                                {'id' => @js1.id, 'text' => @js1.full_name}]
                                                })
       end
-
     end
 
     context 'job developer without job seeker' do
