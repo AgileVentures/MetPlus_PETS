@@ -17,12 +17,17 @@ class CompanyMailer < ApplicationMailer
     send_company_mail(company, company_person, email_text)
   end
 
-  def application_received(company, job_application, resume_file_path)
+  def application_received(company, job_application, resume_id)
     @job = job_application.job
     @job_seeker = job_application.job_seeker
+
+    # Download the resume from Cruncher
+    resume_temp_file = ResumeCruncher.download_resume(resume_id)
     file_name = @job_seeker.resumes.first.file_name
-    attachments[file_name] = File.read(resume_file_path)
+    attachments[file_name] = File.read(resume_temp_file.path)
+
     mail to: company.job_email, subject: 'Job Application received'
+    resume_temp_file.unlink
   end
 
   private

@@ -44,10 +44,6 @@ RSpec.describe CompanyMailer, type: :mailer do
   end
 
   describe 'Job application process' do
-    before do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create # To avoid creating job in the cruncher
-    end
 
     let!(:company) { FactoryGirl.create(:company) }
     let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
@@ -58,12 +54,16 @@ RSpec.describe CompanyMailer, type: :mailer do
         job_seeker: job_seeker,
         job: job
     )}
+    let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
-    let!(:mail) {
-      CompanyMailer.application_received( company,
-          job_application,
-          File.new("#{Rails.root}/spec/fixtures/files/#{resume.file_name}").path)
-    }
+    let!(:mail) { CompanyMailer.application_received(company,
+                    job_application, resume.id) }
+
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      stub_cruncher_file_download test_file
+    end
 
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job Application received'
