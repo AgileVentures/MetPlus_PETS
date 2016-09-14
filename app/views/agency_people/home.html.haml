@@ -20,7 +20,10 @@
           All Agency Open Tasks
     %li(role="presentation")
       %a(href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab")
-        Closed Tasks
+        - if @agency_person.is_agency_admin?(@agency)
+          All Agency Closed Tasks
+        - if !@agency_person.is_agency_admin?(@agency)
+          Your Closed Tasks
 
   .tab-content
     - if @agency_person.is_agency_admin?(@agency)
