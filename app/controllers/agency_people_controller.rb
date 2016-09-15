@@ -15,10 +15,13 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
     @task_type = 'mine-open'
-    @people_type_cm = 'jobseeker-cm'
-    @people_type_jd = 'jobseeker-jd'
+    @agency_all = 'agency-all'
+    @agency_new = 'agency-new'
+    @agency_closed = 'agency-closed'
     @people_type_without_jd = 'jobseeker-without-jd'
     @people_type_without_cm = 'jobseeker-without-cm'
+    @people_type_cm = 'jobseeker-cm'
+    @people_type_jd = 'jobseeker-jd'
     @js_without_jd = JobSeeker.js_without_jd
     @js_without_cm = JobSeeker.js_without_cm
     @your_jobseekers_jd = JobSeeker.your_jobseekers_jd(@agency_person)
