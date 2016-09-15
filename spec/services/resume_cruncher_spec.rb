@@ -48,10 +48,17 @@ RSpec.describe ResumeCruncher, type: :model do
 
   describe 'match resumes' do
 
-    it 'returns success' do
-
+    it 'returns array of résumé matches for a valid request' do
       stub_cruncher_match_resumes
-      expect(ResumeCruncher.match_resumes(1)).not_to be nil
+      results = ResumeCruncher.match_resumes(1)
+      expect(results).not_to be nil
+      expect(results.class).to be Array
+      expect(results[0][0]).to be 7
+      expect(results[0][1]).to be 4.9
+      expect(results[1][0]).to be 5
+      expect(results[1][1]).to be 3.8
+      expect(results[2][0]).to be 2
+      expect(results[2][1]).to be 2.0
     end
 
   end
