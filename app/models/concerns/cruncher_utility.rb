@@ -2,15 +2,14 @@ module CruncherUtility
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def process_match_results(results)
+    def process_match_results(results, key_id)
       match_set = {}
 
       # First level of results is a hash of specific matcher results ....
       results.each_value do |matcher|
         # Second level is array of object id and matching scores (hashes) ....
         matcher.each do |match_item|
-          object_id = (match_item.has_key?('resumeId') ?
-                       match_item['resumeId'] : match_item['jobId']).to_i
+          object_id =  match_item[key_id].to_i
 
           # Have we seen this object from another matcher?
           # If so, use highest score

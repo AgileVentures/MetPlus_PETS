@@ -20,14 +20,14 @@ RSpec.describe CruncherUtility do
                                        {"resumeId"=>"7", "stars"=>1.7}]} }
 
   it 'processes job match results' do
-    processed_results = UtilityTester.process_match_results(job_results)
+    processed_results = UtilityTester.process_match_results(job_results, 'jobId')
     expect(processed_results.length).to be 4
     expect(processed_results).
       to eq [ [2, 5.5], [4, 4.4], [3, 3.8], [1, 1.0] ]
   end
 
   it 'processes resume match results' do
-    processed_results = UtilityTester.process_match_results(resume_results)
+    processed_results = UtilityTester.process_match_results(resume_results, 'resumeId')
     expect(processed_results.length).to be 4
     expect(processed_results).
       to eq [ [7, 4.9], [5, 3.6], [2, 2.0], [8, 1.8] ]

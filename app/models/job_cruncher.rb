@@ -24,6 +24,6 @@ class JobCruncher
 
     match_results = CruncherService.match_jobs(resumeId)
 
-    self.process_match_results match_results
+    self.process_match_results match_results, 'jobId'
   end
 end
