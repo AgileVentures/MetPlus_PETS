@@ -10,7 +10,7 @@ RSpec.describe CruncherUtility do
                                     {"jobId"=>"1", "stars"=>1.0}],
                        "matcher2"=>[{"jobId"=>"4", "stars"=>4.4},
                                     {"jobId"=>"3", "stars"=>3.8},
-                                    {"jobId"=>"2", "stars"=>5.5}]} }
+                                    {"jobId"=>"2", "stars"=>5.0}]} }
 
   let(:resume_results) { {"matcher1"=>[{"resumeId"=>"2", "stars"=>2.0},
                                        {"resumeId"=>"7", "stars"=>4.9},
@@ -23,7 +23,7 @@ RSpec.describe CruncherUtility do
     processed_results = UtilityTester.process_match_results(job_results, 'jobId')
     expect(processed_results.length).to be 4
     expect(processed_results).
-      to eq [ [2, 5.5], [4, 4.4], [3, 3.8], [1, 1.0] ]
+      to eq [ [2, 5.0], [4, 4.4], [3, 3.8], [1, 1.0] ]
   end
 
   it 'processes resume match results' do
