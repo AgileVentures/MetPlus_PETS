@@ -10,13 +10,13 @@ var dataHandler = {
     return this;
   },
 
-  load_form: function () {
+  load_form: function (jd_id) {
     $('.alert_msg').html('');
     $('#jd_apply_job_select').val('');
     $("#jd_apply_job_select").select2({
       placeholder: "Select your Job Seekers",
       ajax: { 
-        url: "/agency_people/"+this.jd_id+"/my_js_as_jd",
+        url: "/agency_people/"+jd_id+"/my_js_as_jd",
         dataType: 'json',
         type: "GET",
         delay: 250,
@@ -30,7 +30,6 @@ var dataHandler = {
         cache: true,
       }
     });
-    return this;
   },
 
   load_preview: function() {
@@ -71,7 +70,7 @@ $(function() {
   });
 
   var handler = dataHandler.init();
-  $("#jd-apply-button").click(handler.load_form);
+  $("#jd-apply-button").click(handler.load_form(handler.jd_id));
   $('#jdApplyJobModal').on('shown.bs.modal', function () {
     $('#jdApplyJobModal_button').click(function () {
       if ($("#jd_apply_job_select").val() === null) {
