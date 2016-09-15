@@ -45,18 +45,18 @@ RSpec.describe CompanyMailer, type: :mailer do
 
   describe 'Job application process' do
 
-    let!(:company) { FactoryGirl.create(:company) }
-    let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let!(:job) { FactoryGirl.create(:job) }
-    let!(:job_application) {
+    let(:company) { FactoryGirl.create(:company) }
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let(:job) { FactoryGirl.create(:job) }
+    let(:job_application) {
       FactoryGirl.create(:job_application,
         job_seeker: job_seeker,
         job: job
     )}
     let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
-    let!(:mail) { CompanyMailer.application_received(company,
+    let(:mail) { CompanyMailer.application_received(company,
                     job_application, resume.id) }
 
     before do
