@@ -151,42 +151,68 @@ RSpec.describe AgencyPerson, type: :model do
   end
 
   context 'job_seeker / agency_person relationships' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:agency_person) { FactoryGirl.create(:agency_person) }
-    
-   
-    let(:cm_person) {FactoryGirl.create(:case_manager, first_name: 'John',      last_name: 'Manager', agency: agency)}
-    let(:cm_person2) {FactoryGirl.create(:case_manager, first_name: 'Jane', last_name: 'Manager2', agency: agency)}
-    let(:jd_person) {FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency)}
-    let(:aa_person) {FactoryGirl.create(:agency_admin, first_name: 'John', last_name: 'Admin', agency: agency)}
 
-    let(:steve)    { FactoryGirl.create(:job_seeker, first_name: 'Steve', last_name: 'Smith') }
-    let(:Mark)     { FactoryGirl.create(:job_seeker, first_name: 'Mark', last_name: 'Smith') }
-    let(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
-    let(:dave) { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
+    let(:agency)           { FactoryGirl.create(:agency) }
+    let(:cm_person)        {FactoryGirl.create(:case_manager, agency: agency)}
+    let(:jd_person)        {FactoryGirl.create(:job_developer, agency: agency)}
+    let(:jd_and_cm_person) {FactoryGirl.create(:jd_cm, agency: agency)}
 
-    FactoryGirl.create(:agency_role)
-    FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
-    FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
+    10.times do |n|
+      let("js#{n+1}".to_sym) {FactoryGirl.create(:job_seeker)}
+    end
 
     before(:each) do
       
-      agency_person = steve.assign_case_manager(cm_person, agency)
-      agency_person= dave.assign_job_developer(jd_person, agency)
-    
+      # Assign first 3 job seekers to cm_person
+      js1.assign_case_manager cm_person, agency
+      js2.assign_case_manager cm_person, agency
+      js3.assign_case_manager cm_person, agency
+      #Assign next 3 to jd_person
+      js4.assign_job_developer jd_person, agency
+      js5.assign_job_developer jd_person, agency
+      js6.assign_job_developer jd_person, agency
+      #Assign next 2 to dual_role person as job developer
+      js7.assign_job_developer jd_and_cm_person, agency
+      js8.assign_job_developer jd_and_cm_person, agency
+      #Assign next 2 to dual_role person as case manager
+      js9.assign_case_manager jd_and_cm_person, agency
+      js10.assign_case_manager jd_and_cm_person, agency
     end
     
-    describe 'instance methods for job seekers agency relations' do
-      it 'job_seekers_as_job_developer returns job seekers with job developer' do
-        
-        expect(agency_person.job_seekers_as_job_developer)==(:job_seeker_id)
+    context '.job_seekers_as_job_developer' do
+      
+      it 'returns job seekers for job developer' do
+        expect(jd_person.job_seekers_as_job_developer).to contain_exactly(js4, js5, js6)
+      
+      end 
+      it 'returns job seekers for dual-rol agency person' do
+        expect(jd_and_cm_person.job_seekers_as_job_developer).to contain_exactly(js7, js8)
+      
+      end  
+      it 'returns no jobseekers for case manager' do
+        expect(cm_person.job_seekers_as_job_developer.count).to be 0
+  
       end
+
+    end  
+   
+    context 'job_seekers_as_case_manager' do
+      
+      it 'returns job seekers for case manager' do
+        expect(cm_person.job_seekers_as_case_manager).to contain_exactly(js1, js2, js3)
+  
+      end
+      it 'returns job seekers for dual-role agency person' do
+        expect(jd_and_cm_person.job_seekers_as_case_manager).to contain_exactly(js9, js10)
+
+      end
+
+      it 'returns no job seekers for job developer' do
+        expect(jd_person.job_seekers_as_case_manager.count).to be 0
+
+       end
+
     end
-   describe 'instance methods for job seekers agency relations' do
-      it 'job_seekers_as_case_manager returns job seekers with case manager' do
-        #expect(agency_person.job_seekers_as_case_manager)==(:job_seeker_id)
-        expect(agency_person.job_seekers_as_case_manager)==([:job_seeker_id,:job_seeker_id])
-      end
-   end
+     
   end
 end
