@@ -33,5 +33,5 @@
 %p
   In the meantime, if you have any other questions about the use of PETS
   then please contact the PETS administrator at:
-  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
          subject: 'Using PETS as a Job Seeker')
