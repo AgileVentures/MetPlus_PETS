@@ -279,22 +279,22 @@ RSpec.describe Task, type: :model do
       @task_all_cc_future = FactoryGirl.create(:task, :deferred_date => Date.today + 1, :task_owner => {:company => {company: @company, role: :CC}})
     end
     it 'job seeker user' do
-      expect(Task.find_by_owner_user @job_seeker).to eq [@task_js]
+      expect(Task.find_by_owner_user_open @job_seeker).to eq [@task_js]
     end
     it 'job developer user' do
-      expect(Task.find_by_owner_user @job_developer1).to eq [@task_jd, @task_jd_today, @task_all_jd]
+      expect(Task.find_by_owner_user_open @job_developer1).to eq [@task_jd, @task_jd_today]
     end
     it 'case manager user' do
-      expect(Task.find_by_owner_user @case_manager1).to eq [@task_cm, @task_cm_today, @task_all_cm]
+      expect(Task.find_by_owner_user_open @case_manager1).to eq [@task_cm, @task_cm_today]
     end
     it 'agency admin user' do
-      expect(Task.find_by_owner_user @agency_admin1).to eq [@task_aa, @task_all_aa]
+      expect(Task.find_by_owner_user_open @agency_admin1).to eq [@task_aa]
     end
     it 'company admin user' do
-      expect(Task.find_by_owner_user @company_admin1).to eq [@task_ca, @task_ca_today, @task_all_ca]
+      expect(Task.find_by_owner_user_open @company_admin1).to eq [@task_ca, @task_ca_today]
     end
     it 'company contact user' do
-      expect(Task.find_by_owner_user @company_contact1).to eq [@task_cc, @task_all_cc]
+      expect(Task.find_by_owner_user_open @company_contact1).to eq [@task_cc]
     end
   end
   describe 'Find all tasks for a owner' do
@@ -322,36 +322,42 @@ RSpec.describe Task, type: :model do
 
 
       @task_js_new = FactoryGirl.create(:task, :task_owner => {:user => @job_seeker})
+      @task_js_new.assign @job_seeker
       @task_js_closed = FactoryGirl.create(:task, :task_owner => {:user => @job_seeker})
       @task_js_closed.assign @job_seeker
       @task_js_closed.work_in_progress
       @task_js_closed.complete
 
       @task_jd_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
+      @task_jd_new.assign @job_developer
       @task_jd_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :JD}})
       @task_jd_closed.assign @job_developer
       @task_jd_closed.work_in_progress
       @task_jd_closed.complete
 
       @task_cm_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
+      @task_cm_new.assign @case_manager
       @task_cm_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :CM}})
       @task_cm_closed.assign @case_manager
       @task_cm_closed.work_in_progress
       @task_cm_closed.complete
 
       @task_aa_new = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
+      @task_aa_new.assign @agency_admin
       @task_aa_closed = FactoryGirl.create(:task, :task_owner => {:agency => {agency: @agency, role: :AA}})
       @task_aa_closed.assign @agency_admin
       @task_aa_closed.work_in_progress
       @task_aa_closed.complete
 
       @task_ca_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
+      @task_ca_new.assign @company_admin
       @task_ca_closed = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
       @task_ca_closed.assign @company_admin
       @task_ca_closed.work_in_progress
       @task_ca_closed.complete
 
       @task_cc_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
+      @task_cc_new.assign @company_contact
       @task_cc_closed = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
       @task_cc_closed.assign @company_contact
       @task_cc_closed.work_in_progress

@@ -17,17 +17,19 @@ class Task < ActiveRecord::Base
 
   scope :today_tasks, -> {where('deferred_date IS NULL or deferred_date < ?', Date.today + 1)}
   scope :open_tasks, -> {today_tasks.where('status != ?', STATUS[:DONE])}
+  scope :new_tasks, -> {today_tasks.where('status = ?', STATUS[:NEW])}
+  scope :active_tasks, -> {today_tasks.where('status != ? and status != ?', STATUS[:DONE], STATUS[:NEW])}
   scope :closed_tasks, -> {where('status = ?', STATUS[:DONE])}
   scope :user_tasks, -> (user) {where('owner_user_id=?', user.user.id)}
-  scope :js_tasks, ->(job_seeker) {where('owner_user_id=?', job_seeker.user.id)}
-  scope :agency_person_tasks, ->(agency_person) {where('owner_user_id=? or (owner_agency_id=? and owner_agency_role in (?))',
-                                                         agency_person.user.id,
+  scope :agency_person_tasks, ->(agency_person) {where('(owner_agency_id=? and owner_agency_role in (?))',
                                                          agency_person.agency.id,
                                                          agency_person.agency_roles.pluck(:role).collect{|role| AgencyRole::ROLE.key(role)})}
   scope :company_person_tasks, ->(company_person) {where('owner_user_id=? or (owner_company_id=? and owner_company_role in (?))',
                                                          company_person.user.id,
                                                          company_person.company.id,
                                                          company_person.company_roles.pluck(:role).collect{|role| CompanyRole::ROLE.key(role)})}
+  scope :agency_tasks, -> (user) {where('(owner_agency_id = ? or owner_user_id in (?))',  
+                          user.agency.id, user.agency.agency_people.map{|a| a.acting_as.id}.collect)}
 
   def task_owner
     return owner.pets_user if owner != nil
@@ -45,26 +47,44 @@ class Task < ActiveRecord::Base
     self.owner_company_role = company[:role]
   end
 
-  def self.find_by_owner_user user
-    return today_tasks.js_tasks(user) \
-                if user.is_a? JobSeeker
-    return today_tasks.agency_person_tasks(user) \
-                   if user.is_a? AgencyPerson
-    return today_tasks.company_person_tasks(user) \
-                   if user.is_a? CompanyPerson
-  end
-
   def self.find_by_owner_user_open user
-    return open_tasks.js_tasks(user) \
-                if user.is_a? JobSeeker
-    return open_tasks.agency_person_tasks(user) \
-                   if user.is_a? AgencyPerson
-    return open_tasks.company_person_tasks(user) \
-                   if user.is_a? CompanyPerson
+    open_tasks.user_tasks(user)
   end
 
   def self.find_by_owner_user_closed user
     closed_tasks.user_tasks(user)
+  end
+
+  def self.find_by_agency user
+    today_tasks.agency_tasks(user)
+  end
+
+  def self.find_by_agency_new user
+    new_tasks.agency_tasks(user)
+  end
+
+  def self.find_by_agency_active user
+    active_tasks.agency_tasks(user)
+  end
+
+  def self.find_by_user_closed user_tasks
+    closed_tasks.user_tasks(user)
+  end
+
+  def self.find_by_agency_closed user
+    if  user.is_agency_admin?(user.agency)
+      closed_tasks.agency_tasks(user)
+    else
+      closed_tasks.user_tasks(user)
+    end
+  end
+
+  def self.find_by_company_open user
+    if  user.is_company_admin?(user.company)
+      open_tasks.company_person_tasks(user)
+    else
+      open_tasks.user_tasks(user)
+    end
   end
 
   def target

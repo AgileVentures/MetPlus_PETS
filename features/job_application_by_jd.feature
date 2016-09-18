@@ -94,6 +94,19 @@ Background: data is added to database
     Then I click the "Click Here to Submit an Application for Job Seeker" link
     Then I cannot select2 "Seeker, July" from "jd_apply_job_select"
 
+  @javascript
+  Scenario: job developer cannot apply for his job seeker without resume
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+
+    Then I visit the jobs page
+    Then I click the "software developer" link
+    Then I click the "Click Here to Submit an Application for Job Seeker" link
+    And I wait 1 second
+    Then I select2 "Seeker, June" from "jd_apply_job_select"
+    Then I press "Proceed"
+    And I should see "* Job Seeker cannot be empty"
+
   @selenium
   Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
     When I am in Job Seeker's browser

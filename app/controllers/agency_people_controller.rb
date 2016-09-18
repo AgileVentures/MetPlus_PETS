@@ -15,10 +15,13 @@ class AgencyPeopleController < ApplicationController
     @agency_person = AgencyPerson.find(params[:id])
     @agency = @agency_person.agency
     @task_type = 'mine-open'
-    @people_type_cm = 'jobseeker-cm'
-    @people_type_jd = 'jobseeker-jd'
+    @agency_all = 'agency-all'
+    @agency_new = 'agency-new'
+    @agency_closed = 'agency-closed'
     @people_type_without_jd = 'jobseeker-without-jd'
     @people_type_without_cm = 'jobseeker-without-cm'
+    @people_type_cm = 'jobseeker-cm'
+    @people_type_jd = 'jobseeker-jd'
     @js_without_jd = JobSeeker.js_without_jd
     @js_without_cm = JobSeeker.js_without_cm
     @your_jobseekers_jd = JobSeeker.your_jobseekers_jd(@agency_person)
@@ -242,14 +245,21 @@ class AgencyPeopleController < ApplicationController
     term = params[:q] || {}
     term = term[:term] || ''
     term = term.downcase
-    my_js = pets_user.job_seekers.select { |js| js.job_developer == pets_user }
+    my_js = pets_user.job_seekers.select { |js| js.job_developer == pets_user }.
+            sort { |a, b| a.full_name <=> b.full_name }
     if my_js.blank?
       render json: {:message => 'You do not have job seekers!'}, status: 403
     else
       list_js = []
       my_js.each do |js|
         # condition for search term
-        list_js << {id: js.id, text: js.full_name} if js.full_name.downcase =~ /#{term}/
+        if js.full_name.downcase =~ /#{term}/
+          if js.resumes.blank?
+            list_js << {id: js.id, text: js.full_name, disabled: "disabled"} 
+          else
+            list_js << {id: js.id, text: js.full_name}
+          end
+        end
       end
       render json: {:results => list_js}
     end

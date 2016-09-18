@@ -15,6 +15,16 @@ Then(/^The (?:task|tasks) ((\d+,?)+) (?:is|are)( not)? present/) do |tasks, _, n
   end
 end
 
+Then(/^The (?:task|tasks) ((\d+,?)+) (?:is|are) hidden/) do |tasks, _|
+  tasks.split(/,/).each do |task_id|
+    begin
+      find("#task-#{task_id}", visible:false)    
+    rescue Exception => e
+      raise "Hidden task with id #{task_id} could not be found" unless not_see
+    end
+  end
+end
+
 And(/The task (\d+) status is "([^"]+)"$/) do |task_id, status|
   expect(find("#task-#{task_id}-status")).to have_content(status)
 end

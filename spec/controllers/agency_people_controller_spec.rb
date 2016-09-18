@@ -502,25 +502,50 @@ RSpec.describe AgencyPeopleController, type: :controller do
       before :each do
         @jd_cm = FactoryGirl.create(:jd_cm, agency: agency)
         @job_developer = FactoryGirl.create(:job_developer, agency: agency)
-        @js1 = FactoryGirl.create(:job_seeker)
+
+        @user1 = FactoryGirl.create(:user, first_name: 'John', last_name: "Joe")
+        @js1 = FactoryGirl.create(:job_seeker, user: @user1)
         @js1.assign_job_developer(@jd_cm, agency)
-        @js2 = FactoryGirl.create(:job_seeker)
+
+        @user2 = FactoryGirl.create(:user, first_name: 'Jack', last_name: "Doe")
+        @js2 = FactoryGirl.create(:job_seeker, user: @user2)
         @js2.assign_job_developer(@jd_cm, agency)
-        @js3 = FactoryGirl.create(:job_seeker)
-        @js3.assign_job_developer(@job_developer, agency)
-        @js3.assign_case_manager(@jd_cm, agency)
+
+        @user3 = FactoryGirl.create(:user, first_name: 'Adam', last_name: "Doe")
+        @js3 = FactoryGirl.create(:job_seeker, user: @user3)
+        @js3.assign_job_developer(@jd_cm, agency)
+
+        @js4 = FactoryGirl.create(:job_seeker)
+        @js4.assign_job_developer(@job_developer, agency)
+        @js4.assign_case_manager(@jd_cm, agency)
+
         sign_in @jd_cm
-        xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json
       end
 
       it 'returns http success' do
+        xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json
         expect(response).to have_http_status(:success)
       end
 
-      it 'check content' do
+      it 'returns his job seekers in alphabetical order' do
+        resume1 = FactoryGirl.create(:resume, job_seeker: @js1)
+        resume2 = FactoryGirl.create(:resume, job_seeker: @js2)
+        resume3 = FactoryGirl.create(:resume, job_seeker: @js3)
+        xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json
         expect(JSON.parse(response.body)).to eq({'results' => [
-                                               {'id' => @js1.id, 'text' => @js1.full_name},
-                                               {'id' => @js2.id, 'text' => @js2.full_name}]
+                                               {'id' => @js3.id, 'text' => @js3.full_name},
+                                               {'id' => @js2.id, 'text' => @js2.full_name},
+                                               {'id' => @js1.id, 'text' => @js1.full_name}]
+                                               })
+      end
+
+      it 'disables application for his job seekers without resume' do
+        resume1 = FactoryGirl.create(:resume, job_seeker: @js1) 
+        xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json
+        expect(JSON.parse(response.body)).to eq({'results' => [
+                                               {'id' => @js3.id, 'text' => @js3.full_name, 'disabled' => 'disabled'},
+                                               {'id' => @js2.id, 'text' => @js2.full_name, 'disabled' => 'disabled'},
+                                               {'id' => @js1.id, 'text' => @js1.full_name}]
                                                })
       end
     end

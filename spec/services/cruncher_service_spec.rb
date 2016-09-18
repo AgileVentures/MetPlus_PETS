@@ -13,11 +13,11 @@ RSpec.describe CruncherService, type: :request do
   let(:testfile_wordxml) {'files/Sales-Manager-Resume.docx'}
 
   let(:download_result) {RestClient.get(CruncherService.service_url +
-        '/curriculum/1',
+        '/resume/1',
         'X-Auth-Token' => JSON.parse(auth_result)['token'])}
 
   let(:upload_result) {RestClient.post(CruncherService.service_url +
-        '/curriculum/upload',
+        '/resume/upload',
       { 'file'   => fixture_file_upload(testfile_pdf),
         'name'   => testfile_pdf,
         'userId' => 'test_id' },
@@ -40,7 +40,7 @@ RSpec.describe CruncherService, type: :request do
         )}
 
   let(:match_resumes_result) { RestClient.get(CruncherService.service_url +
-          '/curriculum/match/1',
+          '/resume/match/1',
         { 'Accept': 'application/json',
           'X-Auth-Token': JSON.parse(auth_result)['token'] }
         )}
