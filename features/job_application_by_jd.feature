@@ -54,16 +54,7 @@ Background: data is added to database
   	Then I am in Job Developer's browser
 	  Given I am on the home page
 	  And I login as "jane@metplus.org" with password "qwerty123"
-
-		Then I visit the jobs page
-		Then I click the "software developer" link
-		Then I click the "Click Here to Submit an Application for Job Seeker" link
-    And I should see "Select your job seeker for the above job:"
-    Then I select2 "Seeker, John" from "jd_apply_job_select"
-    Then I press "Proceed"
-    And I wait 1 second
-    And I should see "John Seeker"
-    Then I press "Apply Now"
+    Then I apply to "software developer" for my job seeker: "Seeker, John"
     And I should see "Job is successfully applied for Seeker, John"
 
     Then I am in Job Seeker's browser
@@ -102,6 +93,20 @@ Background: data is added to database
     Then I click the "software developer" link
     Then I click the "Click Here to Submit an Application for Job Seeker" link
     Then I cannot select2 "Seeker, July" from "jd_apply_job_select"
+
+  @selenium
+  Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
+    When I am in Job Seeker's browser
+    Given I am on the home page
+    And I login as "john.seeker@places.com" with password "password"
+    Then I apply to "software developer" from Jobs link
+    And I should see "Congratulations, you were able to apply with success"
+
+    Then I am in Job Developer's browser
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    Then I apply to "software developer" for my job seeker: "Seeker, John"
+    And I should see "John Seeker has already applied to this job"
     
 
 

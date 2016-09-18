@@ -105,8 +105,9 @@ Given the following agency relations exist:
 	  Then I should see "Signed in successfully"
 	  Then I apply to "software developer" from Jobs link
 	  And I should see "Congratulations, you were able to apply with success"
-	  Then I apply to "software developer" from Jobs link again
-	  And I should see "John Seeker has already applied to this job"
+	  Then I click the "Jobs" link
+	  Then I click the "software developer" link
+	  And I should see "You already have an application submitted for this job."
 
 	Scenario: Company person should not be able to apply
 		Given I am on the home page
