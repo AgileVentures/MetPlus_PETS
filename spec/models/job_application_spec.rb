@@ -17,6 +17,7 @@ RSpec.describe JobApplication, type: :model do
     it { is_expected.to belong_to :job }
   end
   describe 'Validations' do
+    it { is_expected.to validate_uniqueness_of(:job_seeker_id).scoped_to(:job_id) }
     let(:job_seeker){FactoryGirl.create(:job_seeker)}
     let(:job){FactoryGirl.create(:job, company: FactoryGirl.create(:company))}
     subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :active)}
@@ -114,6 +115,7 @@ RSpec.describe JobApplication, type: :model do
 
   describe 'tracking status change history' do
     let(:job)  { FactoryGirl.create(:job) }
+    let(:js) { FactoryGirl.create(:job_seeker) }
     let!(:ja1) { FactoryGirl.create(:job_application, job: job) }
 
     before(:each) do
@@ -122,7 +124,7 @@ RSpec.describe JobApplication, type: :model do
     end
 
     it 'adds a status change record for a new application' do
-      expect{ FactoryGirl.create(:job_application, job: job) }.
+      expect{ FactoryGirl.create(:job_application, job: job, job_seeker: js) }.
             to change(StatusChange, :count).by 1
     end
 

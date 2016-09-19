@@ -74,6 +74,21 @@ Then(/^I click the "([^"]*)" link to job show page$/) do |job_title|
 	find("a[href='/jobs/#{@job.id}']").click
 end
 
+Then(/^I apply to "([^"]*)" from Jobs link(?: again)?$/) do |job_title|
+  step %{I click the "Jobs" link}
+  step %{I click the "#{job_title}" link}
+  step %{I click the "Click Here To Apply Online" link}
+  step %{I wait for 1 second}
+  step %{I should see "Application process"}
+  step %{I click the "Apply Now" link}
+end
 
-
-
+Then(/^I apply to "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
+  step %{I visit the jobs page}
+  step %{I click the "#{job_title}" link}
+  step %{I click the "Click Here to Submit an Application for Job Seeker" link}
+  step %{I select2 "#{job_seeker}" from "jd_apply_job_select"}
+  step %{I press "Proceed"}
+  step %{I wait 1 second}
+  step %{I press "Apply Now"}
+end
