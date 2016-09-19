@@ -149,4 +149,70 @@ RSpec.describe AgencyPerson, type: :model do
       end
     end
   end
+
+  context 'job_seeker / agency_person relationships' do
+
+    let(:agency)           { FactoryGirl.create(:agency) }
+    let(:cm_person)        {FactoryGirl.create(:case_manager, agency: agency)}
+    let(:jd_person)        {FactoryGirl.create(:job_developer, agency: agency)}
+    let(:jd_and_cm_person) {FactoryGirl.create(:jd_cm, agency: agency)}
+
+    10.times do |n|
+      let("js#{n+1}".to_sym) {FactoryGirl.create(:job_seeker)}
+    end
+
+    before(:each) do
+      
+      # Assign first 3 job seekers to cm_person
+      js1.assign_case_manager cm_person, agency
+      js2.assign_case_manager cm_person, agency
+      js3.assign_case_manager cm_person, agency
+      #Assign next 3 to jd_person
+      js4.assign_job_developer jd_person, agency
+      js5.assign_job_developer jd_person, agency
+      js6.assign_job_developer jd_person, agency
+      #Assign next 2 to dual_role person as job developer
+      js7.assign_job_developer jd_and_cm_person, agency
+      js8.assign_job_developer jd_and_cm_person, agency
+      #Assign next 2 to dual_role person as case manager
+      js9.assign_case_manager jd_and_cm_person, agency
+      js10.assign_case_manager jd_and_cm_person, agency
+    end
+    
+    context '.job_seekers_as_job_developer' do
+      
+      it 'returns job seekers for job developer' do
+        expect(jd_person.job_seekers_as_job_developer).to contain_exactly(js4, js5, js6)
+      
+      end 
+      it 'returns job seekers for dual-rol agency person' do
+        expect(jd_and_cm_person.job_seekers_as_job_developer).to contain_exactly(js7, js8)
+      
+      end  
+      it 'returns no jobseekers for case manager' do
+        expect(cm_person.job_seekers_as_job_developer.count).to be 0
+  
+      end
+
+    end  
+   
+    context 'job_seekers_as_case_manager' do
+      
+      it 'returns job seekers for case manager' do
+        expect(cm_person.job_seekers_as_case_manager).to contain_exactly(js1, js2, js3)
+  
+      end
+      it 'returns job seekers for dual-role agency person' do
+        expect(jd_and_cm_person.job_seekers_as_case_manager).to contain_exactly(js9, js10)
+
+      end
+
+      it 'returns no job seekers for job developer' do
+        expect(jd_person.job_seekers_as_case_manager.count).to be 0
+
+       end
+
+    end
+     
+  end
 end
