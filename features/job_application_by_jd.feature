@@ -88,23 +88,16 @@ Background: data is added to database
   Scenario: job developer cannot apply for his job seeker with CM role
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
-
-    Then I visit the jobs page
-    Then I click the "software developer" link
-    Then I click the "Click Here to Submit an Application for Job Seeker" link
-    Then I cannot select2 "Seeker, July" from "jd_apply_job_select"
+    Then I want to apply to "software developer" for "Seeker, July"
+    But I cannot find "Seeker, July" from my job seekers list
 
   @javascript
   Scenario: job developer cannot apply for his job seeker without resume
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
 
-    Then I visit the jobs page
-    Then I click the "software developer" link
-    Then I click the "Click Here to Submit an Application for Job Seeker" link
-    And I wait 1 second
-    Then I select2 "Seeker, June" from "jd_apply_job_select"
-    Then I press "Proceed"
+    Then I want to apply to "software developer" for "Seeker, June"
+    Then I find "Seeker, June" from my job seekers list and proceed with the application
     And I should see "* Job Seeker cannot be empty"
 
   @selenium
@@ -118,7 +111,6 @@ Background: data is added to database
     Then I am in Job Developer's browser
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
-
     Then I apply to "software developer" for my job seeker: "Seeker, John"
     And I should see "John Seeker has already applied to this job"
 
@@ -128,16 +120,13 @@ Background: data is added to database
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
     Then I click the "John" link
-    Then I uncheck "job_seeker_consent"
-    Then I click the "Update Job seeker" button
-    And I should see "Jobseeker was updated successfully."
+    Then I update my profile to not permit job developer to apply a job for me
 
     Then I am in Job Developer's browser
     Given I am on the home page
-    And I login as "jane@metplus.org" with password "qwerty123"
+    Then I login as "jane@metplus.org" with password "qwerty123"
+    Then I want to apply to "software developer" for "Seeker, John"
+    But I cannot find "Seeker, John" from my job seekers list
     
-    Then I visit the jobs page
-    Then I click the "software developer" link
-    Then I click the "Click Here to Submit an Application for Job Seeker" link
-    Then I cannot select2 "Seeker, John" from "jd_apply_job_select"
+    
 

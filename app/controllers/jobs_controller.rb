@@ -167,7 +167,7 @@ class JobsController < ApplicationController
 			return
 		end
 
-    if pets_user == @job_seeker || pets_user == @job_seeker.job_developer  # to be removed once authorize is set properly
+    if pets_user == @job_seeker || ( @job_seeker.consent && pets_user == @job_seeker.job_developer ) # to be removed once authorize is set properly
       begin
         job_app = @job.apply @job_seeker
     	# ActiveRecord::RecordInvalid is raised when validation at model level fails
