@@ -1,11 +1,15 @@
 class AgencyAdminController < ApplicationController
-  def home
-    # Cancancan before_filter here .....
 
+  before_action :user_logged!
+
+  def home
     @agency = Agency.includes([ :agency_people,
                               companies: [:addresses],
                                branches: [:address] ]).
                         find(Agency.this_agency(current_user).id)
+
+    self.action_description = "administer #{@agency.name} agency"
+    authorize @agency, :update
 
     @agency_admins = Agency.agency_admins(@agency)
     @branches      = @agency.branches.order(:code).
@@ -28,6 +32,9 @@ class AgencyAdminController < ApplicationController
   end
 
   def job_properties
+    self.action_description = "administer #{@agency.name} agency"
+    authorize Agency.this_agency(current_user), :update
+
     if request.xhr?
       case params[:data_type]
       when 'job_categories'
