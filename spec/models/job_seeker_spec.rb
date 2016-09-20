@@ -12,6 +12,7 @@ describe JobSeeker, type: :model do
     it {is_expected.to have_db_column :year_of_birth}
     it {is_expected.to have_db_column :job_seeker_status_id }
     it {is_expected.to have_db_column :address_id }
+    it {is_expected.to have_db_column :consent }
   end
   describe 'check model restrictions' do
     it {is_expected.to validate_presence_of(:year_of_birth)}

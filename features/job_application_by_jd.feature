@@ -118,5 +118,26 @@ Background: data is added to database
     Then I am in Job Developer's browser
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
+
     Then I apply to "software developer" for my job seeker: "Seeker, John"
     And I should see "John Seeker has already applied to this job"
+
+  @javascript
+  Scenario: Job developer cannot apply for his job seeker without consent given
+    When I am in Job Seeker's browser
+    Given I am on the home page
+    And I login as "john.seeker@places.com" with password "password"
+    Then I click the "John" link
+    Then I uncheck "job_seeker_consent"
+    Then I click the "Update Job seeker" button
+    And I should see "Jobseeker was updated successfully."
+
+    Then I am in Job Developer's browser
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    
+    Then I visit the jobs page
+    Then I click the "software developer" link
+    Then I click the "Click Here to Submit an Application for Job Seeker" link
+    Then I cannot select2 "Seeker, John" from "jd_apply_job_select"
+

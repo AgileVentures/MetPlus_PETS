@@ -143,6 +143,7 @@ class JobSeekersController < ApplicationController
             :password_confirmation,
             :year_of_birth,
             :resume,
+            :consent,
             :job_seeker_status_id,
             address_attributes: [:id, :street, :city, :zipcode, :state])
    end

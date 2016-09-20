@@ -246,7 +246,7 @@ class AgencyPeopleController < ApplicationController
     term = params[:q] || {}
     term = term[:term] || ''
     term = term.downcase
-    my_js = pets_user.job_seekers.select { |js| js.job_developer == pets_user }.
+    my_js = pets_user.job_seekers.consent.select { |js| js.job_developer == pets_user }.
             sort { |a, b| a.full_name <=> b.full_name }
     if my_js.blank?
       render json: {:message => 'You do not have job seekers!'}, status: 403

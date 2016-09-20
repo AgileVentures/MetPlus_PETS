@@ -16,6 +16,8 @@ class JobSeeker < ActiveRecord::Base
   belongs_to :job_seeker_status
   validates_presence_of :job_seeker_status
 
+  scope :consent, -> { where(consent: true) }
+
   def status
     job_seeker_status
   end
