@@ -9,7 +9,7 @@ class AgencyAdminController < ApplicationController
                         find(Agency.this_agency(current_user).id)
 
     self.action_description = "administer #{@agency.name} agency"
-    authorize @agency, :update
+    authorize @agency, :update?
 
     @agency_admins = Agency.agency_admins(@agency)
     @branches      = @agency.branches.order(:code).
@@ -32,8 +32,9 @@ class AgencyAdminController < ApplicationController
   end
 
   def job_properties
-    self.action_description = "administer #{@agency.name} agency"
-    authorize Agency.this_agency(current_user), :update
+    agency = Agency.this_agency(current_user)
+    self.action_description = "administer #{agency.name} agency"
+    authorize agency, :update?
 
     if request.xhr?
       case params[:data_type]
