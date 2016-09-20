@@ -99,8 +99,15 @@ Given the following agency relations exist:
 		And I should see "Review job application"
 		And I should see "Job: software developer"
 
-
-
+	Scenario: Job seeker cannot re-apply to the same job
+	  Given I am on the home page
+	  And I login as "john.seeker@places.com" with password "password"
+	  Then I should see "Signed in successfully"
+	  Then I apply to "software developer" from Jobs link
+	  And I should see "Congratulations, you were able to apply with success"
+	  Then I click the "Jobs" link
+	  Then I click the "software developer" link
+	  And I should see "You already have an application submitted for this job."
 
 	Scenario: Company person should not be able to apply
 		Given I am on the home page
@@ -110,8 +117,6 @@ Given the following agency relations exist:
 		And I should see "software developer"
 		Then I click the "software developer" link
 		Then I should not see "Click Here To Apply Online"
-
-
 
 	Scenario: Not logged in should not be able to apply
 		Given I am on the home page

@@ -11,7 +11,7 @@ module JobsViewer
   end
 
   FIELDS_IN_JOB_TYPE = {
-      'my-company-all': [:title, :updated_at, :poster, :num_applicants]
+      'my-company-all': [:title, :status, :poster, :num_applicants, :updated_at]
   }
 
   def job_fields job_type
