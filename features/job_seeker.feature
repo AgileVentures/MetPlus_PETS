@@ -82,9 +82,9 @@ Scenario: login jobseeker, land on home page, see applied jobs
   Then I should see "Signed in successfully."
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
   And I should see "vijaya"
-  And I should see "SW dev" before "Job Opportunities - Best Match"
-  And I should see "Trucker" before "Job Opportunities - Best Match"
-  And I should see "Doctor" before "Job Opportunities - Best Match"
+  And I should see "SW dev" before "Job Opportunities - New"
+  And I should see "Trucker" before "Job Opportunities - New"
+  And I should see "Doctor" before "Job Opportunities - New"
 
 Scenario: jobseeker homepage with no agency relations
   Given I am on the home page

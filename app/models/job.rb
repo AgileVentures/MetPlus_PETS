@@ -96,4 +96,8 @@ class Job < ActiveRecord::Base
         raise ActiveRecord::RecordInvalid.new(self)
       end
   end
+  
+  def is_recent? time
+    created_at > time
+  end
 end
