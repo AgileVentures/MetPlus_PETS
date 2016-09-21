@@ -167,28 +167,50 @@ class JobsController < ApplicationController
 			return
 		end
 
-    if pets_user == @job_seeker || ( @job_seeker.consent && pets_user == @job_seeker.job_developer ) # to be removed once authorize is set properly
-      begin
-        job_app = @job.apply @job_seeker
-    	# ActiveRecord::RecordInvalid is raised when validation at model level fails
-    	# ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
-      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
-        flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
+    # if pets_user == @job_seeker || ( @job_seeker.consent && pets_user == @job_seeker.job_developer ) # to be removed once authorize is set properly
+    #   begin
+    #     job_app = @job.apply @job_seeker
+    # 	# ActiveRecord::RecordInvalid is raised when validation at model level fails
+    # 	# ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+    #   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
+    #     flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
+    #     redirect_to job_path(@job)
+    #   else
+    #     if pets_user == @job_seeker
+    #       Event.create(:JS_APPLY, job_app)
+    #     elsif pets_user == @job_seeker.job_developer
+    #       Event.create(:JD_APPLY, job_app)
+    #       flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
+    #       redirect_to job_path(@job)
+    #     end
+    #   end
+    # else
+    #   flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
+    #   redirect_to job_path(@job)
+    # end
+   
+    if pets_user == @job_seeker # to be removed once authorize is set properly
+      apply_job; return if performed?
+      Event.create(:JS_APPLY, @job_app)
+      render :apply and return
+    end
+
+    if pets_user == @job_seeker.job_developer  # to be removed once authorize is set properly
+      if @job_seeker.consent
+        apply_job; return if performed?
+        Event.create(:JD_APPLY, @job_app)
+        flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
         redirect_to job_path(@job)
       else
-        if pets_user == @job_seeker
-          Event.create(:JS_APPLY, job_app)
-        elsif pets_user == @job_seeker.job_developer
-          Event.create(:JD_APPLY, job_app)
-          flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
-          redirect_to job_path(@job)
-        end
+      	flash[:alert] = "Invalid application: You are not permitted to apply for #{@job_seeker.full_name}"
+        redirect_to job_path(@job)
       end
     else
       flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
       redirect_to job_path(@job)
     end
   end
+
 
 	def revoke
 		if @job.status == 'active' && @job.revoked
@@ -202,6 +224,17 @@ class JobsController < ApplicationController
 	end
 
 	private
+
+    def apply_job
+      begin
+        @job_app = @job.apply @job_seeker
+      # ActiveRecord::RecordInvalid is raised when validation at model level fails
+      # ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
+        flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
+        redirect_to job_path(@job)
+      end
+    end
 
 		def authentication_for_post_or_edit
 			if !company_p_or_job_d?
