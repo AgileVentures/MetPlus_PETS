@@ -69,7 +69,7 @@ class AgencyAdminController < ApplicationController
   private
 
   def check_authorization(agency)
-    action_description = "administer #{agency.name} agency"
+    self.action_description= "administer #{agency.name} agency"
     authorize agency, :update?
   end
 
