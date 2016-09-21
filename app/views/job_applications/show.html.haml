@@ -1,38 +1,28 @@
 .col-sm-offset-1.col-sm-10
-	.pull-right#application-show-links
-		- if @job_application.status == 'active'
-			= render partial: 'accept_modal'
-			= render partial: 'reject_modal'
-			= link_to "Accept", '#', class: "accept_link", 
-			  data: { "application-id" => "#{@job_application.id}", 
-			 				  "job-title" => "#{@job_application.job.title}", 
-			 				  "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
-			 				  "job-companyJobId" => "#{@job_application.job.company_job_id}" }
-			|
-			= link_to "Reject", '#', class: "reject_link",
-  			  data: { "application-id" => "#{@job_application.id}",
-			 				  "job-title" => "#{@job_application.job.title}",
-			 				  "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
-			 				  "job-companyJobId" => "#{@job_application.job.company_job_id}" }
-			|
-		=link_to "Return To Applications", applications_job_path(@job_application.job_id)
-
-	.clearfix
-	
-	.panel.panel-default#show-panel-id
-		.panel-heading#panel-heading-show-id 
-			%h4
-				= "#{@job_application.job.title}"
-				- if @job_application.status != 'active'
-					%span{class: 'label label-info'}="#{@job_application.status}"
-
-		= render partial: 'job_seekers/info', locals: {job_seeker: @job_application.job_seeker}
-
-		
-
-
-
-
-
-
-
+  .pull-right#application-show-links
+    - if @job_application.status == 'active'
+      = render partial: 'accept_modal'
+      = render partial: 'reject_modal', locals: {noxhr: true}
+      = link_to "Accept", '#', class: "action_link",
+              data: { "application-id" => "#{@job_application.id}",
+                              "job-title" => "#{@job_application.job.title}",
+                              "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
+                              "job-companyJobId" => "#{@job_application.job.company_job_id}",
+                              "action" => "#acceptModal"}
+      |
+      = link_to "Reject", '#', class: "action_link",
+              data: { "application-id" => "#{@job_application.id}",
+                              "job-title" => "#{@job_application.job.title}",
+                              "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
+                              "job-companyJobId" => "#{@job_application.job.company_job_id}",
+                              "action" => "#rejectModal"}
+      |
+      =link_to "Return To Applications", applications_job_path(@job_application.job_id)
+  .clearfix
+  .panel.panel-default#show-panel-id
+    .panel-heading#panel-heading-show-id
+      %h4
+        = "#{@job_application.job.title}"
+        - if @job_application.status != 'active'
+          %span{class: 'label label-info'}="#{@job_application.status}"
+    = render partial: 'job_seekers/info', locals: {job_seeker: @job_application.job_seeker}
