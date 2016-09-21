@@ -15,13 +15,9 @@ class Event
               COMP_APPROVED: 'company_registration_approved',
               COMP_DENIED:   'company_registration_denied',
               JS_APPLY:      'jobseeker_applied',
-<<<<<<< 3b35e3a2a72b835e7ede1981be53648155bec065
               JD_APPLY:      'job_applied_by_job_developer',
               APP_ACCEPTED:  'job_application_accepted',
-=======
-              APP_ACCEPTED:  'job_application_accepted',
               APP_REJECTED:  'job_application_rejected',
->>>>>>> Implemented job application state change to not_accepted.
               JOB_POSTED:    'job_posted',
               JOB_REVOKED:   'job_revoked',
               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
