@@ -36,6 +36,13 @@
 
   - @address_form = js
   = render partial: 'address/addressform', locals: {fields_for_name: 'address'}
+
+  .form-group
+    .col-sm-2.control-label
+      =js.check_box :consent, {}, "true", "false"
+    .col-sm-6
+      =js.label :consent, 'By checking the box to the left, you are giving consent to your job developer to submit applications to jobs on your behalf.'
+
   .form-group
     %br
     .col-sm-2.col-sm-offset-2

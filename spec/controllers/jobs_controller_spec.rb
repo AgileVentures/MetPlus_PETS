@@ -838,6 +838,23 @@ RSpec.describe JobsController, type: :controller do
       end
     end
 
+    describe "invalid application as job developer: without job seeker's consent" do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        job_seeker.update_attribute(:consent, false)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'show flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Invalid application: You are not permitted to apply for #{job_seeker.full_name}"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
+      end
+    end
+   
     describe 'duplicated applications as job developer' do
       before :each do
         agency = FactoryGirl.create(:agency)
@@ -855,7 +872,7 @@ RSpec.describe JobsController, type: :controller do
       end
     end
 
-    describe 'invalid application as job developer' do
+    describe 'invalid application as job developer: job seeker does not belong to job developer' do
       before :each do
         agency = FactoryGirl.create(:agency)
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
