@@ -115,7 +115,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     let(:job_developer) { FactoryGirl.create(:job_developer) }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:app) { FactoryGirl.create(:job_application, job_seeker: job_seeker, job: job) }
-    let(:mail) { AgencyMailer.job_application_accepted(job_developer.email, app) }
+    let(:mail) { AgencyMailer.job_application_rejected(job_developer.email, app) }
 
     before :each do
       stub_cruncher_authenticate

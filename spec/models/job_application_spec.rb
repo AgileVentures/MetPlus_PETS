@@ -113,7 +113,6 @@ RSpec.describe JobApplication, type: :model do
     end
   end
 
-<<<<<<< 3b35e3a2a72b835e7ede1981be53648155bec065
   describe 'tracking status change history' do
     let(:job)  { FactoryGirl.create(:job) }
     let(:js) { FactoryGirl.create(:job_seeker) }

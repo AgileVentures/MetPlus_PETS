@@ -215,6 +215,11 @@ RSpec.describe Event, type: :model do
 
 
   describe 'job_application_rejected event' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_file_download(testfile_resume)
+    end
+
     it 'triggers Pusher message to primary job developer' do
       Event.create(:APP_REJECTED, application)
       expect(Pusher).to have_received(:trigger).
@@ -228,7 +233,7 @@ RSpec.describe Event, type: :model do
     end
     it 'sends a notification email to primary job developer' do
       expect { Event.create(:APP_REJECTED, application) }.
-          to change(all_emails, :count).by(+1)
+          to change(all_emails, :count).by(+2)
     end
   end
 
