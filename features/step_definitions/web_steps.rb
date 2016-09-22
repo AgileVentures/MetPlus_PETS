@@ -43,8 +43,12 @@ Then(/^"([^"]*)" should( not)? be visible$/) do |string, not_see|
   end
 end
 
-And(/^I press "([^"]*)"$/) do |name|
-  click_on name
+And(/^I( cannot)? press "([^"]*)"$/) do |cannot, name|
+  unless cannot
+    click_on name
+  else
+    expect(page).not_to have_css(name)
+  end
 end
 
 Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, first, last|

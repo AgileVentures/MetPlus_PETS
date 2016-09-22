@@ -105,7 +105,7 @@ Scenario: edit Js Registration
   Then I select "Employed Not Looking" in select list "Status"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
-  Then I click the "Update Job seeker" button
+  Then I click "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
   When I click the "vijaya" link
   Then The field 'First Name' should have the value 'vijaya1'

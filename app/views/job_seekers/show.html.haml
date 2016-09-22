@@ -1,9 +1,14 @@
 .col-sm-3
   %h3
     Job Seeker
+    - if pets_user == @jobseeker.case_manager
+      = link_to edit_job_seeker_path(@jobseeker),
+        :id => 'edit-by-cm' do
+        %i.fa.fa-pencil-square-o.fa-1
   %a(id='toggle_info' href='#info_table' class='text-danger'
               style='padding-left: 10px;')
     Hide Job Seeker Information
+  
 
 .col-sm-9
   = render partial: 'info', locals: {job_seeker: @jobseeker}

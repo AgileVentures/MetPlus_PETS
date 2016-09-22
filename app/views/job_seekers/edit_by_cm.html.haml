@@ -1,0 +1,48 @@
+%h2
+  Update #{@jobseeker.full_name(last_name_first: false)}'s Profile
+%br
+= form_for @jobseeker, html: { class: 'form-horizontal'} do |js_form|
+  .col-sm-offset-2.col-sm-8
+    = render 'shared/error_messages', object: @jobseeker
+    %br
+  .clearfix
+
+  .form-group
+    =js_form.label :first_name, 'First Name', class:'control-label col-sm-2'
+    .col-sm-6
+      =js_form.text_field :first_name, size: 30, class:'form-control'
+  .form-group
+    =js_form.label :last_name, 'Last Name', class:'control-label col-sm-2'
+    .col-sm-6
+      =js_form.text_field :last_name, size: 30, class:'form-control'
+
+  .form-group
+    =js_form.label :email, 'Email', class:'control-label col-sm-2'
+    .col-sm-6
+      =js_form.text_field :email, size: 30, class:'form-control'
+
+  .form-group
+    =js_form.label :phone, 'Phone', class:'control-label col-sm-2'
+    .col-sm-6
+      =js_form.text_field :phone, size: 30, class:'form-control',
+    placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
+
+  - @address_form = js_form
+  = render partial: 'address/addressform', locals: {fields_for_name: 'address'}
+
+  .form-group
+    =js_form.label :resume, 'Resume', class:'control-label col-sm-2'
+    .col-sm-6
+      =js_form.file_field :resume, accept: Resume::MIMETYPES.join(',')
+    .clearfix
+    .col-sm-8.col-sm-offset-2
+      - if @current_resume
+        = "(Your resume on file is \"#{@current_resume.file_name}\",       |
+                 and was uploaded on #{@current_resume.updated_at.         |
+                in_time_zone('Eastern Time (US & Canada)').to_s(:long)})"  |
+
+  .form-group
+    .col-sm-2.col-sm-offset-2
+      =js_form.submit class: 'btn btn-primary'
+    .col-sm-2.col-sm-offset-1
+      =link_to 'Cancel', job_seeker_path(@jobseeker), class: 'btn btn-danger'

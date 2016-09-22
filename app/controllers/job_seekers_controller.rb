@@ -41,16 +41,16 @@ class JobSeekersController < ApplicationController
   def edit
     @jobseeker = JobSeeker.find(params[:id])
     @current_resume = @jobseeker.resumes[0]
+    render 'edit_by_cm' and return if pets_user == @jobseeker.case_manager
   end
 
   def update
+    # p "!"*100
+    # p pets_user
     @jobseeker = JobSeeker.find(params[:id])
-
     jobseeker_params = handle_user_form_parameters form_params
     dispatch_file    = jobseeker_params.delete 'resume'
-
     models_saved = @jobseeker.update_attributes(jobseeker_params)
-
     if models_saved
       if dispatch_file          # If there is a résumé, try to save/update that
         tempfile = dispatch_file.tempfile
@@ -66,21 +66,26 @@ class JobSeekersController < ApplicationController
           resume = Resume.new(file: tempfile, file_name: filename,
                      job_seeker_id: @jobseeker.id)
         end
-
         unless resume.save
           models_saved = false
           @jobseeker.errors.messages.merge! resume.errors.messages
         end
       end
     end
-
-
+    p "*"*100
+    p models_saved
+    p pets_user
     if models_saved
-       sign_in :user, @jobseeker.user, bypass: true
+      if pets_user == @jobseeker
+        p 'sign in user again'
+        sign_in :user, @jobseeker.user, bypass: true 
+      end
        flash[:notice] = "Jobseeker was updated successfully."
+       redirect_to @jobseeker and return if pets_user == @jobseeker.case_manager
        redirect_to root_path
     else
        @resume = resume
+       render 'edit_by_cm' and return if pets_user == @jobseeker.case_manager
        render 'edit'
     end
   end

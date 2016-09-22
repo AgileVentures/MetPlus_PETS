@@ -121,6 +121,7 @@ RSpec.describe JobSeekersController, type: :controller do
        stub_cruncher_file_upload
 
        @jobseeker =  FactoryGirl.create(:job_seeker)
+       allow(controller).to receive(:current_user).and_return(@jobseeker)
      end
      let(:js_status) {FactoryGirl.create(:job_seeker_status)}
 
@@ -179,7 +180,7 @@ RSpec.describe JobSeekersController, type: :controller do
        post :create, job_seeker: @jobseeker_hash
 
        @jobseeker = JobSeeker.find(1)
-
+       allow(controller).to receive(:current_user).and_return(@jobseeker)
        patch :update, id: @jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
                 resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')).
@@ -200,6 +201,7 @@ RSpec.describe JobSeekersController, type: :controller do
    context "valid attributes without password change" do
      before(:each) do
        @jobseeker =  FactoryGirl.create(:job_seeker)
+       allow(controller).to receive(:current_user).and_return(@jobseeker)
        @jobseeker.valid?
        FactoryGirl.create(:job_seeker_status)
        @password = @jobseeker.encrypted_password
@@ -242,6 +244,7 @@ RSpec.describe JobSeekersController, type: :controller do
    context 'invalid attributes' do
      before(:each) do
        @jobseeker = FactoryGirl.create(:job_seeker)
+       allow(controller).to receive(:current_user).and_return(@jobseeker)
        @jobseeker.assign_attributes(year_of_birth: '198')
        @jobseeker.valid?
        patch :update, job_seeker:FactoryGirl.attributes_for(:job_seeker, year_of_birth: '198',resume:''),id:@jobseeker
@@ -253,35 +256,99 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(response).to have_http_status(:success)
      end
    end
+
+  context "valid attributes updated by job seeker's case manager" do
+    before(:each) do
+      @agency = FactoryGirl.create(:agency)
+      @jobseeker =  FactoryGirl.create(:job_seeker, phone: '123-456-7890')
+      @case_manager = FactoryGirl.create(:case_manager, agency: @agency)
+      @jobseeker.assign_case_manager(@case_manager, @agency)
+      allow(controller).to receive(:current_user).and_return(@case_manager)
+    end
+    it "locates the requested @jobseeker" do
+      patch :update, id: @case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+      expect(assigns(:jobseeker)).to eq(@jobseeker)
+      expect(@jobseeker.phone).to eq('123-456-7890')
+    end
+
+    it "changes @jobseeker's attribute" do
+      patch :update, id: @case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, phone: '111-111-1111')
+      @jobseeker.reload
+      expect(@jobseeker.phone).to eq('111-111-1111')
+    end
+
+    it 'sets flash message' do
+      patch :update, id: @case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+      expect(flash[:notice]).to eq "Jobseeker was updated successfully."
+    end
+    
+    it 'redirects to job seeker show page' do
+      patch :update, id: @case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+      expect(response).to redirect_to @jobseeker
+    end
+  end
+
+  context "invalid attributes updated by job seeker's case manager" do
+    before(:each) do
+      @agency = FactoryGirl.create(:agency)
+      @jobseeker =  FactoryGirl.create(:job_seeker, phone: '123-456-7890')
+      @case_manager = FactoryGirl.create(:case_manager, agency: @agency)
+      @jobseeker.assign_case_manager(@case_manager, @agency)
+      allow(controller).to receive(:current_user).and_return(@case_manager)
+      patch :update, id: @jobseeker, job_seeker: FactoryGirl.attributes_for(:job_seeker, phone: '123')
+      @jobseeker.reload
+    end
+    it "does not change job seeker's attribute" do
+      expect(@jobseeker.phone).to eq('123-456-7890')
+    end
+    it "re-renders the edit-by-cm template" do
+      expect(response).to render_template 'job_seekers/edit_by_cm'
+    end
+  end
  end
 
   describe "GET #edit" do
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_file_upload
+    context "edited by job seeker" do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_file_upload
+        js_status = FactoryGirl.create(:job_seeker_status)
+        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
+               resume: fixture_file_upload('files/Janitor-Resume.doc')).
+               merge(FactoryGirl.attributes_for(:user)).
+               merge({:job_seeker_status_id => js_status.id})
 
-      js_status = FactoryGirl.create(:job_seeker_status)
-      @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
-             resume: fixture_file_upload('files/Janitor-Resume.doc')).
-             merge(FactoryGirl.attributes_for(:user)).
-             merge({:job_seeker_status_id => js_status.id})
+        post :create, job_seeker: @jobseeker_hash
 
-      post :create, job_seeker: @jobseeker_hash
+        @jobseeker = JobSeeker.find(1)
+        allow(controller).to receive(:current_user).and_return(@jobseeker)
+        get :edit, id: @jobseeker
+      end
 
-      @jobseeker = JobSeeker.find(1)
-
-      get :edit, id: @jobseeker
+      it 'assigns jobseeker and current_resume for view' do
+        expect(assigns(:jobseeker)).to eq @jobseeker
+        expect(assigns(:current_resume)).to eq @jobseeker.resumes[0]
+      end
+      it "renders edit template" do
+        expect(response).to render_template 'edit'
+      end
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
     end
 
-    it 'assigns jobseeker and current_resume for view' do
-      expect(assigns(:jobseeker)).to eq @jobseeker
-      expect(assigns(:current_resume)).to eq @jobseeker.resumes[0]
-    end
-    it "renders edit template" do
-      expect(response).to render_template 'edit'
-    end
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
+    context "edited by job seeker's case manager" do
+      before(:each) do
+        @agency = FactoryGirl.create(:agency)
+        @jobseeker =  FactoryGirl.create(:job_seeker)
+        @case_manager = FactoryGirl.create(:case_manager, agency: @agency)
+        @jobseeker.assign_case_manager(@case_manager, @agency)
+        allow(controller).to receive(:current_user).and_return(@case_manager)
+        get :edit, id: @case_manager.job_seekers.first
+      end
+      it "renders edit_by_cm template" do
+        expect(response).to render_template 'job_seekers/edit_by_cm'
+      end
     end
   end
 
