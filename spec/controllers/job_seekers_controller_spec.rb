@@ -121,7 +121,7 @@ RSpec.describe JobSeekersController, type: :controller do
        stub_cruncher_file_upload
 
        @jobseeker =  FactoryGirl.create(:job_seeker)
-       allow(controller).to receive(:current_user).and_return(@jobseeker)
+       sign_in @jobseeker
      end
      let(:js_status) {FactoryGirl.create(:job_seeker_status)}
 

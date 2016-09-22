@@ -1,4 +1,5 @@
 class JobSeekersController < ApplicationController
+  before_action :authenticate_user!, except: [:new, :create]
 
   include UserParameters
   include JobApplicationsViewer
@@ -45,8 +46,6 @@ class JobSeekersController < ApplicationController
   end
 
   def update
-    # p "!"*100
-    # p pets_user
     @jobseeker = JobSeeker.find(params[:id])
     jobseeker_params = handle_user_form_parameters form_params
     dispatch_file    = jobseeker_params.delete 'resume'
@@ -72,9 +71,7 @@ class JobSeekersController < ApplicationController
         end
       end
     end
-    p "*"*100
-    p models_saved
-    p pets_user
+   
     if models_saved
       if pets_user == @jobseeker
         p 'sign in user again'
