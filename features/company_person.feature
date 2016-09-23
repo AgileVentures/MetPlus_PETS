@@ -43,6 +43,11 @@ Feature: Company Person
       | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
       | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
+    Given the following tasks exist:
+      | task_type          | owner                | deferred_date | status      | targets               |
+      | job_application    | jane@widgets.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+
+
   Scenario: company admin edits company info
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
@@ -172,3 +177,18 @@ Feature: Company Person
     And I should see "Smith, John"
     And I should see "Smith, Jane"
     And I should not see "Daniel, Charles"
+
+  @selenium
+  Scenario: Company Contact with tasks on home page
+    Given I am on the home page
+    And I login as "jane@widgets.com" with password "qwerty123"
+    And I should see "Tasks that need your attention"
+    And I should see "Review job application"
+    And The task 1 status is "Assigned"
+    Then I press the wip button of the task 1
+    And I wait 5 seconds
+    And I should see notification "Work on the task started"
+    And The task 1 status is "Work in progress"
+    Then I press the done button of the task 1
+    And I wait 1 second
+    And I should see notification "Work on the task is done"

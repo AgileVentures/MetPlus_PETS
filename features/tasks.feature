@@ -26,6 +26,8 @@ Feature: Have a task system in the site
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
       | Widgets Inc. | CA    | Steve      | Jobs      | ca@widgets.com   | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+
 
     Given the following tasks exist:
       | task_type          | owner                | deferred_date | status      | targets               |
@@ -37,6 +39,9 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john.seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john.worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
+      | job_application    | Widgets Inc.,CA      | 2016-03-10    | NEW         | john-seeker@gmail.com |
+      | job_application    | ca@widgets.com       | 2016-03-10    | NEW         | john-seeker@gmail.com |
+
 
   @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
@@ -66,3 +71,21 @@ Feature: Have a task system in the site
     And I click the "Widgets Inc." link
     And I wait 1 second
     And I should see "Company Registration Information"
+<<<<<<< HEAD
+=======
+
+@selenium
+  Scenario: company admin can view and assign tasks
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    Then I should see "Signed in successfully."
+    And I wait 1 second
+    And The tasks 9,10 are present
+    Then I press the assign button of the task 9
+    And I should see "Select the user to assign the task to:"
+    And I select2 "Smith, Jane" from "task_assign_select"
+    Then I press "Assign"
+    And I wait 1 second
+    And I should see notification "Task assigned"
+    And The task 9 is not present
+>>>>>>> Add testcases
