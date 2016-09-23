@@ -3,14 +3,14 @@
     - if @job_application.status == 'active'
       = render partial: 'accept_modal'
       = render partial: 'reject_modal', locals: {noxhr: true}
-      = link_to "Accept", '#', class: "action_link",
+      = link_to "Accept", '#', class: "action_link", id: "accept_link",
               data: { "application-id" => "#{@job_application.id}",
                               "job-title" => "#{@job_application.job.title}",
                               "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
                               "job-companyJobId" => "#{@job_application.job.company_job_id}",
                               "action" => "#acceptModal"}
       |
-      = link_to "Reject", '#', class: "action_link",
+      = link_to "Reject", '#', class: "action_link", id: "reject_link",
               data: { "application-id" => "#{@job_application.id}",
                               "job-title" => "#{@job_application.job.title}",
                               "jobSeeker" => "#{@job_application.job_seeker.full_name(last_name_first: false)}",
