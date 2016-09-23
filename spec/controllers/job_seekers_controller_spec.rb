@@ -115,209 +115,164 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe "PATCH #update" do
-    context "valid attributes and initial résumé upload" do
-      let(:jobseeker) { FactoryGirl.create(:job_seeker) }
-      let(:js_status) { FactoryGirl.create(:job_seeker_status) }
-      before(:each) do
-        stub_cruncher_authenticate
-        stub_cruncher_file_upload
-
-        sign_in jobseeker
-      end
-
-      it 'sets flash message' do
-        patch :update, id: jobseeker,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status_id => js_status.id})
-        expect(flash[:notice]).to eq "Jobseeker was updated successfully."
-      end
-      it 'returns redirect status' do
-        patch :update, id: jobseeker,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status_id => js_status.id})
-        expect(response).to have_http_status(:redirect)
-      end
-      it 'redirects to mainpage' do
-        patch :update, id: jobseeker,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status_id => js_status.id})
-        expect(response).to redirect_to(root_path)
-      end
-      it 'saves resume record' do
-        expect{ patch :update, id: jobseeker,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                resume: fixture_file_upload('files/Janitor-Resume.doc')).
-            merge({:job_seeker_status_id => js_status.id}) }.
-          to change(Resume, :count).by(+1)
-      end
-      it 'check address change' do
-        use_hash = FactoryGirl.attributes_for(:job_seeker,
-                                            resume: fixture_file_upload('files/Janitor-Resume.doc')).
-                   merge({:job_seeker_status_id => js_status.id})
-
-        use_hash[:address_attributes] = FactoryGirl.attributes_for(:address, zipcode: '12346')
-        patch :update, id: jobseeker, job_seeker: use_hash
-        jobseeker.reload
-       expect(jobseeker.address.zipcode).to eq '12346'
-      end
-    end
-
-    context "valid attributes and résumé file update" do
-      let(:js_status) { FactoryGirl.create(:job_seeker_status) }
-      let(:js)  { FactoryGirl.create(:job_seeker) }
-      let(:resume) { FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-        file: fixture_file_upload('files/Janitor-Resume.doc'), job_seeker: js) }
-      before(:each) do
-        stub_cruncher_authenticate
-        stub_cruncher_file_upload
-
-        sign_in js
-        patch :update, id: js,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')).
-            merge({:job_seeker_status_id => js_status.id})
-        js.reload
-      end
-
-      it 'updates resume record' do
-        expect(js.resumes[0].file_name).
-              to eq 'Admin-Assistant-Resume.pdf'
-      end
-      it 'sets flash message' do
-        expect(flash[:notice]).to eq "Jobseeker was updated successfully."
-      end
-    end
-
-    context "valid attributes without password change" do
+    context " updated by job seeker " do
       let(:jobseeker) { FactoryGirl.create(:job_seeker) }
       let(:js_status) { FactoryGirl.create(:job_seeker_status) }
       let(:password) { jobseeker.encrypted_password }
       before(:each) do
-        jobseeker.valid?
+        stub_cruncher_authenticate
+        stub_cruncher_file_upload
+
         sign_in jobseeker
-        patch :update, id: jobseeker,
-          job_seeker: FactoryGirl.attributes_for(:job_seeker, 
-            year_of_birth: '1980', first_name: 'John', 
-            last_name: 'Smith', password: '', 
-            password_confirmation: '', phone: '780-890-8976').
-          merge({:job_seeker_status_id => js_status.id})
-        jobseeker.reload
       end
-      it 'sets a firstname' do
-        expect(jobseeker.first_name).to eq ("John")
+
+      context "successful initial résumé upload" do
+        it 'saves the first resume record' do
+          expect{ patch :update, id: jobseeker,
+              job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                resume: fixture_file_upload('files/Janitor-Resume.doc')) }.
+            to change(Resume, :count).by(+1)
+          expect(flash[:notice]).to eq "Jobseeker was updated successfully."
+        end
       end
-      it 'sets a lastname' do
-        expect(jobseeker.last_name).to eq ("Smith")
+
+      context "valid attributes without password change" do 
+        before(:each) do
+          FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
+            file: fixture_file_upload('files/Janitor-Resume.doc'), 
+            job_seeker: jobseeker)
+          patch :update, id: jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+              year_of_birth: '1980', first_name: 'John', 
+              last_name: 'Smith', password: '', 
+              password_confirmation: '', phone: '780-890-8976',
+              resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')).
+            merge({ :job_seeker_status_id => js_status.id }).
+            merge({ address_attributes: FactoryGirl.attributes_for(:address, zipcode: '12346') })
+          jobseeker.reload
+        end
+        it 'sets the valid attributes' do
+          expect(jobseeker.first_name).to eq ("John")
+          expect(jobseeker.last_name).to eq ("Smith")
+          expect(jobseeker.year_of_birth).to eq ("1980")
+          expect(jobseeker.status.id) == (js_status.id)
+          expect(jobseeker.address.zipcode).to eq '12346'
+          expect(jobseeker.resumes[0].file_name).to eq 'Admin-Assistant-Resume.pdf'
+        end
+        it 'dont change password' do
+          expect(jobseeker.encrypted_password).to eq (password)
+        end
+        it 'sets flash message' do
+          expect(flash[:notice]).to eq "Jobseeker was updated successfully."
+        end
+        it 'returns redirect status' do
+          expect(response).to have_http_status(:redirect)
+        end
+        it 'redirects to mainpage' do
+          expect(response).to redirect_to(root_path)
+        end
       end
-      it 'sets a yearofbirth' do
-        expect(jobseeker.year_of_birth).to eq ("1980")
+
+      context "unsuccessful résumé upload" do
+        render_views
+
+        before(:each) do
+          FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
+            file: fixture_file_upload('files/Janitor-Resume.doc'), 
+            job_seeker: jobseeker)
+          patch :update, id: jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+            resume: fixture_file_upload('files/Example Excel File.xls'))
+          jobseeker.reload
+        end
+        it 'does not update existing resume' do
+          expect(jobseeker.resumes[0].file_name).to eq 'Janitor-Resume.doc'
+        end
+        it 'output file unsupported message' do
+          expect(response.body).to have_content('unsupported file type')
+        end
+        it 'renders edit template' do
+          expect(response).to render_template('edit')
+        end
       end
-      it 'sets a jobseeker status' do
-        expect(jobseeker.status.id) == (js_status.id)
-      end
-      it 'dont change password' do
-        expect(jobseeker.encrypted_password).to eq (password)
-      end
-      it 'sets flash message' do
-        expect(flash[:notice]).to eq "Jobseeker was updated successfully."
-      end
-      it 'returns redirect status' do
-        expect(response).to have_http_status(:redirect)
-      end
-      it 'redirects to mainpage' do
-        expect(response).to redirect_to(root_path)
+
+      context 'invalid attributes' do
+        before(:each) do
+          jobseeker.assign_attributes(year_of_birth: '198')
+          jobseeker.valid?
+          patch :update, id: jobseeker, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+            year_of_birth: '198', resume:'')
+        end
+        it 'renders edit template' do
+          expect(response).to render_template('edit')
+        end
+        it "returns http success" do
+          expect(response).to have_http_status(:success)
+        end
       end
     end
 
-    context 'invalid attributes' do
-      let(:jobseeker) { FactoryGirl.create(:job_seeker) }
+    context " updated by job seeker's case manager " do
+      let(:agency) { FactoryGirl.create(:agency) }
+      let(:jobseeker) { FactoryGirl.create(:job_seeker, phone: '123-456-7890') }
+      let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
       before(:each) do
-        sign_in jobseeker
-        jobseeker.assign_attributes(year_of_birth: '198')
-        jobseeker.valid?
-        patch :update, id: jobseeker, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
-          year_of_birth: '198', resume:'')
-     end
-     it 'renders edit template' do
-        expect(response).to render_template('edit')
-     end
-     it "returns http success" do
-        expect(response).to have_http_status(:success)
-     end
-   end
+        sign_in case_manager
+        jobseeker.assign_case_manager(case_manager, agency)
+      end
+      context "valid attributes" do
+        it "locates the requested @jobseeker" do
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+          expect(assigns(:jobseeker)).to eq(jobseeker)
+        end
+        it "changes @jobseeker's attribute" do
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+            phone: '111-111-1111')
+          jobseeker.reload
+          expect(jobseeker.phone).to eq('111-111-1111')
+        end
+        it 'sets flash message and redirects to job seeker show page' do
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+          expect(flash[:notice]).to eq "Jobseeker was updated successfully."
+          expect(response).to redirect_to jobseeker
+        end
+      end
 
-  context "valid attributes updated by job seeker's case manager" do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:jobseeker) { FactoryGirl.create(:job_seeker, phone: '123-456-7890') }
-    let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
-    before(:each) do
-      sign_in case_manager
-      jobseeker.assign_case_manager(case_manager, agency)
-    end
-
-    it "locates the requested @jobseeker" do
-      patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
-      expect(assigns(:jobseeker)).to eq(jobseeker)
-      expect(jobseeker.phone).to eq('123-456-7890')
-    end
-
-    it "changes @jobseeker's attribute" do
-      patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
-        phone: '111-111-1111')
-      jobseeker.reload
-      expect(jobseeker.phone).to eq('111-111-1111')
-    end
-
-    it 'sets flash message' do
-      patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
-      expect(flash[:notice]).to eq "Jobseeker was updated successfully."
-    end
-    
-    it 'redirects to job seeker show page' do
-      patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
-      expect(response).to redirect_to jobseeker
+      context "invalid attributes" do
+        before(:each) do
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+            phone: '123')
+          jobseeker.reload
+        end
+        it "does not change job seeker's attribute" do
+          expect(jobseeker.phone).to eq('123-456-7890')
+        end
+        it "re-renders the edit-by-cm template" do
+          expect(response).to render_template 'job_seekers/edit_by_cm'
+        end
+      end
     end
   end
-
-  context "invalid attributes updated by job seeker's case manager" do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:jobseeker) { FactoryGirl.create(:job_seeker, phone: '123-456-7890') }
-    let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
-    before(:each) do
-      sign_in case_manager
-      jobseeker.assign_case_manager(case_manager, agency)
-      patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
-        phone: '123')
-      jobseeker.reload
-    end
-    it "does not change job seeker's attribute" do
-      expect(jobseeker.phone).to eq('123-456-7890')
-    end
-    it "re-renders the edit-by-cm template" do
-      expect(response).to render_template 'job_seekers/edit_by_cm'
-    end
-  end
- end
 
   describe "GET #edit" do
+    let(:jobseeker)  { FactoryGirl.create(:job_seeker) }
+    let(:resume) { FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
+      file: fixture_file_upload('files/Janitor-Resume.doc'), job_seeker: jobseeker) }
+    let(:agency) { FactoryGirl.create(:agency) }
+    let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+    
     context "edited by job seeker" do
-      let(:js)  { FactoryGirl.create(:job_seeker) }
-      let(:resume) { FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-        file: fixture_file_upload('files/Janitor-Resume.doc'), job_seeker: js) }
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
 
-        sign_in js
-        get :edit, id: js
+        sign_in jobseeker
+        get :edit, id: jobseeker
       end
 
       it 'assigns jobseeker and current_resume for view' do
-        expect(assigns(:jobseeker)).to eq js
-        expect(assigns(:current_resume)).to eq js.resumes[0]
+        expect(assigns(:jobseeker)).to eq jobseeker
+        expect(assigns(:current_resume)).to eq jobseeker.resumes[0]
       end
       it "renders edit template" do
         expect(response).to render_template 'edit'
@@ -328,9 +283,6 @@ RSpec.describe JobSeekersController, type: :controller do
     end
 
     context "edited by job seeker's case manager" do
-      let(:agency) { FactoryGirl.create(:agency) }
-      let(:jobseeker) { FactoryGirl.create(:job_seeker) }
-      let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
       before(:each) do
         sign_in case_manager
         jobseeker.assign_case_manager(case_manager, agency)
