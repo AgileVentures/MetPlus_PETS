@@ -539,6 +539,18 @@ RSpec.describe AgencyPeopleController, type: :controller do
                                                })
       end
 
+      it 'returns his job seekers with consent' do
+        resume1 = FactoryGirl.create(:resume, job_seeker: @js1)
+        resume2 = FactoryGirl.create(:resume, job_seeker: @js2)
+        resume3 = FactoryGirl.create(:resume, job_seeker: @js3)
+        @js1.update_attribute(:consent, false)
+        xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json
+        expect(JSON.parse(response.body)).to eq({'results' => [
+                                               {'id' => @js3.id, 'text' => @js3.full_name},
+                                               {'id' => @js2.id, 'text' => @js2.full_name}]
+                                               })
+      end
+
       it 'disables application for his job seekers without resume' do
         resume1 = FactoryGirl.create(:resume, job_seeker: @js1) 
         xhr :get, :my_js_as_jd , id: @jd_cm.id, :format => :json

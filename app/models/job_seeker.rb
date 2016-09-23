@@ -16,6 +16,8 @@ class JobSeeker < ActiveRecord::Base
   belongs_to :job_seeker_status
   validates_presence_of :job_seeker_status
 
+  scope :consent, -> { where(consent: true) }
+
   def status
     job_seeker_status
   end
@@ -28,25 +30,13 @@ class JobSeeker < ActiveRecord::Base
     job_applications.order(:created_at).last
   end
 
-  def self.js_without_jd
-    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
-        includes(:job_seeker_status, :job_applications).
-        order("users.last_name")
-  end
-
-  def self.your_jobseekers_jd(job_developer)
-    # this method serves the Job Developer home page, hence the "your"
-
-    where(id: self.with_ap_in_role(:JD, job_developer)).
-            includes(:job_seeker_status, :job_applications).
-            order("users.last_name")
-  end
-
   def self.with_ap_in_role(role_key, agency_person)
     AgencyRelation.in_role_of(role_key).
                   where(:agency_person => agency_person).
                   pluck(:job_seeker_id)
+     
   end
+  
 
   def job_developer
     find_agency_person(:JD)
@@ -57,20 +47,6 @@ class JobSeeker < ActiveRecord::Base
     assign_agency_person(job_developer, :JD)
   end
 
-  def self.js_without_cm
-    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
-        includes(:job_seeker_status, :job_applications).
-        order("users.last_name")
-  end
-
-  def self.your_jobseekers_cm(case_manager)
-    # this method serves the Job Developer home page, hence the "your"
-
-    where(id: self.with_ap_in_role(:CM, case_manager)).
-          includes(:job_seeker_status, :job_applications).
-          order("users.last_name")
-  end
-
   def case_manager
     find_agency_person(:CM)
   end
@@ -78,6 +54,20 @@ class JobSeeker < ActiveRecord::Base
   def assign_case_manager(case_manager, agency)
     raise "User #{case_manager.full_name} is not a Case Manager" unless case_manager.is_case_manager? agency
     assign_agency_person(case_manager, :CM)
+  end
+
+  def self.job_seekers_without_job_developer
+    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
+        includes(:job_seeker_status, :job_applications).
+        order("users.last_name")
+    
+  end
+
+  def self.job_seekers_without_case_manager
+    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
+        includes(:job_seeker_status, :job_applications).
+        order("users.last_name")
+    
   end
 
   private

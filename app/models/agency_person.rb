@@ -1,5 +1,6 @@
 class AgencyPerson < ActiveRecord::Base
   acts_as :user
+  
 
   belongs_to :agency
   belongs_to :branch
@@ -52,6 +53,18 @@ class AgencyPerson < ActiveRecord::Base
         'cannot be assigned as Case Manager unless person has that role.'
     end
   end
+
+  
+  def job_seekers_as_job_developer
+    job_seekers.where(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id))
+  end
+ 
+  def job_seekers_as_case_manager
+    job_seekers.where(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id))
+  end
+
+  
+
 
   def other_agency_admin?
     admins = Agency.agency_admins(agency)

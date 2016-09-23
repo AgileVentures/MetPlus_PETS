@@ -12,6 +12,7 @@ describe JobSeeker, type: :model do
     it {is_expected.to have_db_column :year_of_birth}
     it {is_expected.to have_db_column :job_seeker_status_id }
     it {is_expected.to have_db_column :address_id }
+    it {is_expected.to have_db_column :consent }
   end
   describe 'check model restrictions' do
     it {is_expected.to validate_presence_of(:year_of_birth)}
@@ -124,11 +125,12 @@ end
     end
 
     describe 'class methods for job seekers agency relations' do
-      it '.js_without_jd returns job seekers with no job developer' do
-        expect(JobSeeker.js_without_jd).to match([adam, bob, charles])
+      it '.job_seekers_without_job_developer returns job seekers with no job developer' do
+        expect(JobSeeker.job_seekers_without_job_developer).to match([adam, bob, charles])
       end
-      it '.js_without_cm returns job seekers with no job developer' do
-        expect(JobSeeker.js_without_cm).to match([bob, charles, dave])
+      it '.job_seekers_without_case_manager returns job seekers with no case manager' do
+        expect(JobSeeker.job_seekers_without_case_manager).to match([bob, charles, dave])
+        
       end
     end
 
