@@ -64,7 +64,6 @@ Background: data is added to database
 	  Then I click "hr manager" link to job applications index page
 	  And I should see "3" active applications for the job
 	  Then I click "june@seek.com" link to "June's" job application show page
-	  And I should see an "Accept" link
 	  Then I click the "Accept" link
 	  And I should see an "accept" confirmation
 	  Then I click the "Accept" confirmation

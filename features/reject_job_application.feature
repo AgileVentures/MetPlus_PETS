@@ -63,10 +63,8 @@ Feature: Reject a job application
     Then I click "hr manager" link to job applications index page
     And I should see "3" active applications for the job
     Then I click "june@seek.com" link to "June's" job application show page
-    And I should see an "Reject" link
     Then I click the "Reject" link
     And I should see an "reject" confirmation
-    Then I click the "Reject" confirmation
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
     And I am returned to "hr manager" job application index page
@@ -86,7 +84,6 @@ Feature: Reject a job application
     And I login as "cane@widgets.com" with password "qwerty123"
     Then I click "hr manager" link to job applications index page
     And I reject "john@seek.com" application
-    And I click the "Reject" confirmation
     And I input "Not enough experience" as the reason for rejection
     And I click the "Reject" button
 

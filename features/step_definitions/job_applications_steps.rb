@@ -17,21 +17,21 @@ end
 And(/^I accept "([^"]*)" application$/) do |email|
 	job_seeker = User.find_by_email(email).actable
 	@job_app = JobApplication.find_by(job_seeker: job_seeker)
-	find("#applications-#{@job_app.id} a.accept_link").click
+	find("#applications-#{@job_app.id} #accept_link").click
 end
 
 And(/^I reject "([^"]*)" application$/) do |email|
 	job_seeker = User.find_by_email(email).actable
 	@job_app = JobApplication.find_by(job_seeker: job_seeker)
-	find("#applications-#{@job_app.id} a.reject_link").click
+	find("#applications-#{@job_app.id} #reject_link").click
 end
 
 And(/^I should see an "([^"]*)" confirmation$/) do |action|
 	expect(page).to have_content("Are you sure you want 
  		         to #{action} the following application: 
- 		         		 applicant's name: #{@job_app.job_seeker.full_name(last_name_first: false)}
-                 job title:  #{@job_app.job.title}
-                 company job id: #{@job_app.job.company_job_id}")
+ 		         		 Applicant's Name: #{@job_app.job_seeker.full_name(last_name_first: false)}
+                 Job Title:  #{@job_app.job.title}
+                 Company Job ID: #{@job_app.job.company_job_id}")
 end
 
 And(/^I click the "([^"]*)" confirmation$/) do |action|
@@ -66,9 +66,9 @@ end
 
 Then(/^I should( not)? see(?: an)? "([^"]*)" link$/) do |not_see, action|
 	if not_see
-		expect(page).not_to have_css("a.#{action.downcase}_link", text: "#{action}")
+		expect(page).not_to have_css("#{action.downcase}_link", text: "#{action}")
 	else
-		expect(page).to have_css("a.#{action.downcase}_link", text: "#{action}")
+		expect(page).to have_css("#{action.downcase}_link", text: "#{action}")
 	end
 end
 
