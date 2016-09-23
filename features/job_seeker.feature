@@ -46,7 +46,7 @@ Background: seed data added to database
   Given the following agency relations exist:
   	| job_seeker      | agency_person    | role |
   	| tommy@gmail.com | aa@metplus.org   | JD   |
-@selenium
+
 Scenario: new Js Registration
   Given I am on the Jobseeker Registration page
   When I fill in "First Name" with "test"
