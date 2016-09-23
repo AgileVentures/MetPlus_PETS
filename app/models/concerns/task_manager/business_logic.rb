@@ -91,6 +91,8 @@ module TaskManager
       info = ASSIGNABLE_LIST[task_type.to_sym]
       if info[:type] == :agency
         return Agency.send info[:function], task_owner[0].agency
+      elsif info[:type] == :company
+        return task_owner[0].company.people_on_role("Company Contact")
       end
       nil
     end
