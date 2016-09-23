@@ -1,5 +1,6 @@
 class JobSeekersController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create]
+  # before_action :authenticate_user!, except: [:new, :create]
+  before_action :current_user, except: [:new, :create]
 
   include UserParameters
   include JobApplicationsViewer
@@ -73,17 +74,14 @@ class JobSeekersController < ApplicationController
     end
    
     if models_saved
-      if pets_user == @jobseeker
-        p 'sign in user again'
-        sign_in :user, @jobseeker.user, bypass: true 
-      end
-       flash[:notice] = "Jobseeker was updated successfully."
-       redirect_to @jobseeker and return if pets_user == @jobseeker.case_manager
-       redirect_to root_path
+      sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
+      flash[:notice] = "Jobseeker was updated successfully."
+      redirect_to @jobseeker and return if pets_user == @jobseeker.case_manager
+      redirect_to root_path
     else
-       @resume = resume
-       render 'edit_by_cm' and return if pets_user == @jobseeker.case_manager
-       render 'edit'
+      @resume = resume
+      render 'edit_by_cm' and return if pets_user == @jobseeker.case_manager
+      render 'edit'
     end
   end
 
