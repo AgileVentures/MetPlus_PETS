@@ -4,8 +4,9 @@ include CompanyPeopleViewer
 RSpec.describe CompanyPeopleController, type: :controller do
   describe "GET #edit_profile" do
     before(:each) do
-      @companyperson = FactoryGirl.create(:company_person)
-      get :edit_profile, id: @companyperson
+      @company_person = FactoryGirl.create(:company_person)
+      sign_in @company_person
+      get :edit_profile, id: @company_person
     end
 
     it "renders edit_profile template" do
@@ -18,9 +19,9 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
   describe "GET #home" do
     before(:each) do
-      @companyperson = FactoryGirl.create(:company_person)
-      sign_in @companyperson
-      get :home, id: @companyperson
+      @company_person = FactoryGirl.create(:company_person)
+      sign_in @company_person
+      get :home, id: @company_person
     end
 
     it 'instance vars for view' do
@@ -45,11 +46,12 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     context "valid attributes" do
       before(:each) do
-        @companyperson = FactoryGirl.build(:company_person)
-        @companyperson.company_roles <<
+        @company_person = FactoryGirl.build(:company_person)
+        @company_person.company_roles <<
             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
-        @companyperson.save
-        patch :update_profile, id: @companyperson, company_person: FactoryGirl.attributes_for(:user)
+        @company_person.save
+        sign_in @company_person
+        patch :update_profile, id: @company_person, company_person: FactoryGirl.attributes_for(:user)
 
       end
 
@@ -59,16 +61,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
       it 'returns redirect status' do
          expect(response).to have_http_status(:redirect)
       end
-      it 'redirects to showpage' do
-         expect(response).to redirect_to @companyperson
+      it 'redirects to company person home page' do
+         expect(response).to redirect_to @company_person
       end
     end
     context "valid attributes without password change" do
        before(:each) do
-         @companyperson =  FactoryGirl.create(:company_admin,
+         @company_person =  FactoryGirl.create(:company_admin,
                                               :password => 'testing.....',
                                               :password_confirmation => 'testing.....')
-         @password = @companyperson.encrypted_password
+         @password = @company_person.encrypted_password
+         sign_in @company_person
          patch :update_profile, company_person:FactoryGirl.attributes_for(:company_person,
                                                                           first_name:'John',
                                                                           last_name:'Smith',
@@ -76,20 +79,20 @@ RSpec.describe CompanyPeopleController, type: :controller do
                                                                           title: 'Line Manager',
                                                                           password: '',
                                                                           password_confirmation: ''),
-               id:@companyperson
-         @companyperson.reload
+               id:@company_person
+         @company_person.reload
        end
        it 'sets a title' do
-         expect(@companyperson.title).to eq ("Line Manager")
+         expect(@company_person.title).to eq ("Line Manager")
        end
        it 'sets a firstname' do
-         expect(@companyperson.first_name).to eq ("John")
+         expect(@company_person.first_name).to eq ("John")
        end
        it 'sets a lastname' do
-         expect(@companyperson.last_name).to eq ("Smith")
+         expect(@company_person.last_name).to eq ("Smith")
        end
        it 'dont change password' do
-         expect(@companyperson.encrypted_password).to eq (@password)
+         expect(@company_person.encrypted_password).to eq (@password)
        end
        it 'sets flash message' do
          expect(flash[:notice]).to eq "Your profile was updated successfully."
@@ -97,8 +100,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
        it 'returns redirect status' do
          expect(response).to have_http_status(:redirect)
        end
-       it 'redirects to showpage' do
-         expect(response).to redirect_to @companyperson
+       it 'redirects to company person home page' do
+         expect(response).to redirect_to @company_person
        end
      end
   end
