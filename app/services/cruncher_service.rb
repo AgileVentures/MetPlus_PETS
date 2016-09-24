@@ -19,7 +19,7 @@ class CruncherService
 
     retry_upload = true
     begin
-      result = RestClient.post(service_url + '/curriculum/upload',
+      result = RestClient.post(service_url + '/resume/upload',
               { 'file'   => file,
                 'name'   => file_name,
                 'userId' => file_id },
@@ -54,7 +54,7 @@ class CruncherService
       # That quacks like a string but also contains other info, see:
       # https://github.com/rest-client/rest-client#result-handling
 
-      contents = RestClient.get(service_url + "/curriculum/#{file_id}",
+      contents = RestClient.get(service_url + "/resume/#{file_id}",
                               'X-Auth-Token' => auth_token)
 
       # If successful, :content_disposition will be set in the header
@@ -127,10 +127,6 @@ class CruncherService
       if result_hash['resultCode'] == 'SUCCESS'
         # May or may not contain jobs matching the resume
         matching_jobs = result_hash['jobs']
-
-        #convert job ids returned by the matcher into ints
-        matching_jobs.transform_values! { |arr| arr.map(&:to_i) }
-
       end
     rescue RestClient::Unauthorized
       self.auth_token = nil
@@ -149,13 +145,17 @@ class CruncherService
     retry_match = true
 
     begin
-      result = RestClient.get(service_url + '/curriculum/match/' + job_id.to_s,
-                { 'Accept': 'application/json',
-                  'X-Auth-Token': auth_token })
-      matching_resumes = JSON.parse(result)['resumes']
+      result = RestClient.get(service_url + '/resume/match/' + job_id.to_s,
+                { 'X-Auth-Token': auth_token })
 
-      # convert the resume ids to integers
-      matching_resumes.transform_values! { |arr| arr.map(&:to_i) }
+      result_hash = JSON.parse(result)
+
+      # Set matching résumés to nil if job couldn't be found
+      matching_resumes = nil
+
+      if result_hash['resultCode'] == 'SUCCESS'
+        matching_resumes = result_hash['resumes']
+      end
 
     rescue RestClient::Unauthorized
       if retry_match
@@ -165,9 +165,7 @@ class CruncherService
       end
       raise
     end
-
     matching_resumes
-
   end
 
 

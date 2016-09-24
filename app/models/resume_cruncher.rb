@@ -1,5 +1,6 @@
 class ResumeCruncher
   include ActiveModel::Model
+  include CruncherUtility
 
   # This provides functionality that mediates between the Cruncher service
   # and other models and controllers, for example:
@@ -22,20 +23,21 @@ class ResumeCruncher
   end
 
   def self.match_resumes(job_id)
-    # If a match exists, returns a hash of resume matches where
-    # key is the matcher id and value is the array of resume ids
-    # If no match exists, returns as an empty hash
+    # If match exists, returns an array of résumé matches.  Each match
+    # is represented as an array with 2 values - the first value is
+    # the résumé ID, and the second the match score (a float, with
+    # one digit to right of decimal point).
+    # Otherwise returns nil(in case of job not found)
 
-    # Example return value from CruncherService:
-    # { "matcher2": [3, 2], "matcher1": [1, 2] }
-    # Note that the keys returned are 'matcher1' and 'matcher2'
-    # In the current version of API, we have a single matcher - Word Count
-    # In future releases, additional matchers will be implemented and
-    # the keys might also be modified to reflect the matcher used like
-    # { "expressionCruncher": [3, 2], "naiveBayes": [1, 2] }
-    # The caller can make use of the keys if required
+    # The array is sorted by score (descending)
 
-    CruncherService.match_resumes(job_id)
+    # Example return value:
+    # [ [8, 4.7], [5, 3.3], [3, 2.1] ]
+    # Résumé (ID) 8 matched job with a score of 4.7, résumé 5 with 3.3, etc.
+
+    match_results = CruncherService.match_resumes(job_id)
+
+    self.process_match_results match_results, 'resumeId'
   end
 
 end

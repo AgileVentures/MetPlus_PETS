@@ -5,6 +5,8 @@
         - case field
           - when :title
             %th.strong Title
+          - when :status
+            %th Status
           - when :updated_at
             %th.strong Last update
           - when :poster
@@ -19,15 +21,22 @@
           - when :title
             %td.col-md-4
               = link_to(job.title, job_path(job))
+          - when :status
+            %td.col-md-2
+              = job.status.capitalize
+              &nbsp;
+              %span.glyphicon.glyphicon-time{ 'aria-hidden': true }
+              %span.text-muted.small
+                = job.status_change_time(job.status).strftime('%d %b, %Y')
           - when :updated_at
             %td.col-md-2
-              = job.updated_at.strftime('%F')
+              = job.updated_at.strftime('%d %b, %Y')
           - when :poster
             %td.col-md-3
               = link_to(job.company_person.full_name,
                         company_person_path(job.company_person))
           - when :num_applicants
-            %td.col-md-2
+            %td.col-md-1
               = link_to_unless(job.number_applicants == 0,
                                job.number_applicants,
                                applications_job_path(job.id))

@@ -21,6 +21,7 @@ require 'factory_girl'
 require 'email-spec'
 require 'codeclimate-test-reporter'
 require 'webmock/rspec'
+require 'pundit/rspec'
 
 # WebMock config
 

@@ -2,22 +2,19 @@ require 'rails_helper'
 
 RSpec.describe AgencyAdminController, type: :controller do
 
+  let(:agency)        { FactoryGirl.create(:agency) }
+  let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+  let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
+  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+  let(:job_categories) do
+    cats = []
+    cats << FactoryGirl.create(:job_category, name: 'CAT1') <<
+             FactoryGirl.create(:job_category, name: 'CAT2') <<
+             FactoryGirl.create(:job_category, name: 'CAT3')
+    cats
+  end
+
   describe "GET #home and GET #job_properties" do
-    let(:agency)  {FactoryGirl.create(:agency)}
-    let(:agency_admin) do
-      $admin = FactoryGirl.build(:agency_person, agency: agency)
-      $admin.agency_roles <<
-            FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      $admin.save!
-      $admin
-    end
-    let(:job_categories) do
-      $cats = []
-      $cats << FactoryGirl.create(:job_category, name: 'CAT1') <<
-               FactoryGirl.create(:job_category, name: 'CAT2') <<
-               FactoryGirl.create(:job_category, name: 'CAT3')
-      $cats
-    end
 
     it 'routes GET /agency_admin/home/ to agency_admin#home' do
       expect(get: '/agency_admin/home').to route_to(
@@ -67,14 +64,6 @@ RSpec.describe AgencyAdminController, type: :controller do
   end
 
   describe "XHR GET #home" do
-    let(:agency)  {FactoryGirl.create(:agency)}
-    let(:agency_admin) do
-      $admin = FactoryGirl.build(:agency_person, agency: agency)
-      $admin.agency_roles <<
-            FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      $admin.save!
-      $admin
-    end
 
     before(:each) do
       25.times do |n|
@@ -108,14 +97,6 @@ RSpec.describe AgencyAdminController, type: :controller do
   end
 
   describe "XHR GET #job_properties" do
-    let(:agency)  {FactoryGirl.create(:agency)}
-    let(:agency_admin) do
-      $admin = FactoryGirl.build(:agency_person, agency: agency)
-      $admin.agency_roles <<
-            FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      $admin.save!
-      $admin
-    end
 
     before(:each) do
       25.times do |n|
@@ -136,51 +117,63 @@ RSpec.describe AgencyAdminController, type: :controller do
   describe 'Determine from signed-in user:' do
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      @agency = FactoryGirl.create(:agency)
-      @agency_admin_role = FactoryGirl.create(:agency_role,
-                              role: AgencyRole::ROLE[:AA])
-      @case_manager_role   = FactoryGirl.create(:agency_role,
-                              role: AgencyRole::ROLE[:CM])
-      @job_developer_role = FactoryGirl.create(:agency_role,
-                              role: AgencyRole::ROLE[:JD])
-
-      @agency_admin = FactoryGirl.build(:agency_person, agency: @agency)
-      @agency_admin.agency_roles << @agency_admin_role
-      @agency_admin.save!
-
-      @case_manager = FactoryGirl.build(:agency_person, agency: @agency)
-      @case_manager.agency_roles << @case_manager_role
-      @case_manager.save!
-
-      @job_developer = FactoryGirl.build(:agency_person, agency: @agency)
-      @job_developer.agency_roles << @job_developer_role
-      @job_developer.save!
     end
 
     it 'this agency - from agency admin' do
-      sign_in @agency_admin
-      expect(Agency.this_agency(subject.current_user)).to eq @agency
+      sign_in agency_admin
+      expect(Agency.this_agency(subject.current_user)).to eq agency
     end
     it 'this agency - from case manager' do
-      sign_in @case_manager
-      expect(Agency.this_agency(subject.current_user)).to eq @agency
+      sign_in case_manager
+      expect(Agency.this_agency(subject.current_user)).to eq agency
     end
     it 'this agency - from job developer' do
-      sign_in @job_developer
-      expect(Agency.this_agency(subject.current_user)).to eq @agency
+      sign_in job_developer
+      expect(Agency.this_agency(subject.current_user)).to eq agency
     end
 
-    it 'agency manager - from agency admin' do
-      sign_in @agency_admin
-      expect(Agency.agency_admins(@agency)).to eq [@agency_admin]
+    it 'agency admin - from agency admin' do
+      sign_in agency_admin
+      expect(Agency.agency_admins(agency)).to eq [agency_admin]
     end
-    it 'agency manager - from case manager' do
-      sign_in @case_manager
-      expect(Agency.agency_admins(@agency)).to eq [@agency_admin]
+    it 'agency admin - from case manager' do
+      sign_in case_manager
+      expect(Agency.agency_admins(agency)).to eq [agency_admin]
     end
-    it 'agency manager - from job developer' do
-      sign_in @job_developer
-      expect(Agency.agency_admins(@agency)).to eq [@agency_admin]
+    it 'agency admin - from job developer' do
+      sign_in job_developer
+      expect(Agency.agency_admins(agency)).to eq [agency_admin]
+    end
+
+  end
+
+  describe 'action authorization' do
+    context '.home' do
+      it 'authorizes agency_admin' do
+        expect(subject).to_not receive(:user_not_authorized)
+        sign_in agency_admin
+        get :home
+      end
+      it 'does not authorize non-admin user' do
+        sign_in case_manager
+        get :home
+        expect(flash[:alert]).
+          to eq "You are not authorized to administer #{agency.name} agency."
+      end
+    end
+
+    context '.job_properties' do
+      it 'authorizes agency_admin' do
+        expect(subject).to_not receive(:user_not_authorized)
+        sign_in agency_admin
+        expect {get :job_properties}.to_not raise_error
+      end
+      it 'does not authorize non-admin user' do
+        sign_in case_manager
+        get :job_properties
+        expect(flash[:alert]).
+          to eq "You are not authorized to administer #{agency.name} agency."
+      end
     end
 
   end
