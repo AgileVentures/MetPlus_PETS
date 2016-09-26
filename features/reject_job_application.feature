@@ -86,6 +86,7 @@ Feature: Reject a job application
     And I reject "john@seek.com" application
     And I input "Not enough experience" as the reason for rejection
     And I click the "Reject" button
+    And I wait for 2 seconds
 
     Then I am in Job Developer's browser
     And "dave@metplus.org" should receive an email with subject "Job application rejected"
