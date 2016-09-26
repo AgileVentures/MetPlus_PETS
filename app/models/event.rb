@@ -187,14 +187,7 @@ class Event
     notifyList = [];
     if evt_obj.job_seeker.job_developer
        notifyList << (evt_obj.job_seeker.job_developer.user.email)
-    end
-
-    if evt_obj.job_seeker.case_manager
-       notifyList << (evt_obj.job_seeker.case_manager.user.email)
-
-    end
-    if evt_obj.job_seeker.job_developer
-    Pusher.trigger('pusher_control',
+       Pusher.trigger('pusher_control',
                    EVT_TYPE[:APP_ACCEPTED],
                    {id: evt_obj.id,
                     ap_user_id: evt_obj.job_seeker.job_developer.user.id,
@@ -202,19 +195,22 @@ class Event
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false)
                     })
     end
+
     if evt_obj.job_seeker.case_manager
-    Pusher.trigger('pusher_control',
+       notifyList << (evt_obj.job_seeker.case_manager.user.email)
+       Pusher.trigger('pusher_control',
                    EVT_TYPE[:APP_ACCEPTED],
                    {id: evt_obj.id,
                     ap_user_id: evt_obj.job_seeker.case_manager.user.id,
                     job_title:   evt_obj.job.title,
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false)
                     })
-    
+
     end
+    
     unless notifyList.empty?
     
-    NotifyEmailJob.set(wait: delay_seconds.seconds).
+      NotifyEmailJob.set(wait: delay_seconds.seconds).
                    perform_later(notifyList,
                    EVT_TYPE[:APP_ACCEPTED],
                    evt_obj)
