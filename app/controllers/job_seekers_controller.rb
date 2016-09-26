@@ -46,9 +46,12 @@ class JobSeekersController < ApplicationController
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
+
     jobseeker_params = handle_user_form_parameters form_params
     dispatch_file    = jobseeker_params.delete 'resume'
+
     models_saved = @jobseeker.update_attributes(jobseeker_params)
+
     if models_saved
       if dispatch_file          # If there is a résumé, try to save/update that
         tempfile = dispatch_file.tempfile
@@ -64,6 +67,7 @@ class JobSeekersController < ApplicationController
           resume = Resume.new(file: tempfile, file_name: filename,
                      job_seeker_id: @jobseeker.id)
         end
+        
         unless resume.save
           models_saved = false
           @jobseeker.errors.messages.merge! resume.errors.messages
