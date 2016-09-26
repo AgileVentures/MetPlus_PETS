@@ -177,9 +177,8 @@ Given the following agency relations exist:
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
     Then I click the first "Jones, Mary" link
-    Then I press "edit-by-cm"
-    And I wait 1 second
-    And I should see "Update Mary Jones's Profile"
+    Then I click "Edit Job Seeker" button
+    And I should see "Edit JobSeeker Registration"
     Then I fill in "First Name" with "Samantha"
     Then I click "Update Job seeker" button
     And I should see "Jobseeker was updated successfully."
@@ -192,8 +191,7 @@ Given the following agency relations exist:
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
     Then I click the first "Seeker, Tom" link 
-    And I wait 1 second
-    And I cannot press "edit-by-cm"
+    And I should not see "Edit Job Seeker"
     
     
 

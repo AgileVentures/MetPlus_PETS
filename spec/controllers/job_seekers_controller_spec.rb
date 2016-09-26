@@ -247,8 +247,8 @@ RSpec.describe JobSeekersController, type: :controller do
         it "does not change job seeker's attribute" do
           expect(jobseeker.phone).to eq('123-456-7890')
         end
-        it "re-renders the edit-by-cm template" do
-          expect(response).to render_template 'job_seekers/edit_by_cm'
+        it "re-renders the edit template" do
+          expect(response).to render_template('edit')
         end
       end
     end
@@ -289,7 +289,7 @@ RSpec.describe JobSeekersController, type: :controller do
         get :edit, id: case_manager.job_seekers.first
       end
       it "renders edit_by_cm template" do
-        expect(response).to render_template 'job_seekers/edit_by_cm'
+        expect(response).to render_template 'edit'
       end
     end
   end

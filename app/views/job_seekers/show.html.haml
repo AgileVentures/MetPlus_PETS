@@ -1,10 +1,6 @@
 .col-sm-3
   %h3
     Job Seeker
-    - if pets_user == @jobseeker.case_manager
-      = link_to edit_job_seeker_path(@jobseeker),
-        :id => 'edit-by-cm' do
-        %i.fa.fa-pencil-square-o.fa-1
   %a(id='toggle_info' href='#info_table' class='text-danger'
               style='padding-left: 10px;')
     Hide Job Seeker Information
@@ -20,13 +16,13 @@
   .pagination-div{id: "applications-#{@application_type}",
                   data: {url: applied_jobs_job_seeker_path(@jobseeker,
                                                          @application_type)}}
-- if pets_user.is_agency_admin? current_agency
+- if pets_user.is_agency_admin?(current_agency) || pets_user == @jobseeker.case_manager
   .clearfix
   %br
   .col-sm-2
     = button_to 'Edit Job Seeker', edit_job_seeker_path(@jobseeker),
         method: :get, class: 'btn btn-primary'
-
+- if pets_user.is_agency_admin? current_agency
   .com-sm-2.col-sm-offset-4
     = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
         method: :delete,

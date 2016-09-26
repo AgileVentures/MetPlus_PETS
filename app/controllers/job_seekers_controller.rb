@@ -1,5 +1,5 @@
 class JobSeekersController < ApplicationController
-  before_action :current_user, except: [:new, :create]
+  before_action :user_logged!, except: [:new, :create]
 
   include UserParameters
   include JobApplicationsViewer
@@ -42,7 +42,6 @@ class JobSeekersController < ApplicationController
   def edit
     @jobseeker = JobSeeker.find(params[:id])
     @current_resume = @jobseeker.resumes[0]
-    render 'edit_by_cm' and return if pets_user == @jobseeker.case_manager
   end
 
   def update
@@ -79,7 +78,6 @@ class JobSeekersController < ApplicationController
       redirect_to root_path
     else
       @resume = resume
-      render 'edit_by_cm' and return if pets_user == @jobseeker.case_manager
       render 'edit'
     end
   end
