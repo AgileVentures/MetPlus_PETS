@@ -83,12 +83,31 @@ Then(/^I apply to "([^"]*)" from Jobs link(?: again)?$/) do |job_title|
   step %{I click the "Apply Now" link}
 end
 
-Then(/^I apply to "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
+Then(/^I want to apply to "([^"]*)" for "(?:[^"]*)"$/) do |job_title|
   step %{I visit the jobs page}
   step %{I click the "#{job_title}" link}
   step %{I click the "Click Here to Submit an Application for Job Seeker" link}
+end
+
+And(/^I find "([^"]*)" from my job seekers list and proceed with the application$/) do |job_seeker|
   step %{I select2 "#{job_seeker}" from "jd_apply_job_select"}
   step %{I press "Proceed"}
+end
+
+Then(/^I apply to "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
+  step %{I want to apply to "#{job_title}" for "#{job_seeker}"}
+  step %{I find "#{job_seeker}" from my job seekers list and proceed with the application}
   step %{I wait 1 second}
   step %{I press "Apply Now"}
 end
+
+But(/^I cannot find "([^"]*)" from my job seekers list$/) do |job_seeker|
+  step %{I cannot select2 "#{job_seeker}" from "jd_apply_job_select"}
+end
+
+Then(/^I update my profile to not permit job developer to apply a job for me$/) do
+  step %{I uncheck "job_seeker_consent"}
+  step %{I click the "Update Job seeker" button}
+  step %{I should see "Jobseeker was updated successfully."}
+end
+
