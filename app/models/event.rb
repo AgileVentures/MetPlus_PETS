@@ -181,19 +181,44 @@ class Event
   def self.evt_app_accepted(evt_obj)
     # evt_obj = job application
     # Business rules:
-    #    Notify job seeker's job developer (email and popup)
+    # Notify job seeker's job developer (email and popup)
+    # Notify job seeker's case manager (email and popup)
 
+    notifyList = [];
+    if evt_obj.job_seeker.job_developer
+       notifyList << (evt_obj.job_seeker.job_developer.user.email)
+    end
+
+    if evt_obj.job_seeker.case_manager
+       notifyList << (evt_obj.job_seeker.case_manager.user.email)
+
+    end
+    if evt_obj.job_seeker.job_developer
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:APP_ACCEPTED],
                    {id: evt_obj.id,
-                    jd_user_id: evt_obj.job_seeker.job_developer.user.id,
+                    ap_user_id: evt_obj.job_seeker.job_developer.user.id,
                     job_title:   evt_obj.job.title,
                     js_name: evt_obj.job_seeker.full_name(last_name_first: false)
                     })
+    end
+    if evt_obj.job_seeker.case_manager
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:APP_ACCEPTED],
+                   {id: evt_obj.id,
+                    ap_user_id: evt_obj.job_seeker.case_manager.user.id,
+                    job_title:   evt_obj.job.title,
+                    js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+                    })
+    
+    end
+    unless notifyList.empty?
+    
     NotifyEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(evt_obj.job_seeker.job_developer.user.email,
+                   perform_later(notifyList,
                    EVT_TYPE[:APP_ACCEPTED],
                    evt_obj)
+    end
   end
 
   def self.evt_jd_assigned_js(evt_obj)
