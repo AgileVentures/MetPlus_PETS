@@ -17,15 +17,21 @@ end
 And(/^I accept "([^"]*)" application$/) do |email|
 	job_seeker = User.find_by_email(email).actable
 	@job_app = JobApplication.find_by(job_seeker: job_seeker)
-	find("#applications-#{@job_app.id} a.accept_link").click
+	find("#applications-#{@job_app.id} #accept_link").click
+end
+
+And(/^I reject "([^"]*)" application$/) do |email|
+	job_seeker = User.find_by_email(email).actable
+	@job_app = JobApplication.find_by(job_seeker: job_seeker)
+	find("#applications-#{@job_app.id} #reject_link").click
 end
 
 And(/^I should see an "([^"]*)" confirmation$/) do |action|
 	expect(page).to have_content("Are you sure you want 
  		         to #{action} the following application: 
- 		         		 applicant's name: #{@job_app.job_seeker.full_name(last_name_first: false)}
-                 job title:  #{@job_app.job.title}
-                 company job id: #{@job_app.job.company_job_id}")
+ 		         		 Applicant's Name: #{@job_app.job_seeker.full_name(last_name_first: false)}
+                 Job Title:  #{@job_app.job.title}
+                 Company Job ID: #{@job_app.job.company_job_id}")
 end
 
 And(/^I click the "([^"]*)" confirmation$/) do |action|
@@ -41,7 +47,13 @@ And(/^I should see "([^"]*)" application changes to accepted$/) do |email|
 	job_seeker = User.find_by_email(email).actable
 	@app_accepted = JobApplication.find_by(job_seeker: job_seeker)
 	within("#applications-#{@app_accepted.id}") { expect(page).to have_content("accepted") }
-end 
+end
+
+And(/^I should see "([^"]*)" application changes to not_accepted$/) do |email|
+	job_seeker = User.find_by_email(email).actable
+	@app_rejected = JobApplication.find_by(job_seeker: job_seeker)
+	within("#applications-#{@app_rejected.id}") { expect(page).to have_content("not_accepted") }
+end
 
 # this step can only be used in a scenario that includes steps line:35 and line:42
 # which define @app_ids, @app_accepted
@@ -54,9 +66,9 @@ end
 
 Then(/^I should( not)? see(?: an)? "([^"]*)" link$/) do |not_see, action|
 	if not_see
-		expect(page).not_to have_css("a.#{action.downcase}_link", text: "#{action}")
+		expect(page).not_to have_css("#{action.downcase}_link", text: "#{action}")
 	else
-		expect(page).to have_css("a.#{action.downcase}_link", text: "#{action}")
+		expect(page).to have_css("#{action.downcase}_link", text: "#{action}")
 	end
 end
 
@@ -66,6 +78,11 @@ And(/^I should see "([^"]*)" application is listed first$/) do |email|
 	within(".pagination-div > table > tbody > tr:first-child") { expect(page).to have_content("#{job_seeker.first_name}") }
 end
 
+And(/^I should see "([^"]*)" application is listed last$/) do |email|
+	job_seeker = User.find_by_email(email).actable
+	job_app = JobApplication.find_by(job_seeker: job_seeker)
+	within(".pagination-div > table > tbody > tr:last-child") { expect(page).to have_content("#{job_seeker.first_name}") }
+end
 
 And(/^I should see "([^"]*)" job changes to status filled/) do |job_title|
 	find("#job-status") { expect(page).to have_content("filled") }
@@ -89,6 +106,10 @@ And(/^I return to my "([^"]*)" home page$/) do |email|
 	job_seeker = User.find_by_email(email).actable
 	role = job_seeker.class.to_s.underscore
 	visit "/#{role}s/#{job_seeker.id}/home"
+end
+
+And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
+  step %{I fill in "reason_text" with "#{reason}"}
 end
 
 	  

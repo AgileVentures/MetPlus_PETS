@@ -16,6 +16,10 @@ class AgencyMailer < ApplicationMailer
     send_notification_mail(email_list, job_application, 'Job Application Accepted')
   end
 
+  def job_application_rejected(email_list, job_application)
+    send_notification_mail(email_list, job_application, 'Job Application Rejected')
+  end
+
   def job_seeker_assigned_jd(email_list, job_seeker)
     send_notification_mail(email_list, job_seeker, 'Job Seeker Assigned JD')
   end

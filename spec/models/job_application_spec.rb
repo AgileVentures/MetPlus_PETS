@@ -137,4 +137,18 @@ RSpec.describe JobApplication, type: :model do
     end
   end
 
+  describe '#reject' do
+    let(:active_job) { FactoryGirl.create(:job) }
+    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let(:application1) { FactoryGirl.create(:job_application,
+                                            job: active_job, job_seeker: job_seeker1) }
+    let(:application2) { FactoryGirl.create(:job_application,
+                                            job: active_job, job_seeker: job_seeker2) }
+
+    it 'updates the selected application status to be rejected' do
+      expect { application1.reject }.to change{application1.status}.from('active').to('not_accepted')
+    end
+  end
+
 end

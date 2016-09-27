@@ -227,6 +227,31 @@ RSpec.describe Event, type: :model do
     end
   end
 
+
+  describe 'job_application_rejected event' do
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_file_download(testfile_resume)
+    end
+
+    it 'triggers Pusher message to primary job developer' do
+      Event.create(:APP_REJECTED, application)
+      expect(Pusher).to have_received(:trigger).
+          with('pusher_control',
+               'job_application_rejected',
+               {id: application.id,
+                jd_user_id: application.job_seeker.job_developer.user.id,
+                job_title: job.title,
+                js_name: application.job_seeker.full_name(last_name_first: false)
+               })
+    end
+    it 'sends a notification email to primary job developer' do
+      expect { Event.create(:APP_REJECTED, application) }.
+          to change(all_emails, :count).by(+2)
+    end
+  end
+
+
   describe 'jobseeker_assigned_jd event' do
 
     it 'triggers Pusher messages to job developer and job seeker' do
