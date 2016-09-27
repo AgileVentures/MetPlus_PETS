@@ -6,12 +6,14 @@ RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
   let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
-  let!(:case_manager)   { FactoryGirl.create(:case_manager) }
+  let!(:case_manager)   { FactoryGirl.create(:case_manager, agency: agency) }
   let!(:job_seeker) do
     js = FactoryGirl.create(:job_seeker)
     js.assign_job_developer(job_developer, agency)
+    js.assign_case_manager(case_manager, agency)
     js
   end
+  
   let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
   let!(:company_person) { FactoryGirl.create(:company_person, company: company) }
@@ -114,7 +116,7 @@ RSpec.describe Event, type: :model do
                          {job_id:  job.id,
                           js_id:   job_seeker.id,
                           js_name: job_seeker.full_name(last_name_first: false),
-                          notify_list: [job_seeker.job_developer.user.id, company_person.user.id]})
+                          notify_list: [job_seeker.case_manager.user.id, job_seeker.job_developer.user.id, company_person.user.id]})
     end
 
     it 'sends event notification email and application received email' do
@@ -188,7 +190,6 @@ RSpec.describe Event, type: :model do
       end
     end
   end
-
   describe 'job_application_accepted event' do
 
     before do
@@ -202,12 +203,25 @@ RSpec.describe Event, type: :model do
                         with('pusher_control',
                              'job_application_accepted',
                              {id: application.id,
-                              jd_user_id: application.job_seeker.job_developer.user.id,
+                              ap_user_id: application.job_seeker.job_developer.user.id,
                               job_title: job.title,
                               js_name: application.job_seeker.full_name(last_name_first: false)
                               })
     end
-    it 'sends a notification email to primary job developer' do
+
+    it 'triggers Pusher message to case manager' do
+      Event.create(:APP_ACCEPTED, application)
+      expect(Pusher).to have_received(:trigger).
+                        with('pusher_control',
+                             'job_application_accepted',
+                             {id: application.id,
+                              ap_user_id: application.job_seeker.case_manager.user.id,
+                              job_title: job.title,
+                              js_name: application.job_seeker.full_name(last_name_first: false)
+                              })
+    end
+    
+    it 'sends a notification email to job developer and case manager' do
       expect { Event.create(:APP_ACCEPTED, application) }.
                     to change(all_emails, :count).by(+2)
     end
