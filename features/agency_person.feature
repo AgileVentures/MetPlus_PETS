@@ -171,3 +171,27 @@ Given the following agency relations exist:
     And I should see "Seeker, Tom" between "Your Job Seekers (as job developer)" and "Your Job Seekers (as case manager)"
     And I should see "Jones, Mary" after "Your Job Seekers (as case manager)"
 
+  @javascript
+  Scenario: Case manager can edit his job seeker's profile
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I click the first "Jones, Mary" link
+    Then I click "Edit Job Seeker" button
+    And I should see "Edit JobSeeker Registration"
+    Then I fill in "First Name" with "Samantha"
+    Then I click "Update Job seeker" button
+    And I should see "Jobseeker was updated successfully."
+    And I should not see "Mary"
+    And I should see "Samantha"
+
+  @javascript
+  Scenario: Case manager cannot edit other job seekers' profile
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I click the first "Seeker, Tom" link 
+    And I should not see "Edit Job Seeker"
+    
+    
+
