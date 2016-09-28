@@ -25,13 +25,17 @@ $state-danger-text: #a94442;
 
 }
 
-.pull-right#job-show-links-id, .pull-right#application-show-links{
+.pull-right#job-show-links-id{
 		margin-top: 80px;
 		a{
 			text-decoration: underline;
 		}
 
 }
+.pull-right#application-show-links{
+        margin-top: 80px;
+}
+
 .panel.panel-default#show-panel-id{
 	margin-bottom: 0px;
 	.panel-heading#panel-heading-show-id{

@@ -1,0 +1,31 @@
+#rejectModal.modal.fade(tabindex='-1' role='dialog')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        %button(type='button' class='close' data-dismiss='modal')
+          %span(aria-hidden='true') &times;
+        %h4.modal-title.text-center
+      .modal-body
+        %div.text-center
+          Are you sure you want to reject the following application:
+          %ul{class: "list-unstyled"}
+            %li#job_seeker
+            %li#title
+            %li#company_job_id
+          %br
+        #job_reject_errors.alert.alert-danger
+        %br
+        .form-group
+          %label(for='reason_text' class='control-label') Please provide the reason for rejection:
+          %textarea(class='form-control' id='reason_text'
+          form='confirm_reject_noxhr' name='reason_for_rejection')
+      .modal-footer
+
+        - if defined?(noxhr) and noxhr
+          = form_tag '/url', method: 'PATCH', id: 'confirm_reject_noxhr' do
+            %button(type='button' class='btn btn-default' data-dismiss='modal') Cancel
+            = submit_tag 'Reject', class: 'btn btn-danger'
+        - else
+          %button(type='button' class='btn btn-default' data-dismiss='modal') Cancel
+          %button#confirm_reject(type='button' class='btn btn-danger'
+          data-dismiss='modal' ) Reject
