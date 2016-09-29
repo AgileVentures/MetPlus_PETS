@@ -15,4 +15,10 @@ class TaskPolicy < ApplicationPolicy
   def tasks?
     not user.nil?
   end
+
+  def index?
+    return false if user.nil?
+    return false if user.is_job_seeker?
+    true
+  end
 end
