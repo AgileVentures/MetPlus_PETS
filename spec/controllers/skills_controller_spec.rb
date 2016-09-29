@@ -18,8 +18,11 @@ RSpec.shared_examples "unauthorized all" do
   let(:agency) {FactoryGirl.create(:agency)}
   let(:company) {FactoryGirl.create(:company)}
   context "Not logged in" do
-    it_behaves_like "unauthorized" do
-      let(:user) {nil}
+    it 'returns http unauthorized' do
+      expect(subject).to have_http_status(401)
+    end
+    it 'check content' do
+      expect(subject.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
     end
   end
   context "Case Manager" do
