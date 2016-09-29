@@ -5,6 +5,7 @@ class SkillsController < ApplicationController
 
   def create
     skill = Skill.new(skill_params)
+    authorized skill
     if skill.save
       render nothing: true
     else
