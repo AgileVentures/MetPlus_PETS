@@ -79,6 +79,9 @@ class TasksController < ApplicationController
     term = term.downcase
     task = Task.find_by_id params[:id]
     return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+
+    authorize task
+
     list_users = []
     all_users = task.assignable_list
     return render json: {:message => 'There are no users you can assign this task to!'}, status: 403 \
