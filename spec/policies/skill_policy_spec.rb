@@ -12,10 +12,6 @@ RSpec.describe SkillPolicy do
   let(:skill) {FactoryGirl.create(:skill)}
 
   permissions :create?, :show?, :update?, :destroy? do
-    it 'denies access if user not logged in' do
-      expect(SkillPolicy).not_to permit(nil, skill)
-    end
-
     it 'denies access if user is case manager' do
       expect(SkillPolicy).not_to permit(cm, skill)
     end
