@@ -1,5 +1,20 @@
 require 'rails_helper'
 
+RSpec.shared_examples "unauthorized" do
+    before :each do
+      warden.set_user user
+    end
+    describe "access" do
+      subject{my_request}
+      it 'returns http unauthorized' do
+        expect(subject).to have_http_status(403)
+      end
+      it 'check content' do
+        expect(subject.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
+end
+
 RSpec.describe TasksController, type: :controller do
 
   describe "PATCH #assign" do
@@ -255,70 +270,129 @@ RSpec.describe TasksController, type: :controller do
   end
   describe 'GET #tasks' do
     describe 'unauthorized' do
-      subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
-      it 'returns http error' do
-        expect(subject).to have_http_status(401)
+      context 'not signed in' do
+        subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
+        it 'returns http error' do
+          expect(subject).to have_http_status(401)
+        end
+        it 'check task status' do
+          subject
+          expect(response.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
+        end
       end
-      it 'check task status' do
-        subject
-        expect(response.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
+      context 'job seeker' do
+        before :each do
+          js = FactoryGirl.create(:job_seeker)
+          sign_in js
+        end
+        subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
+        it 'returns http error' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check task status' do
+          subject
+          expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+        end
       end
     end
   end
   describe 'GET #list_owners' do
     let!(:agency){FactoryGirl.create(:agency)}
-    before :each do
-      aa = FactoryGirl.create(:agency_admin, :agency => agency)
-      sign_in aa
-    end
-    describe 'retrieve information' do
+    describe "authorized access" do
       before :each do
-        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
-        @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
-        @jd3 = FactoryGirl.create(:job_developer, :agency => agency)
-        @jd4 = FactoryGirl.create(:job_developer, :agency => agency)
-        js = FactoryGirl.create(:job_seeker)
-        @task = Task.new_js_unassigned_jd_task js, agency
+        aa = FactoryGirl.create(:agency_admin, :agency => agency)
+        sign_in aa
       end
-      subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
-      it 'returns http success' do
-        expect(subject).to have_http_status(:success)
+      describe 'retrieve information' do
+        before :each do
+          @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+          @jd2 = FactoryGirl.create(:job_developer, :agency => agency)
+          @jd3 = FactoryGirl.create(:job_developer, :agency => agency)
+          @jd4 = FactoryGirl.create(:job_developer, :agency => agency)
+          js = FactoryGirl.create(:job_seeker)
+          @task = Task.new_js_unassigned_jd_task js, agency
+        end
+        subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
+        it 'returns http success' do
+          expect(subject).to have_http_status(:success)
+        end
+        it 'check content' do
+          expect(JSON.parse(subject.body)).to eq({'results' => [
+                                                     {'id' => @jd1.id,
+                                                      'text' => @jd1.full_name},
+                                                     {'id' => @jd2.id,
+                                                      'text' => @jd2.full_name},
+                                                     {'id' => @jd3.id,
+                                                      'text' => @jd3.full_name},
+                                                     {'id' => @jd4.id,
+                                                      'text' => @jd4.full_name}]})
+        end
       end
-      it 'check content' do
-        expect(JSON.parse(subject.body)).to eq({'results' => [
-                                                   {'id' => @jd1.id,
-                                                    'text' => @jd1.full_name},
-                                                   {'id' => @jd2.id,
-                                                    'text' => @jd2.full_name},
-                                                   {'id' => @jd3.id,
-                                                    'text' => @jd3.full_name},
-                                                   {'id' => @jd4.id,
-                                                    'text' => @jd4.full_name}]})
+      describe 'unknown task' do
+        subject{xhr :get, :list_owners , {id: -1000}, :format => :json}
+        it 'returns http error' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check content' do
+          expect(subject.body).to eq({:message => 'Cannot find the task!'}.to_json)
+        end
+      end
+      describe 'no assignable found' do
+        before :each do
+          @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
+          js = FactoryGirl.create(:job_seeker)
+          @task = Task.new_js_unassigned_cm_task js, agency
+        end
+
+        subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
+
+        it 'returns http success' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check content' do
+          expect(subject.body).to eq({:message => 'There are no users you can assign this task to!'}.to_json)
+        end
       end
     end
-    describe 'unknown task' do
-      subject{xhr :get, :list_owners , {id: -1000}, :format => :json}
-      it 'returns http error' do
-        expect(subject).to have_http_status(403)
-      end
-      it 'check content' do
-        expect(subject.body).to eq({:message => 'Cannot find the task!'}.to_json)
-      end
-    end
-    describe 'no assignable found' do
+
+    describe 'Unauthorized access' do
+      let(:company) {FactoryGirl.create(:company)}
+      let(:company_contact) {FactoryGirl.create(:company_contact, :company => company)}
+      let(:job_developer) {FactoryGirl.create(:job_developer, :agency => agency)}
+      let(:case_manager) {FactoryGirl.create(:case_manager, :agency => agency)}
+      let(:job_seeker) {FactoryGirl.create(:job_seeker)}
+      let(:my_request) {xhr :get, :list_owners , {id: @task.id}, :format => :json}
       before :each do
-        @jd1 = FactoryGirl.create(:job_developer, :agency => agency)
-        js = FactoryGirl.create(:job_seeker)
-        @task = Task.new_js_unassigned_cm_task js, agency
+        @task = Task.new_js_unassigned_jd_task job_seeker, agency
       end
-
-      subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
-
-      it 'returns http success' do
-        expect(subject).to have_http_status(403)
+      context "not logged in" do
+        subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
+        it 'returns http unauthorized' do
+          expect(subject).to have_http_status(401)
+        end
+        it 'check content' do
+          expect(subject.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
+        end
       end
-      it 'check content' do
-        expect(subject.body).to eq({:message => 'There are no users you can assign this task to!'}.to_json)
+      context "Job Seeker" do
+        it_behaves_like "unauthorized" do
+          let(:user) {job_seeker}
+        end
+      end
+      context "Case Manager" do
+        it_behaves_like "unauthorized" do
+          let!(:user) { case_manager }
+        end
+      end
+      context "Job Developer" do
+        it_behaves_like "unauthorized" do
+          let!(:user) { job_developer }
+        end
+      end
+      context "Company Contact" do
+        it_behaves_like "unauthorized" do
+          let!(:user) { company_contact }
+        end
       end
     end
   end
