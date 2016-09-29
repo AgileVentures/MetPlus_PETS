@@ -12,10 +12,6 @@ RSpec.describe JobCategoryPolicy do
   let(:job_category) {FactoryGirl.create(:job_category)}
 
   permissions :create?, :show?, :update?, :destroy? do
-    it 'denies access if user not logged in' do
-      expect(JobCategoryPolicy).not_to permit(nil, job_category)
-    end
-
     it 'denies access if user is case manager' do
       expect(JobCategoryPolicy).not_to permit(cm, job_category)
     end

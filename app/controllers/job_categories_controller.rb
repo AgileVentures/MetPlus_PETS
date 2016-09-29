@@ -1,4 +1,7 @@
 class JobCategoriesController < ApplicationController
+
+  before_action :user_logged!
+
   def create
     category = JobCategory.new(category_params)
     authorize category
