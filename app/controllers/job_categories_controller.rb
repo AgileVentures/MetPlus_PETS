@@ -11,6 +11,8 @@ class JobCategoriesController < ApplicationController
   end
 
   def show
+
+    authorize JobCategory.new
     begin
       category = JobCategory.find(params[:id])
     rescue

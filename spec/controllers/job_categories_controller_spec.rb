@@ -111,6 +111,9 @@ RSpec.describe JobCategoriesController, type: :controller do
         end
       end
     end
+    it_behaves_like "unauthorized all" do
+      let(:my_request) {xhr :get, :show, id: category }
+    end
   end
 
   describe "PATCH #update" do
