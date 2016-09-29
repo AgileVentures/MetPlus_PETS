@@ -2,6 +2,7 @@ class SkillsController < ApplicationController
   # These actions are designed to respond only to XHR requests
 
   before_action :confirm_xhr
+  before_action :user_logged!
 
   def create
     skill = Skill.new(skill_params)
