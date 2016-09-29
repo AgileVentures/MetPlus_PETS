@@ -363,8 +363,7 @@ RSpec.describe TasksController, type: :controller do
       let(:job_seeker) {FactoryGirl.create(:job_seeker)}
       let(:my_request) {xhr :get, :list_owners , {id: @task.id}, :format => :json}
       before :each do
-        js = FactoryGirl.create(:job_seeker)
-        @task = Task.new_js_unassigned_jd_task js, agency
+        @task = Task.new_js_unassigned_jd_task job_seeker, agency
       end
       context "not logged in" do
         subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
