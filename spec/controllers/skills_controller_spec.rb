@@ -1,9 +1,52 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
+RSpec.shared_examples "unauthorized" do
+  before :each do
+    warden.set_user user
+  end
+  subject{my_request}
+  it 'returns http unauthorized' do
+    expect(subject).to have_http_status(403)
+  end
+  it 'check content' do
+    expect(subject.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+  end
+end
+RSpec.shared_examples "unauthorized all" do
+  let(:agency) {FactoryGirl.create(:agency)}
+  let(:company) {FactoryGirl.create(:company)}
+  context "Case Manager" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:case_manager, agency: agency)}
+    end
+  end
+  context "Jod Developer" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:job_developer, agency: agency)}
+    end
+  end
+  context "Job Seeker" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:job_seeker)}
+    end
+  end
+  context "Company admin" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:company_admin, company: company)}
+    end
+  end
+  context "Company contact" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:company_contact, company: company)}
+    end
+  end
+end
+
 RSpec.describe SkillsController, type: :controller do
 
   describe "POST #create" do
+    let(:agency) {FactoryGirl.create(:agency)}
     let(:skill_params) { FactoryGirl.attributes_for(:skill) }
 
     it 'creates new skill for valid parameters' do
@@ -19,6 +62,9 @@ RSpec.describe SkillsController, type: :controller do
       xhr :post, :create, skill: {name: '', description: ''}
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response).to render_template('shared/_error_messages')
+    end
+    it_behaves_like "unauthorized all" do
+      let(:my_request) {xhr :post, :create, skill: skill_params}
     end
   end
 
