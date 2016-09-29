@@ -48,20 +48,25 @@ RSpec.describe SkillsController, type: :controller do
   describe "POST #create" do
     let(:agency) {FactoryGirl.create(:agency)}
     let(:skill_params) { FactoryGirl.attributes_for(:skill) }
+    context "authorized access" do
+      before :each do
+        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        sign_in aa
+      end
+      it 'creates new skill for valid parameters' do
+        expect { xhr :post, :create, skill: skill_params }.
+          to change(Skill, :count).by(+1)
+      end
+      it 'returns success for valid parameters' do
+        xhr :post, :create, skill: skill_params
+        expect(response).to have_http_status(:success)
+      end
 
-    it 'creates new skill for valid parameters' do
-      expect { xhr :post, :create, skill: skill_params }.
-        to change(Skill, :count).by(+1)
-    end
-    it 'returns success for valid parameters' do
-      xhr :post, :create, skill: skill_params
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'returns errors and error status for invalid parameters' do
-      xhr :post, :create, skill: {name: '', description: ''}
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(response).to render_template('shared/_error_messages')
+      it 'returns errors and error status for invalid parameters' do
+        xhr :post, :create, skill: {name: '', description: ''}
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template('shared/_error_messages')
+      end
     end
     it_behaves_like "unauthorized all" do
       let(:my_request) {xhr :post, :create, skill: skill_params}
