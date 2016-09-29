@@ -40,6 +40,7 @@ class JobCategoriesController < ApplicationController
   end
 
   def destroy
+    authorize JobCategory.new
     begin
       category = JobCategory.find(params[:id])
     rescue
