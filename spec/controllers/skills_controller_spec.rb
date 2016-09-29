@@ -18,6 +18,7 @@ RSpec.shared_examples "unauthorized all" do
   let(:agency) {FactoryGirl.create(:agency)}
   let(:company) {FactoryGirl.create(:company)}
   context "Not logged in" do
+    subject{my_request}
     it 'returns http unauthorized' do
       expect(subject).to have_http_status(401)
     end
