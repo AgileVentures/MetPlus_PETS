@@ -338,4 +338,20 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+
+  describe 'Unauthorized access' do
+    before :each do
+      js = FactoryGirl.create(:job_seeker)
+      @task = Task.new_js_unassigned_jd_task js, agency
+    end
+    context "not logged in" do
+      subject{xhr :get, :list_owners , {id: @task.id}, :format => :json}
+      it 'returns http unauthorized' do
+        expect(subject).to have_http_status(403)
+      end
+      it 'check content' do
+        expect(subject.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+      end
+    end
+  end
 end
