@@ -148,30 +148,41 @@ RSpec.describe SkillsController, type: :controller do
       stub_cruncher_job_create
     end
 
-    let(:skill)     { FactoryGirl.create(:skill) }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
-
-    context 'skill found' do
-
-      it 'deletes skill' do
-        expect { xhr :delete, :destroy, id: skill }.
-            to change(Skill, :count).by(-1)
+    context "authorized access" do
+      let(:agency) {FactoryGirl.create(:agency)}
+      before :each do
+        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        sign_in aa
       end
-      it 'deletes associated job_skill' do
-        expect { xhr :delete, :destroy, id: skill }.
-            to change(JobSkill, :count).by(-1)
+      let(:skill)     { FactoryGirl.create(:skill) }
+      let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill)}
+
+      context 'skill found' do
+
+        it 'deletes skill' do
+          expect { xhr :delete, :destroy, id: skill }.
+              to change(Skill, :count).by(-1)
+        end
+        it 'deletes associated job_skill' do
+          expect { xhr :delete, :destroy, id: skill }.
+              to change(JobSkill, :count).by(-1)
+        end
+        it "returns http success" do
+          xhr :delete, :destroy, id: skill
+          expect(response).to have_http_status(:success)
+        end
       end
-      it "returns http success" do
-        xhr :delete, :destroy, id: skill
-        expect(response).to have_http_status(:success)
+
+      context 'skill NOT found' do
+        it "returns http status not_found" do
+          xhr :delete, :destroy, id: 0
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
 
-    context 'skill NOT found' do
-      it "returns http status not_found" do
-        xhr :delete, :destroy, id: 0
-        expect(response).to have_http_status(:not_found)
-      end
+    it_behaves_like "unauthorized all" do
+      let(:my_request) {  xhr :delete, :destroy, id: 0}
     end
   end
 

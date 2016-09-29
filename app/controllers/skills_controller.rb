@@ -44,6 +44,7 @@ class SkillsController < ApplicationController
   end
 
   def destroy
+    authorize Skill.new
     begin
       skill = Skill.find(params[:id])
     rescue
