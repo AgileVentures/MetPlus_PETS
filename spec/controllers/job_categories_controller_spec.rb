@@ -137,6 +137,9 @@ RSpec.describe JobCategoriesController, type: :controller do
         expect(response).to render_template('shared/_error_messages')
       end
     end
+    it_behaves_like "unauthorized all" do
+      let(:my_request) {xhr :patch, :update, id: category, job_category: jobcat_params}
+    end
   end
 
   describe "DELETE #destroy" do
