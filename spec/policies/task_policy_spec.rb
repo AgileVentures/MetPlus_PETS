@@ -61,16 +61,7 @@ RSpec.describe TaskPolicy do
     end
   end
 
-  permissions :tasks? do
-    it 'denies access if user is not logged in' do
-      expect(TaskPolicy).not_to permit(nil, task)
-    end
-
-    it 'allows access if user is logged in' do
-      expect(TaskPolicy).to permit(job_developer, task)
-    end
-  end
-  permissions :index? do
+  permissions :index?, :tasks? do
     it 'denies access if user not logged in' do
       expect(TaskPolicy).not_to permit(nil, task)
     end
