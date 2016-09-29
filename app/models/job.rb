@@ -34,8 +34,12 @@ class Job < ActiveRecord::Base
   enum status: [:active, :filled, :revoked]
   has_many :status_changes, as: :entity, dependent: :destroy
 
+  # `self.status.to_sym` is necessary because sometimes we would need to create
+  #  a job with a status other than `active`(in tests) and we don't want
+  #  to have a mismatch in statuses across `jobs` and `status_changes` tables.
+
   after_create do
-    StatusChange.update_status_history(self, :active)
+    StatusChange.update_status_history(self, self.status.to_sym || :active)
   end
 
   def number_applicants
@@ -46,9 +50,7 @@ class Job < ActiveRecord::Base
     job_seekers << job_seeker
     save!
 
-    # Download resume from the Cruncher
     resume_id = job_seeker.resumes[0].id
-    temp_file = ResumeCruncher.download_resume(resume_id)
     job_application = last_application_by_job_seeker(job_seeker)
 
     # Send mail to the company with the attached resume
@@ -56,10 +58,7 @@ class Job < ActiveRecord::Base
                      perform_later(Event::EVT_TYPE[:JS_APPLY],
                      self.company,
                       nil, { application: job_application,
-                      resume_file_path: temp_file.path })
-
-    # Remove the temp file
-    temp_file.unlink
+                      resume_id: resume_id })
 
     last_application_by_job_seeker(job_seeker)
   end

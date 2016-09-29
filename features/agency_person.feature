@@ -4,7 +4,7 @@ Feature: Agency Person
   I want to login to PETS
   And manage my work from my home page
 
-  Background: seed data added to database and log in as agency admim
+  Background: seed data added to database and log in as agency admin
 
     Given the default settings are present
 
@@ -97,14 +97,35 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
+@selenium 
+  Scenario: Agency admin can see all tabs
+    Given I am on the home page
+    And I login as "aa@metplus.org" with password "qwerty123"
+    And I should be on the Agency Person 'aa@metplus.org' Home page
+    And I wait 2 seconds
+    And I should see "Unassigned Agency Tasks"
+    And I should see "Your Open Tasks"
+    And I should see "All Agency Open Tasks"
+    And I should see "Closed Tasks"
+    And The tasks 5,6 are present
+    And The tasks 1,2,3,4,7 are hidden
+    And I click the "Unassigned Agency Tasks" link
+    And The tasks 1,2 are present
+    And The tasks 3,4,7 are hidden
+    And I click the "All Agency Open Tasks" link
+    And The tasks 3,4,5,6 are present
+    And The tasks 1,2,7 are hidden
+    And I click the "Closed Tasks" link
+    And The task 7 is present
+    And The tasks 1,2,3,4 are hidden
 
-  @selenium
+  @selenium 
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'aa@metplus.org' Home page
     And I wait 2 seconds
-    And The tasks 1,2,5,6 are present
+    And I click the "Unassigned Agency Tasks" link
     Then I press the assign button of the task 2
     And I should see "Select the user to assign the task to:"
     And I select2 "Jones, Jane" from "task_assign_select"
@@ -112,6 +133,8 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Task assigned"
     And The task 2 is not present
+    And I click the "All Agency Open Tasks" link
+    And The task 2 is present
 
   @selenium
   Scenario: Job developer assigns self to job seeker
@@ -147,4 +170,28 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see "Seeker, Tom" between "Your Job Seekers (as job developer)" and "Your Job Seekers (as case manager)"
     And I should see "Jones, Mary" after "Your Job Seekers (as case manager)"
+
+  @javascript
+  Scenario: Case manager can edit his job seeker's profile
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I click the first "Jones, Mary" link
+    Then I click "Edit Job Seeker" button
+    And I should see "Edit JobSeeker Registration"
+    Then I fill in "First Name" with "Samantha"
+    Then I click "Update Job seeker" button
+    And I should see "Jobseeker was updated successfully."
+    And I should not see "Mary"
+    And I should see "Samantha"
+
+  @javascript
+  Scenario: Case manager cannot edit other job seekers' profile
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I click the first "Seeker, Tom" link 
+    And I should not see "Edit Job Seeker"
+    
+    
 

@@ -37,34 +37,7 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
-
-
-  @selenium
-  Scenario: Job Developer assigns tasks and complete it
-    Given I am on the home page
-    And I login as "jane-dev@metplus.org" with password "qwerty123"
-    Then I should see "Signed in successfully."
-    Then I go to the tasks page
-    And I wait 1 second
-    And I should see "Job Seeker has no assigned Job Developer"
-    And I should not see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
-    And The task 1 status is "New"
-    Then I press the assign button of the task 1
-    And I should see "Select the user to assign the task to:"
-    And I select2 "Developer, Jane" from "task_assign_select"
-    Then I press "Assign"
-    And I wait 1 second
-    And I should see notification "Task assigned"
-    And The task 1 status is "Assigned"
-    Then I press the wip button of the task 1
-    And I wait 1 second
-    And I should see notification "Work on the task started"
-    And The task 1 status is "Work in progress"
-    And I wait 2 second
-    Then I press the done button of the task 1
-    And I wait 1 second
-    And I should see notification "Work on the task is done"
-
+  
   @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
@@ -94,19 +67,4 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see "Company Registration Information"
 
-  @selenium
-  Scenario: Case Manager open and closes assign modal
-    Given I am on the home page
-    And I login as "jane@metplus.org" with password "qwerty123"
-    Then I should see "Signed in successfully."
-    Then I go to the tasks page
-    And The tasks 2,4 are present
-    And I should not see "Job Seeker has no assigned Job Developer"
-    And I should see "Job Seeker has no assigned Case Manager"
-    And I should not see "Job Seeker has no assigned Case Manager" after "Tasks completed by you"
-    Then I press the assign button of the task 2
-    And I should see "Select the user to assign the task to:"
-    Then I press "Cancel"
-    And I wait 1 seconds
-    And I should not see notification "Task assigned"
-    And The task 2 status is "New"
+  

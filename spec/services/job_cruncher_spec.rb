@@ -25,9 +25,15 @@ RSpec.describe JobCruncher, type: :model do
   end
 
   describe 'match jobs' do
-    it 'returns the matching jobs for a valid request' do
+    it 'returns array of job matches for a valid request' do
       stub_cruncher_match_jobs
-      expect { JobCruncher.match_jobs(1).not_to be nil }
+      results = JobCruncher.match_jobs(1)
+      expect(results).not_to be nil
+      expect(results.class).to be Array
+      expect(results[0][0]).to be 3
+      expect(results[0][1]).to be 4.7
+      expect(results[2][0]).to be 6
+      expect(results[2][1]).to be 3.4
     end
 
     it 'returns nil in case of a wrong resume id' do

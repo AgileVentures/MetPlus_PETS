@@ -201,6 +201,23 @@ And(/^(?:I|they) check( \w*)? "([^"]*)"$/) do |ordinal, item|
   end
 end
 
+And(/^(?:I|they) uncheck( \w*)? "([^"]*)"$/) do |ordinal, item|
+  # use 'ordinal' when selecting among select checkboxes all of which
+  # have the same selector (e.g., same label)
+  case ordinal
+  when nil
+    uncheck(item)
+  when ' first'
+    all(:checkbox, item)[0].set(false)
+  when ' second'
+    all(:checkbox, item)[1].set(false)
+  when ' third'
+    all(:checkbox, item)[2].set(false)
+  else
+    raise 'do not understand ordinal value'
+  end
+end
+
 And(/^the selection "([^"]*)" should be disabled$/) do |item|
   expect(has_field?(item, disabled: true)).to be true
 end
