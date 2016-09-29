@@ -4,6 +4,8 @@ class TasksController < ApplicationController
   before_action :user_logged!
 
   def index
+
+    authorize Task.new
     @task_type_t1 = 'mine-open'
     @task_type_t2 = 'agency-new'
     @task_type_t3 = 'mine-closed'
@@ -60,6 +62,8 @@ class TasksController < ApplicationController
   def tasks
     raise 'Unsupported request' if not request.xhr?
 
+    authorize Task.new
+
     @task_type = params[:task_type] || 'mine-open'
 
     @render_modal = params[:modal]
@@ -75,6 +79,9 @@ class TasksController < ApplicationController
     term = term.downcase
     task = Task.find_by_id params[:id]
     return render json: {:message => 'Cannot find the task!'}, status: 403 if task.nil?
+
+    authorize task
+
     list_users = []
     all_users = task.assignable_list
     return render json: {:message => 'There are no users you can assign this task to!'}, status: 403 \
