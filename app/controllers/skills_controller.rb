@@ -28,6 +28,7 @@ class SkillsController < ApplicationController
   end
 
   def update
+    authorize Skill.new
     begin
       skill = Skill.find(params[:id])
     rescue

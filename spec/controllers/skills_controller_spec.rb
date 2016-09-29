@@ -117,18 +117,27 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe "PATCH #update" do
+    let(:agency) {FactoryGirl.create(:agency)}
     let(:skill)  { FactoryGirl.create(:skill) }
     let(:skill_params) { FactoryGirl.attributes_for(:skill) }
+    context "authorized access" do
+      before :each do
+        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        sign_in aa
+      end
+      it 'returns success for valid parameters' do
+        xhr :patch, :update, id: skill, skill: skill_params
+        expect(response).to have_http_status(:success)
+      end
 
-    it 'returns success for valid parameters' do
-      xhr :patch, :update, id: skill, skill: skill_params
-      expect(response).to have_http_status(:success)
+      it 'returns errors and error status for invalid parameters' do
+        xhr :patch, :update, id: skill, skill: {name: '', description: ''}
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template('shared/_error_messages')
+      end
     end
-
-    it 'returns errors and error status for invalid parameters' do
-      xhr :patch, :update, id: skill, skill: {name: '', description: ''}
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(response).to render_template('shared/_error_messages')
+    it_behaves_like "unauthorized all" do
+      let(:my_request) {xhr :patch, :update, id: skill, skill: skill_params}
     end
   end
 
