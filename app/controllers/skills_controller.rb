@@ -5,7 +5,7 @@ class SkillsController < ApplicationController
 
   def create
     skill = Skill.new(skill_params)
-    authorized skill
+    authorize skill
     if skill.save
       render nothing: true
     else
@@ -15,6 +15,7 @@ class SkillsController < ApplicationController
   end
 
   def show
+    authorize Skill.new
     begin
       skill = Skill.find(params[:id])
     rescue

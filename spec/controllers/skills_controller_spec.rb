@@ -13,9 +13,15 @@ RSpec.shared_examples "unauthorized" do
     expect(subject.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
   end
 end
+
 RSpec.shared_examples "unauthorized all" do
   let(:agency) {FactoryGirl.create(:agency)}
   let(:company) {FactoryGirl.create(:company)}
+  context "Not logged in" do
+    it_behaves_like "unauthorized" do
+      let(:user) {nil}
+    end
+  end
   context "Case Manager" do
     it_behaves_like "unauthorized" do
       let(:user) {FactoryGirl.create(:case_manager, agency: agency)}
@@ -74,29 +80,39 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe "GET #show" do
+    let(:agency) {FactoryGirl.create(:agency)}
     let(:skill)  { FactoryGirl.create(:skill) }
+    context "authorized access" do
+      before :each do
+        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        sign_in aa
+      end
+      context 'skill found' do
+        before(:each) do
+          xhr :get, :show, id: skill
+        end
 
-    context 'skill found' do
-      before(:each) do
-        xhr :get, :show, id: skill
+        it 'renders json structure' do
+          expect(JSON.parse(response.body))
+              .to match({'id' => skill.id,
+                         'name' => skill.name,
+                         'description' => skill.description})
+        end
+        it "returns http success" do
+          expect(response).to have_http_status(:success)
+        end
       end
 
-      it 'renders json structure' do
-        expect(JSON.parse(response.body))
-            .to match({'id' => skill.id,
-                       'name' => skill.name,
-                       'description' => skill.description})
-      end
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
+      context 'skill NOT found' do
+        it "returns http status not_found" do
+          xhr :get, :show, id: 0
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
 
-    context 'skill NOT found' do
-      it "returns http status not_found" do
-        xhr :get, :show, id: 0
-        expect(response).to have_http_status(:not_found)
-      end
+    it_behaves_like "unauthorized all" do
+      let(:my_request) {xhr :get, :show, id: skill}
     end
   end
 
