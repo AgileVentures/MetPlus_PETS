@@ -19,9 +19,9 @@
           %td
             = link_to "#{job.title}", job_path(job)
             %td
-              = Company
+              = job.company.name
             %td
-              = job.description
+              = truncate(job.description, length: 200)
             %td
               = "#{time_ago_in_words(job.created_at, )} ago"
 

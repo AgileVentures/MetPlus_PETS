@@ -86,6 +86,27 @@ Scenario: login jobseeker, land on home page, see applied jobs
   And I should see "Trucker" before "Job Opportunities - New"
   And I should see "Doctor" before "Job Opportunities - New"
 
+@javascript
+Scenario: job seeker finds new job opportunities
+  When I am in Job Seeker's browser
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully"
+  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
+  And I should see "Mime" after "Job Opportunities - New"
+  And I should see "Clerk" after "Job Opportunities - New"
+  When I am in Company Contact's browser
+  Given I am on the home page
+  And I login as "jane@widgets.com" with password "qwerty123"
+  And I create the following jobs
+  | title          | shift   | fulltime | description       | company      | creator        |
+  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | ca@widgets.com |
+  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | ca@widgets.com |
+  When I am in Job Seeker's browser
+  And I reload the page
+  Then I should see "UI Developer" after "Job Opportunities - New"
+  And I should see "RoR Developer" after "UI Developer"
+
 Scenario: jobseeker homepage with no agency relations
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
