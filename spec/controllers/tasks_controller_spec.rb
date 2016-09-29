@@ -255,13 +255,29 @@ RSpec.describe TasksController, type: :controller do
   end
   describe 'GET #tasks' do
     describe 'unauthorized' do
-      subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
-      it 'returns http error' do
-        expect(subject).to have_http_status(401)
+      context 'not signed in' do
+        subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
+        it 'returns http error' do
+          expect(subject).to have_http_status(401)
+        end
+        it 'check task status' do
+          subject
+          expect(response.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
+        end
       end
-      it 'check task status' do
-        subject
-        expect(response.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
+      context 'job seeker' do
+        before :each do
+          js = FactoryGirl.create(:job_seeker)
+          sign_in js
+        end
+        subject{xhr :get, :tasks , {:task_type => 'mine-open'}, :format => :json}
+        it 'returns http error' do
+          expect(subject).to have_http_status(403)
+        end
+        it 'check task status' do
+          subject
+          expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+        end
       end
     end
   end

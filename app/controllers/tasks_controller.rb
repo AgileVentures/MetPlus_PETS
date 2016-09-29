@@ -4,6 +4,8 @@ class TasksController < ApplicationController
   before_action :user_logged!
 
   def index
+
+    authorize Task.new
     @task_type_t1 = 'mine-open'
     @task_type_t2 = 'agency-new'
     @task_type_t3 = 'mine-closed'
@@ -59,6 +61,8 @@ class TasksController < ApplicationController
 
   def tasks
     raise 'Unsupported request' if not request.xhr?
+
+    authorize Task.new
 
     @task_type = params[:task_type] || 'mine-open'
 
