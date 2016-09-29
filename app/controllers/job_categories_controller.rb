@@ -1,6 +1,7 @@
 class JobCategoriesController < ApplicationController
   def create
     category = JobCategory.new(category_params)
+    authorize category
     if category.save
       render nothing: true
     else
