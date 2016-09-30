@@ -3,13 +3,32 @@ require 'rails_helper'
 RSpec.describe BranchesController, type: :controller do
 
   describe "GET #show" do
-    let(:branch)   { FactoryGirl.create(:branch) }
+    let(:branch)   { FactoryGirl.create(:branch, agency: agency) }
+    let(:agency)  {FactoryGirl.create(:agency)}
+    let(:jd)      {FactoryGirl.create(:job_developer, agency: agency)}
+    let(:cm)      {FactoryGirl.create(:case_manager, agency: agency)}
+    let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
+
     before(:each) do
-      get :show, id: branch
+      sign_in admin
+      get :show, id: branch.id
     end
+    
+    before(:each) do
+      sign_in jd
+      get :show, id: branch.id
+    end
+ 
+    before(:each) do
+      sign_in cm
+      get :show, id: branch.id
+    end
+
     it 'assigns @branch for view' do
       expect(assigns(:branch)).to eq branch
+      
     end
+      
     it 'renders show template' do
       expect(response).to render_template('show')
     end
@@ -21,12 +40,14 @@ RSpec.describe BranchesController, type: :controller do
   describe "POST #create" do
 
     let(:agency)   { FactoryGirl.create(:agency) }
-    let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
-    let(:branch2)  { FactoryGirl.build(:branch, agency: agency, code: branch1.code) }
+    let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
+    let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
+    let(:branch1)  { FactoryGirl.build(:branch, agency: agency, code: branch.code) }
 
     context 'valid attributes' do
       before(:each) do
-        post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
+        sign_in admin
+        post :create, agency_id: admin, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
@@ -46,6 +67,7 @@ RSpec.describe BranchesController, type: :controller do
       render_views
 
       before(:each) do
+        sign_in admin
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
         branch_hash = FactoryGirl.attributes_for(:branch, code: branch1.code)
@@ -71,27 +93,32 @@ RSpec.describe BranchesController, type: :controller do
   describe "GET #new" do
 
     let(:agency)        { FactoryGirl.create(:agency) }
-    let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
+    let(:admin)         { FactoryGirl.create(:agency_admin, agency: agency) }
+    let(:branch)        { FactoryGirl.create(:branch, agency: agency) }
 
     before(:each) do
-      sign_in agency_admin
+      sign_in admin
       get :new, agency_id: agency
     end
     it 'assigns @agency for branch creation' do
       expect(assigns(:agency)).to eq agency
     end
     it "returns http success" do
-      get :new, agency_id: agency
+      get :new , agency_id: agency
       expect(response).to have_http_status(:success)
     end
   end
 
   describe "GET #edit" do
-
-    let(:branch)  { FactoryGirl.create(:branch) }
+    
+    let(:agency)   { FactoryGirl.create(:agency) }
+    let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
+    let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
+    
 
     before(:each) do
-      get :edit, id: branch
+      sign_in admin
+      get :edit, id: branch.id
     end
     it 'assigns @branch for form' do
       expect(assigns(:branch)).to eq branch
@@ -107,13 +134,15 @@ RSpec.describe BranchesController, type: :controller do
   describe "PATCH #update" do
 
     let(:agency)   { FactoryGirl.create(:agency) }
+    let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
     let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
     let(:branch2)  { FactoryGirl.create(:branch, agency: agency) }
 
     context 'valid attributes' do
       before(:each) do
+        sign_in admin
         patch :update, branch: FactoryGirl.attributes_for(:branch),
-                     id: branch1
+                     id: branch1.id
       end
       it 'assigns @branch for updating' do
         expect(assigns(:branch)).to eq branch1
@@ -133,6 +162,7 @@ RSpec.describe BranchesController, type: :controller do
       render_views
 
       before(:each) do
+        sign_in admin
         branch2.assign_attributes(code: branch1.code)
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
@@ -140,7 +170,7 @@ RSpec.describe BranchesController, type: :controller do
         branch_hash[:address_attributes] =
                   FactoryGirl.attributes_for(:address, zipcode: '123456')
 
-        patch :update, branch: branch_hash, id: branch2
+        patch :update, branch: branch_hash, id: branch2.id
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
@@ -156,11 +186,14 @@ RSpec.describe BranchesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-
-    let(:branch)  { FactoryGirl.create(:branch) }
+    
+    let(:agency)   { FactoryGirl.create(:agency) }
+    let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
+    let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
 
     before(:each) do
-      delete :destroy, id: branch
+      sign_in admin
+      delete :destroy, id: branch.id
     end
     it 'sets flash message' do
       expect(flash[:notice]).to eq "Branch '#{branch.code}' deleted."
@@ -169,5 +202,5 @@ RSpec.describe BranchesController, type: :controller do
       expect(response).to have_http_status(:redirect)
     end
   end
-
 end
+
