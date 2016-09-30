@@ -2,9 +2,11 @@ class SkillsController < ApplicationController
   # These actions are designed to respond only to XHR requests
 
   before_action :confirm_xhr
+  before_action :user_logged!
 
   def create
     skill = Skill.new(skill_params)
+    authorize skill
     if skill.save
       render nothing: true
     else
@@ -14,6 +16,7 @@ class SkillsController < ApplicationController
   end
 
   def show
+    authorize Skill.new
     begin
       skill = Skill.find(params[:id])
     rescue
@@ -26,6 +29,7 @@ class SkillsController < ApplicationController
   end
 
   def update
+    authorize Skill.new
     begin
       skill = Skill.find(params[:id])
     rescue
@@ -41,6 +45,7 @@ class SkillsController < ApplicationController
   end
 
   def destroy
+    authorize Skill.new
     begin
       skill = Skill.find(params[:id])
     rescue
