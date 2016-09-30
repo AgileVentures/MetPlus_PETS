@@ -80,6 +80,7 @@ Given the following agency relations exist:
     And attachment 1 should be of type "application/msword"
 
 		Then I am in Job Developer's browser
+    And I wait 1 second
 		And I should see "Job Seeker: John Seeker has applied to this job"
 		Then I am in Case Manager's browser
 		And I should see "Job Seeker: John Seeker has applied to this job"
