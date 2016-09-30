@@ -10,13 +10,16 @@ class BranchesController < ApplicationController
 
   def create
     @agency = Agency.find(params[:agency_id])
+    @branch = Branch.new(agency: @agency)
+
     self.action_description ="create a branch"
-    @branch = Branch.new
     authorize @branch
+
     @branch.assign_attributes(branch_params)
-    @agency.branches << @branch
+    
     if @branch.valid?
       @branch.save
+      @agency.branches << @branch
       flash[:notice] = "Branch was successfully created."
       redirect_to agency_admin_home_path
     else
@@ -26,9 +29,11 @@ class BranchesController < ApplicationController
 
   def new
     @agency = Agency.this_agency(current_user)
-    @branch = Branch.new
+    @branch = Branch.new(agency: @agency)
+
     self.action_description ="create a branch"
     authorize @branch
+
     @branch.build_address
   end
 

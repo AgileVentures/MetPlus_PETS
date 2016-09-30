@@ -39,15 +39,15 @@ RSpec.describe BranchesController, type: :controller do
 
   describe "POST #create" do
 
-    let(:agency)   { FactoryGirl.create(:agency) }
+    let(:agency)  { FactoryGirl.create(:agency) }
     let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
-    let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
-    let(:branch1)  { FactoryGirl.build(:branch, agency: agency, code: branch.code) }
+    let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
+    let(:branch2)  { FactoryGirl.build(:branch, agency: agency, code: branch1.code) }
 
     context 'valid attributes' do
       before(:each) do
         sign_in admin
-        post :create, agency_id: admin, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
+        post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
@@ -94,8 +94,7 @@ RSpec.describe BranchesController, type: :controller do
 
     let(:agency)        { FactoryGirl.create(:agency) }
     let(:admin)         { FactoryGirl.create(:agency_admin, agency: agency) }
-    let(:branch)        { FactoryGirl.create(:branch, agency: agency) }
-
+    
     before(:each) do
       sign_in admin
       get :new, agency_id: agency
@@ -111,8 +110,8 @@ RSpec.describe BranchesController, type: :controller do
 
   describe "GET #edit" do
     
-    let(:agency)   { FactoryGirl.create(:agency) }
-    let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
+    let(:agency)  { FactoryGirl.create(:agency) }
+    let(:admin)   { FactoryGirl.create(:agency_admin, agency: agency)}
     let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
     
 

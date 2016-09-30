@@ -24,4 +24,4 @@ class BranchPolicy < ApplicationPolicy
   end
 
 end 
-  
+

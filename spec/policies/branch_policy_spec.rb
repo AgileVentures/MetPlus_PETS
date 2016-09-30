@@ -31,17 +31,12 @@ RSpec.describe BranchPolicy do
   permissions :show?  do
 
     it 'allows access if user is an agency person' do
-      expect(BranchPolicy).to permit(admin, jd, cm , branch)
+      expect(BranchPolicy).to permit(admin, branch)
+      expect(BranchPolicy).to permit(jd, branch)
+      expect(BranchPolicy).to permit(cm , branch)
     end
   end
 
 end
-
-
-
-
-
-
-
 
 
