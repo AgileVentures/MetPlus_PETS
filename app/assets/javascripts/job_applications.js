@@ -83,7 +83,7 @@ $(function() {
 });
 
 var handler = dataHandler.init();
-("#jd-apply-button").click(handler.load_form(handler.jd_id));
+$("#jd-apply-button").click(handler.load_form(handler.jd_id));
 
 $('#jdApplyJobModal').on('shown.bs.modal', function () {
     $('#jdApplyJobModal_button').click(function () {
@@ -131,7 +131,7 @@ var RejectAppln = {
                         case 200:
                             Notification.success_notification(data.message);
                             // 'click' on current pagination page link to force reload of page
-                            ele = $('.pagination-div li.active a')
+                            ele = $('.pagination-div li.active a');
                             if (ele.length === 0) {
                                 // if no pagination link present, reload the div directly
                                 $.ajax({
@@ -144,7 +144,7 @@ var RejectAppln = {
                                     success: function (apps_data) {
                                         $('#applications-job-applied').html(apps_data);
                                     }
-                                })
+                                });
                             } else {
                                 ele.click();
                             }
@@ -158,7 +158,7 @@ var RejectAppln = {
         }
     },
     check_for_reason: function () {
-        var reason_text = $('#reason_text').val()
+        var reason_text = $('#reason_text').val();
         if (reason_text) {
             return (true);  // Continue processing in controller
         } else {

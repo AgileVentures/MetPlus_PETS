@@ -11,7 +11,7 @@
               %th.strong Name
             - when :js_status
               %th.strong Job Seeker Status
-            - when :updated_at
+            - when :applied_at
               %th.strong Applied
             - when :action
               %th.strong Action
@@ -29,7 +29,8 @@
                   = job_application.job_seeker.job_seeker_status.short_description
               - when :updated_at
                 %td
-                  = "#{time_ago_in_words(job_application.updated_at, )} ago"
+                  - applied_at = job_application.status_change_time(:active)
+                  = "#{time_ago_in_words(applied_at, )} ago"
               - when :action
                 %td
                   - if job_application.active?
