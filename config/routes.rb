@@ -140,6 +140,8 @@ Rails.application.routes.draw do
   # --------------------------- Job Applications -----------------------------
   patch 'job_applications/:id/accept'    => 'job_applications#accept', 
                                              as: :accept_application
+  patch 'job_applications/:id/reject'    =>  'job_applications#reject',
+                                             as: :reject_application
   get 'job_applications/:id'             => 'job_applications#show',
                                              as: :application
   # --------------------------------------------------------------------------
