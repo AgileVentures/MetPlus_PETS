@@ -235,7 +235,7 @@ RSpec.describe Event, type: :model do
     end
 
     it 'triggers Pusher message to primary job developer' do
-      Event.create(:APP_ACCEPTED, application)
+      Event.create(:APP_REJECTED, application)
       expect(Pusher).to have_received(:trigger).
           with('pusher_control',
                'job_application_rejected',
