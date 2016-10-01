@@ -80,25 +80,24 @@ $(function() {
         $(action).modal();
         event.preventDefault();
     });
-});
+    var handler = dataHandler.init();
+    $("#jd-apply-button").click(handler.load_form(handler.jd_id));
 
-var handler = dataHandler.init();
-$("#jd-apply-button").click(handler.load_form(handler.jd_id));
-
-$('#jdApplyJobModal').on('shown.bs.modal', function () {
-    $('#jdApplyJobModal_button').click(function () {
-        if ($("#jd_apply_job_select").val() === null) {
-            $('.alert_msg').html(' * Job Seeker cannot be empty.');
-            return;
-          }
-      handler.js_user_id = $("#jd_apply_job_select").val();
-      $("#jdApplyJobModal").modal('hide');
-      handler.load_preview();
+    $('#jdApplyJobModal').on('shown.bs.modal', function () {
+        $('#jdApplyJobModal_button').click(function () {
+            if ($("#jd_apply_job_select").val() === null) {
+                $('.alert_msg').html(' * Job Seeker cannot be empty.');
+                return;
+            }
+            handler.js_user_id = $("#jd_apply_job_select").val();
+            $("#jdApplyJobModal").modal('hide');
+            handler.load_preview();
+        });
     });
-});
 
-$('#jdApplyJobModal').on('hidden.bs.modal', function () {
+    $('#jdApplyJobModal').on('hidden.bs.modal', function () {
         $('#jdApplyJobModal_button').off('click');
+    });
 });
 
 var RejectAppln = {
