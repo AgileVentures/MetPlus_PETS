@@ -128,7 +128,14 @@ class JobsController < ApplicationController
 
     @jobs = []
     @jobs = display_jobs @job_type
-    render partial: 'list_all', :locals => {all_jobs: @jobs, job_type: @job_type}
+		case @job_type
+			when 'my-company-all'
+				render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
+			when 'recent-jobs'
+				render partial: 'compact_list', locals: { 
+					jobs: @jobs, job_type: @job_type, last_sign_in: params[:js_login] }
+		end
+    
 	end
 
   def update_addresses
