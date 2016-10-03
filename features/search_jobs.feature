@@ -49,7 +49,6 @@ Scenario: Go to jobs search page, see all jobs, search by title
 	And I should see "Job2"
 	And I should see "Job3"
 	And I should see "Job4"
-	And I click the "Show Search Form" link
 	Then I should see "Title contains any"
 	And I fill in "Title contains any" with "Job1 Job3"
 	And I click the "Search Jobs" button
@@ -64,7 +63,6 @@ Scenario: Search by description
 	Given I am on the home page
 	And I click the "Jobs" link
 	And I click the "Search Jobs" button
-	And I click the "Show Search Form" link
 	And I fill in "Description contains any" with "Job1., Job3."
 	And I click the "Search Jobs" button
 	Then I should see "Job1"
@@ -77,7 +75,6 @@ Scenario: Search by skills
 	Given I am on the home page
 	And I click the "Jobs" link
 	And I click the "Search Jobs" button
-	And I click the "Show Search Form" link
 	And I select "Skill1" in select list "Skills"
 	And I select "Skill3" in select list "Skills"
 	And I click the "Search Jobs" button
@@ -91,7 +88,6 @@ Scenario: Search by city
 	Given I am on the home page
 	And I click the "Jobs" link
 	And I click the "Search Jobs" button
-	And I click the "Show Search Form" link
 	And I select "city1" in select list "City"
 	And I select "city4" in select list "City"
 	And I click the "Search Jobs" button
@@ -105,7 +101,6 @@ Scenario: Search by title and description
 	Given I am on the home page
 	And I click the "Jobs" link
 	And I click the "Search Jobs" button
-	And I click the "Show Search Form" link
 	And I fill in "Title contains all" with "Job4"
 	And I fill in "Description contains any" with "Job1., Job2, Job3."
 	And I click the "Search Jobs" button
@@ -113,10 +108,27 @@ Scenario: Search by title and description
 	And I should not see "Job3"
 	And I should not see "Job2"
 	And I should not see "Job4"
-	And I click the "Show Search Form" link
 	And I fill in "Title contains all" with "Job1"
 	And I click the "Search Jobs" button
 	Then I should see "Job1"
 	And I should not see "Job3"
 	And I should not see "Job2"
 	And I should not see "Job4"
+
+@javascript
+Scenario: Search by company
+	Given I am on the home page
+	And I click the "Jobs" link
+	And I click the "Search Jobs" button
+	And I select "Widgets Inc." in select list "Company"
+	And I click the "Search Jobs" button
+	Then I should see "Job1"
+	And I should see "Job2"
+	And I should not see "Job3"
+	And I should not see "Job4"
+  Then I select "Feature Inc." in select list "Company"
+  And I click the "Search Jobs" button
+  Then I should see "Job1"
+	And I should see "Job2"
+	And I should see "Job3"
+	And I should see "Job4"
