@@ -35,6 +35,10 @@ class ApplicationPolicy
     false
   end
 
+  def permit?
+    (record.persisted? && user == record) || (record.new_record? && user.nil?)
+  end
+
   def scope
     Pundit.policy_scope!(user, record.class)
   end

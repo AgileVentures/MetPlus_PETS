@@ -6,9 +6,11 @@ class JobSeekersController < ApplicationController
 
   def new
     @jobseeker = JobSeeker.new
+    authorize @jobseeker
   end
 
   def create
+    authorize(JobSeeker)
     jobseeker_params = form_params
     dispatch_file    = jobseeker_params.delete 'resume'
 
@@ -41,13 +43,14 @@ class JobSeekersController < ApplicationController
 
   def edit
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     @current_resume = @jobseeker.resumes[0]
   end
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
-
-    jobseeker_params = handle_user_form_parameters form_params
+    authorize @jobseeker
+    jobseeker_params = handle_user_form_parameters(permitted_attributes(@jobseeker))
     dispatch_file    = jobseeker_params.delete 'resume'
 
     models_saved = @jobseeker.update_attributes(jobseeker_params)
@@ -89,6 +92,7 @@ class JobSeekersController < ApplicationController
   def home
     @jobseeker = JobSeeker.find(params[:id])
     @recent_jobs_type = 'recent-jobs'
+    authorize @jobseeker
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
     @js_last_sign_in = @jobseeker.last_sign_in_at
     @application_type = params[:application_type] || 'my-applied'
@@ -96,10 +100,12 @@ class JobSeekersController < ApplicationController
 
   def index
     @jobseeker = JobSeeker.all
+    authorize @jobseeker
   end
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     @application_type = params[:application_type] || 'js-applied'
   end
 
@@ -136,9 +142,10 @@ class JobSeekersController < ApplicationController
     redirect_to root_path
   end
 
+ 
   private
-   def form_params
-     params.require(:job_seeker).permit(:first_name,
+    def form_params
+      params.require(:job_seeker).permit(:first_name,
             :last_name, :email, :phone,
             :password,
             :password_confirmation,
@@ -147,5 +154,5 @@ class JobSeekersController < ApplicationController
             :consent,
             :job_seeker_status_id,
             address_attributes: [:id, :street, :city, :zipcode, :state])
-   end
+    end
 end

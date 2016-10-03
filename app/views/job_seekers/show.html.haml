@@ -15,13 +15,13 @@
   .pagination-div{id: "applications-#{@application_type}",
                   data: {url: applied_jobs_job_seeker_path(@jobseeker,
                                                          @application_type)}}
-- if pets_user.is_agency_admin?(current_agency) || pets_user == @jobseeker.case_manager
+- if policy(@jobseeker).edit?
   .clearfix
   %br
   .col-sm-2
     = button_to 'Edit Job Seeker', edit_job_seeker_path(@jobseeker),
         method: :get, class: 'btn btn-primary'
-- if pets_user.is_agency_admin? current_agency
+- if policy(@jobseeker).destroy?
   .com-sm-2.col-sm-offset-4
     = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
         method: :delete,

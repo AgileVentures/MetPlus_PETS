@@ -216,6 +216,7 @@ RSpec.describe JobSeekersController, type: :controller do
       let(:agency) { FactoryGirl.create(:agency) }
       let(:jobseeker) { FactoryGirl.create(:job_seeker, phone: '123-456-7890') }
       let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+      let(:password) { jobseeker.encrypted_password }
       before(:each) do
         sign_in case_manager
         jobseeker.assign_case_manager(case_manager, agency)
@@ -235,6 +236,18 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
           expect(flash[:notice]).to eq "Jobseeker was updated successfully."
           expect(response).to redirect_to jobseeker
+        end
+      end
+
+      context "unauthorized attributes" do
+        before(:each) do
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+            year_of_birth: '1988', password: '123345', password_confirmation: '123345')
+          jobseeker.reload
+        end
+        it "does not change job seeker's attribute" do
+          expect(jobseeker.year_of_birth).to eq('1998')
+          expect(jobseeker.encrypted_password).to eq password
         end
       end
 
