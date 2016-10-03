@@ -29,6 +29,15 @@ class Company < ActiveRecord::Base
 
   validates :status, inclusion: STATUS.values
 
+  def self.all_with_active_jobs
+    companies = []
+    Company.where(status: Company::STATUS[:ACT]).order(:name).each do |cmpy|
+      unless cmpy.jobs.where(status: 'active').empty?
+        companies << cmpy
+      end
+    end
+    companies
+  end
 
   def self.company_admins(company)
     find_users_with_role(company, CompanyRole::ROLE[:CA])
