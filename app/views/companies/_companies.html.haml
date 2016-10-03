@@ -12,7 +12,7 @@
       - @companies.each do |company|
         %tr
           %td
-            - if company.status == Company::STATUS[:PND]
+            - if company.pending_registration?
               = link_to company.name, company_registration_path(company)
             - else
               = link_to company.name, company_path(company)

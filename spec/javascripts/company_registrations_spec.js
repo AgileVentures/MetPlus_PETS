@@ -33,7 +33,7 @@ describe('Company Registration', function () {
 
       $('#send_button').trigger('click');
       expect($.ajax).toHaveBeenCalled();
-      expect($('#company_status').html()).toContain('Registration Denied');
+      expect($('#company_status').html()).toContain('registration_denied');
     });
   });
 });

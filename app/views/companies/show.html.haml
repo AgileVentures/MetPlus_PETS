@@ -15,7 +15,7 @@
   %h4 All company people who are on PETS
 .col-sm-3
   - if @admin_aa || @admin_ca
-    - if @company.status == Company::STATUS[:ACT]
+    - if @company.active?
       = link_to 'Invite Person',
                     new_user_invitation_path(person_type: 'CompanyPerson',
                     org_id: @company.id),

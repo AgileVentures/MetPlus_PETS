@@ -21,7 +21,7 @@ Feature: Have a task system in the site
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Pending Registration |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | pending_registration |
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |

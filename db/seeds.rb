@@ -60,9 +60,9 @@ if Rails.env.development? || Rails.env.staging?
                       name: name)
     cmp.agencies << agency
     if n < 20
-      cmp.status = Company::STATUS[:PND]
+      cmp.pending_registration
     else
-      cmp.status = Company::STATUS[:ACT]
+      cmp.active
     end
     cmp.save!
 
@@ -80,7 +80,7 @@ if Rails.env.development? || Rails.env.staging?
                               job_email: 'hr@widgets.com',
                               website: 'www.widgets.com',
                               name: 'Widgets, Inc.',
-                              status: Company::STATUS[:ACT])
+                              status: 'active')
   known_company.agencies << agency
   known_company.save!
 
@@ -388,7 +388,7 @@ if Rails.env.development? || Rails.env.staging?
   puts "Agency Relations created: #{AgencyRelation.count}"
 
   #-------------------------- Tasks ---------------------------------------
-  companies = Company.where(status: Company::STATUS[:PND])
+  companies = Company.pending_registration
 
   Task.new_js_unassigned_cm_task(js3, agency)
   Task.new_js_registration_task(js4, agency)

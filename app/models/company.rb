@@ -10,6 +10,9 @@ class Company < ActiveRecord::Base
 
   has_and_belongs_to_many :agencies
 
+  enum status: [:pending_registration, :active, :inactive, :registration_denied]
+  has_many :status_changes, as: :entity, dependent: :destroy
+
 
   validates :ein,   :ein_number => true
   validates_uniqueness_of :ein, case_sensitive: false,
@@ -22,16 +25,24 @@ class Company < ActiveRecord::Base
   validates_presence_of :job_email
   validates :job_email, :email => true
 
-  STATUS = { PND:   'Pending Registration', # Company has registered but not yet approved
-             ACT:   'Active',
-             INACT: 'Inactive',
-             DENY:  'Registration Denied'}
+  def pending_registration
+    pending_registration!
+    StatusChange.update_status_history(self, :pending_registration)
+  end
 
-  validates :status, inclusion: STATUS.values
+  def active
+    active!
+    StatusChange.update_status_history(self, :active)
+  end
+
+  def registration_denied
+    registration_denied!
+    StatusChange.update_status_history(self, :registration_denied)
+  end
 
   def self.all_with_active_jobs
     companies = []
-    Company.where(status: Company::STATUS[:ACT]).order(:name).each do |cmpy|
+    Company.active.order(:name).each do |cmpy|
       unless cmpy.jobs.where(status: 'active').empty?
         companies << cmpy
       end

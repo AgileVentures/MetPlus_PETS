@@ -71,7 +71,7 @@ Scenario: company registration approval
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
-  Then I should see "Pending Registration"
+  Then I should see "pending_registration"
   And I click the "Approve" link
   Then I should see "Company contact has been notified of registration approval."
   Then "hughjobs@widgets.com" should receive an email with subject "Registration approved"
@@ -89,7 +89,7 @@ Scenario: company registration delete
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
   Then I click the "Widgets, Inc." link
-  And I should see "Pending Registration"
+  And I should see "pending_registration"
   Then I click and accept the "Delete Registration" button
   And I wait 1 second
   Then I should see "Registration for 'Widgets, Inc.' deleted."
@@ -117,13 +117,13 @@ Scenario: company registration denial
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
   Then I click the "Widgets, Inc." link
-  And I should see "Pending Registration"
+  And I should see "pending_registration"
   And I click the "Deny" button
   Then I should see "Explanation for registration denial"
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
   And I wait 2 seconds
-  Then I should see "Registration Denied"
+  Then I should see "registration_denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
 
 @selenium
@@ -134,12 +134,12 @@ Scenario: attempt login after registration is denied
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
   Then I click the "Widgets, Inc." link
-  And I should see "Pending Registration"
+  And I should see "pending_registration"
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
   And I wait 2 seconds
-  Then I should see "Registration Denied"
+  Then I should see "registration_denied"
   And I log out
   And I wait 1 second
   Then I am on the home page
@@ -181,7 +181,7 @@ Scenario: edit Company Registration: change contact email and job email
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
-  Then I should see "Pending Registration"
+  Then I should see "pending_registration"
   And I click the "Edit Registration" button
   And I should see "Edit Company Registration"
   Then I fill in "Company Name" with "Gizmos, Inc."
@@ -201,7 +201,7 @@ Scenario: edit Company Registration: change contact password
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets, Inc." link
-  Then I should see "Pending Registration"
+  Then I should see "pending_registration"
   And I click the "Edit Registration" button
   And I should see "Edit Company Registration"
   Then I fill in "Password" with "abcd1234"
