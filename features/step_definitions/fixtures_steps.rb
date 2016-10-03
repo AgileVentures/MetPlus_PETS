@@ -200,6 +200,10 @@ Given(/^the following jobs exist:$/) do |table|
   end
 end
 
+And /^I create the following jobs$/ do |table|
+  step "the following jobs exist:", table
+end
+
 Given(/^the following job applications exist:$/) do |table|
   table.hashes.each do |hash|
     job = Job.find_by_title(hash['job title'])
