@@ -14,6 +14,7 @@ RSpec.describe AgencyPerson, type: :model do
     it { is_expected.to have_and_belong_to_many(:job_categories).
             join_table('job_specialities')}
     it { is_expected.to have_many(:job_seekers).through(:agency_relations) }
+    it { is_expected.to have_many(:status_changes) }
   end
 
   describe 'Database schema' do
@@ -54,6 +55,26 @@ RSpec.describe AgencyPerson, type: :model do
       agency_person.valid?
       expect(agency_person.errors[:person]).
         to include('cannot be assigned as Case Manager unless person has that role.')
+    end
+    describe 'status' do
+       it 'Status -1 should generate exception' do
+         expect{subject.status = -1}.to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
+       end
+       it 'Status 0 should be invited' do
+         subject.status = 0
+         expect(subject.status).to eq 'invited'
+       end
+       it 'Status 1 should be active' do
+         subject.status = 1
+         expect(subject.status).to eq 'active'
+       end
+       it 'Status 2 should be inactive' do
+         subject.status = 2
+         expect(subject.status).to eq 'inactive'
+       end
+       it 'Status 3 should generate exception' do
+         expect{subject.status = 3}.to raise_error(ArgumentError).with_message('\'3\' is not a valid status')
+       end
     end
   end
 
@@ -162,7 +183,7 @@ RSpec.describe AgencyPerson, type: :model do
     end
 
     before(:each) do
-      
+
       # Assign first 3 job seekers to cm_person
       js1.assign_case_manager cm_person, agency
       js2.assign_case_manager cm_person, agency
@@ -178,29 +199,29 @@ RSpec.describe AgencyPerson, type: :model do
       js9.assign_case_manager jd_and_cm_person, agency
       js10.assign_case_manager jd_and_cm_person, agency
     end
-    
+
     context '.job_seekers_as_job_developer' do
-      
+
       it 'returns job seekers for job developer' do
         expect(jd_person.job_seekers_as_job_developer).to contain_exactly(js4, js5, js6)
-      
-      end 
+
+      end
       it 'returns job seekers for dual-rol agency person' do
         expect(jd_and_cm_person.job_seekers_as_job_developer).to contain_exactly(js7, js8)
-      
-      end  
+
+      end
       it 'returns no jobseekers for case manager' do
         expect(cm_person.job_seekers_as_job_developer.count).to be 0
-  
+
       end
 
-    end  
-   
+    end
+
     context 'job_seekers_as_case_manager' do
-      
+
       it 'returns job seekers for case manager' do
         expect(cm_person.job_seekers_as_case_manager).to contain_exactly(js1, js2, js3)
-  
+
       end
       it 'returns job seekers for dual-role agency person' do
         expect(jd_and_cm_person.job_seekers_as_case_manager).to contain_exactly(js9, js10)
@@ -213,6 +234,6 @@ RSpec.describe AgencyPerson, type: :model do
        end
 
     end
-     
+
   end
 end

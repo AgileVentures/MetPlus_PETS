@@ -1,6 +1,6 @@
 class AgencyPerson < ActiveRecord::Base
   acts_as :user
-  
+
 
   belongs_to :agency
   belongs_to :branch
@@ -9,19 +9,31 @@ class AgencyPerson < ActiveRecord::Base
   has_and_belongs_to_many :agency_roles, autosave: false
   has_and_belongs_to_many :job_categories, join_table: 'job_specialities'
 
+  enum status: [:invited, :active, :inactive]
+  has_many :status_changes, as: :entity, dependent: :destroy
+
   validates_presence_of :agency_id
-
-  STATUS = { IVT:   'Invited',
-             ACT:   'Active',
-             INACT: 'Inactive' }
-
-  validates :status, inclusion: STATUS.values
 
   validate :not_removing_sole_agency_admin, on: :update
 
   validate :job_seeker_assigned_to_job_developer
 
   validate :job_seeker_assigned_to_case_manager
+
+  def invited
+    invited!
+    StatusChange.update_status_history(self, :invited)
+  end
+
+  def active
+    active!
+    StatusChange.update_status_history(self, :active)
+  end
+
+  def inactive
+    inactive!
+    StatusChange.update_status_history(self, :inactive)
+  end
 
   def not_removing_sole_agency_admin
     # This validation is to prevent the removal of a sole agency admin - which
@@ -54,16 +66,16 @@ class AgencyPerson < ActiveRecord::Base
     end
   end
 
-  
+
   def job_seekers_as_job_developer
     job_seekers.where(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id))
   end
- 
+
   def job_seekers_as_case_manager
     job_seekers.where(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id))
   end
 
-  
+
 
 
   def other_agency_admin?
@@ -127,7 +139,7 @@ class AgencyPerson < ActiveRecord::Base
   def is_agency_person? agency
     self.agency == agency
   end
-  
+
 
   private
   def has_role? role

@@ -331,7 +331,7 @@ if Rails.env.development? || Rails.env.staging?
                                agency_id: agency.id, email: 'pets_admin@metplus.org',
                                password: 'qwerty123', confirmed_at: Time.now,
                                branch_id: agency.branches[0].id,
-                               status: AgencyPerson::STATUS[:ACT])
+                               status: 'active')
   agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
   agency_aa.save!
 
@@ -339,7 +339,7 @@ if Rails.env.development? || Rails.env.staging?
                                       agency_id: agency.id, email: 'chet@metplus.org',
                                       password: 'qwerty123', confirmed_at: Time.now,
                                       branch_id: agency.branches[1].id,
-                                      status: AgencyPerson::STATUS[:ACT])
+                                      status: 'active')
   agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
   agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_cm_and_jd.save!
@@ -349,7 +349,7 @@ if Rails.env.development? || Rails.env.staging?
                                password: 'qwerty123', confirmed_at: Time.now,
 
                                branch_id: agency.branches[2].id,
-                               status: AgencyPerson::STATUS[:ACT])
+                               status: 'active')
 
   agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_jd.save!
@@ -359,7 +359,7 @@ if Rails.env.development? || Rails.env.staging?
                                password: 'qwerty123', confirmed_at: Time.now,
 
                                branch_id: agency.branches[2].id,
-                               status: AgencyPerson::STATUS[:ACT])
+                               status: 'active')
 
   agency_cm.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
   agency_cm.save!
