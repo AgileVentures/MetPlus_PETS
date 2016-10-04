@@ -71,22 +71,6 @@ class CompanyPeopleController < ApplicationController
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
-  def list_people
-    raise 'Unsupported request' if not request.xhr?
-
-    @company = Company.find(params[:company_id])
-
-    @people_type = params[:people_type] || 'my-company-all'
-
-    @people = []
-    @people = display_company_people @people_type, @company
-
-    render :partial => 'company_people/list_people',
-                       locals: {people: @people,
-                                people_type: @people_type,
-                                company: @company}
-  end
-
   private
 
   def company_person_params
