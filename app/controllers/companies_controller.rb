@@ -1,27 +1,24 @@
 class CompaniesController < ApplicationController
 
   include CompanyPeopleViewer
+  before_action :lookup_company
 
   def show
-    @company        = Company.find(params[:id])
     @company_admins = Company.company_admins(@company)
     @people_type    = 'company-all'
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
   def destroy
-    company = Company.find(params[:id])
-    company.destroy
-    flash[:notice] = "Company '#{company.name}' deleted."
+    @company.destroy
+    flash[:notice] = "Company '#{@company.name}' deleted."
     redirect_to root_path
   end
 
   def edit
-    @company = Company.find(params[:id])
   end
 
   def update
-    @company = Company.find(params[:id])
     @company.assign_attributes(company_params)
     if @company.valid?
       @company.save
@@ -37,7 +34,26 @@ class CompaniesController < ApplicationController
     end
   end
 
+  def list_people
+    raise 'Unsupported request' if not request.xhr?
+
+    @people_type = params[:people_type] || 'my-company-all'
+
+    @people = []
+    @people = display_company_people @people_type, @company
+
+    render :partial => 'company_people/list_people',
+                       locals: {people: @people,
+                                people_type: @people_type,
+                                company: @company}
+  end
+
   private
+
+  def lookup_company
+    @company = Company.find(params[:id])
+  end
+
   def company_params
     params.require(:company).permit(:name, :email, :phone, :fax,
     :website, :ein, :description, :job_email,
