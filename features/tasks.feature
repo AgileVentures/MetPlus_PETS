@@ -37,7 +37,7 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
-  
+
   @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
@@ -66,5 +66,3 @@ Feature: Have a task system in the site
     And I click the "Widgets Inc." link
     And I wait 1 second
     And I should see "Company Registration Information"
-
-  
