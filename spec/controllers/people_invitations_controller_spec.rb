@@ -31,7 +31,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
   describe 'POST #create AgencyPerson' do
 
     let(:agency)        { FactoryGirl.create(:agency) }
-    let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
+    let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
 
     it 'sends invitation email' do
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -43,7 +43,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     context 'valid attributes' do
 
       let(:agency)        { FactoryGirl.create(:agency) }
-      let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
+      let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
       let(:user_hash)     { FactoryGirl.attributes_for(:user) }
 
       before(:each) do
