@@ -41,7 +41,7 @@ class PeopleInvitationsController < Devise::InvitationsController
           person = CompanyPerson.new
           person.user = user
           person.company_id = session[:org_id]
-          person.status = CompanyPerson::STATUS[:IVT]
+          person.invited
           person.save
           store_location_for user, edit_company_person_path(person.id)
         end
@@ -62,7 +62,7 @@ class PeopleInvitationsController < Devise::InvitationsController
       person.save
       store_location_for user, agency_home_path(person.agency_id)
     when CompanyPerson
-      person.status = CompanyPerson::STATUS[:ACT]
+      person.active
       person.save
       store_location_for user, company_home_path(person.company_id)
     end

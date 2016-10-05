@@ -126,7 +126,7 @@ if Rails.env.development? || Rails.env.staging?
                     confirmed_at: confirmed_at,
                       company_id: companies[n].id,
                       address_id: addresses[n].id,
-                          status: 'Active')
+                          status: 'active')
     cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
     cp.save!
   end
@@ -140,7 +140,7 @@ if Rails.env.development? || Rails.env.staging?
                                            confirmed_at: DateTime.now,
                                            company_id: known_company.id,
                                            address_id: Address.find(1).id,
-                                           status: 'Active')
+                                           status: 'active')
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
 
@@ -153,7 +153,7 @@ if Rails.env.development? || Rails.env.staging?
                                            confirmed_at: DateTime.now,
                                            company_id: known_company.id,
                                            address_id: Address.find(1).id,
-                                           status: 'Active')
+                                           status: 'active')
   known_company_contact.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
   known_company_contact.save!
 
@@ -174,7 +174,7 @@ if Rails.env.development? || Rails.env.staging?
                     confirmed_at: DateTime.now,
                       company_id: known_company.id,
                       address_id: addresses[n].id,
-                          status: 'Active')
+                          status: 'active')
     cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
     cp.save!
   end
@@ -347,7 +347,6 @@ if Rails.env.development? || Rails.env.staging?
   agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                                agency_id: agency.id, email: 'jane@metplus.org',
                                password: 'qwerty123', confirmed_at: Time.now,
-
                                branch_id: agency.branches[2].id,
                                status: 'active')
 
@@ -357,7 +356,6 @@ if Rails.env.development? || Rails.env.staging?
   agency_cm = AgencyPerson.new(first_name: 'Kevin', last_name: 'Caseman',
                                agency_id: agency.id, email: 'kevin@metplus.org',
                                password: 'qwerty123', confirmed_at: Time.now,
-
                                branch_id: agency.branches[2].id,
                                status: 'active')
 
