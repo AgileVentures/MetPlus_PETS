@@ -31,6 +31,9 @@
           - resume = job_seeker.resumes[0]
           = resume.file_name
           &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
+        = button_to "Download Resume", download_resume_path(@job_application),
+          method: :get, class: 'btn btn-success btn-xs pull-right'
+
     %tr
       %td
         %strong Case Manager

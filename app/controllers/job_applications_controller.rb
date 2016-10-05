@@ -70,4 +70,20 @@ class JobApplicationsController < ApplicationController
       redirect_to applications_path(@job_application)
     end
   end
+
+	def download_resume
+		begin
+			job_application = JobApplication.find(params[:id])
+			job_seeker = job_application.job_seeker
+			resume = job_seeker.resumes[0]
+			resume_file = ResumeCruncher.download_resume(resume.id)
+			respond_to do |format|
+			 format.pdf { render :nothing => true }
+			end
+		rescue
+			flash[:alert] = "Resume not found."
+			redirect_back_or_default
+		end
+
+	end
 end
