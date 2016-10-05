@@ -34,7 +34,7 @@ class PeopleInvitationsController < Devise::InvitationsController
           person = AgencyPerson.new
           person.user = user
           person.agency_id = session[:org_id]
-          person.status = AgencyPerson::STATUS[:IVT]
+          person.invited
           person.save
           store_location_for user, edit_agency_person_path(person.id)
         when 'CompanyPerson'
@@ -58,7 +58,7 @@ class PeopleInvitationsController < Devise::InvitationsController
     user = resource_class.accept_invitation!(update_resource_params)
     case (person = user.actable)
     when AgencyPerson
-      person.status = AgencyPerson::STATUS[:ACT]
+      person.active
       person.save
       store_location_for user, agency_home_path(person.agency_id)
     when CompanyPerson

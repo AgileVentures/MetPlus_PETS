@@ -23,13 +23,12 @@
     = mail_to agency_person.email
     %br
     - if agency_person.status
-      = agency_person.status
-      = link_to '(Invite Again)',                                             |
-            user_invitation_path(user: {email: agency_person.email,           |
-                                   first_name: agency_person.first_name,      |
-                                    last_name: agency_person.last_name} ),    |
-                                                  method: :post if            |
-            agency_person.status == AgencyPerson::STATUS[:IVT]                |
+      = status_desc(agency_person)
+      = link_to '(Invite Again)',
+            user_invitation_path(user: {email: agency_person.email,
+                                   first_name: agency_person.first_name,
+                                    last_name: agency_person.last_name} ),
+                                       method: :post if agency_person.invited?
 
 
 %h4
