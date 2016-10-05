@@ -10,7 +10,7 @@ class CompanyPerson < ActiveRecord::Base
              IVT:   'Invited', # Company approved, invite sent to confirm account
              ACT:   'Active',
              INACT: 'Inactive',
-             DENY:  'Registration Denied'} # Company registration denied
+             DENY:  'registration_denied'} # Company registration denied
 
   validates :status, inclusion: STATUS.values
 

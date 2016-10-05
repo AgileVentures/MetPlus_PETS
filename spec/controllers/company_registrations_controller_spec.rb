@@ -122,8 +122,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         expect(assigns(:company).company_people[0].user.approved).to be false
       end
       it "sets company status to Pending" do
-        expect(assigns(:company).status).
-                            to eq Company::STATUS[:PND]
+        expect(assigns(:company).pending_registration?).to be true
       end
       it "sets company person status to Pending" do
         expect(assigns(:company).company_people[0].status).

@@ -1,6 +1,6 @@
-= company.status
+= status_desc(company)
 - if admin_aa
-  - if company.status == Company::STATUS[:PND]
+  - if company.pending_registration?
     &nbsp &nbsp
     = link_to 'Approve',
         approve_company_registration_path(company),

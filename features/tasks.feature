@@ -21,7 +21,7 @@ Feature: Have a task system in the site
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Pending Registration |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | pending_registration |
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
@@ -37,7 +37,7 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
-  
+
   @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
@@ -66,5 +66,3 @@ Feature: Have a task system in the site
     And I click the "Widgets Inc." link
     And I wait 1 second
     And I should see "Company Registration Information"
-
-  
