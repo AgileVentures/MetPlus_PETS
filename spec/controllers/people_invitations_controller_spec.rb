@@ -121,8 +121,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
     context 'valid attributes' do
       let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company,
-                              status: Company::STATUS[:ACT]) }
+      let(:company)       { FactoryGirl.create(:company) }
       let!(:ca_role)      { FactoryGirl.create(:company_role,
                               role: CompanyRole::ROLE[:CA]) }
       let(:company_admin) do
@@ -155,8 +154,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
   describe 'POST #create CompanyPerson' do
 
     let(:agency)        { FactoryGirl.create(:agency) }
-    let(:company)       { FactoryGirl.create(:company,
-                            status: Company::STATUS[:ACT]) }
+    let(:company)       { FactoryGirl.create(:company) }
     let!(:ca_role)      { FactoryGirl.create(:company_role,
                             role: CompanyRole::ROLE[:CA]) }
     let(:company_admin) do
@@ -176,8 +174,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     context 'valid attributes' do
 
       let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company,
-                              status: Company::STATUS[:ACT]) }
+      let(:company)       { FactoryGirl.create(:company) }
       let!(:ca_role)      { FactoryGirl.create(:company_role,
                               role: CompanyRole::ROLE[:CA]) }
       let(:company_admin) do
@@ -214,8 +211,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     context 'reinviting a user' do
 
       let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company,
-                              status: Company::STATUS[:ACT]) }
+      let(:company)       { FactoryGirl.create(:company) }
       let!(:ca_role)      { FactoryGirl.create(:company_role,
                               role: CompanyRole::ROLE[:CA]) }
       let(:company_admin) do
@@ -244,8 +240,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     context 'invalid attributes' do
 
       let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company,
-                              status: Company::STATUS[:ACT]) }
+      let(:company)       { FactoryGirl.create(:company) }
       let!(:ca_role)      { FactoryGirl.create(:company_role,
                               role: CompanyRole::ROLE[:CA]) }
       let(:company_admin) do
