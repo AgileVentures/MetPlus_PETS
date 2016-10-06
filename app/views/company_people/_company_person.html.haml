@@ -28,12 +28,11 @@
     %strong Status:
   .col-sm-8
     = company_person.status
-    = link_to '(Invite Again)',                                             |
-        user_invitation_path(user: {email: company_person.email,            |
-                               first_name: company_person.first_name,       |
-                                last_name: company_person.last_name} ),     |
-                                                  method: :post if          |
-                  company_person.status == CompanyPerson::STATUS[:IVT]      |
+    = link_to '(Invite Again)',
+        user_invitation_path(user: {email: company_person.email,
+                               first_name: company_person.first_name,
+                                last_name: company_person.last_name} ),
+                                   method: :post if company_person.invited?
 
 %h4
   = "#{company_person.first_name} has these roles:"
