@@ -321,7 +321,7 @@ RSpec.describe JobSeekersController, type: :controller do
       expect(response).to have_http_status(:success)
     end
     it 'assigns application_type for pagination' do
-      expect(assigns(:application_type)).to eq 'my-applied'
+      expect(assigns(:application_type)).to eq 'job_seeker'
     end
 
     it "returns jobs posted since last login" do
@@ -359,9 +359,9 @@ RSpec.describe JobSeekersController, type: :controller do
       get :show, id: jobseeker
     end
     it 'assigns application_type for pagination' do
-      expect(assigns(:application_type)).to eq 'js-applied'
+      expect(assigns(:application_type)).to eq 'job_seeker'
     end
-    it "it renders  the show template" do
+    it "it renders the show template" do
       expect(response).to render_template 'show'
     end
     it "returns http success" do
@@ -370,75 +370,17 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe "GET #preview_info" do
+    let(:agency) { FactoryGirl.create(:agency) }
     let(:jobseeker) { FactoryGirl.create(:job_seeker) }
+    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
     before(:each) do
-      sign_in jobseeker
+      sign_in job_developer
+      jobseeker.assign_job_developer(job_developer, agency)
       xhr :get, :preview_info, id: jobseeker
     end
     it "it renders job seeker's info partial" do
       expect(response).to render_template(:partial => '_info')
     end
-  end
-
-  describe 'GET #applied_jobs' do
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:job1) { FactoryGirl.create(:job) }
-    let(:job2) { FactoryGirl.create(:job) }
-    let(:job3) { FactoryGirl.create(:job) }
-    let(:app1) { FactoryGirl.create(:job_application,
-                               job: job1, job_seeker: job_seeker)}
-    let(:app2) { FactoryGirl.create(:job_application,
-                               job: job2, job_seeker: job_seeker)}
-    let(:app3) { FactoryGirl.create(:job_application,
-                               job: job3, job_seeker: job_seeker)}
-    let(:app4) { FactoryGirl.create(:job_application,
-                               job: job3,
-                               job_seeker: FactoryGirl.create(:job_seeker)) }
-
-    context 'JS home page view' do
-      before(:each) do
-        sign_in job_seeker
-        xhr :get, :applied_jobs, id: job_seeker.id, application_type: 'my-applied'
-      end
-
-      it 'assigns application_type for pagination' do
-        expect(assigns(:application_type)).to eq 'my-applied'
-      end
-
-      it 'assigns jobs for view' do
-        stub_cruncher_authenticate
-        stub_cruncher_job_create
-        expect(assigns(:job_applications)).to include(app1, app2, app3)
-        expect(assigns(:job_applications)).not_to include(app4)
-      end
-
-      it 'renders partial for applications' do
-        expect(response).to render_template(partial: 'jobs/_applied_job_list')
-      end
-    end
-
-    context 'JS show page view' do
-      before(:each) do
-        sign_in job_seeker
-        xhr :get, :applied_jobs, id: job_seeker.id, application_type: 'js-applied'
-      end
-
-      it 'assigns application_type for pagination' do
-        expect(assigns(:application_type)).to eq 'js-applied'
-      end
-
-      it 'assigns jobs for view' do
-        stub_cruncher_authenticate
-        stub_cruncher_job_create
-        expect(assigns(:job_applications)).to include(app1, app2, app3)
-        expect(assigns(:job_applications)).not_to include(app4)
-      end
-
-      it 'renders partial for applications' do
-        expect(response).to render_template(partial: 'jobs/_applied_job_list')
-      end
-    end
-
   end
 
   describe "DELETE #destroy" do

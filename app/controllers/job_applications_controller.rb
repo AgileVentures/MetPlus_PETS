@@ -1,7 +1,8 @@
 class JobApplicationsController < ApplicationController
+	
 	include JobApplicationsViewer
 
-	before_action :find_application
+	before_action :find_application, except: :list
 
 	def accept
 		unless @job_application.active?
@@ -40,6 +41,15 @@ class JobApplicationsController < ApplicationController
 	end
 
 	def show
+	end
+
+	def list
+    raise 'Unsupported request' if not request.xhr?
+    @job_applications = []
+    @job_applications = display_job_applications(params[:type], 5, params[:id])
+    render partial: 'jobs/applied_job_list',
+          :locals => { job_applications: @job_applications,
+                       application_type: params[:type] }
 	end
 
 	def find_application

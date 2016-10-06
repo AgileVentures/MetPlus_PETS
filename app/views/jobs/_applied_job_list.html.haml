@@ -42,6 +42,6 @@
                   = job_application.status_name
 
   = will_paginate job_applications, param_name: 'applications_page',
-                               params: {controller: 'job_seekers',
-                                        action: 'applied_jobs',
-                                        application_type: application_type}
+                               params: {controller: 'job_applications',
+                                        action: 'list',
+                                        type: application_type}

@@ -66,4 +66,35 @@ RSpec.describe JobApplicationsController, type: :controller do
 			end
 		end
 	end
+
+  describe 'GET #list' do
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job1) { FactoryGirl.create(:job) }
+    let(:job2) { FactoryGirl.create(:job) }
+    let(:job3) { FactoryGirl.create(:job) }
+    let(:app1) { FactoryGirl.create(:job_application,
+                               job: job1, job_seeker: job_seeker)}
+    let(:app2) { FactoryGirl.create(:job_application,
+                               job: job2, job_seeker: job_seeker)}
+    let(:app3) { FactoryGirl.create(:job_application,
+                               job: job3, job_seeker: job_seeker)}
+    let(:app4) { FactoryGirl.create(:job_application,
+                               job: job3,
+                               job_seeker: FactoryGirl.create(:job_seeker)) }
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      xhr :get, :list, type: "job_seeker", id: job_seeker
+    end
+
+    it 'assigns jobs for view' do
+      expect(assigns(:job_applications)).to include(app1, app2, app3)
+      expect(assigns(:job_applications)).not_to include(app4)
+    end
+
+    it 'renders partial for applications' do
+      expect(response).to render_template(partial: 'jobs/_applied_job_list')
+    end
+  end
 end

@@ -5,7 +5,7 @@ end
 
 And(/^I click "([^"]*)" link to job show page$/) do |job_title|
 	job = Job.find_by(title: "#{job_title}")
-	find("#applications-my-applied a[href='/jobs/#{job.id}']").click
+	find("#applications-job_seeker a[href='/jobs/#{job.id}']").click
 end
 
 And(/^I click "([^"]*)" link to "([^"]*)'s" job application show page$/) do |email, js_name|

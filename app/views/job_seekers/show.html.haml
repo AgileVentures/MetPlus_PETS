@@ -8,13 +8,13 @@
 .col-sm-9
   = render partial: 'info', locals: {job_seeker: @jobseeker}
 
-.col-sm-12
-  %h3
-    Job Applications for
-    = "#{@jobseeker.full_name(last_name_first: false)}"
-  .pagination-div{id: "applications-#{@application_type}",
-                  data: {url: applied_jobs_job_seeker_path(@jobseeker,
-                                                         @application_type)}}
+- if pets_user == @jobseeker || pets_user.is_a?(AgencyPerson)
+  .col-sm-12
+    %h3
+      Job Applications for
+      = "#{@jobseeker.full_name(last_name_first: false)}"
+    .pagination-div{ id: "applications-#{@application_type}",
+                     data: { url: list_applications_path(@application_type, @jobseeker) }}
 - if policy(@jobseeker).edit?
   .clearfix
   %br

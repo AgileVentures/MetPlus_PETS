@@ -22,7 +22,8 @@ class JobSeekerPolicy < ApplicationPolicy
   def show?
     # account's owner
     # all agency people
-    user == record || user.is_a?(AgencyPerson)
+    # all company people
+    user == record || user.is_a?(AgencyPerson) || user.is_a?(CompanyPerson)
   end
 
   def destroy?
@@ -41,8 +42,12 @@ class JobSeekerPolicy < ApplicationPolicy
     create?
   end
 
+  def preview_info?
+    user == record.job_developer
+  end
+
   def permitted_attributes
-    if user == record
+    if user == record 
       [ :first_name,
         :last_name, 
         :email, 

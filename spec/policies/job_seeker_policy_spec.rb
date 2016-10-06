@@ -44,7 +44,35 @@ RSpec.describe JobSeekerPolicy do
     end
   end
 
-  permissions :show?, :destroy? do
+  permissions :show? do
+    it "only allows access if user is account owner" do
+      expect(JobSeekerPolicy).to permit(js1, js1)
+      expect(JobSeekerPolicy).not_to permit(js2, js1)
+    end
+
+    it "only allow access if user is agency people" do
+      expect(JobSeekerPolicy).to permit(jd1, js1)
+      expect(JobSeekerPolicy).to permit(cm1, js1)
+      expect(JobSeekerPolicy).to permit(admin, js1)
+    end
+
+    it "only allow access if user is company people" do
+      expect(JobSeekerPolicy).to permit(cc, js1)
+    end
+  end
+
+  permissions :preview_info? do
+    it "only allows access if user is the account owner's job developer" do
+      js1.assign_case_manager(cm1, agency)
+      js1.assign_job_developer(jd1, agency)
+      expect(JobSeekerPolicy).to permit(jd1, js1)
+      expect(JobSeekerPolicy).not_to permit(cm1, js1)
+      expect(JobSeekerPolicy).not_to permit(jd2, js1)
+      expect(JobSeekerPolicy).not_to permit(cc, js1)
+    end
+  end
+
+  permissions :destroy? do
     it "only allows access if user is account owner" do
       expect(JobSeekerPolicy).to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)

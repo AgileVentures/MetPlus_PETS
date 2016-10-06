@@ -1,0 +1,2 @@
+class CompanyPersonPolicy < ApplicationPolicy
+end

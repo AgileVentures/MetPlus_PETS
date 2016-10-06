@@ -1,8 +1,6 @@
 class JobSeekersController < ApplicationController
   before_action :user_logged!, except: [:new, :create]
-
   include UserParameters
-  include JobApplicationsViewer
 
   def new
     @jobseeker = JobSeeker.new
@@ -10,11 +8,11 @@ class JobSeekersController < ApplicationController
   end
 
   def create
-    authorize(JobSeeker)
     jobseeker_params = form_params
     dispatch_file    = jobseeker_params.delete 'resume'
 
     @jobseeker = JobSeeker.new(jobseeker_params)
+    authorize @jobseeker
     models_saved = @jobseeker.save
 
     if models_saved
@@ -95,7 +93,7 @@ class JobSeekersController < ApplicationController
     authorize @jobseeker
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
     @js_last_sign_in = @jobseeker.last_sign_in_at
-    @application_type = params[:application_type] || 'my-applied'
+    @application_type = 'job_seeker'
   end
 
   def index
@@ -106,43 +104,25 @@ class JobSeekersController < ApplicationController
   def show
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
-    @application_type = params[:application_type] || 'js-applied'
+    @application_type = 'job_seeker'
   end
 
   def preview_info
     raise 'Unsupported request' if not request.xhr?
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
                                                    preview_mode: true }
   end
 
-  def applied_jobs
-    raise 'Unsupported request' if not request.xhr?
-
-    @application_type = params[:application_type] || 'my-applied'
-
-    @job_applications = []
-
-    if User.is_company_person? pets_user
-      @job_applications = display_job_applications @application_type, 5,
-                                      params[:id], nil, pets_user.company.id
-    else
-      @job_applications = display_job_applications @application_type, 5,
-                                      params[:id]
-    end
-    render partial: 'jobs/applied_job_list',
-          :locals => {job_applications: @job_applications,
-                      application_type: @application_type}
-	end
-
   def destroy
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     @jobseeker.destroy
     flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
   end
 
- 
   private
     def form_params
       params.require(:job_seeker).permit(:first_name,
