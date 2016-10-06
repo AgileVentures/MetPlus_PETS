@@ -76,9 +76,12 @@ RSpec.describe JobSeekerPolicy do
     it "only allows access if user is account owner" do
       expect(JobSeekerPolicy).to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)
+    end
+
+    it "only allows access if user is agency admin" do
+      expect(JobSeekerPolicy).to permit(admin, js1)
       expect(JobSeekerPolicy).not_to permit(jd1, js1)
       expect(JobSeekerPolicy).not_to permit(cm1, js1)
-      expect(JobSeekerPolicy).not_to permit(admin, js1)
       expect(JobSeekerPolicy).not_to permit(cc, js1)
     end
   end

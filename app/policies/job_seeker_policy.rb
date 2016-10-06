@@ -2,7 +2,7 @@ class JobSeekerPolicy < ApplicationPolicy
   def update?
     # account owner
     # job seeker's case manager
-    user == record || user == record.case_manager
+    user == record || user == record.case_manager 
   end
 
   def edit?
@@ -28,7 +28,8 @@ class JobSeekerPolicy < ApplicationPolicy
 
   def destroy?
     # account's owner
-    user == record
+    # agency admin
+    user == record || user.is_agency_admin?(user.try(:agency))
   end
 
   def create?
