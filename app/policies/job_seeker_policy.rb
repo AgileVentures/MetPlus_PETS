@@ -28,8 +28,7 @@ class JobSeekerPolicy < ApplicationPolicy
 
   def destroy?
     # account's owner
-    # agency admin
-    user == record || user.is_a?(AgencyPerson)
+    user == record
   end
 
   def create?
