@@ -151,29 +151,27 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
-    # describe 'company person' do
-    #   let(:company_person) { FactoryGirl.create(:company_person) }
-    #
-    #   it 'Status 0 should be Pending' do
-    #     company_person.status = 0
-    #     expect(status_desc(company_person)).to eq 'Pending'
-    #   end
-    #   it 'Status 1 should be Invited' do
-    #     company_person.status = 1
-    #     expect(status_desc(company_person)).to eq 'Invited'
-    #   end
-    #   it 'Status 2 should be Active' do
-    #     company_person.status = 2
-    #     expect(status_desc(company_person)).to eq 'Active'
-    #   end
-    #   it 'Status 3 should be Inactive' do
-    #     company_person.status = 3
-    #     expect(status_desc(company_person)).to eq 'Inactive'
-    #   end
-    #   it 'Status 4 should be Registration Denied' do
-    #     company_person.status = 2
-    #     expect(status_desc(company_person)).to eq 'Registration Denied'
-    #   end
-    # end
+    describe 'company person' do
+      it 'Status 0 should be Company Pending' do
+        company_contact.status = 0
+        expect(status_desc(company_contact)).to eq 'Company Pending'
+      end
+      it 'Status 1 should be Invited' do
+        company_contact.status = 1
+        expect(status_desc(company_contact)).to eq 'Invited'
+      end
+      it 'Status 2 should be Active' do
+        company_contact.status = 2
+        expect(status_desc(company_contact)).to eq 'Active'
+      end
+      it 'Status 3 should be Inactive' do
+        company_contact.status = 3
+        expect(status_desc(company_contact)).to eq 'Inactive'
+      end
+      it 'Status 4 should be Company Denied' do
+        company_contact.status = 4
+        expect(status_desc(company_contact)).to eq 'Company Denied'
+      end
+    end
   end
 end
