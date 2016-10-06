@@ -96,9 +96,9 @@ class User < ActiveRecord::Base
   end
 
   def inactive_message
-    if !approved? && actable.company_pending?
+    if !approved? && actable.try(:company_pending?)
       :signed_up_but_not_approved
-    elsif !approved? && actable.company_denied?
+    elsif !approved? && actable.try(:company_denied?)
       :not_approved
     else
       super

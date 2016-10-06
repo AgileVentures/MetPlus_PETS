@@ -9,6 +9,8 @@ class CompanyPerson < ActiveRecord::Base
   enum status: [:company_pending, :invited, :active, :inactive, :company_denied]
   has_many :status_changes, as: :entity, dependent: :destroy
 
+  validate :not_removing_sole_company_admin, on: :update
+
   def company_pending
     company_pending!
     StatusChange.update_status_history(self, :company_pending)
@@ -33,8 +35,6 @@ class CompanyPerson < ActiveRecord::Base
     company_denied!
     StatusChange.update_status_history(self, :company_denied)
   end
-
-  validate :not_removing_sole_company_admin, on: :update
 
   scope :all_company_people, ->(company) {
     where(company_id: company.id).joins(:user).order('users.last_name')

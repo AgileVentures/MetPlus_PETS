@@ -38,9 +38,9 @@
           - if User.is_agency_admin?(pets_user) || User.is_company_admin?(pets_user)
             = link_to '(Invite Again)',
               user_invitation_path(user: {email: @company_person.email,
-                                     first_name: @company_person.first_name,
-                                      last_name: @company_person.last_name} ),
-                                         method: :post if @company_person.invited?
+                                  first_name: @company_person.first_name,
+                                  last_name: @company_person.last_name} ),
+                                  method: :post if @company_person.invited?
 
       %tr
         %td
