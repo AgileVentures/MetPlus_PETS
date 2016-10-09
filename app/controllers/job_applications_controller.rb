@@ -78,7 +78,10 @@ class JobApplicationsController < ApplicationController
 			resume = job_seeker.resumes[0]
 			resume_file = ResumeCruncher.download_resume(resume.id)
 			respond_to do |format|
-			 format.pdf { render :nothing => true }
+				format.html
+				format.html do
+					send_data job_application, disposition: 'inline'
+				end
 			end
 		rescue
 			flash[:alert] = "Resume not found."
