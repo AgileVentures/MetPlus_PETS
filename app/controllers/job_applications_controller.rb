@@ -77,12 +77,26 @@ class JobApplicationsController < ApplicationController
 			job_seeker = job_application.job_seeker
 			resume = job_seeker.resumes[0]
 			resume_file = ResumeCruncher.download_resume(resume.id)
-			respond_to do |format|
-				format.html
-				format.html do
-					send_data job_application, disposition: 'inline'
-				end
-			end
+
+			send_data resume_file.as_file,
+								:type => 'application/pdf/docx/doc',
+								:disposition => 'inline'
+
+			#@filename = "#{Rails.root}/public/#{resume_file}"
+			# send_data(resume_file ,
+			# 					:type => 'application/pdf/docx/doc',
+			# 					:disposition => 'inline')
+
+				# respond_to do |format|
+			#  	format.pdf
+			# 	format.pdf do
+			# 		send_file(
+			# 				"#{Rails.root}/public/#{resume_file}",
+			# 				filename: "#{resume_file}",
+			# 				type: "application/pdf"
+			# 		)
+			# 	end
+			# end
 		rescue
 			flash[:alert] = "Resume not found."
 			redirect_back_or_default
