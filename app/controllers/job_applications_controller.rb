@@ -77,29 +77,22 @@ class JobApplicationsController < ApplicationController
 			job_seeker = job_application.job_seeker
 			resume = job_seeker.resumes[0]
 			resume_file = ResumeCruncher.download_resume(resume.id)
+			# original_file_name = resume.file_name
+			# transfer_file = File.new(File.dirname(tempfile) + '/' + original_file_name)
+			# transfer_file.write tempfile.read
+			path = '#{Rails.root}/tmp/#{resume_file}'
+		  send_data(path,
+		    type: 'application/#{extension[1]}',
+		    disposition: 'inline',
+		    x_sendfile: true)
 
-			send_data resume_file.as_file,
-								:type => 'application/pdf/docx/doc',
-								:disposition => 'inline'
-
-			#@filename = "#{Rails.root}/public/#{resume_file}"
-			# send_data(resume_file ,
-			# 					:type => 'application/pdf/docx/doc',
-			# 					:disposition => 'inline')
-
-				# respond_to do |format|
-			#  	format.pdf
-			# 	format.pdf do
-			# 		send_file(
-			# 				"#{Rails.root}/public/#{resume_file}",
-			# 				filename: "#{resume_file}",
-			# 				type: "application/pdf"
-			# 		)
-			# 	end
-			# end
 		rescue
 			flash[:alert] = "Resume not found."
 			redirect_back_or_default
+
+		ensure
+			resume_file.close
+			resume_file.unlink
 		end
 
 	end
