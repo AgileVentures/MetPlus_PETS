@@ -17,7 +17,7 @@
     =@user_form.text_field :phone, size: 30, class:'form-control',
     placeholder: 'Eg. 1-369-374-5803 x9579 (\'1-\' prefix and extension optional)'
 
-- if policy(@user_form.object).permit?	
+- if policy(@user_form.object).allow?	
   .form-group
 
     - if defined? new_form and new_form

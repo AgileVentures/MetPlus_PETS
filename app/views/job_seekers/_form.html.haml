@@ -8,7 +8,7 @@
   = render partial: 'users/subform',
       locals: {new_form: (new_form if defined? new_form)}
 
-  - if policy(js.object).permit?
+  - if policy(js.object).allow?
     .form-group
       =js.label :year_of_birth, 'Year Of Birth', class:'control-label col-sm-2'
       .col-sm-6

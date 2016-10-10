@@ -2,7 +2,8 @@ class JobSeekerPolicy < ApplicationPolicy
   def update?
     # account owner
     # job seeker's case manager
-    user == record || user == record.case_manager 
+    # job seeker's job developer
+    user == record || user == record.case_manager || user == record.job_developer
   end
 
   def edit?
@@ -44,6 +45,10 @@ class JobSeekerPolicy < ApplicationPolicy
 
   def preview_info?
     user == record.job_developer
+  end
+
+  def allow?
+    user.nil? || user == record
   end
 
   def permitted_attributes

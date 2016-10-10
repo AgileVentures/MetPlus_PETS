@@ -146,7 +146,7 @@ Rails.application.routes.draw do
                                              as: :reject_application
   get 'job_applications/:id'             => 'job_applications#show',
                                              as: :application
-  get 'job_applications/:type/:id'       => 'job_applications#list', 
+  get 'job_applications/:type/:entity_id'=> 'job_applications#list', 
                                              as: :list_applications
   # --------------------------------------------------------------------------
   

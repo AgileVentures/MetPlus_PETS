@@ -35,8 +35,8 @@ class ApplicationPolicy
     false
   end
 
-  def permit?
-    (record.persisted? && user == record) || (record.new_record? && user.nil?)
+  def allow?
+    true
   end
 
   def scope
