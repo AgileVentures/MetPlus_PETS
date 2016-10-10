@@ -1,8 +1,7 @@
 class JobApplicationsController < ApplicationController
-	
   include JobApplicationsViewer
 
-	before_action :find_application, except: :list
+  before_action :find_application, except: :list
 
 	def accept
 		unless @job_application.active?
