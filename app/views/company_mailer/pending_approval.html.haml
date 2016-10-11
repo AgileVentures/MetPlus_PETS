@@ -14,5 +14,5 @@
 %p
   In the meantime, if you have any questions or concerns please contact the
   the PETS administrator at:
-  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',            |
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',            |
          subject: "Registration request for #{@agency.name}")   |

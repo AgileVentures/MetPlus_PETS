@@ -50,5 +50,5 @@
     ) has been revoked for company: #{@obj.company.name}.
 %p
   If you have any questions please contact the PETS administrator at:
-  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
          subject: "New #{@obj_type}: #{@obj_name}")
