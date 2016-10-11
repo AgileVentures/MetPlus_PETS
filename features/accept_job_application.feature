@@ -13,7 +13,7 @@ Background: data is added to database
 
   Given the following companies exist:
   	| agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
+  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
 
   Given the following company people exist:
   	| company      | role  | first_name | last_name | email            | password  | phone        |
@@ -64,7 +64,6 @@ Background: data is added to database
 	  Then I click "hr manager" link to job applications index page
 	  And I should see "3" active applications for the job
 	  Then I click "june@seek.com" link to "June's" job application show page
-	  And I should see an "Accept" link
 	  Then I click the "Accept" link
 	  And I should see an "accept" confirmation
 	  Then I click the "Accept" confirmation

@@ -3,14 +3,14 @@ FactoryGirl.define do
     agency
     branch
     user
-    status AgencyPerson::STATUS[:ACT]
+    status 'active'
   end
 
   factory :agency_admin, class: AgencyPerson do
     agency
     branch
     user
-    status AgencyPerson::STATUS[:ACT]
+    status 'active'
     agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:AA]) || FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])]}
   end
 
@@ -18,7 +18,7 @@ FactoryGirl.define do
     agency
     branch
     user
-    status AgencyPerson::STATUS[:ACT]
+    status 'active'
     agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) || FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])]}
   end
 
@@ -26,7 +26,7 @@ FactoryGirl.define do
     agency
     branch
     user
-    status AgencyPerson::STATUS[:ACT]
+    status 'active'
     agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) || FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])]}
   end
 
@@ -34,7 +34,7 @@ FactoryGirl.define do
     agency
     branch
     user
-    status AgencyPerson::STATUS[:ACT]
+    status 'active'
     agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) || FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM]),
                    AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) || FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])]}
   end

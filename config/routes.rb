@@ -68,7 +68,11 @@ Rails.application.routes.draw do
   # Most company actions can be performed by a company admin or an
   # agency admin. Delete of a company can only be performed by an agency admin.
 
-  resources :companies, only: [:show, :edit, :update, :destroy]
+  resources :companies, only: [:show, :edit, :update, :destroy] do
+    member do
+      get 'list_people/:people_type' => 'companies#list_people', as: :list_people
+    end
+  end
 
   # --------------------------------------------------------------------------
 
@@ -85,8 +89,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'company_people/:company_id/list_people/:people_type' =>
-              'company_people#list_people', as: :list_company_people
 
   # --------------------------------------------------------------------------
 
@@ -140,6 +142,8 @@ Rails.application.routes.draw do
   # --------------------------- Job Applications -----------------------------
   patch 'job_applications/:id/accept'    => 'job_applications#accept', 
                                              as: :accept_application
+  patch 'job_applications/:id/reject'    =>  'job_applications#reject',
+                                             as: :reject_application
   get 'job_applications/:id'             => 'job_applications#show',
                                              as: :application
   # --------------------------------------------------------------------------

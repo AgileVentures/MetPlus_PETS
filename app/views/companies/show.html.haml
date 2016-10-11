@@ -15,14 +15,14 @@
   %h4 All company people who are on PETS
 .col-sm-3
   - if @admin_aa || @admin_ca
-    - if @company.status == Company::STATUS[:ACT]
+    - if @company.active?
       = link_to 'Invite Person',
                     new_user_invitation_path(person_type: 'CompanyPerson',
                     org_id: @company.id),
                     method: :get, class: 'btn btn-primary btn-sm pull-right'
 .col-sm-12
   .pagination-div{id: "people-#{@people_type}", style: 'margin-top: 10px;',
-                  data: {url: list_company_people_path(@company.id, @people_type)}}
+                  data: {url: list_people_company_path(@company.id, @people_type)}}
 
 .clearfix
 %br

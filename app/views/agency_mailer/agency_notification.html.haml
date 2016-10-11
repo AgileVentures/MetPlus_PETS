@@ -24,6 +24,11 @@
     = link_to "#{@obj.job.title} by #{@obj.job_seeker.full_name(last_name_first: false)}",
       application_url(id: @obj.id)
 
+  - elsif @obj_type == 'Job Application Rejected'
+    A job application is rejected:
+    = link_to "#{@obj.job.title} by #{@obj.job_seeker.full_name(last_name_first: false)}",
+      application_url(id: @obj.id)
+
   - elsif @obj_type == 'Job Seeker Assigned JD'
     A job seeker has been assigned to you as Job Developer:
     = link_to @obj.full_name(last_name_first: false),
@@ -45,5 +50,5 @@
     ) has been revoked for company: #{@obj.company.name}.
 %p
   If you have any questions please contact the PETS administrator at:
-  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
          subject: "New #{@obj_type}: #{@obj_name}")

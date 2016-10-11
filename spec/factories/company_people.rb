@@ -4,7 +4,7 @@ FactoryGirl.define do
     address
     user
     title "Manager"
-    status CompanyPerson::STATUS[:ACT]
+    status 'active'
   end
 
   factory :company_admin, class: CompanyPerson do
@@ -12,6 +12,7 @@ FactoryGirl.define do
     address
     user
     title "Admin"
+    status 'active'
     company_roles {[CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) || FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]}
   end
 
@@ -20,6 +21,7 @@ FactoryGirl.define do
     address
     user
     title "Contact"
+    status 'active'
     company_roles {[CompanyRole.find_by_role(CompanyRole::ROLE[:CC]) || FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])]}
   end
 
