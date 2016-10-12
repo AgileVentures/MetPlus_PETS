@@ -200,7 +200,7 @@ RSpec.describe BranchesController, type: :controller do
       end
       it 'does not authorize non-admin agency person' do
         allow(controller).to receive(:current_user).and_return(jd)
-        get :create, agency_id: agency
+        post :create, agency_id: agency
         expect(flash[:alert]).to eq "You are not authorized to create a branch."
       end
     end
@@ -210,11 +210,11 @@ RSpec.describe BranchesController, type: :controller do
       it 'authorizes agency admin' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
-        get :update, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
+        patch :update, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
       end
       it 'does not authorize non-agency admin' do
         allow(controller).to receive(:current_user).and_return(jd)
-        get :update, id: branch.id
+        patch :update, id: branch.id
         expect(flash[:alert]).
           to eq "You are not authorized to update the branch."
       end
@@ -238,11 +238,11 @@ RSpec.describe BranchesController, type: :controller do
       it 'authorizes agency admin' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
-        patch :destroy, id: branch.id
+        delete :destroy, id: branch.id
       end
       it 'does not authorize non-admin agency person' do
         allow(controller).to receive(:current_user).and_return(jd)
-        patch :destroy, id: branch.id
+        delete :destroy, id: branch.id
         expect(flash[:alert]).
           to eq "You are not authorized to destroy the branch."
       end
