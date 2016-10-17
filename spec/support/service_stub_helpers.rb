@@ -108,6 +108,7 @@ module ServiceStubHelpers
 
   module EmailValidator
     def stub_email_validate_valid
+      debugger
       body_json = "{\n  \"address\": \"address@gmail.com\",
                     \n  \"did_you_mean\": null,
                     \n  \"is_valid\": true,

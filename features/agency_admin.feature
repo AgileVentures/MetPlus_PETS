@@ -44,8 +44,8 @@ Background: seed data added to database and log in as agency admim
 
   Given the following jobseeker exist:
   | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
-  | Sam       | Seeker   | sam@gmail.com | 222-333-4444| password   |password             | 1990          |Unemployed Seeking |
-  | Tom       | Terrific | tom@gmail.com | 333-444-5555| password   |password             | 1990          |Unemployed Seeking |
+  | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| password   |password             | 1990          |Unemployed Seeking |
+  | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| password   |password             | 1990          |Unemployed Seeking |
 
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
