@@ -28,3 +28,7 @@ Given(/^I am logged in as job developer$/) do
   step %{I am on the home page}
   step %{I login as "#{person.email}" with password "qwerty123"}
 end
+
+Given(/^I am on "(.*?)" page$/) do |pagename|
+  visit path(pagename)
+end

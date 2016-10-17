@@ -125,3 +125,12 @@ Given the following agency relations exist:
     And I should see "software developer"
     Then I click the "software developer" link
     Then I should not see "Click Here To Apply Online"
+
+  Scenario: Download resume file_name as a Company Admin
+    Given I am on the home page
+    And I am logged in as "ca@widgets.com" with password "qwerty123"
+    Then show me the page
+    And I am on "Job Seeker: John Seeker" page
+    Then I should see button "Download Resume"
+    And I click the "Download Resume" button
+    Then I should get a download file for resume "Janitor-Resume.doc"
