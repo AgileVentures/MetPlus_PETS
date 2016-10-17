@@ -107,22 +107,22 @@ module ServiceStubHelpers
   end
 
   module EmailValidator
-    def stub_email_validate_valid(email)
-      body_json = "{\n  \"address\": \"#{email}\",
+    def stub_email_validate_valid
+      body_json = "{\n  \"address\": \"address@gmail.com\",
                     \n  \"did_you_mean\": null,
-                    \n  \"is_valid\": false,
+                    \n  \"is_valid\": true,
                     \n  \"parts\":
                       {\n    \"display_name\": null,
                        \n    \"domain\": null,
                        \n    \"local_part\": null
                        \n  }
                     \n}"
-      stub_request(:get, EmailValidateService.service_url +
-                          "/validate?address=#{CGI::escape(email)}").
+      stub_request(:get,
+          /^#{EmailValidateService.service_url}\/validate?.*/).
           to_return(body: body_json)
     end
 
-    def stub_email_validate_invalid(email)
+    def stub_email_validate_invalid
       body_json = "{\n  \"address\": \"myaddress@gmal.com\",
                     \n  \"did_you_mean\": \"myaddress@gmail.com\",
                     \n  \"is_valid\": false,
@@ -132,14 +132,14 @@ module ServiceStubHelpers
                        \n    \"local_part\": null
                        \n  }
                     \n}"
-      stub_request(:get, EmailValidateService.service_url +
-                          "/validate?address=#{CGI::escape(email)}").
+      stub_request(:get,
+          /^#{EmailValidateService.service_url}\/validate?.*/).
           to_return(body: body_json)
     end
 
-    def stub_email_validate_error(email)
-      stub_request(:get, EmailValidateService.service_url +
-                          "/validate?address=CGI::escape(#{email})").
+    def stub_email_validate_error
+      stub_request(:get,
+          /^#{EmailValidateService.service_url}\/validate?.*/).
           to_raise(RuntimeError)
     end
   end

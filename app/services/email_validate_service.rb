@@ -12,7 +12,7 @@ class EmailValidateService
   def self.validate_email(email_address)
     return {status: 'SUCCESS',
             valid: false,
-            did_you_mean: nil} if email_address.empty?
+            did_you_mean: nil} if email_address.nil? or email_address.empty?
 
     begin
       validate_url = self.service_url + '/validate?' +
