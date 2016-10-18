@@ -6,7 +6,7 @@ class EmailValidateService
 
   def self.service_url
     return @@url if @@url
-    @@url = "https://api:#{ENV['MAILGUN_PUBLIC_KEY']}@#{EMAIL_VALIDATE_URL}/address"
+    @@url = "https://api:#{MAILGUN_PUBLIC_KEY}@#{EMAIL_VALIDATE_URL}/address"
   end
 
   def self.validate_email(email_address)

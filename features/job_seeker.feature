@@ -103,7 +103,6 @@ Scenario: job seeker finds new job opportunities
   | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | ca@widgets.com |
   | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | ca@widgets.com |
   When I am in Job Seeker's browser
-  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
   And I reload the page
   Then I should see "UI Developer" after "Job Opportunities - New"
   And I should see "RoR Developer" after "UI Developer"
