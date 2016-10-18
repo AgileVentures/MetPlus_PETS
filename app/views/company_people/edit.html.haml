@@ -1,7 +1,6 @@
 %h2
   = "Edit Company Person: #{@company_person.full_name(last_name_first: false)}"
 
-= render partial: 'form',                                                  |
-              locals: {company_person: @company_person, method: :patch,    |
-              submit: 'Update', url: company_person_path(@company_person), |
-          cancel_url: company_person_path(@company_person)}                |
+= render partial: 'form', locals: {company_person: @company_person,
+                                  method: :patch, submit: 'Update',
+                                  url: company_person_path(@company_person)}
