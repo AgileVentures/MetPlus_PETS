@@ -86,7 +86,7 @@ Scenario: login jobseeker, land on home page, see applied jobs
   And I should see "Trucker" before "Job Opportunities - New"
   And I should see "Doctor" before "Job Opportunities - New"
 
-@javascript
+@selenium
 Scenario: job seeker finds new job opportunities
   When I am in Job Seeker's browser
   Given I am on the home page
