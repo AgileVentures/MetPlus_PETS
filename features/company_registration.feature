@@ -138,7 +138,7 @@ Scenario: attempt login after registration is denied
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  And I wait 2 seconds
+  And I wait 5 seconds
   Then I should see "Registration Denied"
   And I log out
   And I wait 1 second
