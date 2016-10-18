@@ -66,7 +66,7 @@ var PusherControl = {
     });
 
     channel.bind('job_application_rejected', function(data) {
-      if (parseInt(Cookies('user_id')) === data.jd_user_id) {
+      if (parseInt(Cookies('user_id')) === data.ap_user_id) {
         Notification.info_notification("Job Application: " +
             "<a href='/job_applications/" + data.id +
             "' target='_blank'>" + data.job_title + " by " +
