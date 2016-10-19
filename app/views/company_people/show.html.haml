@@ -27,15 +27,20 @@
           = @company_person.phone
       %tr
         %td
+          %strong Address:
+        %td
+          = @company_person.address.full_address if @company_person.address
+      %tr
+        %td
           %strong Status:
         %td
           = @company_person.status
           - if User.is_agency_admin?(pets_user) || User.is_company_admin?(pets_user)
             = link_to '(Invite Again)',
               user_invitation_path(user: {email: @company_person.email,
-                                   first_name: @company_person.first_name,
-                                   last_name: @company_person.last_name} ),
-              method: :post if @company_person.status == CompanyPerson::STATUS[:IVT]
+                                  first_name: @company_person.first_name,
+                                  last_name: @company_person.last_name} ),
+                                  method: :post if @company_person.invited?
 
       %tr
         %td

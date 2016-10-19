@@ -4,7 +4,7 @@
   .form-group
     .col-sm-1.control-label
       = f.label :street, 'Street:', class: 'job-skill-label'
-    .col-sm-5
+    .col-sm-4
       = f.text_field :street, size: 30, class: 'form-control'
     .col-sm-1.control-label
       = f.label :city, 'City:', class: 'job-skill-label'
@@ -16,7 +16,7 @@
     .col-sm-4
       = f.collection_select(:state, Address.states_full_name,
                :to_s, :to_s, {include_blank: true}, class: 'form-control')
-    .col-sm-2.control-label
+    .col-sm-1.control-label
       = f.label :zipcode, 'Zipcode:', class: 'job-skill-label'
     .col-sm-4
       = f.text_field :zipcode, size: 10, class: 'form-control'

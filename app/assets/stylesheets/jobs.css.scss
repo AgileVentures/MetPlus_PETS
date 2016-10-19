@@ -7,7 +7,7 @@ $state-danger-text: #a94442;
 /*ONLY JOB RELATED CSS*/
 
 .job-skill-label {
-	font-style: italic;
+	font-style: normal;
 	font-weight: normal;
 }
 
@@ -32,6 +32,10 @@ $state-danger-text: #a94442;
 		}
 
 }
+.pull-right#application-show-links{
+        margin-top: 80px;
+}
+
 .panel.panel-default#show-panel-id{
 	margin-bottom: 0px;
 	.panel-heading#panel-heading-show-id{
@@ -62,7 +66,7 @@ $state-danger-text: #a94442;
 	}
 }
 
-.btn.btn-primary.btn-xs#jobs-delete-link{
+.btn.btn-primary.btn-xs.jobs-revoke-button{
 	margin-left: 7px;
 	background: $light-blue;
 }
@@ -113,4 +117,14 @@ $state-danger-text: #a94442;
     a{
     	color: $white;
     }
+}
+
+/* Scrollable fixed height modal */
+.modal .modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.recent-jobs {
+	background: rgba(255,255,0,0.4);
 }

@@ -7,11 +7,14 @@ module JobsViewer
         return Job.order(:title).
             paginate(:page => params[:jobs_page], :per_page => per_page).
             find_by_company(pets_user.company)
+      when 'recent-jobs'
+        return Job.new_jobs(Time.now - 3.weeks).order(created_at: :desc).
+            paginate(:page => params[:js_home_page], :per_page => per_page)
     end
   end
 
   FIELDS_IN_JOB_TYPE = {
-      'my-company-all': [:title, :updated_at, :poster, :num_applicants]
+      'my-company-all': [:title, :status, :poster, :num_applicants, :updated_at]
   }
 
   def job_fields job_type

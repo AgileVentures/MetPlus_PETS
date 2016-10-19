@@ -39,6 +39,22 @@ RSpec.describe NotifyEmailJob, type: :job do
       to change(Delayed::Job, :count).by(+1)
   end
 
+  it 'job application accepted event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later('job_developer@gmail.com',
+                 Event::EVT_TYPE[:APP_ACCEPTED],
+                 {name: 'Joe Newseeker', id: 1}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
+  it 'job application rejected event' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+        perform_later('job_developer@gmail.com',
+                      Event::EVT_TYPE[:APP_REJECTED],
+                      {name: 'Joe Newseeker', id: 1}) }.
+        to change(Delayed::Job, :count).by(+1)
+  end
+
   it 'job seeker assigned to job developer event' do
     expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
                  perform_later('job_developer@gmail.com',
@@ -59,6 +75,15 @@ RSpec.describe NotifyEmailJob, type: :job do
     expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
                  perform_later('job_developer@gmail.com',
                  Event::EVT_TYPE[:JOB_POSTED],
+                 {job: {title: 'test job'},
+                  agency: {name: 'MetPlus'}}) }.
+      to change(Delayed::Job, :count).by(+1)
+  end
+
+  it 'job revoked' do
+    expect{ NotifyEmailJob.set(wait: Event.delay_seconds.seconds).
+                 perform_later('job_developer@gmail.com',
+                 Event::EVT_TYPE[:JOB_REVOKED],
                  {job: {title: 'test job'},
                   agency: {name: 'MetPlus'}}) }.
       to change(Delayed::Job, :count).by(+1)

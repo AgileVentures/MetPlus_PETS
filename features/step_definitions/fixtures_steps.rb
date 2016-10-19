@@ -164,6 +164,16 @@ Given(/^the following tasks exist:$/) do |table|
   end
 end
 
+Given(/^the following resumes exist:$/) do |table|
+  table.hashes.each do |hash|
+    job_seeker = JobSeeker.find_by(email: hash[:job_seeker])
+    resume = FactoryGirl.create(:resume,
+                                file_name: hash[:file_name],
+                                job_seeker: job_seeker)
+  end
+end
+
+
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
     company_name  = hash.delete 'company'
@@ -181,9 +191,8 @@ Given(/^the following jobs exist:$/) do |table|
     end
 
     job.save!
-
     if skills and not skills.empty?
-      skills.split(/(?:,\s*|\s+)/).each do |skill|
+      skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
                         required: true, min_years: 1, max_years: 20)
       end
@@ -191,12 +200,21 @@ Given(/^the following jobs exist:$/) do |table|
   end
 end
 
+And /^I create the following jobs$/ do |table|
+  step "the following jobs exist:", table
+end
+
 Given(/^the following job applications exist:$/) do |table|
   table.hashes.each do |hash|
     job = Job.find_by_title(hash['job title'])
     job_seeker = User.find_by_email(hash['job seeker']).actable
 
-    JobApplication.create!(job: job, job_seeker: job_seeker)
+    unless hash[:status]
+      JobApplication.create!(job: job, job_seeker: job_seeker)
+    else
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
+                         status: hash[:status])
+    end
   end
 end
 

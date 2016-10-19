@@ -23,6 +23,10 @@ Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   end
 end
 
+Then(/^I should not see the "(.*?)" link$/) do |link|
+  expect(page.body).to_not have_link link
+end
+
 Then(/^(?:I|they) should( not)? see button "([^"]*)"$/) do |not_see, button|
   unless not_see
     expect(page).to have_button button
@@ -104,6 +108,13 @@ When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
 
   # see discussion here:
   # https://github.com/teampoltergeist/poltergeist/issues/520
+end
+
+When(/^(?:I|they) click the "([^"]*)" link and switch to the new window$/) do |link|
+  new_window = window_opened_by do
+    click_link link
+  end
+  switch_to_window new_window
 end
 
 When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
@@ -190,6 +201,23 @@ And(/^(?:I|they) check( \w*)? "([^"]*)"$/) do |ordinal, item|
   end
 end
 
+And(/^(?:I|they) uncheck( \w*)? "([^"]*)"$/) do |ordinal, item|
+  # use 'ordinal' when selecting among select checkboxes all of which
+  # have the same selector (e.g., same label)
+  case ordinal
+  when nil
+    uncheck(item)
+  when ' first'
+    all(:checkbox, item)[0].set(false)
+  when ' second'
+    all(:checkbox, item)[1].set(false)
+  when ' third'
+    all(:checkbox, item)[2].set(false)
+  else
+    raise 'do not understand ordinal value'
+  end
+end
+
 And(/^the selection "([^"]*)" should be disabled$/) do |item|
   expect(has_field?(item, disabled: true)).to be true
 end
@@ -202,12 +230,13 @@ When /^I am in (.*) browser$/ do |name|
   Capybara.session_name = name
 end
 
-Then(/^I select2 "([^"]*)" from "([^"]*)"$/) do |value, select_name|
-
+Then(/^I( cannot)? select2 "([^"]*)" from "([^"]*)"$/) do |cannot, value, select_name|
   find("#select2-#{select_name}-container").click
   find(".select2-search__field").set(value)
-  within ".select2-results" do
-    find("li", text: value).click
+  if cannot
+    within(".select2-results") { expect(page.find("li")).to have_text("No results found") }
+  else
+    within(".select2-results") { find("li", text: value).click }
   end
 end
 

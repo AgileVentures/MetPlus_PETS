@@ -8,7 +8,7 @@ FactoryGirl.define do
     company_job_id "KRKE12"
     shift 'Day'
     fulltime true
-    status Job::STATUS[:ACTIVE]
+    status :active
   end
 
 end

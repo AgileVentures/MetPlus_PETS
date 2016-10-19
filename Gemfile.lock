@@ -47,6 +47,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    airbrake (5.4.4)
+      airbrake-ruby (~> 1.4)
+    airbrake-ruby (1.4.4)
     arel (6.0.3)
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
@@ -176,6 +179,10 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    mailgun_rails (0.8.0)
+      actionmailer (>= 3.2.13)
+      json (>= 1.7.7)
+      rest-client (>= 1.6.7)
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
@@ -337,6 +344,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record-acts_as
+  airbrake (~> 5.4)
   bcrypt (~> 3.1.7)
   bootstrap-will_paginate
   bullet
@@ -364,6 +372,7 @@ DEPENDENCIES
   js_cookie_rails
   json
   launchy
+  mailgun_rails
   pg
   poltergeist
   puma
@@ -387,4 +396,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

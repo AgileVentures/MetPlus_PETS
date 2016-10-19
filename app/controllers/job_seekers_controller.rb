@@ -1,4 +1,5 @@
 class JobSeekersController < ApplicationController
+  before_action :user_logged!, except: [:new, :create]
 
   include UserParameters
   include JobApplicationsViewer
@@ -66,30 +67,30 @@ class JobSeekersController < ApplicationController
           resume = Resume.new(file: tempfile, file_name: filename,
                      job_seeker_id: @jobseeker.id)
         end
-
+        
         unless resume.save
           models_saved = false
           @jobseeker.errors.messages.merge! resume.errors.messages
         end
       end
     end
-
-
+   
     if models_saved
-       sign_in :user, @jobseeker.user, bypass: true
-       flash[:notice] = "Jobseeker was updated successfully."
-       redirect_to root_path
+      sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
+      flash[:notice] = "Jobseeker was updated successfully."
+      redirect_to @jobseeker and return if pets_user == @jobseeker.case_manager
+      redirect_to root_path
     else
-       @resume = resume
-       render 'edit'
+      @resume = resume
+      render 'edit'
     end
   end
 
   def home
     @jobseeker = JobSeeker.find(params[:id])
+    @recent_jobs_type = 'recent-jobs'
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
-    @past_week = Job.new_jobs(Time.now - 3.weeks).paginate(:page => params[:page], :per_page => 5)
-
+    @js_last_sign_in = @jobseeker.last_sign_in_at
     @application_type = params[:application_type] || 'my-applied'
   end
 
@@ -100,6 +101,13 @@ class JobSeekersController < ApplicationController
   def show
     @jobseeker = JobSeeker.find(params[:id])
     @application_type = params[:application_type] || 'js-applied'
+  end
+
+  def preview_info
+    raise 'Unsupported request' if not request.xhr?
+    @jobseeker = JobSeeker.find(params[:id])
+    render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
+                                                   preview_mode: true }
   end
 
   def applied_jobs
@@ -136,6 +144,7 @@ class JobSeekersController < ApplicationController
             :password_confirmation,
             :year_of_birth,
             :resume,
+            :consent,
             :job_seeker_status_id,
             address_attributes: [:id, :street, :city, :zipcode, :state])
    end

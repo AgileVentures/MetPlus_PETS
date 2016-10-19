@@ -15,16 +15,17 @@
           %strong Posted
     %tbody
       - jobs.each do |job|
-        %tr
+        %tr{ class: ( "recent-jobs" if job.is_recent? last_sign_in ) }
           %td
             = link_to "#{job.title}", job_path(job)
             %td
-              = Company
+              = job.company.name
             %td
-              = job.description
+              = truncate(job.description, length: 200)
             %td
               = "#{time_ago_in_words(job.created_at, )} ago"
 
-  %div{class: "col-sm-offset-2 col-sm-8"}
-    = will_paginate jobs
+  %div{class: "col-sm-offset-2 col-sm-8 text-center"}
+    = will_paginate jobs, param_name: 'js_home_page', 
+          params: { controller: 'jobs', action: 'list', job_type: job_type }
 %br

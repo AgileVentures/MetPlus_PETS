@@ -32,9 +32,6 @@ class CompanyRegistrationsController < ApplicationController
     # Ensure that contact cannot log in
     @company.company_people[0].user.approved = false
 
-    @company.status                   = Company::STATUS[:PND]
-    @company.company_people[0].status = CompanyPerson::STATUS[:PND]
-
     @company.company_people[0].company_roles <<
                     CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
 
@@ -43,6 +40,8 @@ class CompanyRegistrationsController < ApplicationController
     ###################################################
 
     if @company.save
+      @company.pending_registration
+      @company.company_people[0].company_pending
       flash.notice = "Thank you for your registration request. " +
          " We will review your request and get back to you shortly."
 
@@ -79,8 +78,10 @@ class CompanyRegistrationsController < ApplicationController
       # Send pending-approval email to company contact if the contact
       # email address was changed
       if changed_email
-        CompanyMailer.pending_approval(@company,
-                                @company.company_people[0]).deliver_now
+        CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
+                         perform_later(Event::EVT_TYPE[:COMP_REGISTER],
+                         @company,
+                         @company.company_people[0])
       end
       redirect_to agency_admin_home_path
     else
@@ -93,11 +94,11 @@ class CompanyRegistrationsController < ApplicationController
     # There should be only one CompanyPerson associated with the company -
     # this is the 'company contact' included in the registration request.
     company = Company.find(params[:id])
-    company.status          = Company::STATUS[:ACT]
+    company.active
     company.save
 
     company_person = company.company_people[0]
-    company_person.status   = CompanyPerson::STATUS[:ACT]
+    company_person.active
     company_person.approved = true
     company_person.save
 
@@ -107,21 +108,20 @@ class CompanyRegistrationsController < ApplicationController
     company_person.user.send_confirmation_instructions
 
     flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_path(company.id, admin_type: 'AA')
+    redirect_to company_path(company.id)
 
   end
 
   def deny
     # Deny the company's registration request.
     company = Company.find(params[:id])
-    company_person = company.company_people[0]
 
-    company.status                   = Company::STATUS[:DENY]
-    company.company_people[0].status = CompanyPerson::STATUS[:DENY]
+    company.registration_denied
+    company.company_people[0].company_denied
     company.save
 
     render :partial => 'companies/company_status',
-           :locals => {company: company} if request.xhr?
+           :locals => {company: company, admin_aa: true} if request.xhr?
 
     # Anonymous class to contain company and reason for denial
     obj = Struct.new(:company, :reason)

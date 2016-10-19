@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+include ServiceStubHelpers::Cruncher
+
 describe JobSeeker, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
@@ -9,12 +11,11 @@ describe JobSeeker, type: :model do
   describe 'Database schema' do
     it {is_expected.to have_db_column :year_of_birth}
     it {is_expected.to have_db_column :job_seeker_status_id }
-    it {is_expected.to have_db_column :resume }
     it {is_expected.to have_db_column :address_id }
+    it {is_expected.to have_db_column :consent }
   end
   describe 'check model restrictions' do
     it {is_expected.to validate_presence_of(:year_of_birth)}
-    xit {is_expected.to validate_presence_of(:resume)}
     it {is_expected.to validate_presence_of(:job_seeker_status)}
     it {is_expected.to have_many(:agency_people).through(:agency_relations)}
     it {is_expected.to have_many(:job_applications)}
@@ -28,18 +29,17 @@ describe JobSeeker, type: :model do
   end
 
   describe "#latest_application" do
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:job1)       { FactoryGirl.create(:job) }
-    let(:job2)       { FactoryGirl.create(:job) }
+    let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let(:job1)        { FactoryGirl.create(:job) }
+    let(:job2)        { FactoryGirl.create(:job) }
+    let(:test_file)   { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
     it 'returns last application for job seeker' do
 
-      stub_request(:post,CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-           :headers => {'Content-Type' => 'application/json'})
-      stub_request(:post, CruncherService.service_url + '/job/create').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}" , status: 200,
-           :headers => {'Content-Type' => 'application/json'})
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      stub_cruncher_file_download test_file
 
       job1.apply job_seeker
       expect(job_seeker.latest_application).to eq job1.job_applications[0]
@@ -125,11 +125,12 @@ end
     end
 
     describe 'class methods for job seekers agency relations' do
-      it '.js_without_jd returns job seekers with no job developer' do
-        expect(JobSeeker.js_without_jd).to match([adam, bob, charles])
+      it '.job_seekers_without_job_developer returns job seekers with no job developer' do
+        expect(JobSeeker.job_seekers_without_job_developer).to match([adam, bob, charles])
       end
-      it '.js_without_cm returns job seekers with no job developer' do
-        expect(JobSeeker.js_without_cm).to match([bob, charles, dave])
+      it '.job_seekers_without_case_manager returns job seekers with no case manager' do
+        expect(JobSeeker.job_seekers_without_case_manager).to match([bob, charles, dave])
+        
       end
     end
 

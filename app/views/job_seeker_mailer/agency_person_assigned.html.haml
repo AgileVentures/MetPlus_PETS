@@ -4,7 +4,7 @@
   This message is from the administrator of the PETS system for
   the jobs agency:
   %strong
-    #{@agency.name}.
+    #{@agency_person.agency.name}.
 %p
   - case @person_type
   - when :JD
@@ -17,7 +17,7 @@
     = mail_to(@agency_person.email,
       "#{@agency_person.full_name(last_name_first: false)}",
       subject: "My Assignment of #{role}")
-  has been assigned to you as your #{@agency.name} #{role}.
+  has been assigned to you as your #{@agency_person.agency.name} #{role}.
 %p
   - case @person_type
   - when :JD
@@ -26,12 +26,12 @@
     Please feel free to contact your Job Developer with any questions or concerns
     about the job matching process.
   - when :CM
-    Your Case Manager works with you to ensure that #{@agency.name} and you are
+    Your Case Manager works with you to ensure that #{@agency_person.agency.name} and you are
     working effectively to achieve your job-hunting goals.
     Please feel free to contact your Case Manager with any questions or concerns
     about working with the agency.
 %p
   In the meantime, if you have any other questions about the use of PETS
   then please contact the PETS administrator at:
-  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
          subject: 'Using PETS as a Job Seeker')

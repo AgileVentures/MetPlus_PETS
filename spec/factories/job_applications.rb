@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :job_application do
     job_seeker nil
-    job nil
+    job
     status :active
   end
 

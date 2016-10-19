@@ -1,14 +1,40 @@
-= render partial: 'companies/agency_admin/company_info'
+.col-sm-3
+  %h4 Company Information
+  %a(id='toggle_company_info' href='#company_info_table' class='text-danger'
+              style='padding-left: 10px;')
+    Hide Company Information
+.col-sm-9
+  = render partial: 'company_info',
+           locals: {company: @company,
+                    admin_aa: @admin_aa,
+                    admin_ca: @admin_ca,
+                    company_admins: @company_admins}
+
+.clearfix
+.col-sm-9
+  %h4 All company people who are on PETS
+.col-sm-3
+  - if @admin_aa || @admin_ca
+    - if @company.active?
+      = link_to 'Invite Person',
+                    new_user_invitation_path(person_type: 'CompanyPerson',
+                    org_id: @company.id),
+                    method: :get, class: 'btn btn-primary btn-sm pull-right'
+.col-sm-12
+  .pagination-div{id: "people-#{@people_type}", style: 'margin-top: 10px;',
+                  data: {url: list_people_company_path(@company.id, @people_type)}}
 
 .clearfix
 %br
 
-.col-sm-2.col-sm-offset-2
-  = button_to 'Edit Company',
-              edit_company_path(@company, admin_type: 'AA'),
-              method: :get, class: 'btn btn-primary'
+- if @admin_aa || @admin_ca
+  .col-sm-2.col-sm-offset-2
+    = button_to('Edit Company',
+                edit_company_path(@company),
+                method: :get, class: 'btn btn-primary')
 
-.col-sm-2.col-sm-offset-4
-  = button_to 'Delete Company', company_path(@company, admin_type: 'AA'),
-    method: :delete, data: {confirm: "Delete company #{@company.name}?"},
-                    class: 'btn btn-danger'
+- if @admin_aa
+  .col-sm-2.col-sm-offset-4
+    = button_to('Delete Company', company_path(@company),
+      method: :delete, data: {confirm: "Delete company #{@company.name}?"},
+                      class: 'btn btn-danger')

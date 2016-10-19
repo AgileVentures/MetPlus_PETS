@@ -1,6 +1,10 @@
 class JobCategoriesController < ApplicationController
+
+  before_action :user_logged!
+
   def create
     category = JobCategory.new(category_params)
+    authorize category
     if category.save
       render nothing: true
     else
@@ -10,6 +14,7 @@ class JobCategoriesController < ApplicationController
   end
 
   def show
+    authorize JobCategory.new
     begin
       category = JobCategory.find(params[:id])
     rescue
@@ -22,6 +27,7 @@ class JobCategoriesController < ApplicationController
   end
 
   def update
+    authorize JobCategory.new
     begin
       category = JobCategory.find(params[:id])
     rescue
@@ -37,6 +43,7 @@ class JobCategoriesController < ApplicationController
   end
 
   def destroy
+    authorize JobCategory.new
     begin
       category = JobCategory.find(params[:id])
     rescue

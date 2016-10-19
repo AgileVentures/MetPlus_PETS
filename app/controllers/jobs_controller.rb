@@ -4,7 +4,7 @@ class JobsController < ApplicationController
   include JobApplicationsViewer
 
 	before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                :applications, :applications_list]
+                :applications, :applications_list, :revoke]
 	before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy]
 	before_action :is_right_company_person, only: [:edit, :destroy, :update]
 	before_action :user_logged!, only: [:apply]
@@ -128,7 +128,14 @@ class JobsController < ApplicationController
 
     @jobs = []
     @jobs = display_jobs @job_type
-    render partial: 'list_all', :locals => {all_jobs: @jobs, job_type: @job_type}
+		case @job_type
+			when 'my-company-all'
+				render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
+			when 'recent-jobs'
+				render partial: 'compact_list', locals: { 
+					jobs: @jobs, job_type: @job_type, last_sign_in: params[:js_login] }
+		end
+    
 	end
 
   def update_addresses
@@ -145,8 +152,15 @@ class JobsController < ApplicationController
 
 	def apply
 		@job = Job.find_by_id params[:job_id]
+
 		if @job == nil
 			flash[:alert] = "Unable to find the job the user is trying to apply to."
+			redirect_to jobs_url
+			return
+		end
+
+		if @job.status != 'active'
+			flash[:alert] = "Unable to apply. Job has either been filled or revoked."
 			redirect_to jobs_url
 			return
 		end
@@ -159,16 +173,53 @@ class JobsController < ApplicationController
 			redirect_to job_path(@job)
 			return
 		end
-		begin
-			@job.apply @job_seeker
-			Event.create(:JS_APPLY, @job.last_application_by_job_seeker(@job_seeker))
-		rescue Exception => e
-			flash[:alert] = "Unable to apply at this moment, please try again."
-			redirect_to job_path(@job)
+   
+    if pets_user == @job_seeker # to be removed once authorize is set properly
+      apply_job; return if performed?
+      Event.create(:JS_APPLY, @job_app)
+      render :apply and return
+    end
+
+    if pets_user == @job_seeker.job_developer  # to be removed once authorize is set properly
+      if @job_seeker.consent
+        apply_job; return if performed?
+        Event.create(:JD_APPLY, @job_app)
+        flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
+        redirect_to job_path(@job)
+      else
+      	flash[:alert] = "Invalid application: You are not permitted to apply for #{@job_seeker.full_name}"
+        redirect_to job_path(@job)
+      end
+    else
+      flash[:alert] = "Invalid application: You are not the Job Developer for this job seeker"
+      redirect_to job_path(@job)
+    end
+  end
+
+
+	def revoke
+		if @job.status == 'active' && @job.revoked
+			flash[:alert] = "#{@job.title} is revoked successfully."
+			obj = Struct.new(:job, :agency)
+			Event.create(:JOB_REVOKED, obj.new(@job, Agency.first))
+		else
+			flash[:alert] = "Only active job can be revoked."
 		end
+		redirect_to jobs_path
 	end
 
 	private
+
+    def apply_job
+      begin
+        @job_app = @job.apply @job_seeker
+      # ActiveRecord::RecordInvalid is raised when validation at model level fails
+      # ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique  => e
+        flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
+        redirect_to job_path(@job)
+      end
+    end
 
 		def authentication_for_post_or_edit
 			if !company_p_or_job_d?

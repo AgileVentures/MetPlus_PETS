@@ -1,6 +1,18 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
+RSpec::Matchers.define :evt_obj do |*attributes|
+  match do |actual|
+    if actual.is_a?(Struct)
+      attributes.each do |attribute|
+        return false unless actual.respond_to?(attribute)
+      end
+      return true
+    end
+    false
+  end
+end
+
 RSpec.describe JobsController, type: :controller do
 
   before(:example) do
@@ -704,6 +716,8 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #apply' do
     let!(:job_seeker){FactoryGirl.create(:job_seeker)}
+    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:testfile_resume) { '/files/Janitor-Resume.doc' }
     before :each do
       agency = FactoryGirl.create(:agency)
     end
@@ -724,6 +738,21 @@ RSpec.describe JobsController, type: :controller do
         expect(flash[:alert]).to eq "Unable to find the job the user is trying to apply to."
       end
     end
+
+    describe 'not active job' do
+      before :each do
+        revoked_job = FactoryGirl.create(:job, status: 'revoked')
+        allow(controller).to receive(:current_user).and_return(job_seeker)
+        get :apply, :job_id => revoked_job.id, :user_id => job_seeker.id
+      end
+      it "redirected to list of jobs" do
+        expect(response).to redirect_to(:action => 'index')
+      end
+      it 'check set flash' do
+        expect(flash[:alert]).to eq "Unable to apply. Job has either been filled or revoked."
+      end
+    end
+
     describe 'unknown job seeker' do
       before :each do
         allow(controller).to receive(:current_user).and_return(job_seeker)
@@ -740,12 +769,14 @@ RSpec.describe JobsController, type: :controller do
         expect(flash[:alert]).to eq "Unable to find the user who wants to apply."
       end
     end
-    describe 'successful application' do
+    describe 'successful application as job seeker' do
       before :each do
         allow(Pusher).to receive(:trigger)
 
         allow(Event).to receive(:create).and_call_original
         allow(controller).to receive(:current_user).and_return(job_seeker)
+        stub_cruncher_authenticate
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
       it "is a success" do
@@ -766,25 +797,95 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JS_APPLY, application)
       end
     end
-    describe 'error applications' do
-      let!(:job) { Job.new } # no lazy load, executed right away, no need to mock
+    describe 'duplicated applications as job seeker' do
       before :each do
-        expect(Job).to receive(:find_by_id).and_return(job)
-        expect(job).to receive(:save!).and_raise(Exception)
-        expect(job).to receive(:id).exactly(4).times.and_return(1)
         allow(controller).to receive(:current_user).and_return(job_seeker)
+        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
         get :apply, :job_id => @job.id, :user_id => job_seeker.id
       end
-      it "is a redirect" do
-        expect(response).to have_http_status(:redirect)
+      it "shows flash[:alert]" do
+        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
       end
-      it "redirected to the job" do
+      it "redirects to the job" do
         expect(response).to redirect_to(:action => 'show', :id => @job.id)
       end
-      it 'check set flash' do
-        should set_flash
-        expect(flash[:alert]).to be_present
-        expect(flash[:alert]).to eq "Unable to apply at this moment, please try again."
+    end
+    describe 'successful application as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        allow(Pusher).to receive(:trigger)
+        allow(Event).to receive(:create).and_call_original
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        stub_cruncher_authenticate
+        stub_cruncher_file_download testfile_resume
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'creates a job application' do
+        @job.reload
+        expect(@job.job_seekers).to include job_seeker
+      end
+      it 'creates :JD_APPLY event' do
+        application = @job.job_applications.last
+        expect(Event).to have_received(:create).with(:JD_APPLY, application)
+      end
+      it 'show flash[:info]' do
+        expect(flash[:info]).to be_present.and eq "Job is successfully applied for #{job_seeker.full_name}"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
+      end
+    end
+
+    describe "invalid application as job developer: without job seeker's consent" do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        job_seeker.update_attribute(:consent, false)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'show flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Invalid application: You are not permitted to apply for #{job_seeker.full_name}"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
+      end
+    end
+   
+    describe 'duplicated applications as job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        allow(controller).to receive(:current_user).and_return(job_developer)
+        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it "shows flash[:alert]" do
+        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
+      end
+      it "redirects to job" do
+        expect(response).to redirect_to(:action => 'show', :id => @job.id)
+      end
+    end
+
+    describe 'invalid application as job developer: job seeker does not belong to job developer' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        job_seeker.assign_job_developer(job_developer, agency)
+        job_developer2 = FactoryGirl.create(:job_developer, agency: agency)
+        allow(controller).to receive(:current_user).and_return(job_developer2)
+        get :apply, :job_id => @job.id, :user_id => job_seeker.id
+      end
+      it 'show flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Invalid application: You are not the Job Developer for this job seeker"
+      end
+      it "redirect to job " do
+        expect(response).to redirect_to(job_path(@job))
       end
     end
     describe 'user not logged in' do
@@ -822,6 +923,51 @@ RSpec.describe JobsController, type: :controller do
         should set_flash
         expect(flash[:alert]).to be_present
         expect(flash[:alert]).to eq "You are not authorized to perform this action."
+      end
+    end
+  end
+
+  describe 'PATCH #revoke' do
+
+    context 'active job' do
+      before :each do
+        @job = FactoryGirl.create(:job)
+      end
+
+      it 'changes job status from active to revoked' do
+        patch :revoke, id: @job.id
+        @job.reload
+        expect(@job.status).to eq('revoked')
+      end
+
+      it 'creates a job_revoked event' do
+        expect(Event).to receive(:create).with(:JOB_REVOKED, evt_obj(:job, :agency))
+        patch :revoke, id: @job.id
+      end
+
+      it 'flash[:alert]' do
+        patch :revoke, id: @job.id
+        expect(flash[:alert]).to be_present.and eq "#{@job.title} is revoked successfully."
+      end
+
+      it 'redirects to jobs_path' do
+        patch :revoke, id: @job.id
+        expect(response).to redirect_to(jobs_path)
+      end
+    end
+
+    context 'revoked job' do
+      before :each do
+        @job = FactoryGirl.create(:job, status: 'revoked')
+        patch :revoke, id: @job.id
+      end
+
+      it 'flash[:alert]' do
+        expect(flash[:alert]).to be_present.and eq "Only active job can be revoked."
+      end
+
+      it 'redirects to jobs_path' do
+        expect(response).to redirect_to(jobs_path)
       end
     end
   end

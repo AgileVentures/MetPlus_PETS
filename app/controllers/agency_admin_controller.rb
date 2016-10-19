@@ -1,11 +1,14 @@
 class AgencyAdminController < ApplicationController
-  def home
-    # Cancancan before_filter here .....
 
+  before_action :user_logged!
+
+  def home
     @agency = Agency.includes([ :agency_people,
                               companies: [:addresses],
                                branches: [:address] ]).
                         find(Agency.this_agency(current_user).id)
+
+    check_authorization(@agency)
 
     @agency_admins = Agency.agency_admins(@agency)
     @branches      = @agency.branches.order(:code).
@@ -28,13 +31,16 @@ class AgencyAdminController < ApplicationController
   end
 
   def job_properties
+
+    check_authorization(Agency.this_agency(current_user))
+
     if request.xhr?
       case params[:data_type]
       when 'job_categories'
         @job_categories = JobCategory.order(:name).
                     page(params[:job_categories_page]).per_page(10)
 
-        render partial: 'job_properties', object: @job_categories,
+        render partial: 'job_specialties', object: @job_categories,
                 locals: {data_type:  'job_categories',
                          partial_id: 'job_categories_table',
                          show_property_path:   :job_category_path,
@@ -43,7 +49,7 @@ class AgencyAdminController < ApplicationController
         @skills = Skill.order(:name).
                     page(params[:skills_page]).per_page(10)
 
-        render partial: 'job_properties', object: @skills,
+        render partial: 'job_skills', object: @skills,
                 locals: {data_type:  'skills',
                          partial_id: 'skills_table',
                          show_property_path:   :skill_path,
@@ -59,4 +65,12 @@ class AgencyAdminController < ApplicationController
                   page(params[:skills_page]).per_page(10)
     end
   end
+
+  private
+
+  def check_authorization(agency)
+    self.action_description= "administer #{agency.name} agency"
+    authorize agency, :update?
+  end
+
 end

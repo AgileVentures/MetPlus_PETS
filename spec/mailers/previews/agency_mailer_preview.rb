@@ -18,10 +18,30 @@ class AgencyMailerPreview < ActionMailer::Preview
     agency_person = User.find_by_email('chet@metplus.org').actable
     company       = Company.find_by_email('contact@widgets.com')
     job           = company.jobs.first
+    application   = job.apply job_seeker
+
+    AgencyMailer.job_seeker_applied(agency_person.email, application)
+  end
+
+  def job_application_accepted
+    job_seeker    = User.find_by_email('tom@gmail.com').actable
+    agency_person = User.find_by_email('chet@metplus.org').actable
+    company       = Company.find_by_email('contact@widgets.com')
+    job           = company.jobs.first
+    application   = job.apply job_seeker
+
+    AgencyMailer.job_application_accepted(agency_person.email, application)
+  end
+
+  def job_application_rejected
+    job_seeker    = User.find_by_email('tom@gmail.com').actable
+    agency_person = User.find_by_email('chet@metplus.org').actable
+    company       = Company.find_by_email('contact@widgets.com')
+    job           = company.jobs.first
     job.apply job_seeker
     application   = job.last_application_by_job_seeker(job_seeker)
 
-    AgencyMailer.job_seeker_applied(agency_person.email, application)
+    AgencyMailer.job_application_rejected(agency_person.email, application)
   end
 
   def job_seeker_assigned_jd
@@ -45,6 +65,17 @@ class AgencyMailerPreview < ActionMailer::Preview
     job_developer = User.find_by_email('chet@metplus.org').actable
 
     AgencyMailer.job_posted(job_developer.email, job)
+  end
+
+  def job_revoked
+    job = Job.create(title: 'Software Engineer',
+                  company: Company.first,
+                  company_job_id: 'XYZ',
+                  shift: Job::SHIFT_OPTIONS[0],
+                  description: 'description of test job')
+    job_developer = User.find_by_email('chet@metplus.org').actable
+
+    AgencyMailer.job_revoked(job_developer.email, job)
   end
 
 end

@@ -1,23 +1,45 @@
 -provide(:title, @job.title)
 
 %div{class: "col-sm-offset-1 col-sm-10"}
-	%div{class: "pull-right", id: "job-show-links-id"}
-		-if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
-			=link_to "Delete", job_path(@job), method: :delete,
-				data: {confirm: "Are you sure you want to delete: #{@job.title}"}
-			|
-			=link_to "Edit Job", edit_job_path(@job)
-			|
-		=link_to "Return To Jobs", jobs_path
-		|
-		=link_to "Send this job to a friend", '#'
+  %div{class: "pull-right", id: "job-show-links-id"}
+    -if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
+      -if @job.status == "active" 
+        =render partial: 'revoke_modal'
+        =link_to "Revoke", '#', id: 'revoke_link', data: { "job-id" => "#{@job.id}", "job-title" => "#{@job.title}", "job-companyJobId" => "#{@job.company_job_id}"  }
+        |
+      =link_to "Edit Job", edit_job_path(@job)
+      |
+    =link_to "Return To Jobs", jobs_path
+    |
+    =link_to "Send this job to a friend", '#'
 
-	.clearfix
+  .clearfix
 
-	= render partial: 'job_info'
+  = render partial: 'job_info'
 
-	- if not pets_user.nil? and policy(@job).apply?
-		=link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
-					data: { :toggle => 'modal',
-									:target => '#applyJobModal'}
-		=render partial: 'apply_modal', :locals => {:job => @job}
+  %div{id: 'apply_job'}
+  -if pets_user && @job.status == "active"
+    -if pets_user.is_job_developer?(current_agency)
+      =link_to 'Click Here to Submit an Application for Job Seeker', '#', 
+                class: 'col-sm-offset-4', id: 'jd-apply-button',
+                data: { :toggle => 'modal',
+                        :target => '#jdApplyJobModal' }
+      =render partial: '/job_applications/jd_apply_job_modal', :locals => {job: @job}
+      =render partial: '/job_applications/preview_modal', :locals => {job: @job}
+    -elsif pets_user.is_job_seeker? 
+      -if @job.last_application_by_job_seeker(pets_user)
+        .panel.panel-primary.center-aligned-div
+          .panel-body
+            %h5
+              You already have an application submitted for this job.
+            %h5
+              If you want the employer to see a revised version of your résumé, 
+              simply edit your profile by clicking on this icon:
+              %i.fa.fa-pencil-square-o.fa-1
+              on your home page, and upload the revised résumé.
+                
+      -else
+        =link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
+                  data: { :toggle => 'modal',
+                          :target => '#applyJobModal'}
+        =render partial: 'apply_modal', :locals => {:job => @job}

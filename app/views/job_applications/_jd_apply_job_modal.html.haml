@@ -1,0 +1,33 @@
+%div{id: "jdApplyJobModal", class: 'modal fade', data: { job: "#{job.id}", jd: "#{pets_user.id}" }}
+  .modal-dialog(role='document')
+    %form{ :method => "get" }
+      .modal-content
+        .modal-header
+          %button(type='button' class='close' data-dismiss='modal')
+            %span(aria-hidden='true') &times;
+          %h4.modal-title.text-center
+            .row
+              = link_to job.company.name, company_home_path(job.company)
+            .row
+              #{job.title} (#{job.company_job_id})
+        .modal-body
+          .form-group
+            %label(for="jdApplyJobModal_name" class='control-label')
+              Select your job seeker for the above job:
+            .row
+              .col-md-6
+                %select{:id => 'jd_apply_job_select', :style => 'width: 100%;' }
+                %span{class: 'alert_msg', style: 'color: red;' }
+            .row
+              .col-md-12
+                %br
+                The Job Seekers not selectable do not have a resume on file.
+        .modal-footer
+          %button(type='button' class='btn btn-default'
+          data-dismiss='modal') Cancel
+          %button(type='button' class='btn btn-primary'
+          id='jdApplyJobModal_button')
+            Proceed
+            
+
+      

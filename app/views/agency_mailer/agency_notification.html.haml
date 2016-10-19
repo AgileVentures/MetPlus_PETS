@@ -8,7 +8,7 @@
 
   - elsif @obj_type == 'Company'
     A company has requested registration in PETS:
-    = link_to @obj.name, company_url(id: @obj.id, admin_type: 'AA')
+    = link_to @obj.name, company_url(id: @obj.id)
 
   - elsif @obj_type == 'Job Application'
     A job seeker has applied to this job:
@@ -18,6 +18,16 @@
     %br
     The job seeker who applied is:
     = link_to @obj.job_seeker.full_name, job_seeker_url(id: @obj.job_seeker.id)
+
+  - elsif @obj_type == 'Job Application Accepted'
+    A job application is accepted:
+    = link_to "#{@obj.job.title} by #{@obj.job_seeker.full_name(last_name_first: false)}",
+      application_url(id: @obj.id)
+
+  - elsif @obj_type == 'Job Application Rejected'
+    A job application is rejected:
+    = link_to "#{@obj.job.title} by #{@obj.job_seeker.full_name(last_name_first: false)}",
+      application_url(id: @obj.id)
 
   - elsif @obj_type == 'Job Seeker Assigned JD'
     A job seeker has been assigned to you as Job Developer:
@@ -33,7 +43,12 @@
     A new job (
     = link_to @obj.title, job_url(id: @obj.id)
     ) has been posted for company: #{@obj.company.name}.
+
+  - elsif @obj_type == 'Job Revoked'
+    A job (
+    = link_to @obj.title, job_url(id: @obj.id)
+    ) has been revoked for company: #{@obj.company.name}.
 %p
   If you have any questions please contact the PETS administrator at:
-  = mail_to("#{ENV['SMTP_USERNAME']}", 'PETS Admin',
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
          subject: "New #{@obj_type}: #{@obj_name}")

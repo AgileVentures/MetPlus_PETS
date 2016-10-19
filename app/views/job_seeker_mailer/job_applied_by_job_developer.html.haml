@@ -1,0 +1,22 @@
+%p
+  Hello #{@job_seeker.full_name(last_name_first: false)},
+%p
+  This message is from the administrator of the PETS system for
+  the jobs agency:
+  %strong
+    #{@job_developer.agency.name}.
+%p
+  This is to let you know that
+  %strong
+    your job developer, &nbsp
+    = mail_to(@job_developer.email,
+      "#{@job_developer.full_name(last_name_first: false)}",
+      subject: "My Job Application")
+    , &nbsp has submitted an application on your behalf to the job: &nbsp
+    = link_to @job.title, job_url(id: @job.id)
+    , &nbsp in company: #{@job.company.name}
+%p
+  In the meantime, if you have any other questions about the use of PETS
+  then please contact the PETS administrator at:
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
+         subject: 'Using PETS as a Job Seeker')
