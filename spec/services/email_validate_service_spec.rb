@@ -6,6 +6,7 @@ RSpec.describe EmailValidateService, type: :model do
     it 'returns invalid address' do
       result = {status: 'SUCCESS', valid: false, did_you_mean: nil}
       expect(EmailValidateService.validate_email('')).to eq result
+      expect(RestClient).to_not receive(:get)
     end
   end
 
