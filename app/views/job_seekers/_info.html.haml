@@ -35,8 +35,10 @@
           = resume.file_name
           &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
       %td
-        = button_to "Download Resume", download_resume_path(@job_application), target: '_self',
-          method: :get, class: 'btn btn-success btn-s pull-right'
+        - if offer_download
+          = button_to "Download Resume", download_resume_path(@job_application), target: '_self',
+            method: :get, class: 'btn btn-success btn-s pull-right'
+
 
     %tr
       %td
