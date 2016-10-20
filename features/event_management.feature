@@ -135,7 +135,7 @@ Scenario: Job developer assigned to job seeker by agency admin
   Then I check first "Seeker, Sam"
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Job Seekers for Job Developer role:"
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Dave Developer as Job Developer:"
   Then I am in Job Seeker's browser
   And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
   Then I am in Job Developer's browser
@@ -174,7 +174,7 @@ Scenario: Case manager assigned to job seeker by agency admin
   Then I check second "Seeker, Sam"
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Jane Jones as Case Manager:"
   Then I am in Job Seeker's browser
   And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
   Then I am in Case Manager's browser
