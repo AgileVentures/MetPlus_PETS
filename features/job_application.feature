@@ -39,6 +39,10 @@ Given the following agency relations exist:
   | john.seeker@places.com | jane@metplus.org | JD   |
   | john.seeker@places.com | mike@metplus.org | CM   |
 
+Given the following job applications exist:
+	| job title 	        | job seeker 	           | status |
+  | software developer  | john.seeker@places.com | active |
+
   @selenium
   Scenario: Job seeker applies to job
     When I am in Job Developer's browser
@@ -126,11 +130,15 @@ Given the following agency relations exist:
     Then I click the "software developer" link
     Then I should not see "Click Here To Apply Online"
 
+  @javascript
   Scenario: Download resume file_name as a Company Admin
     Given I am on the home page
     And I am logged in as "ca@widgets.com" with password "qwerty123"
-    Then show me the page
-    And I am on "Job Seeker: John Seeker" page
+    And I should see "software developer"
+    When I click the "1" link
+    And I wait 1 second
+    And I should see "Applications for this Job"
+    Then I click the "Seeker, John" link
     Then I should see button "Download Resume"
     And I click the "Download Resume" button
     Then I should get a download file for resume "Janitor-Resume.doc"
