@@ -181,9 +181,9 @@ RSpec.describe BranchesController, type: :controller do
   describe 'action authorization' do
     context '#new' do
       it 'authorizes agency admin' do
-        expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
         get :new, agency_id: agency
+        expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-admin agency person' do
         allow(controller).to receive(:current_user).and_return(jd)
@@ -194,9 +194,9 @@ RSpec.describe BranchesController, type: :controller do
   
     context '#create' do
       it 'authorizes agency admin' do
-        expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
         post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
+        expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-admin agency person' do
         allow(controller).to receive(:current_user).and_return(jd)
@@ -208,9 +208,9 @@ RSpec.describe BranchesController, type: :controller do
     context '#update' do
       
       it 'authorizes agency admin' do
-        expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
         patch :update, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
+        expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-agency admin' do
         allow(controller).to receive(:current_user).and_return(jd)
@@ -222,9 +222,9 @@ RSpec.describe BranchesController, type: :controller do
 
     context '#edit' do
       it 'authorizes agency admin' do
-        expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
         get :edit, id: branch.id
+        expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-agency admin' do
         allow(controller).to receive(:current_user).and_return(jd)
@@ -236,9 +236,9 @@ RSpec.describe BranchesController, type: :controller do
 
     context '#destroy' do
       it 'authorizes agency admin' do
-        expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(admin)
         delete :destroy, id: branch.id
+        expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-admin agency person' do
         allow(controller).to receive(:current_user).and_return(jd)
@@ -250,9 +250,9 @@ RSpec.describe BranchesController, type: :controller do
     
     context '#show' do
       it 'authorizes agency person' do
-        expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(jd)
         get :show, id: branch.id
+        expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(js)
