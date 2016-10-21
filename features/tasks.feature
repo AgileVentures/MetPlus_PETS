@@ -16,8 +16,8 @@ Feature: Have a task system in the site
 
     Given the following jobseeker exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
-      | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
-      | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | John      | Seeker   | john.seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
+      | John      | Worker   | john.worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
@@ -29,13 +29,13 @@ Feature: Have a task system in the site
 
     Given the following tasks exist:
       | task_type          | owner                | deferred_date | status      | targets               |
-      | need_job_developer | MetPlus,JD           | 2016-03-10    | NEW         | john-seeker@gmail.com |
-      | need_case_manager  | MetPlus,CM           | 2016-03-10    | NEW         | john-seeker@gmail.com |
-      | need_job_developer | jane-dev@metplus.org | 2016-03-10    | ASSIGNED    | john-worker@gmail.com |
-      | need_case_manager  | jane@metplus.org     | 2016-03-10    | WIP         | john-worker@gmail.com |
-      | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
-      | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john-seeker@gmail.com |
-      | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john-worker@gmail.com |
+      | need_job_developer | MetPlus,JD           | 2016-03-10    | NEW         | john.seeker@gmail.com |
+      | need_case_manager  | MetPlus,CM           | 2016-03-10    | NEW         | john.seeker@gmail.com |
+      | need_job_developer | jane-dev@metplus.org | 2016-03-10    | ASSIGNED    | john.worker@gmail.com |
+      | need_case_manager  | jane@metplus.org     | 2016-03-10    | WIP         | john.worker@gmail.com |
+      | need_case_manager  | aa@metplus.org       | 2016-03-10    | ASSIGNED    | john.seeker@gmail.com |
+      | need_job_developer | aa@metplus.org       | 2016-03-10    | WIP         | john.seeker@gmail.com |
+      | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john.worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
 
   @selenium

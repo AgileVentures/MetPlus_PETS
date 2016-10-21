@@ -122,7 +122,7 @@ Scenario: company registration denial
   Then I should see "Explanation for registration denial"
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  And I wait 2 seconds
+  And I wait 5 seconds
   Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
 
@@ -138,7 +138,7 @@ Scenario: attempt login after registration is denied
   And I click the "Deny" button
   And I fill in "Explanation:" with "We are not accepting additional partners at this time."
   And I click the "Send email" button
-  And I wait 2 seconds
+  And I wait 5 seconds
   Then I should see "Registration Denied"
   And I log out
   And I wait 1 second
@@ -185,13 +185,13 @@ Scenario: edit Company Registration: change contact email and job email
   And I click the "Edit Registration" button
   And I should see "Edit Company Registration"
   Then I fill in "Company Name" with "Gizmos, Inc."
-  And I fill in "Contact Email" with "hughjobs@gizmos.com"
-  And I fill in "Job Email" with "job@gizmos.com"
+  And I fill in "Contact Email" with "hughjobs@gmail.com"
+  And I fill in "Job Email" with "goodjobs@gmail.com"
   And I click the "Update" button
   Then I should see "Registration was successfully updated."
   Then "hughjobs@widgets.com" should have no emails
-  And "hughjobs@gizmos.com" should receive 1 email with subject "Pending approval"
-  Then "hughjobs@gizmos.com" opens the email
+  And "hughjobs@gmail.com" should receive 1 email with subject "Pending approval"
+  Then "hughjobs@gmail.com" opens the email
   And they should see "Thank you for registering Gizmos, Inc. in PETS." in the email body
 
 Scenario: edit Company Registration: change contact password

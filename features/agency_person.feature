@@ -19,11 +19,11 @@ Feature: Agency Person
 
     Given the following jobseeker exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
-      | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
-      | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
-      | Wanda     | Worker   | wanda-worker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
-      | Tom     | Seeker   | tom-seeker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
-      | Mary    | Jones   | Mary-jones@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | John      | Seeker   | john.seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
+      | John      | Worker   | john.worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Wanda     | Worker   | wanda.worker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Tom       | Seeker   | tom.seeker@gmail.com      | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Mary      | Jones    | mary.jones@gmail.com      | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
 
     Given the following tasks exist:
@@ -38,9 +38,9 @@ Feature: Agency Person
 
 Given the following agency relations exist:
   	| job_seeker      | agency_person    | role |
-  	| tom-seeker@gmail.com | mark@metplus.org   | JD   |
-  	| mary-jones@gmail.com | mark@metplus.org   | CM   |
-       
+  	| tom.seeker@gmail.com | mark@metplus.org   | JD   |
+  	| mary.jones@gmail.com | mark@metplus.org   | CM   |
+
 
   Scenario: Case Manager login and edit from home page
     Given I am on the home page
@@ -97,7 +97,7 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
-@selenium 
+@selenium
   Scenario: Agency admin can see all tabs
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -119,7 +119,7 @@ Given the following agency relations exist:
     And The task 7 is present
     And The tasks 1,2,3,4 are hidden
 
-  @selenium 
+  @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -190,8 +190,5 @@ Given the following agency relations exist:
     Given I am on the home page
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
-    Then I click the first "Seeker, Tom" link 
+    Then I click the first "Seeker, Tom" link
     And I should not see "Edit Job Seeker"
-    
-    
-

@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe ApplicationHelper, type: :helper do
 
@@ -100,6 +101,11 @@ RSpec.describe ApplicationHelper, type: :helper do
   context '#status_desc for status description display' do
 
     describe 'job application' do
+      
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
 
       it 'Status 0 should be Active' do
         job_app.status = 0

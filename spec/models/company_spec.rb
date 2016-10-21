@@ -63,8 +63,14 @@ RSpec.describe Company, type: :model do
      end
 
      describe 'Email' do
-       subject {FactoryGirl.build(:company)}
-       it { should_not allow_value('asd', 'john@company').for(:email)}
+       let!(:company) {FactoryGirl.build(:company)}
+       it do
+         stub_email_validate_error
+         company.email = 'asd'
+         expect(company).not_to be_valid
+         company.email = 'john@company'
+         expect(company).not_to be_valid
+       end
        it { should allow_value('johndoe@company.com').for(:email)}
      end
 
@@ -89,7 +95,10 @@ RSpec.describe Company, type: :model do
 
      describe 'Job Email' do
        it { should validate_presence_of(:job_email) }
-       it { should_not allow_value('asd', 'john@company').for(:job_email)}
+       it do
+         stub_email_validate_error
+         should_not allow_value('asd', 'john@company').for(:job_email)
+       end
        it { should allow_value('johndoe@company.com').for(:job_email)}
      end
 
