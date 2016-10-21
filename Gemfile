@@ -76,6 +76,8 @@ gem 'faker'
 
 gem 'ransack'
 
+gem 'mailgun_rails'
+
 group :development do
   gem 'haml-rails'
   gem 'bullet'

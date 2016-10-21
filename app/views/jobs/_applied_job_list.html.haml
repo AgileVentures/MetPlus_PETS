@@ -39,7 +39,7 @@
                   = "#{time_ago_in_words(applied_at)} ago"
               - when :status
                 %td
-                  = job_application.status_name
+                  = status_desc(job_application)
 
   = will_paginate job_applications, param_name: 'applications_page',
                                params: {controller: 'job_seekers',

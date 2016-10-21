@@ -22,14 +22,14 @@ Background: data is added to database
 
   Given the following jobseeker exist:
   	| first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
-  	| John       | Seeker    | john@seek.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
-  	| Jane       | Seeker    | jane@seek.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
-  	| June       | Seeker    | june@seek.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+  	| John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+  	| Jane       | Seeker    | jane@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+  	| June       | Seeker    | june@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following agency relations exist:
 		| job_seeker    | agency_person    | role |
-		| john@seek.com | dave@metplus.org | JD   |
-		| june@seek.com | dave@metplus.org | JD   |
+		| john@mail.com | dave@metplus.org | JD   |
+		| june@mail.com | dave@metplus.org | JD   |
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator          |
@@ -37,9 +37,9 @@ Background: data is added to database
 
 	Given the following job applications exist:
 		| job title 	 | job seeker 	 | status 			|
-		| hr manager	 | john@seek.com | active 			|
-		| hr manager	 | jane@seek.com | active 			|
-		| hr manager	 | june@seek.com | active 			|
+		| hr manager	 | john@mail.com | active 			|
+		| hr manager	 | jane@mail.com | active 			|
+		| hr manager	 | june@mail.com | active 			|
 
 	@javascript
 	Scenario: company contact accept a job application
@@ -48,11 +48,11 @@ Background: data is added to database
 	  And I wait 1 second
 	  Then I click "hr manager" link to job applications index page
 	  And I should see "3" active applications for the job
-	  Then I accept "jane@seek.com" application
+	  Then I accept "jane@mail.com" application
 	  And I should see an "accept" confirmation
 	  Then I click the "Accept" confirmation
-	  And I should see "jane@seek.com" application is listed first
-	  And I should see "jane@seek.com" application changes to accepted
+	  And I should see "jane@mail.com" application is listed first
+	  And I should see "jane@mail.com" application changes to accepted
 	  And other applications change to not accepted
 	  And I should see "hr manager" job changes to status filled
 
@@ -63,16 +63,16 @@ Background: data is added to database
 	  And I wait 1 second
 	  Then I click "hr manager" link to job applications index page
 	  And I should see "3" active applications for the job
-	  Then I click "june@seek.com" link to "June's" job application show page
+	  Then I click "june@mail.com" link to "June's" job application show page
 	  Then I click the "Accept" link
 	  And I should see an "accept" confirmation
 	  Then I click the "Accept" confirmation
 	  And I am returned to "hr manager" job application index page
-	  And I should see "june@seek.com" application is listed first
-	  And I should see "june@seek.com" application changes to accepted
+	  And I should see "june@mail.com" application is listed first
+	  And I should see "june@mail.com" application changes to accepted
 	  And other applications change to not accepted
 	  And I should see "hr manager" job changes to status filled
-	  Then I click "june@seek.com" link to "June's" job application show page
+	  Then I click "june@mail.com" link to "June's" job application show page
 	  And I should not see "Accept" link
 
 	@selenium
@@ -85,7 +85,7 @@ Background: data is added to database
 	  Given I am on the home page
 	  And I login as "cane@widgets.com" with password "qwerty123"
 	  Then I click "hr manager" link to job applications index page
-	  And I accept "john@seek.com" application
+	  And I accept "john@mail.com" application
 	  And I click the "Accept" confirmation
 
 	  Then I am in Job Developer's browser

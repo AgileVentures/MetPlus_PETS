@@ -11,7 +11,7 @@ Background: seed data added to database
   Given the following jobseeker exist:
     | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
     | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-    | thomas    | jones    | tommy@gmail.com           | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | thomas    | jones    | tommy1@gmail.com           | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
@@ -35,9 +35,9 @@ Background: seed data added to database
     | SW dev     | vijaya.karumudi@gmail.com |
     | Trucker    | vijaya.karumudi@gmail.com |
     | Doctor     | vijaya.karumudi@gmail.com |
-    | Clerk      | tommy@gmail.com           |
-    | Doctor     | tommy@gmail.com           |
-    | Mime       | tommy@gmail.com           |
+    | Clerk      | tommy1@gmail.com           |
+    | Doctor     | tommy1@gmail.com           |
+    | Mime       | tommy1@gmail.com           |
 
   Given the following agency people exist:
     | agency  | role  | first_name | last_name | phone        | email          | password  |
@@ -45,7 +45,7 @@ Background: seed data added to database
 
   Given the following agency relations exist:
   	| job_seeker      | agency_person    | role |
-  	| tommy@gmail.com | aa@metplus.org   | JD   |
+  	| tommy1@gmail.com | aa@metplus.org   | JD   |
 
 Scenario: new Js Registration
   Given I am on the Jobseeker Registration page
@@ -86,7 +86,7 @@ Scenario: login jobseeker, land on home page, see applied jobs
   And I should see "Trucker" before "Job Opportunities - New"
   And I should see "Doctor" before "Job Opportunities - New"
 
-@javascript
+@selenium
 Scenario: job seeker finds new job opportunities
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -164,7 +164,7 @@ Scenario: Job Developer sees job seeker's job applications
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Welcome back to PETS, John Smith"
-  Then I am on the JobSeeker Show page for "tommy@gmail.com"
+  Then I am on the JobSeeker Show page for "tommy1@gmail.com"
   And I wait 1 second
   And I should see "Clerk"
   And I should see "Doctor"
