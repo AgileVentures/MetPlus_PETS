@@ -15,6 +15,8 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require js.cookie
+//= require jquery-readyselector
+//= require moment-with-locales.min
 //= require_self
 //= require cocoon
 //= require_tree .
@@ -70,3 +72,4 @@ PETS = {
         return this;
     }
 };
+
