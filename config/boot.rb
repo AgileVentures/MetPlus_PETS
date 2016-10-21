@@ -9,6 +9,8 @@ module Rails
   class Server
     alias :default_options_bk :default_options
     def default_options
+      # Change the default property of HOST to 0.0.0.0
+      # currently it is set to 127.0.0.1
       default_options_bk.merge!(Host: '0.0.0.0')
     end
   end
