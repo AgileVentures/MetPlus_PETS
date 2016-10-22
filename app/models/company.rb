@@ -54,6 +54,10 @@ class Company < ActiveRecord::Base
     find_users_with_role(company, CompanyRole::ROLE[:CA])
   end
 
+  def self.everyone(company)
+    company.company_people.joins(:user).order('users.last_name')
+  end
+
   def sole_company_admin?
     # Is this person even an admin?
     return false unless company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]

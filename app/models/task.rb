@@ -28,8 +28,10 @@ class Task < ActiveRecord::Base
                                                          company_person.user.id,
                                                          company_person.company.id,
                                                          company_person.company_roles.pluck(:role).collect{|role| CompanyRole::ROLE.key(role)})}
-  scope :agency_tasks, -> (user) {where('(owner_agency_id = ? or owner_user_id in (?))',  
+  scope :agency_tasks, -> (user) {where('(owner_agency_id = ? or owner_user_id in (?))',
                           user.agency.id, user.agency.agency_people.map{|a| a.acting_as.id}.collect)}
+  scope :company_tasks, -> (user) {where('(owner_company_id = ? or owner_user_id in (?))',
+                          user.company.id, user.company.company_people.map{|a| a.acting_as.id}.collect)}
 
   def task_owner
     return owner.pets_user if owner != nil
@@ -67,7 +69,7 @@ class Task < ActiveRecord::Base
     active_tasks.agency_tasks(user)
   end
 
-  def self.find_by_user_closed user_tasks
+  def self.find_by_user_closed user
     closed_tasks.user_tasks(user)
   end
 
@@ -84,6 +86,22 @@ class Task < ActiveRecord::Base
       open_tasks.company_person_tasks(user)
     else
       open_tasks.user_tasks(user)
+    end
+  end
+
+  def self.find_by_company_new user
+    new_tasks.company_tasks(user)
+  end
+
+  def self.find_by_company_active user
+    active_tasks.company_tasks(user)
+  end
+
+  def self.find_by_company_closed user
+    if  user.is_company_admin?(user.company)
+      closed_tasks.company_tasks(user)
+    else
+      closed_tasks.user_tasks(user)
     end
   end
 

@@ -58,7 +58,7 @@ module TaskManager
     ASSIGNABLE_LIST = {:need_job_developer => {type: :agency, function: :job_developers},
                        :need_case_manager => {type: :agency, function: :case_managers},
                        :company_registration => {type: :agency, function: :agency_admins},
-                       :job_application => {type: :company, function: :all}}
+                       :job_application => {type: :company, function: :everyone}}
 
     module ClassMethods
       def new_js_registration_task jobseeker, agency
@@ -92,7 +92,7 @@ module TaskManager
       if info[:type] == :agency
         return Agency.send info[:function], task_owner[0].agency
       elsif info[:type] == :company
-        return task_owner[0].company.people_on_role("Company Contact")
+        return Company.send info[:function], task_owner[0].company
       end
       nil
     end

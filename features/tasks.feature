@@ -71,10 +71,8 @@ Feature: Have a task system in the site
     And I click the "Widgets Inc." link
     And I wait 1 second
     And I should see "Company Registration Information"
-<<<<<<< HEAD
-=======
 
-@selenium
+  @selenium
   Scenario: company admin can view and assign tasks
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
@@ -88,4 +86,3 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see notification "Task assigned"
     And The task 9 is not present
->>>>>>> Add testcases
