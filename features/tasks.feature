@@ -78,6 +78,7 @@ Feature: Have a task system in the site
     And I login as "ca@widgets.com" with password "qwerty123"
     Then I should see "Signed in successfully."
     And I wait 1 second
+    And I click the "Unassigned Company Tasks" link
     And The tasks 9,10 are present
     Then I press the assign button of the task 9
     And I should see "Select the user to assign the task to:"

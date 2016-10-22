@@ -182,7 +182,7 @@ Feature: Company Person
   Scenario: Company Contact with tasks on home page
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
-    And I should see "Tasks that need your attention"
+    And I should see "Your Open Tasks"
     And I should see "Review job application"
     And The task 1 status is "Assigned"
     Then I press the wip button of the task 1
