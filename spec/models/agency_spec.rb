@@ -35,7 +35,6 @@ RSpec.describe Agency, type: :model do
 
     describe 'phone' do
        subject {FactoryGirl.build(:agency)}
-
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
@@ -45,7 +44,6 @@ RSpec.describe Agency, type: :model do
 
      describe 'fax' do
        subject {FactoryGirl.build(:agency)}
-
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
