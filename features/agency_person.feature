@@ -88,11 +88,11 @@ Given the following agency relations exist:
     And I should see "Your Open Tasks"
     And I should see "Job Seeker has no assigned Job Developer"
     And I should not see "Job Seeker has no assigned Case Manager"
-    And The task 3 status is "Assigned"
+    And the task 3 status is "Assigned"
     Then I press the wip button of the task 3
     And I wait 5 seconds
     And I should see notification "Work on the task started"
-    And The task 3 status is "Work in progress"
+    And the task 3 status is "Work in progress"
     Then I press the done button of the task 3
     And I wait 1 second
     And I should see notification "Work on the task is done"
@@ -107,17 +107,17 @@ Given the following agency relations exist:
     And I should see "Your Open Tasks"
     And I should see "All Agency Open Tasks"
     And I should see "Closed Tasks"
-    And The tasks 5,6 are present
-    And The tasks 1,2,3,4,7 are hidden
+    And the tasks 5,6 are present
+    And the tasks 1,2,3,4,7 are hidden
     And I click the "Unassigned Agency Tasks" link
-    And The tasks 1,2 are present
-    And The tasks 3,4,7 are hidden
+    And the tasks 1,2 are present
+    And the tasks 3,4,7 are hidden
     And I click the "All Agency Open Tasks" link
-    And The tasks 3,4,5,6 are present
-    And The tasks 1,2,7 are hidden
+    And the tasks 3,4,5,6 are present
+    And the tasks 1,2,7 are hidden
     And I click the "Closed Tasks" link
-    And The task 7 is present
-    And The tasks 1,2,3,4 are hidden
+    And the task 7 is present
+    And the tasks 1,2,3,4 are hidden
 
   @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
@@ -132,9 +132,9 @@ Given the following agency relations exist:
     Then I press "Assign"
     And I wait 1 second
     And I should see notification "Task assigned"
-    And The task 2 is not present
+    And the task 2 is not present
     And I click the "All Agency Open Tasks" link
-    And The task 2 is present
+    And the task 2 is present
 
   @selenium
   Scenario: Job developer assigns self to job seeker

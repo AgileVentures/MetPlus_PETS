@@ -184,11 +184,11 @@ Feature: Company Person
     And I login as "jane@widgets.com" with password "qwerty123"
     And I should see "Your Open Tasks"
     And I should see "Review job application"
-    And The task 1 status is "Assigned"
+    And the task 1 status is "Assigned"
     Then I press the wip button of the task 1
     And I wait 5 seconds
     And I should see notification "Work on the task started"
-    And The task 1 status is "Work in progress"
+    And the task 1 status is "Work in progress"
     Then I press the done button of the task 1
     And I wait 1 second
     And I should see notification "Work on the task is done"

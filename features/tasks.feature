@@ -40,50 +40,71 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john.worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
       | job_application    | Widgets Inc.,CA      | 2016-03-10    | NEW         | john-seeker@gmail.com |
-      | job_application    | ca@widgets.com       | 2016-03-10    | NEW         | john-seeker@gmail.com |
+      | job_application    | ca@widgets.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
 
   @selenium
-  Scenario: Agency admin assign task to other JD and task is removed from his view
+  Scenario: Agency admin task management
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
-    Then I go to the tasks page
-    And The tasks 1,2,5,6,7,8 are present
-    And I should see "Job Seeker has no assigned Job Developer"
-    And I should see "Job Seeker has no assigned Job Developer" after "Tasks completed by you"
+    And the tasks 5,6 are present  # "Your Open Tasks"
+    And I click the "Unassigned Agency Tasks" link
+    And the tasks 1,2,8 are present
+    And I click the "All Agency Open Tasks" link
+    And the tasks 3,4,5,6 are present
+    And I click the "All Agency Closed Tasks" link
+    And the task 7 is present
+    And I click the "Unassigned Agency Tasks" link
+    And I should see "Job Seeker has no assigned Case Manager"
     Then I press the assign button of the task 2
-    And I should see "Select the user to assign the task to:"
     And I select2 "Jones, Jane" from "task_assign_select"
     Then I press "Assign"
     And I wait 1 second
     And I should see notification "Task assigned"
-    And The task 2 is not present
+    And the task 2 is not present
+    And I click the "All Agency Open Tasks" link
+    And the task 2 is present
+    And I press the done button of the task 6
+    And I wait 1 second
+    And I should see notification "Work on the task is done"
+    And the task 6 is not present
+    And I click the "All Agency Closed Tasks" link
+    And the task 6 is present
 
   @selenium
   Scenario: Agency admin can see company registration
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
-    Then I go to the tasks page
-    And I wait 2 seconds
+    And I click the "Unassigned Agency Tasks" link
     And I should see "Widgets Inc."
     And I click the "Widgets Inc." link
     And I wait 1 second
     And I should see "Company Registration Information"
 
   @selenium
-  Scenario: company admin can view and assign tasks
+  Scenario: Company admin task management
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
     Then I should see "Signed in successfully."
-    And I wait 1 second
     And I click the "Unassigned Company Tasks" link
-    And The tasks 9,10 are present
+    And the task 9 is present
     Then I press the assign button of the task 9
     And I should see "Select the user to assign the task to:"
     And I select2 "Smith, Jane" from "task_assign_select"
     Then I press "Assign"
     And I wait 1 second
     And I should see notification "Task assigned"
-    And The task 9 is not present
+    And the task 9 is not present
+    Then I click the "Your Open Tasks" link
+    And the task 10 is present
+    Then I press the wip button of the task 10
+    Then I click the "All Company Open Tasks" link
+    And the tasks 9,10 are present
+    Then I click the "Your Open Tasks" link
+    And I press the done button of the task 10
+    And I wait 1 second
+    And the task 10 is not present
+    Then I click the "All Company Closed Tasks" link
+    And the task 10 is present
