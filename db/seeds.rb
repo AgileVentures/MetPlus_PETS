@@ -11,6 +11,11 @@ def create_address(location = nil)
                  location: location)
 end
 
+def create_email(name_seed)
+  name = name_seed.gsub(/[ ,\-']/, '').slice(0,20).concat('pets')
+  Faker::Internet.free_email(name)
+end
+
 # --------------------------- Seed Production Database --------------------
 @jss1 = JobSeekerStatus.first
 @jss2 = JobSeekerStatus.second
@@ -49,9 +54,9 @@ if Rails.env.development? || Rails.env.staging?
     ein = Faker::Company.ein
     phone = "(#{(1..9).to_a.shuffle[0..2].join})-#{(1..9).to_a.shuffle[0..2]
                                                        .join}-#{(1..9).to_a.shuffle[0..3].join}"
-    email =Faker::Internet.email
-    website = Faker::Internet.url
     name = Faker::Company.name
+    website = Faker::Internet.url
+    email = create_email(name)
     cmp = Company.new(ein: ein,
                       phone: phone,
                       email: email,
@@ -115,10 +120,10 @@ if Rails.env.development? || Rails.env.staging?
   addresses = Address.all.to_a
   200.times do |n|
     title = FFaker::Job.title
-    email = FFaker::Internet.email
     password = "secret123"
-    first_name = FFaker::Name.first_name
-    last_name = FFaker::Name.last_name
+    first_name = Faker::Name.first_name
+    last_name = Faker::Name.last_name
+    email = create_email("#{first_name}#{last_name}")
     confirmed_at = DateTime.now
     cp = CompanyPerson.new(title: title, email: email, password: password,
                       first_name: first_name,
@@ -160,13 +165,12 @@ if Rails.env.development? || Rails.env.staging?
   # Create more company people for 'known company'
   21.times do |n|
     title = FFaker::Job.title
-    email = FFaker::Internet.email
     password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
     confirmed_at = DateTime.now
     cp = CompanyPerson.new(title: FFaker::Job.title,
-                           email: FFaker::Internet.email,
+                           email: create_email("#{first_name}#{last_name}"),
                         password: 'qwerty123',
                       first_name: FFaker::Name.first_name,
                        last_name: FFaker::Name.last_name,
@@ -224,7 +228,6 @@ if Rails.env.development? || Rails.env.staging?
   #-------------------------- Job Seekers ---------------------------------
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
-    email = FFaker::Internet.email
     password = "secret123"
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
@@ -235,7 +238,7 @@ if Rails.env.development? || Rails.env.staging?
 
     job_seeker = JobSeeker.create(first_name: first_name,
                      last_name: last_name,
-                     email: email,
+                     email: create_email("#{first_name}#{last_name}"),
                      password: password,
                      year_of_birth: year_of_birth,
                      job_seeker_status: job_seeker_status,
@@ -249,7 +252,7 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
-                        email: 'tom@gmail.com', password: 'qwerty123',
+                        email: 'tomseekerpets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', phone: '111-222-3333',
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
@@ -272,19 +275,19 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
-                        email: 'mary@gmail.com', password: 'qwerty123',
+                        email: 'marymacpets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss2, confirmed_at: Time.now,
                       address: create_address)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
-                        email: 'frank@gmail.com', password: 'qwerty123',
+                        email: 'fwilliamspets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
-                        email: 'henry@gmail.com', password: 'qwerty123',
+                        email: 'hmccoypets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
