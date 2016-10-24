@@ -12,7 +12,7 @@ def create_address(location = nil)
 end
 
 def create_email(name_seed)
-  name = name_seed.gsub(/[ ,\-']/, '').slice(0,24)
+  name = name_seed.gsub(/[ ,\-']/, '').slice(0,20).concat('pets')
   Faker::Internet.free_email(name)
 end
 
@@ -252,7 +252,7 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
-                        email: 'tomseeker@gmail.com', password: 'qwerty123',
+                        email: 'tomseekerpets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1980', phone: '111-222-3333',
             job_seeker_status: @jss1, confirmed_at: Time.now,
                       address: create_address)
@@ -275,19 +275,19 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
-                        email: 'marymac@gmail.com', password: 'qwerty123',
+                        email: 'marymacpets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss2, confirmed_at: Time.now,
                       address: create_address)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
-                        email: 'fwilliams@gmail.com', password: 'qwerty123',
+                        email: 'fwilliamspets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
 
   js4 = JobSeeker.create(first_name: 'Henry', last_name: 'McCoy',
-                        email: 'hmccoy@gmail.com', password: 'qwerty123',
+                        email: 'hmccoypets@gmail.com', password: 'qwerty123',
                 year_of_birth: '1970', phone: '111-222-3333',
             job_seeker_status: @jss3, confirmed_at: Time.now,
                       address: create_address)
