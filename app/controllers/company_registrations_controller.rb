@@ -32,9 +32,6 @@ class CompanyRegistrationsController < ApplicationController
     # Ensure that contact cannot log in
     @company.company_people[0].user.approved = false
 
-    @company.status                   = Company::STATUS[:PND]
-    @company.company_people[0].status = CompanyPerson::STATUS[:PND]
-
     @company.company_people[0].company_roles <<
                     CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
 
@@ -43,6 +40,8 @@ class CompanyRegistrationsController < ApplicationController
     ###################################################
 
     if @company.save
+      @company.pending_registration
+      @company.company_people[0].company_pending
       flash.notice = "Thank you for your registration request. " +
          " We will review your request and get back to you shortly."
 
@@ -95,11 +94,11 @@ class CompanyRegistrationsController < ApplicationController
     # There should be only one CompanyPerson associated with the company -
     # this is the 'company contact' included in the registration request.
     company = Company.find(params[:id])
-    company.status          = Company::STATUS[:ACT]
+    company.active
     company.save
 
     company_person = company.company_people[0]
-    company_person.status   = CompanyPerson::STATUS[:ACT]
+    company_person.active
     company_person.approved = true
     company_person.save
 
@@ -116,10 +115,9 @@ class CompanyRegistrationsController < ApplicationController
   def deny
     # Deny the company's registration request.
     company = Company.find(params[:id])
-    company_person = company.company_people[0]
 
-    company.status                   = Company::STATUS[:DENY]
-    company.company_people[0].status = CompanyPerson::STATUS[:DENY]
+    company.registration_denied
+    company.company_people[0].company_denied
     company.save
 
     render :partial => 'companies/company_status',

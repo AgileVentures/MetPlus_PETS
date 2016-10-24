@@ -15,8 +15,8 @@ Background: data is added to database
 
   Given the following companies exist:
   	| agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | Active |
-  	| MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | Active |
+  	| MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+  	| MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
 
   Given the following company people exist:
   	| company      | role  | first_name | last_name | email            | password  | phone        |
@@ -26,7 +26,7 @@ Background: data is added to database
 
   Given the following jobseeker exist:
   	| first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
-  	| John       | Seeker    | john@seek.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+  	| John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
@@ -71,7 +71,7 @@ Background: data is added to database
 
 	Scenario: job seeker view job listed
 		Given I am on the home page
-		And I login as "john@seek.com" with password "qwerty123"
+		And I login as "john@mail.com" with password "qwerty123"
 		And I visit the jobs page
 	  And I should see "Revoked" next to "hr assistant"
 	  Then I click the "hr assistant" link to job show page

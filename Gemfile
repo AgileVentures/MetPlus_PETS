@@ -76,6 +76,8 @@ gem 'faker'
 
 gem 'ransack'
 
+gem 'mailgun_rails'
+
 group :development do
   gem 'haml-rails'
   gem 'bullet'
@@ -114,10 +116,10 @@ group :test do
   gem 'webmock'
 end
 
+gem 'airbrake', '~> 5.4'
 group :production do
   # Use Postgres as the database for Active Record
   gem 'pg'
   gem 'rails_12factor'
   gem 'puma'
-  gem 'airbrake', '~> 5.4'
 end

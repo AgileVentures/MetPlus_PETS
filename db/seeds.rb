@@ -60,9 +60,9 @@ if Rails.env.development? || Rails.env.staging?
                       name: name)
     cmp.agencies << agency
     if n < 20
-      cmp.status = Company::STATUS[:PND]
+      cmp.pending_registration
     else
-      cmp.status = Company::STATUS[:ACT]
+      cmp.active
     end
     cmp.save!
 
@@ -80,7 +80,7 @@ if Rails.env.development? || Rails.env.staging?
                               job_email: 'hr@widgets.com',
                               website: 'www.widgets.com',
                               name: 'Widgets, Inc.',
-                              status: Company::STATUS[:ACT])
+                              status: 'active')
   known_company.agencies << agency
   known_company.save!
 
@@ -126,7 +126,7 @@ if Rails.env.development? || Rails.env.staging?
                     confirmed_at: confirmed_at,
                       company_id: companies[n].id,
                       address_id: addresses[n].id,
-                          status: 'Active')
+                          status: 'active')
     cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
     cp.save!
   end
@@ -140,7 +140,7 @@ if Rails.env.development? || Rails.env.staging?
                                            confirmed_at: DateTime.now,
                                            company_id: known_company.id,
                                            address_id: Address.find(1).id,
-                                           status: 'Active')
+                                           status: 'active')
   known_company_person.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
   known_company_person.save!
 
@@ -153,7 +153,7 @@ if Rails.env.development? || Rails.env.staging?
                                            confirmed_at: DateTime.now,
                                            company_id: known_company.id,
                                            address_id: Address.find(1).id,
-                                           status: 'Active')
+                                           status: 'active')
   known_company_contact.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
   known_company_contact.save!
 
@@ -174,7 +174,7 @@ if Rails.env.development? || Rails.env.staging?
                     confirmed_at: DateTime.now,
                       company_id: known_company.id,
                       address_id: addresses[n].id,
-                          status: 'Active')
+                          status: 'active')
     cp.company_roles << CompanyRole.find_by_role(CompanyRole::ROLE[:CC])
     cp.save!
   end
@@ -331,7 +331,7 @@ if Rails.env.development? || Rails.env.staging?
                                agency_id: agency.id, email: 'pets_admin@metplus.org',
                                password: 'qwerty123', confirmed_at: Time.now,
                                branch_id: agency.branches[0].id,
-                               status: AgencyPerson::STATUS[:ACT])
+                               status: 'active')
   agency_aa.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:AA])
   agency_aa.save!
 
@@ -339,7 +339,7 @@ if Rails.env.development? || Rails.env.staging?
                                       agency_id: agency.id, email: 'chet@metplus.org',
                                       password: 'qwerty123', confirmed_at: Time.now,
                                       branch_id: agency.branches[1].id,
-                                      status: AgencyPerson::STATUS[:ACT])
+                                      status: 'active')
   agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
   agency_cm_and_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_cm_and_jd.save!
@@ -347,9 +347,8 @@ if Rails.env.development? || Rails.env.staging?
   agency_jd = AgencyPerson.new(first_name: 'Jane', last_name: 'Doe',
                                agency_id: agency.id, email: 'jane@metplus.org',
                                password: 'qwerty123', confirmed_at: Time.now,
-
                                branch_id: agency.branches[2].id,
-                               status: AgencyPerson::STATUS[:ACT])
+                               status: 'active')
 
   agency_jd.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:JD])
   agency_jd.save!
@@ -357,9 +356,8 @@ if Rails.env.development? || Rails.env.staging?
   agency_cm = AgencyPerson.new(first_name: 'Kevin', last_name: 'Caseman',
                                agency_id: agency.id, email: 'kevin@metplus.org',
                                password: 'qwerty123', confirmed_at: Time.now,
-
                                branch_id: agency.branches[2].id,
-                               status: AgencyPerson::STATUS[:ACT])
+                               status: 'active')
 
   agency_cm.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM])
   agency_cm.save!
@@ -388,7 +386,7 @@ if Rails.env.development? || Rails.env.staging?
   puts "Agency Relations created: #{AgencyRelation.count}"
 
   #-------------------------- Tasks ---------------------------------------
-  companies = Company.where(status: Company::STATUS[:PND])
+  companies = Company.pending_registration
 
   Task.new_js_unassigned_cm_task(js3, agency)
   Task.new_js_registration_task(js4, agency)

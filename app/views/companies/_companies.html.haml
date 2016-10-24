@@ -12,13 +12,13 @@
       - @companies.each do |company|
         %tr
           %td
-            - if company.status == Company::STATUS[:PND]
+            - if company.pending_registration?
               = link_to company.name, company_registration_path(company)
             - else
               = link_to company.name, company_path(company)
           %td
             = single_line_address(company.addresses.first)
           %td
-            = company.status
+            = status_desc(company)
   = will_paginate @companies, param_name: 'companies_page', |
                       params: {data_type: 'companies'}      |

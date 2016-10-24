@@ -6,15 +6,35 @@ class CompanyPerson < ActiveRecord::Base
                           join_table: 'company_people_roles',
                           autosave: false
 
-  STATUS = { PND:   'Pending', # Company has registered but not yet approved
-             IVT:   'Invited', # Company approved, invite sent to confirm account
-             ACT:   'Active',
-             INACT: 'Inactive',
-             DENY:  'Registration Denied'} # Company registration denied
-
-  validates :status, inclusion: STATUS.values
+  enum status: [:company_pending, :invited, :active, :inactive, :company_denied]
+  has_many :status_changes, as: :entity, dependent: :destroy
 
   validate :not_removing_sole_company_admin, on: :update
+
+  def company_pending
+    company_pending!
+    StatusChange.update_status_history(self, :company_pending)
+  end
+
+  def invited
+    invited!
+    StatusChange.update_status_history(self, :invited)
+  end
+
+  def active
+    active!
+    StatusChange.update_status_history(self, :active)
+  end
+
+  def inactive
+    inactive!
+    StatusChange.update_status_history(self, :inactive)
+  end
+
+  def company_denied
+    company_denied!
+    StatusChange.update_status_history(self, :company_denied)
+  end
 
   scope :all_company_people, ->(company) {
     where(company_id: company.id).joins(:user).order('users.last_name')

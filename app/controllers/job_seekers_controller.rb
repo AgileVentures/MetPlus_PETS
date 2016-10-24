@@ -88,9 +88,9 @@ class JobSeekersController < ApplicationController
 
   def home
     @jobseeker = JobSeeker.find(params[:id])
+    @recent_jobs_type = 'recent-jobs'
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
-    @past_week = Job.new_jobs(Time.now - 3.weeks).paginate(:page => params[:page], :per_page => 5)
-
+    @js_last_sign_in = @jobseeker.last_sign_in_at
     @application_type = params[:application_type] || 'my-applied'
   end
 

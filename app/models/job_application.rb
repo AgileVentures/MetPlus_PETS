@@ -2,6 +2,7 @@ class JobApplication < ActiveRecord::Base
   belongs_to :job_seeker
   belongs_to :job
   enum status: [:active, :accepted, :not_accepted]
+  attr_accessor :reason_for_rejection
 
   has_many :status_changes, as: :entity, dependent: :destroy
 
@@ -9,10 +10,6 @@ class JobApplication < ActiveRecord::Base
 
   after_create do
     StatusChange.update_status_history(self, :active)
-  end
-
-  def status_name
-    status.to_s.camelcase
   end
 
   def status_change_time(status, which = :latest)
@@ -32,6 +29,10 @@ class JobApplication < ActiveRecord::Base
       StatusChange.update_status_history(application, :not_accepted)
 		end
     job.filled
+  end
+
+  def reject
+    not_accepted!
   end
 
 end

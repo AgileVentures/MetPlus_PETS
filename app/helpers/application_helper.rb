@@ -1,5 +1,10 @@
 module ApplicationHelper
 
+  def status_desc entity
+    # Converts entitie's status to descriptive string suitable for display
+    entity.status.titleize
+  end
+
   def full_title(page_title = '')
     base_title = "MetPlus"
     page_title.empty? ? base_title : "#{page_title} | #{base_title}"

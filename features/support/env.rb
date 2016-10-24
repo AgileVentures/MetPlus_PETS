@@ -66,6 +66,13 @@ WebMock.allow_net_connect!
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.default_max_wait_time = 5
+# see http://blog.pixarea.com/2013/02/locking-the-firefox-version-when-testing-rails-with-capybara-and-selenium/ for 
+# details on how to set this up
+Capybara.register_driver :selenium do |app|
+  require 'selenium/webdriver'
+  Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_BINARY_PATH'] || Selenium::WebDriver::Firefox::Binary.path
+  Capybara::Selenium::Driver.new(app, :browser => :firefox)
+end
 
 Before '@selenium' do
   Capybara.current_session.current_window.resize_to(1024, 768)

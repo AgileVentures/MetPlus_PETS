@@ -38,7 +38,7 @@ RSpec.describe Agency, type: :model do
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234', 
+               '1 231 231 2345', '12312312345',  '1231231234',
                '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
      end
 
@@ -47,13 +47,16 @@ RSpec.describe Agency, type: :model do
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234', 
+               '1 231 231 2345', '12312312345',  '1231231234',
                '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:fax)}
      end
 
      describe 'Email' do
        subject {FactoryGirl.build(:agency)}
-       it { should_not allow_value('asd', 'john@company').for(:email)}
+       it do
+         stub_email_validate_error
+         should_not allow_value('asd', 'john@company').for(:email)
+       end
        it { should allow_value('johndoe@company.com').for(:email)}
      end
 

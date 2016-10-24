@@ -36,13 +36,12 @@
           %strong Status:
         %td
           - if @agency_person.status
-            = @agency_person.status
-            = link_to '(Invite Again)',                                           |
-                  user_invitation_path(user: {email: @agency_person.email,        |
-                                         first_name: @agency_person.first_name,   |
-                                          last_name: @agency_person.last_name} ), |
-                                                        method: :post if          |
-                  @agency_person.status == AgencyPerson::STATUS[:IVT]             |
+            = status_desc(@agency_person)
+            = link_to '(Invite Again)',
+              user_invitation_path(user: {email: @agency_person.email,
+                                     first_name: @agency_person.first_name,
+                                      last_name: @agency_person.last_name} ),
+                                         method: :post if @agency_person.invited?
 
 .clearfix
 
@@ -70,7 +69,7 @@
 .clearfix
 %br
 .col-sm-5.col-sm-offset-2
-  %b Job Seekers for Job Developer role:
+  %b Assigned Job Seekers to #{@agency_person.full_name(last_name_first: false)} as Job Developer:
   - seekers = job_seekers_assigned_for_role(@agency_person, :JD)
   - if seekers.empty?
     %i None
@@ -84,7 +83,7 @@
                 = link_to seeker.full_name,
                           job_seeker_path(seeker.id)
 .col-sm-5
-  %b Job Seekers for Case Manager role:
+  %b Assigned Job Seekers to #{@agency_person.full_name(last_name_first: false)} as Case Manager:
   - seekers = job_seekers_assigned_for_role(@agency_person, :CM)
   - if seekers.empty?
     %i None

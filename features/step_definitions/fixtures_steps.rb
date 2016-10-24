@@ -191,7 +191,6 @@ Given(/^the following jobs exist:$/) do |table|
     end
 
     job.save!
-
     if skills and not skills.empty?
       skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
@@ -199,6 +198,10 @@ Given(/^the following jobs exist:$/) do |table|
       end
     end
   end
+end
+
+And /^I create the following jobs$/ do |table|
+  step "the following jobs exist:", table
 end
 
 Given(/^the following job applications exist:$/) do |table|

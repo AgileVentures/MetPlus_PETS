@@ -39,6 +39,22 @@ RSpec.describe JobApplicationsController, type: :controller do
 			it 'redirect to the specific job application index page' do
 				expect(response).to redirect_to(applications_job_url(valid_application.job))
 			end
+    end
+
+
+		context 'Valid Job Application Rejected' do
+			before (:each) do
+				stub_cruncher_authenticate
+				stub_cruncher_job_create
+				expect_any_instance_of(JobApplication).to receive(:reject)
+				patch :reject, id: valid_application
+			end
+			it 'show a flash[:info]' do
+				expect(flash[:notice]).to eq "Job application rejected."
+			end
+			it 'redirect to the specific job application index page' do
+				expect(response).to redirect_to(applications_job_url(valid_application.job))
+			end
 		end
 	end
 
