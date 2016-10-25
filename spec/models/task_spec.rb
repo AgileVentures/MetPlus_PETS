@@ -390,15 +390,15 @@ RSpec.describe Task, type: :model do
         expect(Task.find_by_agency_active @agency_admin).
                     to match_array [@task_jd_new, @task_cm_new, @task_aa_new]
       end
-      describe 'all closed tasks for company/agency' do
-        it 'company' do
-          expect(Task.find_by_company_closed @company_admin).
-                      to match_array [@task_ca_closed, @task_cc_closed]
-        end
-        it 'agency' do
-          expect(Task.find_by_agency_closed @agency_admin).
-                      to match_array [@task_aa_closed, @task_jd_closed, @task_cm_closed]
-        end
+    end
+    describe 'all closed tasks for company/agency' do
+      it 'company' do
+        expect(Task.find_by_company_closed @company_admin).
+                    to match_array [@task_ca_closed, @task_cc_closed]
+      end
+      it 'agency' do
+        expect(Task.find_by_agency_closed @agency_admin).
+                    to match_array [@task_aa_closed, @task_jd_closed, @task_cm_closed]
       end
     end
     describe 'open tasks for assigned owner' do
