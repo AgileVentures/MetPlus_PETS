@@ -141,4 +141,4 @@ Given the following job applications exist:
     Then I click the "Seeker, John" link
     Then I should see button "Download Resume"
     And I click the "Download Resume" button
-    Then I should get a download file for resume "Janitor-Resume.doc"
+    Then I should get a download with the filename "Janitor-Resume.doc"

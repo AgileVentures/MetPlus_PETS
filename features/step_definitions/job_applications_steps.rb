@@ -123,3 +123,7 @@ end
 Then(/^I should get a download file for resume "(.*?)"$/) do |resume|
   page.driver.response.headers['Content-Disposition'].should include("filename=\"#{filename}\"")
 end
+
+Then /^I should get a download with the filename "([^\"]*)"$/ do |filename|
+  page.driver.response.headers['Content-Disposition'].should include("filename=\"#{filename}\"")
+end
