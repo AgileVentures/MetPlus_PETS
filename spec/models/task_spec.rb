@@ -140,7 +140,7 @@ RSpec.describe Task, type: :model do
     before :each do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      
+
       @job_seeker = FactoryGirl.create(:job_seeker)
       @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
       @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
@@ -348,6 +348,10 @@ RSpec.describe Task, type: :model do
       @task_aa_closed.assign @agency_admin
       @task_aa_closed.work_in_progress
       @task_aa_closed.complete
+      @task_aa_unassigned1 = FactoryGirl.create(:task,
+                  :task_owner => {:agency => {agency: @agency, role: :AA}})
+      @task_aa_unassigned2 = FactoryGirl.create(:task,
+                  :task_owner => {:agency => {agency: @agency, role: :AA}})
 
       @task_ca_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CA}})
       @task_ca_new.assign @company_admin
@@ -355,6 +359,10 @@ RSpec.describe Task, type: :model do
       @task_ca_closed.assign @company_admin
       @task_ca_closed.work_in_progress
       @task_ca_closed.complete
+      @task_ca_unassigned1 = FactoryGirl.create(:task,
+                  :task_owner => {:company => {company: @company, role: :CA}})
+      @task_ca_unassigned2 = FactoryGirl.create(:task,
+                  :task_owner => {:company => {company: @company, role: :CA}})
 
       @task_cc_new = FactoryGirl.create(:task, :task_owner => {:company => {company: @company, role: :CC}})
       @task_cc_new.assign @company_contact
@@ -363,7 +371,37 @@ RSpec.describe Task, type: :model do
       @task_cc_closed.work_in_progress
       @task_cc_closed.complete
     end
-    describe 'open tasks' do
+    describe 'all new (unassigned) tasks for company/agency' do
+      it 'company' do
+        expect(Task.find_by_company_new @company_admin).
+                    to match_array [@task_ca_unassigned1, @task_ca_unassigned2]
+      end
+      it 'agency' do
+        expect(Task.find_by_agency_new @agency_admin).
+                    to match_array [@task_aa_unassigned1, @task_aa_unassigned2]
+      end
+    end
+    describe 'all open (assigned and incomplete) tasks for company/agency' do
+      it 'company' do
+        expect(Task.find_by_company_active @company_admin).
+                    to match_array [@task_ca_new, @task_cc_new]
+      end
+      it 'agency' do
+        expect(Task.find_by_agency_active @agency_admin).
+                    to match_array [@task_jd_new, @task_cm_new, @task_aa_new]
+      end
+    end
+    describe 'all closed tasks for company/agency' do
+      it 'company' do
+        expect(Task.find_by_company_closed @company_admin).
+                    to match_array [@task_ca_closed, @task_cc_closed]
+      end
+      it 'agency' do
+        expect(Task.find_by_agency_closed @agency_admin).
+                    to match_array [@task_aa_closed, @task_jd_closed, @task_cm_closed]
+      end
+    end
+    describe 'open tasks for assigned owner' do
       it 'job developer user' do
         expect(Task.find_by_owner_user_open @job_developer).to eq [@task_jd_new]
       end
@@ -380,7 +418,7 @@ RSpec.describe Task, type: :model do
         expect(Task.find_by_owner_user_open @company_contact).to eq [@task_cc_new]
       end
     end
-    describe 'close tasks' do
+    describe 'closed tasks for assigned owner' do
       it 'job developer user' do
         expect(Task.find_by_owner_user_closed @job_developer).to eq [@task_jd_closed]
       end

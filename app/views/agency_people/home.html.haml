@@ -5,37 +5,38 @@
     :id => 'edit-profile' do
     %i.fa.fa-pencil-square-o.fa-1
 
-%div
-  %ul.nav.nav-tabs(role="tablist")
-    - if @agency_person.is_agency_admin?(@agency)
+%div.panel.with-nav-tabs.panel-success
+  .panel-heading
+    %ul.nav.nav-tabs(role="tablist")
+      - if @agency_person.is_agency_admin?(@agency)
+        %li(role="presentation")
+          %a(href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab")
+            Unassigned Agency Tasks
+      %li.active(role="presentation")
+        %a(href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab")
+          Your Open Tasks
+      - if @agency_person.is_agency_admin?(@agency)
+        %li(role="presentation")
+          %a(href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab")
+            All Agency Open Tasks
       %li(role="presentation")
-        %a(href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab")
-          Unassigned Agency Tasks    
-    %li.active(role="presentation")
-      %a(href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab")
-        Your Open Tasks
-    - if @agency_person.is_agency_admin?(@agency)
-      %li(role="presentation")
-        %a(href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab")
-          All Agency Open Tasks
-    %li(role="presentation")
-      %a(href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab")
-        - if @agency_person.is_agency_admin?(@agency)
-          All Agency Closed Tasks
-        - if !@agency_person.is_agency_admin?(@agency)
-          Your Closed Tasks
-
-  .tab-content
-    - if @agency_person.is_agency_admin?(@agency)
-      .tab-pane#tab1(role="tabpanel")
-        = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_new}
-    .tab-pane.active#tab2(role="tabpanel")
-      = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
-    - if @agency_person.is_agency_admin?(@agency)
-      .tab-pane#tab3(role="tabpanel")
-        = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_all}
-    .tab-pane#tab4(role="tabpanel")
-      = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_closed}
+        %a(href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab")
+          - if @agency_person.is_agency_admin?(@agency)
+            All Agency Closed Tasks
+          - if !@agency_person.is_agency_admin?(@agency)
+            Your Closed Tasks
+  .panel-body
+    .tab-content
+      - if @agency_person.is_agency_admin?(@agency)
+        .tab-pane#tab1(role="tabpanel")
+          = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_new}
+      .tab-pane.active#tab2(role="tabpanel")
+        = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
+      - if @agency_person.is_agency_admin?(@agency)
+        .tab-pane#tab3(role="tabpanel")
+          = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_all}
+      .tab-pane#tab4(role="tabpanel")
+        = render partial: 'tasks/tasks_structure' , :locals => {task_type: @agency_closed}
 
 
 - if @agency_person.is_job_developer?(@agency)
@@ -45,7 +46,7 @@
   - else
     .pagination-div{id: "agency_person-#{@people_type_jd}",
      data: {url: list_js_jd_agency_people_path(@agency_person.id,@people_type_jd)}}
-    
+
 - if @agency_person.is_case_manager?(@agency)
   %h3 Your Job Seekers (as case manager)
   - if @your_jobseekers_cm.empty?
@@ -53,7 +54,7 @@
   - else
     .pagination-div{id: "agency_person-#{@people_type_cm}",
      data: {url: list_js_cm_agency_people_path(@agency_person.id,@people_type_cm)}}
-    
+
 - if @agency_person.is_job_developer?(@agency)
   %h3 Job Seekers without a Job Developer
   - if @js_without_jd.empty?
@@ -69,5 +70,3 @@
   -else
     .pagination-div{id: "agency_person-#{@people_type_without_cm}",
      data: {url: list_js_without_cm_agency_people_path(@agency_person.id,@people_type_without_cm)}}
-    
-

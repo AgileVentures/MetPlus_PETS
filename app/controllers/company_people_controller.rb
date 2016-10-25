@@ -62,7 +62,11 @@ class CompanyPeopleController < ApplicationController
   end
 
   def home
-    @task_type   = 'company-open'
+    @task_type      = 'mine-open'
+    @company_all    = 'company-all'
+    @company_new    = 'company-new'
+    @company_closed = 'company-closed'
+    
     @job_type    = 'my-company-all'
     @people_type = 'my-company-all'
     @company     = pets_user.company
