@@ -192,3 +192,4 @@ Feature: Company Person
     Then I press the done button of the task 1
     And I wait 1 second
     And I should see notification "Work on the task is done"
+    And the task 1 is not present
