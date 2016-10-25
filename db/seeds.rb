@@ -1,5 +1,16 @@
 require 'ffaker'
 
+require 'webmock'
+include WebMock::API
+
+require './spec/support/service_stub_helpers'
+include ServiceStubHelpers::EmailValidator
+
+WebMock.enable!
+WebMock.allow_net_connect!  # allow non-stubbed service calls to proceed
+
+stub_email_validate_valid   # stub mailgun email validation
+
 def create_address(location = nil)
   street = Faker::Address.street_address
   city = Faker::Address.city
