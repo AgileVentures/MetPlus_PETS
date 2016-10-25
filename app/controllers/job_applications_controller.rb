@@ -73,15 +73,23 @@ class JobApplicationsController < ApplicationController
 
 	def download_resume
 		begin
+      debugger
+      # Don't need the following line because of the before_action method
 			job_application = JobApplication.find(params[:id])
+
 			job_seeker = job_application.job_seeker
+
+
+      raise RuntimeError, 'Resume not found in DB' if job_seeker.resumes.empty?
 			resume = job_seeker.resumes[0]
+
 			resume_file = ResumeCruncher.download_resume(resume.id)
+      raise RuntimeError, 'Resume not found in Cruncher' if resume_file.nil?
 
 			send_data resume_file.open.read, filename: resume.file_name
 
-		rescue
-			flash[:alert] = "Resume not found."
+		rescue RuntimeError => e
+			flash[:alert] = "Error: #{e}"
 			redirect_back_or_default
 
 		ensure
