@@ -113,6 +113,15 @@ Feature: Company Person
     And I should not see "Jane"
     And I should see "Mary"
 
+  Scenario: company contact cancel out of edit profile
+    Given I am on the home page
+    And I login as "jane@widgets.com" with password "qwerty123"
+    And I should be on the Company Person 'jane@widgets.com' Home page
+    Then I press "edit-profile"
+    And I should see "Update Your Profile"
+    Then I click the "Cancel" link
+    Then I should be on the Company Person 'jane@widgets.com' Home page
+
   Scenario: company contact login and edit profile from name
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
