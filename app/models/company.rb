@@ -58,19 +58,6 @@ class Company < ActiveRecord::Base
     company.company_people.joins(:user).order('users.last_name')
   end
 
-  def sole_company_admin?
-    # Is this person even an admin?
-    return false unless company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
-
-    not other_company_admin?
-  end
-
-  def other_company_admin?
-    admins = Company.company_admins(company)
-
-    (admins.count > 1) || (admins.count == 1 && !admins.include?(self))
-  end
-
   def people_on_role role
     users = []
     company_people.each do |person|
