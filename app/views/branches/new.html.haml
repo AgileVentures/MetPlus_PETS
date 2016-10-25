@@ -1,5 +1,4 @@
 %h2 Create Branch
-      
-= render partial: 'form', locals: {branch: @branch, method: :post, |
-          submit: 'Create', url: agency_branches_path(@agency),    |
-          cancel_url: agency_admin_home_path}                      |
+
+= render partial: 'form', locals: {branch: @branch, method: :post,
+          submit: 'Create', url: agency_branches_path(@agency)}

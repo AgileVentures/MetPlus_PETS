@@ -41,7 +41,6 @@ Given the following agency relations exist:
   	| tom.seeker@gmail.com | mark@metplus.org   | JD   |
   	| mary.jones@gmail.com | mark@metplus.org   | CM   |
 
-
   Scenario: Case Manager login and edit from home page
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
@@ -184,6 +183,19 @@ Given the following agency relations exist:
     And I should see "Jobseeker was updated successfully."
     And I should not see "Mary"
     And I should see "Samantha"
+
+  @javascript
+  Scenario: Agency person cancels out of profile edit
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I press "edit-profile"
+    And I wait 1 second
+    And I should see "Update Your Profile"
+    And I click the "Cancel" link
+    And I wait 1 second
+    And I should not see "Update Your Profile"
+    And I should be on the Agency Person 'mark@metplus.org' Home page
 
   @javascript
   Scenario: Case manager cannot edit other job seekers' profile

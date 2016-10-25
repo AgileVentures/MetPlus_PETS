@@ -1,6 +1,4 @@
 %h2 Edit Branch
-  
-= render partial: 'form', locals: {branch: @branch, method: :patch, |
-                submit: 'Update', url: branch_path(@branch),        |
-                cancel_url: branch_path(@branch)}                   |
 
+= render partial: 'form', locals: {branch: @branch, method: :patch,
+                submit: 'Update', url: branch_path(@branch)}

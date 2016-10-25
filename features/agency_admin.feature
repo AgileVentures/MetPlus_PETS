@@ -98,12 +98,14 @@ Scenario: edit agency information
 
 Scenario: cancel edit agency information
   And I click the "Agency and Partner Companies" link
+  And I should see "PETS Administration - Branches, People, Companies"
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
   And I click the "Cancel" link
   Then I should not see "Agency was successfully updated."
   And I should not see "MetPlus Two"
+  And I should see "PETS Administration - Branches, People, Companies"
 
 Scenario: errors for edit agency information
   And I click the "Agency and Partner Companies" link
@@ -134,12 +136,14 @@ Scenario: edit branch
 Scenario: cancel edit branch
   And I click the "Agency and Partner Companies" link
   And I click the "001" link
+  And I should see "Agency Branch"
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "004"
   Then I click the "Cancel" link
   Then I should see "Agency Branch"
   And I should not see "004"
+  And I should see "Agency Branch"
 
 Scenario: error for edit branch
   And I click the "Agency and Partner Companies" link
