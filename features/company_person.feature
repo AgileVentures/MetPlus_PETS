@@ -165,8 +165,8 @@ Feature: Company Person
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
-    And I should be on the Company person 'jane@widgets.com' show page
-    And I should see "12 Main Street Detroit, Michigan 02034"
+    And I should be on the Company Person 'jane@widgets.com' Home page
+    And I should see "Your profile was updated successfully."
 
   @javascript
   Scenario: verify people listing in home page

@@ -1,38 +1,40 @@
 class CompanyPeopleController < ApplicationController
+
+  before_action :user_logged!
+  before_action :load_and_authorize_company_person
+
   include Tasks
   include UserParameters
 
   include CompanyPeopleViewer
 
   def show
-    @company_person = CompanyPerson.find(params[:id])
   end
 
   def edit
-    @company_person = CompanyPerson.find(params[:id])
   end
 
   def edit_profile
-    @company_person = CompanyPerson.find(params[:id])
     @company_addresses = Company.find(@company_person.company_id).addresses
   end
 
   def update_profile
-    @company_person = CompanyPerson.find(params[:id])
     @company_addresses = Company.find(@company_person.company_id).addresses
 
     person_params = handle_user_form_parameters company_person_params
     if @company_person.update_attributes(person_params)
       sign_in :user, @company_person.user, bypass: true
       flash[:notice] = "Your profile was updated successfully."
-      redirect_to @company_person
+      is_company_admin = @company_person.is_company_admin? @company_person.company
+
+      redirect_to (is_company_admin) ?
+        @company_person : home_company_person_path(@company_person)
     else
       render :edit_profile
     end
   end
 
   def update
-    @company_person = CompanyPerson.find(params[:id])
     if @company_person.update_attributes(company_person_params)
       flash[:notice] = "Company person was successfully updated."
       redirect_to company_person_path(@company_person)
@@ -51,13 +53,8 @@ class CompanyPeopleController < ApplicationController
   end
 
   def destroy
-    person = CompanyPerson.find(params[:id])
-    if person.user != current_user
-      person.destroy
-      flash[:notice] = "Person '#{person.full_name(last_name_first: false)}' deleted."
-    else
-      flash[:alert] = "You cannot delete yourself."
-    end
+    @company_person.destroy
+    flash[:notice] = "Person '#{@company_person.full_name(last_name_first: false)}' deleted."
     redirect_to home_company_person_path(person.id)
   end
 
@@ -71,11 +68,20 @@ class CompanyPeopleController < ApplicationController
     @people_type = 'my-company-all'
     @company     = pets_user.company
     @company_admins = Company.company_admins(@company)
-    @company_person = pets_user
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
   private
+
+  def load_and_authorize_company_person
+    begin
+      @company_person = CompanyPerson.find(params[:id])
+      authorize @company_person
+    rescue ActiveRecord::RecordNotFound
+      redirect_to root_path,
+        alert: "The company person you're looking for doesn't exist"
+    end
+  end
 
   def company_person_params
     params.require(:company_person).permit(:title, :first_name, :last_name, :phone,
