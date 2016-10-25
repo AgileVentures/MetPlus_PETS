@@ -73,12 +73,12 @@ class JobApplicationsController < ApplicationController
 
 	def download_resume
 		begin
-      debugger
       # Don't need the following line because of the before_action method
 			job_application = JobApplication.find(params[:id])
 
+      # Without the prior line, this next line would be:
+      #     job_seeker = @job_application.job_seeker
 			job_seeker = job_application.job_seeker
-
 
       raise RuntimeError, 'Resume not found in DB' if job_seeker.resumes.empty?
 			resume = job_seeker.resumes[0]
