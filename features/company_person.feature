@@ -43,6 +43,11 @@ Feature: Company Person
       | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
       | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
+    Given the following tasks exist:
+      | task_type          | owner                | deferred_date | status      | targets               |
+      | job_application    | jane@widgets.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+
+
   Scenario: company admin edits company info
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"
@@ -113,6 +118,15 @@ Feature: Company Person
     And I should not see "Jane"
     And I should see "Mary"
 
+  Scenario: company contact cancel out of edit profile
+    Given I am on the home page
+    And I login as "jane@widgets.com" with password "qwerty123"
+    And I should be on the Company Person 'jane@widgets.com' Home page
+    Then I press "edit-profile"
+    And I should see "Update Your Profile"
+    Then I click the "Cancel" link
+    Then I should be on the Company Person 'jane@widgets.com' Home page
+
   Scenario: company contact login and edit profile from name
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
@@ -160,8 +174,8 @@ Feature: Company Person
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
-    And I should be on the Company person 'jane@widgets.com' show page
-    And I should see "12 Main Street Detroit, Michigan 02034"
+    And I should be on the Company Person 'jane@widgets.com' Home page
+    And I should see "Your profile was updated successfully."
 
   @javascript
   Scenario: verify people listing in home page
@@ -172,3 +186,19 @@ Feature: Company Person
     And I should see "Smith, John"
     And I should see "Smith, Jane"
     And I should not see "Daniel, Charles"
+
+  @selenium
+  Scenario: Company Contact with tasks on home page
+    Given I am on the home page
+    And I login as "jane@widgets.com" with password "qwerty123"
+    And I should see "Your Open Tasks"
+    And I should see "Review job application"
+    And the task 1 status is "Assigned"
+    Then I press the wip button of the task 1
+    And I wait 5 seconds
+    And I should see notification "Work on the task started"
+    And the task 1 status is "Work in progress"
+    Then I press the done button of the task 1
+    And I wait 1 second
+    And I should see notification "Work on the task is done"
+    And the task 1 is not present
