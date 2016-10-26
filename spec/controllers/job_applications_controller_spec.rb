@@ -41,8 +41,7 @@ RSpec.describe JobApplicationsController, type: :controller do
                          status: 'accepted')
     end
     let(:valid_application) do
-      FactoryGirl.create(:job_application, job: job,
-                                           job_seeker: job_seeker)
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
     end
 
     describe 'authorized access' do
@@ -90,8 +89,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           end
           it 'redirect to the specific job application index page' do
             expect(response).to redirect_to(applications_job_url(
-                                              valid_application.job
-            ))
+                                            valid_application.job))
           end
         end
 
@@ -107,12 +105,12 @@ RSpec.describe JobApplicationsController, type: :controller do
           end
           it 'redirect to the specific job application index page' do
             expect(response).to redirect_to(applications_job_url(
-                                              valid_application.job
-            ))
+                                            valid_application.job))
           end
         end
       end
     end
+
     describe 'unauthorized access' do
       let(:company) { FactoryGirl.create(:company) }
       let(:company_admin) do
@@ -364,19 +362,19 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:job1) { FactoryGirl.create(:job) }
     let(:job2) { FactoryGirl.create(:job) }
     let(:job3) { FactoryGirl.create(:job) }
-    let(:app1) do 
+    let(:app1) do
       FactoryGirl.create(:job_application,
-                               job: job1, job_seeker: job_seeker) 
+                               job: job1, job_seeker: job_seeker)
     end
-    let(:app2) do 
+    let(:app2) do
       FactoryGirl.create(:job_application,
-                               job: job2, job_seeker: job_seeker) 
+                               job: job2, job_seeker: job_seeker)
     end
-    let(:app3) do 
+    let(:app3) do
       FactoryGirl.create(:job_application,
-                               job: job3, job_seeker: job_seeker) 
+                               job: job3, job_seeker: job_seeker)
     end
-    let(:app4) do 
+    let(:app4) do
       FactoryGirl.create(:job_application,
                                job: job3,
                                job_seeker: FactoryGirl.create(:job_seeker))
@@ -396,5 +394,26 @@ RSpec.describe JobApplicationsController, type: :controller do
       expect(response).to render_template(partial: 'jobs/_applied_job_list')
     end
   end
-end
 
+  describe 'GET download_resume' do
+    context 'Successful download' do
+      it 'does not raise exception' do
+        get :download_resume, id: valid_application
+        expect(response).to_not set_flash
+      end
+    end
+    context 'Error: Resume not found in DB' do
+      it 'sets flash message' do
+        get :download_resume, id: valid_application
+        expect(flash[:alert]).to eq 'Error: Resume not found in DB'
+      end
+    end
+    context 'Error: Resume not found in Cruncher' do
+      it 'sets flash message' do
+        stub_cruncher_file_download_notfound
+        get :download_resume, id: valid_application
+        expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
+      end
+    end
+  end
+end
