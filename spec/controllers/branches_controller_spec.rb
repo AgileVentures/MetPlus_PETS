@@ -1,11 +1,15 @@
 require 'rails_helper'
 
+
 RSpec.describe BranchesController, type: :controller do
   let(:agency)  {FactoryGirl.create(:agency)}
-  let(:branch)   { FactoryGirl.create(:branch, agency: agency) }
+  let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
   let(:jd)      {FactoryGirl.create(:job_developer, agency: agency)}
   let(:cm)      {FactoryGirl.create(:case_manager, agency: agency)}
   let(:admin)   {FactoryGirl.create(:agency_admin, agency: agency)}
+  let(:company){FactoryGirl.create(:company)}
+  let(:ca)      {FactoryGirl.create(:company_admin, company: company)}
+  let(:cc)      {FactoryGirl.create(:company_contact, company: company)}
   let(:js)       { FactoryGirl.create(:job_seeker) }
 
 
@@ -27,6 +31,7 @@ RSpec.describe BranchesController, type: :controller do
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
+        
   end
 
   describe "POST #create" do
@@ -110,6 +115,7 @@ RSpec.describe BranchesController, type: :controller do
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
+    
   end
 
   describe "PATCH #update" do
@@ -176,8 +182,10 @@ RSpec.describe BranchesController, type: :controller do
     it "returns redirect status" do
       expect(response).to have_http_status(:redirect)
     end
+    
   end
 
+  
   describe 'action authorization' do
     context '#new' do
       it 'authorizes agency admin' do
@@ -185,11 +193,18 @@ RSpec.describe BranchesController, type: :controller do
         get :new, agency_id: agency
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-admin agency person' do
+      it 'does not authorize non-admin agency person as job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
         get :new, agency_id: agency
         expect(flash[:alert]).to eq "You are not authorized to create a branch."
       end
+
+      it 'does not authorize non-admin agency person as case manager' do
+        allow(controller).to receive(:current_user).and_return(cm)
+        get :new, agency_id: agency
+        expect(flash[:alert]).to eq "You are not authorized to create a branch."
+      end
+                  
     end
   
     context '#create' do
@@ -198,8 +213,13 @@ RSpec.describe BranchesController, type: :controller do
         post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-admin agency person' do
+      it 'does not authorize non-admin agency person as job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
+        post :create, agency_id: agency
+        expect(flash[:alert]).to eq "You are not authorized to create a branch."
+      end
+      it 'does not authorize non-admin agency person as case manager' do
+        allow(controller).to receive(:current_user).and_return(cm)
         post :create, agency_id: agency
         expect(flash[:alert]).to eq "You are not authorized to create a branch."
       end
@@ -218,6 +238,12 @@ RSpec.describe BranchesController, type: :controller do
         expect(flash[:alert]).
           to eq "You are not authorized to update the branch."
       end
+      it 'does not authorize comapny admin' do
+        allow(controller).to receive(:current_user).and_return(ca)
+        patch :update, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to update the branch."
+      end
     end
 
     context '#edit' do
@@ -226,8 +252,26 @@ RSpec.describe BranchesController, type: :controller do
         get :edit, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-agency admin' do
+      it 'does not authorize non-agency admin as job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
+        get :edit, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to edit the branch."
+      end
+      it 'does not authorize non-agency admin as case maanger' do
+        allow(controller).to receive(:current_user).and_return(cm)
+        get :edit, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to edit the branch."
+      end
+      it 'does not authorize company admin' do
+        allow(controller).to receive(:current_user).and_return(ca)
+        get :edit, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to edit the branch."
+      end
+      it 'does not authorize company contact' do
+        allow(controller).to receive(:current_user).and_return(ca)
         get :edit, id: branch.id
         expect(flash[:alert]).
           to eq "You are not authorized to edit the branch."
@@ -240,8 +284,20 @@ RSpec.describe BranchesController, type: :controller do
         delete :destroy, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-admin agency person' do
+      it 'does not authorize non-admin agency person as job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
+        delete :destroy, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to destroy the branch."
+      end
+      it 'does not authorize non-admin agency person as case manager' do
+        allow(controller).to receive(:current_user).and_return(cm)
+        delete :destroy, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to destroy the branch."
+      end
+      it 'does not authorize comany persons' do
+        allow(controller).to receive(:current_user).and_return(cc)
         delete :destroy, id: branch.id
         expect(flash[:alert]).
           to eq "You are not authorized to destroy the branch."
@@ -249,13 +305,29 @@ RSpec.describe BranchesController, type: :controller do
     end
     
     context '#show' do
-      it 'authorizes agency person' do
+      it 'authorizes agency admin' do
+        allow(controller).to receive(:current_user).and_return(admin)
+        get :show, id: branch.id
+        expect(subject).to_not receive(:user_not_authorized)
+      end
+      it 'authorizes agency person job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
+        get :show, id: branch.id
+        expect(subject).to_not receive(:user_not_authorized)
+      end
+      it 'authorizes agency person case manager' do
+        allow(controller).to receive(:current_user).and_return(cm)
         get :show, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(js)
+        get :show, id: branch.id
+        expect(flash[:alert]).
+          to eq "You are not authorized to show the branch with id."
+      end
+      it 'does not authorize company persons' do
+        allow(controller).to receive(:current_user).and_return(cc)
         get :show, id: branch.id
         expect(flash[:alert]).
           to eq "You are not authorized to show the branch with id."
