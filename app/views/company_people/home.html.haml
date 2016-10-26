@@ -25,8 +25,39 @@
                      company_admins: @company_admins}
 
 .col-sm-12
-  %h3 Tasks that need your attention
-  = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
+  %div.panel.with-nav-tabs.panel-success
+    .panel-heading
+      %ul.nav.nav-tabs(role="tablist")
+        - if @company_person.is_company_admin?(@company)
+          %li(role="presentation")
+            %a(href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab")
+              Unassigned Company Tasks
+        %li.active.in(role="presentation")
+          %a(href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab")
+            Your Open Tasks
+        - if @company_person.is_company_admin?(@company)
+          %li(role="presentation")
+            %a(href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab")
+              All Company Open Tasks
+        %li(role="presentation")
+          %a(href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab")
+            - if @company_person.is_company_admin?(@company)
+              All Company Closed Tasks
+            - else
+              Your Closed Tasks
+
+    .panel-body
+      .tab-content
+        - if @company_person.is_company_admin?(@company)
+          .tab-pane#tab1(role="tabpanel")
+            = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_new}
+        .tab-pane.active.in#tab2(role="tabpanel")
+          = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
+        - if @company_person.is_company_admin?(@company)
+          .tab-pane#tab3(role="tabpanel")
+            = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_all}
+        .tab-pane#tab4(role="tabpanel")
+          = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_closed}
 
 .col-sm-12
   %h3 All #{@company.name} jobs

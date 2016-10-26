@@ -136,3 +136,19 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
 	Then  I should see "The form contains 3 errors"
+
+@javascript
+Scenario: Cancel out of job edit
+  Given I am on the home page
+	And I login as "jane@widgets.com" with password "qwerty123"
+  Then I should be on the Company Person 'jane@widgets.com' Home page
+  And I click the "software dev" link
+  And I wait 1 second
+  And I should see "Revoke"
+  And I click the "Edit Job" link
+  And I should see "Edit Job"
+  And I wait 1 second
+  And I should not see "Revoke"
+  And I click the "Cancel" link
+  And I wait 1 second
+  And I should see "Revoke"

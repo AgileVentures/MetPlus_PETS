@@ -13,6 +13,10 @@ RSpec.describe AgencyPersonPolicy do
     it 'denies access if user is not agency admin' do
       expect(AgencyPersonPolicy).not_to permit(jd, cm)
     end
+    
+    it 'denies access if user is not agency admin' do
+      expect(AgencyPersonPolicy).not_to permit(cc, cm)
+    end
     it 'allows access if user is an agency admin' do
       expect(AgencyPersonPolicy).to permit(admin, cm)
     end

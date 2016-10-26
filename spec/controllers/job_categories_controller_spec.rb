@@ -30,7 +30,7 @@ RSpec.shared_examples "unauthorized all" do
       let(:user) {FactoryGirl.create(:case_manager, agency: agency)}
     end
   end
-  context "Jod Developer" do
+  context "Job Developer" do
     it_behaves_like "unauthorized" do
       let(:user) {FactoryGirl.create(:job_developer, agency: agency)}
     end
