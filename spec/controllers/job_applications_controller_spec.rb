@@ -398,20 +398,21 @@ RSpec.describe JobApplicationsController, type: :controller do
   describe 'GET download_resume' do
     context 'Successful download' do
       it 'does not raise exception' do
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
         get :download_resume, id: valid_application
         expect(response).to_not set_flash
       end
     end
     context 'Error: Resume not found in DB' do
       it 'sets flash message' do
-        get :download_resume, id: valid_application
+        get :download_resume, id: invalid_application2
         expect(flash[:alert]).to eq 'Error: Resume not found in DB'
       end
     end
     context 'Error: Resume not found in Cruncher' do
       it 'sets flash message' do
         stub_cruncher_file_download_notfound
-        get :download_resume, id: valid_application
+        get :download_resume, id: invalid_application
         expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
       end
     end
