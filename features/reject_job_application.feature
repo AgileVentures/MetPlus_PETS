@@ -96,5 +96,4 @@ Feature: Reject a job application
     And "dave@metplus.org" should receive an email with subject "Job application rejected"
     Then "dave@metplus.org" opens the email
     And I should see "A job application is rejected:" in the email body
-    #And I should see "Job Application: hr manager by John Seeker is rejected."
     And I should see notification "Job Application: hr manager by John Seeker is rejected."
