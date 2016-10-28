@@ -367,7 +367,6 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       before(:each) do
         sign_in company_admin
-        company_person
         patch :destroy, id: company_person
       end
 
@@ -386,7 +385,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'PATCH #update' do
     context 'valid roles' do
       before(:each) do
-        updated_fields = company_admin.attributes.merge(company_admin.user.attributes)
+        updated_fields = company_admin.attributes.
+          merge(company_admin.user.attributes)
         sign_in company_admin
         patch :update, id: company_admin, company_person: updated_fields
       end
@@ -404,19 +404,20 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     context 'invalid roles' do
       before(:each) do
-        updated_fields = company_admin.attributes.merge(company_admin.user.attributes)
+        updated_fields = company_admin.attributes.
+          merge(company_admin.user.attributes)
         updated_fields[:company_role_ids] = []
         sign_in company_admin
         patch :update, id: company_admin, company_person: updated_fields
       end
 
       it 'adds sole company admin error to error hash' do
-        expect(assigns(:company_person).errors[:company_admin])
-          .to include('cannot be unset for sole company admin.')
+        expect(assigns(:company_person).errors[:company_admin]).
+          to include('cannot be unset for sole company admin.')
       end
       it 'sets company_roles to include CA' do
-        expect(assigns(:company_person).company_roles.pluck(:role))
-          .to include('Company Admin')
+        expect(assigns(:company_person).company_roles.pluck(:role)).
+          to include('Company Admin')
       end
       it 'renders edit template' do
         expect(response).to render_template 'edit'
