@@ -335,4 +335,100 @@ RSpec.describe CompanyPeopleController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    describe 'authorized access' do
+      before(:each) do
+        @company_admin = FactoryGirl.create(:company_admin)
+        sign_in @company_admin
+        get :show, id: @company_admin
+      end
+
+      it 'renders show template' do
+        expect(response).to render_template 'show'
+      end
+      it 'returns http success' do
+          expect(response).to have_http_status(:success)
+      end
+    end
+  end
+  
+  describe 'GET #edit' do
+    describe 'authorized access' do
+      before(:each) do
+        @company_admin = FactoryGirl.create(:company_admin)
+        sign_in @company_admin
+        get :edit, id: @company_admin
+      end
+
+      it 'renders show template' do
+        expect(response).to render_template 'edit'
+      end
+      it 'returns http success' do
+          expect(response).to have_http_status(:success)
+      end
+    end
+  end
+  
+  describe 'PATCH #destroy' do
+    describe 'authorized access' do
+      before(:each) do
+        sign_in company_admin
+        company_person
+        patch :destroy, id: company_person
+      end
+
+      it 'sets flash message' do
+        expect(flash[:notice]).to eq "Person '#{assigns(:company_person).full_name(last_name_first: false)}' deleted."
+      end
+      it 'returns redirect status' do
+        expect(response).to have_http_status(:redirect)
+      end
+      it 'redirects to current_user home page' do
+        expect(response).to redirect_to home_company_person_path(assigns("current_user").id)
+      end
+    end
+  end 
+  
+  describe 'PATCH #update' do
+    
+    context 'valid roles' do
+      before(:each) do
+        updated_fields = company_admin.attributes.merge(company_admin.user.attributes)
+        sign_in company_admin
+        patch :update, id: company_admin, company_person: updated_fields
+      end
+
+      it 'sets flash message' do
+        expect(flash[:notice]).to eq 'Company person was successfully updated.'
+      end
+      it 'returns redirect status' do
+        expect(response).to have_http_status(:redirect)
+      end
+      it 'redirects to company person page' do
+        expect(response).to redirect_to company_admin
+      end
+    end
+    
+    context 'invalid roles' do
+      before(:each) do
+        updated_fields = company_admin.attributes.merge(company_admin.user.attributes)
+        updated_fields[:company_role_ids] = []
+        sign_in company_admin
+        patch :update, id: company_admin, company_person: updated_fields
+      end
+      
+      it 'adds sole company admin error to error hash' do
+        expect(assigns(:company_person).errors[:company_admin]).
+          to include('cannot be unset for sole company admin.')
+      end
+      it 'sets company_roles to include CA' do
+        expect(assigns(:company_person).company_roles.pluck(:role)).
+        to include("Company Admin")
+      end
+      it 'renders edit template' do
+        expect(response).to render_template 'edit'
+      end
+    end
+  end
+
 end
