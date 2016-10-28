@@ -4,7 +4,7 @@ RSpec.describe BranchPolicy do
 
   let(:agency) {FactoryGirl.create(:agency)}
   let(:agency1) {FactoryGirl.create(:agency)}
-  let(:company){FactoryGirl.create(:company)}
+  let(:company){FactoryGirl.create(:company, agency: agency)}
   let(:branch) {FactoryGirl.create(:branch, agency: agency)}
   let(:jd)     {FactoryGirl.create(:job_developer, agency: agency)}
   let(:cm)     {FactoryGirl.create(:case_manager, agency: agency)}
@@ -15,6 +15,7 @@ RSpec.describe BranchPolicy do
   let(:company_admin) {FactoryGirl.create(:company_admin, company: company)}
   let(:company_contact) {FactoryGirl.create(:company_contact, company: company)}
   let(:js) {FactoryGirl.create(:job_seeker)}
+ 
   
 
   permissions :new?, :create?, :edit?, :update?, :destroy? do

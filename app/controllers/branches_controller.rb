@@ -1,10 +1,10 @@
 class BranchesController < ApplicationController
 
-  before_action = :user_logged!
+  before_action :user_logged!
 
   def show
     @branch = Branch.find(params[:id])
-    self.action_description ="show the branch with id"
+    self.action_description ="show the branch"
     authorize @branch
   end
 
@@ -28,12 +28,16 @@ class BranchesController < ApplicationController
   end
 
   def new
-    @agency = Agency.this_agency(current_user)
+    begin
+     @agency = Agency.this_agency(current_user)
+    rescue
+     @agency = nil
+    end
     @branch = Branch.new(agency: @agency)
-
+    
     self.action_description ="create a branch"
     authorize @branch
-
+  
     @branch.build_address
   end
 
