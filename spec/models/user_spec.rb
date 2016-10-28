@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::EmailValidator
 
 RSpec.describe User, type: :model do
 
@@ -7,7 +8,7 @@ RSpec.describe User, type: :model do
       expect(FactoryGirl.create(:user)).to be_valid
       end
   end
-  
+
    describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :first_name }
@@ -16,7 +17,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column :phone }
     it { is_expected.to have_db_column :actable_id }
     it { is_expected.to have_db_column :actable_type }
-    
+
     it { is_expected.to have_db_column :encrypted_password}
     it { is_expected.to have_db_column :reset_password_token}
     it { is_expected.to have_db_column :reset_password_sent_at}
@@ -33,7 +34,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column :confirmed_at }
     it { is_expected.to have_db_column :confirmation_sent_at}
     it { is_expected.to have_db_column :unconfirmed_email}
-   
+
    end
 
    describe 'check model restrictions' do
@@ -41,7 +42,7 @@ RSpec.describe User, type: :model do
      describe 'FirstName check' do
        subject {FactoryGirl.build(:user)}
        it { is_expected.to validate_presence_of :first_name }
-       
+
      end
 
      describe 'LastName check' do
@@ -54,22 +55,43 @@ RSpec.describe User, type: :model do
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234', 
+               '1 231 231 2345', '12312312345',  '1231231234',
                '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
-     end  
+     end
+
+     describe 'Email validation' do
+       let(:user) { FactoryGirl.create(:user) }
+
+       it 'valid email address' do
+         user.email = 'thisone@yahoo.com'
+         expect(user).to be_valid
+       end
+
+       it 'missing email' do
+         user.email = ''
+         expect(user).not_to be_valid
+       end
+
+       it 'validate service not available' do
+         stub_email_validate_error
+
+         user.email = 'emailaddress@gmal.com'
+         expect(user).to be_valid
+       end
+     end
    end
-   
+
    describe 'roles determination' do
      before :each do
        @job_seeker = FactoryGirl.create(:job_seeker)
        @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
        @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
        @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-       
+
        @job_developer = FactoryGirl.build(:agency_person)
        @job_developer.agency_roles << @jd_role
        @job_developer.save
-       
+
        @case_manager = FactoryGirl.create(:agency_person)
        @case_manager.agency_roles << @cm_role
        @case_manager.save
@@ -77,7 +99,7 @@ RSpec.describe User, type: :model do
        @agency_admin = FactoryGirl.create(:agency_person)
        @agency_admin.agency_roles << @aa_role
        @agency_admin.save
-       
+
        @cm_and_jd = FactoryGirl.create(:agency_person)
        @cm_and_jd.agency_roles << [@cm_role, @jd_role]
        @cm_and_jd.save
@@ -111,19 +133,19 @@ RSpec.describe User, type: :model do
        expect(User.is_job_developer?(@cm_and_jd.user)).to be true
      end
    end
-   
+
    describe 'company roles determination' do
      before :each do
       @ec_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
       @ea_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
-              
+
       @company_contact = FactoryGirl.build(:company_person)
       @company_contact.company_roles << @ec_role
       @company_contact.save
 
       @company_admin = FactoryGirl.build(:company_person)
       @company_admin.company_roles << @ea_role
-      @company_admin.save       
+      @company_admin.save
     end
     it 'company admin' do
       expect(User.is_company_admin?(@company_admin.user)).to be true
@@ -242,6 +264,3 @@ RSpec.describe User, type: :model do
     end
   end
 end
-
-
-

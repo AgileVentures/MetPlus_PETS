@@ -19,11 +19,11 @@ Feature: Agency Person
 
     Given the following jobseeker exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
-      | John      | Seeker   | john-seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
-      | John      | Worker   | john-worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
-      | Wanda     | Worker   | wanda-worker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
-      | Tom     | Seeker   | tom-seeker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
-      | Mary    | Jones   | Mary-jones@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | John      | Seeker   | john.seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
+      | John      | Worker   | john.worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Wanda     | Worker   | wanda.worker@gmail.com    | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Tom       | Seeker   | tom.seeker@gmail.com      | 345-890-7890| password |password             | 1990          |Employed Looking   |
+      | Mary      | Jones    | mary.jones@gmail.com      | 345-890-7890| password |password             | 1990          |Employed Looking   |
 
 
     Given the following tasks exist:
@@ -38,9 +38,8 @@ Feature: Agency Person
 
 Given the following agency relations exist:
   	| job_seeker      | agency_person    | role |
-  	| tom-seeker@gmail.com | mark@metplus.org   | JD   |
-  	| mary-jones@gmail.com | mark@metplus.org   | CM   |
-       
+  	| tom.seeker@gmail.com | mark@metplus.org   | JD   |
+  	| mary.jones@gmail.com | mark@metplus.org   | CM   |
 
   Scenario: Case Manager login and edit from home page
     Given I am on the home page
@@ -88,16 +87,16 @@ Given the following agency relations exist:
     And I should see "Your Open Tasks"
     And I should see "Job Seeker has no assigned Job Developer"
     And I should not see "Job Seeker has no assigned Case Manager"
-    And The task 3 status is "Assigned"
+    And the task 3 status is "Assigned"
     Then I press the wip button of the task 3
     And I wait 5 seconds
     And I should see notification "Work on the task started"
-    And The task 3 status is "Work in progress"
+    And the task 3 status is "Work in progress"
     Then I press the done button of the task 3
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
-@selenium 
+@selenium
   Scenario: Agency admin can see all tabs
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -107,19 +106,19 @@ Given the following agency relations exist:
     And I should see "Your Open Tasks"
     And I should see "All Agency Open Tasks"
     And I should see "Closed Tasks"
-    And The tasks 5,6 are present
-    And The tasks 1,2,3,4,7 are hidden
+    And the tasks 5,6 are present
+    And the tasks 1,2,3,4,7 are hidden
     And I click the "Unassigned Agency Tasks" link
-    And The tasks 1,2 are present
-    And The tasks 3,4,7 are hidden
+    And the tasks 1,2 are present
+    And the tasks 3,4,7 are hidden
     And I click the "All Agency Open Tasks" link
-    And The tasks 3,4,5,6 are present
-    And The tasks 1,2,7 are hidden
+    And the tasks 3,4,5,6 are present
+    And the tasks 1,2,7 are hidden
     And I click the "Closed Tasks" link
-    And The task 7 is present
-    And The tasks 1,2,3,4 are hidden
+    And the task 7 is present
+    And the tasks 1,2,3,4 are hidden
 
-  @selenium 
+  @selenium
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -132,9 +131,9 @@ Given the following agency relations exist:
     Then I press "Assign"
     And I wait 1 second
     And I should see notification "Task assigned"
-    And The task 2 is not present
+    And the task 2 is not present
     And I click the "All Agency Open Tasks" link
-    And The task 2 is present
+    And the task 2 is present
 
   @selenium
   Scenario: Job developer assigns self to job seeker
@@ -189,12 +188,22 @@ Given the following agency relations exist:
     And I should see "Samantha"
 
   @javascript
+  Scenario: Agency person cancels out of profile edit
+    Given I am on the home page
+    And I login as "mark@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I press "edit-profile"
+    And I wait 1 second
+    And I should see "Update Your Profile"
+    And I click the "Cancel" link
+    And I wait 1 second
+    And I should not see "Update Your Profile"
+    And I should be on the Agency Person 'mark@metplus.org' Home page
+
+  @javascript
   Scenario: Case manager cannot edit other job seekers' profile
     Given I am on the home page
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
     Then I click the first "Seeker, John" link 
     And I should not see "Edit Job Seeker"
-    
-    
-

@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
    validates_presence_of :first_name
    validates_presence_of :last_name
    validates   :phone, :phone => true
+   validates   :email, :email => true
 
    def self.is_job_seeker?(user)
      user.actable_type == 'JobSeeker'
@@ -96,9 +97,9 @@ class User < ActiveRecord::Base
   end
 
   def inactive_message
-    if !approved? && actable.status == CompanyPerson::STATUS[:PND]
+    if !approved? && actable.try(:company_pending?)
       :signed_up_but_not_approved
-    elsif !approved? && actable.status == CompanyPerson::STATUS[:DENY]
+    elsif !approved? && actable.try(:company_denied?)
       :not_approved
     else
       super

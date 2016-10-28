@@ -104,7 +104,44 @@ module ServiceStubHelpers
           headers: { 'Content-Type': 'application/json' })
 
     end
+  end
 
+  module EmailValidator
+    def stub_email_validate_valid
+      body_json = "{\n  \"address\": \"address@gmail.com\",
+                    \n  \"did_you_mean\": null,
+                    \n  \"is_valid\": true,
+                    \n  \"parts\":
+                      {\n    \"display_name\": null,
+                       \n    \"domain\": null,
+                       \n    \"local_part\": null
+                       \n  }
+                    \n}"
+      stub_request(:get,
+          /^#{EmailValidateService.service_url}\/validate?.*/).
+          to_return(body: body_json)
+    end
+
+    def stub_email_validate_invalid
+      body_json = "{\n  \"address\": \"myaddress@gmal.com\",
+                    \n  \"did_you_mean\": \"myaddress@gmail.com\",
+                    \n  \"is_valid\": false,
+                    \n  \"parts\":
+                      {\n    \"display_name\": null,
+                       \n    \"domain\": null,
+                       \n    \"local_part\": null
+                       \n  }
+                    \n}"
+      stub_request(:get,
+          /^#{EmailValidateService.service_url}\/validate?.*/).
+          to_return(body: body_json)
+    end
+
+    def stub_email_validate_error
+      stub_request(:get,
+          /^#{EmailValidateService.service_url}\/validate?.*/).
+          to_raise(RuntimeError)
+    end
   end
 
 end

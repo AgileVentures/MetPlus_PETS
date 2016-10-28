@@ -28,8 +28,8 @@ Background: seed data
 
   Given the following jobseekers exist:
   | first_name| last_name| email         | phone       | password  | year_of_birth |job_seeker_status  |
-  | Sam       | Seeker   | sam@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
-  | Tom       | Terrific | tom@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
+  | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
+  | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
 
 @selenium
 Scenario: Job Seeker registers in PETS
@@ -115,7 +115,7 @@ Scenario: Company registration request in PETS
 Scenario: Job developer assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
-  And I login as "sam@gmail.com" with password "qwerty123"
+  And I login as "sammy1@gmail.com" with password "qwerty123"
   Then I should see "Signed in successfully."
   When I am in Job Developer's browser
   Given I am on the home page
@@ -135,13 +135,13 @@ Scenario: Job developer assigned to job seeker by agency admin
   Then I check first "Seeker, Sam"
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Job Seekers for Job Developer role:"
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Dave Developer as Job Developer:"
   Then I am in Job Seeker's browser
   And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
   Then I am in Job Developer's browser
   And I should see "Job Seeker: Sam Seeker has been assigned to you as Job Developer"
-  And "sam@gmail.com" should receive an email with subject "Job developer assigned"
-  When "sam@gmail.com" opens the email
+  And "sammy1@gmail.com" should receive an email with subject "Job developer assigned"
+  When "sammy1@gmail.com" opens the email
   Then they should see "Dave Developer" in the email body
   And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
   And "dave@metplus.org" should receive an email with subject "Job seeker assigned jd"
@@ -154,7 +154,7 @@ Scenario: Job developer assigned to job seeker by agency admin
 Scenario: Case manager assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
-  And I login as "sam@gmail.com" with password "qwerty123"
+  And I login as "sammy1@gmail.com" with password "qwerty123"
   Then I should see "Signed in successfully."
   When I am in Case Manager's browser
   Given I am on the home page
@@ -174,13 +174,13 @@ Scenario: Case manager assigned to job seeker by agency admin
   Then I check second "Seeker, Sam"
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Jane Jones as Case Manager:"
   Then I am in Job Seeker's browser
   And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
   Then I am in Case Manager's browser
   And I should see "Job Seeker: Sam Seeker has been assigned to you as Case Manager"
-  And "sam@gmail.com" should receive an email with subject "Case manager assigned"
-  When "sam@gmail.com" opens the email
+  And "sammy1@gmail.com" should receive an email with subject "Case manager assigned"
+  When "sammy1@gmail.com" opens the email
   Then they should see "Jane Jones" in the email body
   And they should see "has been assigned to you as your MetPlus Case Manager" in the email body
   And "jane@metplus.org" should receive an email with subject "Job seeker assigned cm"
@@ -193,7 +193,7 @@ Scenario: Case manager assigned to job seeker by agency admin
 Scenario: Job developer assigns self to job seeker
   When I am in Job Seeker's browser
   Given I am on the home page
-  And I login as "sam@gmail.com" with password "qwerty123"
+  And I login as "sammy1@gmail.com" with password "qwerty123"
   Then I should see "Signed in successfully."
   When I am in Job Developer's browser
   Given I am on the home page
@@ -209,8 +209,8 @@ Scenario: Job developer assigns self to job seeker
   And I should not see "Assign Myself"
   Then I am in Job Seeker's browser
   And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
-  And "sam@gmail.com" should receive an email with subject "Job developer assigned"
-  When "sam@gmail.com" opens the email
+  And "sammy1@gmail.com" should receive an email with subject "Job developer assigned"
+  When "sammy1@gmail.com" opens the email
   Then they should see "Dave Developer" in the email body
   And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
 
@@ -218,7 +218,7 @@ Scenario: Job developer assigns self to job seeker
 Scenario: Case manager assigns self to job seeker
   When I am in Job Seeker's browser
   Given I am on the home page
-  And I login as "sam@gmail.com" with password "qwerty123"
+  And I login as "sammy1@gmail.com" with password "qwerty123"
   Then I should see "Signed in successfully."
   When I am in Case Manager's browser
   Given I am on the home page
@@ -234,7 +234,7 @@ Scenario: Case manager assigns self to job seeker
   And I should not see "Assign Myself"
   Then I am in Job Seeker's browser
   And I should see "Jane Jones has been assigned to you as your MetPlus Case Manager"
-  And "sam@gmail.com" should receive an email with subject "Case manager assigned"
-  When "sam@gmail.com" opens the email
+  And "sammy1@gmail.com" should receive an email with subject "Case manager assigned"
+  When "sammy1@gmail.com" opens the email
   Then they should see "Jane Jones" in the email body
   And they should see "has been assigned to you as your MetPlus Case Manager" in the email body

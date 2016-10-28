@@ -21,6 +21,10 @@
 *~
 *.swp
 
+#ignore rvm version files
+.ruby-version
+.ruby-gemset
+
 # Ignore byebug history
 .byebug_history
 

@@ -43,24 +43,6 @@ RSpec.describe JobApplication, type: :model do
        end
     end
   end
-  describe '#status_name' do
-
-    let(:job_seeker){FactoryGirl.create(:job_seeker)}
-    let(:job){FactoryGirl.create(:job, company: FactoryGirl.create(:company))}
-    subject{FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :active)}
-    it 'Status 0 should be Active' do
-      subject.status = 0
-      expect(subject.status_name).to eq 'Active'
-    end
-    it 'Status 1 should be Accepted' do
-      subject.status = 1
-      expect(subject.status_name).to eq 'Accepted'
-    end
-    it 'Status 2 should be NotAccepted' do
-      subject.status = 2
-      expect(subject.status_name).to eq 'NotAccepted'
-    end
-  end
 
   describe '#active?' do
     let(:active_job) { FactoryGirl.create(:job) }

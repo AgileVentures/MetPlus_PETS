@@ -12,10 +12,6 @@ class JobApplication < ActiveRecord::Base
     StatusChange.update_status_history(self, :active)
   end
 
-  def status_name
-    status.to_s.camelcase
-  end
-
   def status_change_time(status, which = :latest)
     StatusChange.status_change_time(self, status, which)
   end
