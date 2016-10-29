@@ -1,6 +1,6 @@
 class JobApplicationsController < ApplicationController
 	include JobApplicationsViewer
-
+	before_action :user_logged!
 	before_action :find_application
 
 	def accept
@@ -44,8 +44,9 @@ class JobApplicationsController < ApplicationController
 
 	def find_application
 		begin
-			@job_application = JobApplication.find(params[:id])
-		rescue
+			authorize JobApplication.new
+			@job_application = JobApplication.find(params[:id]) 
+		rescue ActiveRecord::RecordNotFound
 			flash[:alert] = "Job Application Entry not found."
 			redirect_back_or_default
 		end
