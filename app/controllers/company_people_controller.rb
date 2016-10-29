@@ -55,7 +55,7 @@ class CompanyPeopleController < ApplicationController
   def destroy
     @company_person.destroy
     flash[:notice] = "Person '#{@company_person.full_name(last_name_first: false)}' deleted."
-    redirect_to home_company_person_path(person.id)
+    redirect_to home_company_person_path(@current_user.id)
   end
 
   def home
