@@ -17,15 +17,19 @@ RSpec.describe JobSeekersController, type: :controller do
       before(:each) do
         js_status = FactoryGirl.create(:job_seeker_status)
         ActionMailer::Base.deliveries.clear
-        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker)
-                                     .merge(FactoryGirl.attributes_for(:user))
-                                     .merge(job_seeker_status_id: js_status.id)
-        @jobseeker_hash[:address_attributes] = FactoryGirl.attributes_for(:address, zipcode: '54321')
-        post :create, job_seeker: @jobseeker_hash
+        @js_hash = FactoryGirl.attributes_for(:job_seeker)
+                              .merge(FactoryGirl.attributes_for(:user))
+                              .merge(job_seeker_status_id: js_status.id)
+        @js_hash[:address_attributes] = FactoryGirl.attributes_for(:address,
+                                          zipcode: '54321')
+        post :create, job_seeker: @js_hash
       end
 
       it 'sets flash message' do
-        expect(flash[:notice]).to eq 'A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account.'
+        message = 'A message with a confirmation and link has been sent to '\
+                  'your email address. Please follow the link to activate '\
+                  'your account.'
+        expect(flash[:notice]).to eq message
       end
 
       it 'returns redirect status' do
@@ -35,7 +39,7 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
       it 'check address' do
-        js = User.find_by_email(@jobseeker_hash[:email]).pets_user
+        js = User.find_by_email(@js_hash[:email]).pets_user
         expect(js.address.zipcode).to eq '54321'
       end
       describe 'confirmation email' do
@@ -47,11 +51,11 @@ RSpec.describe JobSeekersController, type: :controller do
         include EmailSpec::Matchers
 
         # open the most recent email sent to user_email
-        subject { open_email(@jobseeker_hash[:email]) }
+        subject { open_email(@js_hash[:email]) }
 
         # Verify email details
-        it { is_expected.to deliver_to(@jobseeker_hash[:email]) }
-        it { is_expected.to have_body_text(/Welcome #{@jobseeker_hash[:first_name]} #{@jobseeker_hash[:last_name]}!/) }
+        it { is_expected.to deliver_to(@js_hash[:email]) }
+        it { is_expected.to have_body_text(/Welcome #{@js_hash[:first_name]} #{@js_hash[:last_name]}!/) }
         it { is_expected.to have_body_text(/You can confirm your account/) }
         it { is_expected.to have_body_text(/users\/confirmation\?confirmation/) }
         it { is_expected.to have_subject(/Confirmation instructions/) }
@@ -66,18 +70,18 @@ RSpec.describe JobSeekersController, type: :controller do
         ActionMailer::Base.deliveries.clear
 
         js_status = FactoryGirl.create(:job_seeker_status)
-        @jobseeker_hash = FactoryGirl.attributes_for(:job_seeker,
-                                                     resume: fixture_file_upload('files/Janitor-Resume.doc'))
-                                     .merge(FactoryGirl.attributes_for(:user))
-                                     .merge(job_seeker_status_id: js_status.id)
+        @js_hash = FactoryGirl.attributes_for(:job_seeker,
+                    resume: fixture_file_upload('files/Janitor-Resume.doc'))
+                             .merge(FactoryGirl.attributes_for(:user))
+                             .merge(job_seeker_status_id: js_status.id)
       end
 
       it 'saves job seeker' do
-        expect { post :create, job_seeker: @jobseeker_hash }
+        expect { post :create, job_seeker: @js_hash }
           .to change(JobSeeker, :count).by(+1)
       end
       it 'saves resume record' do
-        expect { post :create, job_seeker: @jobseeker_hash }
+        expect { post :create, job_seeker: @js_hash }
           .to change(Resume, :count).by(+1)
       end
     end
@@ -92,16 +96,18 @@ RSpec.describe JobSeekersController, type: :controller do
                                 phone: '890-789-9087')
         @jobseekerstatus.assign_attributes(description: 'MyText')
         @jobseeker.valid?
-        jobseeker1_hash = FactoryGirl.attributes_for(:job_seeker,
-                                                     year_of_birth: '198',
-                                                     resume: fixture_file_upload('files/Janitor-Resume.doc'))
-                                     .merge(FactoryGirl.attributes_for(:user, first_name: 'John',
-                                                                              last_name: 'Smith', phone: '890-789-9087'))
-                                     .merge(FactoryGirl.attributes_for(:job_seeker_status,
-                                                                       description: 'MyText'))
-                                     .merge(FactoryGirl.attributes_for(:address,
-                                                                       zipcode: '12345131231231231231236'))
-        post :create, job_seeker: jobseeker1_hash
+        js1_hash = FactoryGirl.attributes_for(:job_seeker,
+                      year_of_birth: '198',
+                      resume: fixture_file_upload('files/Janitor-Resume.doc'))
+                    .merge(FactoryGirl.attributes_for(:user,
+                      first_name: 'John',
+                      last_name: 'Smith', 
+                      phone: '890-789-9087'))
+                    .merge(FactoryGirl.attributes_for(:job_seeker_status,
+                      description: 'MyText'))
+                    .merge(FactoryGirl.attributes_for(:address,
+                      zipcode: '12345131231231231231236'))
+        post :create, job_seeker: js1_hash
       end
       it 'renders new template' do
         expect(response).to render_template('new')
@@ -127,9 +133,10 @@ RSpec.describe JobSeekersController, type: :controller do
       context 'successful initial résumé upload' do
         it 'saves the first resume record' do
           expect do
-            patch :update, id: jobseeker,
-                           job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                  resume: fixture_file_upload('files/Janitor-Resume.doc'))
+            patch :update,
+                  id: jobseeker,
+                  job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                    resume: fixture_file_upload('files/Janitor-Resume.doc'))
           end
             .to change(Resume, :count).by(+1)
           expect(flash[:notice]).to eq 'Jobseeker was updated successfully.'
@@ -138,17 +145,20 @@ RSpec.describe JobSeekersController, type: :controller do
 
       context 'valid attributes without password change' do
         before(:each) do
-          FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-                                      file: fixture_file_upload('files/Janitor-Resume.doc'),
-                                      job_seeker: jobseeker)
-          patch :update, id: jobseeker,
-                         job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                year_of_birth: '1980', first_name: 'John',
-                                                                last_name: 'Smith', password: '',
-                                                                password_confirmation: '', phone: '780-890-8976',
-                                                                resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf'))
-                           .merge(job_seeker_status_id: js_status.id)
-                           .merge(address_attributes: FactoryGirl.attributes_for(:address, zipcode: '12346'))
+          FactoryGirl.create(:resume, 
+            file_name: 'Janitor-Resume.doc',
+            file: fixture_file_upload('files/Janitor-Resume.doc'),
+            job_seeker: jobseeker)
+          patch :update,
+            id: jobseeker,
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+              year_of_birth: '1980', first_name: 'John',
+              last_name: 'Smith', password: '',
+              password_confirmation: '', phone: '780-890-8976',
+              resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf'))
+              .merge(job_seeker_status_id: js_status.id)
+              .merge(address_attributes: FactoryGirl.attributes_for(:address,
+                zipcode: '12346'))
           jobseeker.reload
         end
         it 'sets the valid attributes' do
@@ -157,7 +167,8 @@ RSpec.describe JobSeekersController, type: :controller do
           expect(jobseeker.year_of_birth).to eq '1980'
           expect(jobseeker.status.id) == js_status.id
           expect(jobseeker.address.zipcode).to eq '12346'
-          expect(jobseeker.resumes[0].file_name).to eq 'Admin-Assistant-Resume.pdf'
+          expect(jobseeker.resumes[0].file_name).
+          to eq 'Admin-Assistant-Resume.pdf'
         end
         it 'dont change password' do
           expect(jobseeker.encrypted_password).to eq password
@@ -177,12 +188,14 @@ RSpec.describe JobSeekersController, type: :controller do
         render_views
 
         before(:each) do
-          FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-                                      file: fixture_file_upload('files/Janitor-Resume.doc'),
-                                      job_seeker: jobseeker)
-          patch :update, id: jobseeker,
-                         job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                resume: fixture_file_upload('files/Example Excel File.xls'))
+          FactoryGirl.create(:resume,
+            file_name: 'Janitor-Resume.doc',
+            file: fixture_file_upload('files/Janitor-Resume.doc'),
+            job_seeker: jobseeker)
+          patch :update, 
+                id: jobseeker,
+                job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                  resume: fixture_file_upload('files/Example Excel File.xls'))
           jobseeker.reload
         end
         it 'does not update existing resume' do
@@ -200,8 +213,11 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           jobseeker.assign_attributes(year_of_birth: '198')
           jobseeker.valid?
-          patch :update, id: jobseeker, job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                               year_of_birth: '198', resume: '')
+          patch :update,
+                id: jobseeker,
+                job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                  year_of_birth: '198',
+                  resume: '')
         end
         it 'renders edit template' do
           expect(response).to render_template('edit')
@@ -223,17 +239,23 @@ RSpec.describe JobSeekersController, type: :controller do
       end
       context 'valid attributes' do
         it 'locates the requested @jobseeker' do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+          patch :update,
+                id: case_manager.job_seekers.first,
+                job_seeker: FactoryGirl.attributes_for(:job_seeker)
           expect(assigns(:jobseeker)).to eq(jobseeker)
         end
         it "changes @jobseeker's attribute" do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                                                    phone: '111-111-1111')
+          patch :update,
+                id: case_manager.job_seekers.first,
+                job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                  phone: '111-111-1111')
           jobseeker.reload
           expect(jobseeker.phone).to eq('111-111-1111')
         end
         it 'sets flash message and redirects to job seeker show page' do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker)
+          patch :update,
+                id: case_manager.job_seekers.first,
+                job_seeker: FactoryGirl.attributes_for(:job_seeker)
           expect(flash[:notice]).to eq 'Jobseeker was updated successfully.'
           expect(response).to redirect_to jobseeker
         end
@@ -241,8 +263,12 @@ RSpec.describe JobSeekersController, type: :controller do
 
       context 'unauthorized attributes' do
         before(:each) do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                                                    year_of_birth: '1988', password: '123345', password_confirmation: '123345')
+          patch :update,
+                id: case_manager.job_seekers.first,
+                job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                  year_of_birth: '1988',
+                  password: '123345',
+                  password_confirmation: '123345')
           jobseeker.reload
         end
         it "does not change job seeker's attribute" do
@@ -253,8 +279,10 @@ RSpec.describe JobSeekersController, type: :controller do
 
       context 'invalid attributes' do
         before(:each) do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                                                                    phone: '123')
+          patch :update,
+                id: case_manager.job_seekers.first, 
+                job_seeker: FactoryGirl.attributes_for(:job_seeker,
+                  phone: '123')
           jobseeker.reload
         end
         it "does not change job seeker's attribute" do
@@ -270,8 +298,10 @@ RSpec.describe JobSeekersController, type: :controller do
   describe 'GET #edit' do
     let(:jobseeker) { FactoryGirl.create(:job_seeker) }
     let(:resume) do
-      FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-                                  file: fixture_file_upload('files/Janitor-Resume.doc'), job_seeker: jobseeker)
+      FactoryGirl.create(:resume, 
+                        file_name: 'Janitor-Resume.doc',
+                        file: fixture_file_upload('files/Janitor-Resume.doc'),
+                        job_seeker: jobseeker)
     end
     let(:agency) { FactoryGirl.create(:agency) }
     let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
