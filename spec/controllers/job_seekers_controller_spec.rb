@@ -165,7 +165,7 @@ RSpec.describe JobSeekersController, type: :controller do
           expect(jobseeker.first_name).to eq 'John'
           expect(jobseeker.last_name).to eq 'Smith'
           expect(jobseeker.year_of_birth).to eq '1980'
-          expect(jobseeker.status.id) == js_status.id
+          expect(jobseeker.status.id).to eq js_status.id
           expect(jobseeker.address.zipcode).to eq '12346'
           expect(jobseeker.resumes[0].file_name).
           to eq 'Admin-Assistant-Resume.pdf'
