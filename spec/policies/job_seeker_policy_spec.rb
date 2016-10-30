@@ -14,7 +14,7 @@ RSpec.describe JobSeekerPolicy do
   let(:ca)      { FactoryGirl.create(:company_admin) }
 
   permissions :update?, :edit? do
-    it "only allows access if user is the account owner" do
+    it 'only allows access if user is the account owner' do
       expect(JobSeekerPolicy).to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)
     end
@@ -33,11 +33,11 @@ RSpec.describe JobSeekerPolicy do
   end
 
   permissions :create?, :new? do
-    it "only allows access if user is visitor" do
+    it 'only allows access if user is visitor' do
       expect(JobSeekerPolicy).to permit(visitor, JobSeeker.new)
     end
 
-    it "only allows access if user is agency people" do
+    it 'only allows access if user is agency people' do
       expect(JobSeekerPolicy).to permit(jd1, JobSeeker.new)
       expect(JobSeekerPolicy).to permit(cm1, JobSeeker.new)
       expect(JobSeekerPolicy).to permit(admin, JobSeeker.new)
@@ -55,7 +55,7 @@ RSpec.describe JobSeekerPolicy do
   end
 
   permissions :index? do
-    it "only allows access if user is agency people" do
+    it 'only allows access if user is agency people' do
       expect(JobSeekerPolicy).to permit(jd1, js1)
       expect(JobSeekerPolicy).to permit(cm1, js1)
       expect(JobSeekerPolicy).to permit(admin, js1)
@@ -65,18 +65,18 @@ RSpec.describe JobSeekerPolicy do
   end
 
   permissions :show? do
-    it "only allows access if user is account owner" do
+    it 'only allows access if user is account owner' do
       expect(JobSeekerPolicy).to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)
     end
 
-    it "only allow access if user is agency people" do
+    it 'only allow access if user is agency people' do
       expect(JobSeekerPolicy).to permit(jd1, js1)
       expect(JobSeekerPolicy).to permit(cm1, js1)
       expect(JobSeekerPolicy).to permit(admin, js1)
     end
 
-    it "only allow access if user is company people" do
+    it 'only allow access if user is company people' do
       expect(JobSeekerPolicy).to permit(cc, js1)
       expect(JobSeekerPolicy).to permit(ca, js1)
     end
@@ -96,12 +96,12 @@ RSpec.describe JobSeekerPolicy do
   end
 
   permissions :destroy? do
-    it "only allows access if user is account owner" do
+    it 'only allows access if user is account owner' do
       expect(JobSeekerPolicy).to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)
     end
 
-    it "only allows access if user is agency admin" do
+    it 'only allows access if user is agency admin' do
       expect(JobSeekerPolicy).to permit(admin, js1)
       expect(JobSeekerPolicy).not_to permit(jd1, js1)
       expect(JobSeekerPolicy).not_to permit(cm1, js1)
@@ -111,11 +111,11 @@ RSpec.describe JobSeekerPolicy do
   end
 
   permissions :allow? do
-    it "only allows access if user is visitor" do
+    it 'only allows access if user is visitor' do
       expect(JobSeekerPolicy).to permit(visitor, JobSeeker.new)
     end
 
-    it "only allows access if user is account owner" do
+    it 'only allows access if user is account owner' do
       js1.assign_case_manager(cm1, agency)
       js1.assign_job_developer(jd1, agency)
       expect(JobSeekerPolicy).to permit(js1, js1)

@@ -1,2 +1,25 @@
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+
+Style/BlockDelimiters:
+  Enabled: true
+
+Style/MultilineBlockLayout:
+  Enabled: true
+
+Style/BlockEndNewline:
+  Enabled: true
+
+Style/ClosingParenthesisIndentation:
+  Enabled: true
+
+Style/Tab:
+  Enabled: true
+
+Metrics/LineLength:
+  Description: 'Limit lines to 80 characters.'
+  StyleGuide: '#80-character-limits'
+  Enabled: true
+
+AllCops:
+  DisabledByDefault: true

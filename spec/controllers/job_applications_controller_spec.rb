@@ -19,7 +19,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 	    	expect(assigns(:job_application)).to eq invalid_application
 	    end
 			it 'show a flash[:alert]' do
-				expect(flash[:alert]).to eq "Invalid action on inactive job application."
+				expect(flash[:alert]).to eq 'Invalid action on inactive job application.'
 			end
 			it 'redirect to the specific job application index page' do
 				expect(response).to redirect_to(applications_job_url(invalid_application.job))
@@ -34,7 +34,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 				patch :accept, id: valid_application
 			end
 			it 'show a flash[:info]' do
-				expect(flash[:info]).to eq "Job application accepted."
+				expect(flash[:info]).to eq 'Job application accepted.'
 			end
 			it 'redirect to the specific job application index page' do
 				expect(response).to redirect_to(applications_job_url(valid_application.job))
@@ -50,7 +50,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 				patch :reject, id: valid_application
 			end
 			it 'show a flash[:info]' do
-				expect(flash[:notice]).to eq "Job application rejected."
+				expect(flash[:notice]).to eq 'Job application rejected.'
 			end
 			it 'redirect to the specific job application index page' do
 				expect(response).to redirect_to(applications_job_url(valid_application.job))
@@ -62,7 +62,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 		context 'Invalid Request' do
 			it 'shows a flash[:alert]' do
 				get :show, id: anything
-				expect(flash[:alert]).to eq "Job Application Entry not found."
+				expect(flash[:alert]).to eq 'Job Application Entry not found.'
 			end
 		end
 	end
@@ -72,20 +72,28 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:job1) { FactoryGirl.create(:job) }
     let(:job2) { FactoryGirl.create(:job) }
     let(:job3) { FactoryGirl.create(:job) }
-    let(:app1) { FactoryGirl.create(:job_application,
-                               job: job1, job_seeker: job_seeker)}
-    let(:app2) { FactoryGirl.create(:job_application,
-                               job: job2, job_seeker: job_seeker)}
-    let(:app3) { FactoryGirl.create(:job_application,
-                               job: job3, job_seeker: job_seeker)}
-    let(:app4) { FactoryGirl.create(:job_application,
+    let(:app1) do 
+      FactoryGirl.create(:job_application,
+                               job: job1, job_seeker: job_seeker) 
+    end
+    let(:app2) do 
+      FactoryGirl.create(:job_application,
+                               job: job2, job_seeker: job_seeker) 
+    end
+    let(:app3) do 
+      FactoryGirl.create(:job_application,
+                               job: job3, job_seeker: job_seeker) 
+    end
+    let(:app4) do 
+      FactoryGirl.create(:job_application,
                                job: job3,
-                               job_seeker: FactoryGirl.create(:job_seeker)) }
+                               job_seeker: FactoryGirl.create(:job_seeker)) 
+    end
 
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      xhr :get, :list, type: "job_seeker", entity_id: job_seeker
+      xhr :get, :list, type: 'job_seeker', entity_id: job_seeker
     end
 
     it 'assigns jobs for view' do
