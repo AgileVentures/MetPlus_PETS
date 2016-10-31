@@ -50,6 +50,8 @@ Feature: Reject a job application
     And I should see "3" active applications for the job
     Then I reject "jane@mail.com" application
     And I should see an "reject" confirmation
+    And I click the "Reject" button
+    And I should see "Please enter a reason for rejecting this application."
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
     And I should see "jane@mail.com" application is listed last
@@ -65,6 +67,8 @@ Feature: Reject a job application
     Then I click "june@mail.com" link to "June's" job application show page
     Then I click the "Reject" link
     And I should see an "reject" confirmation
+    And I click the "Reject" button
+    And I should see "Please enter a reason for rejecting this application."
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
     And I am returned to "hr manager" job application index page
@@ -92,6 +96,4 @@ Feature: Reject a job application
     And "dave@metplus.org" should receive an email with subject "Job application rejected"
     Then "dave@metplus.org" opens the email
     And I should see "A job application is rejected:" in the email body
-    And I should see "Job Application: hr manager by John Seeker is rejected."
-
-
+    And I should see notification "Job Application: hr manager by John Seeker is rejected."
