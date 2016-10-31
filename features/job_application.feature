@@ -103,7 +103,7 @@ Given the following job applications exist:
     And I am on the Company Person 'ca@widgets.com' Home page
     And I should see "Review job application"
     And I should see "Job: software developer"
-
+  @selenium
   Scenario: Job seeker cannot re-apply to the same job
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
