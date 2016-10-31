@@ -31,8 +31,8 @@ RSpec.shared_examples "unauthorized all" do
     end
    end
    context "Company Admin" do
-    it_behaves_like "unauthorized" do
-      let(:user) {FactoryGirl.create(:company_admin, company: company)}
+     it_behaves_like "unauthorized" do
+       let(:user) {FactoryGirl.create(:company_admin, company: company)}
     end
    end
  end
@@ -319,7 +319,7 @@ RSpec.describe BranchesController, type: :controller do
         let(:my_request) {delete :destroy, id: branch.id}
       end
       it_behaves_like "unauthorized all non-agency people" do
-        let(:my_request) {get :edit, id: branch.id}
+        let(:my_request) {delete :destroy, id: branch.id}
       end
     end
       
