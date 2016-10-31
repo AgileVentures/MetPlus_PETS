@@ -20,6 +20,26 @@ end
 RSpec.shared_examples "unauthorized all" do
   let(:agency) {FactoryGirl.create(:agency)}
   let(:company) {FactoryGirl.create(:company)}
+  context "Case Manager" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:case_manager, agency: agency)}
+    end
+   end
+   context "Job Developer" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:job_developer, agency: agency)}
+    end
+   end
+   context "Company Admin" do
+    it_behaves_like "unauthorized" do
+      let(:user) {FactoryGirl.create(:company_admin, company: company)}
+    end
+   end
+ end
+
+RSpec.shared_examples "unauthorized all non-agency people" do
+  let(:agency) {FactoryGirl.create(:agency)}
+  let(:company) {FactoryGirl.create(:company)}
   context "Not logged in" do
     subject{my_request}
     it 'returns http redirect' do
@@ -27,18 +47,9 @@ RSpec.shared_examples "unauthorized all" do
     end
     it 'check redirect url' do
       expect(subject).to redirect_to(root_path)
-   end
-   end
-  context "Case Manager" do
-    it_behaves_like "unauthorized" do
-      let(:user) {FactoryGirl.create(:case_manager, agency: agency)}
     end
   end
-  context "Job Developer" do
-    it_behaves_like "unauthorized" do
-      let(:user) {FactoryGirl.create(:job_developer, agency: agency)}
-    end
-  end
+  
   context "Job Seeker" do
     it_behaves_like "unauthorized" do
       let(:user) {FactoryGirl.create(:job_seeker)}
@@ -55,7 +66,6 @@ RSpec.shared_examples "unauthorized all" do
     end
   end
 end
-
 
 RSpec.describe BranchesController, type: :controller do
   let(:agency)  {FactoryGirl.create(:agency)}
@@ -249,35 +259,13 @@ RSpec.describe BranchesController, type: :controller do
         get :new, agency_id: agency
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-admin agency person job developer' do
-        allow(controller).to receive(:current_user).and_return(jd)
-        get :new, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
+      it_behaves_like "unauthorized all" do
+       let(:my_request) {get :new, agency_id: agency}
+      end 
+      it_behaves_like "unauthorized all non-agency people" do
+        let(:my_request) {get :new, agency_id: agency}
       end
-
-      it 'does not authorize non-admin agency person case manager' do
-        allow(controller).to receive(:current_user).and_return(cm)
-        get :new, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-
-      it 'does not authorize company admin' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        get :new, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-      it 'does not authorize company contact' do
-        allow(controller).to receive(:current_user).and_return(cc)
-        get :new, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-      it 'does not authorize job seeker' do
-        allow(controller).to receive(:current_user).and_return(js)
-        get :new, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-                  
-    end
+     end
   
     context '#create' do
       it 'authorizes agency admin' do
@@ -285,72 +273,27 @@ RSpec.describe BranchesController, type: :controller do
         post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-admin agency person job developer' do
-        allow(controller).to receive(:current_user).and_return(jd)
-        post :create, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
+      it_behaves_like "unauthorized all" do
+       let(:my_request) {get :new, agency_id: agency}
+      end 
+      it_behaves_like "unauthorized all non-agency people" do
+        let(:my_request) {get :new, agency_id: agency}
       end
-      it 'does not authorize non-admin agency person case manager' do
-        allow(controller).to receive(:current_user).and_return(cm)
-        post :create, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-      it 'does not authorize company admin' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        post :create, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-      it 'does not authorize company contract' do
-        allow(controller).to receive(:current_user).and_return(cc)
-        post :create, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-      it 'does not authorize jobseeker' do
-        allow(controller).to receive(:current_user).and_return(js)
-        post :create, agency_id: agency
-        expect(flash[:alert]).to eq "You are not authorized to create a branch."
-      end
-     
-    end
+     end
 
     context '#update' do
-      
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
         patch :update, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-agency admin job developer' do
-        allow(controller).to receive(:current_user).and_return(jd)
-        patch :update, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to update the branch."
-      end
-      it 'does not authorize non-agency admin case manager' do
-        allow(controller).to receive(:current_user).and_return(cm)
-        patch :update, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to update the branch."
-      end
-      it 'does not authorize comapny admin' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        patch :update, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to update the branch."
-      end
-      it 'does not authorize comapny contact' do
-        allow(controller).to receive(:current_user).and_return(cc)
-        patch :update, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to update the branch."
-      end
-      it 'does not authorize job seeker' do
-        allow(controller).to receive(:current_user).and_return(js)
-        patch :update, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to update the branch."
-      end
-    end
+      it_behaves_like "unauthorized all" do
+        let(:my_request) {post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)}
+      end 
+      it_behaves_like "unauthorized all non-agency people" do
+        let(:my_request) {post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)}
+      end 
+     end
 
     context '#edit' do
       it 'authorizes agency admin' do
@@ -358,37 +301,13 @@ RSpec.describe BranchesController, type: :controller do
         get :edit, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-agency admin job developer' do
-        allow(controller).to receive(:current_user).and_return(jd)
-        get :edit, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit the branch."
-      end
-      it 'does not authorize non-agency admin case maanger' do
-        allow(controller).to receive(:current_user).and_return(cm)
-        get :edit, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit the branch."
-      end
-      it 'does not authorize company admin' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        get :edit, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit the branch."
-      end
-      it 'does not authorize company contact' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        get :edit, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit the branch."
-      end
-      it 'does not authorize job seeker' do
-        allow(controller).to receive(:current_user).and_return(js)
-        get :edit, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit the branch."
-      end
-    end
+      it_behaves_like "unauthorized all" do
+       let(:my_request) {get :edit, id: branch.id}
+      end 
+      it_behaves_like "unauthorized all non-agency people" do
+        let(:my_request) {get :edit, id: branch.id}
+      end 
+   end
 
     context '#destroy' do
       it 'authorizes agency admin' do
@@ -396,43 +315,14 @@ RSpec.describe BranchesController, type: :controller do
         delete :destroy, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize non-admin agency person job developer' do
-        allow(controller).to receive(:current_user).and_return(jd)
-        delete :destroy, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to destroy the branch."
-      end
-      it 'does not authorize non-admin agency person case manager' do
-        allow(controller).to receive(:current_user).and_return(cm)
-        delete :destroy, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to destroy the branch."
-      end
-      it 'does not authorize comany admin' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        delete :destroy, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to destroy the branch."
-      end
-      it 'does not authorize comany contact' do
-        allow(controller).to receive(:current_user).and_return(cc)
-        delete :destroy, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to destroy the branch."
-      end
-      it 'does not authorize jobseeker' do
-        allow(controller).to receive(:current_user).and_return(js)
-        delete :destroy, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to destroy the branch."
-      end
       it_behaves_like "unauthorized all" do
         let(:my_request) {delete :destroy, id: branch.id}
       end
-           
+      it_behaves_like "unauthorized all non-agency people" do
+        let(:my_request) {get :edit, id: branch.id}
+      end
     end
       
-    
     context '#show' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
@@ -449,60 +339,10 @@ RSpec.describe BranchesController, type: :controller do
         get :show, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'does not authorize company admin' do
-        allow(controller).to receive(:current_user).and_return(ca)
-        get :show, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to show the branch."
-      end
-      it 'does not authorize company contact' do
-        allow(controller).to receive(:current_user).and_return(cc)
-        get :show, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to show the branch."
-      end
-      it 'does not authorize non-agency person as job seeker' do
-        allow(controller).to receive(:current_user).and_return(js)
-        get :show, id: branch.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to show the branch."
-      end
-      
-    end 
-
-    
-
-  end
-
-  describe 'action unauthorization all' do
-    context '#new' do
-      it_behaves_like "unauthorized all" do
-       let(:my_request) {get :new, agency_id: agency}
-      end            
-    end
-    context '#create' do
-      it_behaves_like "unauthorized all" do
-       let(:my_request) {post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)}
-      end            
-    end
-    context '#edit' do
-      it_behaves_like "unauthorized all" do
-       let(:my_request) {get :edit, id: branch.id}
-      end            
-    end
-    context '#update' do
-      it_behaves_like "unauthorized all" do
-       let(:my_request) {patch :update, id: branch.id, branch: FactoryGirl.attributes_for(:branch)}
-      end            
-    end
-    context '#show' do
-      it_behaves_like "unauthorized all" do
+      it_behaves_like "unauthorized all non-agency people" do
        let(:my_request) {get :show, id: branch.id}
-      end            
-    end
+      end 
+    end 
   end
-   
-
-  
 end
 
