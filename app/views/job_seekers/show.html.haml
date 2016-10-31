@@ -8,7 +8,7 @@
 .col-sm-9
   = render partial: 'info', locals: {job_seeker: @jobseeker}
 
-- if pets_user == @jobseeker || pets_user.is_a?(AgencyPerson)
+- if policy(@jobseeker).show?
   .col-sm-12
     %h3
       Job Applications for

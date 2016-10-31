@@ -5,6 +5,11 @@ module JobApplicationsViewer
 
     case application_type
     when 'job_seeker'
+      if pets_user.is_a?(CompanyPerson)
+        return JobApplication.paginate(page: params[:applications_page],
+          :per_page => per_page).where(job_seeker: id).    
+          joins(:job).where('jobs.company_id = ?', pets_user.company_id)
+      end
       return JobApplication.paginate(page: params[:applications_page], 
         :per_page => per_page).where(job_seeker: id) 
     when 'job-applied'

@@ -65,7 +65,7 @@ class JobSeekerPolicy < ApplicationPolicy
         :job_seeker_status_id,
         address_attributes: [:id, :street, :city, :zipcode, :state]
       ]
-    elsif user == record.case_manager
+    elsif (user == record.case_manager) || (user == record.job_developer)
       [ :first_name,
         :last_name, 
         :email, 
