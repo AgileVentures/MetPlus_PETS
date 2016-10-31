@@ -16,11 +16,8 @@ RSpec.describe BranchPolicy do
   let(:company_contact) {FactoryGirl.create(:company_contact, company: company)}
   let(:js) {FactoryGirl.create(:job_seeker)}
  
-  
-
   permissions :new?, :create?, :edit?, :update?, :destroy? do
 
-    
     it 'denies access if user is job developer' do
       expect(BranchPolicy).not_to permit(jd, branch)
     end
@@ -28,7 +25,6 @@ RSpec.describe BranchPolicy do
     it 'denies access if user is case manager' do
       expect(BranchPolicy).not_to permit(cm, branch)
     end
-
 
     it 'allows access if user is an agency admin' do    
       expect(BranchPolicy).to permit(admin, branch)
@@ -42,10 +38,8 @@ RSpec.describe BranchPolicy do
       expect(BranchPolicy).not_to permit(cm1, branch)
     end
 
-
     it 'denies access if user is an another agency admin' do
       expect(BranchPolicy).not_to permit(admin1, branch)
-
     end
 
     it 'denies access if user is company admin' do
@@ -59,7 +53,6 @@ RSpec.describe BranchPolicy do
     it 'denies access if user is jobseeker' do
       expect(BranchPolicy).not_to permit(js, branch)
     end
-
   end
   
   permissions :show?  do
@@ -73,7 +66,7 @@ RSpec.describe BranchPolicy do
     it 'denies access if user is another agency person' do
       expect(BranchPolicy).not_to permit(admin1, branch)
       expect(BranchPolicy).not_to permit(jd1, branch)
-      expect(BranchPolicy).not_to permit(cm1 , branch)
+      expect(BranchPolicy).not_to permit(cm1, branch)
     end
 
     it 'denies access if user is company admin' do
@@ -87,9 +80,6 @@ RSpec.describe BranchPolicy do
     it 'denies access if user is jobseeker' do
       expect(BranchPolicy).not_to permit(js, branch)
     end
-
   end
-
 end
-
 
