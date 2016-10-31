@@ -1,8 +1,36 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
+RSpec.shared_examples 'unauthorized' do
+  before :each do
+    warden.set_user user
+  end
+  it 'redirects to the home page' do
+    expect(response).to redirect_to(root_path)
+  end
+  it 'sets the flash' do
+    expect(flash[:alert]).to eq 'You are not authorized to to perform this action.'
+  end
+  # it 'sets the flash' do
+  #   expect(flash[:alert]).to eq 'You need to login to perform this action.'
+  # end
+end
+
+RSpec.shared_examples 'authorized' do
+  before :each do
+    warden.set_user user
+  end
+  it 'returns http success' do
+    expect(response).to have_http_status(:success)
+  end
+end
+
 RSpec.describe JobSeekersController, type: :controller do
   describe 'GET #new' do
+    context 'visitor' do
+      it_behaves_like "authorized" { let(:user) { nil } }
+    end
+
     it 'renders new template' do
       get :new
       expect(response).to render_template 'new'
