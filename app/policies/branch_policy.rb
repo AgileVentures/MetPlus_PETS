@@ -23,5 +23,5 @@ class BranchPolicy < ApplicationPolicy
     user.is_agency_person? record.agency
   end
 
-end 
+end
 
