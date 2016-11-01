@@ -3,7 +3,7 @@ RSpec.describe BranchPolicy do
   let(:agency)  { FactoryGirl.create(:agency) }
   let(:agency1) { FactoryGirl.create(:agency) }
   let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
-  let(:branch)  { FactoryGirl.create(:branch, agency: agency)}
+  let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
   let(:jd)      { FactoryGirl.create(:job_developer, agency: agency) }
   let(:cm)      { FactoryGirl.create(:case_manager, agency: agency) }
   let(:admin)   { FactoryGirl.create(:agency_admin, agency: agency) }

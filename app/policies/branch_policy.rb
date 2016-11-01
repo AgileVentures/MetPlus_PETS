@@ -1,8 +1,9 @@
+# BranchPolicy
 class BranchPolicy < ApplicationPolicy
   def new?
     user.is_agency_admin? record.agency
   end
-  
+
   def create?
     user.is_agency_admin? record.agency
   end
@@ -10,11 +11,11 @@ class BranchPolicy < ApplicationPolicy
   def edit?
     user.is_agency_admin? record.agency
   end
- 
+
   def update?
     user.is_agency_admin? record.agency
   end
-  
+
   def destroy?
     update?
   end
