@@ -2,14 +2,14 @@ require 'rails_helper'
 
 
 RSpec.describe CompanyPolicy do
-  let(:agency) {FactoryGirl.create(:agency)}
-  let(:admin)  {FactoryGirl.create(:agency_admin, agency: agency)}
-  let(:jd)     {FactoryGirl.create(:job_developer, agency: agency)}
-  let(:cm)     {FactoryGirl.create(:case_manager,  agency: agency)}
-  let(:company){FactoryGirl.create(:company)}
-  let(:ca)     {FactoryGirl.create(:company_admin, company: company)}
-  let(:cc)     {FactoryGirl.create(:company_contact, company: company)}
-  let(:js)     {FactoryGirl.create(:job_seeker)}
+  let(:agency) { FactoryGirl.create(:agency)}
+  let(:admin)  { FactoryGirl.create(:agency_admin, agency: agency)}
+  let(:jd)     { FactoryGirl.create(:job_developer, agency: agency)}
+  let(:cm)     { FactoryGirl.create(:case_manager,  agency: agency)}
+  let(:company){ FactoryGirl.create(:company)}
+  let(:ca)     { FactoryGirl.create(:company_admin, company: company)}
+  let(:cc)     { FactoryGirl.create(:company_contact, company: company)}
+  let(:js)     { FactoryGirl.create(:job_seeker)}
 
 
  permissions :edit?, :update?, :show? do
