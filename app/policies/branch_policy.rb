@@ -22,6 +22,4 @@ class BranchPolicy < ApplicationPolicy
   def show?
     user.is_agency_person? record.agency
   end
-
 end
-
