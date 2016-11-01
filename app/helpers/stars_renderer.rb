@@ -18,7 +18,7 @@ module StarsRenderer
   end
 
   def star_image(value)
-    tag("i", :class => "fa #{star_type(value)}", "aria-hidden" => "true")
+    content_tag("i", nil, class: ["fa", star_type(value)], "aria-hidden": "true")
   end
 
   def star_type(value)

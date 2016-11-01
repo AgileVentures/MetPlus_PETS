@@ -1,5 +1,7 @@
 module ApplicationHelper
 
+  include StarsRenderer
+
   def status_desc entity
     # Converts entitie's status to descriptive string suitable for display
     entity.status.titleize
@@ -50,4 +52,7 @@ module ApplicationHelper
     root_path
   end
 
+  def show_stars rating
+    render_stars(rating, self)
+  end
 end
