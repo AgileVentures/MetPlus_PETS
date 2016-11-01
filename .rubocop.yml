@@ -1,2 +1,9 @@
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+AllCops:
+  Exclude:
+    - 'tmp/**/*'
+  TargetRubyVersion: 2.3
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

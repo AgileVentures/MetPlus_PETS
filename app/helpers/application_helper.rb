@@ -53,6 +53,6 @@ module ApplicationHelper
   end
 
   def show_stars rating
-    render_stars(rating, self)
+    render_stars(rating)
   end
 end

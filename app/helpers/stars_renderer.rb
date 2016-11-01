@@ -1,9 +1,13 @@
+# Module that will render the stars
+# Usage Include the module in the helper
+# Inside the help call it using
+# render_stars(1)
+# This will render 1 star
 module StarsRenderer
-  def render_stars(rating, template)
+  def render_stars(rating)
     @rating = rating
-    @template = template
-    content_tag :div, :class => 'stars' do
-      star_images.collect {|star| concat(star)}
+    content_tag :div, class: 'stars' do
+      star_images.collect { |star| concat(star) }
     end
   end
 
@@ -12,13 +16,14 @@ module StarsRenderer
   def star_images
     stars = []
     (0...5).map do |position|
-      stars << star_image(((@rating-position)*2).floor)
+      stars << star_image(((@rating - position) * 2).floor)
     end
     stars
   end
 
   def star_image(value)
-    content_tag("i", nil, class: ["fa", star_type(value)], "aria-hidden": "true")
+    content_tag('i', nil,
+                class: ['fa', star_type(value)], 'aria-hidden': 'true')
   end
 
   def star_type(value)
@@ -29,9 +34,5 @@ module StarsRenderer
     else
       'fa-star'
     end
-  end
-
-  def method_missing(*args, &block)
-    @template.send(*args, &block)
   end
 end
