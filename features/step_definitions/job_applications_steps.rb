@@ -8,8 +8,7 @@ And(/^I click "([^"]*)" link to job show page$/) do |job_title|
   find("#applications-job_seeker a[href='/jobs/#{job.id}']").click
 end
 
-And(/^I\sclick\s"([^"]*)"\slink\sto\s"([^"]*)'s"\sjob\sapplication\s
-  show\spage$/x) do |email, js_name|
+And(/^I click "([^"]*)" link to "([^"]*)'s" job application show page$/) do |email, js_name|
   job_seeker = User.find_by_email(email).actable
   @job_app = JobApplication.find_by(job_seeker: job_seeker)
   find("a[href='/job_applications/#{@job_app.id}']").click
@@ -97,8 +96,7 @@ And(/^I should see "([^"]*)" job changes to status filled/) do |job_title|
   find('#job-status') { expect(page).to have_content('filled') }
 end
 
-And(/^I\sshould\ssee\smy\sapplication\sfor\s"([^"]*)"\sshow\sstatus\s
-  "([^"]*)"$/x) do |job_title, status|
+And(/^I should see my application for "([^"]*)" show status "([^"]*)"$/) do |job_title, status|
   job = Job.find_by(title: "#{job_title}")
   job_app = JobApplication.find_by(job: job)
   expect(page.find("#applications-#{job_app.id}")).to have_content("#{status}")

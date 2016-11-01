@@ -79,7 +79,7 @@ class JobSeekersController < ApplicationController
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
       flash[:notice] = "Jobseeker was updated successfully."
-      redirect_to @jobseeker and return if pets_user == @jobseeker.case_manager
+      redirect_to @jobseeker and return if (pets_user == @jobseeker.case_manager) || (pets_user == @jobseeker.job_developer) 
       redirect_to root_path
     else
       @resume = resume
