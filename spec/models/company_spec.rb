@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Company, type: :model do
 
@@ -130,6 +131,13 @@ RSpec.describe Company, type: :model do
    end
 
   describe 'Class and Instance methods' do
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      stub_cruncher_job_update
+    end
+    
     let(:company1) { FactoryGirl.create(:company) }
     let(:company2) { FactoryGirl.create(:company, name: 'Gadgets, Inc.') }
     let!(:company3) { FactoryGirl.create(:company, name: 'Things, Inc.') }
