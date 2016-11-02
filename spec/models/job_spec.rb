@@ -235,7 +235,6 @@ RSpec.describe Job, type: :model do
       job.description = 'new description'
 
       expect(job.save).to be true
-      expect(Job.count).to eq 1
     end
 
     it 'fails with invalid model parameters' do
@@ -245,7 +244,6 @@ RSpec.describe Job, type: :model do
 
       expect(job.save).to be false
       expect(job.errors.full_messages).to include("Title can't be blank")
-      expect(Job.count).to eq 1
     end
 
     it 'fails with valid model but cruncher update failure' do
@@ -254,7 +252,17 @@ RSpec.describe Job, type: :model do
       job.title = 'new title'
 
       expect(job.save).to be false
-      expect(Job.count).to eq 1
+      expect(job.errors.full_messages).
+          to include('Job could not be posted to Cruncher, please try again.')
+    end
+
+    it 'fails when cruncher authorization fails' do
+      job.title = 'new title'
+
+      # Stub for auth error here (after job create, before update)
+      stub_cruncher_authenticate_error
+
+      expect(job.save).to be false
       expect(job.errors.full_messages).
           to include('Job could not be posted to Cruncher, please try again.')
     end
