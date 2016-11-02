@@ -84,19 +84,40 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 
+  private
 
-  def save_job_to_cruncher()
+  def save_job_to_cruncher
+    cruncher_posted = true
+    rolled_back = false
+
+    unless (changed & ['title', 'description']).empty?
       begin
-        if self.id_changed?
-          return true if JobCruncher.create_job(id, title, description)
+        if id_changed?
+          cruncher_posted = JobCruncher.create_job(id, title, description)
+        else
+          cruncher_posted = JobCruncher.update_job(id, title, description)
         end
-
       rescue
-        errors.add(:job, 'could not be created in Cruncher, please try again.')
+        # Exception occured and save/update TX has been rolled back
+        cruncher_posted = false
+        rolled_back = true
+      end
+    end
+    unless cruncher_posted
+      errors.add(:job, 'could not be posted to Cruncher, please try again.')
+      unless rolled_back
+
+        # Here raising ActiveRecord::RecordInvalid in order to
+        # 1) force a rollback of the save (or update) transaction, and,
+        # 2) force a return value of 'false' from save (or update)
+        # See: http://tech.taskrabbit.com/blog/2013/05/23/rollback-after-save/
+
         raise ActiveRecord::RecordInvalid.new(self)
       end
+    end
+    cruncher_posted
   end
-  
+
   def is_recent? time
     created_at > time
   end

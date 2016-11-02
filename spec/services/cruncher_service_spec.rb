@@ -34,15 +34,24 @@ RSpec.describe CruncherService, type: :request do
         'X-Auth-Token' => JSON.parse(auth_result)['token']
         })}
 
+  let(:job_update_result) {RestClient.post(CruncherService.service_url +
+        '/job/update',
+      { 'jobId'   => 10,
+        'title'   => 'Software Engineer',
+        'description' => 'revised description of the job' },
+      { 'Accept' => 'application/json',
+        'X-Auth-Token' => JSON.parse(auth_result)['token']
+        })}
+
   let(:match_jobs_result) { RestClient.get(CruncherService.service_url +
         '/job/match/1',
-        { 'X-Auth-Token': JSON.parse(auth_result)['token'] }
+        { 'X-Auth-Token' => JSON.parse(auth_result)['token'] }
         )}
 
   let(:match_resumes_result) { RestClient.get(CruncherService.service_url +
           '/resume/match/1',
-        { 'Accept': 'application/json',
-          'X-Auth-Token': JSON.parse(auth_result)['token'] }
+        { 'Accept' => 'application/json',
+          'X-Auth-Token' => JSON.parse(auth_result)['token'] }
         )}
 
 
@@ -62,19 +71,6 @@ RSpec.describe CruncherService, type: :request do
       end
       it 'returns authorization token' do
         expect(JSON.parse(auth_result)['token']).not_to be_nil
-      end
-    end
-
-    describe 'authentication failure' do
-      it 'raises error with invalid credentials' do
-
-        stub_cruncher_authenticate_error
-
-        expect {RestClient.post(CruncherService.service_url +
-                          '/authenticate', {},
-                          {'X-Auth-Username' => 'nobody',
-                           'X-Auth-Password' => 'none'})}.
-                                to raise_error(RuntimeError)
       end
     end
 
@@ -159,6 +155,22 @@ RSpec.describe CruncherService, type: :request do
       end
     end
 
+    describe 'update job' do
+
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_update
+      end
+
+      it 'returns HTTP success' do
+        expect(job_update_result.code).to eq 200
+      end
+
+      it 'returns cruncher success message' do
+        expect(JSON.parse(job_update_result)['resultCode']).to eq 'SUCCESS'
+      end
+    end
+
     describe 'match jobs' do
       before(:each) do
         stub_cruncher_authenticate
@@ -215,6 +227,12 @@ RSpec.describe CruncherService, type: :request do
         CruncherService.auth_token
         expect(RestClient).to have_received(:post).once
       end
+
+      it 'raises exception for unauthorized exception' do
+        stub_cruncher_authenticate_error
+        expect { CruncherService.auth_token }.
+                  to raise_error('Invalid credentials for Cruncher access')
+      end
     end
 
     describe 'File upload' do
@@ -264,17 +282,29 @@ RSpec.describe CruncherService, type: :request do
       it 'returns success (true) for valid create job' do
         stub_cruncher_job_create
 
-        expect(JobCruncher.create_job(10,'Software Engineer',
+        expect(CruncherService.create_job(10,'Software Engineer',
               'description of the job')).to be true
       end
 
-      it 'raises error for invalid job id' do
-        stub_cruncher_job_create_error
+      it 'fails if jobId already exists' do
+        stub_cruncher_job_create_fail('JOB_ID_EXISTS')
 
-        expect{ CruncherService.create_job('jobId',
-                                    'title',
-                                    'description') }.
-                      to raise_error(RuntimeError)
+        expect(CruncherService.create_job(10, 'title', 'test')).to be false
+      end
+    end
+
+    describe 'update job' do
+      it 'returns success (true) for successful job update' do
+        stub_cruncher_job_update
+
+        expect(CruncherService.update_job(10,'Software Engineer',
+              'revised description of the job')).to be true
+      end
+
+      it 'fails if jobId cannot be found' do
+        stub_cruncher_job_update_fail('JOB_NOT_FOUND')
+
+        expect(CruncherService.update_job('jobId', 'title', 'test')).to be false
       end
     end
 
@@ -285,7 +315,7 @@ RSpec.describe CruncherService, type: :request do
         expect{ CruncherService.match_jobs(1).not_to be nil }
       end
 
-      it 'returns nil for a wrong resume_id' do
+      it 'returns nil if cannot find resume' do
         stub_cruncher_match_jobs_fail('RESUME_NOT_FOUND')
 
         expect { CruncherService.match_jobs(1).to be nil }
@@ -299,6 +329,12 @@ RSpec.describe CruncherService, type: :request do
         stub_cruncher_match_resumes
 
         expect(CruncherService.match_resumes(1)).not_to be nil
+      end
+
+      it 'returns nil if cannot find job' do
+        stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
+
+        expect { CruncherService.match_resumes(1).to be nil }
       end
 
     end

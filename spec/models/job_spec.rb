@@ -2,6 +2,13 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe Job, type: :model do
+  let(:job) {FactoryGirl.create(:job)}
+  let!(:job_seeker) {FactoryGirl.create(:job_seeker)}
+  let!(:job_seeker_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker)}
+  let!(:job_seeker2) {FactoryGirl.create(:job_seeker)}
+  let!(:job_seeker2_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker2)}
+  let!(:test_file) {'../fixtures/files/Admin-Assistant-Resume.pdf'}
+
   describe 'Fixtures' do
     it 'should have a valid factory' do
       expect(FactoryGirl.build(:job)).to be_valid
@@ -79,12 +86,6 @@ RSpec.describe Job, type: :model do
 
   describe 'Instance methods' do
     describe '#apply' do
-      let(:job) {FactoryGirl.create(:job)}
-      let!(:job_seeker) {FactoryGirl.create(:job_seeker)}
-      let!(:job_seeker_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker)}
-      let!(:job_seeker2) {FactoryGirl.create(:job_seeker)}
-      let!(:job_seeker2_resume) {FactoryGirl.create(:resume, job_seeker: job_seeker2)}
-      let!(:test_file) {'../fixtures/files/Admin-Assistant-Resume.pdf'}
 
       before(:each) do
         stub_cruncher_authenticate
@@ -118,19 +119,14 @@ RSpec.describe Job, type: :model do
       end
     end
   end
-  describe 'Create Job method (AR model and CruncherService)' do
+  describe 'Create Job (AR model and CruncherService)' do
 
     before(:each) do
-      stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_return(body: "{\"token\": \"12345\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+      stub_cruncher_authenticate
     end
 
     it 'succeeds with all parameters' do
-
-      stub_request(:post, CruncherService.service_url + '/job/create').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+      stub_cruncher_job_create
 
       job = FactoryGirl.build(:job)
 
@@ -139,10 +135,7 @@ RSpec.describe Job, type: :model do
     end
 
     it 'fails with invalid model parameters' do
-
-      stub_request(:post, CruncherService.service_url + '/job/create').
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+      stub_cruncher_job_create
 
       job = FactoryGirl.build(:job, title: nil)
 
@@ -152,28 +145,60 @@ RSpec.describe Job, type: :model do
    end
 
    it 'fails with valid model but cruncher create failure' do
-
-      stub_request(:post, CruncherService.service_url + '/job/create').
-         to_raise(RuntimeError)
+      stub_cruncher_job_create_fail('JOB_ID_EXISTS')
 
       job = FactoryGirl.build(:job)
-
 
       expect(job.save).to be false
       expect(Job.count).to eq 0
       expect(job.errors.full_messages).
-          to include('Job could not be created in Cruncher, please try again.')
-
+          to include('Job could not be posted to Cruncher, please try again.')
    end
   end
 
+  describe 'Update Job (AR model and CruncherService)' do
+
+    before(:each) do
+      stub_cruncher_authenticate
+    end
+
+    it 'succeeds with all parameters' do
+      stub_cruncher_job_update
+
+      job.title = 'new title'
+      job.description = 'new description'
+
+      expect(job.save).to be true
+      expect(Job.count).to eq 1
+    end
+
+    it 'fails with invalid model parameters' do
+      stub_cruncher_job_update
+
+      job.title = nil
+
+      expect(job.save).to be false
+      expect(job.errors.full_messages).to include("Title can't be blank")
+      expect(Job.count).to eq 1
+    end
+
+    it 'fails with valid model but cruncher update failure' do
+      stub_cruncher_job_update_fail('JOB_NOT_FOUND')
+
+      job.title = 'new title'
+
+      expect(job.save).to be false
+      expect(Job.count).to eq 1
+      expect(job.errors.full_messages).
+          to include('Job could not be posted to Cruncher, please try again.')
+    end
+  end
+
   describe 'tracking status change history' do
-    before do
+    before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
     end
-
-    let!(:job) { FactoryGirl.create(:job) }
 
     context 'active to filled' do
       before(:each) do
@@ -209,7 +234,5 @@ RSpec.describe Job, type: :model do
             to eq StatusChange.second.created_at
       end
     end
-
   end
-
 end

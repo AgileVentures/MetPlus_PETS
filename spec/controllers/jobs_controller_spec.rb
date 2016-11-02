@@ -18,6 +18,7 @@ RSpec.describe JobsController, type: :controller do
   before(:example) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      stub_cruncher_job_update
       allow(Pusher).to receive(:trigger)
 
       @company_person = FactoryGirl.create(:company_person)
@@ -854,7 +855,7 @@ RSpec.describe JobsController, type: :controller do
         expect(response).to redirect_to(job_path(@job))
       end
     end
-   
+
     describe 'duplicated applications as job developer' do
       before :each do
         agency = FactoryGirl.create(:agency)

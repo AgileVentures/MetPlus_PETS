@@ -101,8 +101,29 @@ class CruncherService
       end
       raise
     end
+  end
 
+  def self.update_job(jobId, title, description)
+    retry_update = true
+    begin
+      result = RestClient.post(service_url + '/job/update',
+              { 'jobId'   => jobId,
+                'title'   => title,
+                'description' => description },
+              { 'Accept' => 'application/json',
+                'X-Auth-Token' => auth_token })
 
+      return JSON.parse(result)['resultCode'] == 'SUCCESS'
+
+    rescue RestClient::Unauthorized   # most likely expired token
+      # Retry and force refresh of cached auth_token
+      self.auth_token = nil
+      if retry_update
+         retry_update = false
+         retry
+      end
+      raise
+    end
   end
 
   def self.match_jobs(resume_id)
@@ -171,12 +192,15 @@ class CruncherService
 
   def self.auth_token
     return @@auth_token if @@auth_token
-
-    result = RestClient.post(service_url + '/authenticate', {},
-                {'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
-                 'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD']})
-
-    raise "Invalid credentials for Cruncher access" if result.code == 401
+    begin
+      result = RestClient.post(service_url + '/authenticate', {},
+                  {'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
+                   'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD']})
+    rescue Exception => e
+      raise "Invalid credentials for Cruncher access" if
+                    e.class == RestClient::Unauthorized
+      raise
+    end
 
     self.auth_token =  JSON.parse(result)['token']
   end
@@ -184,5 +208,4 @@ class CruncherService
   def self.auth_token=(token)
     @@auth_token =  token
   end
-
 end
