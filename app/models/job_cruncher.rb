@@ -17,6 +17,12 @@ class JobCruncher
     CruncherService.update_job(job_id, title, description)
   end
 
+  def self.update_job(job_id, title, description)
+    # Returns true if success, false otherwise
+
+     CruncherService.update_job(job_id, title, description)
+  end
+
   def self.match_jobs(resume_id)
     # If match exists, returns an array of job matches.  Each match
     # is represented as an array with 2 values - the first value is

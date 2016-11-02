@@ -65,12 +65,12 @@ module ServiceStubHelpers
           :headers => {'Content-Type' => 'application/json'})
     end
     def stub_cruncher_job_update
-      stub_request(:patch, /#{CruncherService.service_url + "/job/"}\d+#{"/update"}/).
+      stub_request(:patch, %r{#{CruncherService.service_url}/job/\d+/update}).
           to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
           :headers => {'Content-Type'=> 'application/json'})
     end
     def stub_cruncher_job_update_fail(resultCode)
-      stub_request(:patch, /#{CruncherService.service_url + "/job/"}\d+#{"/update"}/).
+      stub_request(:patch, %r{#{CruncherService.service_url}/job/\d+/update}).
           to_return(body: "{\"resultCode\":\"#{resultCode}\"}" , status: 200,
           :headers => {'Content-Type' => 'application/json'})
     end

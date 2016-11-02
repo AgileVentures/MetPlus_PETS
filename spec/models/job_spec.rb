@@ -221,6 +221,45 @@ RSpec.describe Job, type: :model do
     end
   end
 
+  describe 'Update Job (AR model and CruncherService)' do
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    it 'succeeds with all parameters' do
+      stub_cruncher_job_update
+
+      job.title = 'new title'
+      job.description = 'new description'
+
+      expect(job.save).to be true
+      expect(Job.count).to eq 1
+    end
+
+    it 'fails with invalid model parameters' do
+      stub_cruncher_job_update
+
+      job.title = nil
+
+      expect(job.save).to be false
+      expect(job.errors.full_messages).to include("Title can't be blank")
+      expect(Job.count).to eq 1
+    end
+
+    it 'fails with valid model but cruncher update failure' do
+      stub_cruncher_job_update_fail('JOB_NOT_FOUND')
+
+      job.title = 'new title'
+
+      expect(job.save).to be false
+      expect(Job.count).to eq 1
+      expect(job.errors.full_messages).
+          to include('Job could not be posted to Cruncher, please try again.')
+    end
+  end
+
   describe 'tracking status change history' do
     before(:each) do
       stub_cruncher_authenticate

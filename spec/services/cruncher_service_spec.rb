@@ -32,7 +32,7 @@ RSpec.describe CruncherService, type: :request do
 
   let(:job_result) do
     RestClient.post(CruncherService.service_url +
-        '/job/create',
+                    '/job/create',
                     { 'jobId'   => 10,
                       'title'   => 'Software Engineer',
                       'description' => 'description of the job' },
@@ -42,7 +42,7 @@ RSpec.describe CruncherService, type: :request do
 
   let(:job_update_result) do
     RestClient.patch(CruncherService.service_url +
-        '/job/10/update',
+                     '/job/10/update',
                      { 'jobId'   => 10,
                        'title'   => 'Software Engineer',
                        'description' => 'revised description of the job' },
@@ -52,13 +52,13 @@ RSpec.describe CruncherService, type: :request do
 
   let(:match_jobs_result) do
     RestClient.get(CruncherService.service_url +
-        '/job/match/1',
+                   '/job/match/1',
                    'X-Auth-Token' => JSON.parse(auth_result)['token'])
   end
 
   let(:match_resumes_result) do
     RestClient.get(CruncherService.service_url +
-          '/resume/match/1',
+                   '/resume/match/1',
                    'Accept' => 'application/json',
                    'X-Auth-Token' => JSON.parse(auth_result)['token'])
   end
@@ -290,6 +290,21 @@ RSpec.describe CruncherService, type: :request do
         stub_cruncher_job_create_fail('JOB_ID_EXISTS')
 
         expect(CruncherService.create_job(10, 'title', 'test')).to be false
+      end
+    end
+
+    describe 'update job' do
+      it 'returns success (true) for successful job update' do
+        stub_cruncher_job_update
+
+        expect(CruncherService.update_job(10,'Software Engineer',
+              'revised description of the job')).to be true
+      end
+
+      it 'fails if jobId cannot be found' do
+        stub_cruncher_job_update_fail('JOB_NOT_FOUND')
+
+        expect(CruncherService.update_job(1, 'title', 'test')).to be false
       end
     end
 
