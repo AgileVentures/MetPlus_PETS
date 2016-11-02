@@ -63,7 +63,7 @@ RSpec.configure do |c|
   c.extend Helpers
 end
 
-RSpec.shared_examples 'unauthorized action' do |role|
+RSpec.shared_examples 'unauthorized to js controller' do |role|
   assign_role(role)
   before :each do
     warden.set_user person
@@ -133,10 +133,10 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'authorized to retrieve data', 'agency_person'
     end
     context 'job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_person'
+      it_behaves_like 'unauthorized to js controller', 'company_person'
     end
     it 'renders new template' do
       request
@@ -153,10 +153,10 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'authorized to create / destroy job seeker', 'agency_person', 'create'
     end
     context 'job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_person'
+      it_behaves_like 'unauthorized to js controller', 'company_person'
     end
 
     context 'valid attributes' do
@@ -262,18 +262,18 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     let(:request) { patch :update, id: owner }
     context 'visitor' do
-      it_behaves_like 'unauthorized action', 'visitor'
+      it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'agency_person' do
-      it_behaves_like 'unauthorized', 'agency_admin'
-      it_behaves_like 'unauthorized', 'job_developer'
-      it_behaves_like 'unauthorized', 'case_manager'
+      it_behaves_like 'unauthorized to js controller', 'agency_admin'
+      it_behaves_like 'unauthorized to js controller', 'job_developer'
+      it_behaves_like 'unauthorized to js controller', 'case_manager'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_person'
+      it_behaves_like 'unauthorized to js controller', 'company_person'
     end
     context 'job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'owner' do
       let(:js_status) { FactoryGirl.create(:job_seeker_status) }
@@ -516,18 +516,18 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     let(:request) { get :edit, id: owner }
     context 'visitor' do
-      it_behaves_like 'unauthorized action', 'visitor'
+      it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'random agency_person' do
-      it_behaves_like 'unauthorized', 'agency_admin'
-      it_behaves_like 'unauthorized', 'job_developer'
-      it_behaves_like 'unauthorized', 'case_manager'
+      it_behaves_like 'unauthorized to js controller', 'agency_admin'
+      it_behaves_like 'unauthorized to js controller', 'job_developer'
+      it_behaves_like 'unauthorized to js controller', 'case_manager'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_person'
+      it_behaves_like 'unauthorized to js controller', 'company_person'
     end
     context 'random job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'related job developer, related case_manager' do
       it_behaves_like 'authorized to retrieve data', 'owner'
@@ -559,18 +559,18 @@ RSpec.describe JobSeekersController, type: :controller do
     let(:owner) { FactoryGirl.create(:job_seeker) }
     let(:request) { get :home, id: owner }
     context 'visitor' do
-      it_behaves_like 'unauthorized action', 'visitor'
+      it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'agency_person' do
-      it_behaves_like 'unauthorized', 'agency_admin'
-      it_behaves_like 'unauthorized', 'job_developer'
-      it_behaves_like 'unauthorized', 'case_manager'
+      it_behaves_like 'unauthorized to js controller', 'agency_admin'
+      it_behaves_like 'unauthorized to js controller', 'job_developer'
+      it_behaves_like 'unauthorized to js controller', 'case_manager'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_person'
+      it_behaves_like 'unauthorized to js controller', 'company_person'
     end
     context 'job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'owner' do
       before :each do
@@ -604,7 +604,7 @@ RSpec.describe JobSeekersController, type: :controller do
   describe 'GET #index' do
     let(:request) { get :index }
     context 'visitor' do
-      it_behaves_like 'unauthorized action', 'visitor'
+      it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'agency_person' do
       it_behaves_like 'authorized to retrieve data', 'agency_admin'
@@ -612,11 +612,11 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'authorized to retrieve data', 'case_manager'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_admin'
-      it_behaves_like 'unauthorized', 'company_contact'
+      it_behaves_like 'unauthorized to js controller', 'company_admin'
+      it_behaves_like 'unauthorized to js controller', 'company_contact'
     end
     context 'job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     it 'renders the index template' do
       sign_in FactoryGirl.create(:agency_admin)
@@ -629,7 +629,7 @@ RSpec.describe JobSeekersController, type: :controller do
     let(:owner) { FactoryGirl.create(:job_seeker) }
     let(:request) { get :show, id: owner }
     context 'visitor' do
-      it_behaves_like 'unauthorized action', 'visitor'
+      it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'agency_person' do
       it_behaves_like 'authorized to retrieve data', 'agency_admin'
@@ -641,7 +641,7 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'authorized to retrieve data', 'company_contact'
     end
     context 'random job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'owner' do
       before(:each) do
@@ -675,19 +675,19 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'unauthorized action (xhr)', 'visitor'
     end
     context 'random agency_person' do
-      it_behaves_like 'unauthorized in xhr', 'agency_admin'
-      it_behaves_like 'unauthorized in xhr', 'job_developer'
-      it_behaves_like 'unauthorized in xhr', 'case_manager'
+      it_behaves_like 'unauthorized action (xhr)', 'agency_admin'
+      it_behaves_like 'unauthorized action (xhr)', 'job_developer'
+      it_behaves_like 'unauthorized action (xhr)', 'case_manager'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized in xhr', 'company_person'
+      it_behaves_like 'unauthorized action (xhr)', 'company_person'
     end
     context 'job_seeker' do
-      it_behaves_like 'unauthorized in xhr', 'job_seeker'
+      it_behaves_like 'unauthorized action (xhr)', 'job_seeker'
     end
     context 'owner, related case_manager' do
-      it_behaves_like 'unauthorized in xhr', 'owner'
-      it_behaves_like 'unauthorized in xhr', 'owner_case_manager'
+      it_behaves_like 'unauthorized action (xhr)', 'owner'
+      it_behaves_like 'unauthorized action (xhr)', 'owner_case_manager'
     end
     context 'related job_developer' do
       it "it renders job seeker's info partial" do
@@ -702,19 +702,19 @@ RSpec.describe JobSeekersController, type: :controller do
     let(:owner) { FactoryGirl.create(:job_seeker) }
     let(:request) { delete :destroy, id: owner }
     context 'visitor' do
-      it_behaves_like 'unauthorized action', 'visitor'
+      it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'agency_person' do
       it_behaves_like 'authorized to create / destroy job seeker', 'agency_admin', 'destroy'
-      it_behaves_like 'unauthorized', 'job_developer'
-      it_behaves_like 'unauthorized', 'case_manager'
+      it_behaves_like 'unauthorized to js controller', 'job_developer'
+      it_behaves_like 'unauthorized to js controller', 'case_manager'
     end
     context 'company_person' do
-      it_behaves_like 'unauthorized', 'company_admin'
-      it_behaves_like 'unauthorized', 'company_contact'
+      it_behaves_like 'unauthorized to js controller', 'company_admin'
+      it_behaves_like 'unauthorized to js controller', 'company_contact'
     end
     context 'random job_seeker' do
-      it_behaves_like 'unauthorized', 'job_seeker'
+      it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'owner' do
       it_behaves_like 'authorized to create / destroy job seeker', 'owner', 'destroy'
