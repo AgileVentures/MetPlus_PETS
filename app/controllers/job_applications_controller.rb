@@ -34,13 +34,13 @@ class JobApplicationsController < ApplicationController
 
   def find_application
     @job_application = JobApplication.find(params[:id])
-		authorize @job_application
+    authorize @job_application
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = 'Job Application Entry not found.'
     redirect_back_or_default
   end
 
-private
+  private
 
   def reject_success_response(request)
     if request.xhr?
