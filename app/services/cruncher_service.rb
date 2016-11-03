@@ -80,7 +80,6 @@ class CruncherService
 
 
   def self.create_job(jobId, title, description)
-    debugger
     retry_create = true
     begin
       result = RestClient.post(service_url + '/job/create',
@@ -104,7 +103,6 @@ class CruncherService
   end
 
   def self.update_job(jobId, title, description)
-    debugger
     retry_update = true
     begin
       result = RestClient.patch(service_url + "/job/#{jobId}/update",
