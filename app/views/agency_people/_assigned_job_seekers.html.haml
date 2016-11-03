@@ -28,7 +28,8 @@
           - when :match_rating
             %td.col-md-3
               - if js.resumes.length > 0
-                %i.fa.fa-search
+                = link_to list_match_jobs_job_seeker_path(js) do
+                  %i.fa.fa-search
               - else
                 No resume on file
 

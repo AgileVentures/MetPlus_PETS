@@ -43,14 +43,14 @@ Rails.application.routes.draw do
   get 'agency_people/:id/list_js_jd/:people_type' =>
              'agency_people#list_js_jd', as: :list_js_jd_agency_people
 
-  get 'agency_people/:id/list_js_without_jd/:people_type' => 
+  get 'agency_people/:id/list_js_without_jd/:people_type' =>
               'agency_people#list_js_without_jd',as: :list_js_without_jd_agency_people
-  
-  get 'agency_people/:id/list_js_without_cm/:people_type' => 
+
+  get 'agency_people/:id/list_js_without_cm/:people_type' =>
               'agency_people#list_js_without_cm',as: :list_js_without_cm_agency_people
 
   get 'agency_people/:id/my_js_as_jd' => 'agency_people#my_js_as_jd', as: :my_js_as_jd
-                    
+
   # --------------------------------------------------------------------------
 
   # ----------------------- Company Registration -----------------------------
@@ -140,18 +140,19 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # --------------------------- Job Applications -----------------------------
-  patch 'job_applications/:id/accept'    => 'job_applications#accept', 
+  patch 'job_applications/:id/accept'    => 'job_applications#accept',
                                              as: :accept_application
   patch 'job_applications/:id/reject'    =>  'job_applications#reject',
                                              as: :reject_application
   get 'job_applications/:id'             => 'job_applications#show',
                                              as: :application
   # --------------------------------------------------------------------------
-  
+
   # ---------------------------- Job Seekers ---------------------------------
   resources :job_seekers do
      get 'home', on: :member, as: :home
      get 'match_jobs', on: :member, as: :match_jobs
+     get 'list_match_jobs', on: :member, as: :list_match_jobs
   end
 
   get 'job_seekers/:id/applied_jobs/:application_type' =>

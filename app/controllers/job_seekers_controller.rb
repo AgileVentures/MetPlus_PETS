@@ -67,14 +67,14 @@ class JobSeekersController < ApplicationController
           resume = Resume.new(file: tempfile, file_name: filename,
                      job_seeker_id: @jobseeker.id)
         end
-        
+
         unless resume.save
           models_saved = false
           @jobseeker.errors.messages.merge! resume.errors.messages
         end
       end
     end
-   
+
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
       flash[:notice] = "Jobseeker was updated successfully."
@@ -134,6 +134,15 @@ class JobSeekersController < ApplicationController
     @jobseeker.destroy
     flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
+  end
+
+  def list_match_jobs
+    @jobseeker = JobSeeker.find(params[:id])
+
+    @rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
+    @list_jobs = Job.all.where(id: @rating.keys).includes(:company)
+                    .sort { |x,y| @rating[y.id] <=> @rating[x.id] }
+                    .paginate(page: params[:jobs_page], per_page: 20)
   end
 
   private
