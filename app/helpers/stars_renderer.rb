@@ -7,7 +7,7 @@ module StarsRenderer
   def render_stars(rating)
     @rating = rating
     content_tag :div, class: 'stars' do
-      star_images.collect { |star| concat(star) }
+      star_images.map { |star| concat(star) }
     end
   end
 

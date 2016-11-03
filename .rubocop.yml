@@ -7,3 +7,7 @@ AllCops:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Style/DotPosition:
+  Description: 'Checks the position of the dot in multi-line method call
+  EnforcedStyle: leading
