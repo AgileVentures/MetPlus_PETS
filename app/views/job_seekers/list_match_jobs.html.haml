@@ -1,0 +1,33 @@
+%h1
+  Job Matches for
+  = @jobseeker.full_name(last_name_first: false)
+%br
+%div{:class => 'row'}
+  %div{:class => 'panel panel-default'}
+    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
+      %thead
+        %tr{class: 'text-center'}
+          %td
+            Title
+          %td
+            Employer
+          %td
+            Posted
+          %td
+            Match Rating
+      %tbody
+        - @list_jobs.each do |job|
+          %tr
+            %td
+              = job.title
+            %td
+              = job.company.name
+            %td
+              = "#{time_ago_in_words(job.created_at)} ago"
+            %td
+              = @rating[job.id]
+  .row.text-center
+    = will_paginate @list_jobs, param_name: 'jobs_page',
+                              :params => {:controller => 'job_seekers',
+                              :action => 'list_match_jobs',
+                              :id => @jobseeker.id}
