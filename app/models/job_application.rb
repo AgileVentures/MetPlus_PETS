@@ -34,5 +34,4 @@ class JobApplication < ActiveRecord::Base
   def reject
     not_accepted!
   end
-
 end
