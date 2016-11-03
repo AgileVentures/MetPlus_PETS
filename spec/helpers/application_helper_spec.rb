@@ -2,66 +2,74 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe ApplicationHelper, type: :helper do
-
   let(:company)         { FactoryGirl.create(:company) }
-  let(:company_admin)   { FactoryGirl.create(:company_admin, company: company)}
-  let(:company_contact) { FactoryGirl.create(:company_contact, company: company)}
+  let(:company_admin)   { FactoryGirl.create(:company_admin, company: company) }
+  let(:company_contact) do
+    FactoryGirl.create(:company_contact, company: company)
+  end
   let(:agency)          { FactoryGirl.create(:agency) }
   let(:case_manager)    { FactoryGirl.create(:case_manager, agency: agency) }
   let(:job_developer)   { FactoryGirl.create(:job_developer, agency: agency) }
   let(:agency_admin)    { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:job_seeker)      { FactoryGirl.create(:job_seeker) }
   let(:job)             { FactoryGirl.create(:job, company: company) }
-  let(:job_app)         { FactoryGirl.build(:job_application, job: job,
-                                job_seeker: job_seeker, status: :active)}
+  let(:job_app)         do
+    FactoryGirl.build(:job_application, job: job,
+                                        job_seeker: job_seeker, status: :active)
+  end
 
   context 'single_line_address method' do
     it 'returns string for address' do
-      address = FactoryGirl.build(:address, :state => "MI")
-      expect(single_line_address(address)).
-          to eq "#{address.street}, #{address.city}, MI #{address.zipcode}"
+      address = FactoryGirl.build(:address, state: 'MI')
+      expect(single_line_address(address))
+        .to eq "#{address.street}, #{address.city}, MI #{address.zipcode}"
     end
     it 'return no-address for nil' do
-      expect(single_line_address(nil)).
-          to eq 'No Address'
+      expect(single_line_address(nil))
+        .to eq 'No Address'
     end
   end
 
   context '#full_title' do
+    it 'base title' do
+      expect(helper.full_title).to eq('MetPlus')
+    end
 
-   it "base title" do
-     expect(helper.full_title()).to eq("MetPlus")
-   end
-
-   it "show page title" do
-       expect(helper.full_title("Ruby on Rails")).to eq("Ruby on Rails | MetPlus")
-   end
-
+    it 'show page title' do
+      expect(helper.full_title('Ruby on Rails'))
+        .to eq('Ruby on Rails | MetPlus')
+    end
   end
 
   context '#show_person_path with' do
     describe 'job seeker' do
       it 'success' do
-        expect(helper.show_person_path job_seeker).to eq(job_seeker_path job_seeker)
+        expect(helper.show_person_path(job_seeker))
+          .to eq(job_seeker_path(job_seeker))
       end
     end
     describe 'agency people as' do
       it 'job developer' do
-        expect(helper.show_person_path job_developer).to eq(agency_person_path job_developer)
+        expect(helper.show_person_path(job_developer))
+          .to eq(agency_person_path(job_developer))
       end
       it 'case manager' do
-        expect(helper.show_person_path case_manager).to eq(agency_person_path case_manager)
+        expect(helper.show_person_path(case_manager))
+          .to eq(agency_person_path(case_manager))
       end
       it 'agency admin' do
-        expect(helper.show_person_path agency_admin).to eq(agency_person_path agency_admin)
+        expect(helper.show_person_path(agency_admin))
+          .to eq(agency_person_path(agency_admin))
       end
     end
     describe 'company people as' do
       it 'company admin' do
-        expect(helper.show_person_path company_admin).to eq(company_person_path company_admin)
+        expect(helper.show_person_path(company_admin))
+          .to eq(company_person_path(company_admin))
       end
       it 'company contact' do
-        expect(helper.show_person_path company_contact).to eq(company_person_path company_contact)
+        expect(helper.show_person_path(company_contact))
+          .to eq(company_person_path(company_contact))
       end
     end
   end
@@ -69,39 +77,43 @@ RSpec.describe ApplicationHelper, type: :helper do
   context '#show_person_home_page_path with' do
     describe 'not logged in' do
       it 'success' do
-        expect(helper.show_person_home_page_path nil).to eq(root_path)
+        expect(helper.show_person_home_page_path(nil)).to eq(root_path)
       end
     end
     describe 'job seeker' do
       it 'success' do
-        expect(helper.show_person_home_page_path job_seeker).to eq(home_job_seeker_path job_seeker)
+        expect(helper.show_person_home_page_path(job_seeker))
+          .to eq(home_job_seeker_path(job_seeker))
       end
     end
     describe 'agency people as' do
       it 'job developer' do
-        expect(helper.show_person_home_page_path job_developer).to eq(home_agency_person_path(job_developer))
+        expect(helper.show_person_home_page_path(job_developer))
+          .to eq(home_agency_person_path(job_developer))
       end
       it 'case manager' do
-        expect(helper.show_person_home_page_path case_manager).to eq(home_agency_person_path(case_manager))
+        expect(helper.show_person_home_page_path(case_manager))
+          .to eq(home_agency_person_path(case_manager))
       end
       it 'agency admin' do
-        expect(helper.show_person_home_page_path agency_admin).to eq(home_agency_person_path(agency_admin))
+        expect(helper.show_person_home_page_path(agency_admin))
+          .to eq(home_agency_person_path(agency_admin))
       end
     end
     describe 'company people as' do
       it 'company admin' do
-        expect(helper.show_person_home_page_path company_admin).to eq(home_company_person_path company_admin)
+        expect(helper.show_person_home_page_path(company_admin))
+          .to eq(home_company_person_path(company_admin))
       end
       it 'company contact' do
-        expect(helper.show_person_home_page_path company_contact).to eq(home_company_person_path company_contact)
+        expect(helper.show_person_home_page_path(company_contact))
+          .to eq(home_company_person_path(company_contact))
       end
     end
   end
 
   context '#status_desc for status description display' do
-
     describe 'job application' do
-      
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_job_create
@@ -178,6 +190,17 @@ RSpec.describe ApplicationHelper, type: :helper do
         company_contact.status = 4
         expect(status_desc(company_contact)).to eq 'Company Denied'
       end
+    end
+  end
+  context '#show_stars' do
+    it '5 stars' do
+      expect(show_stars(5)).to eq '<div class="stars">
+                 <i class="fa fa-star" aria-hidden="true"></i>
+                 <i class="fa fa-star" aria-hidden="true"></i>
+                 <i class="fa fa-star" aria-hidden="true"></i>
+                 <i class="fa fa-star" aria-hidden="true"></i>
+                 <i class="fa fa-star" aria-hidden="true"></i>
+                 </div>'.split("\n").map(&:strip).join
     end
   end
 end
