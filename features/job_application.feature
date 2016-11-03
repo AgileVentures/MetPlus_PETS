@@ -39,15 +39,12 @@ Given the following agency relations exist:
   | john.seeker@places.com | jane@metplus.org | JD   |
   | john.seeker@places.com | mike@metplus.org | CM   |
 
-Given the following job applications exist:
-	| job title 	        | job seeker 	           | status |
-  | software developer  | john.seeker@places.com | active |
-
   @selenium
   Scenario: Job seeker applies to job
     When I am in Job Developer's browser
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
+    And I wait 2 seconds
     Then I should see "Signed in successfully."
 
     When I am in Case Manager's browser
@@ -67,6 +64,7 @@ Given the following job applications exist:
     Then I click the "Jobs" link
     And I should see "software developer"
     Then I click the "software developer" link
+    And I wait for 5 second
     Then I click the "Click Here To Apply Online" link
     And I wait for 1 second
     And I should see "Application process"
@@ -75,6 +73,7 @@ Given the following job applications exist:
     And I wait for 1 second
     And I should see "Application process"
     Then I click the "Apply Now" link
+    And I wait 2 seconds
     And I should see "Congratulations, you were able to apply with success"
 
     Then "corp@widgets.com" should receive an email with subject "Job Application received"
