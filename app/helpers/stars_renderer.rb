@@ -29,7 +29,7 @@ module StarsRenderer
   def star_type(value)
     if value <= 0.3
       'fa-star-o'
-    elsif value > 0.3 and value < 0.9
+    elsif value > 0.3 && value < 0.9
       'fa-star-half-o'
     else
       'fa-star'
