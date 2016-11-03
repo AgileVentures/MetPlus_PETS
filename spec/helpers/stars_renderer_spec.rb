@@ -42,6 +42,15 @@ RSpec.describe StarsRenderer, type: :helper do
     it 'rating 1.4' do
       expect(render_stars(1.4)).to eq '<div class="stars">
                   <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </div>'.split("\n").map(&:strip).join
+    end
+    it 'rating 1.1' do
+      expect(render_stars(1.1)).to eq '<div class="stars">
+                  <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
@@ -54,6 +63,33 @@ RSpec.describe StarsRenderer, type: :helper do
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </div>'.split("\n").map(&:strip).join
+    end
+    it 'rating 2.9' do
+      expect(render_stars(2.9)).to eq '<div class="stars">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </div>'.split("\n").map(&:strip).join
+    end
+    it 'rating 2.8' do
+      expect(render_stars(2.8)).to eq '<div class="stars">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </div>'.split("\n").map(&:strip).join
+    end
+    it 'rating 2.3' do
+      expect(render_stars(2.3)).to eq '<div class="stars">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
                   </div>'.split("\n").map(&:strip).join
     end

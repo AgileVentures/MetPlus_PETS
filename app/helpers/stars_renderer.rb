@@ -16,7 +16,7 @@ module StarsRenderer
   def star_images
     stars = []
     (0...5).map do |position|
-      stars << star_image(((@rating - position) * 2).floor)
+      stars << star_image((@rating - position).round(1))
     end
     stars
   end
@@ -27,9 +27,9 @@ module StarsRenderer
   end
 
   def star_type(value)
-    if value <= 0
+    if value <= 0.3
       'fa-star-o'
-    elsif value == 1
+    elsif value > 0.3 and value < 0.9
       'fa-star-half-o'
     else
       'fa-star'

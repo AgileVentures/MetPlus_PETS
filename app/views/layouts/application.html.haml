@@ -31,6 +31,16 @@
             %div{:class => "alert #{flash_to_css key}"}
               = value
               %a{href: "#", class: "close", "data-dismiss" =>  "alert",  "aria-label" => "close"} &times;
+      = 0
+      = show_stars(0)
+      = 1.2
+      = show_stars(1.2)
+      = 2.5
+      = show_stars(2.5)
+      = 3.6
+      = show_stars(3.6)
+      = 5
+      = show_stars(5)
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'
