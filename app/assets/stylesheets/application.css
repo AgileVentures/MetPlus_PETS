@@ -19,7 +19,7 @@
    margin-top: 0px;
    margin-bottom: 10px;
  }
- 
+
  /* Styling for PANEL WARNING is based on:
  * http://bootsnipp.com/snippets/featured/panels-with-nav-tabs
  */
@@ -309,3 +309,11 @@ ul.dropdown-menu{
   color:#ffffff !important;
 }
 /* Warning text end */
+
+/* Star configuration */
+.stars .fa {
+    color: yellow;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+}
+/* Star configuration end */
