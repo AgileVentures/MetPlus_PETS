@@ -1,20 +1,20 @@
 # Job application policy
 class JobApplicationPolicy < ApplicationPolicy
+
   def accept?
-    company_person? user
+		 correct_company_person? user
   end
 
   def reject?
-    company_person? user
+		 correct_company_person? user
   end
 
   def show?
-    company_person? user
+		 correct_company_person? user
   end
 
-  private
 
-  def company_person?(user)
-    User.is_company_person? user
+  def correct_company_person? user
+		User.is_company_person?(user) && record.job.company == user.company
   end
 end

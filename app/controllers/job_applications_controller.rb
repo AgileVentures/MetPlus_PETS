@@ -33,8 +33,8 @@ class JobApplicationsController < ApplicationController
   end
 
   def find_application
-    authorize JobApplication.new
     @job_application = JobApplication.find(params[:id])
+		authorize @job_application
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = 'Job Application Entry not found.'
     redirect_back_or_default
@@ -48,7 +48,7 @@ private
     else
       flash[:notice] = 'Job application rejected.'
       redirect_to controller: 'jobs', action: 'applications',
-                  id: @job_application.job.id unless request.xhr?
+                  id: @job_application.job.id
     end
   end
 
