@@ -34,8 +34,8 @@ RSpec.describe CruncherService, type: :request do
         'X-Auth-Token' => JSON.parse(auth_result)['token']
         })}
 
-  let(:job_update_result) {RestClient.post(CruncherService.service_url +
-        '/job/update',
+  let(:job_update_result) {RestClient.patch(CruncherService.service_url +
+        '/job/10/update',
       { 'jobId'   => 10,
         'title'   => 'Software Engineer',
         'description' => 'revised description of the job' },
@@ -304,7 +304,7 @@ RSpec.describe CruncherService, type: :request do
       it 'fails if jobId cannot be found' do
         stub_cruncher_job_update_fail('JOB_NOT_FOUND')
 
-        expect(CruncherService.update_job('jobId', 'title', 'test')).to be false
+        expect(CruncherService.update_job(1, 'title', 'test')).to be false
       end
     end
 
