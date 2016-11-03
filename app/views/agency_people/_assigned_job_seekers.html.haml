@@ -9,6 +9,8 @@
             %th.strong Status
           - when :last_sign_in_at
             %th.strong Last Login
+          - when :match_rating
+            %th.strong Match Rating
   %tbody
   - jobseekers.each do |js|
     %tr
@@ -23,11 +25,16 @@
           - when :last_sign_in_at
             %td.col-md-3
               = js.last_sign_in_at
-         
+          - when :match_rating
+            %td.col-md-3
+              - if js.resumes.length > 0
+                %i.fa.fa-search
+              - else
+                No resume on file
+
 .row.text-center
   = will_paginate jobseekers, param_name: 'jobseekers_page',
                             :params => {:controller => 'agency_people',
                             :action => controller_action,
                             :id => agency_person.id,
                             :people_type => people_type}
-  
