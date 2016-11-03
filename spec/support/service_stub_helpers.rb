@@ -84,6 +84,17 @@ module ServiceStubHelpers
         headers: {'Content-Type': 'application/json'})
     end
 
+    def stub_cruncher_no_match_jobs
+
+      body_json = JSON.generate({"resultCode"=>"SUCCESS", "message"=>"Success",
+              "jobs"=>{"matcher1"=>[],
+                       "matcher2"=>[]}})
+
+      stub_request(:get, CruncherService.service_url + '/job/match/1').
+        to_return(body: body_json, status:200,
+        headers: {'Content-Type': 'application/json'})
+    end
+
     def stub_cruncher_match_jobs_fail(resultCode)
       stub_request(:get, CruncherService.service_url + '/job/match/1').
         to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status:200,

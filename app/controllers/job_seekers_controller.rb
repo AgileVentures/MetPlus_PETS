@@ -138,11 +138,15 @@ class JobSeekersController < ApplicationController
 
   def list_match_jobs
     @jobseeker = JobSeeker.find(params[:id])
-
-    @rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
-    @list_jobs = Job.all.where(id: @rating.keys).includes(:company)
-                    .sort { |x,y| @rating[y.id] <=> @rating[x.id] }
-                    .paginate(page: params[:jobs_page], per_page: 20)
+    if @jobseeker.resumes.length == 0 then
+      flash[:error] = "#{@jobseeker.full_name(last_name_first: false)} do not have any resume"
+      redirect_to(root_path)
+    else
+      @rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
+      @list_jobs = Job.all.where(id: @rating.keys).includes(:company)
+                      .sort { |x,y| @rating[y.id] <=> @rating[x.id] }
+                      .paginate(page: params[:jobs_page], per_page: 20)
+    end
   end
 
   private

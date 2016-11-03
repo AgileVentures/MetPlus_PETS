@@ -136,15 +136,15 @@ RSpec.describe JobSeekersController, type: :controller do
         end
       end
 
-      context "valid attributes without password change" do 
+      context "valid attributes without password change" do
         before(:each) do
           FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-            file: fixture_file_upload('files/Janitor-Resume.doc'), 
+            file: fixture_file_upload('files/Janitor-Resume.doc'),
             job_seeker: jobseeker)
           patch :update, id: jobseeker,
-            job_seeker: FactoryGirl.attributes_for(:job_seeker, 
-              year_of_birth: '1980', first_name: 'John', 
-              last_name: 'Smith', password: '', 
+            job_seeker: FactoryGirl.attributes_for(:job_seeker,
+              year_of_birth: '1980', first_name: 'John',
+              last_name: 'Smith', password: '',
               password_confirmation: '', phone: '780-890-8976',
               resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')).
             merge({ :job_seeker_status_id => js_status.id }).
@@ -178,7 +178,7 @@ RSpec.describe JobSeekersController, type: :controller do
 
         before(:each) do
           FactoryGirl.create(:resume, file_name: 'Janitor-Resume.doc',
-            file: fixture_file_upload('files/Janitor-Resume.doc'), 
+            file: fixture_file_upload('files/Janitor-Resume.doc'),
             job_seeker: jobseeker)
           patch :update, id: jobseeker,
             job_seeker: FactoryGirl.attributes_for(:job_seeker,
@@ -200,7 +200,7 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           jobseeker.assign_attributes(year_of_birth: '198')
           jobseeker.valid?
-          patch :update, id: jobseeker, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+          patch :update, id: jobseeker, job_seeker: FactoryGirl.attributes_for(:job_seeker,
             year_of_birth: '198', resume:'')
         end
         it 'renders edit template' do
@@ -226,7 +226,7 @@ RSpec.describe JobSeekersController, type: :controller do
           expect(assigns(:jobseeker)).to eq(jobseeker)
         end
         it "changes @jobseeker's attribute" do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker,
             phone: '111-111-1111')
           jobseeker.reload
           expect(jobseeker.phone).to eq('111-111-1111')
@@ -240,7 +240,7 @@ RSpec.describe JobSeekersController, type: :controller do
 
       context "invalid attributes" do
         before(:each) do
-          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker, 
+          patch :update, id: case_manager.job_seekers.first, job_seeker: FactoryGirl.attributes_for(:job_seeker,
             phone: '123')
           jobseeker.reload
         end
@@ -260,7 +260,7 @@ RSpec.describe JobSeekersController, type: :controller do
       file: fixture_file_upload('files/Janitor-Resume.doc'), job_seeker: jobseeker) }
     let(:agency) { FactoryGirl.create(:agency) }
     let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
-    
+
     context "edited by job seeker" do
       before(:each) do
         stub_cruncher_authenticate
@@ -439,6 +439,27 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     it "returns redirect status" do
        expect(response).to have_http_status(:redirect)
+    end
+  end
+
+  describe "GET #list_match_jobs" do
+    let(:jobseeker) { FactoryGirl.create(:job_seeker) }
+    before(:each) do
+      sign_in jobseeker
+    end
+    context "User without a resume" do
+      before(:each) do
+        get :list_match_jobs, id: jobseeker
+      end
+      it 'flash message set' do
+        expect(flash[:error]).to be_present
+      end
+      it 'correct content' do
+        expect(flash[:error]).to eq('John Doe do not have any resume')
+      end
+      it "redirects to root" do
+        expect(response).to redirect_to(root_path)
+      end
     end
   end
 end
