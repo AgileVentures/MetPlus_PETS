@@ -84,6 +84,10 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 
+  def is_recent? time
+    created_at > time
+  end
+
   private
 
   def save_job_to_cruncher
@@ -119,9 +123,5 @@ class Job < ActiveRecord::Base
       raise ActiveRecord::RecordInvalid.new(self)
     end
     true
-  end
-
-  def is_recent? time
-    created_at > time
   end
 end
