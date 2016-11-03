@@ -461,5 +461,23 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
     end
+    context "User with a resume" do
+      before(:each) do
+        stub_cruncher_no_match_jobs
+        resume = FactoryGirl.create(:resume,
+                                    file_name: "resume.pdf",
+                                    job_seeker: jobseeker)
+        get :list_match_jobs, id: jobseeker
+      end
+      it 'no flash message set' do
+        expect(flash[:error]).to_not be_present
+      end
+      it 'empty rating' do
+        expect(assigns(:rating)).to eq({})
+      end
+      it "emtpy list of jobs" do
+        expect(assigns(:list_jobs)).to eq([])
+      end
+    end
   end
 end
