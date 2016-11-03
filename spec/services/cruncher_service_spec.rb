@@ -21,7 +21,7 @@ RSpec.describe CruncherService, type: :request do
 
   let(:upload_result) do
     RestClient.post(CruncherService.service_url +
-        '/resume/upload',
+                    '/resume/upload',
                     { 'file'   => fixture_file_upload(testfile_pdf),
                       'name'   => testfile_pdf,
                       'userId' => 'test_id' },
