@@ -42,7 +42,7 @@ RSpec.describe StarsRenderer, type: :helper do
     it 'rating 1.4' do
       expect(render_stars(1.4)).to eq '<div class="stars">
                   <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-half-o" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
