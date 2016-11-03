@@ -52,7 +52,7 @@ module ApplicationHelper
     root_path
   end
 
-  def show_stars rating
+  def show_stars(rating)
     render_stars(rating)
   end
 end
