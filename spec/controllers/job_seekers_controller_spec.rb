@@ -444,6 +444,22 @@ RSpec.describe JobSeekersController, type: :controller do
 
   describe "GET #list_match_jobs" do
     let(:jobseeker) { FactoryGirl.create(:job_seeker) }
+    let(:company) {FactoryGirl.create(:company)}
+    let(:job2) do
+      FactoryGirl.create(:job, :id => 2, :title => "Job 2", :company => company)
+    end
+    let(:job3) do
+      FactoryGirl.create(:job, :id => 3, :title => "Job 3", :company => company)
+    end
+    let(:job6) do
+      FactoryGirl.create(:job, :id => 6, :title => "Job 6", :company => company)
+    end
+    let(:job8) do
+      FactoryGirl.create(:job, :id => 8, :title => "Job 8", :company => company)
+    end
+    let(:job9) do
+      FactoryGirl.create(:job, :id => 9, :title => "Job 9", :company => company)
+    end
     before(:each) do
       sign_in jobseeker
     end
@@ -462,21 +478,47 @@ RSpec.describe JobSeekersController, type: :controller do
       end
     end
     context "User with a resume" do
-      before(:each) do
-        stub_cruncher_no_match_jobs
-        resume = FactoryGirl.create(:resume,
-                                    file_name: "resume.pdf",
-                                    job_seeker: jobseeker)
-        get :list_match_jobs, id: jobseeker
+      context "no matches" do
+        before(:each) do
+          stub_cruncher_no_match_jobs
+          resume = FactoryGirl.create(:resume,
+                                      file_name: "resume.pdf",
+                                      job_seeker: jobseeker)
+          get :list_match_jobs, id: jobseeker
+        end
+        it 'no flash message set' do
+          expect(flash[:error]).to_not be_present
+        end
+        it 'empty rating' do
+          expect(assigns(:rating)).to eq({})
+        end
+        it "emtpy list of jobs" do
+          expect(assigns(:list_jobs)).to eq([])
+        end
       end
-      it 'no flash message set' do
-        expect(flash[:error]).to_not be_present
-      end
-      it 'empty rating' do
-        expect(assigns(:rating)).to eq({})
-      end
-      it "emtpy list of jobs" do
-        expect(assigns(:list_jobs)).to eq([])
+      context "Multiple matches" do
+        before(:each) do
+          job2
+          job3
+          job6
+          job8
+          job9
+          stub_cruncher_match_jobs
+          resume = FactoryGirl.create(:resume,
+                                      file_name: "resume.pdf",
+                                      job_seeker: jobseeker)
+          get :list_match_jobs, id: jobseeker
+        end
+        it 'no flash message set' do
+          expect(flash[:error]).to_not be_present
+        end
+        it 'check output of cruncher' do
+          expect(assigns(:rating))
+                .to eq({ 3 => 4.7, 2 => 3.8, 6 => 3.4, 9 => 2.9, 8 => 2.8 })
+        end
+        it "list of jobs" do
+          expect(assigns(:list_jobs)).to eq([job3, job2, job6, job9, job8])
+        end
       end
     end
   end
