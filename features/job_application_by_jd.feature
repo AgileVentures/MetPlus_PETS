@@ -42,7 +42,7 @@ Background: data is added to database
   | june.seeker@places.com | jane@metplus.org | JD   |
   | july.seeker@places.com | jane@metplus.org | CM   |
 
-  @selenium
+  @javascript
   Scenario: Successful application for his job seeker
     When I am in Company Admin's browser
     Given I am on the home page
@@ -102,7 +102,7 @@ Background: data is added to database
     Then I find "Seeker, June" from my job seekers list and proceed with the application
     And I should see "* Job Seeker cannot be empty"
 
-  @selenium
+  @javascript
   Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
     When I am in Job Seeker's browser
     Given I am on the home page
