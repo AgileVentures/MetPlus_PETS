@@ -6,13 +6,13 @@
     Hide Job Seeker Information
   - if pets_user.is_agency_admin?(current_agency) || pets_user == @jobseeker.case_manager
     = button_to 'Edit Job Seeker', edit_job_seeker_path(@jobseeker),
-      method: :get, class: 'btn btn-primary',
-      style: 'float: left; margin-left: 10px; margin-top: 10px;'
+      method: :get, class: 'btn btn-xs  btn-primary',
+      style: 'margin-left: 10px; margin-top: 10px;'
     - if pets_user.is_agency_admin? current_agency
       = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
           method: :delete,
           data: { confirm: "Delete Jobseeker #{@jobseeker.full_name}?" },
-          class: 'btn btn-danger', style: 'float: left; margin-left: 10px; margin-top: 10px;'
+          class: 'btn btn-xs  btn-danger', style: 'float: left; margin-left: 10px; margin-top: 10px;'
 .col-sm-9
   = render partial: 'info', locals: { job_seeker: @jobseeker }
 
