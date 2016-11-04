@@ -1,7 +1,7 @@
-# CompanyPolicy authorization
+# CompanyPolicy implementation
 class CompanyPolicy < ApplicationPolicy
   def edit?
-    user.is_agency_admin?(record.agency) || user.is_company_admin?(record)
+    user.is_agency_admin? record.agency or user.is_company_admin? record.company
   end
 
   def update?
@@ -13,10 +13,10 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def show?
-    user.is_agency_admin?(record.agency) || user.is_company_admin?(record)
+    user.is_agency_admin? record.agency or user.is_company_admin? record.company
   end
 
   def list_people?
-    user.is_agency_admin?(record.agency) || user.is_company_person?(record)
+    user.is_agency_admin? record.agency or user.is_company_person? recode.company
   end
 end

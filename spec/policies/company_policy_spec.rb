@@ -6,7 +6,7 @@ RSpec.describe CompanyPolicy do
   let(:admin)  { FactoryGirl.create(:agency_admin, agency: agency)}
   let(:jd)     { FactoryGirl.create(:job_developer, agency: agency)}
   let(:cm)     { FactoryGirl.create(:case_manager,  agency: agency)}
-  let(:company){ FactoryGirl.create(:company)}
+  let(:company){ FactoryGirl.create(:company, agencies: [agency])}
   let(:ca)     { FactoryGirl.create(:company_admin, company: company)}
   let(:cc)     { FactoryGirl.create(:company_contact, company: company)}
   let(:js)     { FactoryGirl.create(:job_seeker)}

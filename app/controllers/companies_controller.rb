@@ -23,7 +23,7 @@ class CompaniesController < ApplicationController
   end
 
   def edit
-    self.action_description= "destroy the company"
+    self.action_description= "edit the company"
     authorize @company
   end
 
