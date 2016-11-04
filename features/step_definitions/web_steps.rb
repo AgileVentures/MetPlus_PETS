@@ -53,7 +53,7 @@ Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, f
 end
 
 And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |to_search, anchor_text|
-  expect(find('tr', text: anchor_text)).to have_content(to_tearch)
+  expect(find('tr', text: anchor_text)).to have_content(to_search)
 end
 
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
