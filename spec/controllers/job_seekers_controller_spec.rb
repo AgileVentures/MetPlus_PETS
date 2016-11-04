@@ -477,13 +477,13 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
     end
-    context "User with a resume" do
-      context "no matches" do
+    context 'User with a resume' do
+      context 'no matches' do
         before(:each) do
           stub_cruncher_no_match_jobs
-          resume = FactoryGirl.create(:resume,
-                                      file_name: "resume.pdf",
-                                      job_seeker: jobseeker)
+          FactoryGirl.create(:resume,
+                             file_name: 'resume.pdf',
+                             job_seeker: jobseeker)
           get :list_match_jobs, id: jobseeker
         end
         it 'no flash message set' do
@@ -492,11 +492,11 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'empty rating' do
           expect(assigns(:star_rating)).to eq({})
         end
-        it "emtpy list of jobs" do
+        it 'emtpy list of jobs' do
           expect(assigns(:list_jobs)).to eq([])
         end
       end
-      context "Multiple matches" do
+      context 'Multiple matches' do
         before(:each) do
           job2
           job3
@@ -504,9 +504,9 @@ RSpec.describe JobSeekersController, type: :controller do
           job8
           job9
           stub_cruncher_match_jobs
-          resume = FactoryGirl.create(:resume,
-                                      file_name: "resume.pdf",
-                                      job_seeker: jobseeker)
+          FactoryGirl.create(:resume,
+                             file_name: 'resume.pdf',
+                             job_seeker: jobseeker)
           get :list_match_jobs, id: jobseeker
         end
         it 'no flash message set' do
@@ -514,9 +514,9 @@ RSpec.describe JobSeekersController, type: :controller do
         end
         it 'check output of cruncher' do
           expect(assigns(:star_rating))
-                .to eq({ 3 => 4.7, 2 => 3.8, 6 => 3.4, 9 => 2.9, 8 => 2.8 })
+            .to eq { 3 => 4.7, 2 => 3.8, 6 => 3.4, 9 => 2.9, 8 => 2.8 }
         end
-        it "list of jobs" do
+        it 'list of jobs' do
           expect(assigns(:list_jobs)).to eq([job3, job2, job6, job9, job8])
         end
       end
