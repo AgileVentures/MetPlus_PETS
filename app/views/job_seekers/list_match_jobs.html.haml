@@ -2,11 +2,11 @@
   Job Matches for
   = @jobseeker.full_name(last_name_first: false)
 %br
-%div{:class => 'row'}
-  %div{:class => 'panel panel-default'}
-    %table{:class => 'table table-bordered', 'data-card-view' => 'true', 'data-height' => '299' }
+%div.row
+  %div.panel.panel-default
+    %table.table.table-bordered{ 'data-card-view' => 'true', 'data-height' => '299' }
       %thead
-        %tr{class: 'text-center'}
+        %tr.text-center
           %td
             Title
           %td
@@ -26,7 +26,7 @@
               = "#{time_ago_in_words(job.created_at)} ago"
             %td
               = show_stars(@star_rating[job.id])
-              = "#{@star_rating[job.id]} / 5.0"
+              #{@star_rating[job.id]} / 5.0
   .row.text-center
     = will_paginate @list_jobs, param_name: 'jobs_page',
                               :params => {:controller => 'job_seekers',

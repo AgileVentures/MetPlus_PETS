@@ -138,8 +138,9 @@ class JobSeekersController < ApplicationController
 
   def list_match_jobs
     @jobseeker = JobSeeker.find(params[:id])
-    if @jobseeker.resumes.length == 0 then
-      flash[:error] = "#{@jobseeker.full_name(last_name_first: false)} do not have any resume"
+    if @jobseeker.resumes.empty? then
+      flash[:error] =
+        "#{@jobseeker.full_name(last_name_first: false)} do not have any resume"
       redirect_to(root_path)
     else
       @star_rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
