@@ -123,6 +123,33 @@ class CruncherService
     end
   end
 
+  def match_resume_and_job(resume_id, job_id)
+    # Matches given résumé to given job and returns match scores
+    # from all available matchers.
+    # Possible exceptions raised:
+    #   RestClient::Unauthorized
+    #   RestClient::ResourceNotFound (résumé and job not found)
+
+    retry_match = true
+
+    begin
+      result = RestClient.get(service_url +
+                          "/resume/#{resume_id}/compare/#{job_id}",
+                          { 'X-Auth-Token': auth_token })
+
+      return stars = JSON.parse(result)['stars']
+
+    rescue RestClient::Unauthorized   # most likely expired token
+      # Retry and force refresh of cached auth_token
+      self.auth_token = nil
+      if retry_match
+         retry_match = false
+         retry
+      end
+      raise
+    end
+  end
+
   def self.match_jobs(resume_id)
     # Define retry_search to true outside the begin block
     # otherwise retry_search would be set to true everytime
