@@ -451,8 +451,8 @@ class Event
                                    evt_obj.job,
                                    evt_obj.job_developer.agency)
   end
-
-  def self.notify_list_for_js_apply_event(appl)
+   
+   def self.notify_list_for_js_apply_event(appl)
     # Returns an array containing two arrays.  The first such array contains
     # user ids, and the second email addresses of the people to be notified
     id_list    = []
