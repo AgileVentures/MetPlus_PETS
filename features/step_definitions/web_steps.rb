@@ -52,6 +52,13 @@ Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, f
   search_text regex
 end
 
+require 'byebug'
+And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |toSearch, anchorText|
+
+  byebug
+  expect(find('tr', text: anchorText)).to have_content(toSearch)
+end
+
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
   regex = /#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
   if not_see
@@ -247,4 +254,3 @@ end
 When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
   expect(page).to have_field(field, with: value)
 end
-

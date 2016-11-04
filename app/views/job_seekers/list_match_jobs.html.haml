@@ -19,13 +19,14 @@
         - @list_jobs.each do |job|
           %tr
             %td
-              = job.title
+              = link_to job.title, job_path(job)
             %td
               = job.company.name
             %td
               = "#{time_ago_in_words(job.created_at)} ago"
             %td
-              = @rating[job.id]
+              = show_stars(@star_rating[job.id])
+              = "#{@star_rating[job.id]} / 5.0"
   .row.text-center
     = will_paginate @list_jobs, param_name: 'jobs_page',
                               :params => {:controller => 'job_seekers',

@@ -490,7 +490,7 @@ RSpec.describe JobSeekersController, type: :controller do
           expect(flash[:error]).to_not be_present
         end
         it 'empty rating' do
-          expect(assigns(:rating)).to eq({})
+          expect(assigns(:star_rating)).to eq({})
         end
         it "emtpy list of jobs" do
           expect(assigns(:list_jobs)).to eq([])
@@ -513,7 +513,7 @@ RSpec.describe JobSeekersController, type: :controller do
           expect(flash[:error]).to_not be_present
         end
         it 'check output of cruncher' do
-          expect(assigns(:rating))
+          expect(assigns(:star_rating))
                 .to eq({ 3 => 4.7, 2 => 3.8, 6 => 3.4, 9 => 2.9, 8 => 2.8 })
         end
         it "list of jobs" do

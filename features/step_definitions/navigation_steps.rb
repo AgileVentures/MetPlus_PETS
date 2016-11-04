@@ -12,6 +12,9 @@ def page_translator name
       return tasks_path
     when 'jobs'
       return jobs_path
+    when /Job Seeker '.+' job match/
+      user = name.match(/'(.+)'/)
+      return list_match_jobs_job_seeker_path(User.find_by_email(user[1]).pets_user)
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
       return home_job_seeker_path(User.find_by_email(user[1]).pets_user)
@@ -52,10 +55,14 @@ Given(/I am on the (.+) page$/) do |page|
   step "I go to the #{page} page"
 end
 
-Then(/^I should be on the (.+) page$/) do |page|
-  expect(current_path).to eq(page_translator(page))
+Then(/^I should be on the (.+) page$/) do |page_name|
+  expect(current_path).to eq(page_translator(page_name))
 end
 
 Given(/I am on the JobSeeker Show page for "([^"]*)"$/) do |email|
   visit job_seeker_path(User.find_by_email(email).actable_id)
+end
+
+Then(/^I press the Job Match button for '(.+)'$/) do |email|
+  find("#match-job-#{User.find_by_email(email).actable_id}").click
 end
