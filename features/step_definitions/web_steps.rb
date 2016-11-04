@@ -52,11 +52,8 @@ Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, f
   search_text regex
 end
 
-require 'byebug'
-And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |toSearch, anchorText|
-
-  byebug
-  expect(find('tr', text: anchorText)).to have_content(toSearch)
+And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |to_search, anchor_text|
+  expect(find('tr', text: anchor_text)).to have_content(to_tearch)
 end
 
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
