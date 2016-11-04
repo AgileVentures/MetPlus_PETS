@@ -31,7 +31,7 @@ Background: seed data
   | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
   | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
 
-@selenium
+@javascript
 Scenario: Job Seeker registers in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -61,7 +61,7 @@ Scenario: Job Seeker registers in PETS
   And I wait for 1 second
   And I should see "Job Seeker has no assigned Job Developer"
 
-@selenium
+@javascript
 Scenario: Company registration request in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -111,7 +111,7 @@ Scenario: Company registration request in PETS
   And I wait for 1 second
   And I should see "Review company registration"
 
-@selenium
+@javascript
 Scenario: Job developer assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -150,7 +150,7 @@ Scenario: Job developer assigned to job seeker by agency admin
   When "dave@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-@selenium
+@javascript
 Scenario: Case manager assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -189,7 +189,7 @@ Scenario: Case manager assigned to job seeker by agency admin
   When "jane@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-@selenium
+@javascript
 Scenario: Job developer assigns self to job seeker
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -214,7 +214,7 @@ Scenario: Job developer assigns self to job seeker
   Then they should see "Dave Developer" in the email body
   And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
 
-@selenium
+@javascript
 Scenario: Case manager assigns self to job seeker
   When I am in Job Seeker's browser
   Given I am on the home page

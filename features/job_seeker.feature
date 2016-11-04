@@ -113,7 +113,7 @@ Scenario: login jobseeker, land on home page, see applied jobs
   And I should see "Trucker" before "Job Opportunities - New"
   And I should see "Doctor" before "Job Opportunities - New"
 
-@selenium
+@javascript
 Scenario: job seeker finds new job opportunities
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -169,7 +169,7 @@ Scenario: edit Js Registration without password change
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
-@selenium
+@javascript
 Scenario: delete jobseeker
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"

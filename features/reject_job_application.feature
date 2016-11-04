@@ -74,7 +74,7 @@ Feature: Reject a job application
     Then I click the "Reject" button
     And I should see "june@mail.com" application for "hr manager" changes to not_accepted
 
-  @selenium
+  @javascript
   Scenario: job developer reject notification when job application rejected
     When I am in Job Developer's browser
     Given I am on the home page

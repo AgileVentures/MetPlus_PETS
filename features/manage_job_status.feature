@@ -34,7 +34,7 @@ Background: data is added to database
     | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
     | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
 
-  @selenium
+  @javascript
 	Scenario: company person revoke a job
 		Given I am on the home page
 	  And I login as "ca@widgets.com" with password "qwerty123"
@@ -47,7 +47,7 @@ Background: data is added to database
 	  Then I click the Revoke confirmation for "hr manager"
 	  And I should see "Revoked" next to "hr manager"
 
-	@selenium
+	@javascript
 	Scenario: job developer revoke a job
 		Given I am on the home page
 		And I login as "john@metplus.org" with password "qwerty123"
