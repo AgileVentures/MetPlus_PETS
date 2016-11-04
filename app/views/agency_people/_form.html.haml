@@ -44,7 +44,7 @@
   .form-group
     .col-sm-6
       = person_form.label :job_seekers,
-                'Job Seekers for Job Developer role:',
+                "Assign Job Seekers to #{agency_person.full_name(last_name_first: false)} as a Job Developer:",
                 {class: 'control-label',
                 'data-toggle' => 'tooltip', 'data-placement' => 'top',
                 title: "Must have 'Job Developer' role"}
@@ -61,7 +61,7 @@
   .form-group
     .col-sm-6
       = person_form.label :job_seekers,
-                'Job Seekers for Case Manager role:',
+                "Assign Job Seekers to #{agency_person.full_name(last_name_first: false)} as a Case Manager:",
                 {class: 'control-label',
                 'data-toggle' => 'tooltip', 'data-placement' => 'top',
                 title: "Must have 'Case Manager' role"}

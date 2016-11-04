@@ -61,6 +61,33 @@ Scenario: new Js Registration
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
 
+Scenario: validate email address
+  Given I am on the Jobseeker Registration page
+  And I fill in "Email" with "test@gmal.com"
+  Then I click the "Create Job seeker" button
+  And I should see "Email is not valid (did you mean ... test@gmail.com?"
+  And I fill in "Email" with "test@gmail.com"
+  Then I click the "Create Job seeker" button
+  Then I should see "Email is not a valid address"
+  And I fill in "Email" with "tester@gmail.com"
+  Then I click the "Create Job seeker" button
+  And I should not see "Email is not a valid address"
+  And I fill in "Email" with "test_addr@gmail.com"
+  Then I click the "Create Job seeker" button
+  And I should see "Email is not a valid address"
+  And I fill in "Email" with "test.addr@gmail.com"
+  Then I click the "Create Job seeker" button
+  And I should not see "Email is not a valid address"
+  And I fill in "Email" with "test@yaho.com"
+  Then I click the "Create Job seeker" button
+  And I should see "Email is not valid (did you mean ... test@yahoo.com?"
+  And I fill in "Email" with "test.addr@yahoo.com"
+  Then I click the "Create Job seeker" button
+  And I should not see "Email is not a valid address"
+  And I fill in "Email" with "test_addr@yahoo.com"
+  Then I click the "Create Job seeker" button
+  And I should not see "Email is not a valid address"
+
 Scenario: Invalid résumé file type
   Given I am on the Jobseeker Registration page
   When I fill in "First Name" with "test"

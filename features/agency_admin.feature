@@ -98,12 +98,14 @@ Scenario: edit agency information
 
 Scenario: cancel edit agency information
   And I click the "Agency and Partner Companies" link
+  And I should see "PETS Administration - Branches, People, Companies"
   Then I click the "Edit Agency" button
   Then I should see "MetPlus"
   And I fill in "Name" with "MetPlus Two"
   And I click the "Cancel" link
   Then I should not see "Agency was successfully updated."
   And I should not see "MetPlus Two"
+  And I should see "PETS Administration - Branches, People, Companies"
 
 Scenario: errors for edit agency information
   And I click the "Agency and Partner Companies" link
@@ -134,12 +136,14 @@ Scenario: edit branch
 Scenario: cancel edit branch
   And I click the "Agency and Partner Companies" link
   And I click the "001" link
+  And I should see "Agency Branch"
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "004"
   Then I click the "Cancel" link
   Then I should see "Agency Branch"
   And I should not see "004"
+  And I should see "Agency Branch"
 
 Scenario: error for edit branch
   And I click the "Agency and Partner Companies" link
@@ -214,8 +218,8 @@ Scenario: assign job seeker to job developer
   And I check first "Terrific, Tom"
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Job Seekers for Job Developer role:"
-  And I should see "Terrific, Tom" after "Job Seekers for Job Developer role:"
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Mike Check as Job Developer:"
+  And I should see "Terrific, Tom" after "Assigned Job Seekers to Mike Check as Job Developer:"
   Then "mike@metplus.org" should receive 2 emails with subject "Job seeker assigned jd"
   When "mike@metplus.org" opens the email
   Then they should see "A job seeker has been assigned to you as Job Developer:" in the email body
@@ -232,8 +236,8 @@ Scenario: assign job seeker to case manager
   And I check second "Terrific, Tom"
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Job Seekers for Case Manager role:"
-  And I should see "Terrific, Tom" after "Job Seekers for Case Manager role:"
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Jane Jones as Case Manager:"
+  And I should see "Terrific, Tom" after "Assigned Job Seekers to Jane Jones as Case Manager:"
   Then "jane@metplus.org" should receive 2 emails with subject "Job seeker assigned cm"
   When "jane@metplus.org" opens the email
   Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
@@ -364,6 +368,7 @@ Scenario: delete job specialty
     And I wait 2 seconds
     And I fill in "Description:" with ""
     And I click the "Update Skill" button
+    And I wait 1 second
     And I should see "Description can't be blank"
     And I fill in "Description:" with "Anaytics using web data"
     And I click the "Update Skill" button
