@@ -23,7 +23,7 @@
             %td
               = job.company.name
             %td
-              = "#{time_ago_in_words(job.created_at)} ago"
+              #{time_ago_in_words(job.created_at)} ago
             %td
               = show_stars(@star_rating[job.id])
               #{@star_rating[job.id]} / 5.0

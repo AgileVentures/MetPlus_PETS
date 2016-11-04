@@ -145,7 +145,7 @@ class JobSeekersController < ApplicationController
     else
       @star_rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
       @list_jobs = Job.all.where(id: @star_rating.keys).includes(:company)
-                      .sort { |x,y| @star_rating[y.id] <=> @star_rating[x.id] }
+                      .sort { |x, y| @star_rating[y.id] <=> @star_rating[x.id] }
                       .paginate(page: params[:jobs_page], per_page: 20)
     end
   end

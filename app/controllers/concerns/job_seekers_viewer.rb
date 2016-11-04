@@ -28,11 +28,11 @@ module JobSeekersViewer
   end
 
   FIELDS_IN_PEOPLE_TYPE = {
-       'jobseeker-cm': [ :full_name, :job_seeker_status_short_description,
-                         :last_sign_in_at, :match_rating ],
+       'jobseeker-cm': [:full_name, :job_seeker_status_short_description,
+                        :last_sign_in_at, :match_rating],
 
-       'jobseeker-jd': [ :full_name, :job_seeker_status_short_description,
-                         :last_sign_in_at, :match_rating ],
+       'jobseeker-jd': [:full_name, :job_seeker_status_short_description,
+                        :last_sign_in_at, :match_rating],
        'jobseeker-without-jd':
 [:full_name, :job_seeker_status_short_description,:last_sign_in_at],
        'jobseeker-without-cm':

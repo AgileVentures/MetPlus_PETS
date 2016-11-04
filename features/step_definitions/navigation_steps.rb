@@ -14,7 +14,9 @@ def page_translator name
       return jobs_path
     when /Job Seeker '.+' job match/
       user = name.match(/'(.+)'/)
-      return list_match_jobs_job_seeker_path(User.find_by_email(user[1]).pets_user)
+      return list_match_jobs_job_seeker_path(
+        User.find_by_email(user[1]).pets_user
+      )
     when /Job Seeker '.+' Home/
       user = name.match(/'(.+)'/)
       return home_job_seeker_path(User.find_by_email(user[1]).pets_user)
