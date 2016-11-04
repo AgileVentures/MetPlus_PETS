@@ -436,7 +436,25 @@ RSpec.describe Event, type: :model do
       expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }
         .to change(all_emails, :count).by(+1)
     end
+    it 'triggers mass Pusher message' do
+      Event.create(:JOB_REVOKED, evt_obj_jobpost)
+
+      expect(Pusher).to have_received(:trigger).
+          with('pusher_control',
+               'job_revoked',
+               {job_id: job.id,
+                job_title: job.title,
+                company_name: company.name,
+                notify_list: [job_seeker.user.id]})
+    end
+
+    it 'sends mass event notification email' do
+      expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }.
+          to change(all_emails, :count).by(+1)
+    end
+
   end
+
 
   describe 'jd_self_assigned_js event' do
     it 'triggers Pusher message to job seeker' do
