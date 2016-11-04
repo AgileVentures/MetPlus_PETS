@@ -1,10 +1,9 @@
 # Job applications controller
 class JobApplicationsController < ApplicationController
   include JobApplicationsViewer
-
+  before_action :user_logged!, except: :list
   before_action :find_application, except: :list
-  before_action :user_logged!
- 
+
   def accept
     if @job_application.active?
       @job_application.accept
@@ -41,8 +40,6 @@ class JobApplicationsController < ApplicationController
     redirect_back_or_default
   end
 
-  private
-
   def list
     raise 'Unsupported request' if not request.xhr?
     @job_applications = []
@@ -52,14 +49,7 @@ class JobApplicationsController < ApplicationController
                        application_type: params[:type] }
   end
 
-	def find_application
-		begin
-			@job_application = JobApplication.find(params[:id])
-		rescue
-			flash[:alert] = "Job Application Entry not found."
-			redirect_back_or_default
-		end
-	end
+  private
 
   def reject_success_response(request)
     if request.xhr?

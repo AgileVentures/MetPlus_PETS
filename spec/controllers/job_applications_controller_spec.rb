@@ -69,7 +69,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           end
           it 'show a flash[:alert]' do
             expect(flash[:alert]).to eq 'Invalid action on'\
-  							' inactive job application.'
+                ' inactive job application.'
           end
           it 'redirect to the specific job application index page' do
             expect(response).to redirect_to(applications_job_url(
@@ -358,6 +358,7 @@ RSpec.describe JobApplicationsController, type: :controller do
       end
     end
   end
+
   describe 'GET #list' do
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:job1) { FactoryGirl.create(:job) }
@@ -378,7 +379,8 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:app4) do 
       FactoryGirl.create(:job_application,
                                job: job3,
-                               job_seeker: FactoryGirl.create(:job_seeker)) 
+                               job_seeker: FactoryGirl.create(:job_seeker))
+    end
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
