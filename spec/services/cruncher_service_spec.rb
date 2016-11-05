@@ -65,8 +65,8 @@ RSpec.describe CruncherService, type: :request do
 
   let(:match_resume_and_job_result) do
     RestClient.get(CruncherService.service_url + '/resume/1/compare/1',
-        { 'Accept': 'application/json',
-          'X-Auth-Token': JSON.parse(auth_result)['token'] })
+                   'Accept': 'application/json',
+                   'X-Auth-Token': JSON.parse(auth_result)['token'])
   end
 
   describe 'Initialization' do
@@ -85,6 +85,20 @@ RSpec.describe CruncherService, type: :request do
       end
       it 'returns authorization token' do
         expect(JSON.parse(auth_result)['token']).not_to be_nil
+      end
+    end
+
+    describe 'authentication failure' do
+      it 'raises error with invalid credentials' do
+        stub_cruncher_authenticate_error
+
+        expect do
+          RestClient.post(CruncherService.service_url +
+                          '/authenticate', {},
+                          'X-Auth-Username' => 'nobody',
+                          'X-Auth-Password' => 'none')
+        end
+          .to raise_error(RuntimeError)
       end
     end
 
@@ -220,11 +234,11 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns success result code in response' do
-        expect(JSON.parse(match_resume_and_job_result)['resultCode']).
-                                                    to eq 'SUCCESS'
+        expect(JSON.parse(match_resume_and_job_result)['resultCode'])
+          .to eq 'SUCCESS'
       end
     end
-   end
+  end
 
   context 'CruncherService API calls' do
     before(:each) do
@@ -364,7 +378,6 @@ RSpec.describe CruncherService, type: :request do
 
         expect(CruncherService.match_resumes(1)).not_to be nil
       end
-
       it 'returns nil if cannot find job' do
         stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
 
@@ -376,17 +389,17 @@ RSpec.describe CruncherService, type: :request do
       it 'returns success and match results' do
         stub_cruncher_match_resume_and_job
 
-        result = CruncherService.match_resume_and_job(1,1)
+        result = CruncherService.match_resume_and_job(1, 1)
 
         expect(result[:status]).to eq 'SUCCESS'
-        expect(result[:stars]).
-          to include "NaiveBayes"=>3.4, "ExpressionCruncher"=>2.3
+        expect(result[:stars])
+          .to include 'NaiveBayes' => 3.4, 'ExpressionCruncher' => 2.3
       end
 
       it 'returns error message if job not found' do
         stub_cruncher_match_resume_and_job_error
 
-        result = CruncherService.match_resume_and_job(1,10000)
+        result = CruncherService.match_resume_and_job(1, 10_000)
 
         expect(result[:status]).to eq 'ERROR'
         expect(result[:message]).to eq 'No job found with id: 1'

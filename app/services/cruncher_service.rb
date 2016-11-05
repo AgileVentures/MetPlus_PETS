@@ -1,3 +1,4 @@
+# Interfaces to Cruncher service API
 class CruncherService
   require 'rest-client'
   require 'json'
@@ -124,7 +125,7 @@ class CruncherService
   end
 
   def self.match_resume_and_job(resume_id, job_id)
-    # Matches given résumé to given job and returns match scores
+    # Matches given resume to given job and returns match scores
     # from all available matchers.
     # Returns a hash with these 2 key-value pairs:
     #  status: 'SUCCESS' or 'ERROR'
@@ -139,16 +140,16 @@ class CruncherService
     begin
       result = RestClient.get(service_url +
                           "/resume/#{resume_id}/compare/#{job_id}",
-                          { 'X-Auth-Token': auth_token })
+                              'X-Auth-Token': auth_token)
 
       return { status: 'SUCCESS', stars: JSON.parse(result)['stars'] }
 
-    rescue RestClient::Unauthorized   # most likely expired token
+    rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
       if retry_match
-         retry_match = false
-         retry
+        retry_match = false
+        retry
       end
       raise
 
