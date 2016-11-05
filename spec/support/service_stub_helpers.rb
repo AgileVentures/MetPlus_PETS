@@ -34,13 +34,13 @@ module ServiceStubHelpers
     def stub_cruncher_file_download(testfile)
       file = fixture_file_upload(testfile)
 
-      stub_request(:get, /#{CruncherService.service_url + "/resume/"}\d+/).
+      stub_request(:get, /#{CruncherService.service_url}\/resume\/\d+/).
           to_return(body: file.read, status: 200,
           :headers => {'Content-Disposition'=>
                         'inline; filename="Admin-Assistant-Resume.pdf"'})
     end
     def stub_cruncher_file_download_notfound
-      stub_request(:get, CruncherService.service_url + '/resume/2').
+      stub_request(:get, /#{CruncherService.service_url}\/resume\/\d+/).
           to_return(body: "{\"resultCode\":\"RESUME_NOT_FOUND\",
                             \"message\":\"Unable to find the user '2'\"}",
                     status: 200)
@@ -48,7 +48,7 @@ module ServiceStubHelpers
     def stub_cruncher_file_download_retry_auth(testfile)
       file = fixture_file_upload(testfile)
 
-      stub_request(:get, CruncherService.service_url + '/resume/1').
+      stub_request(:get, /#{CruncherService.service_url}\/resume\/\d+/).
           to_raise(RestClient::Unauthorized).then.
           to_return(body: file.read, status: 200,
           :headers => {'Content-Disposition'=>
@@ -75,8 +75,24 @@ module ServiceStubHelpers
           :headers => {'Content-Type' => 'application/json'})
     end
 
-    def stub_cruncher_match_jobs
+    def stub_cruncher_match_resume_and_job
+      body_json = JSON.generate("resultCode"=>"SUCCESS", "message"=>"Success",
+                  "stars"=>{"NaiveBayes":3.4, "ExpressionCruncher":2.3})
 
+      url_regex = /#{CruncherService.service_url}\/resume\/\d+\/compare\/\d+/
+      stub_request(:get, url_regex).
+                   to_return(body: body_json, status:200,
+                   headers: {'Content-Type': 'application/json'})
+    end
+    def stub_cruncher_match_resume_and_job_error
+      url_regex = /#{CruncherService.service_url}\/resume\/\d+\/compare\/\d+/
+      err = JSON.generate("resultCode":"JOB_NOT_FOUND",
+                          "message":"No job found with id: 1")
+      stub_request(:get, url_regex).
+                    to_raise(RestClient::ResourceNotFound.new(err))
+    end
+
+    def stub_cruncher_match_jobs
       body_json = JSON.generate({"resultCode"=>"SUCCESS", "message"=>"Success",
               "jobs"=>{"matcher1"=>[{"jobId"=>"2", "stars"=>3.8},
                                     {"jobId"=>"3", "stars"=>4.7},
@@ -91,7 +107,7 @@ module ServiceStubHelpers
     end
 
     def stub_cruncher_match_jobs_fail(resultCode)
-      stub_request(:get, CruncherService.service_url + '/job/match/1').
+      stub_request(:get, /#{CruncherService.service_url}\/job\/match\/\d+/).
         to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status:200,
         headers: {'Content-Type': 'application/json'})
     end
@@ -105,7 +121,7 @@ module ServiceStubHelpers
                                     {"resumeId"=>"5", "stars"=>3.8},
                                     {"resumeId"=>"6", "stars"=>1.7}]}})
 
-      stub_request(:get, CruncherService.service_url + '/resume/match/1').
+      stub_request(:get, /#{CruncherService.service_url}\/resume\/match\/\d+/).
           to_return(body: body_json, status: 200,
           headers: { 'Content-Type': 'application/json' })
 

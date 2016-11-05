@@ -63,6 +63,12 @@ RSpec.describe CruncherService, type: :request do
                    'X-Auth-Token' => JSON.parse(auth_result)['token'])
   end
 
+  let(:match_resume_and_job_result) do
+    RestClient.get(CruncherService.service_url + '/resume/1/compare/1',
+        { 'Accept': 'application/json',
+          'X-Auth-Token': JSON.parse(auth_result)['token'] })
+  end
+
   describe 'Initialization' do
     it 'Establishes service URL' do
       expect(CruncherService.service_url).to eq ENV['CRUNCHER_SERVICE_URL']
@@ -202,7 +208,23 @@ RSpec.describe CruncherService, type: :request do
         expect(JSON.parse(match_resumes_result)['resultCode']).to eq 'SUCCESS'
       end
     end
-  end
+
+    describe 'match resume and job' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_match_resume_and_job
+      end
+
+      it 'returns HTTP success' do
+        expect(match_resume_and_job_result.code).to eq 200
+      end
+
+      it 'returns success result code in response' do
+        expect(JSON.parse(match_resume_and_job_result)['resultCode']).
+                                                    to eq 'SUCCESS'
+      end
+    end
+   end
 
   context 'CruncherService API calls' do
     before(:each) do
@@ -347,6 +369,27 @@ RSpec.describe CruncherService, type: :request do
         stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
 
         expect { CruncherService.match_resumes(1).to be nil }
+      end
+    end
+
+    describe 'match résumé and job' do
+      it 'returns success and match results' do
+        stub_cruncher_match_resume_and_job
+
+        result = CruncherService.match_resume_and_job(1,1)
+
+        expect(result[:status]).to eq 'SUCCESS'
+        expect(result[:stars]).
+          to include "NaiveBayes"=>3.4, "ExpressionCruncher"=>2.3
+      end
+
+      it 'returns error message if job not found' do
+        stub_cruncher_match_resume_and_job_error
+
+        result = CruncherService.match_resume_and_job(1,10000)
+
+        expect(result[:status]).to eq 'ERROR'
+        expect(result[:message]).to eq 'No job found with id: 1'
       end
     end
   end

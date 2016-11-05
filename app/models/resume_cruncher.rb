@@ -40,4 +40,20 @@ class ResumeCruncher
     self.process_match_results match_results, 'resumeId'
   end
 
+  def self.match_resume_and_job(resume_id, job_id)
+    # Returns a hash with 2 key-value pairs:
+    # status:  'SUCCESS' or 'ERROR'
+    # message: string indicating error cause (if status == ERROR)
+    # score:   maximum match score across all matchers
+    #              (float, n.m) (if status = SUCCESS)
+
+    match_result = CruncherService.match_resume_and_job(resume_id, job_id)
+
+    if match_result[:status] == 'SUCCESS'
+      return { status: 'SUCCESS', score: match_result[:stars].values.max }
+    else
+      return { status: 'ERROR', message: match_result[:message] }
+    end
+  end
+
 end

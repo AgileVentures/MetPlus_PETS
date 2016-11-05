@@ -123,12 +123,16 @@ class CruncherService
     end
   end
 
-  def match_resume_and_job(resume_id, job_id)
+  def self.match_resume_and_job(resume_id, job_id)
     # Matches given résumé to given job and returns match scores
     # from all available matchers.
-    # Possible exceptions raised:
-    #   RestClient::Unauthorized
-    #   RestClient::ResourceNotFound (résumé and job not found)
+    # Returns a hash with these 2 key-value pairs:
+    #  status: 'SUCCESS' or 'ERROR'
+    #  stars: (if status==SUCCESS) hash with one match score per cruncher
+    #         matcher, e.g.: {"NaiveBayes"=>3.1, "ExpressionCruncher"=>2.9}
+    #  message (f status==ERROR) string indicating specific error
+    #         'No resume found with id: <resume_id>', or,
+    #         'No job found with id: <job_id>'
 
     retry_match = true
 
@@ -137,7 +141,7 @@ class CruncherService
                           "/resume/#{resume_id}/compare/#{job_id}",
                           { 'X-Auth-Token': auth_token })
 
-      return stars = JSON.parse(result)['stars']
+      return { status: 'SUCCESS', stars: JSON.parse(result)['stars'] }
 
     rescue RestClient::Unauthorized   # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -147,6 +151,9 @@ class CruncherService
          retry
       end
       raise
+
+    rescue RestClient::ResourceNotFound => e
+      return { status: 'ERROR', message: JSON.parse(e.response)['message'] }
     end
   end
 

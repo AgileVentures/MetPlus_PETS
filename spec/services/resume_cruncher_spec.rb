@@ -63,4 +63,20 @@ RSpec.describe ResumeCruncher, type: :model do
 
   end
 
+  describe 'match resume and job' do
+
+    it 'returns match score on success' do
+      stub_cruncher_match_resume_and_job
+      results = ResumeCruncher.match_resume_and_job(1, 1)
+      expect(results[:status]).to eq 'SUCCESS'
+      expect(results[:score]).to eq 3.4
+    end
+    it 'returns error if job or resume not found' do
+      stub_cruncher_match_resume_and_job_error
+      results = ResumeCruncher.match_resume_and_job(1, 1)
+      expect(results[:status]).to eq 'ERROR'
+      expect(results[:message]).to eq 'No job found with id: 1'
+    end
+  end
+
 end
