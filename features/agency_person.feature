@@ -178,6 +178,9 @@ Given the following agency relations exist:
     Then I click the first "Jones, Mary" link
     Then I click "Edit Job Seeker" button
     And I should see "Edit JobSeeker Registration"
+    And I should not see "Password"
+    And I should not see "Password Confirmation"
+    And I should not see "Year of Birth"
     Then I fill in "First Name" with "Samantha"
     Then I click "Update Job seeker" button
     And I should see "Jobseeker was updated successfully."
@@ -202,5 +205,5 @@ Given the following agency relations exist:
     Given I am on the home page
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
-    Then I click the first "Seeker, Tom" link
+    Then I click the first "Seeker, John" link 
     And I should not see "Edit Job Seeker"

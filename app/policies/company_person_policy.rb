@@ -44,5 +44,4 @@ class CompanyPersonPolicy < ApplicationPolicy
     def agency_related_to_company? agency, company
       company.agencies.include? agency
     end
-
 end

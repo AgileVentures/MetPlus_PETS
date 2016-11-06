@@ -1,11 +1,10 @@
 class JobSeekersController < ApplicationController
   before_action :user_logged!, except: [:new, :create]
-
   include UserParameters
-  include JobApplicationsViewer
 
   def new
     @jobseeker = JobSeeker.new
+    authorize @jobseeker
   end
 
   def create
@@ -13,6 +12,7 @@ class JobSeekersController < ApplicationController
     dispatch_file    = jobseeker_params.delete 'resume'
 
     @jobseeker = JobSeeker.new(jobseeker_params)
+    authorize @jobseeker
     models_saved = @jobseeker.save
 
     if models_saved
@@ -41,13 +41,14 @@ class JobSeekersController < ApplicationController
 
   def edit
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     @current_resume = @jobseeker.resumes[0]
   end
 
   def update
     @jobseeker = JobSeeker.find(params[:id])
-
-    jobseeker_params = handle_user_form_parameters form_params
+    authorize @jobseeker
+    jobseeker_params = handle_user_form_parameters(permitted_attributes(@jobseeker))
     dispatch_file    = jobseeker_params.delete 'resume'
 
     models_saved = @jobseeker.update_attributes(jobseeker_params)
@@ -78,7 +79,7 @@ class JobSeekersController < ApplicationController
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
       flash[:notice] = "Jobseeker was updated successfully."
-      redirect_to @jobseeker and return if pets_user == @jobseeker.case_manager
+      redirect_to @jobseeker and return if (pets_user == @jobseeker.case_manager) || (pets_user == @jobseeker.job_developer) 
       redirect_to root_path
     else
       @resume = resume
@@ -89,48 +90,34 @@ class JobSeekersController < ApplicationController
   def home
     @jobseeker = JobSeeker.find(params[:id])
     @recent_jobs_type = 'recent-jobs'
+    authorize @jobseeker
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
     @js_last_sign_in = @jobseeker.last_sign_in_at
-    @application_type = params[:application_type] || 'my-applied'
+    @application_type = 'job_seeker'
   end
 
   def index
     @jobseeker = JobSeeker.all
+    authorize @jobseeker
   end
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
-    @application_type = params[:application_type] || 'js-applied'
+    authorize @jobseeker
+    @application_type = 'job_seeker'
   end
 
   def preview_info
     raise 'Unsupported request' if not request.xhr?
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
                                                    preview_mode: true }
   end
 
-  def applied_jobs
-    raise 'Unsupported request' if not request.xhr?
-
-    @application_type = params[:application_type] || 'my-applied'
-
-    @job_applications = []
-
-    if User.is_company_person? pets_user
-      @job_applications = display_job_applications @application_type, 5,
-                                      params[:id], nil, pets_user.company.id
-    else
-      @job_applications = display_job_applications @application_type, 5,
-                                      params[:id]
-    end
-    render partial: 'jobs/applied_job_list',
-          :locals => {job_applications: @job_applications,
-                      application_type: @application_type}
-	end
-
   def destroy
     @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
     @jobseeker.destroy
     flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
@@ -151,8 +138,8 @@ class JobSeekersController < ApplicationController
   end
 
   private
-   def form_params
-     params.require(:job_seeker).permit(:first_name,
+    def form_params
+      params.require(:job_seeker).permit(:first_name,
             :last_name, :email, :phone,
             :password,
             :password_confirmation,
@@ -161,5 +148,5 @@ class JobSeekersController < ApplicationController
             :consent,
             :job_seeker_status_id,
             address_attributes: [:id, :street, :city, :zipcode, :state])
-   end
+    end
 end
