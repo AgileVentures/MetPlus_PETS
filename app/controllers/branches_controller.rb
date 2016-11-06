@@ -1,15 +1,25 @@
 class BranchesController < ApplicationController
+
+  before_action :user_logged!
+
   def show
     @branch = Branch.find(params[:id])
+    self.action_description ="show the branch"
+    authorize @branch
   end
 
   def create
     @agency = Agency.find(params[:agency_id])
-    @branch = Branch.new
+    @branch = Branch.new(agency: @agency)
+
+    self.action_description ="create a branch"
+    authorize @branch
+
     @branch.assign_attributes(branch_params)
-    @agency.branches << @branch
+    
     if @branch.valid?
       @branch.save
+      @agency.branches << @branch
       flash[:notice] = "Branch was successfully created."
       redirect_to agency_admin_home_path
     else
@@ -18,18 +28,30 @@ class BranchesController < ApplicationController
   end
 
   def new
-    @agency = Agency.this_agency(current_user)
-    @branch = Branch.new
+    begin
+     @agency = Agency.this_agency(current_user)
+    rescue
+     @agency = nil
+    end
+    @branch = Branch.new(agency: @agency)
+    
+    self.action_description ="create a branch"
+    authorize @branch
+  
     @branch.build_address
   end
 
   def edit
     @branch = Branch.find(params[:id])
+    self.action_description ="edit the branch"
+    authorize @branch
     @branch.build_address unless @branch.address
   end
 
   def update
     @branch = Branch.find(params[:id])
+    self.action_description ="update the branch"
+    authorize @branch
     @branch.assign_attributes(branch_params)
     if @branch.valid?
       @branch.save
@@ -42,6 +64,8 @@ class BranchesController < ApplicationController
 
   def destroy
     branch = Branch.find(params[:id])
+    self.action_description ="destroy the branch"
+    authorize branch
     branch.destroy
     flash[:notice] = "Branch '#{branch.code}' deleted."
     redirect_to agency_admin_home_path

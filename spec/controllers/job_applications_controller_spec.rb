@@ -69,7 +69,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           end
           it 'show a flash[:alert]' do
             expect(flash[:alert]).to eq 'Invalid action on'\
-  							' inactive job application.'
+                ' inactive job application.'
           end
           it 'redirect to the specific job application index page' do
             expect(response).to redirect_to(applications_job_url(
@@ -358,4 +358,43 @@ RSpec.describe JobApplicationsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #list' do
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job1) { FactoryGirl.create(:job) }
+    let(:job2) { FactoryGirl.create(:job) }
+    let(:job3) { FactoryGirl.create(:job) }
+    let(:app1) do 
+      FactoryGirl.create(:job_application,
+                               job: job1, job_seeker: job_seeker) 
+    end
+    let(:app2) do 
+      FactoryGirl.create(:job_application,
+                               job: job2, job_seeker: job_seeker) 
+    end
+    let(:app3) do 
+      FactoryGirl.create(:job_application,
+                               job: job3, job_seeker: job_seeker) 
+    end
+    let(:app4) do 
+      FactoryGirl.create(:job_application,
+                               job: job3,
+                               job_seeker: FactoryGirl.create(:job_seeker))
+    end
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      xhr :get, :list, type: 'job_seeker', entity_id: job_seeker
+    end
+
+    it 'assigns jobs for view' do
+      expect(assigns(:job_applications)).to include(app1, app2, app3)
+      expect(assigns(:job_applications)).not_to include(app4)
+    end
+
+    it 'renders partial for applications' do
+      expect(response).to render_template(partial: 'jobs/_applied_job_list')
+    end
+  end
 end
+
