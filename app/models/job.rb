@@ -8,45 +8,45 @@ class Job < ActiveRecord::Base
   has_many   :job_skills, inverse_of: :job, dependent: :destroy
   has_many   :skills, through: :job_skills
   accepts_nested_attributes_for :job_skills, allow_destroy: true,
-                                reject_if: :all_blank
+                                             reject_if: :all_blank
 
-  has_many   :required_skills, -> {where job_skills: {required: true}},
+  has_many   :required_skills, -> { where job_skills: { required: true } },
                 through: :job_skills, class_name: 'Skill', source: :skill
-  has_many   :nice_to_have_skills, -> {where job_skills: {required: false}},
+  has_many   :nice_to_have_skills, -> { where job_skills: { required: false } },
                 through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
-  SHIFT_OPTIONS = ['Morning', 'Day', 'Evening']
+  SHIFT_OPTIONS = %w(Morning Day Evening).freeze
   validates_presence_of :title
   validates_presence_of :company_job_id
   validates_presence_of :fulltime, allow_blank: true
-  validates_inclusion_of :shift, :in => SHIFT_OPTIONS,
-  :message => "must be one of: #{SHIFT_OPTIONS.join(', ')}"
+  validates_inclusion_of :shift, in: SHIFT_OPTIONS,
+                        message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
-  validates_length_of   :description, maximum: 10000
+  validates_length_of   :description, maximum: 10_000
   validates_presence_of :company_id
   validates_presence_of :company_person_id, allow_nil: true
-  scope :new_jobs, ->(given_time) {where("created_at > ?", given_time)}
-  scope :find_by_company, ->(company) {where(:company => company)}
+  scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
+  scope :find_by_company, ->(company) { where(company: company) }
 
   enum status: [:active, :filled, :revoked]
   has_many :status_changes, as: :entity, dependent: :destroy
 
-  # `self.status.to_sym` is necessary because sometimes we would need to create
-  #  a job with a status other than `active`(in tests) and we don't want
+  # `status.to_sym` is necessary because sometimes we would need to create
+  #  a job with a status other than `active`(in tests) and we do not want
   #  to have a mismatch in statuses across `jobs` and `status_changes` tables.
 
   after_create do
-    StatusChange.update_status_history(self, self.status.to_sym || :active)
+    StatusChange.update_status_history(self, status.to_sym || :active)
   end
 
   def number_applicants
     job_applications.size
   end
 
-  def apply job_seeker
+  def apply(job_seeker)
     job_seekers << job_seeker
     save!
 
@@ -54,11 +54,12 @@ class Job < ActiveRecord::Base
     job_application = last_application_by_job_seeker(job_seeker)
 
     # Send mail to the company with the attached resume
-    CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
-                     perform_later(Event::EVT_TYPE[:JS_APPLY],
-                     self.company,
-                      nil, { application: job_application,
-                      resume_id: resume_id })
+    CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                    .perform_later(Event::EVT_TYPE[:JS_APPLY],
+                                   company,
+                                   nil,
+                                   application: job_application,
+                                   resume_id: resume_id)
 
     last_application_by_job_seeker(job_seeker)
   end
@@ -84,7 +85,7 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 
-  def is_recent? time
+  def is_recent?(time)
     created_at > time
   end
 
@@ -93,7 +94,7 @@ class Job < ActiveRecord::Base
   def save_job_to_cruncher
     cruncher_posted = true
 
-    unless (changed & ['title', 'description']).empty?
+    unless (changed & %w(title description)).empty?
       begin
         if id_changed?
           cruncher_posted = JobCruncher.create_job(id, title, description)
