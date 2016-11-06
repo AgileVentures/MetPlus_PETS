@@ -224,6 +224,19 @@ RSpec.describe Event, type: :model do
     it 'sends a notification email to job developer and case manager' do
       expect { Event.create(:APP_ACCEPTED, application) }.
           to change(all_emails, :count).by(+2)
+      expect(all_emails.last.to.count).to eq 2
+    end
+
+    context 'case manager and job developer is same person' do
+      it 'sends one email' do
+        #add job_developer a case managers role
+        job_developer.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) ||
+          FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+        expect { Event.create(:APP_ACCEPTED, application) }.
+          to change(all_emails, :count).by(+2)
+        expect(all_emails.last.to.count).to eq 1
+    end
+      
     end
   end
 

@@ -189,8 +189,9 @@ class Event
     # Notify job seeker's case manager (email and popup)
 
     notifyList = [];
-    if evt_obj.job_seeker.job_developer
-      notifyList << (evt_obj.job_seeker.job_developer.user.email)
+    if job_developer = evt_obj.job_seeker.job_developer
+      notifyList << (evt_obj.job_seeker.job_developer.user.email) unless 
+      User.is_case_manager?(job_developer)
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:APP_ACCEPTED],
                      {id: evt_obj.id,
@@ -200,8 +201,8 @@ class Event
                      })
     end
 
-    if evt_obj.job_seeker.case_manager
-      notifyList << (evt_obj.job_seeker.case_manager.user.email)
+    if case_manager = evt_obj.job_seeker.case_manager
+      notifyList << (case_manager.user.email) 
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:APP_ACCEPTED],
                      {id: evt_obj.id,
