@@ -190,15 +190,16 @@ class Event
 
     notifyList = [];
     if job_developer = evt_obj.job_seeker.job_developer
-      notifyList << (evt_obj.job_seeker.job_developer.user.email) unless 
-      User.is_case_manager?(job_developer)
-      Pusher.trigger('pusher_control',
-                     EVT_TYPE[:APP_ACCEPTED],
-                     {id: evt_obj.id,
-                      ap_user_id: evt_obj.job_seeker.job_developer.user.id,
-                      job_title:   evt_obj.job.title,
-                      js_name: evt_obj.job_seeker.full_name(last_name_first: false)
-                     })
+      unless User.is_case_manager?(job_developer)
+        notifyList << (evt_obj.job_seeker.job_developer.user.email)
+        Pusher.trigger('pusher_control',
+                       EVT_TYPE[:APP_ACCEPTED],
+                       {id: evt_obj.id,
+                        ap_user_id: evt_obj.job_seeker.job_developer.user.id,
+                        job_title:   evt_obj.job.title,
+                        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+        })
+      end
     end
 
     if case_manager = evt_obj.job_seeker.case_manager

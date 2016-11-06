@@ -235,8 +235,14 @@ RSpec.describe Event, type: :model do
         expect { Event.create(:APP_ACCEPTED, application) }.
           to change(all_emails, :count).by(+2)
         expect(all_emails.last.to.count).to eq 1
-    end
-      
+      end
+      it 'sends one notification' do
+        job_developer.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) ||
+          FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+        Event.create(:APP_ACCEPTED, application)
+        expect(Pusher).to have_received(:trigger).once
+      end
+
     end
   end
 
