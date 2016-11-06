@@ -990,5 +990,36 @@ RSpec.describe JobsController, type: :controller do
       end
     end
   end
-  
+
+
+  describe 'GET #applications_list' do
+    before :each do
+      5.times.each do
+        job_seeker = FactoryGirl.create(:job_seeker)
+        FactoryGirl.create(:job_application, :job => @job, :job_seeker => job_seeker)
+      end
+      xhr :get, :applications_list, :id => @job.id, :application_type => 'job-applied'
+    end
+
+    it 'is a success' do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders 'jobs/_job_applications' template" do
+      expect(response).to render_template('jobs/_job_applications')
+    end
+
+    it 'check application_type' do
+      expect(assigns(:application_type)).to eq 'job-applied'
+    end
+
+    it 'check applications' do
+      # Next line added to ensure the query is done and that the
+      # paginate is also called
+      assigns(:applications).each do end
+      expect(assigns(:applications).all.size).to eq 5
+    end
+
+    it { should_not set_flash }
+  end
 end
