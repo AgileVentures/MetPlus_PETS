@@ -116,7 +116,7 @@ class JobsController < ApplicationController
     @application_type = params[:application_type] || 'job-applied'
 
     @applications = []
-    @applications = display_job_applications @application_type, 5, nil, @job.id
+    @applications = display_job_applications @application_type, 5, @job.id
 
     render partial: 'job_applications'
   end

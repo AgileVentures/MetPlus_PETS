@@ -14,9 +14,8 @@
     = render partial: 'info', locals: {job_seeker: @jobseeker}
 
 %h3 Your Applications
-.pagination-div{id: "applications-#{@application_type}",
-                data: {url: applied_jobs_job_seeker_path(@jobseeker,
-                                                         @application_type)}}
+.pagination-div{ id: "applications-#{@application_type}",
+                 data: { url: list_applications_path(@application_type, @jobseeker) } }
 
 %h3
   Job Opportunities - New

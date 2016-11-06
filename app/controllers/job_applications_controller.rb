@@ -1,8 +1,8 @@
 # Job applications controller
 class JobApplicationsController < ApplicationController
   include JobApplicationsViewer
-  before_action :user_logged!
-  before_action :find_application
+  before_action :user_logged!, except: :list
+  before_action :find_application, except: :list
 
   def accept
     if @job_application.active?
@@ -38,6 +38,15 @@ class JobApplicationsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = 'Job Application Entry not found.'
     redirect_back_or_default
+  end
+
+  def list
+    raise 'Unsupported request' if not request.xhr?
+    @job_applications = []
+    @job_applications = display_job_applications(params[:type], 5, params[:entity_id])
+    render partial: 'jobs/applied_job_list',
+          :locals => { job_applications: @job_applications,
+                       application_type: params[:type] }
   end
 
   private
