@@ -71,12 +71,12 @@ class Event
                     name: evt_obj.full_name(last_name_first: false)})
 
     NotifyEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(Agency.all_agency_people_emails,
-                   EVT_TYPE[:JS_REGISTER],
-                   evt_obj)
+      perform_later(Agency.all_agency_people_emails,
+                    EVT_TYPE[:JS_REGISTER],
+                    evt_obj)
 
-    # MULTIPLE AGENCIES: the code below needs to change
-    Task.new_js_registration_task(evt_obj, Agency.first)
+      # MULTIPLE AGENCIES: the code below needs to change
+      Task.new_js_registration_task(evt_obj, Agency.first)
   end
 
   def self.evt_comp_register(evt_obj)   # evt_obj = company
@@ -89,16 +89,16 @@ class Event
                    {id: evt_obj.id, name: evt_obj.name})
 
     NotifyEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(Agency.all_agency_people_emails,
-                   EVT_TYPE[:COMP_REGISTER],
-                   evt_obj)
+      perform_later(Agency.all_agency_people_emails,
+                    EVT_TYPE[:COMP_REGISTER],
+                    evt_obj)
 
-    CompanyMailerJob.set(wait: delay_seconds.seconds).
-                     perform_later(EVT_TYPE[:COMP_REGISTER],
-                     evt_obj,
-                     evt_obj.company_people[0])
+      CompanyMailerJob.set(wait: delay_seconds.seconds).
+        perform_later(EVT_TYPE[:COMP_REGISTER],
+                      evt_obj,
+                      evt_obj.company_people[0])
 
-    Task.new_review_company_registration_task(evt_obj, evt_obj.agencies[0])
+        Task.new_review_company_registration_task(evt_obj, evt_obj.agencies[0])
   end
 
   def self.evt_comp_approved(evt_obj)  # evt_obj = company
@@ -106,9 +106,9 @@ class Event
     #    Send email to company contact
 
     CompanyMailerJob.set(wait: delay_seconds.seconds).
-                     perform_later(EVT_TYPE[:COMP_APPROVED],
-                     evt_obj,
-                     evt_obj.company_people[0])
+      perform_later(EVT_TYPE[:COMP_APPROVED],
+                    evt_obj,
+                    evt_obj.company_people[0])
   end
 
   def self.evt_comp_denied(evt_obj) # evt_obj = struct(company, reason)
@@ -116,10 +116,10 @@ class Event
     #    Send email to company contact
 
     CompanyMailerJob.set(wait: delay_seconds.seconds).
-                  perform_later(EVT_TYPE[:COMP_DENIED],
-                  evt_obj.company,
-                  evt_obj.company.company_people[0],
-                  reason: evt_obj.reason)
+      perform_later(EVT_TYPE[:COMP_DENIED],
+                    evt_obj.company,
+                    evt_obj.company.company_people[0],
+                    reason: evt_obj.reason)
   end
 
   def self.evt_js_apply(evt_obj)  # evt_obj = job application
@@ -139,9 +139,9 @@ class Event
                       js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                       notify_list: notify_list[0]})
       NotifyEmailJob.set(wait: delay_seconds.seconds).
-                     perform_later(notify_list[1],
-                     EVT_TYPE[:JS_APPLY],
-                     evt_obj)
+        perform_later(notify_list[1],
+                      EVT_TYPE[:JS_APPLY],
+                      evt_obj)
     end
 
     Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
@@ -160,24 +160,24 @@ class Event
                     js_user_id: evt_obj.job_seeker.user.id})
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
-                    perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
-                                  evt_obj.job_seeker.job_developer, evt_obj.job)
+      perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
+                    evt_obj.job_seeker.job_developer, evt_obj.job)
 
-    if evt_obj.job.company_person
-      Pusher.trigger('pusher_control',
-                     EVT_TYPE[:JS_APPLY],
-                     {job_id:  evt_obj.job.id,
-                      js_id:   evt_obj.job_seeker.id,
-                      js_name: evt_obj.job_seeker.full_name(last_name_first: false),
-                      notify_list: [evt_obj.job.company_person.user.id]})
-
-      NotifyEmailJob.set(wait: delay_seconds.seconds).
-                       perform_later([evt_obj.job.company_person.user.email],
+      if evt_obj.job.company_person
+        Pusher.trigger('pusher_control',
                        EVT_TYPE[:JS_APPLY],
-                       evt_obj)
-    end
+                       {job_id:  evt_obj.job.id,
+                        js_id:   evt_obj.job_seeker.id,
+                        js_name: evt_obj.job_seeker.full_name(last_name_first: false),
+                        notify_list: [evt_obj.job.company_person.user.id]})
 
-    Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
+        NotifyEmailJob.set(wait: delay_seconds.seconds).
+          perform_later([evt_obj.job.company_person.user.email],
+                        EVT_TYPE[:JS_APPLY],
+                        evt_obj)
+      end
+
+      Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
   end
 
 
@@ -188,38 +188,39 @@ class Event
     # Notify job seeker's job developer (email and popup)
     # Notify job seeker's case manager (email and popup)
 
-    notifyList = [];
+    notifyList = []
     if job_developer = evt_obj.job_seeker.job_developer
       unless User.is_case_manager?(job_developer)
-        notifyList << (evt_obj.job_seeker.job_developer.user.email)
-        Pusher.trigger('pusher_control',
-                       EVT_TYPE[:APP_ACCEPTED],
-                       {id: evt_obj.id,
-                        ap_user_id: evt_obj.job_seeker.job_developer.user.id,
-                        job_title:   evt_obj.job.title,
-                        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
-        })
+        notifyList << job_developer.user.email
+        Pusher.trigger(
+          'pusher_control',
+          EVT_TYPE[:APP_ACCEPTED],
+          id: evt_obj.id,
+          ap_user_id: job_developer.user.id,
+          job_title:   evt_obj.job.title,
+          js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+        )
       end
     end
 
     if case_manager = evt_obj.job_seeker.case_manager
-      notifyList << (case_manager.user.email) 
-      Pusher.trigger('pusher_control',
-                     EVT_TYPE[:APP_ACCEPTED],
-                     {id: evt_obj.id,
-                      ap_user_id: evt_obj.job_seeker.case_manager.user.id,
-                      job_title:   evt_obj.job.title,
-                      js_name: evt_obj.job_seeker.full_name(last_name_first: false)
-                     })
-
+      notifyList << case_manager.user.email
+      Pusher.trigger(
+        'pusher_control',
+        EVT_TYPE[:APP_ACCEPTED],
+        id: evt_obj.id,
+        ap_user_id: case_manager.user.id,
+        job_title:   evt_obj.job.title,
+        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+      )
     end
 
     unless notifyList.empty?
 
       NotifyEmailJob.set(wait: delay_seconds.seconds).
-          perform_later(notifyList,
-                        EVT_TYPE[:APP_ACCEPTED],
-                        evt_obj)
+        perform_later(notifyList,
+                      EVT_TYPE[:APP_ACCEPTED],
+                      evt_obj)
     end
   end
 
@@ -229,38 +230,39 @@ class Event
     # Notify job seeker's job developer (email and popup)
     # Notify job seeker's case manager (email and popup)
 
-    notifyList = [];
+    notifyList = []
     if job_developer = evt_obj.job_seeker.job_developer
       unless User.is_case_manager?(job_developer)
-        notifyList << (evt_obj.job_seeker.job_developer.user.email)
-        Pusher.trigger('pusher_control',
-                       EVT_TYPE[:APP_REJECTED],
-                       {id: evt_obj.id,
-                        ap_user_id: evt_obj.job_seeker.job_developer.user.id,
-                        job_title:   evt_obj.job.title,
-                        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
-        })
+        notifyList << job_developer.user.email
+        Pusher.trigger(
+          'pusher_control',
+          EVT_TYPE[:APP_REJECTED],
+          id: evt_obj.id,
+          ap_user_id: job_developer.user.id,
+          job_title:   evt_obj.job.title,
+          js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+        )
       end
     end
 
     if evt_obj.job_seeker.case_manager
-      notifyList << (evt_obj.job_seeker.case_manager.user.email)
-      Pusher.trigger('pusher_control',
-                     EVT_TYPE[:APP_REJECTED],
-                     {id: evt_obj.id,
-                      ap_user_id: evt_obj.job_seeker.case_manager.user.id,
-                      job_title:   evt_obj.job.title,
-                      js_name: evt_obj.job_seeker.full_name(last_name_first: false)
-                     })
-
+      notifyList << evt_obj.job_seeker.case_manager.user.email
+      Pusher.trigger(
+        'pusher_control',
+        EVT_TYPE[:APP_REJECTED],
+        id: evt_obj.id,
+        ap_user_id: evt_obj.job_seeker.case_manager.user.id,
+        job_title:   evt_obj.job.title,
+        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+      )
     end
 
     unless notifyList.empty?
 
       NotifyEmailJob.set(wait: delay_seconds.seconds).
-          perform_later(notifyList,
-                        EVT_TYPE[:APP_REJECTED],
-                        evt_obj)
+        perform_later(notifyList,
+                      EVT_TYPE[:APP_REJECTED],
+                      evt_obj)
     end
   end
 
@@ -282,13 +284,13 @@ class Event
                     agency_name: evt_obj.agency_person.agency.name})
 
     NotifyEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(evt_obj.agency_person.email,
-                   EVT_TYPE[:JD_ASSIGNED_JS],
-                   evt_obj.job_seeker)
+      perform_later(evt_obj.agency_person.email,
+                    EVT_TYPE[:JD_ASSIGNED_JS],
+                    evt_obj.job_seeker)
 
-    JobSeekerEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(EVT_TYPE[:JD_ASSIGNED_JS],
-                                 evt_obj.job_seeker, evt_obj.agency_person)
+      JobSeekerEmailJob.set(wait: delay_seconds.seconds).
+        perform_later(EVT_TYPE[:JD_ASSIGNED_JS],
+                      evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_jd_self_assigned_js(evt_obj)
@@ -303,8 +305,8 @@ class Event
                     agency_name: evt_obj.agency_person.agency.name})
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(EVT_TYPE[:JD_SELF_ASSIGN_JS],
-                                 evt_obj.job_seeker, evt_obj.agency_person)
+      perform_later(EVT_TYPE[:JD_SELF_ASSIGN_JS],
+                    evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_cm_self_assigned_js(evt_obj)
@@ -319,8 +321,8 @@ class Event
                     agency_name: evt_obj.agency_person.agency.name})
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(EVT_TYPE[:CM_SELF_ASSIGN_JS],
-                                 evt_obj.job_seeker, evt_obj.agency_person)
+      perform_later(EVT_TYPE[:CM_SELF_ASSIGN_JS],
+                    evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_cm_assigned_js(evt_obj)
@@ -341,13 +343,13 @@ class Event
                     agency_name: evt_obj.agency_person.agency.name})
 
     NotifyEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(evt_obj.agency_person.email,
-                   EVT_TYPE[:CM_ASSIGNED_JS],
-                   evt_obj.job_seeker)
+      perform_later(evt_obj.agency_person.email,
+                    EVT_TYPE[:CM_ASSIGNED_JS],
+                    evt_obj.job_seeker)
 
-    JobSeekerEmailJob.set(wait: delay_seconds.seconds).
-                   perform_later(EVT_TYPE[:CM_ASSIGNED_JS],
-                                 evt_obj.job_seeker, evt_obj.agency_person)
+      JobSeekerEmailJob.set(wait: delay_seconds.seconds).
+        perform_later(EVT_TYPE[:CM_ASSIGNED_JS],
+                      evt_obj.job_seeker, evt_obj.agency_person)
   end
 
   def self.evt_job_posted(evt_obj)
@@ -370,9 +372,9 @@ class Event
                       notify_list:  jd_ids})
 
       NotifyEmailJob.set(wait: delay_seconds.seconds).
-                     perform_later(jd_emails,
-                     EVT_TYPE[:JOB_POSTED],
-                     evt_obj.job)
+        perform_later(jd_emails,
+                      EVT_TYPE[:JOB_POSTED],
+                      evt_obj.job)
     end
   end
 
@@ -395,9 +397,9 @@ class Event
                       notify_list:  jd_ids})
 
       NotifyEmailJob.set(wait: delay_seconds.seconds).
-                     perform_later(jd_emails,
-                     EVT_TYPE[:JOB_REVOKED],
-                     evt_obj.job)
+        perform_later(jd_emails,
+                      EVT_TYPE[:JOB_REVOKED],
+                      evt_obj.job)
     end
   end
 
@@ -413,7 +415,7 @@ class Event
     end
 
     if appl.job_seeker.job_developer &&
-                !id_list.include?(appl.job_seeker.job_developer.user.id)
+      !id_list.include?(appl.job_seeker.job_developer.user.id)
       id_list    << appl.job_seeker.job_developer.user.id
       email_list << appl.job_seeker.job_developer.user.email
     end
