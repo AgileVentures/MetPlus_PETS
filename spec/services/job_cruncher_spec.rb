@@ -43,15 +43,15 @@ RSpec.describe JobCruncher, type: :model do
     it 'returns success (true) for update to existing job' do
       stub_cruncher_job_update
 
-      expect(JobCruncher.update_job(10,'Software Engineer',
-              'description of the job')).to be true
+      expect(JobCruncher.update_job(10, 'Software Engineer',
+                                    'description of the job')).to be true
     end
 
     it 'returns failure (false) for job not found' do
       stub_cruncher_job_update_fail('JOB_NOT_FOUND')
 
-      expect(JobCruncher.update_job(10,'Software Engineer',
-              'description of the job')).to be false
+      expect(JobCruncher.update_job(10, 'Software Engineer',
+                                    'description of the job')).to be false
     end
   end
 

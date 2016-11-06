@@ -297,8 +297,8 @@ RSpec.describe CruncherService, type: :request do
       it 'returns success (true) for successful job update' do
         stub_cruncher_job_update
 
-        expect(CruncherService.update_job(10,'Software Engineer',
-              'revised description of the job')).to be true
+        expect(CruncherService.update_job(10, 'Software Engineer',
+                                          'revised description')).to be true
       end
 
       it 'fails if jobId cannot be found' do

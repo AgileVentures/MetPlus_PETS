@@ -20,7 +20,7 @@ class JobCruncher
   def self.update_job(job_id, title, description)
     # Returns true if success, false otherwise
 
-     CruncherService.update_job(job_id, title, description)
+    CruncherService.update_job(job_id, title, description)
   end
 
   def self.match_jobs(resume_id)

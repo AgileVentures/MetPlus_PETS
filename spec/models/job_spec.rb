@@ -222,7 +222,6 @@ RSpec.describe Job, type: :model do
   end
 
   describe 'Update Job (AR model and CruncherService)' do
-
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
@@ -252,8 +251,8 @@ RSpec.describe Job, type: :model do
       job.title = 'new title'
 
       expect(job.save).to be false
-      expect(job.errors.full_messages).
-          to include('Job could not be posted to Cruncher, please try again.')
+      expect(job.errors.full_messages)
+        .to include('Job could not be posted to Cruncher, please try again.')
     end
 
     it 'fails when cruncher authorization fails' do
@@ -263,8 +262,8 @@ RSpec.describe Job, type: :model do
       stub_cruncher_authenticate_error
 
       expect(job.save).to be false
-      expect(job.errors.full_messages).
-          to include('Job could not be posted to Cruncher, please try again.')
+      expect(job.errors.full_messages)
+        .to include('Job could not be posted to Cruncher, please try again.')
     end
   end
 
