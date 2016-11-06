@@ -281,6 +281,24 @@ RSpec.describe Event, type: :model do
       expect { Event.create(:APP_REJECTED, application) }.
           to change(all_emails, :count).by(+2)
     end
+
+    context 'case manager and job developer is same person' do
+      it 'sends one email' do
+        #add job_developer a case managers role
+        job_developer.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) ||
+          FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+        expect { Event.create(:APP_REJECTED, application) }.
+          to change(all_emails, :count).by(+2)
+        expect(all_emails.last.to.count).to eq 1
+      end
+      it 'sends one notification' do
+        job_developer.agency_roles << AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) ||
+          FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+        Event.create(:APP_REJECTED, application)
+        expect(Pusher).to have_received(:trigger).once
+      end
+
+    end
   end
 
   describe 'jobseeker_assigned_jd event' do
