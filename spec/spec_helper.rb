@@ -22,9 +22,9 @@ require 'email-spec'
 require 'codeclimate-test-reporter'
 require 'webmock/rspec'
 require 'pundit/rspec'
-require './spec/support/service_stub_helpers'
-include ServiceStubHelpers::EmailValidator
 
+Dir['./spec/support/**/*.rb'].each {|f| require f}
+include ServiceStubHelpers::EmailValidator
 # WebMock config
 
 #  Uncomment to disable Webmock and access external services during test:
