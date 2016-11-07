@@ -146,6 +146,8 @@ Rails.application.routes.draw do
                                              as: :reject_application
   get 'job_applications/:id'             => 'job_applications#show',
                                              as: :application
+  get 'job_applications/:type/:entity_id'=> 'job_applications#list', 
+                                             as: :list_applications
   # --------------------------------------------------------------------------
   
   # ---------------------------- Job Seekers ---------------------------------
@@ -154,8 +156,6 @@ Rails.application.routes.draw do
      get 'match_jobs', on: :member, as: :match_jobs
   end
 
-  get 'job_seekers/:id/applied_jobs/:application_type' =>
-                'job_seekers#applied_jobs', as: :applied_jobs_job_seeker
   get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
   # --------------------------------------------------------------------------
 
