@@ -4,26 +4,22 @@
   %a(id='toggle_info' href='#info_table' class='text-danger'
               style='padding-left: 10px;')
     Hide Job Seeker Information
-
-.col-sm-9
-  = render partial: 'info', locals: {job_seeker: @jobseeker}
-
-- if policy(@jobseeker).show?
-  .col-sm-12
-    %h3
-      Job Applications for
-      = "#{@jobseeker.full_name(last_name_first: false)}"
-    .pagination-div{ id: "applications-#{@application_type}",
-                     data: { url: list_applications_path(@application_type, @jobseeker) }}
-- if policy(@jobseeker).edit?
-  .clearfix
-  %br
-  .col-sm-2
+  - if pets_user.is_agency_admin?(current_agency) || pets_user == @jobseeker.case_manager
     = button_to 'Edit Job Seeker', edit_job_seeker_path(@jobseeker),
-        method: :get, class: 'btn btn-primary'
-- if policy(@jobseeker).destroy?
-  .com-sm-2.col-sm-offset-4
-    = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
-        method: :delete,
-        data: {confirm: "Delete Jobseeker #{@jobseeker.full_name}?"},
-        class: 'btn btn-danger'
+      method: :get, class: 'btn btn-primary',
+      style: 'float: left; margin-left: 10px; margin-top: 10px;'
+    - if pets_user.is_agency_admin? current_agency
+      = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
+          method: :delete,
+          data: { confirm: "Delete Jobseeker #{@jobseeker.full_name}?" },
+          class: 'btn btn-danger', style: 'float: left; margin-left: 10px; margin-top: 10px;'
+.col-sm-9
+  = render partial: 'info', locals: { job_seeker: @jobseeker }
+
+.col-sm-12
+  %h3
+    Job Applications for
+    = "#{@jobseeker.full_name(last_name_first: false)}"
+  .pagination-div{id: "applications-#{@application_type}",
+                  data: { url: applied_jobs_job_seeker_path(@jobseeker,
+                                                         @application_type) } }
