@@ -33,7 +33,7 @@
                                 :params => {:controller => 'job_seekers',
                                 :action => 'list_match_jobs',
                                 :id => @jobseeker.id}
-  - else
-    .row
-      %h4
-        No Jobs found that match the current Résumé
+- else
+  .row
+    %h4
+      No Jobs found that match the current Résumé

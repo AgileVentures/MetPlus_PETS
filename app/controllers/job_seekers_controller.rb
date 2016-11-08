@@ -127,7 +127,7 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
     if @jobseeker.resumes.empty? then
       flash[:error] =
-        "#{@jobseeker.full_name(last_name_first: false)} " +
+        "#{@jobseeker.full_name(last_name_first: false)} " \
         'does not have a résumé on file'
       redirect_to(root_path)
     else
