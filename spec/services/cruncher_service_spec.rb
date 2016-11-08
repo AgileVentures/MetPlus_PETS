@@ -2,49 +2,66 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe CruncherService, type: :request do
-
-  let(:auth_result) {RestClient.post(CruncherService.service_url +
+  let(:auth_result) do
+    RestClient.post(CruncherService.service_url +
                     '/authenticate', {},
-                    {'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
-                     'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD']})}
+                    'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
+                    'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD'])
+  end
 
-  let(:testfile_pdf)     {'files/Admin-Assistant-Resume.pdf'}
-  let(:testfile_word)    {'files/Janitor-Resume.doc'}
-  let(:testfile_wordxml) {'files/Sales-Manager-Resume.docx'}
+  let(:testfile_pdf)     { 'files/Admin-Assistant-Resume.pdf' }
+  let(:testfile_word)    { 'files/Janitor-Resume.doc' }
+  let(:testfile_wordxml) { 'files/Sales-Manager-Resume.docx' }
 
-  let(:download_result) {RestClient.get(CruncherService.service_url +
+  let(:download_result) do
+    RestClient.get(CruncherService.service_url +
         '/resume/1',
-        'X-Auth-Token' => JSON.parse(auth_result)['token'])}
+                   'X-Auth-Token' => JSON.parse(auth_result)['token'])
+  end
 
-  let(:upload_result) {RestClient.post(CruncherService.service_url +
+  let(:upload_result) do
+    RestClient.post(CruncherService.service_url +
         '/resume/upload',
-      { 'file'   => fixture_file_upload(testfile_pdf),
-        'name'   => testfile_pdf,
-        'userId' => 'test_id' },
-      { 'Accept' => 'application/json',
-        'X-Auth-Token' => JSON.parse(auth_result)['token'],
-        'Content-Type' => 'application/pdf' })}
+                    { 'file'   => fixture_file_upload(testfile_pdf),
+                      'name'   => testfile_pdf,
+                      'userId' => 'test_id' },
+                    'Accept' => 'application/json',
+                    'X-Auth-Token' => JSON.parse(auth_result)['token'],
+                    'Content-Type' => 'application/pdf')
+  end
 
-  let(:job_result) {RestClient.post(CruncherService.service_url +
+  let(:job_result) do
+    RestClient.post(CruncherService.service_url +
         '/job/create',
-      { 'jobId'   => 10,
-        'title'   => 'Software Engineer',
-        'description' => 'description of the job' },
-      { 'Accept' => 'application/json',
-        'X-Auth-Token' => JSON.parse(auth_result)['token']
-        })}
+                    { 'jobId'   => 10,
+                      'title'   => 'Software Engineer',
+                      'description' => 'description of the job' },
+                    'Accept' => 'application/json',
+                    'X-Auth-Token' => JSON.parse(auth_result)['token'])
+  end
 
-  let(:match_jobs_result) { RestClient.get(CruncherService.service_url +
+  let(:job_update_result) do
+    RestClient.patch(CruncherService.service_url +
+        '/job/10/update',
+                     { 'jobId'   => 10,
+                       'title'   => 'Software Engineer',
+                       'description' => 'revised description of the job' },
+                     'Accept' => 'application/json',
+                     'X-Auth-Token' => JSON.parse(auth_result)['token'])
+  end
+
+  let(:match_jobs_result) do
+    RestClient.get(CruncherService.service_url +
         '/job/match/1',
-        { 'X-Auth-Token': JSON.parse(auth_result)['token'] }
-        )}
+                   'X-Auth-Token' => JSON.parse(auth_result)['token'])
+  end
 
-  let(:match_resumes_result) { RestClient.get(CruncherService.service_url +
+  let(:match_resumes_result) do
+    RestClient.get(CruncherService.service_url +
           '/resume/match/1',
-        { 'Accept': 'application/json',
-          'X-Auth-Token': JSON.parse(auth_result)['token'] }
-        )}
-
+                   'Accept' => 'application/json',
+                   'X-Auth-Token' => JSON.parse(auth_result)['token'])
+  end
 
   describe 'Initialization' do
     it 'Establishes service URL' do
@@ -65,21 +82,7 @@ RSpec.describe CruncherService, type: :request do
       end
     end
 
-    describe 'authentication failure' do
-      it 'raises error with invalid credentials' do
-
-        stub_cruncher_authenticate_error
-
-        expect {RestClient.post(CruncherService.service_url +
-                          '/authenticate', {},
-                          {'X-Auth-Username' => 'nobody',
-                           'X-Auth-Password' => 'none'})}.
-                                to raise_error(RuntimeError)
-      end
-    end
-
     describe 'upload file' do
-
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
@@ -95,7 +98,6 @@ RSpec.describe CruncherService, type: :request do
     end
 
     describe 'download file: PDF' do
-
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_download(testfile_pdf)
@@ -111,7 +113,6 @@ RSpec.describe CruncherService, type: :request do
       end
     end
     describe 'download file: MS Word' do
-
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_download(testfile_word)
@@ -127,7 +128,6 @@ RSpec.describe CruncherService, type: :request do
       end
     end
     describe 'download file: MS Word - XML' do
-
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_download(testfile_wordxml)
@@ -144,7 +144,6 @@ RSpec.describe CruncherService, type: :request do
     end
 
     describe 'create job' do
-
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_job_create
@@ -156,6 +155,21 @@ RSpec.describe CruncherService, type: :request do
 
       it 'returns cruncher success message' do
         expect(JSON.parse(job_result)['resultCode']).to eq 'SUCCESS'
+      end
+    end
+
+    describe 'update job' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_update
+      end
+
+      it 'returns HTTP success' do
+        expect(job_update_result.code).to eq 200
+      end
+
+      it 'returns cruncher success message' do
+        expect(JSON.parse(job_update_result)['resultCode']).to eq 'SUCCESS'
       end
     end
 
@@ -174,9 +188,7 @@ RSpec.describe CruncherService, type: :request do
       end
     end
 
-
     describe 'match resumes' do
-
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_match_resumes
@@ -189,13 +201,10 @@ RSpec.describe CruncherService, type: :request do
       it 'returns success message in response' do
         expect(JSON.parse(match_resumes_result)['resultCode']).to eq 'SUCCESS'
       end
-
     end
-
-   end
+  end
 
   context 'CruncherService API calls' do
-
     before(:each) do
       stub_cruncher_authenticate
     end
@@ -208,12 +217,18 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'authenticates only once' do
-        allow(RestClient).to receive(:post).
-              and_return(auth_result)
+        allow(RestClient).to receive(:post)
+          .and_return(auth_result)
         CruncherService.auth_token
         CruncherService.auth_token
         CruncherService.auth_token
         expect(RestClient).to have_received(:post).once
+      end
+
+      it 'raises exception for unauthorized exception' do
+        stub_cruncher_authenticate_error
+        expect { CruncherService.auth_token }
+          .to raise_error('Invalid credentials for Cruncher access')
       end
     end
 
@@ -223,27 +238,30 @@ RSpec.describe CruncherService, type: :request do
 
         file = fixture_file_upload(testfile_pdf)
         expect(CruncherService.upload_file(file,
-                                    testfile_pdf,
-                                    'test_id')).to be true
+                                           testfile_pdf,
+                                           'test_id')).to be true
       end
 
       it 'raises error for invalid file type' do
         stub_cruncher_file_upload_error
 
         file = fixture_file_upload('files/Example Excel File.xls')
-        expect{ CruncherService.upload_file(file,
-                                    'Example Excel File.xls',
-                                    'test_id') }.
-                      to raise_error(RuntimeError)
+        expect do
+          CruncherService.upload_file(file,
+                                      'Example Excel File.xls',
+                                      'test_id')
+        end
+          .to raise_error(RuntimeError)
       end
 
       it 'raises error for unknown MIME type' do
-
         file = fixture_file_upload('files/Test File.zzz')
-        expect{ CruncherService.upload_file(file,
-                                    'Test File.zzz',
-                                    'test_id') }.
-                      to raise_error(RuntimeError)
+        expect do
+          CruncherService.upload_file(file,
+                                      'Test File.zzz',
+                                      'test_id')
+        end
+          .to raise_error(RuntimeError)
       end
     end
 
@@ -264,45 +282,58 @@ RSpec.describe CruncherService, type: :request do
       it 'returns success (true) for valid create job' do
         stub_cruncher_job_create
 
-        expect(JobCruncher.create_job(10,'Software Engineer',
-              'description of the job')).to be true
+        expect(CruncherService.create_job(10, 'Software Engineer',
+                                          'description of the job')).to be true
       end
 
-      it 'raises error for invalid job id' do
-        stub_cruncher_job_create_error
+      it 'fails if jobId already exists' do
+        stub_cruncher_job_create_fail('JOB_ID_EXISTS')
 
-        expect{ CruncherService.create_job('jobId',
-                                    'title',
-                                    'description') }.
-                      to raise_error(RuntimeError)
+        expect(CruncherService.create_job(10, 'title', 'test')).to be false
+      end
+    end
+
+    describe 'update job' do
+      it 'returns success (true) for successful job update' do
+        stub_cruncher_job_update
+
+        expect(CruncherService.update_job(10, 'Software Engineer',
+                                          'revised description')).to be true
+      end
+
+      it 'fails if jobId cannot be found' do
+        stub_cruncher_job_update_fail('JOB_NOT_FOUND')
+
+        expect(CruncherService.update_job(1, 'title', 'test')).to be false
       end
     end
 
     describe 'match jobs' do
-
       it 'returns matching jobs for a valid request' do
         stub_cruncher_match_jobs
-        expect{ CruncherService.match_jobs(1).not_to be nil }
+        expect { CruncherService.match_jobs(1).not_to be nil }
       end
 
-      it 'returns nil for a wrong resume_id' do
+      it 'returns nil if cannot find resume' do
         stub_cruncher_match_jobs_fail('RESUME_NOT_FOUND')
 
         expect { CruncherService.match_jobs(1).to be nil }
       end
     end
 
-
     describe 'match resumes' do
-
       it 'returns success' do
         stub_cruncher_match_resumes
 
         expect(CruncherService.match_resumes(1)).not_to be nil
       end
 
-    end
+      it 'returns nil if cannot find job' do
+        stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
 
+        expect { CruncherService.match_resumes(1).to be nil }
+      end
+    end
   end
 
   context 'Cruncher service recover expired token' do
@@ -312,14 +343,13 @@ RSpec.describe CruncherService, type: :request do
 
       CruncherService.auth_token = 'expired'
 
-      expect(CruncherService).to receive(:auth_token).
-                    twice.and_call_original
+      expect(CruncherService).to receive(:auth_token)
+        .twice.and_call_original
 
       file = fixture_file_upload('files/Janitor-Resume.doc')
       expect(CruncherService.upload_file(file,
-                                  'Janitor-Resume.doc',
-                                 'test_id')).to be true
-
+                                         'Janitor-Resume.doc',
+                                         'test_id')).to be true
     end
     it 'retries for expired auth_token - file download' do
       stub_cruncher_authenticate
@@ -327,12 +357,12 @@ RSpec.describe CruncherService, type: :request do
 
       CruncherService.auth_token = 'expired'
 
-      expect(CruncherService).to receive(:auth_token).
-                    twice.and_call_original
+      expect(CruncherService).to receive(:auth_token)
+        .twice.and_call_original
 
       file = fixture_file_upload(testfile_pdf)
-      expect(CruncherService.download_file(1).open.read).
-                        to eq file.read
+      expect(CruncherService.download_file(1).open.read)
+        .to eq file.read
     end
   end
- end
+end
