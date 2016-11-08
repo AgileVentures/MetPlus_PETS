@@ -723,21 +723,6 @@ RSpec.describe JobSeekersController, type: :controller do
   describe 'GET #list_match_jobs' do
     let(:jobseeker) { FactoryGirl.create(:job_seeker) }
     let(:company) { FactoryGirl.create(:company) }
-    let(:job2) do
-      FactoryGirl.create(:job, id: 2, title: 'Job 2', company: company)
-    end
-    let(:job3) do
-      FactoryGirl.create(:job, id: 3, title: 'Job 3', company: company)
-    end
-    let(:job6) do
-      FactoryGirl.create(:job, id: 6, title: 'Job 6', company: company)
-    end
-    let(:job8) do
-      FactoryGirl.create(:job, id: 8, title: 'Job 8', company: company)
-    end
-    let(:job9) do
-      FactoryGirl.create(:job, id: 9, title: 'Job 9', company: company)
-    end
     before(:each) do
       sign_in jobseeker
     end
@@ -749,7 +734,7 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(flash[:error]).to be_present
       end
       it 'correct content' do
-        expect(flash[:error]).to eq('John Doe do not have any resume')
+        expect(flash[:error]).to eq('John Doe does not have a résumé on file')
       end
       it 'redirects to root' do
         expect(response).to redirect_to(root_path)
@@ -775,12 +760,22 @@ RSpec.describe JobSeekersController, type: :controller do
         end
       end
       context 'Multiple matches' do
+        let!(:job2) do
+          FactoryGirl.create(:job, id: 2, title: 'Job 2', company: company)
+        end
+        let!(:job3) do
+          FactoryGirl.create(:job, id: 3, title: 'Job 3', company: company)
+        end
+        let!(:job6) do
+          FactoryGirl.create(:job, id: 6, title: 'Job 6', company: company)
+        end
+        let!(:job8) do
+          FactoryGirl.create(:job, id: 8, title: 'Job 8', company: company)
+        end
+        let!(:job9) do
+          FactoryGirl.create(:job, id: 9, title: 'Job 9', company: company)
+        end
         before(:each) do
-          job2
-          job3
-          job6
-          job8
-          job9
           stub_cruncher_match_jobs
           FactoryGirl.create(:resume,
                              file_name: 'resume.pdf',

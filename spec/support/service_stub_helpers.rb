@@ -141,7 +141,7 @@ module ServiceStubHelpers
                        \n  }
                     \n}"
       stub_request(:get,
-                   %r{/^#{EmailValidateService.service_url}\/validate?.*/})
+                   %r{^#{EmailValidateService.service_url}\/validate?.*})
         .to_return(body: body_json)
     end
 
@@ -156,13 +156,13 @@ module ServiceStubHelpers
                        \n  }
                     \n}"
       stub_request(:get,
-                   %r{/^#{EmailValidateService.service_url}\/validate?.*/})
+                   %r{^#{EmailValidateService.service_url}\/validate?.*})
         .to_return(body: body_json)
     end
 
     def stub_email_validate_error
       stub_request(:get,
-                   %r{/^#{EmailValidateService.service_url}\/validate?.*/})
+                   %r{^#{EmailValidateService.service_url}\/validate?.*})
         .to_raise(RuntimeError)
     end
   end
