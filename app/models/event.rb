@@ -426,9 +426,13 @@ class Event
                                    EVT_TYPE[:JOB_REVOKED],
                                    evt_obj.job)
     end
+
    
    job_seekers = JobApplication.job_seeker(evt_obj.job.job_application)
-
+   
+    job_applications = evt_obj.job.job_applications#job_seekers = Job.apply job_seeker(evt_obj.job)
+    job_seekers = job_applications.job_seeker;
+    
     unless job_seekers.empty?
 
       js_ids     = job_seekers.collect {|js| js.user.id}
@@ -446,9 +450,8 @@ class Event
                      EVT_TYPE[:JOB_REVOKED],
                      evt_obj.job)
     end
-
-
-  end
+   
+   end
 
   def self.notify_list_for_js_apply_event(appl)
     # Returns an array containing two arrays.  The first such array contains
