@@ -724,6 +724,8 @@ RSpec.describe JobSeekersController, type: :controller do
     let(:jobseeker) { FactoryGirl.create(:job_seeker) }
     let(:company) { FactoryGirl.create(:company) }
     before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
       sign_in jobseeker
     end
     context 'User without a resume' do
