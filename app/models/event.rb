@@ -410,19 +410,20 @@ class Event
     jd_ids     = job_developers.map { |jd| jd.user.id }
     jd_emails  = job_developers.map(&:email)
 
-    Pusher.trigger('pusher_control',
-                   EVT_TYPE[:JOB_REVOKED],
-                   job_id:       evt_obj.job.id,
-                   job_title:    evt_obj.job.title,
-                   company_name: evt_obj.job.company.name,
-                   notify_list:  jd_ids)
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JOB_REVOKED],
+                     job_id:       evt_obj.job.id,
+                     job_title:    evt_obj.job.title,
+                     company_name: evt_obj.job.company.name,
+                     notify_list:  jd_ids)
 
-    NotifyEmailJob.set(wait: delay_seconds.seconds)
-                  .perform_later(jd_emails,
-                                 EVT_TYPE[:JOB_REVOKED],
-                                 evt_obj.job)
-  end
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(jd_emails,
+                                   EVT_TYPE[:JOB_REVOKED],
+                                   evt_obj.job)
+    end
 
+    
   def self.evt_cp_interest_in_js(evt_obj)
     # evt_obj = struct(:job, :company_person, :job_developer, :job_seeker)
     # Business rules:
