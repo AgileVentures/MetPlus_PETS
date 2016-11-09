@@ -1,0 +1,39 @@
+%h1
+  Job Matches for
+  = @jobseeker.full_name(last_name_first: false)
+%br
+- if @list_jobs.size > 0
+  .row
+    .panel.panel-default
+      %table.table.table-bordered{ 'data-card-view' => 'true', 'data-height' => '299' }
+        %thead
+          %tr.text-center
+            %td
+              Title
+            %td
+              Employer
+            %td
+              Posted
+            %td
+              Match Rating
+        %tbody
+          - @list_jobs.each do |job|
+            %tr
+              %td
+                = link_to job.title, job_path(job)
+              %td
+                = job.company.name
+              %td
+                #{time_ago_in_words(job.created_at)} ago
+              %td
+                = show_stars(@star_rating[job.id])
+                #{@star_rating[job.id]} / 5.0
+    .row.text-center
+      = will_paginate @list_jobs, param_name: 'jobs_page',
+                                :params => {:controller => 'job_seekers',
+                                :action => 'list_match_jobs',
+                                :id => @jobseeker.id}
+- else
+  .row
+    %h4
+      No Jobs found that match the current Résumé

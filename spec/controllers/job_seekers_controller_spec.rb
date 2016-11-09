@@ -720,4 +720,81 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'authorized to create / destroy job seeker', 'owner', 'destroy'
     end
   end
+  describe 'GET #list_match_jobs' do
+    let(:jobseeker) { FactoryGirl.create(:job_seeker) }
+    let(:company) { FactoryGirl.create(:company) }
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in jobseeker
+    end
+    context 'User without a resume' do
+      before(:each) do
+        get :list_match_jobs, id: jobseeker
+      end
+      it 'flash message set' do
+        expect(flash[:error]).to be_present
+      end
+      it 'correct content' do
+        expect(flash[:error]).to eq('John Doe does not have a résumé on file')
+      end
+      it 'redirects to root' do
+        expect(response).to redirect_to(root_path)
+      end
+    end
+    context 'User with a resume' do
+      context 'no matches' do
+        before(:each) do
+          stub_cruncher_no_match_jobs
+          FactoryGirl.create(:resume,
+                             file_name: 'resume.pdf',
+                             job_seeker: jobseeker)
+          get :list_match_jobs, id: jobseeker
+        end
+        it 'no flash message set' do
+          expect(flash[:error]).to_not be_present
+        end
+        it 'empty rating' do
+          expect(assigns(:star_rating)).to eq({})
+        end
+        it 'emtpy list of jobs' do
+          expect(assigns(:list_jobs)).to eq([])
+        end
+      end
+      context 'Multiple matches' do
+        let!(:job2) do
+          FactoryGirl.create(:job, id: 2, title: 'Job 2', company: company)
+        end
+        let!(:job3) do
+          FactoryGirl.create(:job, id: 3, title: 'Job 3', company: company)
+        end
+        let!(:job6) do
+          FactoryGirl.create(:job, id: 6, title: 'Job 6', company: company)
+        end
+        let!(:job8) do
+          FactoryGirl.create(:job, id: 8, title: 'Job 8', company: company)
+        end
+        let!(:job9) do
+          FactoryGirl.create(:job, id: 9, title: 'Job 9', company: company)
+        end
+        before(:each) do
+          stub_cruncher_match_jobs
+          FactoryGirl.create(:resume,
+                             file_name: 'resume.pdf',
+                             job_seeker: jobseeker)
+          get :list_match_jobs, id: jobseeker
+        end
+        it 'no flash message set' do
+          expect(flash[:error]).to_not be_present
+        end
+        it 'check output of cruncher' do
+          expect(assigns(:star_rating))
+            .to eq(3 => 4.7, 2 => 3.8, 6 => 3.4, 9 => 2.9, 8 => 2.8)
+        end
+        it 'list of jobs' do
+          expect(assigns(:list_jobs)).to eq([job3, job2, job6, job9, job8])
+        end
+      end
+    end
+  end
 end
