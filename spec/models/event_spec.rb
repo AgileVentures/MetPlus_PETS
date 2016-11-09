@@ -233,13 +233,22 @@ RSpec.describe Event, type: :model do
         cm_role = AgencyRole::ROLE[:CM]
         job_developer.agency_roles << AgencyRole.find_by_role(cm_role) ||
           FactoryGirl.create(:agency_role, role: cm_role)
+        # assign the same job developer as job_seeker case manager
+      end
+      it 'sends two emails if jd and cm is not for the same js' do
+        expect { Event.create(:APP_ACCEPTED, application) }.
+        to change(all_emails, :count).by(+2)
+        expect(all_emails.last.to.count).to eq 2
+        
       end
       it 'sends one email' do
+        job_seeker.assign_case_manager job_developer, agency
         expect { Event.create(:APP_ACCEPTED, application) }.
         to change(all_emails, :count).by(+2)
         expect(all_emails.last.to.count).to eq 1
       end
       it 'sends one notification' do
+        job_seeker.assign_case_manager job_developer, agency
         Event.create(:APP_ACCEPTED, application)
         expect(Pusher).to have_received(:trigger).once
       end
@@ -288,12 +297,21 @@ RSpec.describe Event, type: :model do
         job_developer.agency_roles << AgencyRole.find_by_role(case_manager_role) ||
           FactoryGirl.create(:agency_role, role: case_manager_role)
       end
+
+      it 'sends two emails if jd and cm is not for the same js' do
+        expect { Event.create(:APP_REJECTED, application) }.
+        to change(all_emails, :count).by(+2)
+        expect(all_emails.last.to.count).to eq 2
+        
+      end
       it 'sends one email' do
+        job_seeker.assign_case_manager job_developer, agency
         expect { Event.create(:APP_REJECTED, application) }.
           to change(all_emails, :count).by(+2)
         expect(all_emails.last.to.count).to eq 1
       end
       it 'sends one notification' do
+        job_seeker.assign_case_manager job_developer, agency
         Event.create(:APP_REJECTED, application)
         expect(Pusher).to have_received(:trigger).once
       end

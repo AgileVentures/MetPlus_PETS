@@ -189,8 +189,13 @@ class Event
     # Notify job seeker's case manager (email and popup)
 
     notifyList = []
-    if job_developer = evt_obj.job_seeker.job_developer
-      unless User.is_case_manager?(job_developer)
+    job_developer = evt_obj.job_seeker.job_developer
+    case_manager = evt_obj.job_seeker.case_manager
+    job_seeker = evt_obj.job_seeker
+    if job_developer 
+      # if the case manager is the same as job developer for the same 
+      # job_seeker use the if statement for case manager to notify the agency person
+      unless case_manager == job_developer
         notifyList << job_developer.user.email
         Pusher.trigger(
           'pusher_control',
@@ -198,12 +203,12 @@ class Event
           id: evt_obj.id,
           ap_user_id: job_developer.user.id,
           job_title:   evt_obj.job.title,
-          js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+          js_name: job_seeker.full_name(last_name_first: false)
         )
       end
     end
 
-    if case_manager = evt_obj.job_seeker.case_manager
+    if case_manager
       notifyList << case_manager.user.email
       Pusher.trigger(
         'pusher_control',
@@ -211,7 +216,7 @@ class Event
         id: evt_obj.id,
         ap_user_id: case_manager.user.id,
         job_title:   evt_obj.job.title,
-        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+        js_name: job_seeker.full_name(last_name_first: false)
       )
     end
 
@@ -231,8 +236,12 @@ class Event
     # Notify job seeker's case manager (email and popup)
 
     notifyList = []
-    if job_developer = evt_obj.job_seeker.job_developer
-      unless User.is_case_manager?(job_developer)
+    job_developer = evt_obj.job_seeker.job_developer
+    case_manager = evt_obj.job_seeker.case_manager
+    job_seeker = evt_obj.job_seeker
+
+    if job_developer 
+      unless job_developer == case_manager
         notifyList << job_developer.user.email
         Pusher.trigger(
           'pusher_control',
@@ -240,20 +249,20 @@ class Event
           id: evt_obj.id,
           ap_user_id: job_developer.user.id,
           job_title:   evt_obj.job.title,
-          js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+          js_name:job_seeker.full_name(last_name_first: false)
         )
       end
     end
 
-    if evt_obj.job_seeker.case_manager
-      notifyList << evt_obj.job_seeker.case_manager.user.email
+    if case_manager 
+      notifyList << case_manager.user.email
       Pusher.trigger(
         'pusher_control',
         EVT_TYPE[:APP_REJECTED],
         id: evt_obj.id,
-        ap_user_id: evt_obj.job_seeker.case_manager.user.id,
+        ap_user_id: case_manager.user.id,
         job_title:   evt_obj.job.title,
-        js_name: evt_obj.job_seeker.full_name(last_name_first: false)
+        js_name: job_seeker.full_name(last_name_first: false)
       )
     end
 
