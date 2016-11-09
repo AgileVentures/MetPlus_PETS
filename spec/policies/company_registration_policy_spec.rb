@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe CompanyRegistrationPolicy do
-
   let(:subject) { described_class }
 
   let(:agency)               { FactoryGirl.create(:agency) }
@@ -12,10 +11,13 @@ describe CompanyRegistrationPolicy do
 
   let(:company)              { FactoryGirl.create(:company, agencies: [agency]) }
   let(:company_registration) { CompanyRegistration.new(company) }
-  let(:company_bayer)        { FactoryGirl.create(:company, name: 'Bayer-Raynor',
-                            agencies: [agency_metplus]) }
-  let(:company_admin)        { FactoryGirl.create(:company_admin, company: company) }
-  let(:bayer_admin)          { FactoryGirl.create(:company_admin, company: company_bayer) }
+  let(:company_bayer) do
+    FactoryGirl.create(:company,
+                       name: 'Bayer-Raynor',
+                       agencies: [agency_metplus])
+  end
+  let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let(:bayer_admin)   { FactoryGirl.create(:company_admin, company: company_bayer) }
 
   let(:jd) { FactoryGirl.create(:job_developer, agency: agency) }
   let(:cm) { FactoryGirl.create(:case_manager, agency: agency) }
@@ -23,7 +25,6 @@ describe CompanyRegistrationPolicy do
   let(:cp) { FactoryGirl.create(:company_person) }
   let(:js) { FactoryGirl.create(:job_seeker) }
 
-  
   permissions :show? do
     it 'allows agency admin associated with the company' do
       expect(subject).to permit(agency_admin, company_registration)
@@ -52,7 +53,7 @@ describe CompanyRegistrationPolicy do
     end
   end
 
-  permissions :update? do
+  permissions :edit?, :update?, :destroy?, :approve?, :deny? do
     it 'allows agency admin associated with the company' do
       expect(subject).to permit(agency_admin, company_registration)
     end

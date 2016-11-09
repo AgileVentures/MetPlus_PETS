@@ -5,20 +5,24 @@ RSpec.describe CompanyPeopleController, type: :controller do
   let(:agency)         { FactoryGirl.create(:agency, name: 'Metplus') }
   let(:another_agency) { FactoryGirl.create(:agency) }
   let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
-  let!(:company_bayer) do
+  let!(:comp_bayer) do
     FactoryGirl.create(:company, name: 'Bayer-Raynor',
                                  agencies: [another_agency])
   end
   let(:company_person) { FactoryGirl.create(:company_person, company: company) }
   let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+  let(:company_contact) do
+    FactoryGirl.create(:company_contact, company: company)
+  end
   let(:agency_admin)   { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
   let(:case_manager)   { FactoryGirl.create(:case_manager, agency: agency) }
   let(:agency_person) { FactoryGirl.create(:agency_person, agency: agency) }
-  let(:ca_bayer) { FactoryGirl.create(:company_admin, company: company_bayer) }
-  let(:cc_bayer) { FactoryGirl.create(:company_contact, company: company_bayer) }
-  let(:admin_bayer) { FactoryGirl.create(:agency_admin, agency: another_agency) }
+  let(:ca_bayer) { FactoryGirl.create(:company_admin, company: comp_bayer) }
+  let(:cc_bayer) { FactoryGirl.create(:company_contact, company: comp_bayer) }
+  let(:admin_bayer) do
+    FactoryGirl.create(:agency_admin, agency: another_agency)
+  end
   let(:job_seeker) { FactoryGirl.create(:job_seeker) }
 
   describe 'GET #edit_profile' do
@@ -174,7 +178,9 @@ RSpec.describe CompanyPeopleController, type: :controller do
           company_person.company_roles <<
             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
           company_person.save
-          patch :update_profile, id: company_person, company_person: FactoryGirl.attributes_for(:user)
+          patch :update_profile,
+                id: company_person,
+                company_person: FactoryGirl.attributes_for(:user)
         end
 
         it 'sets flash message' do
@@ -189,19 +195,22 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
       context 'valid attributes without password change' do
         before(:each) do
-          @company_person = FactoryGirl.create(:company_admin,
-                                               password: 'testing.....',
-                                               password_confirmation: 'testing.....')
+          @company_person =
+            FactoryGirl.create(:company_admin,
+                               password: 'testing.....',
+                               password_confirmation: 'testing.....')
           @password = @company_person.encrypted_password
           sign_in @company_person
-          patch :update_profile, company_person: FactoryGirl.attributes_for(:company_person,
-                                                                            first_name: 'John',
-                                                                            last_name: 'Smith',
-                                                                            phone: '780-890-8976',
-                                                                            title: 'Line Manager',
-                                                                            password: '',
-                                                                            password_confirmation: ''),
-                                 id: @company_person
+          patch :update_profile,
+                company_person:
+                  FactoryGirl.attributes_for(:company_person,
+                                             first_name: 'John',
+                                             last_name: 'Smith',
+                                             phone: '780-890-8976',
+                                             title: 'Line Manager',
+                                             password: '',
+                                             password_confirmation: ''),
+                id: @company_person
           @company_person.reload
         end
         it 'sets a title' do
@@ -342,13 +351,16 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
 
       it 'sets flash message' do
-        expect(flash[:notice]).to eq "Person '#{assigns(:company_person).full_name(last_name_first: false)}' deleted."
+        full_name = assigns(:company_person).full_name(last_name_first: false)
+        expect(flash[:notice])
+          .to eq "Person '#{full_name}' deleted."
       end
       it 'returns redirect status' do
         expect(response).to have_http_status(:redirect)
       end
       it 'redirects to current_user home page' do
-        expect(response).to redirect_to home_company_person_path(assigns('current_user').id)
+        expect(response)
+          .to redirect_to home_company_person_path(assigns('current_user').id)
       end
     end
   end
@@ -356,8 +368,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'PATCH #update' do
     context 'valid roles' do
       before(:each) do
-        updated_fields = company_admin.attributes.
-          merge(company_admin.user.attributes)
+        updated_fields = company_admin.attributes
+                                      .merge(company_admin.user.attributes)
         sign_in company_admin
         patch :update, id: company_admin, company_person: updated_fields
       end
@@ -365,9 +377,11 @@ RSpec.describe CompanyPeopleController, type: :controller do
       it 'sets flash message' do
         expect(flash[:notice]).to eq 'Company person was successfully updated.'
       end
+
       it 'returns redirect status' do
         expect(response).to have_http_status(:redirect)
       end
+
       it 'redirects to company person page' do
         expect(response).to redirect_to company_admin
       end
@@ -375,20 +389,20 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     context 'invalid roles' do
       before(:each) do
-        updated_fields = company_admin.attributes.
-          merge(company_admin.user.attributes)
+        updated_fields = company_admin.attributes
+                                      .merge(company_admin.user.attributes)
         updated_fields[:company_role_ids] = []
         sign_in company_admin
         patch :update, id: company_admin, company_person: updated_fields
       end
 
       it 'adds sole company admin error to error hash' do
-        expect(assigns(:company_person).errors[:company_admin]).
-          to include('cannot be unset for sole company admin.')
+        expect(assigns(:company_person).errors[:company_admin])
+          .to include('cannot be unset for sole company admin.')
       end
       it 'sets company_roles to include CA' do
-        expect(assigns(:company_person).company_roles.pluck(:role)).
-          to include('Company Admin')
+        expect(assigns(:company_person).company_roles.pluck(:role))
+          .to include('Company Admin')
       end
       it 'renders edit template' do
         expect(response).to render_template 'edit'

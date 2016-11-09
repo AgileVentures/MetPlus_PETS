@@ -4,6 +4,10 @@ RSpec.shared_examples 'unauthorized request' do
     request
   end
 
+  it 'returns http unauthorized' do
+    expect(response).to have_http_status(302)
+  end
+
   it 'redirects to the home page' do
     expect(response).to redirect_to(root_path)
   end
@@ -24,7 +28,9 @@ RSpec.shared_examples 'unauthorized XHR request' do
   end
 
   it 'check content' do
-    expect(response.body).to eq({:message => 'You are not authorized to perform this action.'}.to_json)
+    expect(response.body).to eq(
+      { message: 'You are not authorized to perform this action.' }.to_json
+    )
   end
 end
 
@@ -52,6 +58,8 @@ RSpec.shared_examples 'unauthenticated XHR request' do
   end
 
   it 'check content' do
-    expect(response.body).to eq({:message => 'You need to login to perform this action.'}.to_json)
+    expect(response.body).to eq(
+      { message: 'You need to login to perform this action.' }.to_json
+    )
   end
 end

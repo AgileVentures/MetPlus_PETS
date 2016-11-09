@@ -1,35 +1,6 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
-RSpec.shared_examples 'unauthorized' do
-  before :each do
-    warden.set_user user
-    request
-  end
-
-  it 'redirects to the home page' do
-    expect(response).to redirect_to(root_path)
-  end
-
-  it 'sets the flash' do
-    expect(flash[:alert]).to match(/^You are not authorized to/)
-  end
-end
-
-RSpec.shared_examples 'unauthenticated request' do
-  before do
-    request
-  end
-
-  it 'redirects to the home page' do
-    expect(response).to redirect_to(root_path)
-  end
-
-  it 'sets the flash' do
-    expect(flash[:alert]).to match(/You need to login to/)
-  end
-end
-
 RSpec.describe JobApplicationsController, type: :controller do
   let(:company)       { FactoryGirl.create(:company) }
   let(:job)           { FactoryGirl.create(:job, company: company) }
@@ -153,7 +124,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :accept, id: valid_application }
           let(:user) { job_seeker }
         end
@@ -163,7 +134,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :accept, id: valid_application }
           let(:user) { agency_admin }
         end
@@ -173,7 +144,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :accept, id: valid_application }
           let(:user) { job_developer }
         end
@@ -183,7 +154,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :accept, id: valid_application }
           let(:user) { case_manager }
         end
@@ -194,7 +165,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :accept, id: valid_application }
           let(:user) { company_admin2 }
         end
@@ -204,7 +175,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :accept, id: valid_application }
           let(:user) { company_contact2 }
         end
@@ -226,7 +197,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :reject, id: valid_application }
           let(:user) { job_seeker }
         end
@@ -236,7 +207,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :reject, id: valid_application }
           let(:user) { agency_admin }
         end
@@ -246,7 +217,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :reject, id: valid_application }
           let(:user) { job_developer }
         end
@@ -256,7 +227,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :reject, id: valid_application }
           let(:user) { case_manager }
         end
@@ -267,7 +238,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :reject, id: valid_application }
           let(:user) { company_admin2 }
         end
@@ -277,7 +248,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { patch :reject, id: valid_application }
           let(:user) { company_contact2 }
         end
@@ -299,7 +270,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { get :show, id: valid_application }
           let(:user) { job_seeker }
         end
@@ -309,7 +280,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { get :show, id: valid_application }
           let(:user) { agency_admin }
         end
@@ -319,7 +290,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { get :show, id: valid_application }
           let(:user) { job_developer }
         end
@@ -329,7 +300,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { get :show, id: valid_application }
           let(:user) { case_manager }
         end
@@ -340,7 +311,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { get :show, id: valid_application }
           let(:user) { company_admin2 }
         end
@@ -350,7 +321,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it_behaves_like 'unauthorized' do
+        it_behaves_like 'unauthorized request' do
           let(:request) { get :show, id: valid_application }
           let(:user) { company_contact2 }
         end

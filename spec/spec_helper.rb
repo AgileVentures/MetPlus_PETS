@@ -23,7 +23,7 @@ require 'codeclimate-test-reporter'
 require 'webmock/rspec'
 require 'pundit/rspec'
 
-Dir['./spec/support/**/*.rb'].each {|f| require f}
+Dir['./spec/support/**/*.rb'].each { |f| require f }
 include ServiceStubHelpers::EmailValidator
 # WebMock config
 
