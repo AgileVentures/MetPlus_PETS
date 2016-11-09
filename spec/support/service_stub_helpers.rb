@@ -19,7 +19,7 @@ module ServiceStubHelpers
     def stub_cruncher_file_upload
       stub_request(:post, CruncherService.service_url + '/resume/upload')
         .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
-                   headers: { 'Content-Type': 'application/json' })2
+                   headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_file_upload_retry_auth
@@ -129,6 +129,17 @@ module ServiceStubHelpers
     def stub_cruncher_match_jobs_fail(result_code)
       stub_request(:get, %r{#{CruncherService.service_url}/job/match/\d+})
         .to_return(body: "{\"resultCode\": \"#{result_code}\"}", status: 200,
+                   headers: { 'Content-Type': 'application/json' })
+    end
+
+    def stub_cruncher_no_match_jobs
+      body_json = JSON.generate('resultCode' => 'SUCCESS',
+                                'message' => 'Success',
+                                'jobs' => { 'matcher1' => [],
+                                            'matcher2' => [] })
+
+      stub_request(:get, %r{#{CruncherService.service_url}/job/match/\d+})
+        .to_return(body: body_json, status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
