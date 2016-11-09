@@ -45,12 +45,36 @@ RSpec.describe JobApplicationsController, type: :controller do
                                            job_seeker: job_seeker)
     end
 
+    describe 'find_application' do
+			before(:each) do
+				@company_admin = FactoryGirl.create(:company_admin, company: company)
+				sign_in @company_admin
+			end
+			context 'Application not found' do
+        it 'shows a flash[:alert]' do
+          get :show, id: anything
+          expect(flash[:alert]).to eq 'Job Application Entry not found.'
+				end
+			end
+			context 'Application found' do
+				before(:each) do
+					stub_cruncher_authenticate
+					stub_cruncher_job_create
+				#	patch :accept, id: valid_application
+				end
+				it 'finds application' do
+					get :show, id: valid_application
+					expect(assigns(:job_application)).to eq valid_application
+				end
+			end
+		end
     describe 'authorized access' do
       context 'company admin' do
         before(:each) do
           @company_admin = FactoryGirl.create(:company_admin, company: company)
           sign_in @company_admin
         end
+				#moved
         context 'Invalid Request' do
           it 'shows a flash[:alert]' do
             get :show, id: anything
