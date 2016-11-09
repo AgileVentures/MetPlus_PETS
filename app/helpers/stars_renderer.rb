@@ -5,18 +5,17 @@
 # This will render 1 star
 module StarsRenderer
   def render_stars(rating)
-    @rating = rating
     content_tag :div, class: 'stars' do
-      star_images.map { |star| concat(star) }
+      star_images(rating).map { |star| concat(star) }
     end
   end
 
   private
 
-  def star_images
+  def star_images(rating)
     stars = []
     (0...5).map do |position|
-      stars << star_image((@rating - position).round(1))
+      stars << star_image((rating - position).round(1))
     end
     stars
   end
