@@ -12,8 +12,8 @@ module ServiceStubHelpers
     end
 
     def stub_cruncher_authenticate_error
-      stub_request(:post, CruncherService.service_url + '/authenticate')
-        .to_raise(RuntimeError)
+      stub_request(:post, CruncherService.service_url + '/authenticate').
+          to_raise(RestClient::Unauthorized)
     end
 
     def stub_cruncher_file_upload
@@ -77,6 +77,18 @@ module ServiceStubHelpers
         .to_raise(RuntimeError)
     end
 
+    def stub_cruncher_job_update
+      stub_request(:patch, /#{CruncherService.service_url + "/job/"}\d+#{"/update"}/).
+          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
+          :headers => {'Content-Type'=> 'application/json'})
+    end
+
+    def stub_cruncher_job_update_fail(resultCode)
+      stub_request(:patch, /#{CruncherService.service_url + "/job/"}\d+#{"/update"}/).
+          to_return(body: "{\"resultCode\":\"#{resultCode}\"}" , status: 200,
+          :headers => {'Content-Type' => 'application/json'})
+    end
+    
     def stub_cruncher_match_jobs
       body_json = JSON.generate(
         'resultCode' => 'SUCCESS', 'message' => 'Success',
@@ -126,6 +138,12 @@ module ServiceStubHelpers
       stub_request(:get, CruncherService.service_url + '/resume/match/1')
         .to_return(body: body_json, status: 200,
                    headers: { 'Content-Type': 'application/json' })
+    end
+
+    def stub_cruncher_match_resumes_fail(resultCode)
+      stub_request(:get, CruncherService.service_url + '/resume/match/1').
+        to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status:200,
+        headers: {'Content-Type': 'application/json'})
     end
   end
 
