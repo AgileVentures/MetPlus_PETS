@@ -19,7 +19,7 @@ module ServiceStubHelpers
     def stub_cruncher_file_upload
       stub_request(:post, CruncherService.service_url + '/resume/upload')
         .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
-                   headers: { 'Content-Type': 'application/json' })
+                   headers: { 'Content-Type': 'application/json' })2
     end
 
     def stub_cruncher_file_upload_retry_auth

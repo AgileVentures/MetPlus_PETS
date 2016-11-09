@@ -14,6 +14,11 @@ RSpec.describe JobApplicationPolicy do
                        company: company2)
   end
 
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   let(:job_seeker) { FactoryGirl.create(:job_seeker) }
   let(:job) { FactoryGirl.create(:job, company: company) }
   let(:job_application) do
