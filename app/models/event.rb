@@ -166,8 +166,8 @@ class Event
                                   job_developer, evt_obj.job)
 
     if job_developer != evt_obj.job_seeker.job_developer then
-      AgencyMailerJob.set(wait: delay_seconds.seconds).
-                      perform_later(EVT_TYPE[:OTHER_JD_APPLY],
+      AgencyMailerJob.set(wait: delay_seconds.seconds)
+                     .perform_later(EVT_TYPE[:OTHER_JD_APPLY],
                                     evt_obj.job_seeker,
                                     evt_obj.job_seeker.job_developer,
                                     job_developer, evt_obj.job)

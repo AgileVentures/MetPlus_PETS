@@ -231,12 +231,14 @@ RSpec.describe AgencyMailer, type: :mailer do
     let(:job_developer1) { FactoryGirl.create(:job_developer, agency: agency) }
     let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
     let(:job)            { FactoryGirl.create(:job) }
-    let(:mail) { AgencyMailer.job_applied_by_other_job_developer(job_seeker, job_developer, job_developer1, job) }
-
+    let(:mail) do
+      AgencyMailer.job_applied_by_other_job_developer(job_seeker,
+        job_developer, job_developer1, job)
+    end
+    
     before do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-
     end
     before(:each) do
       job_seeker.assign_job_developer job_developer, agency

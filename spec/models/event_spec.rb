@@ -6,7 +6,7 @@ RSpec.describe Event, type: :model do
   let!(:agency)        { FactoryGirl.create(:agency) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
   let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
-  let!(:job_developer1)  { FactoryGirl.create(:job_developer, agency: agency) }
+  let!(:job_developer1) { FactoryGirl.create(:job_developer, agency: agency) }
   let!(:case_manager)   { FactoryGirl.create(:case_manager, agency: agency) }
   let!(:job_seeker) do
     js = FactoryGirl.create(:job_seeker)
@@ -345,7 +345,7 @@ RSpec.describe Event, type: :model do
                {job_id:    job.id,
                 job_title: job.title,
                 company_name: company.name,
-                notify_list: [job_developer.user.id, job_developer1.user.id]})
+                notify_list: [job_developer.user.id, job_developer1.user.id] })
     end
 
     it 'sends event notification email' do
@@ -365,7 +365,7 @@ RSpec.describe Event, type: :model do
                {job_id: job.id,
                 job_title: job.title,
                 company_name: company.name,
-                notify_list: [job_developer.user.id, job_developer1.user.id]})
+                notify_list: [job_developer.user.id, job_developer1.user.id] })
     end
 
     it 'sends mass event notification email' do
