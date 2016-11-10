@@ -146,21 +146,21 @@ RSpec.describe Event, type: :model do
     describe 'Job Developer not the primary JD' do
       it 'trigger message to the primary JD' do
         Event.create(:JD_APPLY, application_diff_jd)
-        expect(Pusher).to have_received(:trigger).
-            with('pusher_control',
-                 'job_applied_by_job_developer',
-                 {job_id:  job_wo_cp.id,
-                  js_user_id:   job_seeker.user.id})
+        expect(Pusher).to have_received(:trigger)
+          .with('pusher_control',
+                'job_applied_by_job_developer',
+                job_id:  job_wo_cp.id,
+                js_user_id: job_seeker.user.id)
       end
 
       it 'sends event notification email to Primary Job Developer' do
-        expect { Event.create(:JD_APPLY, application_diff_jd) }.
-            to change(all_emails, :count).by(+3)
+        expect { Event.create(:JD_APPLY, application_diff_jd) }
+          .to change(all_emails, :count).by(+3)
       end
 
       it 'creates one task' do
-        expect { Event.create(:JD_APPLY, application_diff_jd) }.
-            to change(Task, :count).by(+1)
+        expect { Event.create(:JD_APPLY, application_diff_jd) }
+          .to change(Task, :count).by(+1)
       end
     end
 

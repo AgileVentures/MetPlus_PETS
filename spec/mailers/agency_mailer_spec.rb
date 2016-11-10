@@ -242,22 +242,21 @@ RSpec.describe AgencyMailer, type: :mailer do
       job_seeker.assign_job_developer job_developer, agency
     end
 
-    it "renders the headers" do
+    it 'renders the headers' do
       expect(mail.subject).to eq 'Job applied by other job developer'
-      expect(mail.to).to eq(["#{job_developer.email}"])
-      expect(mail.from).to eq(["from@example.com"])
+      expect(mail.to).to eq([job_developer.email.to_s])
+      expect(mail.from).to eq(['from@example.com'])
     end
-    it "renders the body" do
+    it 'renders the body' do
       expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
       expect(mail).to have_body_text(/has submitted an application on behalf of/)
       expect(mail).to have_body_text(/Doe, John/)
     end
-    it "includes link to show job" do
+    it 'includes link to show job' do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
     it "includes link to show job seeker" do
       expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
     end
   end
-
 end
