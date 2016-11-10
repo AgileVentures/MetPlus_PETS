@@ -279,12 +279,10 @@ RSpec.describe Event, type: :model do
       expect(Pusher).to have_received(:trigger).
         with('pusher_control',
              'job_application_rejected',
-             {
-               id: application.id,
-               ap_user_id: application.job_seeker.case_manager.user.id,
-               job_title: job.title,
-               js_name: application.job_seeker.full_name(last_name_first: false)
-             }
+             id: application.id,
+             ap_user_id: application.job_seeker.case_manager.user.id,
+             job_title: job.title,
+             js_name: application.job_seeker.full_name(last_name_first: false)
             )
     end
 
@@ -353,7 +351,8 @@ RSpec.describe Event, type: :model do
               js_name: job_seeker.full_name(last_name_first: false),
               cm_name: case_manager.full_name(last_name_first: false),
               cm_user_id: case_manager.user.id,
-              agency_name: job_developer.agency.name})
+              agency_name: job_developer.agency.name
+      })
     end
 
     it 'sends event notification emails to case manager and job seeker' do
