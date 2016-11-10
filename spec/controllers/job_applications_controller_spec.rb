@@ -31,24 +31,40 @@ RSpec.shared_examples 'unauthenticated request' do
 end
 
 RSpec.describe JobApplicationsController, type: :controller do
-  describe 'PATCH accept' do
-    let(:company) { FactoryGirl.create(:company) }
-    let(:job) { FactoryGirl.create(:job, company: company) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:invalid_application) do
-      FactoryGirl.create(:job_application,
-                         job: job, job_seeker: job_seeker,
-                         status: 'accepted')
-    end
-    let(:valid_application) do
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
-    end
+  let(:company)       { FactoryGirl.create(:company) }
+  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+  let(:job)           { FactoryGirl.create(:job, company: company) }
+  let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+  let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+  let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
+  let(:invalid_application) do
+    FactoryGirl.create(:job_application,
+                       job: job, job_seeker: job_seeker2,
+                       status: 'accepted')
+  end
+  let(:valid_application) do
+    FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+  end
+  let(:agency)       { FactoryGirl.create(:agency) }
+  let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+  let(:company2)     { FactoryGirl.create(:company) }
+  let(:company_admin2) do
+    FactoryGirl.create(:company_admin,
+                       company: company2)
+  end
+  let(:company_contact2) do
+    FactoryGirl.create(:company_contact,
+                       company: company2)
+  end
+  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+  let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
 
+  describe 'PATCH accept' do
     describe 'authorized access' do
       context 'company admin' do
         before(:each) do
-          @company_admin = FactoryGirl.create(:company_admin, company: company)
-          sign_in @company_admin
+          sign_in company_admin
         end
         context 'Invalid Request' do
           it 'shows a flash[:alert]' do
@@ -112,28 +128,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
 
     describe 'unauthorized access' do
-      let(:company) { FactoryGirl.create(:company) }
-      let(:company_admin) do
-        FactoryGirl.create(:company_admin,
-                           company: company)
-      end
-      let(:company_contact) do
-        FactoryGirl.create(:company_contact,
-                           company: company)
-      end
-      let(:company2) { FactoryGirl.create(:company) }
-      let(:company_admin2) do
-        FactoryGirl.create(:company_admin,
-                           company: company2)
-      end
-      let(:company_contact2) do
-        FactoryGirl.create(:company_contact,
-                           company: company2)
-      end
-      let(:agency) { FactoryGirl.create(:agency) }
-      let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-      let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-      let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
 
       context 'Accept' do
         context 'not logged in' do
@@ -358,7 +352,6 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'GET #list' do
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let(:job1) { FactoryGirl.create(:job) }
     let(:job2) { FactoryGirl.create(:job) }
     let(:job3) { FactoryGirl.create(:job) }
@@ -396,6 +389,12 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'GET download_resume' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in company_admin
+    end
+
     context 'Successful download' do
       it 'does not raise exception' do
         stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
@@ -405,14 +404,14 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
     context 'Error: Resume not found in DB' do
       it 'sets flash message' do
-        get :download_resume, id: invalid_application2
+        get :download_resume, id: invalid_application
         expect(flash[:alert]).to eq 'Error: Resume not found in DB'
       end
     end
     context 'Error: Resume not found in Cruncher' do
       it 'sets flash message' do
         stub_cruncher_file_download_notfound
-        get :download_resume, id: invalid_application
+        get :download_resume, id: valid_application
         expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
       end
     end

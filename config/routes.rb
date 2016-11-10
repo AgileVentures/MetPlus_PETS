@@ -146,10 +146,10 @@ Rails.application.routes.draw do
                                              as: :reject_application
   get 'job_applications/:id'                 => 'job_applications#show',
                                              as: :application
-  get 'job_applications/:type/:entity_id'=> 'job_applications#list',
-                                             as: :list_applications
   get 'job_applications/:id/download_resume' => 'job_applications#download_resume',
                                              as: :download_resume
+  get 'job_applications/:type/:entity_id'=> 'job_applications#list',
+                                             as: :list_applications
   # --------------------------------------------------------------------------
 
   # ---------------------------- Job Seekers ---------------------------------
