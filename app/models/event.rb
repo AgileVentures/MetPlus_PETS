@@ -160,13 +160,16 @@ class Event
                     js_user_id: evt_obj.job_seeker.user.id})
 
     job_developer = evt_obj.try(:job_developer) || evt_obj.job_seeker.job_developer
+
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                     perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
                                   job_developer, evt_obj.job)
 
     if job_developer != evt_obj.job_seeker.job_developer then
-      JobSeekerEmailJob.set(wait: delay_seconds.seconds).
-                      perform_later(EVT_TYPE[:OTHER_JD_APPLY], evt_obj.job_seeker,
+      AgencyMailerJob.set(wait: delay_seconds.seconds).
+                      perform_later(EVT_TYPE[:OTHER_JD_APPLY],
+                                    evt_obj.job_seeker,
+                                    evt_obj.job_seeker.job_developer,
                                     job_developer, evt_obj.job)
     end
 

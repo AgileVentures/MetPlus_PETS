@@ -2,7 +2,7 @@ class JobApplication < ActiveRecord::Base
   belongs_to :job_seeker
   belongs_to :job
   enum status: [:active, :accepted, :not_accepted]
-  attr_accessor :reason_for_rejection
+  attr_accessor :reason_for_rejection, :job_developer
 
   has_many :status_changes, as: :entity, dependent: :destroy
 
