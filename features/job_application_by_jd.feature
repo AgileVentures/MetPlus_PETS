@@ -3,7 +3,7 @@ Feature: Job developer submit application for his job seeker
 As a job developer
 I want to apply to a job for my job seeker
 
-Background: data is added to database 
+Background: data is added to database
 
   Given the default settings are present
 
@@ -11,6 +11,7 @@ Background: data is added to database
   | agency  | role  | first_name | last_name | email            | password  |
   | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
   | MetPlus | JD,CM | Jane       | Jones     | jane@metplus.org | qwerty123 |
+  | MetPlus | JD    | John       | Happy     | john@metplus.org | qwerty123 |
 
   Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
@@ -127,6 +128,25 @@ Background: data is added to database
     Then I login as "jane@metplus.org" with password "qwerty123"
     Then I want to apply to "software developer" for "Seeker, John"
     But I cannot find "Seeker, John" from my job seekers list
-    
-    
 
+
+  @javascript
+  Scenario: Apply for a Job Seeker that I am not the assigned Job Developer
+    When I am in Assigned Job Developer's browser
+    Given I am on the home page
+    And I login as "john@metplus.org" with password "qwerty123"
+
+    Then I am in Job Developer's browser
+    Given I am on the home page
+    And I login as "jane@metplus.org" with password "qwerty123"
+    Then I apply to "software developer" for my job seeker: "Seeker, John"
+    And I should see "Job is successfully applied for Seeker, John"
+
+    Then I am in Assigned Job Developer's browser
+    And I should see "Your 'Jones, Jane' has applied to this job for 'Seeker, John'"
+    Then "john@metplus.org" should receive an email with subject "Job applied by job developer"
+    When "john@metplus.org" opens the email
+    Then they should see "Jane Jones" in the email body
+    Then they should see "has submitted an application on behalf of 'Seeker, John' to the job:" in the email body
+    Then they should see "software developer" in the email body
+    Then they should see "in company: Widgets Inc." in the email body
