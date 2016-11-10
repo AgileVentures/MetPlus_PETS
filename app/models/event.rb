@@ -10,16 +10,17 @@ class Event
     @@delay ||= 10
   end
 
-  EVT_TYPE = {JS_REGISTER:   'js_registered',
-              COMP_REGISTER: 'company_registered',
-              COMP_APPROVED: 'company_registration_approved',
-              COMP_DENIED:   'company_registration_denied',
-              JS_APPLY:      'jobseeker_applied',
-              JD_APPLY:      'job_applied_by_job_developer',
-              APP_ACCEPTED:  'job_application_accepted',
-              APP_REJECTED:  'job_application_rejected',
-              JOB_POSTED:    'job_posted',
-              JOB_REVOKED:   'job_revoked',
+  EVT_TYPE = {JS_REGISTER:    'js_registered',
+              COMP_REGISTER:  'company_registered',
+              COMP_APPROVED:  'company_registration_approved',
+              COMP_DENIED:    'company_registration_denied',
+              JS_APPLY:       'jobseeker_applied',
+              JD_APPLY:       'job_applied_by_job_developer',
+              OTHER_JD_APPLY: 'job_applied_by_other_job_developer',
+              APP_ACCEPTED:   'job_application_accepted',
+              APP_REJECTED:   'job_application_rejected',
+              JOB_POSTED:     'job_posted',
+              JOB_REVOKED:    'job_revoked',
               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
               CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
               JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
@@ -153,15 +154,21 @@ class Event
     #    Notify job seeker
     #    Notify company contact associated with the job
     #    Create task for 'job application' (application to be reviewed)
-
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JD_APPLY],
                    {job_id:  evt_obj.job.id,
                     js_user_id: evt_obj.job_seeker.user.id})
 
+    job_developer = evt_obj.try(:job_developer) || evt_obj.job_seeker.job_developer
     JobSeekerEmailJob.set(wait: delay_seconds.seconds).
                     perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
-                                  evt_obj.job_seeker.job_developer, evt_obj.job)
+                                  job_developer, evt_obj.job)
+
+    if job_developer != evt_obj.job_seeker.job_developer then
+      JobSeekerEmailJob.set(wait: delay_seconds.seconds).
+                      perform_later(EVT_TYPE[:OTHER_JD_APPLY], evt_obj.job_seeker,
+                                    job_developer, evt_obj.job)
+    end
 
     if evt_obj.job.company_person
       Pusher.trigger('pusher_control',

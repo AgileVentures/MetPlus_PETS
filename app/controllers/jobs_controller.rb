@@ -132,10 +132,10 @@ class JobsController < ApplicationController
 			when 'my-company-all'
 				render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
 			when 'recent-jobs'
-				render partial: 'compact_list', locals: { 
+				render partial: 'compact_list', locals: {
 					jobs: @jobs, job_type: @job_type, last_sign_in: params[:js_login] }
 		end
-    
+
 	end
 
   def update_addresses
@@ -173,7 +173,7 @@ class JobsController < ApplicationController
 			redirect_to job_path(@job)
 			return
 		end
-   
+
     if pets_user == @job_seeker # to be removed once authorize is set properly
       apply_job; return if performed?
       Event.create(:JS_APPLY, @job_app)
