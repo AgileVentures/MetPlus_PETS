@@ -237,14 +237,14 @@ RSpec.describe Event, type: :model do
       end
       it 'sends two emails if jd and cm is not for the same js' do
         expect { Event.create(:APP_ACCEPTED, application) }.
-        to change(all_emails, :count).by(+2)
+          to change(all_emails, :count).by(+2)
         expect(all_emails.last.to.count).to eq 2
-        
+
       end
       it 'sends one email' do
         job_seeker.assign_case_manager job_developer, agency
         expect { Event.create(:APP_ACCEPTED, application) }.
-        to change(all_emails, :count).by(+2)
+          to change(all_emails, :count).by(+2)
         expect(all_emails.last.to.count).to eq 1
       end
       it 'sends one notification' do
@@ -279,11 +279,13 @@ RSpec.describe Event, type: :model do
       expect(Pusher).to have_received(:trigger).
         with('pusher_control',
              'job_application_rejected',
-             {id: application.id,
-              ap_user_id: application.job_seeker.case_manager.user.id,
-              job_title: job.title,
-              js_name: application.job_seeker.full_name(last_name_first: false)
-      })
+             {
+               id: application.id,
+               ap_user_id: application.job_seeker.case_manager.user.id,
+               job_title: job.title,
+               js_name: application.job_seeker.full_name(last_name_first: false)
+             }
+            )
     end
 
     it 'sends a notification email to job developer and case manager' do
@@ -300,9 +302,8 @@ RSpec.describe Event, type: :model do
 
       it 'sends two emails if jd and cm is not for the same js' do
         expect { Event.create(:APP_REJECTED, application) }.
-        to change(all_emails, :count).by(+2)
+          to change(all_emails, :count).by(+2)
         expect(all_emails.last.to.count).to eq 2
-        
       end
       it 'sends one email' do
         job_seeker.assign_case_manager job_developer, agency
