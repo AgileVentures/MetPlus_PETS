@@ -143,10 +143,9 @@ Background: data is added to database
     And I should see "Job is successfully applied for Seeker, John"
 
     Then I am in Assigned Job Developer's browser
-    And I should see "Your 'Jones, Jane' has applied to this job for 'Seeker, John'"
-    Then "john@metplus.org" should receive an email with subject "Job applied by job developer"
+    Then "john@metplus.org" should receive an email with subject "Job applied by other job developer"
     When "john@metplus.org" opens the email
     Then they should see "Jane Jones" in the email body
-    Then they should see "has submitted an application on behalf of 'Seeker, John' to the job:" in the email body
+    Then they should see "has submitted an application on behalf of Seeker, John to the job:" in the email body
     Then they should see "software developer" in the email body
     Then they should see "in company: Widgets Inc." in the email body
