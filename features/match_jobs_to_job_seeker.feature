@@ -53,7 +53,7 @@ Feature: Match Jobs to a Job Seeker
      | doer             | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
      | breaker          | KRK10K          | Evening| true     | internship position with pay| Hammer Inc.  | ca@hammer.com |
 
-  @javascript
+  @selenium
   Scenario: Access job seeker job matching page
     Given I am on the home page
     And I login as "jane-dev@metplus.org" with password "qwerty123"
