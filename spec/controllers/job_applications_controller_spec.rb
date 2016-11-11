@@ -32,12 +32,12 @@ end
 
 RSpec.describe JobApplicationsController, type: :controller do
   let(:company)       { FactoryGirl.create(:company) }
-  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:job)           { FactoryGirl.create(:job, company: company) }
   let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
   let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
   let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
+  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:invalid_application) do
     FactoryGirl.create(:job_application,
                        job: job, job_seeker: job_seeker2,
