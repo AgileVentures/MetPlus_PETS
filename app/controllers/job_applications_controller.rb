@@ -50,16 +50,15 @@ class JobApplicationsController < ApplicationController
   end
 
   def download_resume
-    begin
-      job_seeker = @job_application.job_seeker
+    job_seeker = @job_application.job_seeker
 
-      raise 'Resume not found in DB' if job_seeker.resumes.empty?
-      resume = job_seeker.resumes[0]
+    raise 'Resume not found in DB' if job_seeker.resumes.empty?
+    resume = job_seeker.resumes[0]
 
-      resume_file = ResumeCruncher.download_resume(resume.id)
-      raise 'Resume not found in Cruncher' if resume_file.nil?
+    resume_file = ResumeCruncher.download_resume(resume.id)
+    raise 'Resume not found in Cruncher' if resume_file.nil?
 
-      send_data resume_file.open.read, filename: resume.file_name
+    send_data resume_file.open.read, filename: resume.file_name
 
     rescue RuntimeError => e
       flash[:alert] = "Error: #{e}"
