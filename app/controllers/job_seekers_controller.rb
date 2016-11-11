@@ -68,18 +68,18 @@ class JobSeekersController < ApplicationController
           resume = Resume.new(file: tempfile, file_name: filename,
                      job_seeker_id: @jobseeker.id)
         end
-        
+
         unless resume.save
           models_saved = false
           @jobseeker.errors.messages.merge! resume.errors.messages
         end
       end
     end
-   
+
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
       flash[:notice] = "Jobseeker was updated successfully."
-      redirect_to @jobseeker and return if (pets_user == @jobseeker.case_manager) || (pets_user == @jobseeker.job_developer) 
+      redirect_to @jobseeker and return if (pets_user == @jobseeker.case_manager) || (pets_user == @jobseeker.job_developer)
       redirect_to root_path
     else
       @resume = resume
@@ -112,7 +112,8 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
     render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
-                                                   preview_mode: true }
+                                                   preview_mode: true,
+                                                   offer_download: false }
   end
 
   def destroy
@@ -121,6 +122,21 @@ class JobSeekersController < ApplicationController
     @jobseeker.destroy
     flash[:notice] = "Jobseeker was deleted successfully."
     redirect_to root_path
+  end
+
+  def list_match_jobs
+    @jobseeker = JobSeeker.find(params[:id])
+    if @jobseeker.resumes.empty? then
+      flash[:error] =
+        "#{@jobseeker.full_name(last_name_first: false)} " \
+        'does not have a résumé on file'
+      redirect_to(root_path)
+    else
+      @star_rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
+      @list_jobs = Job.all.where(id: @star_rating.keys).includes(:company)
+                      .sort { |x, y| @star_rating[y.id] <=> @star_rating[x.id] }
+                      .paginate(page: params[:jobs_page], per_page: 20)
+    end
   end
 
   private
