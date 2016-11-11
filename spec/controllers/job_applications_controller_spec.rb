@@ -104,8 +104,8 @@ RSpec.describe JobApplicationsController, type: :controller do
             expect(flash[:info]).to eq 'Job application accepted.'
           end
           it 'redirect to the specific job application index page' do
-            expect(response).to redirect_to(applications_job_url(
-                                            valid_application.job))
+            expect(response)
+              .to redirect_to(applications_job_url(valid_application.job))
           end
         end
 
@@ -120,15 +120,14 @@ RSpec.describe JobApplicationsController, type: :controller do
             expect(flash[:notice]).to eq 'Job application rejected.'
           end
           it 'redirect to the specific job application index page' do
-            expect(response).to redirect_to(applications_job_url(
-                                            valid_application.job))
+            expect(response)
+              .to redirect_to(applications_job_url(valid_application.job))
           end
         end
       end
     end
 
     describe 'unauthorized access' do
-
       context 'Accept' do
         context 'not logged in' do
           context 'company_admin' do
@@ -357,20 +356,19 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:job3) { FactoryGirl.create(:job) }
     let(:app1) do
       FactoryGirl.create(:job_application,
-                               job: job1, job_seeker: job_seeker)
+                         job: job1, job_seeker: job_seeker)
     end
     let(:app2) do
       FactoryGirl.create(:job_application,
-                               job: job2, job_seeker: job_seeker)
+                         job: job2, job_seeker: job_seeker)
     end
     let(:app3) do
       FactoryGirl.create(:job_application,
-                               job: job3, job_seeker: job_seeker)
+                         job: job3, job_seeker: job_seeker)
     end
     let(:app4) do
       FactoryGirl.create(:job_application,
-                               job: job3,
-                               job_seeker: FactoryGirl.create(:job_seeker))
+                         job: job3, job_seeker: FactoryGirl.create(:job_seeker))
     end
     before(:each) do
       stub_cruncher_authenticate
