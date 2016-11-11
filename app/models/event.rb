@@ -218,7 +218,7 @@ class Event
       )
     end
 
-    return unless notify_list.empty?
+    return if notify_list.empty?
 
     NotifyEmailJob.set(wait: delay_seconds.seconds)
                   .perform_later(notify_list,
@@ -263,7 +263,7 @@ class Event
       )
     end
 
-    return unless notify_list.empty?
+    return if notify_list.empty?
 
     NotifyEmailJob.set(wait: delay_seconds.seconds)
                   .perform_later(notify_list,
@@ -364,7 +364,7 @@ class Event
 
     job_developers = Agency.job_developers(evt_obj.agency)
 
-    return unless job_developers.empty?
+    return if job_developers.empty?
 
     jd_ids    = job_developers.map { |jd| jd.user.id }
     jd_emails = job_developers.map(&:email)
@@ -388,7 +388,7 @@ class Event
 
     job_developers = Agency.job_developers(evt_obj.agency)
 
-    return unless job_developers.empty?
+    return if job_developers.empty?
 
     jd_ids     = job_developers.map { |jd| jd.user.id }
     jd_emails  = job_developers.map(&:email)
