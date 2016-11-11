@@ -130,7 +130,6 @@ Rails.application.routes.draw do
       as: :update_addresses
 
   resources :jobs do
-    get 'applications', on: :member, as: :applications
     patch 'revoke', on: :member, as: :revoke
   end
   # --------------------------------------------------------------------------

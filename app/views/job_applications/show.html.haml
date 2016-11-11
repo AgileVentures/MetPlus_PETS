@@ -17,7 +17,7 @@
                               "job-companyJobId" => "#{@job_application.job.company_job_id}",
                               "action" => "#rejectModal"}
       |
-      =link_to "Return To Applications", applications_job_path(@job_application.job_id)
+      =link_to "Return To Applications", job_path(@job_application.job_id)
   .clearfix
   .panel.panel-default#show-panel-id
     .panel-heading#panel-heading-show-id

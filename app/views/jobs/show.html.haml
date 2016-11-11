@@ -43,3 +43,12 @@
                   data: { :toggle => 'modal',
                           :target => '#applyJobModal'}
         =render partial: 'apply_modal', :locals => {:job => @job}
+
+  -if pets_user.is_a?(CompanyPerson) && (pets_user.company == @job.company)
+    %h3
+      Applications for this Job
+      
+    = render partial: 'job_applications/accept_modal'
+    = render partial: 'job_applications/reject_modal'
+    .pagination-div{id: "applications-job",
+                    data: {url: list_applications_path('job', @job)}}

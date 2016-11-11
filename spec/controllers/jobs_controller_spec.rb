@@ -957,21 +957,4 @@ RSpec.describe JobsController, type: :controller do
       end
     end
   end
-
-  describe 'GET #applications' do
-    context 'application_type not provided' do
-      it 'check application_type' do
-        get :applications, id: @job.id
-        expect(assigns(:application_type)).to eq 'job-applied'
-      end
-    end
-
-    context 'application_type provided' do
-      let(:application_type) { 'my-applied' }
-      it 'check application_type' do
-        get :applications, id: @job.id, application_type: application_type
-        expect(assigns(:application_type)).to eq application_type
-      end
-    end
-  end
 end

@@ -37,8 +37,6 @@
                         company_person_path(job.company_person))
           - when :num_applicants
             %td.col-md-1
-              = link_to_unless(job.number_applicants == 0,
-                               job.number_applicants,
-                               applications_job_path(job.id))
+              = job.number_applicants
 .row.text-center
   = will_paginate all_jobs, param_name: 'jobs_page', :params => {:controller => 'jobs', :action => 'list', :job_type => job_type}
