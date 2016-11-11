@@ -29,9 +29,9 @@
     .clearfix
     .col-sm-8.col-sm-offset-2
       - if @current_resume
-        = "Your current resume is"
+        = 'Your current resume is'
         = @current_resume.file_name
-        = "and was uploaded on"
+        = 'and was uploaded on'
         %span.utc_to_local_time= @current_resume.updated_at
 
   - @address_form = js
