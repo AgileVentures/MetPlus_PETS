@@ -366,8 +366,8 @@ class Event
 
     return unless job_developers.empty?
 
-    jd_ids    = job_developers.collect { |jd| jd.user.id }
-    jd_emails = job_developers.collect(&:email)
+    jd_ids    = job_developers.map { |jd| jd.user.id }
+    jd_emails = job_developers.map(&:email)
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JOB_POSTED],
@@ -390,8 +390,8 @@ class Event
 
     return unless job_developers.empty?
 
-    jd_ids     = job_developers.collect { |jd| jd.user.id }
-    jd_emails  = job_developers.collect(&:email)
+    jd_ids     = job_developers.map { |jd| jd.user.id }
+    jd_emails  = job_developers.map(&:email)
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JOB_REVOKED],
