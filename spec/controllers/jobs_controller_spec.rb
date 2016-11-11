@@ -24,7 +24,7 @@ RSpec.describe JobsController, type: :controller do
     @request.env['devise.mapping'] = Devise.mappings[:user]
     sign_in @company_person
     @job =  FactoryGirl.create(:job, company: @company_person.company)
-    @job_2 = FactoryGirl.create(:job, company: @company_person.company)
+    @job2 = FactoryGirl.create(:job, company: @company_person.company)
     @address = FactoryGirl.create(:address)
     @skill = FactoryGirl.create(:skill)
   end
@@ -236,12 +236,14 @@ RSpec.describe JobsController, type: :controller do
     let(:job2) { FactoryGirl.create(:job) }
 
     let!(:job_skill1) do
-      FactoryGirl.create(:job_skill, job: job1,
-                                     skill: FactoryGirl.create(:skill, name: 'New Skill 1'))
+      FactoryGirl.create(:job_skill,
+                         job: job1,
+                         skill: FactoryGirl.create(:skill, name: 'New Skill 1'))
     end
     let!(:job_skill2) do
-      FactoryGirl.create(:job_skill, job: job2,
-                                     skill: FactoryGirl.create(:skill, name: 'New Skill 2'))
+      FactoryGirl.create(:job_skill,
+                         job: job2,
+                         skill: FactoryGirl.create(:skill, name: 'New Skill 2'))
     end
 
     before(:each) do
@@ -427,7 +429,7 @@ RSpec.describe JobsController, type: :controller do
 
     it 'destroys job and associated job_skill' do
       expect { delete :destroy, id: job_skill.job.id }
-        .to change(Job, :count).by -1
+        .to change(Job, :count).by(-1)
     end
   end
 
@@ -451,7 +453,7 @@ RSpec.describe JobsController, type: :controller do
       sign_in @company_person.acting_as
     end
 
-    before(:example) { delete :destroy, id: @job_2.id }
+    before(:example) { delete :destroy, id: @job2.id }
 
     it 'is a success' do
       expect(response).to have_http_status(302)
@@ -486,7 +488,7 @@ RSpec.describe JobsController, type: :controller do
       sign_in @job_seeker.acting_as
     end
 
-    before(:example) { delete :destroy, id: @job_2.id }
+    before(:example) { delete :destroy, id: @job2.id }
 
     it 'is a success' do
       expect(response).to have_http_status(302)
@@ -608,7 +610,8 @@ RSpec.describe JobsController, type: :controller do
         FactoryGirl.create(:job, title: title, company: company, company_person: @ca)
       end
       4.times.each do |i|
-        FactoryGirl.create(:job, title: "Awesome new job #{i}", company: company1, company_person: @ca1)
+        FactoryGirl.create(:job, title: "Awesome new job #{i}", company: company1,
+                                 company_person: @ca1)
       end
     end
 
@@ -722,7 +725,8 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'check set flash' do
         should set_flash
-        expect(flash[:alert]).to eq 'Unable to find the job the user is trying to apply to.'
+        expect(flash[:alert]).to eq 'Unable to find the job the user is'\
+        ' trying to apply to.'
       end
     end
 
@@ -736,7 +740,8 @@ RSpec.describe JobsController, type: :controller do
         expect(response).to redirect_to(action: 'index')
       end
       it 'check set flash' do
-        expect(flash[:alert]).to eq 'Unable to apply. Job has either been filled or revoked.'
+        expect(flash[:alert]).to eq 'Unable to apply. Job has either been filled'\
+        ' or revoked.'
       end
     end
 
@@ -787,11 +792,15 @@ RSpec.describe JobsController, type: :controller do
     describe 'duplicated applications as job seeker' do
       before :each do
         allow(controller).to receive(:current_user).and_return(job_seeker)
-        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
+        existing_application = FactoryGirl.create(:job_application,
+                                                  job: @job,
+                                                  job_seeker: job_seeker)
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'shows flash[:alert]' do
-        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
+        expect(flash[:alert]).to be_present
+          .and eq "#{job_seeker.full_name(last_name_first: false)} has already"\
+          ' applied to this job.'
       end
       it 'redirects to the job' do
         expect(response).to redirect_to(action: 'show', id: @job.id)
@@ -818,7 +827,8 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JD_APPLY, application)
       end
       it 'show flash[:info]' do
-        expect(flash[:info]).to be_present.and eq "Job is successfully applied for #{job_seeker.full_name}"
+        expect(flash[:info]).to be_present.and eq 'Job is successfully applied'\
+        " for #{job_seeker.full_name}"
       end
       it 'redirect to job ' do
         expect(response).to redirect_to(job_path(@job))
@@ -835,7 +845,8 @@ RSpec.describe JobsController, type: :controller do
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'show flash[:alert]' do
-        expect(flash[:alert]).to be_present.and eq "Invalid application: You are not permitted to apply for #{job_seeker.full_name}"
+        expect(flash[:alert]).to be_present.and eq 'Invalid application:'\
+        " You are not permitted to apply for #{job_seeker.full_name}"
       end
       it 'redirect to job ' do
         expect(response).to redirect_to(job_path(@job))
@@ -848,18 +859,21 @@ RSpec.describe JobsController, type: :controller do
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
         job_seeker.assign_job_developer(job_developer, agency)
         allow(controller).to receive(:current_user).and_return(job_developer)
-        existing_application = FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
+        existing_application = FactoryGirl.create(:job_application,
+                                                  job: @job, job_seeker: job_seeker)
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'shows flash[:alert]' do
-        expect(flash[:alert]).to be_present.and eq "#{job_seeker.full_name(last_name_first: false)} has already applied to this job."
+        expect(flash[:alert]).to be_present
+          .and eq "#{job_seeker.full_name(last_name_first: false)} has already "\
+          'applied to this job.'
       end
       it 'redirects to job' do
         expect(response).to redirect_to(action: 'show', id: @job.id)
       end
     end
 
-    describe 'invalid application as job developer: job seeker does not belong to job developer' do
+    describe 'invalid application as job developer' do
       before :each do
         agency = FactoryGirl.create(:agency)
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
@@ -869,14 +883,16 @@ RSpec.describe JobsController, type: :controller do
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'show flash[:alert]' do
-        expect(flash[:alert]).to be_present.and eq 'Invalid application: You are not the Job Developer for this job seeker'
+        expect(flash[:alert]).to be_present.and eq 'Invalid application: '\
+        'You are not the Job Developer for this job seeker'
       end
       it 'redirect to job ' do
         expect(response).to redirect_to(job_path(@job))
       end
     end
     describe 'user not logged in' do
-      let!(:job) { FactoryGirl.create(:job) } # no lazy load, executed right away, no need to mock
+      # no lazy load, executed right away, no need to mock
+      let!(:job) { FactoryGirl.create(:job) }
       before :each do
         get :apply, job_id: job.id, user_id: job_seeker.id
       end
@@ -893,7 +909,8 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'logged in as company person' do
-      let!(:job) { FactoryGirl.create(:job) } # no lazy load, executed right away, no need to mock
+      # no lazy load, executed right away, no need to mock
+      let!(:job) { FactoryGirl.create(:job) }
       before :each do
         company = FactoryGirl.create(:company)
         @ca = FactoryGirl.create(:company_admin, company: company)
@@ -933,7 +950,8 @@ RSpec.describe JobsController, type: :controller do
 
       it 'flash[:alert]' do
         patch :revoke, id: @job.id
-        expect(flash[:alert]).to be_present.and eq "#{@job.title} is revoked successfully."
+        expect(flash[:alert]).to be_present.and eq "#{@job.title} is revoked "\
+        'successfully.'
       end
 
       it 'redirects to jobs_path' do
