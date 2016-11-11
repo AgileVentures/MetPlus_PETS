@@ -36,17 +36,20 @@ class AgencyMailer < ApplicationMailer
     send_notification_mail(email_list, job, 'Job Revoked')
   end
 
-  def job_applied_by_other_job_developer(job_seeker, primary_job_developer, job_developer, job)
+  def job_applied_by_other_job_developer(job_seeker, primary_job_developer,
+                                         job_developer, job)
     @primary_job_developer = primary_job_developer
     @job_developer = job_developer
     @job = job
     @job_seeker = job_seeker
-    send_notification_mail(primary_job_developer.email, nil, nil, 'job_applied_by_job_developer')
+    send_notification_mail(primary_job_developer.email, nil, nil,
+                           'job_applied_by_job_developer')
   end
 
   private
 
-  def send_notification_mail(email_list, obj, obj_type, template='agency_notification')
+  def send_notification_mail(email_list, obj, obj_type,
+                             template = 'agency_notification')
     @obj      = obj
     @obj_type = obj_type
     mail to: email_list, template_name: template

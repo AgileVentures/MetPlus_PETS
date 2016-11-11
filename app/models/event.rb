@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Event
   include ActiveModel::Model
   require 'agency_person' # provide visibility to AR model methods
@@ -10,7 +11,7 @@ class Event
     @@delay ||= 10
   end
 
-  EVT_TYPE = {JS_REGISTER:    'js_registered',
+  EVT_TYPE = { JS_REGISTER:    'js_registered',
               COMP_REGISTER:  'company_registered',
               COMP_APPROVED:  'company_registration_approved',
               COMP_DENIED:    'company_registration_denied',
@@ -165,7 +166,7 @@ class Event
                     perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
                                   job_developer, evt_obj.job)
 
-    if job_developer != evt_obj.job_seeker.job_developer then
+    if job_developer != evt_obj.job_seeker.job_developer
       AgencyMailerJob.set(wait: delay_seconds.seconds)
                      .perform_later(EVT_TYPE[:OTHER_JD_APPLY],
                                     evt_obj.job_seeker,

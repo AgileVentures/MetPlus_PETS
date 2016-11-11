@@ -7,7 +7,9 @@ class AgencyMailerJob < ActiveJob::Base
       # args[0] = job_developer
       # args[1] = job_developer
       # args[2] = job
-      AgencyMailer.job_applied_by_other_job_developer(job_seeker, args[0], args[1], args[2]).deliver_later
+      AgencyMailer.job_applied_by_other_job_developer(job_seeker, args[0],
+                                                      args[1],
+                                                      args[2]).deliver_later
     end
   end
 end

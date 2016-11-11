@@ -233,9 +233,9 @@ RSpec.describe AgencyMailer, type: :mailer do
     let(:job)            { FactoryGirl.create(:job) }
     let(:mail) do
       AgencyMailer.job_applied_by_other_job_developer(job_seeker,
-        job_developer, job_developer1, job)
+                                                      job_developer,
+                                                      job_developer1, job)
     end
-    
     before do
       stub_cruncher_authenticate
       stub_cruncher_job_create
@@ -257,7 +257,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'includes link to show job' do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
-    it "includes link to show job seeker" do
+    it 'includes link to show job seeker' do
       expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
     end
   end
