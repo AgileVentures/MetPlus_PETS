@@ -27,7 +27,7 @@
               %th.strong Action
     %tbody
       - job_applications.each do |job_application|
-        %tr{id: "applications-#{job_application.id}"}
+        %tr{ id: "applications-#{job_application.id}" }
           - application_fields(application_type).each do |field|
             - case field
               - when :title
@@ -61,23 +61,26 @@
               - when :action
                 %td
                   - if job_application.active?
-                    = link_to "Accept", '#', class: "action_link btn btn-success", id: "accept_link",
-                      data: { "application-id" => "#{job_application.id}",
-                              "job-title" => "#{job_application.job.title}",
-                              "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
-                              "job-companyJobId" => "#{job_application.job.company_job_id}",
-                              "action" => "#acceptModal" }
-                    = link_to "Reject", '#', class: "action_link btn btn-warning",id: "reject_link",
-                      data: { "application-id" => "#{job_application.id}",
-                              "job-id" => "#{job_application.job.id}",
-                              "job-title" => "#{job_application.job.title}",
-                              "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
-                              "job-companyJobId" => "#{job_application.job.company_job_id}",
-                              "action" => "#rejectModal" }
+                    = link_to "Accept", '#', class: "action_link btn btn-success", 
+                              id: "accept_link",
+                              data: { "application-id" => "#{job_application.id}",
+                                      "job-title" => "#{job_application.job.title}",
+                                      "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
+                                      "job-companyJobId" => "#{job_application.job.company_job_id}",
+                                      "action" => "#acceptModal" }
+                    = link_to "Reject", '#', class: "action_link btn btn-warning",
+                              id: "reject_link",
+                              data: { "application-id" => "#{job_application.id}",
+                                      "job-id" => "#{job_application.job.id}",
+                                      "job-title" => "#{job_application.job.title}",
+                                      "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
+                                      "job-companyJobId" => "#{job_application.job.company_job_id}",
+                                      "action" => "#rejectModal" }
                   - else
-                    = link_to "#{job_application.status}",'#',  class: "btn btn-default disabled"
+                    = link_to "#{job_application.status}", '#',
+                              class: "btn btn-default disabled"
 
   = will_paginate job_applications, param_name: 'applications_page',
-                               params: {controller: 'job_applications',
-                                        action: 'list',
-                                        type: application_type}
+                                    params: { controller: 'job_applications',
+                                              action: 'list',
+                                              type: application_type }
