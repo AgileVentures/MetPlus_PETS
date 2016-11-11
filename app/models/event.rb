@@ -12,20 +12,20 @@ class Event
   end
 
   EVT_TYPE = { JS_REGISTER:    'js_registered',
-              COMP_REGISTER:  'company_registered',
-              COMP_APPROVED:  'company_registration_approved',
-              COMP_DENIED:    'company_registration_denied',
-              JS_APPLY:       'jobseeker_applied',
-              JD_APPLY:       'job_applied_by_job_developer',
-              OTHER_JD_APPLY: 'job_applied_by_other_job_developer',
-              APP_ACCEPTED:   'job_application_accepted',
-              APP_REJECTED:   'job_application_rejected',
-              JOB_POSTED:     'job_posted',
-              JOB_REVOKED:    'job_revoked',
-              JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
-              CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
-              JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
-              CM_SELF_ASSIGN_JS: 'cm_self_assigned_js'}
+               COMP_REGISTER:  'company_registered',
+               COMP_APPROVED:  'company_registration_approved',
+               COMP_DENIED:    'company_registration_denied',
+               JS_APPLY:       'jobseeker_applied',
+               JD_APPLY:       'job_applied_by_job_developer',
+               OTHER_JD_APPLY: 'job_applied_by_other_job_developer',
+               APP_ACCEPTED:   'job_application_accepted',
+               APP_REJECTED:   'job_application_rejected',
+               JOB_POSTED:     'job_posted',
+               JOB_REVOKED:    'job_revoked',
+               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
+               CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
+               JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
+               CM_SELF_ASSIGN_JS: 'cm_self_assigned_js'}
 
   # Add events as required below.  Each event may have business rules around
   # 1) who is to be notified of the event occurence, and/or 2) task(s)
