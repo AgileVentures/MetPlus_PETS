@@ -129,23 +129,23 @@ Background: data is added to database
     Then I want to apply to "software developer" for "Seeker, John"
     But I cannot find "Seeker, John" from my job seekers list
 
-
-  @javascript
-  Scenario: Apply for a Job Seeker that I am not the assigned Job Developer
-    When I am in Assigned Job Developer's browser
-    Given I am on the home page
-    And I login as "john@metplus.org" with password "qwerty123"
-
-    Then I am in Job Developer's browser
-    Given I am on the home page
-    And I login as "jane@metplus.org" with password "qwerty123"
-    Then I apply to "software developer" for my job seeker: "Seeker, John"
-    And I should see "Job is successfully applied for Seeker, John"
-
-    Then I am in Assigned Job Developer's browser
-    Then "john@metplus.org" should receive an email with subject "Job applied by other job developer"
-    When "john@metplus.org" opens the email
-    Then they should see "Jane Jones" in the email body
-    Then they should see "has submitted an application on behalf of Seeker, John to the job:" in the email body
-    Then they should see "software developer" in the email body
-    Then they should see "in company: Widgets Inc." in the email body
+# Commented this test because currently there is no way
+# to apply for a js that the JD is not the assigned one
+#  @javascript
+#  Scenario: Apply for a Job Seeker that I am not the assigned Job Developer
+#    When I am in Assigned Job Developer's browser
+#    Given I am on the home page
+#    And I login as "john@metplus.org" with password "qwerty123"
+#
+#    Then I am in Job Developer's browser
+#    Given I am on the home page
+#    And I login as "john@metplus.org" with password "qwerty123"
+#    Then I apply to "software developer" for my job seeker: "Seeker, John"
+#    And I should see "Job is successfully applied for Seeker, John"
+#
+#    Then "jane@metplus.org" should receive an email with subject "Job applied by other job developer"
+#    When "jane@metplus.org" opens the email
+#    Then they should see "Jane Jones" in the email body
+#    Then they should see "has submitted an application on behalf of Seeker, John to the job:" in the email body
+#    Then they should see "software developer" in the email body
+#    Then they should see "in company: Widgets Inc." in the email body
