@@ -2,7 +2,7 @@
 
 .col-sm-offset-1.col-sm-10
   .pull-right#job-show-links-id
-    - if pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency)
+    - if pets_user && (pets_user.is_a?(CompanyPerson) || pets_user.is_job_developer?(current_agency))
       - if @job.status == "active"
         = render partial: 'revoke_modal'
         = link_to "Revoke", '#', id: 'revoke_link',
