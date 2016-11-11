@@ -1,2 +1,20 @@
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+
+AllCops:
+  Exclude:
+    - 'tmp/**/*'
+  TargetRubyVersion: 2.3
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/DotPosition:
+  Description: 'Checks the position of the dot in multi-line method call'
+  EnforcedStyle: leading
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 90
