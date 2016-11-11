@@ -237,15 +237,15 @@ class JobsController < ApplicationController
   end
 
   def job_params
-    params.require(:job).permit(:description, 
-      :shift, :company_job_id,
-      :fulltime, :company_id, 
-      :title, :address_id,
-      :company_person_id,
-      job_skills_attributes:
-      [
-        :id, :_destroy, :skill_id,
-        :required, :min_years, :max_years
-      ])
+    params.require(:job).permit(:description,
+                                :shift, :company_job_id,
+                                :fulltime, :company_id,
+                                :title, :address_id,
+                                :company_person_id,
+                                job_skills_attributes:
+                                [
+                                  :id, :_destroy, :skill_id,
+                                  :required, :min_years, :max_years
+                                ])
   end
 end
