@@ -45,27 +45,39 @@ RSpec.describe JobApplicationsController, type: :controller do
                                            job_seeker: job_seeker)
     end
 
+    describe 'find_application' do
+      before(:each) do
+        @company_admin = FactoryGirl.create(:company_admin, company: company)
+        sign_in @company_admin
+      end
+      context 'Application not found' do
+        it 'shows a flash[:alert]' do
+          get :show, id: anything
+          expect(flash[:alert]).to eq 'Job Application Entry not found.'
+        end
+      end
+      context 'Application found' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it 'finds application' do
+          get :show, id: valid_application
+          expect(assigns(:job_application)).to eq valid_application
+        end
+      end
+    end
     describe 'authorized access' do
       context 'company admin' do
         before(:each) do
           @company_admin = FactoryGirl.create(:company_admin, company: company)
           sign_in @company_admin
         end
-        context 'Invalid Request' do
-          it 'shows a flash[:alert]' do
-            get :show, id: anything
-            expect(flash[:alert]).to eq 'Job Application Entry not found.'
-          end
-        end
-
         context 'Invalid Job Application' do
           before(:each) do
             stub_cruncher_authenticate
             stub_cruncher_job_create
             patch :accept, id: invalid_application
-          end
-          it 'look for the invalid application' do
-            expect(assigns(:job_application)).to eq invalid_application
           end
           it 'show a flash[:alert]' do
             expect(flash[:alert]).to eq 'Invalid action on'\
@@ -364,22 +376,22 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:job1) { FactoryGirl.create(:job) }
     let(:job2) { FactoryGirl.create(:job) }
     let(:job3) { FactoryGirl.create(:job) }
-    let(:app1) do 
+    let(:app1) do
       FactoryGirl.create(:job_application,
-                               job: job1, job_seeker: job_seeker) 
+                         job: job1, job_seeker: job_seeker)
     end
-    let(:app2) do 
+    let(:app2) do
       FactoryGirl.create(:job_application,
-                               job: job2, job_seeker: job_seeker) 
+                         job: job2, job_seeker: job_seeker)
     end
-    let(:app3) do 
+    let(:app3) do
       FactoryGirl.create(:job_application,
-                               job: job3, job_seeker: job_seeker) 
+                         job: job3, job_seeker: job_seeker)
     end
-    let(:app4) do 
+    let(:app4) do
       FactoryGirl.create(:job_application,
-                               job: job3,
-                               job_seeker: FactoryGirl.create(:job_seeker))
+                         job: job3,
+                         job_seeker: FactoryGirl.create(:job_seeker))
     end
     before(:each) do
       stub_cruncher_authenticate
@@ -397,4 +409,3 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
   end
 end
-
