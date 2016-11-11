@@ -188,7 +188,7 @@ class JobsController < ApplicationController
         Event.create(:JD_APPLY, @job_app)
         flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
       else
-        flash[:alert] = 'Invalid application: You are not permitted to apply' \
+        flash[:alert] = 'Invalid application: You are not permitted to apply ' \
                         "for #{@job_seeker.full_name}"
       end
     else
@@ -218,7 +218,7 @@ class JobsController < ApplicationController
   #   the database is violated
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
     flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)}" \
-                    'has already applied to this job.'
+                    ' has already applied to this job.'
     redirect_to job_path(@job)
   end
 
