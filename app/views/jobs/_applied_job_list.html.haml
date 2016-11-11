@@ -1,6 +1,6 @@
 -# partial for job applications
 - if job_applications.empty?
-  %span(style='padding-left: 10px;') None
+  %span{ style: 'padding-left: 10px;' } None
 - else
   %table.table.table-hover
     %thead
@@ -43,7 +43,7 @@
               - when :applied_at
                 %td
                   - applied_at = job_application.status_change_time(:active)
-                  = "#{time_ago_in_words(applied_at)} ago"
+                  "#{time_ago_in_words(applied_at)} ago"
               - when :status
                 %td
                   = status_desc(job_application)
@@ -57,11 +57,11 @@
               - when :updated_at
                 %td
                   - applied_at = job_application.status_change_time(:active)
-                  = "#{time_ago_in_words(applied_at, )} ago"
+                  "#{time_ago_in_words(applied_at, )} ago"
               - when :action
                 %td
                   - if job_application.active?
-                    = link_to "Accept", '#', class: "action_link btn btn-success", 
+                    = link_to "Accept", '#', class: "action_link btn btn-success",
                               id: "accept_link",
                               data: { "application-id" => "#{job_application.id}",
                                       "job-title" => "#{job_application.job.title}",

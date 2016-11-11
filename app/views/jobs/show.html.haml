@@ -1,9 +1,9 @@
 - provide(:title, @job.title)
 
-%div{ class: "col-sm-offset-1 col-sm-10" }
-  %div{ class: "pull-right", id: "job-show-links-id" }
-    - if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency))
-      - if @job.status == "active" 
+.col-sm-offset-1.col-sm-10
+  .pull-right#job-show-links-id
+    - if pets_user.is_a?(CompanyPerson) or pets_user.is_job_developer?(current_agency)
+      - if @job.status == "active"
         = render partial: 'revoke_modal'
         = link_to "Revoke", '#', id: 'revoke_link',
                   data: { "job-id" => "#{@job.id}",
@@ -42,7 +42,6 @@
               simply edit your profile by clicking on this icon:
               %i.fa.fa-pencil-square-o.fa-1
               on your home page, and upload the revised résumé.
-                
       - else
         = link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
                   data: { :toggle => 'modal',
@@ -52,8 +51,8 @@
   - if pets_user.is_a?(CompanyPerson) && (pets_user.company == @job.company)
     %h3
       Applications for this Job
-      
     = render partial: 'job_applications/accept_modal'
     = render partial: 'job_applications/reject_modal'
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job', @job) } }
+
