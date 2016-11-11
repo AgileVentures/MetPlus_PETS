@@ -13,4 +13,4 @@
   = render partial: 'job_applications/accept_modal'
   = render partial: 'job_applications/reject_modal'
   .pagination-div{id: "applications-#{@application_type}",
-                  data: {url: applications_list_path(@job, @application_type)}}
+                  data: {url: list_applications_path(@application_type, @job)}}

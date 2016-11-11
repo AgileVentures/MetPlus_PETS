@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-
-  devise_for :users, :path_names => {:sign_up => "new", :sign_out => 'logout',
-                                     :sign_in => 'login' },
-                :controllers => { :invitations   => 'people_invitations',
-                                  :sessions      => 'users/sessions',
-                                  :confirmations => 'users/confirmations'}
+  devise_for :users, path_names: { sign_up: 'new', sign_out: 'logout',
+                                   sign_in: 'login' },
+                     controllers: { invitations: 'people_invitations',
+                                    sessions: 'users/sessions',
+                                    confirmations: 'users/confirmations' }
 
   devise_scope :user do
     match  '/login'   => 'users/sessions#new',        via: 'get'
@@ -14,7 +13,7 @@ Rails.application.routes.draw do
   # ----------------------- Agency Branches ----------------------------------
   # Agency admin can create a branch within the agency
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do
-    resources :branches,      only: [:create, :new]
+    resources :branches, only: [:create, :new]
   end
   # Agency admin can edit and delete a branch
   resources :branches, path: '/admin/branches',
@@ -24,16 +23,16 @@ Rails.application.routes.draw do
   # ----------------------- Agency People ------------------------------------
   # Agency admin can edit and delete an agency person
   resources :agency_people, path: '/admin/agency_people',
-                       only: [:show, :edit, :update, :destroy]
+                            only: [:show, :edit, :update, :destroy]
 
   resources :agency_people, only: [] do
     member do
       get :home
-      get :edit_profile,   to: 'agency_people#edit_profile'
+      get :edit_profile, to: 'agency_people#edit_profile'
       patch :update_profile, to: 'agency_people#update_profile'
       patch 'assign_job_seeker/:job_seeker_id/:agency_role',
-                        to: 'agency_people#assign_job_seeker',
-                        as: 'assign_job_seeker'
+            to: 'agency_people#assign_job_seeker',
+            as: 'assign_job_seeker'
     end
   end
 
@@ -44,10 +43,10 @@ Rails.application.routes.draw do
              'agency_people#list_js_jd', as: :list_js_jd_agency_people
 
   get 'agency_people/:id/list_js_without_jd/:people_type' =>
-              'agency_people#list_js_without_jd',as: :list_js_without_jd_agency_people
+              'agency_people#list_js_without_jd', as: :list_js_without_jd_agency_people
 
   get 'agency_people/:id/list_js_without_cm/:people_type' =>
-              'agency_people#list_js_without_cm',as: :list_js_without_cm_agency_people
+              'agency_people#list_js_without_cm', as: :list_js_without_cm_agency_people
 
   get 'agency_people/:id/my_js_as_jd' => 'agency_people#my_js_as_jd', as: :my_js_as_jd
 
@@ -56,7 +55,7 @@ Rails.application.routes.draw do
   # ----------------------- Company Registration -----------------------------
   # Only agency admin can edit, destroy and approve/deny company registration
   resources :company_registrations, path: 'admin/company_registrations',
-                                only: [:edit, :update, :destroy, :show] do
+                                    only: [:edit, :update, :destroy, :show] do
     patch 'approve', on: :member, as: :approve
     patch 'deny',    on: :member, as: :deny
   end
@@ -79,7 +78,7 @@ Rails.application.routes.draw do
   # ----------------------- Company People -----------------------------------
   # Company admin (and agency admin) can edit and delete a company person
   resources :company_people, path: '/company_admin/company_people',
-                       only: [:show, :edit, :update, :destroy]
+                             only: [:show, :edit, :update, :destroy]
 
   resources :company_people, only: [] do
     member do
@@ -88,7 +87,6 @@ Rails.application.routes.draw do
       get 'home', as: :home
     end
   end
-
 
   # --------------------------------------------------------------------------
 
@@ -123,15 +121,13 @@ Rails.application.routes.draw do
 
   get 'company/home', path: '/company/:id'
 
-# ------------------------------ Jobs ----------------------------------------
+  # ------------------------------ Jobs ----------------------------------------
   get 'jobs/list/:job_type'         => 'jobs#list',   as: :list_jobs
   get 'jobs/:job_id/apply/:user_id' => 'jobs#apply',  as: :apply_job
   get 'jobs/list_search_jobs'       => 'jobs#list_search_jobs',
-                                        as: :list_search_jobs
+      as: :list_search_jobs
   get 'jobs/update_addresses'       => 'jobs#update_addresses',
-                                        as: :update_addresses
-  get 'jobs/:id/applications_list/:application_type'  =>
-                'jobs#applications_list', as: :applications_list
+      as: :update_addresses
 
   resources :jobs do
     get 'applications', on: :member, as: :applications
@@ -140,28 +136,27 @@ Rails.application.routes.draw do
   # --------------------------------------------------------------------------
 
   # --------------------------- Job Applications -----------------------------
-  patch 'job_applications/:id/accept'    => 'job_applications#accept',
-                                             as: :accept_application
-  patch 'job_applications/:id/reject'    =>  'job_applications#reject',
-                                             as: :reject_application
-  get 'job_applications/:id'             => 'job_applications#show',
-                                             as: :application
-  get 'job_applications/:type/:entity_id'=> 'job_applications#list', 
-                                             as: :list_applications
+  patch 'job_applications/:id/accept' => 'job_applications#accept',
+        as: :accept_application
+  patch 'job_applications/:id/reject' => 'job_applications#reject',
+        as: :reject_application
+  get 'job_applications/:id' => 'job_applications#show',
+      as: :application
+  get 'job_applications/:type/:entity_id' => 'job_applications#list',
+      as: :list_applications
   # --------------------------------------------------------------------------
 
   # ---------------------------- Job Seekers ---------------------------------
   resources :job_seekers do
-     get 'home', on: :member, as: :home
-     get 'match_jobs', on: :member, as: :match_jobs
-     get 'list_match_jobs', on: :member, as: :list_match_jobs
+    get 'home', on: :member, as: :home
+    get 'match_jobs', on: :member, as: :match_jobs
+    get 'list_match_jobs', on: :member, as: :list_match_jobs
   end
 
   get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
   # --------------------------------------------------------------------------
 
-
-   # The priority is based upon order of creation: first created -> highest priority.
+  # The priority is based upon order of creation: first created -> highest priority.
 
   # ----------------------- end of customizations ------------------------------
   # The priority is based upon order of creation: first created -> highest priority.
@@ -178,26 +173,24 @@ Rails.application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-=begin
-  resources :main
-  resources :user do
-    collection do
-      post 'login'
-      get 'login'
-      get 'recover'
-    end
-    member do
-      get 'activate' => 'user#activate', as: :activate
-    end
-    #member do
-    #  get 'new'
-    #  post 'create'
-    #  get 'edit'
-    #  get 'show'
-    #end
-  end
-  resources :jobseeker, controller: 'user'
-=end
+  #   resources :main
+  #   resources :user do
+  #     collection do
+  #       post 'login'
+  #       get 'login'
+  #       get 'recover'
+  #     end
+  #     member do
+  #       get 'activate' => 'user#activate', as: :activate
+  #     end
+  #     #member do
+  #     #  get 'new'
+  #     #  post 'create'
+  #     #  get 'edit'
+  #     #  get 'show'
+  #     #end
+  #   end
+  #   resources :jobseeker, controller: 'user'
   # Example resource route with options:
   #   resources :products do
   #     member do
