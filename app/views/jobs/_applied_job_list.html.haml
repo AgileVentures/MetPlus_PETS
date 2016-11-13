@@ -21,8 +21,6 @@
               %th.strong Name
             - when :js_status
               %th.strong Job Seeker Status
-            - when :applied_at
-              %th.strong Applied
             - when :action
               %th.strong Action
     %tbody
@@ -32,8 +30,7 @@
             - case field
               - when :title
                 %td
-                  = link_to job_application.job.title,
-                            job_path(job_application.job)
+                  = link_to job_application.job.title, job_path(job_application.job)
               - when :description
                 %td
                   = truncate(job_application.job.description, length: 200)
@@ -54,10 +51,6 @@
               - when :js_status
                 %td
                   = job_application.job_seeker.job_seeker_status.short_description
-              - when :updated_at
-                %td
-                  - applied_at = job_application.status_change_time(:active)
-                  "#{time_ago_in_words(applied_at, )} ago"
               - when :action
                 %td
                   - if job_application.active?
