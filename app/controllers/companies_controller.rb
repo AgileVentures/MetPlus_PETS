@@ -6,17 +6,18 @@ class CompaniesController < ApplicationController
   before_action :user_logged!
 
   def show
+    self.action_description= "show the company"
+    authorize @company
     @company_admins = Company.company_admins(@company)
     @people_type    = 'company-all'
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
-    self.action_description= "show the company"
-    authorize @company
+    
   end
 
   def destroy
-    @admin_aa = determine_if_admin(pets_user)
     self.action_description= "destroy the company"
     authorize @company
+    @admin_aa = determine_if_admin(pets_user)
     @company.destroy
     flash[:notice] = "Company '#{@company.name}' deleted."
     redirect_to root_path
@@ -28,10 +29,10 @@ class CompaniesController < ApplicationController
   end
 
   def update
-    @company.assign_attributes(company_params)
     self.action_description= "update the company"
     authorize @company
-    if @company.valid?
+    @company.assign_attributes(company_params)
+      if @company.valid?
       @company.save
       flash[:notice] = "company was successfully updated."
       admin_aa, admin_ca = determine_if_admin(pets_user)
@@ -46,6 +47,8 @@ class CompaniesController < ApplicationController
   end
 
   def list_people
+    self.action_description= "view the people"
+    authorize @company
     raise 'Unsupported request' if not request.xhr?
 
     @people_type = params[:people_type] || 'my-company-all'
