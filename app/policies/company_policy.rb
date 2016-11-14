@@ -1,22 +1,37 @@
 # CompanyPolicy implementation
 class CompanyPolicy < ApplicationPolicy
   def edit?
-    user.is_agency_admin? record.agency or user.is_company_admin? record.company
-  end
+    company_admin?(user, record) or agency_admin?(user, record)
+   end
 
   def update?
     edit?
   end
 
   def destroy?
-    user.is_agency_admin? record.agency
+    agency_admin?(user, record)
   end
 
   def show?
-    user.is_agency_admin? record.agency or user.is_company_admin? record.company
+     edit?
   end
 
   def list_people?
-    user.is_agency_admin? record.agency or user.is_company_person? recode.company
+    company_admin?(user, record) or agency_admin?(user, record) or user.is_company_person?(record)
   end
+
+  private
+  
+  def company_admin? user, record
+     user.is_a? CompanyPerson and user.is_company_admin? record
+  end
+ 
+  def agency_admin? user, record
+    User.is_agency_admin? user and (agency_admin_related_to_company? user,record)
+  end
+  
+  def agency_admin_related_to_company? admin, company
+    admin.agency.companies.include? company
+  end
+
 end
