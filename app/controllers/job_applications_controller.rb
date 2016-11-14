@@ -69,7 +69,6 @@ class JobApplicationsController < ApplicationController
         resume_file.close
         resume_file.unlink
       end
-    end
   end
 
   private
