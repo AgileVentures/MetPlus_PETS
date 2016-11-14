@@ -8,25 +8,25 @@ module ServiceStubHelpers
     def stub_cruncher_authenticate
       stub_request(:post, CruncherService.service_url + '/authenticate')
         .to_return(body: '{"token": "12345"}', status: 200,
-                   headers: { 'Content-Type' => 'application/json' })
+                   headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_authenticate_error
-      stub_request(:post, CruncherService.service_url + '/authenticate').
-          to_raise(RestClient::Unauthorized)
+      stub_request(:post, CruncherService.service_url + '/authenticate')
+        .to_raise(RestClient::Unauthorized)
     end
 
     def stub_cruncher_file_upload
       stub_request(:post, CruncherService.service_url + '/resume/upload')
         .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
-                   headers: { 'Content-Type' => 'application/json' })
+                   headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_file_upload_retry_auth
       stub_request(:post, CruncherService.service_url + '/resume/upload')
         .to_raise(RestClient::Unauthorized).then
         .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
-                   headers: { 'Content-Type' => 'application/json' })
+                   headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_file_upload_error
@@ -37,14 +37,14 @@ module ServiceStubHelpers
     def stub_cruncher_file_download(testfile)
       file = fixture_file_upload(testfile)
 
-      stub_request(:get, /#{CruncherService.service_url + "/resume/"}\d+/)
+      stub_request(:get, %r{#{CruncherService.service_url}/resume/\d+})
         .to_return(body: file.read, status: 200,
                    headers: { 'Content-Disposition' =>
                         'inline; filename="Admin-Assistant-Resume.pdf"' })
     end
 
     def stub_cruncher_file_download_notfound
-      stub_request(:get, CruncherService.service_url + '/resume/2')
+      stub_request(:get, %r{#{CruncherService.service_url}/resume/\d+})
         .to_return(body: "{\"resultCode\":\"RESUME_NOT_FOUND\",
                             \"message\":\"Unable to find the user '2'\"}",
                    status: 200)
@@ -53,7 +53,7 @@ module ServiceStubHelpers
     def stub_cruncher_file_download_retry_auth(testfile)
       file = fixture_file_upload(testfile)
 
-      stub_request(:get, CruncherService.service_url + '/resume/1')
+      stub_request(:get, %r{#{CruncherService.service_url}/resume/\d+})
         .to_raise(RestClient::Unauthorized).then
         .to_return(body: file.read, status: 200,
                    headers: { 'Content-Disposition' =>
@@ -63,7 +63,7 @@ module ServiceStubHelpers
     def stub_cruncher_job_create
       stub_request(:post, CruncherService.service_url + '/job/create')
         .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
-                   headers: { 'Content-Type' => 'application/json' })
+                   headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_job_create_fail(result_code)
@@ -78,40 +78,48 @@ module ServiceStubHelpers
     end
 
     def stub_cruncher_job_update
-      stub_request(:patch, /#{CruncherService.service_url + "/job/"}\d+#{"/update"}/).
-          to_return(body: "{\"resultCode\":\"SUCCESS\"}", status: 200,
-          :headers => {'Content-Type'=> 'application/json'})
+      stub_request(:patch, %r{#{CruncherService.service_url}/job/\d+/update})
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
+                   headers: { 'Content-Type' => 'application/json' })
     end
 
     def stub_cruncher_job_update_fail(resultCode)
-      stub_request(:patch, /#{CruncherService.service_url + "/job/"}\d+#{"/update"}/).
-          to_return(body: "{\"resultCode\":\"#{resultCode}\"}" , status: 200,
-          :headers => {'Content-Type' => 'application/json'})
+      stub_request(:patch, %r{#{CruncherService.service_url}/job/\d+/update})
+        .to_return(body: "{\"resultCode\":\"#{resultCode}\"}", status: 200,
+                   headers: { 'Content-Type' => 'application/json' })
     end
-    
-    def stub_cruncher_match_jobs
-      body_json = JSON.generate(
-        'resultCode' => 'SUCCESS', 'message' => 'Success',
-        'jobs' => { 'matcher1' => [{ 'jobId' => '2', 'stars' => 3.8 },
-                                   { 'jobId' => '3', 'stars' => 4.7 },
-                                   { 'jobId' => '6', 'stars' => 3.2 }],
-                    'matcher2' => [{ 'jobId' => '8', 'stars' => 2.8 },
-                                   { 'jobId' => '9', 'stars' => 2.9 },
-                                   { 'jobId' => '6', 'stars' => 3.4 }] }
-      )
 
-      stub_request(:get, CruncherService.service_url + '/job/match/1')
+    def stub_cruncher_match_resume_and_job
+      body_json = JSON.generate('resultCode' => 'SUCCESS',
+                                'message' => 'Success',
+                                'stars' => { "NaiveBayes": 3.4,
+                                             "ExpressionCruncher": 2.3 })
+
+      url_regex = %r{#{CruncherService.service_url}/resume/\d+/compare/\d+}
+      stub_request(:get, url_regex)
         .to_return(body: body_json, status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
-    def stub_cruncher_no_match_jobs
-      body_json = JSON.generate(
-        'resultCode' => 'SUCCESS',
-        'message' => 'Success',
-        'jobs' => { 'matcher1' => [],
-                    'matcher2' => [] }
-      )
+    def stub_cruncher_match_resume_and_job_error
+      url_regex = %r{#{CruncherService.service_url}/resume/\d+/compare/\d+}
+      err = JSON.generate("resultCode": 'JOB_NOT_FOUND',
+                          "message": 'No job found with id: 1')
+      stub_request(:get, url_regex)
+        .to_raise(RestClient::ResourceNotFound.new(err))
+    end
+
+    def stub_cruncher_match_jobs
+      body_json = JSON.generate('resultCode' => 'SUCCESS',
+                                'message' => 'Success',
+                                'jobs' => { 'matcher1' =>
+                                        [{ 'jobId' => '2', 'stars' => 3.8 },
+                                         { 'jobId' => '3', 'stars' => 4.7 },
+                                         { 'jobId' => '6', 'stars' => 3.2 }],
+                                            'matcher2' =>
+                                        [{ 'jobId' => '8', 'stars' => 2.8 },
+                                         { 'jobId' => '9', 'stars' => 2.9 },
+                                         { 'jobId' => '6', 'stars' => 3.4 }] })
 
       stub_request(:get, CruncherService.service_url + '/job/match/1')
         .to_return(body: body_json, status: 200,
@@ -119,31 +127,43 @@ module ServiceStubHelpers
     end
 
     def stub_cruncher_match_jobs_fail(result_code)
-      stub_request(:get, CruncherService.service_url + '/job/match/1')
+      stub_request(:get, %r{#{CruncherService.service_url}/job/match/\d+})
         .to_return(body: "{\"resultCode\": \"#{result_code}\"}", status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
-    def stub_cruncher_match_resumes
-      body_json = JSON.generate(
-        'resultCode' => 'SUCCESS', 'message' => 'Success',
-        'resumes' => { 'matcher1' => [{ 'resumeId' => '2', 'stars' => 2.0 },
-                                      { 'resumeId' => '7', 'stars' => 4.9 },
-                                      { 'resumeId' => '5', 'stars' => 3.6 }],
-                       'matcher2' => [{ 'resumeId' => '8', 'stars' => 1.8 },
-                                      { 'resumeId' => '5', 'stars' => 3.8 },
-                                      { 'resumeId' => '6', 'stars' => 1.7 }] }
-      )
+    def stub_cruncher_no_match_jobs
+      body_json = JSON.generate('resultCode' => 'SUCCESS',
+                                'message' => 'Success',
+                                'jobs' => { 'matcher1' => [],
+                                            'matcher2' => [] })
 
-      stub_request(:get, CruncherService.service_url + '/resume/match/1')
+      stub_request(:get, %r{#{CruncherService.service_url}/job/match/\d+})
+        .to_return(body: body_json, status: 200,
+                   headers: { 'Content-Type': 'application/json' })
+    end
+
+    def stub_cruncher_match_resumes
+      body_json = JSON.generate('resultCode' => 'SUCCESS',
+                                'message' => 'Success',
+                                'resumes' => { 'matcher1' =>
+                                    [{ 'resumeId' => '2', 'stars' => 2.0 },
+                                     { 'resumeId' => '7', 'stars' => 4.9 },
+                                     { 'resumeId' => '5', 'stars' => 3.6 }],
+                                               'matcher2' =>
+                                    [{ 'resumeId' => '8', 'stars' => 1.8 },
+                                     { 'resumeId' => '5', 'stars' => 3.8 },
+                                     { 'resumeId' => '6', 'stars' => 1.7 }] })
+
+      stub_request(:get, %r{#{CruncherService.service_url}/resume/match/\d+})
         .to_return(body: body_json, status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_match_resumes_fail(resultCode)
-      stub_request(:get, CruncherService.service_url + '/resume/match/1').
-        to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status:200,
-        headers: {'Content-Type': 'application/json'})
+      stub_request(:get, CruncherService.service_url + '/resume/match/1')
+        .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
+                   headers: { 'Content-Type': 'application/json' })
     end
   end
 
@@ -159,7 +179,7 @@ module ServiceStubHelpers
                        \n  }
                     \n}"
       stub_request(:get,
-                   %r{^#{EmailValidateService.service_url}\/validate?.*})
+                   %r{^#{EmailValidateService.service_url}/validate?.*})
         .to_return(body: body_json)
     end
 
@@ -174,13 +194,13 @@ module ServiceStubHelpers
                        \n  }
                     \n}"
       stub_request(:get,
-                   %r{^#{EmailValidateService.service_url}\/validate?.*})
+                   %r{^#{EmailValidateService.service_url}/validate?.*})
         .to_return(body: body_json)
     end
 
     def stub_email_validate_error
       stub_request(:get,
-                   %r{^#{EmailValidateService.service_url}\/validate?.*})
+                   %r{^#{EmailValidateService.service_url}/validate?.*})
         .to_raise(RuntimeError)
     end
   end
