@@ -40,7 +40,7 @@
               - when :applied_at
                 %td
                   - applied_at = job_application.status_change_time(:active)
-                  "#{time_ago_in_words(applied_at)} ago"
+                  #{time_ago_in_words(applied_at)} ago
               - when :status
                 %td
                   = status_desc(job_application)
