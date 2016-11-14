@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe CompaniesController, type: :controller do
-  let(:company_admin) { FactoryGirl.create(:company_admin) }
-
+  let(:company)   { FactoryGirl.create(:company) }
+  let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+ 
   before(:each) do
     sign_in company_admin
   end
 
   describe "GET #show" do
-    let(:company)   { FactoryGirl.create(:company) }
     before(:each) do
       get :show, id: company
     end
@@ -25,8 +25,6 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe "GET #edit" do
 
-    let(:company)  { FactoryGirl.create(:company) }
-
     before(:each) do
       get :edit, id: company
     end
@@ -42,8 +40,7 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe 'GET #list_people' do
-    let(:company) { FactoryGirl.create(:company) }
-
+    
     let!(:cp1) { FactoryGirl.create(:company_admin,   company: company) }
     let!(:cp2) { FactoryGirl.create(:company_contact, company: company) }
     let!(:cp3) { FactoryGirl.create(:company_contact, company: company) }
@@ -66,8 +63,7 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe "PATCH #update" do
-    let(:company)  { FactoryGirl.create(:company) }
-
+   
     let(:hash_params) do
       company.attributes.merge(addresses_attributes:
                       {'0' => attributes_for(:address)})
