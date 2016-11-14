@@ -112,7 +112,8 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
     render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
-                                                   preview_mode: true }
+                                                   preview_mode: true,
+                                                   offer_download: false }
   end
 
   def destroy

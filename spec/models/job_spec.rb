@@ -154,6 +154,7 @@ RSpec.describe Job, type: :model do
 
     it 'fails with valid model but cruncher create failure' do
       stub_cruncher_job_create_fail('JOB_ID_EXISTS')
+      stub_cruncher_job_update_fail('JOB_NOT_FOUND')
 
       job = FactoryGirl.build(:job)
 
@@ -165,6 +166,7 @@ RSpec.describe Job, type: :model do
 
     it 'fails when cruncher authorization fails' do
       stub_cruncher_authenticate_error
+      CruncherService.auth_token = nil # reset class var auth_token
 
       job = FactoryGirl.build(:job)
 
@@ -214,6 +216,7 @@ RSpec.describe Job, type: :model do
 
       # Stub for auth error here (after job create, before update)
       stub_cruncher_authenticate_error
+      CruncherService.auth_token = nil # reset class var auth_token
 
       expect(job.save).to be false
       expect(job.errors.full_messages)
@@ -260,6 +263,7 @@ RSpec.describe Job, type: :model do
 
       # Stub for auth error here (after job create, before update)
       stub_cruncher_authenticate_error
+      CruncherService.auth_token = nil # reset class var auth_token
 
       expect(job.save).to be false
       expect(job.errors.full_messages)
