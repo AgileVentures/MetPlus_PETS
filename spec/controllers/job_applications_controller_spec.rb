@@ -32,12 +32,12 @@ end
 
 RSpec.describe JobApplicationsController, type: :controller do
   let(:company)       { FactoryGirl.create(:company) }
-  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:job)           { FactoryGirl.create(:job, company: company) }
   let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
   let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
   let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
+  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:invalid_application) do
     FactoryGirl.create(:job_application,
                        job: job, job_seeker: job_seeker2,
@@ -115,8 +115,8 @@ RSpec.describe JobApplicationsController, type: :controller do
             expect(flash[:info]).to eq 'Job application accepted.'
           end
           it 'redirect to the specific job application index page' do
-            expect(response).to redirect_to(applications_job_url(
-                                            valid_application.job))
+            expect(response)
+              .to redirect_to(applications_job_url(valid_application.job))
           end
         end
 
@@ -131,15 +131,14 @@ RSpec.describe JobApplicationsController, type: :controller do
             expect(flash[:notice]).to eq 'Job application rejected.'
           end
           it 'redirect to the specific job application index page' do
-            expect(response).to redirect_to(applications_job_url(
-                                            valid_application.job))
+            expect(response)
+              .to redirect_to(applications_job_url(valid_application.job))
           end
         end
       end
     end
 
     describe 'unauthorized access' do
-
       context 'Accept' do
         context 'not logged in' do
           context 'company_admin' do
@@ -380,8 +379,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
     let(:app4) do
       FactoryGirl.create(:job_application,
-                         job: job3,
-                         job_seeker: FactoryGirl.create(:job_seeker))
+                         job: job3, job_seeker: FactoryGirl.create(:job_seeker))
     end
     before(:each) do
       stub_cruncher_authenticate
