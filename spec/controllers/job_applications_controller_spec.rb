@@ -34,7 +34,6 @@ RSpec.describe JobApplicationsController, type: :controller do
   let(:company)       { FactoryGirl.create(:company) }
   let(:job)           { FactoryGirl.create(:job, company: company) }
   let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
-  let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
   let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
   let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
   let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
@@ -60,302 +59,300 @@ RSpec.describe JobApplicationsController, type: :controller do
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
   let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
 
-    describe 'find_application' do
-      before(:each) do
-        @company_admin = FactoryGirl.create(:company_admin, company: company)
-        sign_in @company_admin
+  describe 'find_application' do
+    before(:each) do
+      sign_in company_admin
+    end
+    context 'Application not found' do
+      it 'shows a flash[:alert]' do
+        get :show, id: anything
+        expect(flash[:alert]).to eq 'Job Application Entry not found.'
       end
-      context 'Application not found' do
-        it 'shows a flash[:alert]' do
-          get :show, id: anything
-          expect(flash[:alert]).to eq 'Job Application Entry not found.'
+    end
+    context 'Application found' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
+      it 'finds application' do
+        get :show, id: valid_application
+        expect(assigns(:job_application)).to eq valid_application
+      end
+    end
+  end
+  describe 'authorized access' do
+    context 'company admin' do
+      before(:each) do
+        sign_in company_admin
+      end
+      context 'Invalid Job Application' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+          patch :accept, id: invalid_application
+        end
+        it 'show a flash[:alert]' do
+          expect(flash[:alert]).to eq 'Invalid action on'\
+              ' inactive job application.'
+        end
+        it 'redirect to the specific job application index page' do
+          expect(response).to redirect_to(applications_job_url(
+                                            invalid_application.job
+          ))
         end
       end
-      context 'Application found' do
+
+      context 'Valid Job Application Accepted' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+          expect_any_instance_of(JobApplication).to receive(:accept)
+          patch :accept, id: valid_application
+        end
+        it 'show a flash[:info]' do
+          expect(flash[:info]).to eq 'Job application accepted.'
+        end
+        it 'redirect to the specific job application index page' do
+          expect(response)
+            .to redirect_to(applications_job_url(valid_application.job))
+        end
+      end
+
+      context 'Valid Job Application Rejected' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+          expect_any_instance_of(JobApplication).to receive(:reject)
+          patch :reject, id: valid_application
+        end
+        it 'show a flash[:info]' do
+          expect(flash[:notice]).to eq 'Job application rejected.'
+        end
+        it 'redirect to the specific job application index page' do
+          expect(response)
+            .to redirect_to(applications_job_url(valid_application.job))
+        end
+      end
+    end
+  end
+
+  describe 'unauthorized access' do
+    context 'Accept' do
+      context 'not logged in' do
+        context 'company_admin' do
+          let(:request) { patch :accept, id: company_admin }
+          it_behaves_like 'unauthenticated request'
+        end
+        context 'company_contact' do
+          let(:request) { patch :accept, id: company_contact }
+          it_behaves_like 'unauthenticated request'
+        end
+      end
+      context 'Job Seeker' do
         before(:each) do
           stub_cruncher_authenticate
           stub_cruncher_job_create
         end
-        it 'finds application' do
-          get :show, id: valid_application
-          expect(assigns(:job_application)).to eq valid_application
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :accept, id: valid_application }
+          let(:user) { job_seeker }
         end
       end
-    end
-    describe 'authorized access' do
-      context 'company admin' do
+      context 'Agency Admin' do
         before(:each) do
-          sign_in company_admin
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
-        context 'Invalid Job Application' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-            patch :accept, id: invalid_application
-          end
-          it 'show a flash[:alert]' do
-            expect(flash[:alert]).to eq 'Invalid action on'\
-                ' inactive job application.'
-          end
-          it 'redirect to the specific job application index page' do
-            expect(response).to redirect_to(applications_job_url(
-                                              invalid_application.job
-            ))
-          end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :accept, id: valid_application }
+          let(:user) { agency_admin }
         end
+      end
+      context 'Job Developer' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :accept, id: valid_application }
+          let(:user) { job_developer }
+        end
+      end
+      context 'Case Manager' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :accept, id: valid_application }
+          let(:user) { case_manager }
+        end
+      end
 
-        context 'Valid Job Application Accepted' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-            expect_any_instance_of(JobApplication).to receive(:accept)
-            patch :accept, id: valid_application
-          end
-          it 'show a flash[:info]' do
-            expect(flash[:info]).to eq 'Job application accepted.'
-          end
-          it 'redirect to the specific job application index page' do
-            expect(response)
-              .to redirect_to(applications_job_url(valid_application.job))
-          end
+      context 'Company Admin from another company' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
-
-        context 'Valid Job Application Rejected' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-            expect_any_instance_of(JobApplication).to receive(:reject)
-            patch :reject, id: valid_application
-          end
-          it 'show a flash[:info]' do
-            expect(flash[:notice]).to eq 'Job application rejected.'
-          end
-          it 'redirect to the specific job application index page' do
-            expect(response)
-              .to redirect_to(applications_job_url(valid_application.job))
-          end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :accept, id: valid_application }
+          let(:user) { company_admin2 }
+        end
+      end
+      context 'Company Contact from another company' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :accept, id: valid_application }
+          let(:user) { company_contact2 }
         end
       end
     end
-
-    describe 'unauthorized access' do
-      context 'Accept' do
-        context 'not logged in' do
-          context 'company_admin' do
-            let(:request) { patch :accept, id: company_admin }
-            it_behaves_like 'unauthenticated request'
-          end
-          context 'company_contact' do
-            let(:request) { patch :accept, id: company_contact }
-            it_behaves_like 'unauthenticated request'
-          end
+    context 'Reject' do
+      context 'not logged in' do
+        context 'company_admin' do
+          let(:request) { patch :reject, id: company_admin }
+          it_behaves_like 'unauthenticated request'
         end
-        context 'Job Seeker' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :accept, id: valid_application }
-            let(:user) { job_seeker }
-          end
-        end
-        context 'Agency Admin' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :accept, id: valid_application }
-            let(:user) { agency_admin }
-          end
-        end
-        context 'Job Developer' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :accept, id: valid_application }
-            let(:user) { job_developer }
-          end
-        end
-        context 'Case Manager' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :accept, id: valid_application }
-            let(:user) { case_manager }
-          end
-        end
-
-        context 'Company Admin from another company' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :accept, id: valid_application }
-            let(:user) { company_admin2 }
-          end
-        end
-        context 'Company Contact from another company' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :accept, id: valid_application }
-            let(:user) { company_contact2 }
-          end
+        context 'company_contact' do
+          let(:request) { patch :reject, id: company_contact }
+          it_behaves_like 'unauthenticated request'
         end
       end
-      context 'Reject' do
-        context 'not logged in' do
-          context 'company_admin' do
-            let(:request) { patch :reject, id: company_admin }
-            it_behaves_like 'unauthenticated request'
-          end
-          context 'company_contact' do
-            let(:request) { patch :reject, id: company_contact }
-            it_behaves_like 'unauthenticated request'
-          end
+      context 'Job Seeker' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
-        context 'Job Seeker' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :reject, id: valid_application }
-            let(:user) { job_seeker }
-          end
-        end
-        context 'Agency Admin' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :reject, id: valid_application }
-            let(:user) { agency_admin }
-          end
-        end
-        context 'Job Developer' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :reject, id: valid_application }
-            let(:user) { job_developer }
-          end
-        end
-        context 'Case Manager' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :reject, id: valid_application }
-            let(:user) { case_manager }
-          end
-        end
-
-        context 'Company Admin from another company' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :reject, id: valid_application }
-            let(:user) { company_admin2 }
-          end
-        end
-        context 'Company Contact from another company' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { patch :reject, id: valid_application }
-            let(:user) { company_contact2 }
-          end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :reject, id: valid_application }
+          let(:user) { job_seeker }
         end
       end
-      context 'Show' do
-        context 'not logged in' do
-          context 'company_admin' do
-            let(:request) { get :show, id: company_admin }
-            it_behaves_like 'unauthenticated request'
-          end
-          context 'company_contact' do
-            let(:request) { get :show, id: company_contact }
-            it_behaves_like 'unauthenticated request'
-          end
+      context 'Agency Admin' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
-        context 'Job Seeker' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { get :show, id: valid_application }
-            let(:user) { job_seeker }
-          end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :reject, id: valid_application }
+          let(:user) { agency_admin }
         end
-        context 'Agency Admin' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { get :show, id: valid_application }
-            let(:user) { agency_admin }
-          end
+      end
+      context 'Job Developer' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
-        context 'Job Developer' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { get :show, id: valid_application }
-            let(:user) { job_developer }
-          end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :reject, id: valid_application }
+          let(:user) { job_developer }
         end
-        context 'Case Manager' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { get :show, id: valid_application }
-            let(:user) { case_manager }
-          end
+      end
+      context 'Case Manager' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :reject, id: valid_application }
+          let(:user) { case_manager }
+        end
+      end
 
-        context 'Company Admin from another company' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { get :show, id: valid_application }
-            let(:user) { company_admin2 }
-          end
+      context 'Company Admin from another company' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
         end
-        context 'Company Contact from another company' do
-          before(:each) do
-            stub_cruncher_authenticate
-            stub_cruncher_job_create
-          end
-          it_behaves_like 'unauthorized' do
-            let(:request) { get :show, id: valid_application }
-            let(:user) { company_contact2 }
-          end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :reject, id: valid_application }
+          let(:user) { company_admin2 }
+        end
+      end
+      context 'Company Contact from another company' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { patch :reject, id: valid_application }
+          let(:user) { company_contact2 }
+        end
+      end
+    end
+    context 'Show' do
+      context 'not logged in' do
+        context 'company_admin' do
+          let(:request) { get :show, id: company_admin }
+          it_behaves_like 'unauthenticated request'
+        end
+        context 'company_contact' do
+          let(:request) { get :show, id: company_contact }
+          it_behaves_like 'unauthenticated request'
+        end
+      end
+      context 'Job Seeker' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { get :show, id: valid_application }
+          let(:user) { job_seeker }
+        end
+      end
+      context 'Agency Admin' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { get :show, id: valid_application }
+          let(:user) { agency_admin }
+        end
+      end
+      context 'Job Developer' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { get :show, id: valid_application }
+          let(:user) { job_developer }
+        end
+      end
+      context 'Case Manager' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { get :show, id: valid_application }
+          let(:user) { case_manager }
+        end
+      end
+
+      context 'Company Admin from another company' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { get :show, id: valid_application }
+          let(:user) { company_admin2 }
+        end
+      end
+      context 'Company Contact from another company' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+        end
+        it_behaves_like 'unauthorized' do
+          let(:request) { get :show, id: valid_application }
+          let(:user) { company_contact2 }
         end
       end
     end
@@ -398,6 +395,8 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'GET download_resume' do
+    let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
