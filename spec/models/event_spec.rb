@@ -144,13 +144,15 @@ RSpec.describe Event, type: :model do
     end
 
     describe 'Job Developer not the primary JD' do
-      it 'trigger message to the primary JD' do
+      it 'trigger message to the JS' do
         Event.create(:JD_APPLY, application_diff_jd)
         expect(Pusher).to have_received(:trigger)
           .with('pusher_control',
-                'job_applied_by_job_developer',
+                'job_applied_by_other_job_developer',
                 job_id:  job_wo_cp.id,
-                js_user_id: job_seeker.user.id)
+                js_user_id: job_seeker.user.id,
+                jd_id: job_developer1.id,
+                jd_name: job_developer1.full_name(last_name_first: false))
       end
 
       it 'sends event notification email to Primary Job Developer' do

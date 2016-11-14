@@ -155,10 +155,6 @@ class Event
     #    Notify job seeker
     #    Notify company contact associated with the job
     #    Create task for 'job application' (application to be reviewed)
-    Pusher.trigger('pusher_control',
-                   EVT_TYPE[:JD_APPLY],
-                   {job_id:  evt_obj.job.id,
-                    js_user_id: evt_obj.job_seeker.user.id})
 
     job_developer = evt_obj.try(:job_developer) || evt_obj.job_seeker.job_developer
 
@@ -172,6 +168,17 @@ class Event
                                     evt_obj.job_seeker,
                                     evt_obj.job_seeker.job_developer,
                                     job_developer, evt_obj.job)
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:OTHER_JD_APPLY],
+                     {job_id:  evt_obj.job.id,
+                      js_user_id: evt_obj.job_seeker.user.id,
+                      jd_id: job_developer.id,
+                      jd_name: job_developer.full_name(last_name_first: false)})
+    else
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JD_APPLY],
+                     {job_id:  evt_obj.job.id,
+                      js_user_id: evt_obj.job_seeker.user.id})
     end
 
     if evt_obj.job.company_person
