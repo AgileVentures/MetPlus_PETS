@@ -170,10 +170,10 @@ class Event
                                     job_developer, evt_obj.job)
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:OTHER_JD_APPLY],
-                     { job_id:  evt_obj.job.id,
-                       js_user_id: evt_obj.job_seeker.user.id,
-                       jd_id: job_developer.id,
-                       jd_name: job_developer.full_name(last_name_first: false) })
+                     job_id:  evt_obj.job.id,
+                     js_user_id: evt_obj.job_seeker.user.id,
+                     jd_id: job_developer.id,
+                     jd_name: job_developer.full_name(last_name_first: false))
     else
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JD_APPLY],
