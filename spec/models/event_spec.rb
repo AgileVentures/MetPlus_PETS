@@ -35,7 +35,7 @@ RSpec.describe Event, type: :model do
   let(:evt_obj_jobpost) { evt_obj_jobpost_class.new(job, agency) }
 
   let(:application) { job.apply job_seeker }
-  let(:application_wo_cp) { job_wo_cp.apply job_seeker}
+  let(:application_wo_cp) { job_wo_cp.apply job_seeker }
   let(:application_diff_jd) do
     app = job_wo_cp.apply job_seeker
     app.job_developer = job_developer1
