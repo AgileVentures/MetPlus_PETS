@@ -105,7 +105,3 @@ RSpec.describe CompanyPolicy do
 
 end
 
-
-
-
-  
