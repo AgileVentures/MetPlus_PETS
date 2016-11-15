@@ -131,6 +131,7 @@ Rails.application.routes.draw do
 
   resources :jobs do
     patch 'revoke', on: :member, as: :revoke
+    get 'match_resume', on: :member, as: :match_resume
   end
   # --------------------------------------------------------------------------
 

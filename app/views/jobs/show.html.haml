@@ -2,26 +2,31 @@
 
 .col-sm-offset-1.col-sm-10
   .pull-right#job-show-links-id
-    - if pets_user && (pets_user.is_a?(CompanyPerson) || pets_user.is_job_developer?(current_agency))
-      - if @job.status == "active"
+    - if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or            |
+                                 pets_user.is_job_developer?(current_agency)) |
+      - if @job.status == 'active'
         = render partial: 'revoke_modal'
-        = link_to "Revoke", '#', id: 'revoke_link',
-                  data: { "job-id" => "#{@job.id}",
-                          "job-title" => "#{@job.title}",
-                          "job-companyJobId" => "#{@job.company_job_id}" }
+        = link_to 'Revoke', '#', id: 'revoke_link',
+                 data: { 'job-id' => '#{@job.id}',
+                         'job-title' => '#{@job.title}',
+                         'job-companyJobId' => '#{@job.company_job_id}' }
         |
-      = link_to "Edit Job", edit_job_path(@job)
+      = link_to 'Edit Job', edit_job_path(@job)
       |
-    = link_to "Return To Jobs", jobs_path
+    = link_to 'Return To Jobs', jobs_path
     |
-    = link_to "Send this job to a friend", '#'
+    - msg = 'This will match your résumé against all active jobs and may ' + |
+            'take a while.     Do you want to proceed?'   |
+    = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
+              data: { confirm: msg }
 
   .clearfix
 
   = render partial: 'job_info'
 
-  %div{ id: 'apply_job' }
-  - if pets_user && @job.status == "active"
+
+  #apply_job
+  - if pets_user && @job.status == 'active'
     - if pets_user.is_job_developer?(current_agency)
       = link_to 'Click Here to Submit an Application for Job Seeker', '#',
                 class: 'col-sm-offset-4', id: 'jd-apply-button',
@@ -31,6 +36,7 @@
                locals: { job: @job }
       = render partial: '/job_applications/preview_modal',
                locals: { job: @job }
+
     - elsif pets_user.is_job_seeker?
       - if @job.last_application_by_job_seeker(pets_user)
         .panel.panel-primary.center-aligned-div
@@ -38,7 +44,7 @@
             %h5
               You already have an application submitted for this job.
             %h5
-              If you want the employer to see a revised version of your résumé, 
+              If you want the employer to see a revised version of your résumé,
               simply edit your profile by clicking on this icon:
               %i.fa.fa-pencil-square-o.fa-1
               on your home page, and upload the revised résumé.
@@ -55,4 +61,3 @@
     = render partial: 'job_applications/reject_modal'
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job', @job) } }
-
