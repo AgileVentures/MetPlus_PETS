@@ -126,6 +126,7 @@ class JobsController < ApplicationController
     @job_type = params[:job_type] || 'my-company-all'
 
     @jobs = []
+    @jobs = display_jobs @job_type
     case @job_type
     when 'my-company-all'
       render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
