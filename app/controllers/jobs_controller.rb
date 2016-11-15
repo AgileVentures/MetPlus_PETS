@@ -3,7 +3,7 @@ class JobsController < ApplicationController
 
   before_action :find_job,	only: [:show, :edit, :update, :destroy, :revoke]
   before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy]
-  before_action :is_right_company_person, only: [:edit, :destroy, :update]
+  before_action :right_company_person?, only: [:edit, :destroy, :update]
   before_action :user_logged!, only: [:apply]
 
   helper_method :job_fields

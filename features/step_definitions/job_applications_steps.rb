@@ -118,11 +118,6 @@ And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
 
-Then(/^I should get a download file for resume "(.*?)"$/) do |_resume|
-  page.driver.response.headers['Content-Disposition']
-      .should include("filename=\"#{filename}\"")
-end
-
 Then(/^I should get a download with the filename "([^\"]*)"$/) do |filename|
   expect(page.driver.response_headers['Content-Disposition'])
     .to include("attachment; filename=\"#{filename}\"")
