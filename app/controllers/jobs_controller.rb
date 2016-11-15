@@ -155,25 +155,28 @@ class JobsController < ApplicationController
     end
 
     if pets_user == @job_seeker # to be removed once authorize is set properly
-      apply_job; return if performed?
+      apply_job
+      return if performed?
       Event.create(:JS_APPLY, @job_app)
       render(:apply) && return
     end
 
-    if pets_user == @job_seeker.job_developer # to be removed once authorize is set properly
+    if pets_user == @job_seeker.job_developer
+      # ^^ conditional to be removed once authorize is set properly
       if @job_seeker.consent
-        apply_job; return if performed?
+        apply_job
+        return if performed?
         Event.create(:JD_APPLY, @job_app)
         flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
-        redirect_to job_path(@job)
       else
-        flash[:alert] = "Invalid application: You are not permitted to apply for #{@job_seeker.full_name}"
-        redirect_to job_path(@job)
+        flash[:alert] = 'Invalid application: You are not permitted to apply ' \
+                        "for #{@job_seeker.full_name}"
       end
     else
-      flash[:alert] = 'Invalid application: You are not the Job Developer for this job seeker'
-      redirect_to job_path(@job)
+      flash[:alert] = 'Invalid application: You are not the Job Developer ' \
+                      'for this job seeker'
     end
+    redirect_to job_path(@job)
   end
 
   def revoke
@@ -192,9 +195,11 @@ class JobsController < ApplicationController
   def apply_job
     @job_app = @job.apply @job_seeker
   # ActiveRecord::RecordInvalid is raised when validation at model level fails
-  # ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+  # ActiveRecord::RecordNotUnique is raised when unique index constraint on
+  #   the database is violated
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
-    flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)} has already applied to this job."
+    flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)}" \
+                    ' has already applied to this job.'
     redirect_to job_path(@job)
   end
 
@@ -223,12 +228,11 @@ class JobsController < ApplicationController
     end
   end
 
-  def is_right_company_person
+  def right_company_person?
     if @cp_or_jd.is_a?(CompanyPerson)
-      unless @cp_or_jd.company == @job.company
-        flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
-        redirect_to jobs_url
-      end
+      return if @cp_or_jd.company == @job.company
+      flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
+      redirect_to jobs_url
     end
   end
 
@@ -237,15 +241,11 @@ class JobsController < ApplicationController
   end
 
   def job_params
-    params.require(:job).permit(:description,
-                                :shift, :company_job_id,
-                                :fulltime, :company_id,
-                                :title, :address_id,
+    params.require(:job).permit(:description, :shift, :company_job_id,
+                                :fulltime, :company_id, :title, :address_id,
                                 :company_person_id,
-                                job_skills_attributes:
-                                [
-                                  :id, :_destroy, :skill_id,
-                                  :required, :min_years, :max_years
-                                ])
+                                job_skills_attributes: [:id, :_destroy, :skill_id,
+                                                        :required, :min_years,
+                                                        :max_years])
   end
 end

@@ -25,4 +25,5 @@
         = "#{@job_application.job.title}"
         - if @job_application.status != 'active'
           %span{class: 'label label-info'}="#{@job_application.status}"
-    = render partial: 'job_seekers/info', locals: {job_seeker: @job_application.job_seeker}
+    = render partial: 'job_seekers/info', locals: {job_seeker: @job_application.job_seeker,
+                                                  offer_download: true}

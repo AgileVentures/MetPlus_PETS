@@ -36,7 +36,8 @@ ActionController::Base.allow_rescue = false
 begin
   DatabaseCleaner.strategy = :truncation
 rescue NameError
-  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
+  raise 'You need to add database_cleaner to your Gemfile ' \
+        '(in the :test group) if you wish to use it.'
 end
 
 # Turn off delaying emails
@@ -45,7 +46,8 @@ Delayed::Worker.delay_jobs = false
 # Allow non-mocked service calls to proceed:
 WebMock.allow_net_connect!
 
-# You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
+# You may also want to configure DatabaseCleaner to use different
+#   strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 #
 #   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
@@ -66,12 +68,13 @@ WebMock.allow_net_connect!
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 Capybara.default_max_wait_time = 5
-# see http://blog.pixarea.com/2013/02/locking-the-firefox-version-when-testing-rails-with-capybara-and-selenium/ for 
+# see http://blog.pixarea.com/2013/02/locking-the-firefox-version-when-testing-rails-with-capybara-and-selenium/ for
 # details on how to set this up
 Capybara.register_driver :selenium do |app|
   require 'selenium/webdriver'
-  Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_BINARY_PATH'] || Selenium::WebDriver::Firefox::Binary.path
-  Capybara::Selenium::Driver.new(app, :browser => :firefox)
+  Selenium::WebDriver::Firefox::Binary.path =
+    ENV['FIREFOX_BINARY_PATH'] || Selenium::WebDriver::Firefox::Binary.path
+  Capybara::Selenium::Driver.new(app, browser: :firefox)
 end
 
 Before '@selenium' do
@@ -86,16 +89,16 @@ if ENV['IN_BROWSER']
   # IN_BROWSER=true PAUSE=1 bundle exec cucumber
   Capybara.default_driver = :selenium
   AfterStep do
-    sleep (ENV['PAUSE'] || 0).to_i
+    sleep(ENV['PAUSE'] || 0).to_i
   end
 else
   # DEFAULT: headless tests with poltergeist/PhantomJS
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(
-        app,
-        window_size: [1280, 1024],
-        js_errors: false#,
-    #debug:       true
+      app,
+      window_size: [1280, 1024],
+      js_errors: false
+      # debug: true
     )
   end
   Capybara.javascript_driver = :poltergeist

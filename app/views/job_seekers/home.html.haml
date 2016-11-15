@@ -11,7 +11,7 @@
       Hide Your Information
 
   .col-sm-9
-    = render partial: 'info', locals: {job_seeker: @jobseeker}
+    = render partial: 'info', locals: {job_seeker: @jobseeker, offer_download: false}
 
 %h3 Your Applications
 .pagination-div{ id: "applications-#{@application_type}",

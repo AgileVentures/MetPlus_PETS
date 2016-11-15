@@ -59,7 +59,7 @@ var PusherControl = {
     channel.bind('job_application_accepted', function(data) {
       if (parseInt(Cookies('user_id')) === data.ap_user_id) {
         Notification.info_notification("Job Application: " +
-          "<a href='/job_applications/" + data.id + 
+          "<a href='/job_applications/" + data.id +
           "' target='_blank'>" + data.job_title + " by " +
           data.js_name + "</a>" + " is accepted.");
       }
