@@ -1,5 +1,5 @@
 And(/^I click "([^"]*)" link to job applications index page$/) do |job_title|
-  job = Job.find_by(title: "#{job_title}")
+  job = Job.find_by(title: job_title.to_s)
   find("a[href='/jobs/#{job.id}']").click
 end
 
@@ -11,7 +11,7 @@ end
 And(/^I click "([^"]*)" link to "([^"]*)'s" job application show page$/) do |email, _js_name|
   job_seeker = User.find_by_email(email).actable
   @job_app = JobApplication.find_by(job_seeker: job_seeker)
-  find("a[href='/job_applications/#{job_seeker.id}']").click
+  find("a[href='/job_applications/#{@job_app.id}']").click
 end
 
 And(/^I accept "([^"]*)" application$/) do |email|

@@ -85,7 +85,7 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 
-  def is_recent_for?(user)
+  def recent_for?(user)
     created_at > user.last_sign_in_at
   end
 
