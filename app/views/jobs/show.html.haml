@@ -7,9 +7,9 @@
       - if @job.status == 'active'
         = render partial: 'revoke_modal'
         = link_to 'Revoke', '#', id: 'revoke_link',
-                 data: { 'job-id' => '#{@job.id}',
-                         'job-title' => '#{@job.title}',
-                         'job-companyJobId' => '#{@job.company_job_id}' }
+                 data: { 'job-id' => "#{@job.id}",
+                         'job-title' => "#{@job.title}",
+                         'job-companyJobId' => "#{@job.company_job_id}" }
         |
       = link_to 'Edit Job', edit_job_path(@job)
       |
