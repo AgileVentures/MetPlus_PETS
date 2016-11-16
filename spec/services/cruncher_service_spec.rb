@@ -397,12 +397,12 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns error message if job not found' do
-        stub_cruncher_match_resume_and_job_error
+        stub_cruncher_match_resume_and_job_error(:no_job, 10_000)
 
         result = CruncherService.match_resume_and_job(1, 10_000)
 
         expect(result[:status]).to eq 'ERROR'
-        expect(result[:message]).to eq 'No job found with id: 1'
+        expect(result[:message]).to eq 'No job found with id: 10000'
       end
     end
   end

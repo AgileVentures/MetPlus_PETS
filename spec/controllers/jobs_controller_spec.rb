@@ -1029,25 +1029,30 @@ RSpec.describe JobsController, type: :controller do
     render_views
 
     let(:job_seeker)  { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
     let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let(:job)         { FactoryGirl.create(:job) }
-    let(:stars_str)   { "<div class=\"stars\"><i class=\"fa fa-star\"" \
-                        " aria-hidden=\"true\"></i><i class=\"fa fa-star\"" \
-                        " aria-hidden=\"true\"></i><i class=\"fa fa-star\"" \
-                        " aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\"" \
-                        " aria-hidden=\"true\"></i><i class=\"fa fa-star-o\"" \
-                        " aria-hidden=\"true\"></i></div>\n<br>\n3.4 stars\n" }
+    let(:stars_str)   do
+      '<div class="stars"><i class="fa fa-star"' \
+      ' aria-hidden="true"></i><i class="fa fa-star"' \
+      ' aria-hidden="true"></i><i class="fa fa-star"' \
+      ' aria-hidden="true"></i><i class="fa fa-star-half-o"' \
+      ' aria-hidden="true"></i><i class="fa fa-star-o"' \
+      " aria-hidden=\"true\"></i></div>\n<br>\n3.4 stars\n"
+    end
 
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
       stub_cruncher_file_upload
-      stub_cruncher_match_resume_and_job
-
-      xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
     end
 
     context 'happy path' do
+      before(:each) do
+        stub_cruncher_match_resume_and_job
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+      end
+
       it 'returns success status' do
         expect(response).to have_http_status(200)
       end
@@ -1058,9 +1063,33 @@ RSpec.describe JobsController, type: :controller do
 
     context 'sad path' do
       it 'returns 404 status when job seeker does not have resume' do
+        stub_cruncher_match_resume_and_job
 
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker2.id
+
+        expect(JSON.parse(response.body)['status']).to eq 404
+        expect(JSON.parse(response.body)['message']).to eq 'No résumé on file'
+      end
+
+      it 'returns 404 status when job not in Cruncher' do
+        stub_cruncher_match_resume_and_job_error(:no_job, job.id)
+
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+
+        expect(JSON.parse(response.body)['status']).to eq 404
+        expect(JSON.parse(response.body)['message'])
+          .to eq "No job found with id: #{job.id}"
+      end
+
+      it 'returns 404 status when resume not in Cruncher' do
+        stub_cruncher_match_resume_and_job_error(:no_resume, resume.id)
+
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+
+        expect(JSON.parse(response.body)['status']).to eq 404
+        expect(JSON.parse(response.body)['message'])
+          .to eq "No resume found with id: #{resume.id}"
       end
     end
   end
->>>>>>> interim progress
 end
