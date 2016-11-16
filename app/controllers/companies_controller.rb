@@ -69,9 +69,12 @@ class CompaniesController < ApplicationController
 
   def company_params
     params.require(:company).permit(:name, :email, :phone, :fax,
-                                    :website, :ein, :description, :job_email,
-                                    company_people_attributes: [:id, :first_name, :last_name, :phone, :email,
-                                                                :password, :password_confirmation],
-                                    addresses_attributes: [:id, :street, :city, :zipcode, :state, :_destroy])
+                                    :website, :ein, :description,
+                                    :job_email,
+                                    company_people_attributes:
+                                  [:id, :first_name, :last_name, :phone, :email,
+                                   :password, :password_confirmation],
+                                    addresses_attributes:
+                             [:id, :street, :city, :zipcode, :state, :_destroy])
   end
 end

@@ -17,7 +17,7 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def list_people?
-    company_admin?(user, record) || agency_admin?(user, record) || user.is_company_person?(record)
+    agency_admin?(user, record) || user.is_company_person?(record)
   end
 
   private

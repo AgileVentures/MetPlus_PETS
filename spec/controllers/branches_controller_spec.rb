@@ -256,6 +256,7 @@ RSpec.describe BranchesController, type: :controller do
 
       it_behaves_like 'unauthorizes all'
       it_behaves_like 'unauthorized all non-agency people'
+
     end
 
     context '#edit' do
@@ -306,6 +307,3 @@ RSpec.describe BranchesController, type: :controller do
     end
   end
 end
-
-
-
