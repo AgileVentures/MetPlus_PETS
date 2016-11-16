@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Event
   include ActiveModel::Model
   require 'agency_person' # provide visibility to AR model methods
@@ -16,6 +17,7 @@ class Event
                COMP_DENIED:   'company_registration_denied',
                JS_APPLY:      'jobseeker_applied',
                JD_APPLY:      'job_applied_by_job_developer',
+               OTHER_JD_APPLY: 'job_applied_by_other_job_developer',
                APP_ACCEPTED:  'job_application_accepted',
                APP_REJECTED:  'job_application_rejected',
                JOB_POSTED:    'job_posted',
@@ -154,14 +156,30 @@ class Event
     #    Notify company contact associated with the job
     #    Create task for 'job application' (application to be reviewed)
 
-    Pusher.trigger('pusher_control',
-                   EVT_TYPE[:JD_APPLY],
-                   job_id:  evt_obj.job.id,
-                   js_user_id: evt_obj.job_seeker.user.id)
+    job_developer = evt_obj.try(:job_developer) || evt_obj.job_seeker.job_developer
 
     JobSeekerEmailJob.set(wait: delay_seconds.seconds)
                      .perform_later(EVT_TYPE[:JD_APPLY], evt_obj.job_seeker,
-                                    evt_obj.job_seeker.job_developer, evt_obj.job)
+                                    job_developer, evt_obj.job)
+
+    if job_developer != evt_obj.job_seeker.job_developer
+      AgencyMailerJob.set(wait: delay_seconds.seconds)
+                     .perform_later(EVT_TYPE[:OTHER_JD_APPLY],
+                                    evt_obj.job_seeker,
+                                    evt_obj.job_seeker.job_developer,
+                                    job_developer, evt_obj.job)
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:OTHER_JD_APPLY],
+                     job_id:  evt_obj.job.id,
+                     js_user_id: evt_obj.job_seeker.user.id,
+                     jd_id: job_developer.id,
+                     jd_name: job_developer.full_name(last_name_first: false))
+    else
+      Pusher.trigger('pusher_control',
+                     EVT_TYPE[:JD_APPLY],
+                     job_id:  evt_obj.job.id,
+                     js_user_id: evt_obj.job_seeker.user.id)
+    end
 
     if evt_obj.job.company_person
       Pusher.trigger('pusher_control',

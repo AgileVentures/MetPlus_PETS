@@ -1,0 +1,19 @@
+%p
+  Hello #{@primary_job_developer.full_name(last_name_first: false)},
+%p
+  This message is from the administrator of the PETS system for
+  the jobs agency:
+  %strong
+    #{@job_developer.agency.name}.
+%p
+  This is to let you know that
+  %strong
+    the job developer, &nbsp
+    = mail_to(@job_developer.email,
+      "#{@job_developer.full_name(last_name_first: false)}",
+      subject: "Job Application on behalf of #{@job_seeker.full_name}")
+    , &nbsp has submitted an application on behalf of
+    = link_to @job_seeker.full_name, job_seeker_url(id: @job_seeker.id)
+    to the job: &nbsp
+    = link_to @job.title, job_url(id: @job.id)
+    , &nbsp in company: #{@job.company.name}

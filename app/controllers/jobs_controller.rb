@@ -185,6 +185,7 @@ class JobsController < ApplicationController
       if @job_seeker.consent
         apply_job
         return if performed?
+        @job_app.job_developer = pets_user
         Event.create(:JD_APPLY, @job_app)
         flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
       else
