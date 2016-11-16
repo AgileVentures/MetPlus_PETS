@@ -33,28 +33,35 @@ $(function () {
   $('#q_skills_id_in').select2();
   $('#q_company_id_in').select2();
 
-  $('#match_my_resume').on('click', function() {
-    var answer = confirm('This will match your résumé against all active jobs ' +
-                         ' and may take a while.     Do you want to proceed?');
-    if(answer) {
-      $.ajax({type: 'GET',
-              url: '/jobs/' + $(this).data('jobId') + '/match_resume'
-                             + '?job_seeker_id=' + $(this).data('jobSeekerId'),
-              timeout: 60000,
-              success: function (data, status, xhrObject) {
-                if(data['status'] === 404) {
-                  Notification.error_notification('An error occurred: ' +
-                                                  data['message']);
-                  return;
-                }
-                $('#resumeMatchScore').html(data['stars_html']);
-                $('#resumeMatchModal').modal();
+  JobAndResume.match();
 
-              },
-              error: function (xhrObj, status, exception) {
-                Notification.error_notification('Not able to perform matching');
-              }
-      });
-    }
-  });
 });
+
+var JobAndResume = {
+  match: function () {
+    $('#match_my_resume').on('click', function() {
+      var answer = confirm('This will match your résumé against all active jobs ' +
+                           ' and may take a while.     Do you want to proceed?');
+      if (answer) {
+        $.ajax({type: 'GET',
+                url: '/jobs/' + $(this).data('jobId') + '/match_resume'
+                               + '?job_seeker_id=' + $(this).data('jobSeekerId'),
+                timeout: 60000,
+                success: function (data) {
+                  if(data['status'] === 404) {
+                    Notification.error_notification('An error occurred: ' +
+                                                    data['message']);
+                    return;
+                  }
+                  $('#resumeMatchScore').html(data['stars_html']);
+                  $('#resumeMatchModal').modal();
+
+                },
+                error: function () {
+                  Notification.error_notification('Not able to perform matching');
+                }
+        });
+      }
+    });
+  }
+}
