@@ -43,11 +43,15 @@ var JobAndResume = {
       var answer = confirm('This will match your résumé against all active jobs ' +
                            ' and may take a while.     Do you want to proceed?');
       if (answer) {
+        var mySpinner = PETS.spinner($('.table.table-bordered'));
+        mySpinner.start();
+
         $.ajax({type: 'GET',
                 url: '/jobs/' + $(this).data('jobId') + '/match_resume'
                                + '?job_seeker_id=' + $(this).data('jobSeekerId'),
                 timeout: 60000,
                 success: function (data) {
+                  mySpinner.stop();
                   if(data['status'] === 404) {
                     Notification.error_notification('An error occurred: ' +
                                                     data['message']);
@@ -58,6 +62,7 @@ var JobAndResume = {
 
                 },
                 error: function () {
+                  mySpinner.stop();
                   Notification.error_notification('Not able to perform matching');
                 }
         });

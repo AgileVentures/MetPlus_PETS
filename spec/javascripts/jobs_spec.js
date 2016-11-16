@@ -42,6 +42,8 @@ describe('Match resume and job', function() {
     loadFixtures('jobs/job_show.html');
     JobAndResume.match();
     spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(PETS, 'spinner').and
+      .returnValue(jasmine.createSpyObj('spinner', ['start', 'stop']));
   });
 
   it('confirms user intent to perform match', function() {
