@@ -16,7 +16,6 @@ class CompaniesController < ApplicationController
   def destroy
     self.action_description = 'destroy the company'
     authorize @company
-    @admin_aa = determine_if_admin(pets_user)
     @company.destroy
     flash[:notice] = "Company '#{@company.name}' deleted."
     redirect_to root_path
@@ -46,10 +45,9 @@ class CompaniesController < ApplicationController
   end
 
   def list_people
+    raise 'Unsupported request' unless request.xhr?
     self.action_description = 'view the people'
     authorize @company
-    raise 'Unsupported request' unless request.xhr?
-
     @people_type = params[:people_type] || 'my-company-all'
 
     @people = []

@@ -180,46 +180,39 @@ RSpec.describe CompaniesController, type: :controller do
         get :edit, id: company
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'denies access to company contact' do
-        allow(controller).to receive(:current_user).and_return(company_contact)
-        get :edit, id: company
-      end
       it_behaves_like 'unauthorized agency people and jobseeker' do
         let(:my_request) { get :edit, id: company }
       end
+      it_behaves_like 'unauthorized' do
+        let(:my_request) { get :edit, id: company }
+        let(:user) { company_contact }
+      end
     end
     context '#update' do
-      before(:each) do
-        allow(controller).to receive(:current_user).and_return(company_admin)
-        params_hash = attributes_for(:company,
-                                     email: 'info@widgets.com', fax: '510 555-1212',
-                                     job_email: 'humanresources@widgets.com')
-                      .merge(addresses_attributes:
-                         { '0' => attributes_for(:address),
-                           '1' => attributes_for(:address) })
-        patch :update, id: company, company: params_hash
+      let(:params_hash) do
+        attributes_for(:company,
+                       email: 'info@widgets.com', fax: '510 555-1212',
+                       job_email: 'humanresources@widgets.com')
+          .merge(addresses_attributes:
+                        { '0' => attributes_for(:address),
+                          '1' => attributes_for(:address) })
       end
 
       it 'authorizes company admin' do
+        patch :update, id: company, company: params_hash
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes agency admin' do
+        patch :update, id: company, company: params_hash
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'denies access to company contact' do
-        expect(subject).to_not receive(:user_not_authorized)
-      end
-    end
-    context 'unauthorized people' do
       it_behaves_like 'unauthorized agency people and jobseeker' do
         let(:my_request) do
-          params_hash = attributes_for(:company,
-                                       email: 'info@widgets.com', fax: '510 555-1212',
-                                       job_email: 'humanresources@widgets.com')
-                        .merge(addresses_attributes:
-                        { '0' => attributes_for(:address),
-                          '1' => attributes_for(:address) })
           patch :update, id: company, company: params_hash
+        end
+        it_behaves_like 'unauthorized' do
+          let(:my_request) { patch :update, id: company, company: params_hash }
+          let(:user) { company_contact }
         end
       end
     end
@@ -236,12 +229,12 @@ RSpec.describe CompaniesController, type: :controller do
         get :show, id: company
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it 'denies access to company contact' do
-        allow(controller).to receive(:current_user).and_return(company_contact)
-        get :show, id: company
-      end
       it_behaves_like 'unauthorized agency people and jobseeker' do
         let(:my_request) { get :show, id: company }
+      end
+      it_behaves_like 'unauthorized' do
+        let(:my_request) { get :show, id: company }
+        let(:user) { company_contact }
       end
     end
     context '#destroy' do
