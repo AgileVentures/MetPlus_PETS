@@ -128,13 +128,13 @@ var RejectAppln = {
                 // if no pagination link present, reload the div directly
                 $.ajax({
                     type: 'GET',
-                    url: $('#applications-job-applied').attr('data-url'),
+                    url: $('#applications-job').attr('data-url'),
                     timeout: 10000,
                     error: function (xhrObj, status, exception) {
                         alert('Server Timed Out');
                     },
                     success: function (apps_data) {
-                        $('#applications-job-applied').html(apps_data);
+                        $('#applications-job').html(apps_data);
                     }
                 });
               } else {

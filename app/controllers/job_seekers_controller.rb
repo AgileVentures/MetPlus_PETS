@@ -92,7 +92,6 @@ class JobSeekersController < ApplicationController
     @recent_jobs_type = 'recent-jobs'
     authorize @jobseeker
     @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
-    @js_last_sign_in = @jobseeker.last_sign_in_at
     @application_type = 'job_seeker'
   end
 

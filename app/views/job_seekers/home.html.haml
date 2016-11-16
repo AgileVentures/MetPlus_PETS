@@ -21,7 +21,6 @@
   Job Opportunities - New
   %span.text-muted.small (Jobs since last login shown in yellow)
 %div
-  .pagination-div{ id: 'recent-jobs',
-                   data: { url: list_jobs_path(@recent_jobs_type,
-                           js_login: @js_last_sign_in ) } }
+  .pagination-div{ id: 'recent-jobs', 
+                   data: { url: list_jobs_path(@recent_jobs_type) } }
 .clearfix

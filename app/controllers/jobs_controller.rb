@@ -1,11 +1,8 @@
 class JobsController < ApplicationController
   include JobsViewer
-  include JobApplicationsViewer
 
-  before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                                  :applications, :applications_list, :revoke]
-  before_action :authentication_for_post_or_edit,
-                only: [:new, :edit, :create, :update, :destroy]
+  before_action :find_job,	only: [:show, :edit, :update, :destroy, :revoke]
+  before_action :authentication_for_post_or_edit, only: [:new, :edit, :create, :update, :destroy]
   before_action :right_company_person?, only: [:edit, :destroy, :update]
   before_action :user_logged!, only: [:apply]
 
@@ -105,21 +102,6 @@ class JobsController < ApplicationController
     redirect_to jobs_url
   end
 
-  def applications
-    @application_type = params[:application_type] || 'job-applied'
-  end
-
-  def applications_list
-    raise 'Unsupported request' unless request.xhr?
-
-    @application_type = params[:application_type] || 'job-applied'
-
-    @applications = []
-    @applications = display_job_applications @application_type, 5, @job.id
-
-    render partial: 'job_applications'
-  end
-
   def list
     raise 'Unsupported request' unless request.xhr?
 
@@ -131,9 +113,7 @@ class JobsController < ApplicationController
     when 'my-company-all'
       render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
     when 'recent-jobs'
-      render partial: 'compact_list', locals: {
-        jobs: @jobs, job_type: @job_type, last_sign_in: params[:js_login]
-      }
+      render partial: 'compact_list', locals: { jobs: @jobs, job_type: @job_type }
     end
   end
 
