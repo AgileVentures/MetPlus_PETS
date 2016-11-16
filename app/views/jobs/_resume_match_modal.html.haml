@@ -1,0 +1,15 @@
+#resumeMatchModal.modal.fade{:role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+        %h4.modal-title.text-center
+          Job match against your résumé
+
+      .modal-body.text-center
+        #resumeMatchScore.fa-lg
+
+      .modal-footer
+        %button.btn.btn-default{ "data-dismiss" => "modal",
+                                 :type => "button" } Close

@@ -15,10 +15,10 @@
       |
     = link_to 'Return To Jobs', jobs_path
     |
-    - msg = 'This will match your résumé against all active jobs and may ' + |
-            'take a while.     Do you want to proceed?'   |
-    = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
-              data: { confirm: msg }
+    - if @resume
+      = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
+                data: { job_id: @job.id, job_seeker_id: pets_user.id }
+
 
   .clearfix
 
@@ -61,3 +61,5 @@
     = render partial: 'job_applications/reject_modal'
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job', @job) } }
+
+= render partial: 'resume_match_modal'

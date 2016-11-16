@@ -975,4 +975,92 @@ RSpec.describe JobsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #applications' do
+    context 'application_type not provided' do
+      it 'check application_type' do
+        get :applications, id: @job.id
+        expect(assigns(:application_type)).to eq 'job-applied'
+      end
+    end
+
+    context 'application_type provided' do
+      let(:application_type) { 'my-applied' }
+      it 'check application_type' do
+        get :applications, id: @job.id, application_type: application_type
+        expect(assigns(:application_type)).to eq application_type
+      end
+    end
+  end
+
+  describe 'GET #applications_list' do
+    before :each do
+      5.times.each do
+        job_seeker = FactoryGirl.create(:job_seeker)
+        FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
+      end
+      parameters = { id: @job.id, application_type: 'job-applied' }
+      xhr :get, :applications_list, parameters
+    end
+
+    it 'is a success' do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders 'jobs/_job_applications' template" do
+      expect(response).to render_template('jobs/_job_applications')
+    end
+
+    it 'check application_type' do
+      expect(assigns(:application_type)).to eq 'job-applied'
+    end
+
+    it 'check applications' do
+      # Next line added to ensure the query is done and that the
+      # paginate is also called
+      assigns(:applications).each {}
+      expect(assigns(:applications).all.size).to eq 5
+    end
+
+    it { should_not set_flash }
+  end
+
+  describe 'GET #match_resume' do
+    render_views
+
+    let(:job_seeker)  { FactoryGirl.create(:job_seeker) }
+    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let(:job)         { FactoryGirl.create(:job) }
+    let(:stars_str)   { "<div class=\"stars\"><i class=\"fa fa-star\"" \
+                        " aria-hidden=\"true\"></i><i class=\"fa fa-star\"" \
+                        " aria-hidden=\"true\"></i><i class=\"fa fa-star\"" \
+                        " aria-hidden=\"true\"></i><i class=\"fa fa-star-half-o\"" \
+                        " aria-hidden=\"true\"></i><i class=\"fa fa-star-o\"" \
+                        " aria-hidden=\"true\"></i></div>\n<br>\n3.4 stars\n" }
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      stub_cruncher_file_upload
+      stub_cruncher_match_resume_and_job
+
+      xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+    end
+
+    context 'happy path' do
+      it 'returns success status' do
+        expect(response).to have_http_status(200)
+      end
+      it 'renders stars html' do
+        expect(JSON.parse(response.body)['stars_html']).to eq stars_str
+      end
+    end
+
+    context 'sad path' do
+      it 'returns 404 status when job seeker does not have resume' do
+
+      end
+    end
+  end
+>>>>>>> interim progress
 end
