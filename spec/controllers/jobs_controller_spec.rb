@@ -707,6 +707,7 @@ RSpec.describe JobsController, type: :controller do
     let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let!(:testfile_resume) { '/files/Janitor-Resume.doc' }
+    let(:job) { FactoryGirl.create(:job) }
 
     describe 'unknown job' do
       before :each do
@@ -889,8 +890,6 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'user not logged in' do
-      job = FactoryGirl.create(:job)
-
       before :each do
         get :apply, job_id: job.id, user_id: job_seeker.id
       end
@@ -908,8 +907,6 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'logged in as company person' do
-      job = FactoryGirl.create(:job)
-
       before :each do
         company = FactoryGirl.create(:company)
         @ca = FactoryGirl.create(:company_admin, company: company)

@@ -62,9 +62,19 @@ describe('Match resume and job', function() {
     spyOn($, 'ajax');
     $('#match_my_resume').trigger('click');
     expect($.ajax).toHaveBeenCalled();
-    expect($.ajax.calls.mostRecent().args[0]['url']).
+    expect($.ajax.calls.mostRecent().args[0].url).
                     toEqual('/jobs/152/match_resume?job_seeker_id=201');
   });
+
+  it('sets stars html on success', function () {
+    spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+      var data = {'status': 200, 'stars_html': 'div for stars'};
+      ajaxArgs.success(data);
+    });
+    spyOn($('#resumeMatchModal'), 'modal');
+    $('#match_my_resume').trigger('click');
+    expect($('#resumeMatchScore').html()).toEqual('div for stars');
+  })
 
   it('shows error message if resource not found', function () {
     spyOn(Notification, 'error_notification');
