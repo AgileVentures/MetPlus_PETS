@@ -205,7 +205,6 @@ class JobsController < ApplicationController
                           status: 404 }) unless resume
 
     result = ResumeCruncher.match_resume_and_job(resume.id, @job.id)
-    # result = ResumeCruncher.match_resume_and_job(1, 3) # << DEV PURPOSES
 
     return render(json: { message: result[:message],
                           status: 404 }) if result[:status] == 'ERROR'
