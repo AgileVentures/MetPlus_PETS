@@ -74,7 +74,7 @@ describe('Match resume and job', function() {
     spyOn($('#resumeMatchModal'), 'modal');
     $('#match_my_resume').trigger('click');
     expect($('#resumeMatchScore').html()).toEqual('div for stars');
-  })
+  });
 
   it('shows error message if resource not found', function () {
     spyOn(Notification, 'error_notification');
