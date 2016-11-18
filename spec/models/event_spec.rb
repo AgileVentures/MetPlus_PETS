@@ -3,10 +3,11 @@ require 'agency_mailer'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe Event, type: :model do
-  let!(:agency) { FactoryGirl.create(:agency) }
-  let(:agency_admin) { FactoryGirl.create(:agency_admin) }
-  let!(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let!(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+  let!(:agency)        { FactoryGirl.create(:agency) }
+  let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
+  let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
+  let!(:job_developer1) { FactoryGirl.create(:job_developer, agency: agency) }
+  let!(:case_manager)   { FactoryGirl.create(:case_manager, agency: agency) }
   let!(:job_seeker) do
     js = FactoryGirl.create(:job_seeker)
     js.assign_job_developer(job_developer, agency)
@@ -35,6 +36,11 @@ RSpec.describe Event, type: :model do
 
   let(:application) { job.apply job_seeker }
   let(:application_wo_cp) { job_wo_cp.apply job_seeker }
+  let(:application_diff_jd) do
+    app = job_wo_cp.apply job_seeker
+    app.job_developer = job_developer1
+    app
+  end
 
   let(:testfile_resume) { 'files/Admin-Assistant-Resume.pdf' }
 
@@ -145,6 +151,29 @@ RSpec.describe Event, type: :model do
     before do
       stub_cruncher_authenticate
       stub_cruncher_file_download testfile_resume
+    end
+
+    describe 'Job Developer not the primary JD' do
+      it 'trigger message to the JS' do
+        Event.create(:JD_APPLY, application_diff_jd)
+        expect(Pusher).to have_received(:trigger)
+          .with('pusher_control',
+                'job_applied_by_other_job_developer',
+                job_id:  job_wo_cp.id,
+                js_user_id: job_seeker.user.id,
+                jd_id: job_developer1.id,
+                jd_name: job_developer1.full_name(last_name_first: false))
+      end
+
+      it 'sends event notification email to Primary Job Developer' do
+        expect { Event.create(:JD_APPLY, application_diff_jd) }
+          .to change(all_emails, :count).by(+3)
+      end
+
+      it 'creates one task' do
+        expect { Event.create(:JD_APPLY, application_diff_jd) }
+          .to change(Task, :count).by(+1)
+      end
     end
 
     describe 'job without company person' do
@@ -380,7 +409,7 @@ RSpec.describe Event, type: :model do
         job_id:    job.id,
         job_title: job.title,
         company_name: company.name,
-        notify_list: [job_developer.user.id]
+        notify_list: [job_developer.user.id, job_developer1.user.id]
       )
     end
 
@@ -399,7 +428,7 @@ RSpec.describe Event, type: :model do
         job_id: job.id,
         job_title: job.title,
         company_name: company.name,
-        notify_list: [job_developer.user.id]
+        notify_list: [job_developer.user.id, job_developer1.user.id]
       )
     end
 
