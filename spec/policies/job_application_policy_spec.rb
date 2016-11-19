@@ -14,6 +14,11 @@ RSpec.describe JobApplicationPolicy do
                        company: company2)
   end
 
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   let(:job_seeker) { FactoryGirl.create(:job_seeker) }
   let(:job) { FactoryGirl.create(:job, company: company) }
   let(:job_application) do
@@ -25,7 +30,7 @@ RSpec.describe JobApplicationPolicy do
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
   let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
 
-  permissions :accept?, :reject?, :show? do
+  permissions :accept?, :reject?, :show?, :download_resume? do
     it 'allows access if user is a company admin/contact' do
       expect(JobApplicationPolicy).to permit(company_admin1, job_application)
       expect(JobApplicationPolicy).to permit(company_contact, job_application)

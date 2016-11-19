@@ -3,20 +3,23 @@
     = render 'shared/error_messages', object: @jobseeker
     %br
   .clearfix
+  
   - @user_form = js
   = render partial: 'users/subform',
       locals: {new_form: (new_form if defined? new_form)}
-  .form-group
-    =js.label :year_of_birth, 'Year Of Birth', class:'control-label col-sm-2'
-    .col-sm-6
-      - if @jobseeker.year_of_birth
-        - start_year = Date.parse("#{@jobseeker.year_of_birth}0101").year
-      - else
-        - start_year = Date.today.year - 16
 
-      = select_year(start_year, field_name: :year_of_birth,
-                    start_year: start_year, end_year: start_year - 60,
-                    prefix: 'job_seeker')
+  - if policy(js.object).allow?
+    .form-group
+      =js.label :year_of_birth, 'Year Of Birth', class:'control-label col-sm-2'
+      .col-sm-6
+        - if @jobseeker.year_of_birth
+          - start_year = Date.parse("#{@jobseeker.year_of_birth}0101").year
+        - else
+          - start_year = Date.today.year - 16
+
+        = select_year(start_year, field_name: :year_of_birth,
+                      start_year: start_year, end_year: start_year - 60,
+                      prefix: 'job_seeker')
   .form-group
     =js.label :status_id, 'Status', class: 'control-label col-sm-2'
     .col-sm-6
@@ -29,10 +32,10 @@
     .clearfix
     .col-sm-8.col-sm-offset-2
       - if @current_resume
-        = "(Your resume on file is \"#{@current_resume.file_name}\",       |
-                 and was uploaded on #{@current_resume.updated_at.         |
-                in_time_zone('Eastern Time (US & Canada)').to_s(:long)})"  |
-
+        = 'Your current resume is'
+        = @current_resume.file_name
+        = 'and was uploaded on'
+        %span.utc_to_local_time= @current_resume.updated_at
 
   - @address_form = js
   = render partial: 'address/addressform', locals: {fields_for_name: 'address'}
