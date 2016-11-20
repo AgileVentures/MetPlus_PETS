@@ -2,7 +2,6 @@ class JobsController < ApplicationController
   include JobsViewer
 
   before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                                  :applications, :applications_list,
                                   :revoke, :match_resume]
   before_action :authentication_for_post_or_edit,
                 only: [:new, :edit, :create, :update, :destroy]
