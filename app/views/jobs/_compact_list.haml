@@ -15,7 +15,7 @@
           %strong Posted
     %tbody
       - jobs.each do |job|
-        %tr{ class: ( "recent-jobs" if job.is_recent? last_sign_in ) }
+        %tr{ class: ( "recent-jobs" if job.recent_for? pets_user ) }
           %td
             = link_to "#{job.title}", job_path(job)
             %td

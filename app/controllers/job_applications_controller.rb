@@ -13,7 +13,7 @@ class JobApplicationsController < ApplicationController
     else
       flash[:alert] = 'Invalid action on inactive job application.'
     end
-    redirect_to applications_job_url(@job_application.job)
+    redirect_to job_url(@job_application.job)
   end
 
   def reject
@@ -78,7 +78,7 @@ class JobApplicationsController < ApplicationController
       render json: { message: 'Job application rejected', status: 200 }
     else
       flash[:notice] = 'Job application rejected.'
-      redirect_to controller: 'jobs', action: 'applications',
+      redirect_to controller: 'jobs', action: 'show',
                   id: @job_application.job.id
     end
   end

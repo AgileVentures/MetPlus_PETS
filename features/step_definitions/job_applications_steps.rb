@@ -1,6 +1,6 @@
 And(/^I click "([^"]*)" link to job applications index page$/) do |job_title|
   job = Job.find_by(title: job_title.to_s)
-  find("a[href='/jobs/#{job.id}/applications']").click
+  find("a[href='/jobs/#{job.id}']").click
 end
 
 And(/^I click "([^"]*)" link to job show page$/) do |job_title|
@@ -116,11 +116,6 @@ end
 
 And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
-end
-
-Then(/^I should get a download file for resume "(.*?)"$/) do |_resume|
-  page.driver.response.headers['Content-Disposition']
-      .should include("filename=\"#{filename}\"")
 end
 
 Then(/^I should get a download with the filename "([^\"]*)"$/) do |filename|

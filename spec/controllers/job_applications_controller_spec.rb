@@ -62,14 +62,15 @@ RSpec.describe JobApplicationsController, type: :controller do
           stub_cruncher_job_create
           patch :accept, id: invalid_application
         end
+        it 'look for the invalid application' do
+          expect(assigns(:job_application)).to eq invalid_application
+        end
         it 'show a flash[:alert]' do
           expect(flash[:alert]).to eq 'Invalid action on'\
               ' inactive job application.'
         end
         it 'redirect to the specific job application index page' do
-          expect(response).to redirect_to(applications_job_url(
-                                            invalid_application.job
-          ))
+          expect(response).to redirect_to(job_url(invalid_application.job))
         end
       end
 
@@ -84,8 +85,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           expect(flash[:info]).to eq 'Job application accepted.'
         end
         it 'redirect to the specific job application index page' do
-          expect(response)
-            .to redirect_to(applications_job_url(valid_application.job))
+          expect(response).to redirect_to(job_url(valid_application.job))
         end
       end
 
@@ -100,8 +100,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           expect(flash[:notice]).to eq 'Job application rejected.'
         end
         it 'redirect to the specific job application index page' do
-          expect(response)
-            .to redirect_to(applications_job_url(valid_application.job))
+          expect(response).to redirect_to(job_url(valid_application.job))
         end
       end
     end

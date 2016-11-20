@@ -12,7 +12,7 @@ module JobApplicationsViewer
       end
       return JobApplication.paginate(page: params[:applications_page], 
         :per_page => per_page).where(job_seeker: id) 
-    when 'job-applied'
+    when 'job'
       return JobApplication.paginate(page: params[:applications_page],
                :per_page => per_page).where(job: id).
                includes(:job_seeker).order(:status)
@@ -21,7 +21,7 @@ module JobApplicationsViewer
 
   FIELDS_IN_APPLICATION_TYPE = {
       'job_seeker': [:title, :description, :company, :applied_at, :status],
-      'job-applied': [:name, :js_status, :applied_at, :action]
+      'job': [:name, :js_status, :applied_at, :action]
   }
 
   def application_fields application_type
