@@ -120,17 +120,9 @@ class JobsController < ApplicationController
 
   def list
     raise 'Unsupported request' unless request.xhr?
-
-    @job_type = params[:job_type] || 'my-company-all'
-
     @jobs = []
-    @jobs = display_jobs @job_type
-    case @job_type
-    when 'my-company-all'
-      render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
-    when 'recent-jobs'
-      render partial: 'compact_list', locals: { jobs: @jobs, job_type: @job_type }
-    end
+    @jobs = display_jobs params[:job_type]
+    render partial: 'list_jobs', locals: { jobs: @jobs, job_type: params[:job_type] }
   end
 
   def update_addresses

@@ -1,0 +1,63 @@
+- if jobs.empty?
+  %i There are no jobs available
+- else
+  %table.table.table-hover
+    %thead
+      %tr
+        - job_fields(job_type).each do |field|
+          - case field
+            - when :title
+              %th.strong Title
+            - when :status
+              %th Status
+            - when :updated_at
+              %th.strong Last update
+            - when :poster
+              %th.strong Poster
+            - when :num_applicants
+              %th.strong Applications
+            - when :company
+              %th.strong Company
+            - when :description
+              %th.strong Description
+            -when :posted
+              %th.strong Posted
+    %tbody
+      - jobs.each do |job|
+        %tr{ class: ( "recent-jobs" if job.recent_for? pets_user ) }
+        - job_fields(job_type).each do |field|
+          - case field
+            - when :title
+              %td.col-md-4
+                = link_to(job.title, job_path(job))
+            - when :status
+              %td.col-md-2
+                = job.status.capitalize
+                &nbsp;
+                %span.glyphicon.glyphicon-time{ 'aria-hidden': true }
+                %span.text-muted.small
+                  = job.status_change_time(job.status).strftime('%d %b, %Y')
+            - when :updated_at
+              %td.col-md-2
+                = job.updated_at.strftime('%d %b, %Y')
+            - when :poster
+              %td.col-md-3
+                = link_to(job.company_person.full_name,
+                          company_person_path(job.company_person))
+            - when :num_applicants
+              %td.col-md-1
+                = job.number_applicants
+            - when :company
+              %td
+                = job.company.name
+            - when :description
+              %td
+                = truncate(job.description, length: 200)
+            - when :posted
+              %td
+                #{time_ago_in_words(job.created_at, )} ago
+  .row.text-center
+    = will_paginate jobs, param_name: 'jobs_page', 
+                          params: { :controller => 'jobs', :action => 'list', 
+                          :job_type => job_type }
+%br
