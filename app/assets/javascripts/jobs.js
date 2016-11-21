@@ -1,3 +1,37 @@
+var JobAndResume = {
+  match: function () {
+    $('#match_my_resume').on('click', function() {
+      var answer = confirm('This will match your résumé against all active jobs ' +
+                           ' and may take a while.     Do you want to proceed?');
+      if (answer) {
+        var mySpinner = PETS.spinner($('.table.table-bordered'));
+        mySpinner.start();
+
+        $.ajax({type: 'GET',
+                url: '/jobs/' + $(this).data('jobId') + '/match_resume' +
+                              '?job_seeker_id=' + $(this).data('jobSeekerId'),
+                timeout: 60000,
+                success: function (data) {
+                  mySpinner.stop();
+                  if(data.status === 404) {
+                    Notification.error_notification('An error occurred: ' +
+                                                    data.message);
+                    return;
+                  }
+                  $('#resumeMatchScore').html(data.stars_html);
+                  $('#resumeMatchModal').modal();
+
+                },
+                error: function () {
+                  mySpinner.stop();
+                  Notification.error_notification('Not able to perform matching');
+                }
+        });
+      }
+    });
+  }
+};
+
 $(function () {
   $('#toggle_search_form').click(ManageData.toggle);
   $(document).on('change', '#job_company_id', function() {
@@ -32,5 +66,7 @@ $(function () {
   $('#q_address_city_in').select2();
   $('#q_skills_id_in').select2();
   $('#q_company_id_in').select2();
+
+  JobAndResume.match();
 
 });

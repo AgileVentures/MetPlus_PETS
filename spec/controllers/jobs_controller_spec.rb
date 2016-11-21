@@ -599,7 +599,6 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #list' do
     before :each do
-      agency = FactoryGirl.create(:agency)
       company = FactoryGirl.create(:company)
       @ca = FactoryGirl.create(:company_admin, company: company)
       company1 = FactoryGirl.create(:company)
@@ -610,8 +609,8 @@ RSpec.describe JobsController, type: :controller do
         FactoryGirl.create(:job, title: title, company: company, company_person: @ca)
       end
       4.times.each do |i|
-        FactoryGirl.create(:job, title: "Awesome new job #{i}", company: company1,
-                                 company_person: @ca1)
+        FactoryGirl.create(:job, title: "Awesome new job #{i}",
+                                 company: company1, company_person: @ca1)
       end
     end
 
@@ -708,9 +707,8 @@ RSpec.describe JobsController, type: :controller do
     let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let!(:testfile_resume) { '/files/Janitor-Resume.doc' }
-    before :each do
-      agency = FactoryGirl.create(:agency)
-    end
+    let(:job) { FactoryGirl.create(:job) }
+
     describe 'unknown job' do
       before :each do
         allow(controller).to receive(:current_user).and_return(job_seeker)
@@ -725,8 +723,8 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'check set flash' do
         should set_flash
-        expect(flash[:alert]).to eq 'Unable to find the job the user is'\
-        ' trying to apply to.'
+        expect(flash[:alert])
+          .to eq 'Unable to find the job the user is trying to apply to.'
       end
     end
 
@@ -740,8 +738,8 @@ RSpec.describe JobsController, type: :controller do
         expect(response).to redirect_to(action: 'index')
       end
       it 'check set flash' do
-        expect(flash[:alert]).to eq 'Unable to apply. Job has either been filled'\
-        ' or revoked.'
+        expect(flash[:alert])
+          .to eq 'Unable to apply. Job has either been filled or revoked.'
       end
     end
 
@@ -792,15 +790,14 @@ RSpec.describe JobsController, type: :controller do
     describe 'duplicated applications as job seeker' do
       before :each do
         allow(controller).to receive(:current_user).and_return(job_seeker)
-        existing_application = FactoryGirl.create(:job_application,
-                                                  job: @job,
-                                                  job_seeker: job_seeker)
+
+        FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'shows flash[:alert]' do
         expect(flash[:alert]).to be_present
-          .and eq "#{job_seeker.full_name(last_name_first: false)} has already"\
-          ' applied to this job.'
+          .and eq "#{job_seeker.full_name(last_name_first: false)} " \
+                  'has already applied to this job.'
       end
       it 'redirects to the job' do
         expect(response).to redirect_to(action: 'show', id: @job.id)
@@ -827,8 +824,8 @@ RSpec.describe JobsController, type: :controller do
         expect(Event).to have_received(:create).with(:JD_APPLY, application)
       end
       it 'show flash[:info]' do
-        expect(flash[:info]).to be_present.and eq 'Job is successfully applied'\
-        " for #{job_seeker.full_name}"
+        expect(flash[:info]).to be_present
+          .and eq "Job is successfully applied for #{job_seeker.full_name}"
       end
       it 'redirect to job ' do
         expect(response).to redirect_to(job_path(@job))
@@ -845,8 +842,9 @@ RSpec.describe JobsController, type: :controller do
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'show flash[:alert]' do
-        expect(flash[:alert]).to be_present.and eq 'Invalid application:'\
-        " You are not permitted to apply for #{job_seeker.full_name}"
+        expect(flash[:alert]).to be_present
+          .and eq 'Invalid application: You are not permitted to apply for ' \
+                  "#{job_seeker.full_name}"
       end
       it 'redirect to job ' do
         expect(response).to redirect_to(job_path(@job))
@@ -859,21 +857,22 @@ RSpec.describe JobsController, type: :controller do
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
         job_seeker.assign_job_developer(job_developer, agency)
         allow(controller).to receive(:current_user).and_return(job_developer)
-        existing_application = FactoryGirl.create(:job_application,
-                                                  job: @job, job_seeker: job_seeker)
+
+        FactoryGirl.create(:job_application, job: @job, job_seeker: job_seeker)
         get :apply, job_id: @job.id, user_id: job_seeker.id
       end
       it 'shows flash[:alert]' do
         expect(flash[:alert]).to be_present
-          .and eq "#{job_seeker.full_name(last_name_first: false)} has already "\
-          'applied to this job.'
+          .and eq "#{job_seeker.full_name(last_name_first: false)} " \
+                  'has already applied to this job.'
       end
       it 'redirects to job' do
         expect(response).to redirect_to(action: 'show', id: @job.id)
       end
     end
 
-    describe 'invalid application as job developer' do
+    describe 'invalid application as job developer: job seeker does not ' \
+             'belong to job developer' do
       before :each do
         agency = FactoryGirl.create(:agency)
         job_developer = FactoryGirl.create(:job_developer, agency: agency)
@@ -891,11 +890,10 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'user not logged in' do
-      # no lazy load, executed right away, no need to mock
-      let!(:job) { FactoryGirl.create(:job) }
       before :each do
         get :apply, job_id: job.id, user_id: job_seeker.id
       end
+
       it 'is a redirect' do
         expect(response).to have_http_status(:redirect)
       end
@@ -909,8 +907,6 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     describe 'logged in as company person' do
-      # no lazy load, executed right away, no need to mock
-      let!(:job) { FactoryGirl.create(:job) }
       before :each do
         company = FactoryGirl.create(:company)
         @ca = FactoryGirl.create(:company_admin, company: company)
@@ -950,8 +946,8 @@ RSpec.describe JobsController, type: :controller do
 
       it 'flash[:alert]' do
         patch :revoke, id: @job.id
-        expect(flash[:alert]).to be_present.and eq "#{@job.title} is revoked "\
-        'successfully.'
+        expect(flash[:alert]).to be_present
+          .and eq "#{@job.title} is revoked successfully."
       end
 
       it 'redirects to jobs_path' do
@@ -972,6 +968,74 @@ RSpec.describe JobsController, type: :controller do
 
       it 'redirects to jobs_path' do
         expect(response).to redirect_to(jobs_path)
+      end
+    end
+  end
+
+  describe 'GET #match_resume' do
+    render_views
+
+    let(:job_seeker)  { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let(:job)         { FactoryGirl.create(:job) }
+    let(:stars_str)   do
+      '<div class="stars"><i class="fa fa-star"' \
+      ' aria-hidden="true"></i><i class="fa fa-star"' \
+      ' aria-hidden="true"></i><i class="fa fa-star"' \
+      ' aria-hidden="true"></i><i class="fa fa-star-half-o"' \
+      ' aria-hidden="true"></i><i class="fa fa-star-o"' \
+      " aria-hidden=\"true\"></i></div>\n<br>\n3.4 stars\n"
+    end
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      stub_cruncher_file_upload
+    end
+
+    context 'happy path' do
+      before(:each) do
+        stub_cruncher_match_resume_and_job
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+      end
+
+      it 'returns success status' do
+        expect(response).to have_http_status(200)
+      end
+      it 'renders stars html' do
+        expect(JSON.parse(response.body)['stars_html']).to eq stars_str
+      end
+    end
+
+    context 'sad path' do
+      it 'returns 404 status when job seeker does not have resume' do
+        stub_cruncher_match_resume_and_job
+
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker2.id
+
+        expect(JSON.parse(response.body)['status']).to eq 404
+        expect(JSON.parse(response.body)['message']).to eq 'No résumé on file'
+      end
+
+      it 'returns 404 status when job not in Cruncher' do
+        stub_cruncher_match_resume_and_job_error(:no_job, job.id)
+
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+
+        expect(JSON.parse(response.body)['status']).to eq 404
+        expect(JSON.parse(response.body)['message'])
+          .to eq "No job found with id: #{job.id}"
+      end
+
+      it 'returns 404 status when resume not in Cruncher' do
+        stub_cruncher_match_resume_and_job_error(:no_resume, resume.id)
+
+        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+
+        expect(JSON.parse(response.body)['status']).to eq 404
+        expect(JSON.parse(response.body)['message'])
+          .to eq "No resume found with id: #{resume.id}"
       end
     end
   end
