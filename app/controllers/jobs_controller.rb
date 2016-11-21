@@ -1,23 +1,14 @@
 class JobsController < ApplicationController
   include JobsViewer
 
-  before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                                  :revoke, :match_resume]
-  before_action :authentication_for_post_or_edit,
-                only: [:new, :edit, :create, :update, :destroy]
-  before_action :right_company_person?, only: [:edit, :destroy, :update]
-  before_action :user_logged!, only: [:apply]
+  before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke]
+  before_action :user_logged!, except: [:index, :list_search_jobs, :show]
 
   helper_method :job_fields
 
   def index
-    if company_p_or_job_d? && @cp_or_jd.is_a?(CompanyPerson)
-      @jobs = @cp_or_jd.company.jobs.order(:title).paginate(page: params[:page],
-                                                            per_page: 32)
-    else
-      @jobs = Job.order(:title).paginate(page: params[:page],
-                                         per_page: 32).includes(:company)
-    end
+    @jobs = policy_scope(Job).order(:title).includes(:company)
+            .paginate(page: params[:page], per_page: 20)
   end
 
   def list_search_jobs
@@ -65,6 +56,7 @@ class JobsController < ApplicationController
 
   def new
     @job = Job.new
+    authorize @job
     set_company
     set_company_address
   end
@@ -76,6 +68,7 @@ class JobsController < ApplicationController
       job_params.merge({'company_person_id' => pets_user.id}) 
     end
     @job = Job.new(job_params)
+    authorize @job
 
     if @job.save
       flash[:notice] = "#{@job.title} has been created successfully."
@@ -92,14 +85,17 @@ class JobsController < ApplicationController
   def show
     @resume = nil
     @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
+    authorize @job
   end
 
   def edit
+    authorize @job
     set_company
     set_company_address
   end
 
   def update
+    authorize @job
     set_company
     set_company_address
     if @job.update_attributes(job_params)
@@ -111,6 +107,7 @@ class JobsController < ApplicationController
   end
 
   def destroy
+    authorize @job
     @job.destroy
     flash[:alert] = "#{@job.title} has been deleted successfully."
     redirect_to jobs_url
@@ -140,11 +137,15 @@ class JobsController < ApplicationController
       flash[:alert] = 'Unable to find the job the user is trying to apply to.'
       redirect_to jobs_url and return
     end
+    self.action_description = 'apply. Job has either been filled or revoked'
+    authorize @job
 
     unless @job_seeker = JobSeeker.find_by(id: params[:user_id])
       flash[:alert] = 'Unable to find the user who wants to apply.'
       redirect_to job_path(@job) and return
     end
+    self.action_description = "apply for #{@job_seeker.full_name}"
+    authorize @job_seeker
    
     if @job_seeker.consent && @job_seeker.job_developer == pets_user
       apply_for(@job, @job_seeker) do |job_app, job, job_seeker|
@@ -163,6 +164,7 @@ class JobsController < ApplicationController
   end
 
   def revoke
+    authorize @job
     if @job.status == 'active' && @job.revoked
       flash[:alert] = "#{@job.title} is revoked successfully."
       obj = Struct.new(:job, :agency)
@@ -234,38 +236,6 @@ class JobsController < ApplicationController
                       'has already applied to this job.'
       redirect_to job_path(job) and return
     end
-  end
-
-  def authentication_for_post_or_edit
-    if !company_p_or_job_d?
-      flash[:alert] = 'Sorry, You are not permitted to post, edit or delete a job!'
-      redirect_to jobs_url
-    else
-      set_company_p_or_job_d
-    end
-  end
-
-  def set_company_p_or_job_d
-    @cp_or_jd = pets_user
-  end
-
-  def company_p_or_job_d?
-    if pets_user.is_a?(CompanyPerson)
-      set_company_p_or_job_d
-      true
-    elsif pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
-      set_company_p_or_job_d
-      true
-    else
-      false
-    end
-  end
-
-  def right_company_person?
-    return unless @cp_or_jd.is_a?(CompanyPerson)
-    return if @cp_or_jd.company == @job.company
-    flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
-    redirect_to jobs_url
   end
 
   def find_job

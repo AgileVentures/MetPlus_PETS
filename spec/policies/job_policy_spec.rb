@@ -2,42 +2,28 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobPolicy do
-  
-  let(:job_seeker)  { FactoryGirl.create(:job_seeker) }
-  let(:revoked_job) { FactoryGirl.create(:job, status: 'revoked') }
   let(:agency)  { FactoryGirl.create(:agency) }
   let!(:bosh) { FactoryGirl.create(:company, name: 'Bosh', agencies: [agency]) }
   let!(:bosh_mich) { FactoryGirl.create(:address, location: bosh) }
   let!(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
+  let(:revoked_job) { FactoryGirl.create(:job, status: 'revoked') }
+
   let(:bosh_contact)      { FactoryGirl.create(:company_contact, company: bosh) }
   let(:bosh_admin)      { FactoryGirl.create(:company_admin, company: bosh) }
   let(:widget_contact) { FactoryGirl.create(:company_contact) }
   let(:widget_admin) { FactoryGirl.create(:company_admin) }
 
-  
   let(:job_developer)     { FactoryGirl.create(:job_developer, agency: agency) }
   let(:agency_admin)   { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:case_manager)     { FactoryGirl.create(:case_manager, agency: agency) }
 
-  
-  
+  let(:job_seeker)  { FactoryGirl.create(:job_seeker) }
+
   before(:each) do
     stub_cruncher_authenticate
     stub_cruncher_job_create
     stub_cruncher_job_update
-  end
-
-  
-  
-  
-  
-  # let!(:job_seeker) do
-  #   js = FactoryGirl.create(:job_seeker)
-  #   js.assign_case_manager(FactoryGirl.create(:case_manager, agency: agency), agency)
-  #   js.assign_job_developer(job_developer, agency)
-  #   js
-  # end
-    
+  end  
 
   permissions :create?, :update?, :edit? do
     it 'only allows access if user is correct_company_person' do
@@ -119,7 +105,6 @@ RSpec.describe JobPolicy do
       expect(JobPolicy).to permit(job_seeker, bosh_job)
       expect(JobPolicy).not_to permit(job_seeker, revoked_job)
     end
-
   end
 
   permissions :revoke? do
@@ -136,8 +121,7 @@ RSpec.describe JobPolicy do
       expect(JobPolicy).not_to permit(case_manager, bosh_job)
     end
 
-    it "disallows access if user is visitor, job_seeker" do
-      expect(JobPolicy).not_to permit(nil, bosh_job)
+    it "disallows access if user is job_seeker" do
       expect(JobPolicy).not_to permit(job_seeker, bosh_job)
     end
   end
