@@ -64,11 +64,17 @@ class JobsController < ApplicationController
   end
 
   def new
-    @job = Job.new(company_id: params[:company_id],
-                   company_person_id: params[:company_person_id])
+    @job = Job.new
+    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
+    @address = pets_user.is_a?(CompanyPerson) ? Address.where(location_type: 'Company', location_id: pets_user.company).order(:state) : []
   end
 
   def create
+    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
+    @address = pets_user.is_a?(CompanyPerson) ? Address.where(location_type: 'Company', location_id: pets_user.company).order(:state) : []
+    if pets_user.is_a?(CompanyPerson)
+      job_params.merge({ 'company_person_id' => pets_user.id }) 
+    end
     @job = Job.new(job_params)
 
     if @job.save
@@ -89,9 +95,15 @@ class JobsController < ApplicationController
   end
 
   def edit
+    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
+    @address = Address.where(location_type: 'Company', location_id: @job.company)
+              .order(:state)
   end
 
   def update
+    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
+    @address = Address.where(location_type: 'Company', location_id: @job.company)
+              .order(:state)
     if @job.update_attributes(job_params)
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job

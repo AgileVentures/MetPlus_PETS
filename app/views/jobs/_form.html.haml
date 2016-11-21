@@ -1,10 +1,6 @@
 .col-sm-offset-3.col-sm-6
   = render 'shared/error_messages', object: f.object
 .clearfix
-- if @cp_or_jd.is_a?(CompanyPerson)
-  = f.hidden_field  :company_id
-  = f.hidden_field  :company_person_id
-
 .form-group
   .col-sm-3.control-label
     = f.label :title
@@ -16,20 +12,12 @@
     .col-sm-3.control-label
       = f.label  :company_id, 'Company Name'
     .col-sm-6
-      - companies = Company.order(:name)
       = f.collection_select :company_id, companies, :id, :name,
                   {prompt: true}, {class: "form-control"}
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
   .col-sm-6#address_select
-    - if @job.company
-      - addresses = Address.where(location_type: 'Company',      |
-                    location_id: @job.company.id).order(:state)  |
-    - else
-      - companies ||= Company.order(:name)
-      - addresses = Address.where(location_type: 'Company',      |
-                    location_id: companies.first).order(:state)  |
     = f.collection_select :address_id, addresses, :id, :full_address,
                 {prompt: true, include_blank: true}, class: 'form-control'
 

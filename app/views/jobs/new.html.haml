@@ -5,7 +5,7 @@
 
 =form_for @job do |f|
 	.form-horizontal
-		= render partial: 'form', locals: {f: f}
+		= render partial: 'form', locals: {f: f, companies: @company , addresses: @address}
 		.form-group
 			%div{class: "col-sm-offset-3 col-sm-6"}
 				= f.submit "Create", class: "btn btn-primary btn-block",
