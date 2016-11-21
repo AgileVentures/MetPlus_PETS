@@ -65,15 +65,15 @@ class JobsController < ApplicationController
 
   def new
     @job = Job.new
-    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
-    @address = pets_user.is_a?(CompanyPerson) ? Address.where(location_type: 'Company', location_id: pets_user.company).order(:state) : []
+    set_company
+    set_company_address
   end
 
   def create
-    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
-    @address = pets_user.is_a?(CompanyPerson) ? Address.where(location_type: 'Company', location_id: pets_user.company).order(:state) : []
+    set_company
+    set_company_address
     if pets_user.is_a?(CompanyPerson)
-      job_params.merge({ 'company_person_id' => pets_user.id }) 
+      job_params.merge({'company_person_id' => pets_user.id}) 
     end
     @job = Job.new(job_params)
 
@@ -95,15 +95,13 @@ class JobsController < ApplicationController
   end
 
   def edit
-    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
-    @address = Address.where(location_type: 'Company', location_id: @job.company)
-              .order(:state)
+    set_company
+    set_company_address
   end
 
   def update
-    @company = pets_user.is_a?(CompanyPerson) ? [pets_user.company] : Company.order(:name)
-    @address = Address.where(location_type: 'Company', location_id: @job.company)
-              .order(:state)
+    set_company
+    set_company_address
     if @job.update_attributes(job_params)
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job
@@ -138,53 +136,30 @@ class JobsController < ApplicationController
   end
 
   def apply
-    @job = Job.find_by_id params[:job_id]
-
-    if @job.nil?
+    unless @job = Job.find_by(id: params[:job_id])
       flash[:alert] = 'Unable to find the job the user is trying to apply to.'
-      redirect_to jobs_url
-      return
+      redirect_to jobs_url and return
     end
 
-    if @job.status != 'active'
-      flash[:alert] = 'Unable to apply. Job has either been filled or revoked.'
-      redirect_to jobs_url
-      return
-    end
-
-    authorize @job
-
-    @job_seeker = JobSeeker.find_by_id params[:user_id]
-    if @job_seeker.nil?
+    unless @job_seeker = JobSeeker.find_by(id: params[:user_id])
       flash[:alert] = 'Unable to find the user who wants to apply.'
-      redirect_to job_path(@job)
-      return
+      redirect_to job_path(@job) and return
     end
-
-    if pets_user == @job_seeker # to be removed once authorize is set properly
-      apply_job
-      return if performed?
-      Event.create(:JS_APPLY, @job_app)
-      render(:apply) && return
-    end
-
-    if pets_user == @job_seeker.job_developer
-      # ^^ conditional to be removed once authorize is set properly
-      if @job_seeker.consent
-        apply_job
-        return if performed?
-        @job_app.job_developer = pets_user
-        Event.create(:JD_APPLY, @job_app)
-        flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
-      else
-        flash[:alert] = 'Invalid application: You are not permitted to apply ' \
-                        "for #{@job_seeker.full_name}"
+   
+    if @job_seeker.consent && @job_seeker.job_developer == pets_user
+      apply_for(@job, @job_seeker) do |job_app, job, job_seeker|
+        Event.create(:JD_APPLY, job_app)
+        flash[:info] = "Job is successfully applied for #{job_seeker.full_name}"
+        redirect_to job_path(job) and return
       end
-    else
-      flash[:alert] = 'Invalid application: You are not the Job Developer ' \
-                      'for this job seeker'
     end
-    redirect_to job_path(@job)
+
+    if pets_user == @job_seeker
+      apply_for(@job, @job_seeker) do |job_app, job, job_seeker| 
+        Event.create(:JS_APPLY, job_app)
+        render(:apply) and return
+      end
+    end
   end
 
   def revoke
@@ -221,15 +196,44 @@ class JobsController < ApplicationController
 
   private
 
-  def apply_job
-    @job_app = @job.apply @job_seeker
-  # ActiveRecord::RecordInvalid is raised when validation at model level fails
-  # ActiveRecord::RecordNotUnique is raised when unique index constraint on
-  #   the database is violated
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
-    flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)}" \
-                    ' has already applied to this job.'
-    redirect_to job_path(@job)
+  def set_company
+    if pets_user.is_a?(CompanyPerson)
+      @company = [pets_user.company]
+    else
+      @company = Company.order(:name)
+    end
+  end
+
+  def set_company_address
+    case params[:action]
+    when 'new', 'create'
+      @address = Address.where(location_type: 'Company', 
+                 location_id: pets_user.try(:company)).order(:state) || []
+    when 'edit', 'update'
+      @address = Address.where(location_type: 'Company', 
+                 location_id: @job.company).order(:state)
+    end
+  end
+
+  def apply_for(job, job_seeker, &event)
+    begin
+      job_application = job.job_applications.build(job_seeker_id: job_seeker.id)
+      if job_application.save!
+        CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                        .perform_later(Event::EVT_TYPE[:JS_APPLY],
+                                       job.company,
+                                       nil,
+                                       application: job_application,
+                                       resume_id: job_seeker.resumes[0].id)
+        event.call(job_application, job, job_seeker)
+      end
+    # ActiveRecord::RecordInvalid is raised when validation at model level fails
+    # ActiveRecord::RecordNotUnique is raised when unique index constraint on the database is violated
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+      flash[:alert] = "#{job_seeker.full_name(last_name_first: false)} "\
+                      'has already applied to this job.'
+      redirect_to job_path(job) and return
+    end
   end
 
   def authentication_for_post_or_edit
