@@ -118,7 +118,7 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
         request
       end
-      it { expect(assigns(:company)).to eq([bosh]) }
+      it { expect(assigns(:company)).to eq Company.all.order(:name) }
       it { expect(assigns(:address)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'new'
     end
@@ -306,7 +306,7 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
         request
       end
-      it { expect(assigns(:company)).to eq([bosh]) }
+      it { expect(assigns(:company)).to eq Company.all.order(:name) }
       it { expect(assigns(:address)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end

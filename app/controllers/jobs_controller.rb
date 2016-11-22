@@ -58,17 +58,18 @@ class JobsController < ApplicationController
   def new
     @job = Job.new
     authorize @job
-    set_company
+    @company = Company.order(:name)
     set_company_address
   end
 
   def create
-    set_company
+    @company = Company.order(:name)
     set_company_address
-    if pets_user.is_a?(CompanyPerson)
-      job_params.merge({'company_person_id' => pets_user.id}) 
-    end
     @job = Job.new(job_params)
+    if pets_user.is_a?(CompanyPerson)
+      @job.company_id = pets_user.company.id
+      @job.company_person_id = pets_user.id
+    end
     authorize @job
 
     if @job.save
@@ -91,13 +92,13 @@ class JobsController < ApplicationController
 
   def edit
     authorize @job
-    set_company
+    @company = Company.order(:name)
     set_company_address
   end
 
   def update
     authorize @job
-    set_company
+    @company = Company.order(:name)
     set_company_address
     if @job.update_attributes(job_params)
       flash[:info] = "#{@job.title} has been updated successfully."
@@ -198,14 +199,6 @@ class JobsController < ApplicationController
   end
 
   private
-
-  def set_company
-    if pets_user.is_a?(CompanyPerson)
-      @company = [pets_user.company]
-    else
-      @company = Company.order(:name)
-    end
-  end
 
   def set_company_address
     case params[:action]

@@ -30,7 +30,6 @@ class CompanyRegistrationPolicy < ApplicationPolicy
   end
 
   def agency_admin?(user, record)
-    byebug
     User.is_agency_admin?(user) &&
       (agency_admin_related_to_company? user, record.company)
   end
