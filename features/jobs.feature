@@ -34,7 +34,7 @@ Background: adding job to database
   | Gadgets Inc. | 2 Ford Drive | Detroit | Michigan | 02094   |
 
 
-@javascript
+@selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
 	And I login as "jane@widgets.com" with password "qwerty123"
