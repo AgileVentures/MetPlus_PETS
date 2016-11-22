@@ -55,11 +55,9 @@
     = render partial: 'job_applications/reject_modal'
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-company-person', @job) } }
-                     
   - if pets_user && User.is_job_developer?(pets_user)
     %h3 Applications for this Job
-    .pagination-div{ id: "applications-job", 
+    .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-job-developer', @job) } }
-
 = render partial: 'resume_match_modal'
 

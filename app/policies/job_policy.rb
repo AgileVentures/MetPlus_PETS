@@ -10,8 +10,8 @@ class JobPolicy < ApplicationPolicy
   end
 
   def new?
-    User.is_job_developer?(user) || User.is_agency_admin?(user) || 
-    user.is_a?(CompanyPerson)
+    User.is_job_developer?(user) || User.is_agency_admin?(user) ||
+      user.is_a?(CompanyPerson)
   end
 
   def create?
@@ -19,8 +19,8 @@ class JobPolicy < ApplicationPolicy
   end
 
   def edit?
-    User.is_job_developer?(user) || User.is_agency_admin?(user) || 
-    correct_company_person?
+    User.is_job_developer?(user) || User.is_agency_admin?(user) ||
+      correct_company_person?
   end
 
   def update?
@@ -32,8 +32,8 @@ class JobPolicy < ApplicationPolicy
   end
 
   def show?
-    user.nil? || user.is_a?(JobSeeker) || User.is_job_developer?(user) || 
-    User.is_agency_admin?(user) || correct_company_person?
+    user.nil? || user.is_a?(JobSeeker) || User.is_job_developer?(user) ||
+      User.is_agency_admin?(user) || correct_company_person?
   end
 
   def apply?
@@ -45,7 +45,8 @@ class JobPolicy < ApplicationPolicy
   end
 
   private
-    def correct_company_person?
-      user.is_a?(CompanyPerson) && (record.company == user.company)
-    end
+
+  def correct_company_person?
+    user.is_a?(CompanyPerson) && (record.company == user.company)
+  end
 end
