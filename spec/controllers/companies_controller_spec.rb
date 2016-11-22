@@ -1,31 +1,16 @@
 require 'rails_helper'
 
-RSpec.shared_examples 'unauthorized' do
-  before :each do
-    warden.set_user user
-    my_request
-  end
-  it 'returns http unauthorized' do
-    expect(response).to have_http_status(302)
-  end
-  it 'check content' do
-    expect(response).to redirect_to(root_path)
-  end
-  it 'sets the message' do
-    expect(flash[:alert]).to match(/^You are not authorized to/)
-  end
-end
 RSpec.shared_examples 'unauthorized all' do
   let(:company) { FactoryGirl.create(:company) }
 
   context 'company admin' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:company_admin, company: company) }
     end
   end
 
   context 'company contact' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:company_contact, company: company) }
     end
   end
@@ -36,19 +21,19 @@ RSpec.shared_examples'unauthorized agency people and jobseeker' do
   let(:company) { FactoryGirl.create(:company) }
 
   context 'Case manager' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
     end
   end
 
   context 'Job developer' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
     end
   end
 
   context 'Job seeker' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:job_seeker) }
     end
   end
@@ -181,10 +166,10 @@ RSpec.describe CompaniesController, type: :controller do
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:my_request) { get :edit, id: company }
+        let(:request) { get :edit, id: company }
       end
-      it_behaves_like 'unauthorized' do
-        let(:my_request) { get :edit, id: company }
+      it_behaves_like 'unauthorized request' do
+        let(:request) { get :edit, id: company }
         let(:user) { company_contact }
       end
     end
@@ -207,11 +192,11 @@ RSpec.describe CompaniesController, type: :controller do
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:my_request) do
+        let(:request) do
           patch :update, id: company, company: params_hash
         end
-        it_behaves_like 'unauthorized' do
-          let(:my_request) { patch :update, id: company, company: params_hash }
+        it_behaves_like 'unauthorized request' do
+          let(:request) { patch :update, id: company, company: params_hash }
           let(:user) { company_contact }
         end
       end
@@ -230,10 +215,10 @@ RSpec.describe CompaniesController, type: :controller do
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:my_request) { get :show, id: company }
+        let(:request) { get :show, id: company }
       end
-      it_behaves_like 'unauthorized' do
-        let(:my_request) { get :show, id: company }
+      it_behaves_like 'unauthorized request' do
+        let(:request) { get :show, id: company }
         let(:user) { company_contact }
       end
     end
@@ -245,11 +230,11 @@ RSpec.describe CompaniesController, type: :controller do
       end
 
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:my_request) { delete :destroy, id: company }
+        let(:request) { delete :destroy, id: company }
       end
 
       it_behaves_like 'unauthorized all' do
-        let(:my_request) { delete :destroy, id: company }
+        let(:request) { delete :destroy, id: company }
       end
     end
     context '#list-people' do
