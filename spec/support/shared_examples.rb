@@ -97,5 +97,5 @@ end
 
 RSpec.shared_examples 'return success and render' do |action|
   it { expect(response).to have_http_status(:success) }
-  it { expect(response).to render_template "#{action}" }
+  it { expect(response).to render_template action.to_s }
 end

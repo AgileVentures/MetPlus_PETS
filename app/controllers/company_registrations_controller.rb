@@ -92,7 +92,6 @@ class CompanyRegistrationsController < ApplicationController
     # Approve the company's registration request.
     # There should be only one CompanyPerson associated with the company
     # this is the 'company contact' included in the registration request.
-    byebug
     @company.active
     @company.save
 
@@ -132,7 +131,6 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def load_and_authorize_company
-    byebug
     @company = Company.find(params[:id])
     authorize company_registration(@company)
   rescue ActiveRecord::RecordNotFound
