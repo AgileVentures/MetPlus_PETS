@@ -599,7 +599,7 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_seeker
         get :apply, job_id: revoked_job.id, user_id: job_seeker.id
       end
-      # it { expect(response).to redirect_to(action: 'index') }
+      it 'redirect to jobs_path'
       it 'check set flash' do
         expect(flash[:alert]).to eq 'You are not authorized to apply. '\
         'Job has either been filled or revoked.'
@@ -650,7 +650,7 @@ RSpec.describe JobsController, type: :controller do
           expect(flash[:alert]).to be_present.and eq 'You are not authorized to '\
           "apply for #{job_seeker.full_name}."
         end
-        # it { expect(response).to redirect_to(job_path(bosh_job)) }
+        it 'redirect to job_path' 
       end
       describe 'duplicated application' do
         before :each do
