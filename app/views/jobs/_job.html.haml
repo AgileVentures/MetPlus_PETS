@@ -2,14 +2,14 @@
   %h4
     = link_to job.title, job_path(job)
     - unless job.active?
-      %span%span.label.label-info
+      %span.label.label-info
         #{job.status.capitalize}
   %h5
     = job.company.name
   %small
     #{time_ago_in_words(job.created_at, )} ago
     
-  - if job.active?
+  - if job.active? && pets_user
     - if policy(job).revoke? 
       %button.btn.btn-primary.btn-xs.pull-right.jobs-revoke-button{ type: "button", 
       data: { action: 'revoke', 

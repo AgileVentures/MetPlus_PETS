@@ -2,22 +2,22 @@
 
 .col-sm-offset-1.col-sm-10
   .pull-right#job-show-links-id
-    - if @job.active? && policy(@job).revoke?
-      = render partial: 'revoke_modal'
-      = link_to "Revoke", '#', id: 'revoke_link',
-                data: { "job-id" => "#{@job.id}",
-                        "job-title" => "#{@job.title}",
-                        "job-companyJobId" => "#{@job.company_job_id}" }
-      |
-    - if policy(@job).update?
-      = link_to "Edit Job", edit_job_path(@job)
-      |
-    = link_to 'Return To Jobs', jobs_path
+    - if pets_user
+      - if @job.active? && policy(@job).revoke?
+        = render partial: 'revoke_modal'
+        = link_to "Revoke", '#', id: 'revoke_link',
+                  data: { "job-id" => "#{@job.id}",
+                          "job-title" => "#{@job.title}",
+                          "job-companyJobId" => "#{@job.company_job_id}" }
+        |
+      - if policy(@job).update?
+        = link_to "Edit Job", edit_job_path(@job)
+        |
+    = link_to "Return To Jobs", jobs_path
     |
     - if @resume
       = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
                 data: { job_id: @job.id, job_seeker_id: pets_user.id }
-
 
   .clearfix
 
@@ -56,7 +56,7 @@
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-company-person', @job) } }
                      
-  - if User.is_job_developer?(pets_user)
+  - if pets_user && User.is_job_developer?(pets_user)
     %h3 Applications for this Job
     .pagination-div{ id: "applications-job", 
                      data: { url: list_applications_path('job-job-developer', @job) } }

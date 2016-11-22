@@ -12,16 +12,22 @@ module JobApplicationsViewer
       end
       return JobApplication.paginate(page: params[:applications_page], 
         :per_page => per_page).where(job_seeker: id) 
-    when 'job'
+    when 'job-job-developer'
       return JobApplication.paginate(page: params[:applications_page],
-               :per_page => per_page).where(job: id).
-               includes(:job_seeker).order(:status)
+        :per_page => per_page).where(job: id, job_seeker_id: AgencyRelation.
+        where(agency_person: pets_user, agency_role_id: 1).
+        select(:job_seeker_id)).includes(:job_seeker).order(:status)
+    when 'job-company-person'
+      return JobApplication.paginate(page: params[:applications_page],
+                 :per_page => per_page).where(job: id).
+                 includes(:job_seeker).order(:status)
     end
   end
 
   FIELDS_IN_APPLICATION_TYPE = {
       'job_seeker': [:title, :description, :company, :applied_at, :status],
-      'job': [:name, :js_status, :applied_at, :action]
+      'job-job-developer': [:name, :js_status, :applied_at],
+      'job-company-person': [:name, :js_status, :applied_at, :action]
   }
 
   def application_fields application_type
