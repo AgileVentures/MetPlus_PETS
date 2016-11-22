@@ -42,8 +42,7 @@ RSpec.describe AgencyMailer, type: :mailer do
           to have_body_text("A company has requested registration in PETS:")
     end
     it "includes link to show company" do
-      expect(mail).
-          to have_body_text(/#{company_url(id: 1)}/)
+      expect(mail).to have_body_text(/#{company_url(id: company.id)}/)
     end
   end
 
