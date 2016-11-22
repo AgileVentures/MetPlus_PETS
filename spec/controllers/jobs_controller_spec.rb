@@ -487,7 +487,7 @@ RSpec.describe JobsController, type: :controller do
     end
 
     describe 'company_person with 3 pages' do
-      before(:each) {  sign_in bosh_person}
+      before(:each) { warden.set_user bosh_person}
 
       it 'first_page: is a success' do
         request_first_page
@@ -534,7 +534,7 @@ RSpec.describe JobsController, type: :controller do
 
     describe 'company_person with 1 page' do
       before :each do
-        sign_in dyson_person
+        warden.set_user dyson_person
         request_first_page
       end
 
@@ -819,6 +819,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'happy path' do
       before(:each) do
+        warden.set_user job_seeker
         stub_cruncher_match_resume_and_job
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
       end
@@ -833,6 +834,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'sad path' do
       it 'returns 404 status when job seeker does not have resume' do
+        warden.set_user job_seeker2
         stub_cruncher_match_resume_and_job
 
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker2.id
@@ -842,6 +844,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'returns 404 status when job not in Cruncher' do
+        warden.set_user job_seeker
         stub_cruncher_match_resume_and_job_error(:no_job, job.id)
 
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
@@ -852,6 +855,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'returns 404 status when resume not in Cruncher' do
+        warden.set_user job_seeker
         stub_cruncher_match_resume_and_job_error(:no_resume, resume.id)
 
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
