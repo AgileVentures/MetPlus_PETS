@@ -8,14 +8,13 @@
     = job.company.name
   %small
     #{time_ago_in_words(job.created_at, )} ago
-    
   - if job.active? && pets_user
-    - if policy(job).revoke? 
-      %button.btn.btn-primary.btn-xs.pull-right.jobs-revoke-button{ type: "button", 
-      data: { action: 'revoke', 
-              job: { id: "#{job.id}", 
-              title: "#{job.title}", 
+    - if policy(job).revoke?
+      %button.btn.btn-primary.btn-xs.pull-right.jobs-revoke-button{ type: "button",
+      data: { action: 'revoke',
+              job: { id: "#{job.id}",
+              title: "#{job.title}",
               companyJobId: "#{job.company_job_id}" } } }revoke
     - if policy(job).update?
-      = link_to "edit", edit_job_path(job), 
+      = link_to "edit", edit_job_path(job),
         class: "pull-right btn btn-primary btn-xs", id: "jobs-edit-link"

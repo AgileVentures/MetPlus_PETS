@@ -20,7 +20,7 @@
               %th.strong Company
             - when :description
               %th.strong Description
-            -when :posted
+            - when :posted
               %th.strong Posted
     %tbody
       - jobs.each do |job|
@@ -57,7 +57,7 @@
               %td
                 #{time_ago_in_words(job.created_at, )} ago
   .row.text-center
-    = will_paginate jobs, param_name: 'jobs_page', 
-                          params: { :controller => 'jobs', :action => 'list', 
-                          :job_type => job_type }
+    = will_paginate jobs, param_name: 'jobs_page',
+                          params: { controller: 'jobs', action: 'list',
+                          job_type: job_type }
 %br
