@@ -1,21 +1,20 @@
--provide(:title, 'List of jobs')
+- provide(:title, 'List of jobs')
 
-%div{class: "well well-sm col-sm-offset-2 col-sm-8", 	id: "jobs-well-lg"}
-	%div{class: 'col-sm-6'}
-		%h4{id: 'list-header'} List of job opportunities
-
-	.col-sm-6
-		= button_to 'Search Jobs', list_search_jobs_path,
-								 method: :get, class: 'btn btn-primary pull-right',
-								 style: 'margin-top: 20px;'
+.well.well-sm.col-sm-offset-2.col-sm-8#jobs-well-lg
+  .col-sm-6
+    %h4#list-header
+      List of job opportunities
+  .col-sm-6
+    = button_to 'Search Jobs', list_search_jobs_path, method: :get, 
+      class: 'btn btn-primary pull-right', style: 'margin-top: 20px;'
 
 - if @jobs.empty?
-	%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "sub-list-id"}
-		%strong{class: "text-center"}
-			%h3 There are no jobs available.
+  .well.well-lg.col-sm-offset-2.col-sm-8#sub-list-id
+    %strong.text-center
+      %h3 There are no jobs available.
 - else
-	= render partial: "revoke_modal"
-	= render partial: "job", collection: @jobs 
-	
-%div{class: "col-sm-offset-4 col-sm-6"}
-	= will_paginate @jobs
+  = render partial: "revoke_modal"
+  = render partial: "job", collection: @jobs 
+  
+.col-sm-offset-4.col-sm-6
+  = will_paginate @jobs

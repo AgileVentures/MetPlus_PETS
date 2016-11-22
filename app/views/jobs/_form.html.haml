@@ -7,19 +7,19 @@
   .col-sm-6
     = f.text_field :title, class: 'form-control'
 
--if @cp_or_jd.is_a?(AgencyPerson) && @cp_or_jd.is_job_developer?(pets_user.agency)
+- unless pets_user.is_a?(CompanyPerson)
   .form-group
     .col-sm-3.control-label
       = f.label  :company_id, 'Company Name'
     .col-sm-6
       = f.collection_select :company_id, companies, :id, :name,
-                  {prompt: true}, {class: "form-control"}
+                  { prompt: true }, { class: "form-control" }
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
   .col-sm-6#address_select
     = f.collection_select :address_id, addresses, :id, :full_address,
-                {prompt: true, include_blank: true}, class: 'form-control'
+                { prompt: true, include_blank: true }, class: 'form-control'
 
 .form-group
   .col-sm-3.control-label

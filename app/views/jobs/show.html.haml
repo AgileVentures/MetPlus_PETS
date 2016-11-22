@@ -2,16 +2,15 @@
 
 .col-sm-offset-1.col-sm-10
   .pull-right#job-show-links-id
-    - if not pets_user.nil? and (pets_user.is_a?(CompanyPerson) or            |
-                                 pets_user.is_job_developer?(current_agency)) |
-      - if @job.status == 'active'
-        = render partial: 'revoke_modal'
-        = link_to 'Revoke', '#', id: 'revoke_link',
-                 data: { 'job-id' => "#{@job.id}",
-                         'job-title' => "#{@job.title}",
-                         'job-companyJobId' => "#{@job.company_job_id}" }
+    - if @job.active? && policy(@job).revoke?
+      = render partial: 'revoke_modal'
+      = link_to "Revoke", '#', id: 'revoke_link',
+                data: { "job-id" => "#{@job.id}",
+                        "job-title" => "#{@job.title}",
+                        "job-companyJobId" => "#{@job.company_job_id}" }
         |
-      = link_to 'Edit Job', edit_job_path(@job)
+    - if policy(@job).update?
+      = link_to "Edit Job", edit_job_path(@job)
       |
     = link_to 'Return To Jobs', jobs_path
     |
@@ -24,19 +23,14 @@
 
   = render partial: 'job_info'
 
-
   #apply_job
-  - if pets_user && @job.status == 'active'
-    - if pets_user.is_job_developer?(current_agency)
+  - if pets_user && @job.active?
+    - if User.is_job_developer?(pets_user)
       = link_to 'Click Here to Submit an Application for Job Seeker', '#',
                 class: 'col-sm-offset-4', id: 'jd-apply-button',
-                data: { :toggle => 'modal',
-                        :target => '#jdApplyJobModal' }
-      = render partial: '/job_applications/jd_apply_job_modal',
-               locals: { job: @job }
-      = render partial: '/job_applications/preview_modal',
-               locals: { job: @job }
-
+                data: { toggle: 'modal', target: '#jdApplyJobModal' }
+      = render partial: '/job_applications/jd_apply_job_modal', locals: { job: @job }
+      = render partial: '/job_applications/preview_modal', locals: { job: @job }
     - elsif pets_user.is_job_seeker?
       - if @job.last_application_by_job_seeker(pets_user)
         .panel.panel-primary.center-aligned-div
@@ -54,12 +48,20 @@
                           :target => '#applyJobModal' }
         = render partial: 'apply_modal', :locals => { :job => @job }
 
-  - if pets_user.is_a?(CompanyPerson) && (pets_user.company == @job.company)
+  .clearfix
+  #job_applications_list
+  - if pets_user.is_a?(CompanyPerson)
     %h3
       Applications for this Job
     = render partial: 'job_applications/accept_modal'
     = render partial: 'job_applications/reject_modal'
-    .pagination-div{ id: "applications-job",
-                     data: { url: list_applications_path('job', @job) } }
+    .pagination-div{ id: "applications-job", data: { 
+                     url: list_applications_path('job-company-person', @job) } }
+  - if User.is_job_developer?(pets_user)
+    %h3
+      Applications for this Job
+    .pagination-div{ id: "applications-job", data: { 
+                     url: list_applications_path('job-job-developer',  @job) } }
+
 
 = render partial: 'resume_match_modal'
