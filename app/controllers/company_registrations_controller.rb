@@ -2,6 +2,9 @@ class CompanyRegistrationsController < ApplicationController
   include UserParameters
   include CompanyPeopleViewer
 
+  before_action :user_logged!, except: [:new, :create]
+  before_action :load_and_authorize_company, except: [:new, :create]
+
   def new
     @company = Company.new
     @company.addresses.build
@@ -9,21 +12,21 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def show
-    @company        = Company.find(params[:id])
+    authorize company_registration(@company)
     @company_admins = Company.company_admins(@company)
     @people_type    = 'company-all'
   end
 
   def destroy
-    company = Company.find(params[:id])
-    company.destroy
-    flash[:notice] = "Registration for '#{company.name}' deleted."
+    @company.destroy
+    flash[:notice] = "Registration for '#{@company.name}' deleted."
     redirect_to root_path
   end
 
   def create
     @company = Company.new
-    # Assign attributes for Company and (nested) attributes for Address and CompanyPerson
+    # Assign attributes for Company and (nested) attributes
+    # for Address and CompanyPerson
     @company.assign_attributes(company_params)
 
     # Ensure that company contact does *not* recieve a confirmation email
@@ -33,20 +36,18 @@ class CompanyRegistrationsController < ApplicationController
     @company.company_people[0].user.approved = false
 
     @company.company_people[0].company_roles <<
-                    CompanyRole.find_by_role(CompanyRole::ROLE[:CA])
+      CompanyRole.find_by(role: CompanyRole::ROLE[:CA])
 
-    # MULTIPLE AGENCIES: the code below needs to change
+    # MULTIPLE AGENCIES: the line below needs to change
     @company.agencies << Agency.first
-    ###################################################
 
     if @company.save
       @company.pending_registration
       @company.company_people[0].company_pending
-      flash.notice = "Thank you for your registration request. " +
-         " We will review your request and get back to you shortly."
+      flash.notice = 'Thank you for your registration request. ' \
+         ' We will review your request and get back to you shortly.'
 
       Event.create(:COMP_REGISTER, @company)
-
       render :confirmation
     else
       render :new
@@ -54,15 +55,13 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def edit
-    @company = Company.find(params[:id])
     @company.build_address unless @company.addresses
   end
 
   def update
-    @company = Company.find(params[:id])
-
     reg_params = company_params
-    reg_params[:company_people_attributes]['0'] = handle_user_form_parameters reg_params[:company_people_attributes]['0']
+    reg_params[:company_people_attributes]['0'] =
+      handle_user_form_parameters(reg_params[:company_people_attributes]['0'])
 
     changed_email = (@company.company_people[0].email !=
             reg_params[:company_people_attributes]['0'][:email])
@@ -74,14 +73,14 @@ class CompanyRegistrationsController < ApplicationController
     @company.company_people[0].user.skip_reconfirmation!
 
     if @company.update_attributes(reg_params)
-      flash[:notice] = "Registration was successfully updated."
+      flash[:notice] = 'Registration was successfully updated.'
       # Send pending-approval email to company contact if the contact
       # email address was changed
       if changed_email
-        CompanyMailerJob.set(wait: Event.delay_seconds.seconds).
-                         perform_later(Event::EVT_TYPE[:COMP_REGISTER],
-                         @company,
-                         @company.company_people[0])
+        CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                        .perform_later(Event::EVT_TYPE[:COMP_REGISTER],
+                                       @company,
+                                       @company.company_people[0])
       end
       redirect_to agency_admin_home_path
     else
@@ -91,52 +90,63 @@ class CompanyRegistrationsController < ApplicationController
 
   def approve
     # Approve the company's registration request.
-    # There should be only one CompanyPerson associated with the company -
+    # There should be only one CompanyPerson associated with the company
     # this is the 'company contact' included in the registration request.
-    company = Company.find(params[:id])
-    company.active
-    company.save
+    @company.active
+    @company.save
 
-    company_person = company.company_people[0]
+    company_person = @company.company_people[0]
     company_person.active
     company_person.approved = true
     company_person.save
 
-    Event.create(:COMP_APPROVED, company)
+    Event.create(:COMP_APPROVED, @company)
 
     # Send account confirmation email (Devise)
     company_person.user.send_confirmation_instructions
 
-    flash[:notice] = "Company contact has been notified of registration approval."
-    redirect_to company_path(company.id)
-
+    flash[:notice] =
+      'Company contact has been notified of registration approval.'
+    redirect_to @company
   end
 
   def deny
     # Deny the company's registration request.
-    company = Company.find(params[:id])
+    @company.registration_denied
+    @company.company_people[0].company_denied
+    @company.save
 
-    company.registration_denied
-    company.company_people[0].company_denied
-    company.save
-
-    render :partial => 'companies/company_status',
-           :locals => {company: company, admin_aa: true} if request.xhr?
+    render partial: 'companies/company_status',
+           locals: { company: @company, admin_aa: true } if request.xhr?
 
     # Anonymous class to contain company and reason for denial
     obj = Struct.new(:company, :reason)
-
-    Event.create(:COMP_DENIED, obj.new(company, params[:email_text]))
+    Event.create(:COMP_DENIED, obj.new(@company, params[:email_text]))
   end
 
   private
-  def company_params
-    params.require(:company).permit(:name, :email, :phone, :fax,
-    :website, :ein, :description, :job_email,
-    company_people_attributes: [:id, :first_name, :last_name,
-                        :phone, :email, :title,
-                        :password, :password_confirmation],
-    addresses_attributes: [:id, :street, :city, :zipcode, :state, :_destroy])
+
+  def company_registration(company)
+    CompanyRegistration.new company
   end
 
+  def load_and_authorize_company
+    @company = Company.find(params[:id])
+    authorize company_registration(@company)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path,
+                alert: "The company you're looking for doesn't exist"
+  end
+
+  def company_params
+    params
+      .require(:company)
+      .permit(:name, :email, :phone, :fax, :website,
+              :ein, :description, :job_email,
+              company_people_attributes:
+                [:id, :first_name, :last_name, :phone,
+                 :email, :title, :password, :password_confirmation],
+              addresses_attributes:
+                [:id, :street, :city, :zipcode, :state, :_destroy])
+  end
 end

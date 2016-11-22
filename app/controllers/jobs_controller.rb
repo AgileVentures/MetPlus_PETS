@@ -1,9 +1,8 @@
 class JobsController < ApplicationController
   include JobsViewer
-  include JobApplicationsViewer
 
   before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                                  :applications, :applications_list, :revoke]
+                                  :revoke, :match_resume]
   before_action :authentication_for_post_or_edit,
                 only: [:new, :edit, :create, :update, :destroy]
   before_action :right_company_person?, only: [:edit, :destroy, :update]
@@ -85,6 +84,8 @@ class JobsController < ApplicationController
   end
 
   def show
+    @resume = nil
+    @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
   end
 
   def edit
@@ -105,21 +106,6 @@ class JobsController < ApplicationController
     redirect_to jobs_url
   end
 
-  def applications
-    @application_type = params[:application_type] || 'job-applied'
-  end
-
-  def applications_list
-    raise 'Unsupported request' unless request.xhr?
-
-    @application_type = params[:application_type] || 'job-applied'
-
-    @applications = []
-    @applications = display_job_applications @application_type, 5, @job.id
-
-    render partial: 'job_applications'
-  end
-
   def list
     raise 'Unsupported request' unless request.xhr?
 
@@ -131,9 +117,7 @@ class JobsController < ApplicationController
     when 'my-company-all'
       render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
     when 'recent-jobs'
-      render partial: 'compact_list', locals: {
-        jobs: @jobs, job_type: @job_type, last_sign_in: params[:js_login]
-      }
+      render partial: 'compact_list', locals: { jobs: @jobs, job_type: @job_type }
     end
   end
 
@@ -210,6 +194,27 @@ class JobsController < ApplicationController
     redirect_to jobs_path
   end
 
+  def match_resume
+    raise 'Unsupported request' unless request.xhr?
+
+    job_seeker = JobSeeker.find(params[:job_seeker_id])
+    resume = job_seeker.resumes[0]
+
+    return render(json: { message: 'No résumé on file',
+                          status: 404 }) unless resume
+
+    result = ResumeCruncher.match_resume_and_job(resume.id, @job.id)
+
+    return render(json: { message: result[:message],
+                          status: 404 }) if result[:status] == 'ERROR'
+
+    @score = result[:score]
+
+    str = render_to_string layout: false
+
+    render(json: { stars_html: str, status: 200 })
+  end
+
   private
 
   def apply_job
@@ -249,11 +254,10 @@ class JobsController < ApplicationController
   end
 
   def right_company_person?
-    if @cp_or_jd.is_a?(CompanyPerson)
-      return if @cp_or_jd.company == @job.company
-      flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
-      redirect_to jobs_url
-    end
+    return unless @cp_or_jd.is_a?(CompanyPerson)
+    return if @cp_or_jd.company == @job.company
+    flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
+    redirect_to jobs_url
   end
 
   def find_job

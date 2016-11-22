@@ -1,7 +1,6 @@
 -# partial for job applications
--# (e.g. all applications by a specific job seeker)
 - if job_applications.empty?
-  %span(style='padding-left: 10px;') None
+  %span{ style: 'padding-left: 10px;' } None
 - else
   %table.table.table-hover
     %thead
@@ -18,15 +17,20 @@
               %th.strong Applied
             - when :status
               %th.strong Status
+            - when :name
+              %th.strong Name
+            - when :js_status
+              %th.strong Job Seeker Status
+            - when :action
+              %th.strong Action
     %tbody
       - job_applications.each do |job_application|
-        %tr{id: "applications-#{job_application.id}"}
+        %tr{ id: "applications-#{job_application.id}" }
           - application_fields(application_type).each do |field|
             - case field
               - when :title
                 %td
-                  = link_to job_application.job.title,
-                            job_path(job_application.job)
+                  = link_to job_application.job.title, job_path(job_application.job)
               - when :description
                 %td
                   = truncate(job_application.job.description, length: 200)
@@ -36,12 +40,41 @@
               - when :applied_at
                 %td
                   - applied_at = job_application.status_change_time(:active)
-                  = "#{time_ago_in_words(applied_at)} ago"
+                  #{time_ago_in_words(applied_at)} ago
               - when :status
                 %td
                   = status_desc(job_application)
+              - when :name
+                %td
+                  = link_to job_application.job_seeker.full_name,
+                            application_path(job_application)
+              - when :js_status
+                %td
+                  = job_application.job_seeker.job_seeker_status.short_description
+              - when :action
+                %td
+                  - if job_application.active?
+                    = link_to "Accept", '#', class: "action_link btn btn-success",
+                              id: "accept_link",
+                              data: { "application-id" => "#{job_application.id}",
+                                      "job-title" => "#{job_application.job.title}",
+                                      "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
+                                      "job-companyJobId" => "#{job_application.job.company_job_id}",
+                                      "action" => "#acceptModal" }
+                    = link_to "Reject", '#', class: "action_link btn btn-warning",
+                              id: "reject_link",
+                              data: { "application-id" => "#{job_application.id}",
+                                      "job-id" => "#{job_application.job.id}",
+                                      "job-title" => "#{job_application.job.title}",
+                                      "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
+                                      "job-companyJobId" => "#{job_application.job.company_job_id}",
+                                      "action" => "#rejectModal" }
+                  - else
+                    = link_to "#{job_application.status}", '#',
+                              class: "btn btn-default disabled"
 
   = will_paginate job_applications, param_name: 'applications_page',
-                               params: {controller: 'job_applications',
-                                        action: 'list',
-                                        type: application_type}
+                                    params: { controller: 'job_applications',
+                                              action: 'list',
+                                              type: application_type }
+

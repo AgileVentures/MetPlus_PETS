@@ -89,6 +89,7 @@ Background: data is added to database
   Scenario: job developer cannot apply for his job seeker with CM role
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
+    And I wait 1 second
     Then I want to apply to "software developer" for "Seeker, July"
     But I cannot find "Seeker, July" from my job seekers list
 

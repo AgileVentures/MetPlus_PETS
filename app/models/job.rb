@@ -11,9 +11,9 @@ class Job < ActiveRecord::Base
                                              reject_if: :all_blank
 
   has_many   :required_skills, -> { where job_skills: { required: true } },
-                through: :job_skills, class_name: 'Skill', source: :skill
+             through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :nice_to_have_skills, -> { where job_skills: { required: false } },
-                through: :job_skills, class_name: 'Skill', source: :skill
+             through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
@@ -22,7 +22,7 @@ class Job < ActiveRecord::Base
   validates_presence_of :company_job_id
   validates_presence_of :fulltime, allow_blank: true
   validates_inclusion_of :shift, in: SHIFT_OPTIONS,
-                        message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
+                                 message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10_000
@@ -61,7 +61,7 @@ class Job < ActiveRecord::Base
                                    application: job_application,
                                    resume_id: resume_id)
 
-    last_application_by_job_seeker(job_seeker)
+    job_application
   end
 
   def status_change_time(status, which = :latest)
@@ -85,8 +85,8 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 
-  def is_recent?(time)
-    created_at > time
+  def recent_for?(user)
+    created_at > user.last_sign_in_at
   end
 
   private
@@ -121,7 +121,7 @@ class Job < ActiveRecord::Base
       # and, 2) force a return value of 'false' from save (update)
       # See: http://tech.taskrabbit.com/blog/2013/05/23/rollback-after-save/
 
-      raise ActiveRecord::RecordInvalid.new(self)
+      raise ActiveRecord::RecordInvalid, self
     end
     true
   end
