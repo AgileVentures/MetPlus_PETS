@@ -63,3 +63,39 @@ RSpec.shared_examples 'unauthenticated XHR request' do
     )
   end
 end
+
+module Helpers
+  def assign_role(role)
+    let(:agency) { FactoryGirl.create(:agency) }
+    let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+    case role
+    when 'job_seeker'
+      let(:person) { FactoryGirl.create(:job_seeker) }
+    when 'company_person', 'company_admin', 'company_contact'
+      let(:person) { FactoryGirl.send(:create, role.to_sym, company: company) }
+    when 'agency_person', 'job_developer', 'case_manager', 'agency_admin'
+      let(:person) { FactoryGirl.send(:create, role.to_sym, agency: agency) }
+    else
+      let(:person) { nil }
+    end
+  end
+end
+RSpec.configure { |c| c.extend Helpers }
+
+RSpec.shared_examples 'unauthorized' do |role|
+  assign_role(role)
+  before :each do
+    warden.set_user person
+    request
+  end
+  it { expect(response).to have_http_status(:redirect) }
+  it 'sets flash[:alert] message' do
+    expect(flash[:alert]).to match('You are not authorized to')
+      .or eq('You need to login to perform this action.')
+  end
+end
+
+RSpec.shared_examples 'return success and render' do |action|
+  it { expect(response).to have_http_status(:success) }
+  it { expect(response).to render_template "#{action}" }
+end

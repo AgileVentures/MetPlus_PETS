@@ -125,23 +125,4 @@ RSpec.describe JobPolicy do
       expect(JobPolicy).not_to permit(job_seeker, bosh_job)
     end
   end
-
-  # permissions :list? do
-  #   it 'only allows access if user is company_person' do
-  #     expect(JobPolicy).to permit(bosh_contact, bosh_job)
-  #     expect(JobPolicy).to permit(bosh_admin, bosh_job)
-  #     expect(JobPolicy).not_to permit(widget_contact, bosh_job)
-  #     expect(JobPolicy).not_to permit(widget_admin, bosh_job)
-  #   end
-
-  #   it "disallows access if user is agency people" do
-  #     expect(JobPolicy).not_to permit(job_developer, bosh_job)
-  #     expect(JobPolicy).not_to permit(agency_admin, bosh_job)
-  #     expect(JobPolicy).not_to permit(case_manager, bosh_job)
-  #   end
-
-  #   it "allows access if user is job_seeker" do
-  #     expect(JobPolicy).  to permit(job_seeker, bosh_job)
-  #   end
-  # end
 end
