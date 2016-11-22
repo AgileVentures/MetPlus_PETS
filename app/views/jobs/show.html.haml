@@ -8,7 +8,7 @@
                 data: { "job-id" => "#{@job.id}",
                         "job-title" => "#{@job.title}",
                         "job-companyJobId" => "#{@job.company_job_id}" }
-        |
+      |
     - if policy(@job).update?
       = link_to "Edit Job", edit_job_path(@job)
       |
@@ -49,19 +49,17 @@
         = render partial: 'apply_modal', :locals => { :job => @job }
 
   .clearfix
-  #job_applications_list
   - if pets_user.is_a?(CompanyPerson)
-    %h3
-      Applications for this Job
+    %h3 Applications for this Job
     = render partial: 'job_applications/accept_modal'
     = render partial: 'job_applications/reject_modal'
-    .pagination-div{ id: "applications-job", data: { 
-                     url: list_applications_path('job-company-person', @job) } }
+    .pagination-div{ id: "applications-job",
+                     data: { url: list_applications_path('job-company-person', @job) } }
+                     
   - if User.is_job_developer?(pets_user)
-    %h3
-      Applications for this Job
-    .pagination-div{ id: "applications-job", data: { 
-                     url: list_applications_path('job-job-developer',  @job) } }
-
+    %h3 Applications for this Job
+    .pagination-div{ id: "applications-job", 
+                     data: { url: list_applications_path('job-job-developer', @job) } }
 
 = render partial: 'resume_match_modal'
+
