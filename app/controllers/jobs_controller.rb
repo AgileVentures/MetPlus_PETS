@@ -1,7 +1,8 @@
 class JobsController < ApplicationController
   include JobsViewer
 
-  before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke]
+  before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
+                                  :match_resume]
   before_action :user_logged!, except: [:index, :list_search_jobs, :show]
 
   helper_method :job_fields

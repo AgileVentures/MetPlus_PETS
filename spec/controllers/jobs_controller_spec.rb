@@ -794,10 +794,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'visitor'
     end
   end
-end
-
   
-
   describe 'GET #match_resume' do
     render_views
 
