@@ -215,9 +215,6 @@ RSpec.describe JobsController, type: :controller do
         end
       end
     end
-    context 'incorrect company person' do
-      it_behaves_like 'unauthorized', 'company_person'
-    end
     context 'job seeker' do
       it_behaves_like 'unauthorized', 'job_seeker'
     end

@@ -86,7 +86,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 	And I logout
 
 
-@javascript
+@selenium
 Scenario: Creating and Updating Job successfully and unsuccessfully
   Given I am on the home page
 	And I login as "hr@metplus.org" with password "qwerty123"
