@@ -423,7 +423,6 @@ class Event
                                    evt_obj.job)
     end
 
-    
   def self.evt_cp_interest_in_js(evt_obj)
     # evt_obj = struct(:job, :company_person, :job_developer, :job_seeker)
     # Business rules:
