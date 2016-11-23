@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   include JobsViewer
 
   before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
-                                  :match_resume]
+                                  :match_resume, :match_job_seekers]
   before_action :user_logged!, except: [:index, :list_search_jobs, :show]
 
   def index
@@ -194,6 +194,18 @@ class JobsController < ApplicationController
     str = render_to_string layout: false
 
     render(json: { stars_html: str, status: 200 })
+  end
+
+  def match_job_seekers
+    # Get job match scores for all job Seekers
+    result = ResumeCruncher.match_resumes(@job.id)
+
+    # If no match or matche scores all too low, set flash and return
+    if result.nil? || (result.delete_if { |item| item[1] <= 0.9 }).empty?
+      flash[:alert] = "No matching job seekers found."
+      redirect_to(action: 'show', id: @job.id) && return
+    end
+
   end
 
   private
