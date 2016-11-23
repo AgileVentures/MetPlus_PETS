@@ -2,75 +2,40 @@
 describe('Convert UTC to local Time', function () {
   beforeEach(function () {
     loadFixtures('utc_to_local/utc_time.html');
+  });
+
+  it('New York', function () {
+    spyOn(moment.tz, 'guess').and.returnValue('America/New_York');
     utcToLocal.setup();
-    jasmine.clock().install();
+    ele = $('.utc_to_local_time')[0];
+    expect($(ele).text()).toEqual('November 7, 2016 1:04 PM');
   });
 
-  afterEach(function() {
-   jasmine.clock().uninstall();
+  it('Johannesburg', function () {
+    spyOn(moment.tz, 'guess').and.returnValue('Africa/Johannesburg');
+    utcToLocal.setup();
+    ele = $('.utc_to_local_time')[0];
+    expect($(ele).text()).toEqual('November 7, 2016 8:04 PM');
   });
 
-  it('should return the utc local time for New York', function () {
-    expect($('#.utc_to_local_time')).toHaveBeenCalled();
-    jasmine.clock().mockDate(utcToLocal);
-    moment.tz.guess('America/New_York');
-    jasmine.clock().tick(-5);
-    expect($('#.utc_to_local_time').calls.count()).toEqual(-5);
+  it('London', function () {
+    spyOn(moment.tz, 'guess').and.returnValue('Europe/London');
+    utcToLocal.setup();
+    ele = $('.utc_to_local_time')[0];
+    expect($(ele).text()).toEqual('November 7, 2016 6:04 PM');
   });
 
+  it('Shanghai', function () {
+    spyOn(moment.tz, 'guess').and.returnValue('Asia/Shanghai');
+    utcToLocal.setup();
+    ele = $('.utc_to_local_time')[0];
+    expect($(ele).text()).toEqual('November 8, 2016 2:04 AM');
+  });
 
+  it('Hawaii', function () {
+    spyOn(moment.tz, 'guess').and.returnValue('US/Hawaii');
+    utcToLocal.setup();
+    ele = $('.utc_to_local_time')[0];
+    expect($(ele).text()).toEqual('November 7, 2016 8:04 AM');
+  });
 });
-//     // set local timezone so "moment.tz.guess()"" will detect that, or,
-//     // stub "moment.tz.guess()" function to return a specific timezone string
-//     // (see timezone strings in above link)
-//     // here. we want to use timezone 'America/New_York'
-//
-//     utcToLocal.setup();  // convert UTC time to local time in the DOM
-//     ele = $('.utc_to_local_time')[0]  // Get the converted span element
-//
-//     // test that timezone in the DOM is equal to expected timezone
-//     // hint: use $('ele').text()
-//   });
-//
-//   it('Johannesburg', function () {
-//     // tz = 'Africa/Johannesburg'
-//
-//   });
-//
-//   it('London', function () {
-//     // tz = 'Europe/London'
-//   });
-// });
-// Contact GitHub API Training Shop Blog About
-
-// it('should return the utc local time for Johannesburg', function () {
-//   var baseTime = new Date(2013, 9, 23);
-//   jasmine.clock().mockDate(baseTime);
-//
-//   jasmine.clock().tick(50);
-//   expect(new Date().getTime()).toEqual(baseTime.getTime() + 50);
-// });
-//
-// it('should return the utc local time for London', function () {
-//   var baseTime = new Date(2013, 9, 23);
-//   jasmine.clock().mockDate(baseTime);
-//
-//   jasmine.clock().tick(50);
-//   expect(new Date().getTime()).toEqual(baseTime.getTime() + 50);
-// });
-//
-// it('should return the utc local time for China', function () {
-//   var baseTime = new Date(2013, 9, 23);
-//   jasmine.clock().mockDate(baseTime);
-//
-//   jasmine.clock().tick(50);
-//   expect(new Date().getTime()).toEqual(baseTime.getTime() + 50);
-// });
-//
-// it('should return the utc local time for Australia', function () {
-//   var baseTime = new Date(2013, 9, 23);
-//   jasmine.clock().mockDate(baseTime);
-//
-//   jasmine.clock().tick(50);
-//   expect(new Date().getTime()).toEqual(baseTime.getTime() + 50);
-// });
