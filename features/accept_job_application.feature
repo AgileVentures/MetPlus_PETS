@@ -34,46 +34,45 @@ Background: data is added to database
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator          |
     | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com |
+    | hr assistant   | KRK01K       | Day   | true     | internship  | Widgets Inc. | cane@widgets.com |
 
 	Given the following job applications exist:
-		| job title 	 | job seeker 	 | status 			|
-		| hr manager	 | john@mail.com | active 			|
-		| hr manager	 | jane@mail.com | active 			|
-		| hr manager	 | june@mail.com | active 			|
-
+		| job title 	   | job seeker 	 | status 			|
+		| hr manager	   | john@mail.com | active 			|
+		| hr manager	   | jane@mail.com | active 			|
+		| hr manager	   | june@mail.com | active 			|
+    | hr assistant   | june@mail.com | active       |
 	@javascript
 	Scenario: company contact accept a job application
 		Given I am on the home page
 	  And I login as "cicil@widgets.com" with password "qwerty123"
 	  And I wait 1 second
-	  Then I click "hr manager" link to job applications index page
-	  And I should see "3" active applications for the job
-	  Then I accept "jane@mail.com" application
+	  Then I click the "hr manager" link
+	  And I should see "3" active applications for "hr manager"
+	  Then I accept "jane@mail.com" application for "hr manager"
 	  And I should see an "accept" confirmation
 	  Then I click the "Accept" confirmation
 	  And I should see "jane@mail.com" application is listed first
-	  And I should see "jane@mail.com" application changes to accepted
-	  And other applications change to not accepted
+	  And I should see "jane@mail.com" application for "hr manager" changes to accepted
+	  And other applications for "hr manager" change to not accepted
 	  And I should see "hr manager" job changes to status filled
 
-	@selenium
+	@javascript
 	Scenario: company admin accept a job application
 		Given I am on the home page
 	  And I login as "cane@widgets.com" with password "qwerty123"
 	  And I wait 1 second
-	  Then I click "hr manager" link to job applications index page
-	  And I should see "3" active applications for the job
-	  Then I click "june@mail.com" link to "June's" job application show page
-	  Then I click the "Accept" link
-	  And I should see an "accept" confirmation
-	  Then I click the "Accept" confirmation
-	  And I am returned to "hr manager" job application index page
-	  And I should see "june@mail.com" application is listed first
-	  And I should see "june@mail.com" application changes to accepted
-	  And other applications change to not accepted
-	  And I should see "hr manager" job changes to status filled
-	  Then I click "june@mail.com" link to "June's" job application show page
-	  And I should not see "Accept" link
+	  Then I click the "hr manager" link
+    And I should see "3" active applications for "hr manager"
+    Then I click the "Seeker, June" link
+    And I should see "2" active applications by "june@mail.com"
+    Then I accept "june@mail.com" application for "hr assistant"
+    And I should see an "accept" confirmation
+    Then I click the "Accept" confirmation
+    And I should see "june@mail.com" application is listed first
+    And I should see "june@mail.com" application for "hr assistant" changes to accepted
+    And other applications for "hr assistant" change to not accepted
+    And I should see "hr assistant" job changes to status filled
 
 	@selenium
 	Scenario: job developer accept notification when job application accepted
@@ -84,8 +83,8 @@ Background: data is added to database
 	  When I am in Company Admin's browser
 	  Given I am on the home page
 	  And I login as "cane@widgets.com" with password "qwerty123"
-	  Then I click "hr manager" link to job applications index page
-	  And I accept "john@mail.com" application
+	  Then I click the "hr manager" link
+	  And I accept "john@mail.com" application for "hr manager"
 	  And I click the "Accept" confirmation
 
 	  Then I am in Job Developer's browser
