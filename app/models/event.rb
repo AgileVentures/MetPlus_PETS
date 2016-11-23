@@ -427,16 +427,13 @@ class Event
                                    evt_obj.job)
     end
 
-   
-   job_seekers = JobApplication.job_seeker(evt_obj.job.job_application)
-   
-    job_applications = evt_obj.job.job_applications#job_seekers = Job.apply job_seeker(evt_obj.job)
-    job_seekers = job_applications.job_seeker;
+    job_apps = evt_obj.job.job_applications
     
-    unless job_seekers.empty?
-
-      js_ids     = job_seekers.collect {|js| js.user.id}
-      js_emails  = job_seekers.collect {|js| js.email}
+    unless job_apps.empty?
+     
+      js_emails = job_apps.map { |ja| ja.job_seeker.email}
+      js_ids     = job_apps.map { |ja| ja.job_seeker.id}
+      
 
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JOB_REVOKED],
