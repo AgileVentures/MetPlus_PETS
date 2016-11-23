@@ -6,6 +6,7 @@ RSpec.describe AgencyAdminController, type: :controller do
   let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+  let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
   let(:job_categories) do
     cats = []
     cats << FactoryGirl.create(:job_category, name: 'CAT1') <<
@@ -13,7 +14,7 @@ RSpec.describe AgencyAdminController, type: :controller do
              FactoryGirl.create(:job_category, name: 'CAT3')
     cats
   end
-
+ 
   describe "GET #home and GET #job_properties" do
 
     it 'routes GET /agency_admin/home/ to agency_admin#home' do
@@ -131,6 +132,11 @@ RSpec.describe AgencyAdminController, type: :controller do
       sign_in job_developer
       expect(Agency.this_agency(subject.current_user)).to eq agency
     end
+    
+    it 'non-admin and non-agency returns nil' do
+        sign_in job_seeker
+        expect(Agency.this_agency(job_seeker)).to eq nil
+    end  
 
     it 'agency admin - from agency admin' do
       sign_in agency_admin

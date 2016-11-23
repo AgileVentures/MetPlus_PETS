@@ -48,6 +48,11 @@ def page_translator name
   end
 end
 
+When(/^I type agency_admin home the search bar/) do 
+  current_path = URI.parse(current_url).path
+  current_path.replace '/agency_admin/home'
+  visit current_path
+end  
 
 When(/^I go to the (.+) page$/) do |page|
   visit page_translator(page)

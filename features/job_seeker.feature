@@ -197,3 +197,15 @@ Scenario: Job Developer sees job seeker's job applications
   And I should see "Doctor"
   And I should see "Mime"
   And I should not see "Trucker"
+  
+  
+  @selenium 
+  Scenario: non-admin and non-agency person trying to access to admin home page
+    Given I am on the home page
+    And I login as "vijaya.karumudi@gmail.com" with password "password"
+    Then I should see "Signed in successfully."
+    And I should not see "Admin"
+    When I type agency_admin home the search bar
+    Then I should see "Current agency cannot be determined"
+    And I should be on the home page
+

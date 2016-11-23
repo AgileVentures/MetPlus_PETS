@@ -3,11 +3,15 @@ class AgencyAdminController < ApplicationController
   before_action :user_logged!
 
   def home
+    if Agency.this_agency(current_user).nil?              
+      flash[:notice] = 'Current agency cannot be determined'
+      return redirect_to root_path 
+    end
     @agency = Agency.includes([ :agency_people,
                               companies: [:addresses],
                                branches: [:address] ]).
                         find(Agency.this_agency(current_user).id)
-
+    
     check_authorization(@agency)
 
     @agency_admins = Agency.agency_admins(@agency)

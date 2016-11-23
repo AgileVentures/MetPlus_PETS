@@ -28,11 +28,8 @@ class BranchesController < ApplicationController
   end
 
   def new
-    begin
-     @agency = Agency.this_agency(current_user)
-    rescue
-     @agency = nil
-    end
+    @agency = Agency.this_agency(current_user)
+   
     @branch = Branch.new(agency: @agency)
     
     self.action_description ="create a branch"

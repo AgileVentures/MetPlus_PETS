@@ -16,10 +16,11 @@ class Agency < ActiveRecord::Base
   end
 
   def self.this_agency(user)
-    raise RuntimeError, 'Logged in user is not an agency person' unless
-            user.actable.is_a? AgencyPerson
-
+    unless user.actable.is_a? AgencyPerson
+      return nil
+    end  
     user.actable.agency
+   
   end
 
   def agency_people_on_role role
