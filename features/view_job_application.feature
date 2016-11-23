@@ -37,11 +37,11 @@ Background: data is added to database
     And I login as "july@mail.com" with password "qwerty123"
     And I wait 1 second
     And I should see my application for "hr assistant" show status "Accepted"
-    Then I click "hr assistant" link to job show page
+    Then I click the "hr assistant" link
     And I should see "hr assistant" show status "filled"
     And I should not see "Click Here To Apply Online"
     Then I return to my "july@mail.com" home page
     And I should see my application for "hr associate" show status "Not Accepted"
-    Then I click "hr associate" link to job show page
+    Then I click the "hr associate" link
     And I should see "hr associate" show status "filled"
     And I should not see "Click Here To Apply Online"

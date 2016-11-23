@@ -68,7 +68,7 @@ And(/^I should see "([^"]*)" job changes to status filled/) do |job|
 end
 
 And(/^I\sshould\ssee\smy\sapplication\sfor\s"([^"]*)"\sshow\sstatus\s
-  "([^"]*)"$/) do |job_title, status|
+  "([^"]*)"$/x) do |job_title, status|
   job = Job.find_by(title: job_title.to_s)
   job_app = JobApplication.find_by(job: job)
   expect(page.find("#applications-#{job_app.id}")).to have_content(status.to_s)

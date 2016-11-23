@@ -139,8 +139,8 @@ Given the following job applications exist:
   Scenario: Download resume file_name as a Company Admin
     Given I am on the home page
     And I am logged in as "ca@widgets.com" with password "qwerty123"
-    And I should see "software developer"
-    When I click the "software developer" link
+    And I wait 1 second
+    Then I click the "software developer" link
     And I wait 1 second
     And I should see "Applications for this Job"
     Then I click the "Seeker, Jane" link
