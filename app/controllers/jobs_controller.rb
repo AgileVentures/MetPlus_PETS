@@ -202,10 +202,11 @@ class JobsController < ApplicationController
     case params[:action]
     when 'new', 'create'
       @addresses = Address.where(location_type: 'Company',
-                               location_id: pets_user.try(:company)).order(:state) || []
+                                 location_id: pets_user.try(:company)).order(:state) ||
+                   []
     when 'edit', 'update'
       @addresses = Address.where(location_type: 'Company',
-                               location_id: @job.company).order(:state)
+                                 location_id: @job.company).order(:state)
     end
   end
 

@@ -6,7 +6,7 @@ module JobApplicationsViewer
     when 'job_seeker'
       if pets_user.is_a?(CompanyPerson)
         collection = JobApplication.where(job_seeker: id).joins(:job)
-        .where('jobs.company_id = ?', pets_user.company_id)
+                                   .where('jobs.company_id = ?', pets_user.company_id)
       else
         collection = JobApplication.where(job_seeker: id)
       end
