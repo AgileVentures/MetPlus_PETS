@@ -1,16 +1,20 @@
 module JobsViewer
   extend ActiveSupport::Concern
 
+  def self.included(m)
+    return unless m < ActionController::Base
+    m.helper_method :job_fields
+  end
+
   def display_jobs(job_type, per_page = 10)
     case job_type
     when 'my-company-all'
-      Job.order(:title)
-         .paginate(page: params[:jobs_page], per_page: per_page)
-         .find_by_company(pets_user.company)
+      collection = Job.order(:title).find_by_company(pets_user.company)
     when 'recent-jobs'
-      Job.new_jobs(Time.now - 3.weeks).order(created_at: :desc)
-         .paginate(page: params[:js_home_page], per_page: per_page)
+      collection = Job.new_jobs(Time.now - 3.weeks).order(created_at: :desc)
     end
+    return collection if collection.nil?
+    collection.paginate(page: params[:job_page], per_page: per_page)
   end
 
   FIELDS_IN_JOB_TYPE = {

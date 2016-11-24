@@ -5,8 +5,6 @@ class JobsController < ApplicationController
                                   :match_resume]
   before_action :user_logged!, except: [:index, :list_search_jobs, :show]
 
-  helper_method :job_fields
-
   def index
     @jobs = policy_scope(Job).order(:title).includes(:company)
                              .paginate(page: params[:page], per_page: 20)
@@ -58,12 +56,12 @@ class JobsController < ApplicationController
   def new
     @job = Job.new
     authorize @job
-    @company = Company.order(:name)
+    @companies = Company.order(:name)
     set_company_address
   end
 
   def create
-    @company = Company.order(:name)
+    @companies = Company.order(:name)
     set_company_address
     @job = Job.new(job_params)
     if pets_user.is_a?(CompanyPerson)
@@ -85,20 +83,20 @@ class JobsController < ApplicationController
   end
 
   def show
+    authorize @job
     @resume = nil
     @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
-    authorize @job
   end
 
   def edit
     authorize @job
-    @company = Company.order(:name)
+    @companies = Company.order(:name)
     set_company_address
   end
 
   def update
     authorize @job
-    @company = Company.order(:name)
+    @companies = Company.order(:name)
     set_company_address
     if @job.update_attributes(job_params)
       flash[:info] = "#{@job.title} has been updated successfully."
@@ -150,7 +148,7 @@ class JobsController < ApplicationController
     authorize @job_seeker
 
     if @job_seeker.consent && @job_seeker.job_developer == pets_user
-      apply_for(@job, @job_seeker) do |job_app, job, job_seeker|
+      apply_for(@job_seeker) do |job_app, job, job_seeker|
         Event.create(:JD_APPLY, job_app)
         flash[:info] = "Job is successfully applied for #{job_seeker.full_name}"
         redirect_to(job_path(job)) && return
@@ -158,7 +156,7 @@ class JobsController < ApplicationController
     end
 
     if pets_user == @job_seeker
-      apply_for(@job, @job_seeker) do |job_app, _job, _job_seeker|
+      apply_for(@job_seeker) do |job_app, _job, _job_seeker|
         Event.create(:JS_APPLY, job_app)
         render(:apply) && return
       end
@@ -167,7 +165,7 @@ class JobsController < ApplicationController
 
   def revoke
     authorize @job
-    if @job.status == 'active' && @job.revoked
+    if @job.active? && @job.revoked
       flash[:alert] = "#{@job.title} is revoked successfully."
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_REVOKED, obj.new(@job, Agency.first))
@@ -203,32 +201,23 @@ class JobsController < ApplicationController
   def set_company_address
     case params[:action]
     when 'new', 'create'
-      @address = Address.where(location_type: 'Company',
+      @addresses = Address.where(location_type: 'Company',
                                location_id: pets_user.try(:company)).order(:state) || []
     when 'edit', 'update'
-      @address = Address.where(location_type: 'Company',
+      @addresses = Address.where(location_type: 'Company',
                                location_id: @job.company).order(:state)
     end
   end
 
-  def apply_for(job, job_seeker)
-    job_application = job.job_applications.build(job_seeker_id: job_seeker.id)
-    if job_application.save!
-      CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
-                      .perform_later(Event::EVT_TYPE[:JS_APPLY],
-                                     job.company,
-                                     nil,
-                                     application: job_application,
-                                     resume_id: job_seeker.resumes[0].id)
-      yield(job_application, job, job_seeker)
-    end
+  def apply_for(job_seeker, &controller_response)
+    @job.applied_by(job_seeker, &controller_response)
   # ActiveRecord::RecordInvalid is raised when validation at model level fails
   # ActiveRecord::RecordNotUnique is raised when unique index constraint
   # on the database is violated
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
     flash[:alert] = "#{job_seeker.full_name(last_name_first: false)} "\
                     'has already applied to this job.'
-    redirect_to(job_path(job)) && return
+    redirect_to(job_path(@job)) && return
   end
 
   def find_job

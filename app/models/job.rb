@@ -46,6 +46,20 @@ class Job < ActiveRecord::Base
     job_applications.size
   end
 
+  def applied_by(job_seeker)
+    job_application = job_applications.build(job_seeker_id: job_seeker.id)
+    if job_application.save!
+      # Send mail to the company with the attached resume
+      CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                      .perform_later(Event::EVT_TYPE[:JS_APPLY],
+                                     company,
+                                     nil,
+                                     application: job_application,
+                                     resume_id: job_seeker.resumes[0].id)
+      yield(job_application, self, job_seeker)
+    end
+  end
+
   def apply(job_seeker)
     job_seekers << job_seeker
     save!

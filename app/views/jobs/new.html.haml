@@ -4,7 +4,8 @@
   %h2 Create New Job
 = form_for @job do |f|
   .form-horizontal
-    = render partial: 'form', locals: { f: f, companies: @company , addresses: @address }
+    = render partial: 'form', locals: { f: f, companies: @companies ,
+                                        addresses: @addresses }
     .form-group
       .col-sm-offset-3.col-sm-6
         = f.submit "Create", class: "btn btn-primary btn-block", id: "new-job-submit"

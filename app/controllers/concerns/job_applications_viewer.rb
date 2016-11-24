@@ -5,24 +5,20 @@ module JobApplicationsViewer
     case application_type
     when 'job_seeker'
       if pets_user.is_a?(CompanyPerson)
-        return JobApplication.paginate(page: params[:applications_page],
-                                       per_page: per_page).where(job_seeker: id)
-                             .joins(:job).where('jobs.company_id = ?',
-                                                pets_user.company_id)
+        collection = JobApplication.where(job_seeker: id).joins(:job)
+        .where('jobs.company_id = ?', pets_user.company_id)
+      else
+        collection = JobApplication.where(job_seeker: id)
       end
-      JobApplication.paginate(page: params[:applications_page],
-                              per_page: per_page).where(job_seeker: id)
     when 'job-job-developer'
-      JobApplication.paginate(page: params[:applications_page],
-                              per_page: per_page)
-                    .where(job: id, job_seeker_id: AgencyRelation
+      collection = JobApplication.where(job: id, job_seeker_id: AgencyRelation
         .where(agency_person: pets_user, agency_role_id: 1)
         .select(:job_seeker_id)).includes(:job_seeker).order(:status)
     when 'job-company-person'
-      JobApplication.paginate(page: params[:applications_page],
-                              per_page: per_page).where(job: id)
-                    .includes(:job_seeker).order(:status)
+      collection = JobApplication.where(job: id).includes(:job_seeker).order(:status)
     end
+    return collection if collection.nil?
+    collection.paginate(page: params[:applications_page], per_page: per_page)
   end
 
   FIELDS_IN_APPLICATION_TYPE = {
