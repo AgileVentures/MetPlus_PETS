@@ -105,7 +105,7 @@ class JobSeekersController < ApplicationController
   def show
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
-    @offer_download = pets_user.is_a?(CompanyPerson) ? true : false
+    @offer_download = pets_user.is_a?(CompanyPerson)
   end
 
   def preview_info
