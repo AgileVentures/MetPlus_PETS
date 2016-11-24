@@ -5,7 +5,7 @@ RSpec.describe JobPolicy do
   let(:agency)  { FactoryGirl.create(:agency) }
   let!(:bosh) { FactoryGirl.create(:company, name: 'Bosh', agencies: [agency]) }
   let!(:bosh_mich) { FactoryGirl.create(:address, location: bosh) }
-  let!(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
+  let(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
   let(:revoked_job) { FactoryGirl.create(:job, status: 'revoked') }
 
   let(:bosh_contact) { FactoryGirl.create(:company_contact, company: bosh) }
