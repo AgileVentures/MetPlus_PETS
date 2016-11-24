@@ -61,24 +61,6 @@ class Job < ActiveRecord::Base
     end
   end
 
-  # def apply(job_seeker)
-  #   job_seekers << job_seeker
-  #   save!
-
-  #   resume_id = job_seeker.resumes[0].id
-  #   job_application = last_application_by_job_seeker(job_seeker)
-
-  #   # Send mail to the company with the attached resume
-  #   CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
-  #                   .perform_later(Event::EVT_TYPE[:JS_APPLY],
-  #                                  company,
-  #                                  nil,
-  #                                  application: job_application,
-  #                                  resume_id: resume_id)
-
-  #   job_application
-  # end
-
   def status_change_time(status, which = :latest)
     StatusChange.status_change_time(self, status, which)
   end
