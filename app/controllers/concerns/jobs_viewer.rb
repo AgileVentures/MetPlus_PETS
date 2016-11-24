@@ -14,7 +14,7 @@ module JobsViewer
       collection = Job.new_jobs(Time.now - 3.weeks).order(created_at: :desc)
     end
     return collection if collection.nil?
-    collection.paginate(page: params[:job_page], per_page: per_page)
+    collection.paginate(page: params[:jobs_page], per_page: per_page)
   end
 
   FIELDS_IN_JOB_TYPE = {

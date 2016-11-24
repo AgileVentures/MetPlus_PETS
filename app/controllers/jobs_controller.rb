@@ -210,7 +210,7 @@ class JobsController < ApplicationController
   end
 
   def apply_for(job_seeker, &controller_response)
-    @job.applied_by(job_seeker, &controller_response)
+    @job.apply(job_seeker, &controller_response)
   # ActiveRecord::RecordInvalid is raised when validation at model level fails
   # ActiveRecord::RecordNotUnique is raised when unique index constraint
   # on the database is violated

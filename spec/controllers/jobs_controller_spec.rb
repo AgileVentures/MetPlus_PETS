@@ -20,7 +20,7 @@ RSpec.describe JobsController, type: :controller do
   let!(:bosh) { FactoryGirl.create(:company, name: 'Bosh', agencies: [agency]) }
   let!(:bosh_utah) { FactoryGirl.create(:address, state: 'Utah', location: bosh) }
   let!(:bosh_mich) { FactoryGirl.create(:address, location: bosh) }
-  let!(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_utah) }
+  let(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_utah) }
   let(:bosh_person) { FactoryGirl.create(:company_person, company: bosh) }
   let(:skill) { FactoryGirl.create(:skill) }
   let!(:valid_params) do
@@ -33,27 +33,31 @@ RSpec.describe JobsController, type: :controller do
                                         max_years: 5,
                                         _destroy: false } } }
   end
-  before(:each) do
+  let!(:stub) do
     stub_cruncher_authenticate
     stub_cruncher_job_create
     stub_cruncher_job_update
+    allow(Pusher).to receive(:trigger)
   end
 
   describe 'GET #index' do
-    let!(:bosh_job2) { FactoryGirl.create(:job, company: bosh) }
     let!(:rand_job1) { FactoryGirl.create(:job) }
     let!(:rand_job2) { FactoryGirl.create(:job) }
     context 'company person' do
       before(:each) do
+        bosh_job
         warden.set_user bosh_person
         get :index
       end
-      it { expect(assigns(:jobs).count).to eq 2 }
+      it { expect(assigns(:jobs).count).to eq 1 }
       it_behaves_like 'return success and render', 'index'
     end
     context 'others' do
-      before(:each) { get :index }
-      it { expect(assigns(:jobs).count).to eq 4 }
+      before(:each) do
+        bosh_job
+        get :index
+      end
+      it { expect(assigns(:jobs).count).to eq 3 }
       it_behaves_like 'return success and render', 'index'
     end
   end
@@ -97,8 +101,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user agency_admin
         request
       end
-      it { expect(assigns(:company)).to eq Company.all.order(:name) }
-      it { expect(assigns(:address)).to eq([]) }
+      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
+      it { expect(assigns(:addresses)).to eq([]) }
       it_behaves_like 'return success and render', 'new'
     end
     context 'job developer' do
@@ -106,8 +110,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_developer
         request
       end
-      it { expect(assigns(:company)).to eq Company.all.order(:name) }
-      it { expect(assigns(:address)).to eq([]) }
+      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
+      it { expect(assigns(:addresses)).to eq([]) }
       it_behaves_like 'return success and render', 'new'
     end
     context 'case manager' do
@@ -118,8 +122,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
         request
       end
-      it { expect(assigns(:company)).to eq Company.all.order(:name) }
-      it { expect(assigns(:address)).to eq bosh.addresses.order(:state) }
+      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
+      it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'new'
     end
     context 'job seeker' do
@@ -132,7 +136,6 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'POST #create' do
     let(:request) { post :create, job: valid_params }
-    before(:each) { allow(Pusher).to receive(:trigger) }
 
     context 'agency admin' do
       before(:each) { warden.set_user agency_admin }
@@ -282,8 +285,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user agency_admin
         request
       end
-      it { expect(assigns(:company)).to eq Company.all.order(:name) }
-      it { expect(assigns(:address)).to eq bosh.addresses.order(:state) }
+      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
+      it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end
     context 'job developer' do
@@ -291,8 +294,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_developer
         request
       end
-      it { expect(assigns(:company)).to eq Company.all.order(:name) }
-      it { expect(assigns(:address)).to eq bosh.addresses.order(:state) }
+      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
+      it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end
     context 'case manager' do
@@ -303,8 +306,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
         request
       end
-      it { expect(assigns(:company)).to eq Company.all.order(:name) }
-      it { expect(assigns(:address)).to eq bosh.addresses.order(:state) }
+      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
+      it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end
     context 'random company person' do
@@ -323,7 +326,6 @@ RSpec.describe JobsController, type: :controller do
     let!(:job_wo_skill) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
     let!(:job_w_skill) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
     let!(:job_skill) { FactoryGirl.create(:job_skill, job: job_w_skill, skill: skill) }
-    before(:each) { allow(Pusher).to receive(:trigger) }
 
     context 'agency admin' do
       before(:each) { warden.set_user agency_admin }
@@ -482,8 +484,7 @@ RSpec.describe JobsController, type: :controller do
     let!(:dyson_person) { FactoryGirl.create(:company_person, company: dyson) }
     let(:request_first_page) { xhr :get, :list, job_type: 'my-company-all' }
     let(:request_last_page) do
-      xhr :get, :list, job_type: 'my-company-all',
-                       jobs_page: 4
+      xhr :get, :list, job_type: 'my-company-all', jobs_page: 4
     end
     before(:each) do
       31.times.each do |i|
@@ -535,7 +536,7 @@ RSpec.describe JobsController, type: :controller do
         request_last_page
         assigns(:jobs).each {}
         expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
-        expect(assigns(:jobs).size).to eq 2
+        expect(assigns(:jobs).size).to eq 1
       end
       it 'last_page: should not set flash' do
         request_last_page
@@ -633,7 +634,6 @@ RSpec.describe JobsController, type: :controller do
       before(:each) { warden.set_user job_developer }
       describe 'successful application' do
         before(:each) do
-          allow(Pusher).to receive(:trigger)
           allow(Event).to receive(:create).and_call_original
           request
         end
@@ -689,7 +689,6 @@ RSpec.describe JobsController, type: :controller do
       before(:each) { warden.set_user job_seeker }
       describe 'successful application' do
         before :each do
-          allow(Pusher).to receive(:trigger)
           allow(Event).to receive(:create).and_call_original
           request
         end
