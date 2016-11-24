@@ -132,12 +132,10 @@ RSpec.describe AgencyAdminController, type: :controller do
       sign_in job_developer
       expect(Agency.this_agency(subject.current_user)).to eq agency
     end
-    
     it 'non-admin and non-agency returns nil' do
-        sign_in job_seeker
-        expect(Agency.this_agency(job_seeker)).to eq nil
+      sign_in job_seeker
+      expect(Agency.this_agency(job_seeker)).to eq nil
     end  
-
     it 'agency admin - from agency admin' do
       sign_in agency_admin
       expect(Agency.agency_admins(agency)).to eq [agency_admin]
@@ -150,7 +148,6 @@ RSpec.describe AgencyAdminController, type: :controller do
       sign_in job_developer
       expect(Agency.agency_admins(agency)).to eq [agency_admin]
     end
-
   end
 
   describe 'action authorization' do

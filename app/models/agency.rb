@@ -16,11 +16,8 @@ class Agency < ActiveRecord::Base
   end
 
   def self.this_agency(user)
-    unless user.actable.is_a? AgencyPerson
-      return nil
-    end  
+    return nil unless user.actable.is_a? AgencyPerson
     user.actable.agency
-   
   end
 
   def agency_people_on_role role

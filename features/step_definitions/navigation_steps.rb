@@ -48,7 +48,7 @@ def page_translator name
   end
 end
 
-When(/^I type agency_admin home the search bar/) do 
+When(/^I type agency_admin home in the URL address bar/) do 
   current_path = URI.parse(current_url).path
   current_path.replace '/agency_admin/home'
   visit current_path

@@ -205,7 +205,7 @@ Scenario: Job Developer sees job seeker's job applications
     And I login as "vijaya.karumudi@gmail.com" with password "password"
     Then I should see "Signed in successfully."
     And I should not see "Admin"
-    When I type agency_admin home the search bar
+    When I type agency_admin home in the URL address bar
     Then I should see "Current agency cannot be determined"
     And I should be on the home page
 
