@@ -28,16 +28,15 @@ class BranchesController < ApplicationController
   end
 
   def new
-    begin
-     @agency = Agency.this_agency(current_user)
-    rescue
-     @agency = nil
-    end
+    if Agency.this_agency(current_user).nil?
+      flash[:alert] = 'You are not authorized to perform this action.'
+      redirect_to(root_path) && return
+    else
+      @agency = Agency.this_agency(current_user)
+    end  
     @branch = Branch.new(agency: @agency)
-    
     self.action_description ="create a branch"
     authorize @branch
-  
     @branch.build_address
   end
 
