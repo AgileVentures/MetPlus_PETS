@@ -1,18 +1,19 @@
-#revokeModal.modal.fade{:role => "dialog", :tabindex => "-1"}
-  .modal-dialog{:role => "document"}
+.modal.fade#revokeModal{ role: "dialog", tabindex: "-1" }
+  .modal-dialog{ role: "document" }
     .modal-content
       .modal-header
-        %button.close{"data-dismiss" => "modal", :type => "button"}
-          %span{"aria-hidden" => "true"} ×
+        %button.close{ "data-dismiss" => "modal", type: "button" }
+          %span{ "aria-hidden" => "true" } ×
         %h4.modal-title.text-center
       .modal-body.text-center
         %p
-          Are you sure you want to revoke the following job: 
-          %ul{class: "list-unstyled"}
+          Are you sure you want to revoke the following job:
+          %ul.list-unstyled
             %li#title
             %li#company_job_id
 
       .modal-footer
-        %button.btn.btn-default{"data-dismiss" => "modal",
-        :type => "button"} Cancel
-        %a.btn.btn-danger#confirm_revoke{rel: "nofollow", data: { method: "patch"}} Revoke
+        %button.btn.btn-default{ "data-dismiss" => "modal",
+        :type => "button" } Cancel
+        %a.btn.btn-danger#confirm_revoke{ rel: "nofollow",
+        data: { method: "patch" } } Revoke
