@@ -1,14 +1,20 @@
-%div{class: "well well-lg col-sm-offset-2 col-sm-8", id: "job-#{job.id}"}
-	%h4
-		=link_to job.title, job_path(job)
-		-if job.status != 'active' 
-			%span{class: 'label label-info'}= "#{job.status.capitalize}"
-	%h5= job.company.name
-	%small
-		= "#{time_ago_in_words(job.created_at, )} ago"
-		
-	-if job.status == 'active'
-		-if pets_user.is_a?(CompanyPerson) || (pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency))
-			%button.btn.btn-primary.btn-xs.pull-right.jobs-revoke-button{ type: "button", data: { action: 'revoke', job: { id: "#{job.id}", title: "#{job.title}", companyJobId: "#{job.company_job_id}" } } }revoke
-			=link_to "edit", edit_job_path(job), class: "pull-right btn btn-primary btn-xs", 
-			       id: "jobs-edit-link"
+.well.well-lg.col-sm-offset-2.col-sm-8{ id: "job-#{job.id}" }
+  %h4
+    = link_to job.title, job_path(job)
+    - unless job.active?
+      %span.label.label-info
+        #{job.status.capitalize}
+  %h5
+    = job.company.name
+  %small
+    #{time_ago_in_words(job.created_at, )} ago
+  - if job.active? && pets_user
+    - if policy(job).revoke?
+      %button.btn.btn-primary.btn-xs.pull-right.jobs-revoke-button{ type: "button",
+      data: { action: 'revoke',
+              job: { id: "#{job.id}",
+              title: "#{job.title}",
+              companyJobId: "#{job.company_job_id}" } } }revoke
+    - if policy(job).update?
+      = link_to "edit", edit_job_path(job),
+        class: "pull-right btn btn-primary btn-xs", id: "jobs-edit-link"
