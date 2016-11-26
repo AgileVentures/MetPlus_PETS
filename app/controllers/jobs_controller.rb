@@ -200,12 +200,15 @@ class JobsController < ApplicationController
     # Get job match scores for all job Seekers
     result = ResumeCruncher.match_resumes(@job.id)
 
-    # If no match or matche scores all too low, set flash and return
+    # If no match or match scores all too low, set flash and return
     if result.nil? || (result.delete_if { |item| item[1] <= 0.9 }).empty?
       flash[:alert] = "No matching job seekers found."
       redirect_to(action: 'show', id: @job.id) && return
     end
 
+    # Create an array with each element consisting of
+    #  [job_seeker_id, job_match_score]
+    @job_matches = result.collect { |item| [item[0].job_seeker.id, item[1]] }
   end
 
   private
