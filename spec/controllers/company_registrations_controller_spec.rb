@@ -340,7 +340,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                          role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
-      patch :approve, id: Company.find_by_name(registration_params[:name])
+      patch :approve, id: Company.last
     end
 
     context 'authorized access' do
@@ -353,8 +353,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       end
 
       it 'sends registration-approved and account-confirm emails' do
-        expect { request }
-          .to change(all_emails, :count).by(+2)
+        expect { request }.to change(all_emails, :count).by(+2)
       end
 
       context 'after approval' do
@@ -392,7 +391,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                          role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
-      xhr :patch, :deny, id: Company.find_by_name(registration_params[:name])
+      xhr :patch, :deny, id: Company.last
     end
 
     context 'authorized access' do
@@ -405,8 +404,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       end
 
       it 'sends registration-denied email' do
-        expect { request }
-          .to change(all_emails, :count).by(+1)
+        expect { request }.to change(all_emails, :count).by(+1)
       end
       context 'after denial' do
         before(:each) do

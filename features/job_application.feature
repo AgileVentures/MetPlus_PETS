@@ -140,7 +140,11 @@ Given the following job applications exist:
     Given I am on the home page
     And I am logged in as "ca@widgets.com" with password "qwerty123"
     And I wait 1 second
+<<<<<<< HEAD
     Then I click the "software developer" link
+=======
+    When I click the "software developer" link
+>>>>>>> ecea8ac0449c2ba740c67318bfb08382394df834
     And I wait 1 second
     And I should see "Applications for this Job"
     Then I click the "Seeker, Jane" link

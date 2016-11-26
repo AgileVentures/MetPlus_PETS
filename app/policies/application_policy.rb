@@ -47,7 +47,7 @@ class ApplicationPolicy
     attr_reader :user, :scope
 
     def initialize(user, scope)
-      @user = user
+      @user = user.pets_user unless user.nil?
       @scope = scope
     end
 
