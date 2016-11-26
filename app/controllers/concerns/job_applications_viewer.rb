@@ -4,12 +4,10 @@ module JobApplicationsViewer
   def display_job_applications(application_type, id, per_page = 10)
     case application_type
     when 'job_seeker-company-person'
-      JobApplication.paginate(page: params[:applications_page],
-                              per_page: per_page).where(job_seeker: id)
-                    .joins(:job).where('jobs.company_id = ?', pets_user.company_id)
+      collection = JobApplication.where(job_seeker: id).joins(:job)
+                   .where('jobs.company_id = ?', pets_user.company_id)
     when 'job_seeker-default'
-      JobApplication.paginate(page: params[:applications_page],
-                              per_page: per_page).where(job_seeker: id)
+      collection = JobApplication.where(job_seeker: id)
     when 'job-job-developer'
       collection = JobApplication.where(job: id, job_seeker_id: AgencyRelation
         .where(agency_person: pets_user, agency_role_id: 1)
