@@ -43,7 +43,7 @@ class JobApplicationsController < ApplicationController
   def list
     raise 'Unsupported request' unless request.xhr?
     @job_applications = []
-    @job_applications = display_job_applications(params[:type], 5, params[:entity_id])
+    @job_applications = display_job_applications(params[:type], params[:entity_id], 5)
     render partial: 'jobs/applied_job_list',
            locals: { job_applications: @job_applications,
                      application_type: params[:type] }

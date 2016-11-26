@@ -141,7 +141,6 @@ Given the following job applications exist:
     Given I am on the home page
     And I am logged in as "ca@widgets.com" with password "qwerty123"
     And I wait 1 second
-    And I should see "software developer"
     When I click the "software developer" link
     And I wait 1 second
     And I should see "Applications for this Job"

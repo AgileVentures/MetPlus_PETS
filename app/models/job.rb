@@ -47,21 +47,18 @@ class Job < ActiveRecord::Base
   end
 
   def apply(job_seeker)
-    job_seekers << job_seeker
-    save!
-
-    resume_id = job_seeker.resumes[0].id
-    job_application = last_application_by_job_seeker(job_seeker)
-
-    # Send mail to the company with the attached resume
-    CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
-                    .perform_later(Event::EVT_TYPE[:JS_APPLY],
-                                   company,
-                                   nil,
-                                   application: job_application,
-                                   resume_id: resume_id)
-
-    job_application
+    job_application = job_applications.build(job_seeker_id: job_seeker.id)
+    if job_application.save!
+      # Send mail to the company with the attached resume
+      CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                      .perform_later(Event::EVT_TYPE[:JS_APPLY],
+                                     company,
+                                     nil,
+                                     application: job_application,
+                                     resume_id: job_seeker.resumes[0].id)
+      yield(job_application, self, job_seeker) if block_given?
+      job_application
+    end
   end
 
   def status_change_time(status, which = :latest)
