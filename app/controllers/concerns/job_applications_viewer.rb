@@ -5,7 +5,7 @@ module JobApplicationsViewer
     case application_type
     when 'job_seeker-company-person'
       collection = JobApplication.where(job_seeker: id).joins(:job)
-                   .where('jobs.company_id = ?', pets_user.company_id)
+                                 .where('jobs.company_id = ?', pets_user.company_id)
     when 'job_seeker-default'
       collection = JobApplication.where(job_seeker: id)
     when 'job-job-developer'
