@@ -351,7 +351,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      xhr :get, :list, type: 'job_seeker', entity_id: job_seeker
+      xhr :get, :list, type: 'job_seeker-default', entity_id: job_seeker
     end
 
     it 'assigns jobs for view' do
