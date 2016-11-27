@@ -106,6 +106,7 @@ Given the following job applications exist:
 
     Then I am in Company Admin's browser
     And I am on the Company Person 'ca@widgets.com' Home page
+    And I wait 1 second
     And I should see "Review job application"
     And I should see "Job: software developer"
 
@@ -147,4 +148,3 @@ Given the following job applications exist:
     Then I should see button "Download Resume"
     And I click the "Download Resume" button
     Then I should get a download with the filename "Janitor-Resume.doc"
-
