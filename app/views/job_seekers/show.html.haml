@@ -1,8 +1,7 @@
 .col-sm-3
   %h3
     Job Seeker
-  %a(id='toggle_info' href='#info_table' class='text-danger'
-              style='padding-left: 10px;')
+  %a.text-danger#toggle_info{ href:'#info_table', style:'padding-left: 10px;' }
     Hide Job Seeker Information
   - if policy(@jobseeker).edit?
     = button_to 'Edit Job Seeker', edit_job_seeker_path(@jobseeker),
@@ -12,16 +11,24 @@
     = button_to 'Delete Job Seeker', job_seeker_path(@jobseeker),
         method: :delete,
         data: { confirm: "Delete Jobseeker #{@jobseeker.full_name}?" },
-        class: 'btn btn-xs  btn-danger', style: 'float: left; margin-left: 10px; margin-top: 10px;'
+        class: 'btn btn-xs  btn-danger',
+        style: 'float: left; margin-left: 10px; margin-top: 10px;'
 
 .col-sm-9
   = render partial: 'info', locals: { job_seeker: @jobseeker,
-                                      offer_download: false }
+                                      offer_download: @offer_download }
 
 - if policy(@jobseeker).show?
   .col-sm-12
     %h3
-      Job Applications for
-      = "#{@jobseeker.full_name(last_name_first: false)}"
-    .pagination-div{id: "applications-#{@application_type}",
-                    data: { url: list_applications_path(@application_type, @jobseeker) } }
+      Job Applications for #{@jobseeker.full_name(last_name_first: false)}
+    - if pets_user.is_a?(CompanyPerson)
+      = render partial: 'job_applications/accept_modal'
+      = render partial: 'job_applications/reject_modal'
+      .pagination-div{ id: "applications-job",
+                       data: { url: list_applications_path('job_seeker-company-person',
+                                                            @jobseeker) } }
+    - else
+      .pagination-div{ id: "applications-job",
+                       data: { url: list_applications_path('job_seeker-default',
+                                                            @jobseeker) } }
