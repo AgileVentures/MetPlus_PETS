@@ -197,12 +197,22 @@ class JobsController < ApplicationController
   end
 
   def match_job_seekers
+    Pusher.trigger('pusher_control',
+                   'spinner_start',
+                   user_id: pets_user.user.id,
+                   target: '.table.table-bordered')
+
     # Get job match scores for all job Seekers
     if Rails.env.development? || Rails.env.test?
       result = ResumeCruncher.match_resumes(1)
     else
       result = ResumeCruncher.match_resumes(@job.id)
     end
+
+    Pusher.trigger('pusher_control',
+                   'spinner_stop',
+                   user_id: pets_user.user.id,
+                   target: '.table.table-bordered')
 
     # If no match or match scores all too low, set flash and return
     if result.nil? || (result.delete_if { |item| item[1] <= 0.9 }).empty?
