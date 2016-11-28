@@ -202,7 +202,20 @@ if Rails.env.development? || Rails.env.staging?
   companypeople = CompanyPerson.all.to_a
   companies = Company.all.to_a
   addresses = Address.all.to_a
-  #job
+
+  # Create jobs for 'known_company'
+  50.times do |n|
+    Job.create(title: FFaker::Job.title,
+               description: Faker::Lorem.sentence,
+               shift: ["Day", "Evening", "Morning"][r.rand(3)],
+               company_job_id: "Job_ID_#{n}",
+               fulltime: [false, true][r.rand(2)],
+               company_id: known_company.id,
+               company_person_id: known_company_person.id,
+               address_id: known_company.addresses[r.rand(15)].id)
+  end
+
+  # Create random jobs
   200.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3,false, 4 )
@@ -222,21 +235,32 @@ if Rails.env.development? || Rails.env.staging?
 
   end
 
-  # Create jobs for 'known_company'
-  50.times do |n|
-    Job.create(title: FFaker::Job.title,
-               description: Faker::Lorem.sentence,
-               shift: ["Day", "Evening", "Morning"][r.rand(3)],
-               company_job_id: "Job_ID_#{n}",
-               fulltime: [false, true][r.rand(2)],
-               company_id: known_company.id,
-               company_person_id: known_company_person.id,
-               address_id: known_company.addresses[r.rand(15)].id)
-  end
-
   puts "Jobs created: #{Job.count}"
 
   #-------------------------- Job Seekers ---------------------------------
+  js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
+                        email: 'tomseekerpets@gmail.com', password: 'qwerty123',
+                year_of_birth: '1980', phone: '111-222-3333',
+            job_seeker_status: @jss1, confirmed_at: Time.now,
+                      address: create_address)
+
+  # Have this JS apply to every other known_company jobs
+  Job.where(company: known_company).each do |job|
+    JobApplication.create(job: job, job_seeker: js1) unless job.id % 2 == 0
+    Task.new_review_job_application_task job, known_company
+  end
+
+  # Add résumé to this job seeker
+  resume = Resume.new(file: file,
+                      file_name: 'Admin-Assistant-Resume.pdf',
+                      job_seeker_id: js1.id)
+  resume.save!
+
+  # Add job applications for this job seeker
+  Job.limit(50).each do |job|
+    JobApplication.create(job: job, job_seeker: js1)
+  end
+
   jobseekerstatus = JobSeekerStatus.all.to_a
   200.times do |n|
     password = "secret123"
@@ -261,30 +285,14 @@ if Rails.env.development? || Rails.env.staging?
     job = Job.where(company: known_company)[r.rand(25)]
     JobApplication.create(job: job, job_seeker: job_seeker)
     Task.new_review_job_application_task job, known_company
-  end
 
-  js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
-                        email: 'tomseekerpets@gmail.com', password: 'qwerty123',
-                year_of_birth: '1980', phone: '111-222-3333',
-            job_seeker_status: @jss1, confirmed_at: Time.now,
-                      address: create_address)
-
-  # Have this JS apply to every other known_company jobs
-  Job.where(company: known_company).each do |job|
-    JobApplication.create(job: job, job_seeker: js1) unless job.id % 2 == 0
-    Task.new_review_job_application_task job, known_company
-  end
-
-  # Add résumé to this job seeker
-  file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')
-  resume = Resume.new(file: file,
-                      file_name: 'Admin-Assistant-Resume.pdf',
-                      job_seeker_id: js1.id)
-  resume.save!
-
-  # Add job applications for this job seeker
-  Job.limit(50).each do |job|
-    JobApplication.create(job: job, job_seeker: js1)
+    # Add resume to some job seekers
+    file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')
+    if job_seeker.id <= 15
+      resume = Resume.create(file: file,
+                             file_name: 'Admin-Assistant-Resume.pdf',
+                             job_seeker_id: job_seeker.id)
+    end
   end
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',

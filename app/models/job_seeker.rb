@@ -30,13 +30,17 @@ class JobSeeker < ActiveRecord::Base
     job_applications.order(:created_at).last
   end
 
+  def applied_to_job?(job)
+    job_applications.pluck(:job_id).include? job.id
+  end
+
   def self.with_ap_in_role(role_key, agency_person)
     AgencyRelation.in_role_of(role_key).
                   where(:agency_person => agency_person).
                   pluck(:job_seeker_id)
-     
+
   end
-  
+
 
   def job_developer
     find_agency_person(:JD)
@@ -60,14 +64,14 @@ class JobSeeker < ActiveRecord::Base
     where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
         includes(:job_seeker_status, :job_applications).
         order("users.last_name")
-    
+
   end
 
   def self.job_seekers_without_case_manager
     where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
         includes(:job_seeker_status, :job_applications).
         order("users.last_name")
-    
+
   end
 
   private

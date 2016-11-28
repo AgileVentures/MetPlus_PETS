@@ -13,9 +13,11 @@
       - if policy(@job).update?
         = link_to "Edit Job", edit_job_path(@job)
         |
-    = link_to "Return To Jobs", jobs_path
-    |
+        = link_to 'Match Job Seekers', match_job_seekers_job_path(@job), |
+                  data: {confirm: "Search for matching job seekers? " +  |
+                                  "(this may take a while)"}             |
     - if @resume
+      |
       = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
                 data: { job_id: @job.id, job_seeker_id: pets_user.id }
 
@@ -60,4 +62,3 @@
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-job-developer', @job) } }
 = render partial: 'resume_match_modal'
-
