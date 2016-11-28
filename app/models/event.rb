@@ -432,7 +432,7 @@ class Event
     unless job_apps.empty?
      
       js_emails = job_apps.map { |ja| ja.job_seeker.email}
-      js_ids     = job_apps.map { |ja| ja.job_seeker.id}
+      js_ids     = job_apps.map { |ja| ja.job_seeker.user.id}
       
 
       Pusher.trigger('pusher_control',
