@@ -55,6 +55,7 @@ RSpec.describe Event, type: :model do
     allow(Pusher).to receive(:trigger) # stub and spy on 'Pusher'
     stub_cruncher_authenticate
     stub_cruncher_job_create
+    stub_cruncher_file_download(testfile_resume)
 
     3.times do
       FactoryGirl.create(:agency_person, agency: agency)
@@ -454,6 +455,7 @@ RSpec.describe Event, type: :model do
           to change(all_emails, :count).by(+1)
     end
     it 'triggers mass Pusher message to js' do
+      application
       Event.create(:JOB_REVOKED, evt_obj_jobpost)
 
       expect(Pusher).to have_received(:trigger).
