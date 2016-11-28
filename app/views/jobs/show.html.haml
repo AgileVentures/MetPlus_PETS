@@ -9,9 +9,10 @@
                   data: { "job-id" => "#{@job.id}",
                           "job-title" => "#{@job.title}",
                           "job-companyJobId" => "#{@job.company_job_id}" }
-        |
       - if policy(@job).update?
+        |
         = link_to "Edit Job", edit_job_path(@job)
+      - if policy(@job).match_job_seekers?
         |
         = link_to 'Match Job Seekers', match_job_seekers_job_path(@job), |
                   data: {confirm: "Search for matching job seekers? " +  |

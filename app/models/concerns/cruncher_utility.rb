@@ -4,6 +4,7 @@ module CruncherUtility
   module ClassMethods
     def process_match_results(results, key_id)
       match_set = {}
+      return match_set if results.nil?
 
       # First level of results is a hash of specific matcher results ....
       results.each_value do |matcher|

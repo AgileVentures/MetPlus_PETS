@@ -27,6 +27,10 @@ class JobPolicy < ApplicationPolicy
     edit?
   end
 
+  def match_job_seekers?
+    edit?
+  end
+
   def destroy?
     correct_company_person?
   end

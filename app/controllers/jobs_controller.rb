@@ -197,13 +197,14 @@ class JobsController < ApplicationController
   end
 
   def match_job_seekers
+    authorize @job
     Pusher.trigger('pusher_control',
                    'spinner_start',
                    user_id: pets_user.user.id,
                    target: '.table.table-bordered')
 
     # Get job match scores for all job Seekers
-    if Rails.env.development? || Rails.env.test?
+    if Rails.env.development?
       result = ResumeCruncher.match_resumes(1)
     else
       result = ResumeCruncher.match_resumes(@job.id)
@@ -220,11 +221,13 @@ class JobsController < ApplicationController
       redirect_to(action: 'show', id: @job.id) && return
     end
 
-    # Create an array with each element consisting of
-    #  [job_seeker_id, job_match_score, has_applied_to_this_job]
+    # Create an array with each element consisting of an array:
+    #  [job_seeker, job_match_score, has_applied_to_this_job]
     begin
       @job_matches = result.collect do |item|
         job_seeker = Resume.find(item[0]).job_seeker
+        raise "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
+          unless job_seeker
         [job_seeker, item[1], job_seeker.applied_to_job?(@job)]
       end
     rescue Exception => exc
