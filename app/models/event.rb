@@ -428,27 +428,25 @@ class Event
     end
 
     job_apps = evt_obj.job.job_applications
-    
+
     unless job_apps.empty?
-     
-      js_emails = job_apps.map { |ja| ja.job_seeker.email}
-      js_ids     = job_apps.map { |ja| ja.job_seeker.user.id}
-      
+
+      js_emails = job_apps.map { |ja| ja.job_seeker.email }
+      js_ids = job_apps.map { |ja| ja.job_seeker.user.id }
 
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JOB_REVOKED],
-                     {job_id:       evt_obj.job.id,
-                      job_title:    evt_obj.job.title,
-                      company_name: evt_obj.job.company.name,
-                      notify_list:  js_ids})
+                     job_id:       evt_obj.job.id,
+                     job_title:    evt_obj.job.title,
+                     company_name: evt_obj.job.company.name,
+                     notify_list:  js_ids)
 
-      NotifyEmailJob.set(wait: delay_seconds.seconds).
-                     perform_later(js_emails,
-                     EVT_TYPE[:JOB_REVOKED],
-                     evt_obj.job)
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(js_emails,
+                                   EVT_TYPE[:JOB_REVOKED],
+                                   evt_obj.job)
     end
-   
-   end
+  end
 
   def self.notify_list_for_js_apply_event(appl)
     # Returns an array containing two arrays.  The first such array contains
