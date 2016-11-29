@@ -51,7 +51,7 @@
       .col-sm-12.panel.pre-scrollable.panel-default
         .panel-body.input-panel-body
           = person_form.collection_check_boxes(:as_jd_job_seeker_ids,
-                eligible_job_seekers_for_role(agency_person, :JD),
+                job_seekers_assigned_or_assignable_to_ap(agency_person, :JD),
                                               :id, :full_name) do |box|
             = box.label(class: 'checkbox col-sm-12 normal-label') do
               = box.check_box
@@ -68,7 +68,7 @@
       .col-sm-12.panel.pre-scrollable.panel-default
         .panel-body.input-panel-body
           = person_form.collection_check_boxes(:as_cm_job_seeker_ids,
-                eligible_job_seekers_for_role(agency_person, :CM),
+                job_seekers_assigned_or_assignable_to_ap(agency_person, :CM),
                                              :id, :full_name) do |box|
             = box.label(class: 'checkbox col-sm-12 normal-label') do
               = box.check_box
