@@ -952,7 +952,22 @@ RSpec.describe JobsController, type: :controller do
     end
 
     context 'authorization' do
+      let(:request) { get :match_job_seekers, id: bosh_job.id }
+      let(:user)    { FactoryGirl.create(:company_contact) }
 
+      describe 'visitor' do
+        it_behaves_like 'unauthorized', 'visitor'
+      end
+      describe 'job seeker' do
+        it_behaves_like 'unauthorized', 'job_seeker'
+      end
+      describe 'case manager' do
+        it_behaves_like 'unauthorized', 'case_manager'
+      end
+      describe 'company person - wrong company' do
+        user = FactoryGirl.create(:company_contact)
+        it_behaves_like 'unauthorized request'
+      end
     end
   end
 end
