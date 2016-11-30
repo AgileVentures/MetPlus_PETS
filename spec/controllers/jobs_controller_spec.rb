@@ -1,5 +1,6 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
+include ServiceStubHelpers::EmailValidator
 
 RSpec::Matchers.define :evt_obj do |*attributes|
   match do |actual|
@@ -40,6 +41,7 @@ RSpec.describe JobsController, type: :controller do
     stub_cruncher_job_update
     stub_cruncher_file_download test_file
     stub_cruncher_match_resumes
+    stub_email_validate_valid
     allow(Pusher).to receive(:trigger)
   end
 
@@ -875,7 +877,7 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #match_job_seekers' do
     let(:cmpy_contact) { FactoryGirl.create(:company_contact) }
     8.times do |n|
-      let("js#{n+1}".to_sym) { FactoryGirl.create(:job_seeker) }
+      let("js#{n + 1}".to_sym) { FactoryGirl.create(:job_seeker) }
     end
 
     context 'happy path' do
@@ -898,16 +900,16 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'starts and stops spinner' do
-        expect(Pusher).to have_received(:trigger).with(
-          'pusher_control',
-          'spinner_start',
-          user_id: bosh_person.user.id,
-          target: '.table.table-bordered')
-        expect(Pusher).to have_received(:trigger).with(
-          'pusher_control',
-          'spinner_stop',
-          user_id: bosh_person.user.id,
-          target: '.table.table-bordered')
+        expect(Pusher).to have_received(:trigger)
+          .with('pusher_control',
+                'spinner_start',
+                user_id: bosh_person.user.id,
+                target: '.table.table-bordered')
+        expect(Pusher).to have_received(:trigger)
+          .with('pusher_control',
+                'spinner_stop',
+                user_id: bosh_person.user.id,
+                target: '.table.table-bordered')
       end
       it 'sets match array if matches found' do
         expect(assigns(:job_matches))
@@ -925,28 +927,28 @@ RSpec.describe JobsController, type: :controller do
         stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
         get :match_job_seekers, id: bosh_job.id
 
-        expect(flash[:alert]).
-          to eq 'No matching job seekers found.'
+        expect(flash[:alert])
+          .to eq 'No matching job seekers found.'
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
       it 'sets flash and redirects if resume not found' do
         get :match_job_seekers, id: bosh_job.id
 
-        expect(flash[:alert]).
-          to eq "Error: Couldn't find Resume with 'id'=7"
+        expect(flash[:alert])
+          .to eq "Error: Couldn't find Resume with 'id'=7"
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
       it 'sets flash and redirects if job seeker not found' do
         8.times do
           FactoryGirl.create(:resume)
         end
-        job_seeker = resume = Resume.find(7).job_seeker
+        job_seeker = Resume.find(7).job_seeker
         job_seeker.destroy
 
         get :match_job_seekers, id: bosh_job.id
 
-        expect(flash[:alert]).
-          to eq "Error: Couldn't find JobSeeker for Resume with 'id' = 7"
+        expect(flash[:alert])
+          .to eq "Error: Couldn't find JobSeeker for Resume with 'id' = 7"
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
     end
@@ -965,7 +967,6 @@ RSpec.describe JobsController, type: :controller do
         it_behaves_like 'unauthorized', 'case_manager'
       end
       describe 'company person - wrong company' do
-        user = FactoryGirl.create(:company_contact)
         it_behaves_like 'unauthorized request'
       end
     end
