@@ -222,10 +222,9 @@ class JobsController < ApplicationController
     # Create an array with each element consisting of an array:
     #  [job_seeker, job_match_score, has_applied_to_this_job]
     begin
-      @job_matches = result.collect do |item|
+      @job_matches = result.map do |item|
         job_seeker = Resume.find(item[0]).job_seeker
-        raise RuntimeError,
-          "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
+        raise "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
           unless job_seeker
         [job_seeker, item[1], job_seeker.applied_to_job?(@job)]
       end
