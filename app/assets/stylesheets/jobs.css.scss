@@ -44,9 +44,9 @@ $state-danger-text: #a94442;
   }
 }
 .panel.panel-default#panel-default-id {
-  margin-bottom: 0px;
+  margin-bottom: 0;
   height: 78px;
-  border:0px;
+  border: 0;
 
   .panel-footer {
     background-color: $light-blue;
