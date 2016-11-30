@@ -48,11 +48,10 @@ $state-danger-text: #a94442;
   height: 78px;
   border:0px;
 
-  .panel-footer{
+  .panel-footer {
     background-color: $light-blue;
     height: 78px;
     margin-bottom: 0;
-    background-color: $light-blue;
    }
  }
 
@@ -107,13 +106,14 @@ $state-danger-text: #a94442;
 }
 
 #list-header {
-  margin-top: 25px;
-  margin-bottom: 12px;
   font-weight: 300;
+  margin-bottom: 12px;
+  margin-top: 25px;
 }
 
 #hire-header {
-  margin: 25px 0 12px 0;
+  margin: 25px 12px;
+
   a {
     color: $white;
   }
