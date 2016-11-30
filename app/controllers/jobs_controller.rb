@@ -133,14 +133,16 @@ class JobsController < ApplicationController
   end
 
   def apply
-    unless @job = Job.find_by(id: params[:job_id])
+    @job = Job.find_by(id: params[:job_id])
+    unless @job
       flash[:alert] = 'Unable to find the job the user is trying to apply to.'
       redirect_to(jobs_url) && return
     end
     self.action_description = 'apply. Job has either been filled or revoked'
     authorize @job
 
-    unless @job_seeker = JobSeeker.find_by(id: params[:user_id])
+    @job_seeker = JobSeeker.find_by(id: params[:user_id])
+    unless @job_seeker
       flash[:alert] = 'Unable to find the user who wants to apply.'
       redirect_to(job_path(@job)) && return
     end
@@ -204,11 +206,7 @@ class JobsController < ApplicationController
                    target: '.table.table-bordered')
 
     # Get job match scores for all job Seekers
-    if Rails.env.development?
-      result = ResumeCruncher.match_resumes(1)
-    else
-      result = ResumeCruncher.match_resumes(@job.id)
-    end
+    result = ResumeCruncher.match_resumes(@job.id)
 
     Pusher.trigger('pusher_control',
                    'spinner_stop',
@@ -226,11 +224,12 @@ class JobsController < ApplicationController
     begin
       @job_matches = result.collect do |item|
         job_seeker = Resume.find(item[0]).job_seeker
-        raise "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
+        raise RuntimeError,
+          "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
           unless job_seeker
         [job_seeker, item[1], job_seeker.applied_to_job?(@job)]
       end
-    rescue Exception => exc
+    rescue RuntimeError, ActiveRecord::RecordNotFound => exc
       flash[:alert] = "Error: #{exc.message}"
       redirect_to(action: 'show', id: @job.id) && return
     end

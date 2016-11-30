@@ -10,7 +10,7 @@ module CruncherUtility
       results.each_value do |matcher|
         # Second level is array of object id and matching scores (hashes) ....
         matcher.each do |match_item|
-          object_id =  match_item[key_id].to_i
+          object_id = match_item[key_id].to_i
 
           # Have we seen this object from another matcher?
           # If so, use highest score
@@ -23,7 +23,7 @@ module CruncherUtility
         end
       end
 
-      match_set.sort {|a,b| b[1] <=> a[1]}
+      match_set.sort { |a, b| b[1] <=> a[1] }
     end
   end
 end
