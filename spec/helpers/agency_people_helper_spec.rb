@@ -88,18 +88,17 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
     end
     it 'returns job seekers for job developer role' do
       expect(job_seekers_assigned_or_assignable_to_ap(cm_person, :JD))
-                          .to match_array [adam, bob, charles]
+        .to match_array [adam, bob, charles]
 
       expect(job_seekers_assigned_or_assignable_to_ap(jd_person, :JD))
-                          .to match_array [adam, bob, charles, dave]
+        .to match_array [adam, bob, charles, dave]
     end
     it 'returns job seekers for case manager role' do
       expect(job_seekers_assigned_or_assignable_to_ap(cm_person, :CM))
-                          .to match_array [adam, bob, dave, charles]
+        .to match_array [adam, bob, dave, charles]
 
       expect(job_seekers_assigned_or_assignable_to_ap(jd_person, :CM))
-                          .to match_array [bob, charles, dave]
+        .to match_array [bob, charles, dave]
     end
-
   end
 end
