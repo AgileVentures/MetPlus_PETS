@@ -66,7 +66,7 @@ class JobSeekersController < ApplicationController
           resume.file = tempfile
         else
           resume = Resume.new(file: tempfile, file_name: filename,
-                     job_seeker_id: @jobseeker.id)
+                              job_seeker_id: @jobseeker.id)
         end
 
         unless resume.save
@@ -164,16 +164,17 @@ class JobSeekersController < ApplicationController
   end
   
   private
-    def form_params
-      params.require(:job_seeker).permit(:first_name,
-            :last_name, :email, :phone,
-            :password,
-            :password_confirmation,
-            :year_of_birth,
-            :resume,
-            :consent,
-            :job_seeker_status_id,
-            address_attributes: [:id, :street, :city,
-                                 :zipcode, :state])
-    end
+
+  def form_params
+    params.require(:job_seeker).permit(:first_name,
+                                       :last_name, :email, :phone,
+                                       :password,
+                                       :password_confirmation,
+                                       :year_of_birth,
+                                       :resume,
+                                       :consent,
+                                       :job_seeker_status_id,
+                                       address_attributes: [:id, :street, :city,
+                                                            :zipcode, :state])
+  end
 end

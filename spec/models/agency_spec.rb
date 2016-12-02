@@ -92,6 +92,7 @@ RSpec.describe Agency, type: :model do
 
   describe 'Agency management' do
     let(:agency) { FactoryGirl.create(:agency) }
+    let(:js_person) { FactoryGirl.create(:job_seeker) }
     let!(:aa_person1) do
       $person = FactoryGirl.build(:agency_person, agency: agency)
       $person.agency_roles << FactoryGirl.create(:agency_role,
@@ -122,6 +123,10 @@ RSpec.describe Agency, type: :model do
       expect(Agency.this_agency(jd_person)).to eq agency
       expect(Agency.this_agency(aa_person1)).to eq agency
     end
+    
+    it 'identifies non-agency' do
+      expect(Agency.this_agency(js_person)).to eq nil
+    end  
   end
 
   describe 'Class methods' do

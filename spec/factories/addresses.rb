@@ -1,10 +1,9 @@
 FactoryGirl.define do
   factory :address do
+    location { |a| a.association(:company) }
     street "3940 Main Street"
     city "Detroit"
     zipcode "92105"
-    location_id 1
-    location_type "MyString"
     state "Michigan"
   end
 

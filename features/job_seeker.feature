@@ -216,3 +216,15 @@ Scenario: Download resume file_name as a Company Admin
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
   Then I should get a download with the filename "Janitor-Resume.doc"
+  
+  
+  @selenium 
+  Scenario: non-admin and non-agency person trying to access to admin home page
+    Given I am on the home page
+    And I login as "vijaya.karumudi@gmail.com" with password "password"
+    Then I should see "Signed in successfully."
+    And I should not see "Admin"
+    When I type agency_admin home in the URL address bar
+    Then I should see "Current agency cannot be determined"
+    And I should be on the home page
+
