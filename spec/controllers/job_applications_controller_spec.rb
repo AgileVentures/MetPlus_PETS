@@ -351,7 +351,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      xhr :get, :list, type: 'job_seeker', entity_id: job_seeker
+      xhr :get, :list, type: 'job_seeker-default', entity_id: job_seeker
     end
 
     it 'assigns jobs for view' do
@@ -361,37 +361,6 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     it 'renders partial for applications' do
       expect(response).to render_template(partial: 'jobs/_applied_job_list')
-    end
-  end
-
-  describe 'GET download_resume' do
-    let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
-      sign_in company_admin
-    end
-
-    context 'Successful download' do
-      it 'does not raise exception' do
-        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
-        get :download_resume, id: valid_application
-        expect(response).to_not set_flash
-      end
-    end
-    context 'Error: Resume not found in DB' do
-      it 'sets flash message' do
-        get :download_resume, id: invalid_application
-        expect(flash[:alert]).to eq 'Error: Resume not found in DB'
-      end
-    end
-    context 'Error: Resume not found in Cruncher' do
-      it 'sets flash message' do
-        stub_cruncher_file_download_notfound
-        get :download_resume, id: valid_application
-        expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
-      end
     end
   end
 end

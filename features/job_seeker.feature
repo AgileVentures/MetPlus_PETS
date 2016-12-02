@@ -11,7 +11,8 @@ Background: seed data added to database
   Given the following jobseeker exist:
     | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
     | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-    | thomas    | jones    | tommy1@gmail.com           | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
@@ -38,6 +39,11 @@ Background: seed data added to database
     | Clerk      | tommy1@gmail.com           |
     | Doctor     | tommy1@gmail.com           |
     | Mime       | tommy1@gmail.com           |
+
+   
+  Given the following resumes exist:
+    | file_name          | job_seeker             |
+    | Janitor-Resume.doc | vijaya.karumudi@gmail.com |
 
   Given the following agency people exist:
     | agency  | role  | first_name | last_name | phone        | email          | password  |
@@ -197,3 +203,16 @@ Scenario: Job Developer sees job seeker's job applications
   And I should see "Doctor"
   And I should see "Mime"
   And I should not see "Trucker"
+
+@javascript
+Scenario: Download resume file_name as a Company Admin
+  Given I am on the home page
+  And I am logged in as "ca@widgets.com" with password "qwerty123"
+  And I should see "SW dev"
+  When I click the "SW dev" link
+  And I wait 1 second
+  And I should see "Applications for this Job"
+  Then I click the "karumudi, vijaya" link
+  Then I should see button "Download Resume"
+  And I click the "Download Resume" button
+  Then I should get a download with the filename "Janitor-Resume.doc"

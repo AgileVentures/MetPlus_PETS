@@ -797,4 +797,58 @@ RSpec.describe JobSeekersController, type: :controller do
       end
     end
   end
+  describe 'GET download_resume' do
+    let(:company)       { FactoryGirl.create(:company) }
+    let(:job)           { FactoryGirl.create(:job, company: company) }
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
+    let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+    let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+
+    let(:valid_application) do
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    end
+    let(:invalid_application) do
+      FactoryGirl.create(:job_application,
+                         job: job, job_seeker: job_seeker2,
+                         status: 'accepted')
+    end
+    let(:agency)       { FactoryGirl.create(:agency) }
+    let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+
+    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
+    
+    let(:app) do
+      FactoryGirl.create(:job_application,
+                         job: job, job_seeker: job_seeker)
+    end
+    let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in company_admin
+    end
+
+    context 'Successful download' do
+      it 'does not raise exception' do
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
+        get :download_resume, id: valid_application
+        expect(response).to_not set_flash
+      end
+    end
+    context 'Error: Resume not found in DB' do
+      it 'sets flash message' do
+        get :download_resume, id: invalid_application
+        expect(flash[:alert]).to eq 'Error: Resume not found in DB'
+      end
+    end
+    context 'Error: Resume not found in Cruncher' do
+      it 'sets flash message' do
+        stub_cruncher_file_download_notfound
+        get :download_resume, id: valid_application
+        expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
+      end
+    end
+  end
 end
