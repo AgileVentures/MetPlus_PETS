@@ -1,0 +1,150 @@
+<div class='row'>
+  <div class='col-sm-offset-1 col-sm-10'>
+    <div class='pull-right' id='job-show-links-id'>
+      <a href="/jobs">Return To Jobs</a>
+      |
+      <a id="match_my_resume" data-job-id="152" data-job-seeker-id="201"
+                            href="#">Match against my Résumé</a>
+    </div>
+    <div class='clearfix'></div>
+    <div class='panel panel-default' id='show-panel-id'>
+      <div class='panel-heading' id='panel-heading-show-id'>
+        <h4>Ankunding LLC</h4>
+      </div>
+    </div>
+    <table class='table table-bordered'>
+      <tbody>
+        <tr>
+          <td>Job title:</td>
+          <td id='job-title'>Central Accountability Orchestrator</td>
+        </tr>
+        <tr>
+          <td>Job status:</td>
+          <td id='job-status'>active</td>
+        </tr>
+        <tr>
+          <td>Location:</td>
+          <td>
+            87351 Fay Causeway
+            <br>
+            South Shanon, South Carolina
+            14539
+          </td>
+        </tr>
+        <tr>
+          <td>Job category:</td>
+          <!-- %td=@job.job_category.name -->
+          <td>Walmart co. placeholder</td>
+        </tr>
+        <tr>
+          <td>Full time:</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Job ID:</td>
+          <td>CJQP3FER</td>
+        </tr>
+        <tr>
+          <td>Shift:</td>
+          <td>Evening</td>
+        </tr>
+        <tr>
+          <td>Contact information:</td>
+          <td>
+            Contact: Place Holder
+            <br>
+            Email: <a href="mailto:placeholder@gmail.com">placeholder@gmail.com</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Job Details:</td>
+          <td>Repellat nobis cupiditate perspiciatis explicabo ad omnis. Amet sed magni. Ab quia consequatur ut quis. Quos et id consequuntur reprehenderit. Quia voluptas natus tenetur reprehenderit ipsa.</td>
+        </tr>
+        <tr>
+          <td>Job Skills:</td>
+          <td>
+            <i>None</i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div id='apply_job'></div>
+    <a class="col-sm-offset-4" data-toggle="modal" data-target="#applyJobModal" href="#">Click Here To Apply Online</a>
+    <div aria-labelledby='myModalLabel' class='modal fade' id='applyJobModal' role='dialog' tabindex='-1'>
+      <div class='modal-dialog' role='document'>
+        <div class='modal-content' id='job-apply-modal-id'>
+          <div class='modal-header'>
+            <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
+              <span aria-hidden='true'>×</span>
+            </button>
+            <h4 class='modal-title text-center' id='myModalLabel'>
+              Application process
+            </h4>
+          </div>
+          <div class='modal-body'>
+            <p>
+              Job information
+              <div class='row'>
+                <div class='col-sm-6'>
+                  Job title: Central Accountability Orchestrator
+                </div>
+                <div class='col-sm-6'>
+                  Job number: CJQP3FER
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-12'>
+                  Company:
+                  <a href="/company/152">Ankunding LLC</a>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-2 warning-text'>
+                  Warning:
+                </div>
+                <div class='col-sm-10'>
+                  This application will send the resume that you have saved
+                  in your profile to the employer.
+                  <p>
+                    If you want to make some changes please go to your
+                    <a href="/job_seekers/201/edit">profile page</a>
+                    and update the information before following to the next step
+                  </p>
+                </div>
+              </div>
+              <div class='row'>
+                <div class='col-sm-12'>
+                  If you want to proceed with the application press the "Apply button"
+                </div>
+              </div>
+            </p>
+          </div>
+          <div class='modal-footer'>
+            <a class="btn btn-info" id="modal-apply-id" data-method="get" href="/jobs/152/apply/201">Apply Now</a>
+            <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='modal fade' id='resumeMatchModal' role='dialog' tabindex='-1'>
+    <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>×</span>
+          </button>
+          <h4 class='modal-title text-center'>
+            Job match against your résumé
+          </h4>
+        </div>
+        <div class='modal-body text-center'>
+          <div class='fa-lg' id='resumeMatchScore'></div>
+        </div>
+        <div class='modal-footer'>
+          <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

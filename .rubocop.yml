@@ -5,7 +5,8 @@ AllCops:
   Exclude:
     - 'tmp/**/*'
   TargetRubyVersion: 2.3
-
+Documentation:
+  Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
 

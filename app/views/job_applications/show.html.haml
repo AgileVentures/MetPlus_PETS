@@ -17,7 +17,7 @@
                               "job-companyJobId" => "#{@job_application.job.company_job_id}",
                               "action" => "#rejectModal"}
       |
-      =link_to "Return To Applications", applications_job_path(@job_application.job_id)
+      = link_to "Return To Applications", job_path(@job_application.job_id)
   .clearfix
   .panel.panel-default#show-panel-id
     .panel-heading#panel-heading-show-id
@@ -25,4 +25,5 @@
         = "#{@job_application.job.title}"
         - if @job_application.status != 'active'
           %span{class: 'label label-info'}="#{@job_application.status}"
-    = render partial: 'job_seekers/info', locals: {job_seeker: @job_application.job_seeker}
+    = render partial: 'job_seekers/info', locals: {job_seeker: @job_application.job_seeker,
+                                                  offer_download: true}

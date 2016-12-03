@@ -46,36 +46,33 @@ Feature: Reject a job application
     Given I am on the home page
     And I login as "cicil@widgets.com" with password "qwerty123"
     And I wait 1 second
-    Then I click "hr manager" link to job applications index page
-    And I should see "3" active applications for the job
-    Then I reject "jane@mail.com" application
+    Then I click the "hr manager" link
+    And I should see "3" active applications for "hr manager"
+    Then I reject "jane@mail.com" application for "hr manager"
     And I should see an "reject" confirmation
     And I click the "Reject" button
     And I should see "Please enter a reason for rejecting this application."
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
     And I should see "jane@mail.com" application is listed last
-    And I should see "jane@mail.com" application changes to not_accepted
+    And I should see "jane@mail.com" application for "hr manager" changes to not_accepted 
 
   @javascript
   Scenario: company admin reject a job application
     Given I am on the home page
     And I login as "cane@widgets.com" with password "qwerty123"
     And I wait 1 second
-    Then I click "hr manager" link to job applications index page
-    And I should see "3" active applications for the job
-    Then I click "june@mail.com" link to "June's" job application show page
-    Then I click the "Reject" link
+    Then I click the "hr manager" link
+    And I should see "3" active applications for "hr manager"
+    Then I click the "Seeker, June" link
+    And I wait 1 second
+    Then I reject "june@mail.com" application for "hr manager"
     And I should see an "reject" confirmation
     And I click the "Reject" button
     And I should see "Please enter a reason for rejecting this application."
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
-    And I am returned to "hr manager" job application index page
-    And I should see "june@mail.com" application is listed last
-    And I should see "june@mail.com" application changes to not_accepted
-    Then I click "june@mail.com" link to "June's" job application show page
-    And I should not see "Reject" link
+    And I should see "june@mail.com" application for "hr manager" changes to not_accepted
 
   @selenium
   Scenario: job developer reject notification when job application rejected
@@ -86,8 +83,8 @@ Feature: Reject a job application
     When I am in Company Admin's browser
     Given I am on the home page
     And I login as "cane@widgets.com" with password "qwerty123"
-    Then I click "hr manager" link to job applications index page
-    And I reject "john@mail.com" application
+    Then I click the "hr manager" link
+    And I reject "john@mail.com" application for "hr manager"
     And I input "Not enough experience" as the reason for rejection
     And I click the "Reject" button
     And I wait for 2 seconds

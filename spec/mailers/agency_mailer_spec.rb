@@ -42,8 +42,7 @@ RSpec.describe AgencyMailer, type: :mailer do
           to have_body_text("A company has requested registration in PETS:")
     end
     it "includes link to show company" do
-      expect(mail).
-          to have_body_text(/#{company_url(id: 1)}/)
+      expect(mail).to have_body_text(/#{company_url(id: company.id)}/)
     end
   end
 
@@ -225,4 +224,40 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
   end
 
+  describe 'Job Developer not assigned to JS applies to job' do
+    let(:agency)        { FactoryGirl.create(:agency) }
+    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:job_developer1) { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
+    let(:job)            { FactoryGirl.create(:job) }
+    let(:mail) do
+      AgencyMailer.job_applied_by_other_job_developer(job_seeker,
+                                                      job_developer,
+                                                      job_developer1, job)
+    end
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+    before(:each) do
+      job_seeker.assign_job_developer job_developer, agency
+    end
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'Job applied by other job developer'
+      expect(mail.to).to eq([job_developer.email.to_s])
+      expect(mail.from).to eq(['from@example.com'])
+    end
+    it 'renders the body' do
+      expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
+      expect(mail).to have_body_text(/has submitted an application on behalf of/)
+      expect(mail).to have_body_text(/Doe, John/)
+    end
+    it 'includes link to show job' do
+      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+    end
+    it 'includes link to show job seeker' do
+      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+    end
+  end
 end

@@ -1,5 +1,5 @@
 class AgencyPolicy < ApplicationPolicy
   def update?
-    user.is_agency_admin? record
+    record.nil?  ?  false : user.is_agency_admin?(record)
   end
 end

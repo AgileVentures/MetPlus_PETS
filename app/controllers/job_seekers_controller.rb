@@ -31,8 +31,8 @@ class JobSeekersController < ApplicationController
     end
 
     if models_saved
-      flash[:notice] = "A message with a confirmation and link has been sent to your email address. " +
-                       "Please follow the link to activate your account."
+      flash[:notice] = 'A message with a confirmation and link has been sent '\
+      'to your email address. Please follow the link to activate your account.'
       redirect_to root_path
     else
       render 'new'
@@ -61,12 +61,12 @@ class JobSeekersController < ApplicationController
         # Update current résumé if present, otherwise save new
         # (Statement below needs to change if more than one resume per JS)
         resume = @jobseeker.resumes[0]
-        if (resume)
+        if resume
           resume.file_name = filename
           resume.file = tempfile
         else
           resume = Resume.new(file: tempfile, file_name: filename,
-                     job_seeker_id: @jobseeker.id)
+                              job_seeker_id: @jobseeker.id)
         end
 
         unless resume.save
@@ -78,8 +78,9 @@ class JobSeekersController < ApplicationController
 
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
-      flash[:notice] = "Jobseeker was updated successfully."
-      redirect_to @jobseeker and return if (pets_user == @jobseeker.case_manager) || (pets_user == @jobseeker.job_developer)
+      flash[:notice] = 'Jobseeker was updated successfully.'
+      redirect_to(@jobseeker) && return if (pets_user == @jobseeker.case_manager) ||
+                                           (pets_user == @jobseeker.job_developer)
       redirect_to root_path
     else
       @resume = resume
@@ -91,9 +92,9 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
     @recent_jobs_type = 'recent-jobs'
     authorize @jobseeker
-    @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(:page => params[:page], :per_page => 5)
-    @js_last_sign_in = @jobseeker.last_sign_in_at
-    @application_type = 'job_seeker'
+    @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at)
+                  .paginate(page: params[:page], per_page: 5)
+    @application_type = 'job_seeker-default'
   end
 
   def index
@@ -104,28 +105,29 @@ class JobSeekersController < ApplicationController
   def show
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
-    @application_type = 'job_seeker'
+    @offer_download = pets_user.is_a?(CompanyPerson)
   end
 
   def preview_info
-    raise 'Unsupported request' if not request.xhr?
+    raise 'Unsupported request' unless request.xhr?
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
     render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
-                                                   preview_mode: true }
+                                                   preview_mode: true,
+                                                   offer_download: false }
   end
 
   def destroy
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
     @jobseeker.destroy
-    flash[:notice] = "Jobseeker was deleted successfully."
+    flash[:notice] = 'Jobseeker was deleted successfully.'
     redirect_to root_path
   end
 
   def list_match_jobs
     @jobseeker = JobSeeker.find(params[:id])
-    if @jobseeker.resumes.empty? then
+    if @jobseeker.resumes.empty?
       flash[:error] =
         "#{@jobseeker.full_name(last_name_first: false)} " \
         'does not have a résumé on file'
@@ -139,15 +141,17 @@ class JobSeekersController < ApplicationController
   end
 
   private
-    def form_params
-      params.require(:job_seeker).permit(:first_name,
-            :last_name, :email, :phone,
-            :password,
-            :password_confirmation,
-            :year_of_birth,
-            :resume,
-            :consent,
-            :job_seeker_status_id,
-            address_attributes: [:id, :street, :city, :zipcode, :state])
-    end
+
+  def form_params
+    params.require(:job_seeker).permit(:first_name,
+                                       :last_name, :email, :phone,
+                                       :password,
+                                       :password_confirmation,
+                                       :year_of_birth,
+                                       :resume,
+                                       :consent,
+                                       :job_seeker_status_id,
+                                       address_attributes: [:id, :street, :city,
+                                                            :zipcode, :state])
+  end
 end

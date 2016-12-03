@@ -101,10 +101,16 @@ module ServiceStubHelpers
                    headers: { 'Content-Type': 'application/json' })
     end
 
-    def stub_cruncher_match_resume_and_job_error
+    def stub_cruncher_match_resume_and_job_error(type, obj_id)
       url_regex = %r{#{CruncherService.service_url}/resume/\d+/compare/\d+}
-      err = JSON.generate("resultCode": 'JOB_NOT_FOUND',
-                          "message": 'No job found with id: 1')
+      case type
+      when :no_job
+        err = JSON.generate('resultCode': 'JOB_NOT_FOUND',
+                            'message': "No job found with id: #{obj_id}")
+      when :no_resume
+        err = JSON.generate('resultCode': 'RESUME_NOT_FOUND',
+                            'message': "No resume found with id: #{obj_id}")
+      end
       stub_request(:get, url_regex)
         .to_raise(RestClient::ResourceNotFound.new(err))
     end

@@ -13,7 +13,7 @@ class JobApplicationsController < ApplicationController
     else
       flash[:alert] = 'Invalid action on inactive job application.'
     end
-    redirect_to applications_job_url(@job_application.job)
+    redirect_to job_url(@job_application.job)
   end
 
   def reject
@@ -41,12 +41,34 @@ class JobApplicationsController < ApplicationController
   end
 
   def list
-    raise 'Unsupported request' if not request.xhr?
+    raise 'Unsupported request' unless request.xhr?
     @job_applications = []
-    @job_applications = display_job_applications(params[:type], 5, params[:entity_id])
+    @job_applications = display_job_applications(params[:type], params[:entity_id], 5)
     render partial: 'jobs/applied_job_list',
-          :locals => { job_applications: @job_applications,
-                       application_type: params[:type] }
+           locals: { job_applications: @job_applications,
+                     application_type: params[:type] }
+  end
+
+  def download_resume
+    job_seeker = @job_application.job_seeker
+
+    raise 'Resume not found in DB' if job_seeker.resumes.empty?
+    resume = job_seeker.resumes[0]
+
+    resume_file = ResumeCruncher.download_resume(resume.id)
+    raise 'Resume not found in Cruncher' if resume_file.nil?
+
+    send_data resume_file.open.read, filename: resume.file_name
+
+    rescue RuntimeError => e
+      flash[:alert] = "Error: #{e}"
+      redirect_back_or_default
+
+    ensure
+      if resume_file
+        resume_file.close
+        resume_file.unlink
+      end
   end
 
   private
@@ -56,7 +78,7 @@ class JobApplicationsController < ApplicationController
       render json: { message: 'Job application rejected', status: 200 }
     else
       flash[:notice] = 'Job application rejected.'
-      redirect_to controller: 'jobs', action: 'applications',
+      redirect_to controller: 'jobs', action: 'show',
                   id: @job_application.job.id
     end
   end
