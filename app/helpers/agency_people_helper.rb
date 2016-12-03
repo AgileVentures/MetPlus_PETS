@@ -8,7 +8,7 @@ module AgencyPeopleHelper
     agency_person.sole_agency_admin?
   end
 
-  def eligible_job_seekers_for_role(agency_person, role_key)
+  def job_seekers_assigned_or_assignable_to_ap(agency_person, role_key)
     # Inputs:
     #  agency_person: AgencyPerson instance
     #  role_key:      key for AgencyPersonRole::ROLE hash (e.g. :JD, :CM, etc.)
