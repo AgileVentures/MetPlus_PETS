@@ -79,7 +79,7 @@ Given the following job applications exist:
     And I wait for 1 second
     And I should see "Application process"
     Then I click the "Apply Now" link
-    And I wait 2 seconds
+    And I wait 4 seconds
     And I should see "Congratulations, you were able to apply with success"
 
     Then "corp@widgets.com" should receive an email with subject "Job Application received"
