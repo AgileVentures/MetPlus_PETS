@@ -124,6 +124,7 @@ Scenario: job seeker finds new job opportunities
   When I am in Job Seeker's browser
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
+  And I wait 1 second
   Then I should see "Signed in successfully"
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
   And I should see "Mime" after "Job Opportunities - New"
@@ -137,6 +138,7 @@ Scenario: job seeker finds new job opportunities
   | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | ca@widgets.com |
   When I am in Job Seeker's browser
   And I reload the page
+  And I wait 1 second
   Then I should see "UI Developer" after "Job Opportunities - New"
   And I should see "RoR Developer" after "UI Developer"
 
@@ -219,6 +221,8 @@ Scenario: Download resume file_name as a Company Admin
   
   
   @selenium 
+
+  @javascript
   Scenario: non-admin and non-agency person trying to access to admin home page
     Given I am on the home page
     And I login as "vijaya.karumudi@gmail.com" with password "password"
@@ -227,4 +231,3 @@ Scenario: Download resume file_name as a Company Admin
     When I type agency_admin home in the URL address bar
     Then I should see "Current agency cannot be determined"
     And I should be on the home page
-

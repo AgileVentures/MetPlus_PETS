@@ -307,6 +307,7 @@ Scenario: update job specialty
   And I wait 2 seconds
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
+  And I wait 1 second
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
