@@ -71,6 +71,7 @@ Background: data is added to database
     Then I am in Company Admin's browser
     And I should see "Job Seeker: John Seeker has applied to this job"
     And I am on the Company Person 'ca@widgets.com' Home page
+    And I wait 1 second
     And I should see "Review job application"
     And I should see "Job: software developer"
     Then "ca@widgets.com" should receive an email with subject "Job seeker applied"
