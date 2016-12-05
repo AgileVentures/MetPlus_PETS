@@ -135,7 +135,7 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
 	And  I press "new-job-submit"
-  And I wait 3 seconds
+  And I wait 1 second
 	Then  I should see "The form contains 3 errors"
 
 @javascript
