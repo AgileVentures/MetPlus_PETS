@@ -19,7 +19,6 @@ describe('Job Applications', function() {
 			request = jasmine.Ajax.requests.mostRecent();
 			expect(request.url).toMatch(/\/applied_job_list\/job-applied\?applications_page=2/);
 			expect(request.method).toBe('GET');
-
 		});
 
 		afterEach(function() {
@@ -43,9 +42,6 @@ describe('Job Applications', function() {
 		beforeEach( function() {
 			appendLoadFixtures('job_applications/apply.html');
 
-		});
-
-		afterEach( function() {
 		});
 
 		describe('application preview', function() {
@@ -114,15 +110,8 @@ describe('Job Applications', function() {
 			appendLoadFixtures('job_applications/reject.html');
 			jasmine.Ajax.install();
 			$('#confirm_reject').click(RejectAppln.reject_action);
-			$('#confirm_reject').trigger('click');
 			spyOn(Notification, 'success_notification');
 			spyOn(Notification, 'alert_notification');
-			request = jasmine.Ajax.requests.mostRecent();
-			request.respondWith(TestResponses.job_applications.reject.success);
-			expect(request.method).toBe('PATCH');
-			nestedRequest = jasmine.Ajax.requests.mostRecent();
-			nestedRequest.respondWith(TestResponses.job_applications.reject.success);
-			expect(nestedRequest.method).toBe('GET');
 		});
 
 		afterEach(function() {
@@ -130,7 +119,16 @@ describe('Job Applications', function() {
 		});
 
 		it('calls ajax to reject applications', function() {
-			expect(request.status).toEqual(TestResponses.job_applications.reject.success.status);
+			$('#confirm_reject').trigger('click');
+			request = jasmine.Ajax.requests.mostRecent();
+			expect(request.method).toBe('PATCH');
+
+			request.respondWith(TestResponses.job_applications.reject.success);
+			expect(Notification.success_notification).toHaveBeenCalled();
+
+			nestedRequest = jasmine.Ajax.requests.mostRecent();
+			nestedRequest.respondWith(TestResponses.job_applications.reject.success);
+			expect(nestedRequest.method).toBe('GET');
 			expect(Notification.success_notification).toHaveBeenCalled();
 		});
 
