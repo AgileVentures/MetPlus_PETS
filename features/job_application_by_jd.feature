@@ -108,6 +108,7 @@ Background: data is added to database
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
     Then I apply to "software developer" from Jobs link
+    And I wait 2 seconds
     And I should see "Congratulations, you were able to apply with success"
 
     Then I am in Job Developer's browser
