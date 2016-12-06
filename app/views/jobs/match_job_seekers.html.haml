@@ -1,0 +1,40 @@
+%h3
+  Job Seeker matches for job:
+  = link_to @job.title, job_path(@job)
+%br
+%table.table.table-hover
+  %thead
+    %tr
+      %th
+        Name (if applied)
+      %th
+        City
+      %th
+        Match Rating
+      %th
+        Job Developer
+  %tbody
+    - @job_matches.each do |job_match|
+      %tr
+        %td
+          - if job_match[2]
+            = link_to(job_match[0].full_name, job_seeker_path(job_match[0]))
+        %td
+          - address = job_match[0].address
+          #{address.city}, #{address.state}
+        %td
+          = show_stars(job_match[1])
+          #{job_match[1]} / 5.0
+        %td
+          - if job_match[2] && (job_developer = job_match[0].job_developer)
+            = mail_to(job_developer.email,                                    |
+                      job_developer.full_name(last_name_first: false),        |
+                      subject: "Application to job: #{@job.title}",           |
+                      body: "This is in regards to this job application - " + |
+                            "\n\n" +                                          |
+                            "Company: " + "#{@job.company.name}" +            |
+                            "\n" +                                            |
+                            "Job: " + "#{@job.title}" +                       |
+                            "\n" +                                            |
+                            "Applicant: " + "#{job_match[0].full_name}" +     |
+                            "\n\n" + "(your message here)")                   |

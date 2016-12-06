@@ -25,7 +25,7 @@ RSpec.describe JobPolicy do
     stub_cruncher_job_update
   end
 
-  permissions :create?, :update?, :edit? do
+  permissions :create?, :update?, :edit?, :match_job_seekers? do
     it 'only allows access if user is correct_company_person' do
       expect(JobPolicy).to permit(bosh_contact, bosh_job)
       expect(JobPolicy).to permit(bosh_admin, bosh_job)
