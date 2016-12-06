@@ -29,15 +29,17 @@
 
 .form-group
   .col-sm-3.control-label
-    = f.label :shift
+    = f.label :shift, 'Shift'
   .col-sm-5
     = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
             {prompt: true}, class: 'form-control'
-  = f.label :fulltime, class: 'control-label'
+
+  = f.label :fulltime, 'Fulltime', class: 'control-label'
   = f.check_box :fulltime
+
 .form-group
   .col-sm-3.control-label
-    = f.label :description
+    = f.label :description, 'Description'
   .col-sm-6
     =f.text_area :description, size: "40x5", class: 'form-control'
 
