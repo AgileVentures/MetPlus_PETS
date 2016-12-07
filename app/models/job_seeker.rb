@@ -70,6 +70,10 @@ class JobSeeker < ActiveRecord::Base
         includes(:job_seeker_status, :job_applications).
         order("users.last_name")
   end
+  
+  def application_for_job(job)
+    job_applications.where(job: job)[0]
+  end
 
   private
   # Helper methods for associating job seekers with agency people
