@@ -1,5 +1,4 @@
 class JobSeekerMailer < ApplicationMailer
-
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
@@ -24,11 +23,10 @@ class JobSeekerMailer < ApplicationMailer
   end
 
   def job_revoked(job_seeker, job)
-    send_job_seeker_mail(job_seeker: job_seeker, 
+    send_job_seeker_mail(job_seeker: job_seeker,
                          job: job,
                          template: 'job_revoked_jobseeker')
   end
-
 
   private
 
