@@ -14,6 +14,9 @@ class JobSeekerEmailJob < ActiveJob::Base
     when Event::EVT_TYPE[:JD_APPLY]
       # args[0] = job_developer, args[1] = job
       JobSeekerMailer.job_applied_by_job_developer(job_seeker, args[0], args[1]).deliver_later
+
+    when Event::EVT_TYPE[:JOB_REVOKED]
+      JobSeekerMailer.job_revoked(job_seeker, args[0]).deliver_later
     end
   end
 end
