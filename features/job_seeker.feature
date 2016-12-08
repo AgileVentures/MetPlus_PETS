@@ -56,6 +56,10 @@ Scenario: new Js Registration
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
   And I select "1990" in select list "Year Of Birth"
+  And I fill in "Street" with " 123 Main Street"
+  And I fill in "City" with "Detroit"
+  And I fill in "Zipcode" with "48201"
+  And I select "Michigan" in select list "State"
   Then I select "Employed Not Looking" in select list "Status"
   And I choose resume file "Admin-Assistant-Resume.pdf"
   Then I click the "Create Job seeker" button
