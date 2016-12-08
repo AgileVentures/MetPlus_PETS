@@ -440,8 +440,9 @@ class Event
                      job_title:    evt_obj.job.title,
                      company_name: evt_obj.job.company.name,
                      notify_list:  js_ids)
+                    
 
-      NotifyEmailJob.set(wait: delay_seconds.seconds)
+      JobSeekerEmailJob.set(wait: delay_seconds.seconds)
                     .perform_later(js_emails,
                                    EVT_TYPE[:JOB_REVOKED],
                                    evt_obj.job)
