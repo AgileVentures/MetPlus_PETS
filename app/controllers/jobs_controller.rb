@@ -1,24 +1,13 @@
 class JobsController < ApplicationController
   include JobsViewer
-  include JobApplicationsViewer
 
-  before_action :find_job,	only: [:show, :edit, :update, :destroy,
-                                  :applications, :applications_list, :revoke]
-  before_action :authentication_for_post_or_edit,
-                only: [:new, :edit, :create, :update, :destroy]
-  before_action :right_company_person?, only: [:edit, :destroy, :update]
-  before_action :user_logged!, only: [:apply]
-
-  helper_method :job_fields
+  before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
+                                  :match_resume, :match_job_seekers]
+  before_action :user_logged!, except: [:index, :list_search_jobs, :show]
 
   def index
-    if company_p_or_job_d? && @cp_or_jd.is_a?(CompanyPerson)
-      @jobs = @cp_or_jd.company.jobs.order(:title).paginate(page: params[:page],
-                                                            per_page: 32)
-    else
-      @jobs = Job.order(:title).paginate(page: params[:page],
-                                         per_page: 32).includes(:company)
-    end
+    @jobs = policy_scope(Job).order(:title).includes(:company)
+                             .paginate(page: params[:page], per_page: 20)
   end
 
   def list_search_jobs
@@ -65,12 +54,21 @@ class JobsController < ApplicationController
   end
 
   def new
-    @job = Job.new(company_id: params[:company_id],
-                   company_person_id: params[:company_person_id])
+    @job = Job.new
+    authorize @job
+    @companies = Company.order(:name)
+    set_company_address
   end
 
   def create
+    @companies = Company.order(:name)
+    set_company_address
     @job = Job.new(job_params)
+    if pets_user.is_a?(CompanyPerson)
+      @job.company_id = pets_user.company.id
+      @job.company_person_id = pets_user.id
+    end
+    authorize @job
 
     if @job.save
       flash[:notice] = "#{@job.title} has been created successfully."
@@ -85,12 +83,21 @@ class JobsController < ApplicationController
   end
 
   def show
+    authorize @job
+    @resume = nil
+    @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
   end
 
   def edit
+    authorize @job
+    @companies = Company.order(:name)
+    set_company_address
   end
 
   def update
+    authorize @job
+    @companies = Company.order(:name)
+    set_company_address
     if @job.update_attributes(job_params)
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job
@@ -100,41 +107,17 @@ class JobsController < ApplicationController
   end
 
   def destroy
+    authorize @job
     @job.destroy
     flash[:alert] = "#{@job.title} has been deleted successfully."
     redirect_to jobs_url
   end
 
-  def applications
-    @application_type = params[:application_type] || 'job-applied'
-  end
-
-  def applications_list
-    raise 'Unsupported request' unless request.xhr?
-
-    @application_type = params[:application_type] || 'job-applied'
-
-    @applications = []
-    @applications = display_job_applications @application_type, 5, @job.id
-
-    render partial: 'job_applications'
-  end
-
   def list
     raise 'Unsupported request' unless request.xhr?
-
-    @job_type = params[:job_type] || 'my-company-all'
-
     @jobs = []
-    @jobs = display_jobs @job_type
-    case @job_type
-    when 'my-company-all'
-      render partial: 'list_all', locals: { all_jobs: @jobs, job_type: @job_type }
-    when 'recent-jobs'
-      render partial: 'compact_list', locals: {
-        jobs: @jobs, job_type: @job_type, last_sign_in: params[:js_login]
-      }
-    end
+    @jobs = display_jobs params[:job_type]
+    render partial: 'list_jobs', locals: { jobs: @jobs, job_type: params[:job_type] }
   end
 
   def update_addresses
@@ -150,57 +133,41 @@ class JobsController < ApplicationController
   end
 
   def apply
-    @job = Job.find_by_id params[:job_id]
-
-    if @job.nil?
+    @job = Job.find_by(id: params[:job_id])
+    unless @job
       flash[:alert] = 'Unable to find the job the user is trying to apply to.'
-      redirect_to jobs_url
-      return
+      redirect_to(jobs_url) && return
     end
-
-    if @job.status != 'active'
-      flash[:alert] = 'Unable to apply. Job has either been filled or revoked.'
-      redirect_to jobs_url
-      return
-    end
-
+    self.action_description = 'apply. Job has either been filled or revoked'
     authorize @job
 
-    @job_seeker = JobSeeker.find_by_id params[:user_id]
-    if @job_seeker.nil?
+    @job_seeker = JobSeeker.find_by(id: params[:user_id])
+    unless @job_seeker
       flash[:alert] = 'Unable to find the user who wants to apply.'
-      redirect_to job_path(@job)
-      return
+      redirect_to(job_path(@job)) && return
     end
+    self.action_description = "apply for #{@job_seeker.full_name}"
+    authorize @job_seeker
 
-    if pets_user == @job_seeker # to be removed once authorize is set properly
-      apply_job
-      return if performed?
-      Event.create(:JS_APPLY, @job_app)
-      render(:apply) && return
-    end
-
-    if pets_user == @job_seeker.job_developer
-      # ^^ conditional to be removed once authorize is set properly
-      if @job_seeker.consent
-        apply_job
-        return if performed?
-        @job_app.job_developer = pets_user
-        Event.create(:JD_APPLY, @job_app)
-        flash[:info] = "Job is successfully applied for #{@job_seeker.full_name}"
-      else
-        flash[:alert] = 'Invalid application: You are not permitted to apply ' \
-                        "for #{@job_seeker.full_name}"
+    if @job_seeker.consent && @job_seeker.job_developer == pets_user
+      apply_for(@job_seeker) do |job_app, job, job_seeker|
+        Event.create(:JD_APPLY, job_app)
+        flash[:info] = "Job is successfully applied for #{job_seeker.full_name}"
+        redirect_to(job_path(job)) && return
       end
-    else
-      flash[:alert] = 'Invalid application: You are not the Job Developer ' \
-                      'for this job seeker'
     end
-    redirect_to job_path(@job)
+
+    if pets_user == @job_seeker
+      apply_for(@job_seeker) do |job_app, _job, _job_seeker|
+        Event.create(:JS_APPLY, job_app)
+        render(:apply) && return
+      end
+    end
   end
 
   def revoke
-    if @job.status == 'active' && @job.revoked
+    authorize @job
+    if @job.active? && @job.revoked
       flash[:alert] = "#{@job.title} is revoked successfully."
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_REVOKED, obj.new(@job, Agency.first))
@@ -210,50 +177,86 @@ class JobsController < ApplicationController
     redirect_to jobs_path
   end
 
+  def match_resume
+    raise 'Unsupported request' unless request.xhr?
+
+    job_seeker = JobSeeker.find(params[:job_seeker_id])
+    resume = job_seeker.resumes[0]
+
+    return render(json: { message: 'No résumé on file',
+                          status: 404 }) unless resume
+
+    result = ResumeCruncher.match_resume_and_job(resume.id, @job.id)
+
+    return render(json: { message: result[:message],
+                          status: 404 }) if result[:status] == 'ERROR'
+
+    @score = result[:score]
+
+    str = render_to_string layout: false
+
+    render(json: { stars_html: str, status: 200 })
+  end
+
+  def match_job_seekers
+    authorize @job
+    Pusher.trigger('pusher_control',
+                   'spinner_start',
+                   user_id: pets_user.user.id,
+                   target: '.table.table-bordered')
+
+    # Get job match scores for all job Seekers
+    result = ResumeCruncher.match_resumes(@job.id)
+
+    Pusher.trigger('pusher_control',
+                   'spinner_stop',
+                   user_id: pets_user.user.id,
+                   target: '.table.table-bordered')
+
+    # If no match or match scores all too low, set flash and return
+    if result.nil? || (result.delete_if { |item| item[1] <= 0.9 }).empty?
+      flash[:alert] = 'No matching job seekers found.'
+      redirect_to(action: 'show', id: @job.id) && return
+    end
+
+    # Create an array with each element consisting of an array:
+    #  [job_seeker, job_match_score, has_applied_to_this_job]
+    begin
+      @job_matches = result.map do |item|
+        job_seeker = Resume.find(item[0]).job_seeker
+        raise "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
+          unless job_seeker
+        [job_seeker, item[1], job_seeker.applied_to_job?(@job)]
+      end
+    rescue RuntimeError, ActiveRecord::RecordNotFound => exc
+      flash[:alert] = "Error: #{exc.message}"
+      redirect_to(action: 'show', id: @job.id) && return
+    end
+  end
+
   private
 
-  def apply_job
-    @job_app = @job.apply @job_seeker
+  def set_company_address
+    case params[:action]
+    when 'new', 'create'
+      @addresses = Address.where(location_type: 'Company',
+                                 location_id: pets_user.try(:company)).order(:state) ||
+                   []
+    when 'edit', 'update'
+      @addresses = Address.where(location_type: 'Company',
+                                 location_id: @job.company).order(:state)
+    end
+  end
+
+  def apply_for(job_seeker, &controller_response)
+    @job.apply(job_seeker, &controller_response)
   # ActiveRecord::RecordInvalid is raised when validation at model level fails
-  # ActiveRecord::RecordNotUnique is raised when unique index constraint on
-  #   the database is violated
+  # ActiveRecord::RecordNotUnique is raised when unique index constraint
+  # on the database is violated
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
-    flash[:alert] = "#{@job_seeker.full_name(last_name_first: false)}" \
-                    ' has already applied to this job.'
-    redirect_to job_path(@job)
-  end
-
-  def authentication_for_post_or_edit
-    if !company_p_or_job_d?
-      flash[:alert] = 'Sorry, You are not permitted to post, edit or delete a job!'
-      redirect_to jobs_url
-    else
-      set_company_p_or_job_d
-    end
-  end
-
-  def set_company_p_or_job_d
-    @cp_or_jd = pets_user
-  end
-
-  def company_p_or_job_d?
-    if pets_user.is_a?(CompanyPerson)
-      set_company_p_or_job_d
-      true
-    elsif pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
-      set_company_p_or_job_d
-      true
-    else
-      false
-    end
-  end
-
-  def right_company_person?
-    if @cp_or_jd.is_a?(CompanyPerson)
-      return if @cp_or_jd.company == @job.company
-      flash[:alert] = "Sorry, you can't edit or delete #{@job.company.name} job!"
-      redirect_to jobs_url
-    end
+    flash[:alert] = "#{job_seeker.full_name(last_name_first: false)} "\
+                    'has already applied to this job.'
+    redirect_to(job_path(@job)) && return
   end
 
   def find_job

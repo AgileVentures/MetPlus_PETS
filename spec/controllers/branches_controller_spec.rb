@@ -1,66 +1,55 @@
 require 'rails_helper'
-RSpec.shared_examples 'unauthorized' do
-  before :each do
-    warden.set_user user
-    my_request
-  end
-  it 'returns http unauthorized' do
-    expect(response).to have_http_status(302)
-  end
-  it 'check content' do
-    expect(response).to redirect_to(root_path)
-  end
-  it 'sets the message' do
-    expect(flash[:alert]).to match(/^You are not authorized to/)
-  end
-end
-RSpec.shared_examples 'unauthorized all' do
+
+RSpec.shared_examples 'unauthorizes all' do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:company) { FactoryGirl.create(:company) }
+
   context 'Case Manager' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
     end
   end
+
   context 'Job Developer' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
     end
   end
+
   context 'Company Admin' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:company_admin, company: company) }
     end
   end
 end
+
 RSpec.shared_examples 'unauthorized all non-agency people' do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:company) { FactoryGirl.create(:company) }
+
   context 'Not logged in' do
-    subject { my_request }
-    it 'returns http redirect' do
-      expect(subject).to have_http_status(302)
-    end
-    it 'check redirect url' do
-      expect(subject).to redirect_to(root_path)
-    end
+    it_behaves_like 'unauthenticated request'
   end
+
   context 'Job Seeker' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:job_seeker) }
     end
   end
+
   context 'Company admin' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:company_admin, company: company) }
     end
   end
+
   context 'Company contact' do
-    it_behaves_like 'unauthorized' do
+    it_behaves_like 'unauthorized request' do
       let(:user) { FactoryGirl.create(:company_contact, company: company) }
     end
   end
 end
+
 RSpec.describe BranchesController, type: :controller do
   let(:agency)  { FactoryGirl.create(:agency) }
   let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
@@ -88,11 +77,15 @@ RSpec.describe BranchesController, type: :controller do
   end
   describe 'POST #create' do
     let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
-    let(:branch2)  { FactoryGirl.build(:branch, agency: agency, code: branch1.code) }
+    let(:branch2)  do
+      FactoryGirl.build(:branch, agency: agency, code: branch1.code)
+    end
     context 'valid attributes' do
       before(:each) do
         sign_in admin
-        post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
+        post :create,
+             agency_id: agency,
+             branch: FactoryGirl.attributes_for(:branch)
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
@@ -218,6 +211,7 @@ RSpec.describe BranchesController, type: :controller do
       expect(response).to have_http_status(:redirect)
     end
   end
+
   describe 'action authorization' do
     context '#new' do
       it 'authorizes agency admin' do
@@ -225,50 +219,56 @@ RSpec.describe BranchesController, type: :controller do
         get :new, agency_id: agency
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it_behaves_like 'unauthorized all' do
-        let(:my_request) { get :new, agency_id: agency }
+      it_behaves_like 'unauthorizes all' do
+        let(:request) { get :new, agency_id: agency }
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:my_request) { get :new, agency_id: agency }
+        let(:request) { get :new, agency_id: agency }
       end
     end
     context '#create' do
+      let(:request) { get :new, agency_id: agency }
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch)
+        post :create,
+             agency_id: agency,
+             branch: FactoryGirl.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it_behaves_like 'unauthorized all' do
-        let(:my_request) { get :new, agency_id: agency }
-      end
-      it_behaves_like 'unauthorized all non-agency people' do
-        let(:my_request) { get :new, agency_id: agency }
-      end
+
+      it_behaves_like 'unauthorizes all'
+      it_behaves_like 'unauthorized all non-agency people'
     end
+
     context '#update' do
+      let(:request) do
+        post :create,
+             agency_id: agency,
+             branch: FactoryGirl.attributes_for(:branch)
+      end
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        patch :update, id: branch.id, branch: FactoryGirl.attributes_for(:branch)
+        patch :update,
+              id: branch.id,
+              branch: FactoryGirl.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it_behaves_like 'unauthorized all' do
-        let(:my_request) { post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch) }
-      end
-      it_behaves_like 'unauthorized all non-agency people' do
-        let(:my_request) { post :create, agency_id: agency, branch: FactoryGirl.attributes_for(:branch) }
-      end
+
+      it_behaves_like 'unauthorizes all'
+      it_behaves_like 'unauthorized all non-agency people'
     end
+
     context '#edit' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
         get :edit, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it_behaves_like 'unauthorized all' do
-        let(:my_request) { get :edit, id: branch.id }
+      it_behaves_like 'unauthorizes all' do
+        let(:request) { get :edit, id: branch.id }
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:my_request) { get :edit, id: branch.id }
+        let(:request) { get :edit, id: branch.id }
       end
     end
     context '#destroy' do
@@ -277,11 +277,11 @@ RSpec.describe BranchesController, type: :controller do
         delete :destroy, id: branch.id
         expect(subject).to_not receive(:user_not_authorized)
       end
-      it_behaves_like 'unauthorized all' do
-        let(:my_request) { delete :destroy, id: branch.id }
+      it_behaves_like 'unauthorizes all' do
+        let(:request) { delete :destroy, id: branch.id }
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:my_request) { delete :destroy, id: branch.id }
+        let(:request) { delete :destroy, id: branch.id }
       end
     end
     context '#show' do
@@ -301,7 +301,7 @@ RSpec.describe BranchesController, type: :controller do
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:my_request) { get :show, id: branch.id }
+        let(:request) { get :show, id: branch.id }
       end
     end
   end

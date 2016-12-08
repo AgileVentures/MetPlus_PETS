@@ -3,6 +3,20 @@ var PusherControl = {
     var pusher = new Pusher('<%=ENV['PUSHER_APP_KEY']%>');
     return function () {return pusher;}
   })(),
+
+  get_spinner: (function () {
+    var saved_selector;
+    var spinner;
+    return function (selector) {
+      if (selector !== saved_selector) {
+        spinner = null;
+        saved_selector = selector;
+        spinner = PETS.spinner($(selector));
+      }
+      return spinner;
+    }
+  })(),
+
   setup: function () {
     var pusher = PusherControl.get_pusher();
 
@@ -14,6 +28,18 @@ var PusherControl = {
     if (!channel) {
       channel = pusher.subscribe('pusher_control');
     }
+
+    channel.bind('spinner_start', function(data) {
+      if (parseInt(Cookies('user_id')) === data.user_id) {
+        PusherControl.get_spinner(data.target).start();
+      }
+    });
+
+    channel.bind('spinner_stop', function(data) {
+      if (parseInt(Cookies('user_id')) === data.user_id) {
+        PusherControl.get_spinner(data.target).stop();
+      }
+    });
 
     channel.bind('js_registered', function(data) {
       // Process event if I am logged in and am an agency_person

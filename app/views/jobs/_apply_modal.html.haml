@@ -1,12 +1,12 @@
-#applyJobModal.modal.fade{"aria-labelledby" => "myModalLabel",
-:role => "dialog", :tabindex => "-1"}
-  .modal-dialog{:role => "document"}
+.modal.fade#applyJobModal{ "aria-labelledby" => "myModalLabel", role: "dialog",
+tabindex: "-1" }
+  .modal-dialog{ role: "document" }
     .modal-content#job-apply-modal-id
       .modal-header
-        %button.close{"aria-label" => "Close", "data-dismiss" => "modal",
-        :type => "button"}
-          %span{"aria-hidden" => "true"} ×
-        %h4#myModalLabel.modal-title.text-center
+        %button.close{ "aria-label" => "Close", "data-dismiss" => "modal",
+        type: "button" }
+          %span{ "aria-hidden" => "true" } ×
+        %h4.modal-title.text-center#myModalLabel
           Application process
       .modal-body
         %p
@@ -20,7 +20,6 @@
             .col-sm-12
               Company:
               = link_to job.company.name, company_home_path(job.company)
-          
           .row
             .col-sm-2.warning-text
               Warning:
@@ -35,7 +34,7 @@
             .col-sm-12
               If you want to proceed with the application press the "Apply button"
       .modal-footer
-        =link_to "Apply Now", apply_job_path(job, pets_user), method: :get,
+        = link_to "Apply Now", apply_job_path(job, pets_user), method: :get,
           class: "btn btn-info", id: "modal-apply-id"
-        %button.btn.btn-default{"data-dismiss" => "modal",
-          :type => "button"} Close
+        %button.btn.btn-default{ "data-dismiss" => "modal",
+          type: "button" } Close
