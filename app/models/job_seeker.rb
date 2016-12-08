@@ -11,7 +11,7 @@ class JobSeeker < ActiveRecord::Base
   has_many   :job_applications
   has_many   :jobs, through: :job_applications
 
-  validates  :year_of_birth, :year_of_birth => true
+  validates  :year_of_birth, year_of_birth: true
 
   belongs_to :job_seeker_status
   validates_presence_of :job_seeker_status
@@ -35,11 +35,10 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def self.with_ap_in_role(role_key, agency_person)
-    AgencyRelation.in_role_of(role_key).
-                  where(:agency_person => agency_person).
-                  pluck(:job_seeker_id)
+    AgencyRelation.in_role_of(role_key)
+                  .where(agency_person: agency_person)
+                  .pluck(:job_seeker_id)
   end
-
 
   def job_developer
     find_agency_person(:JD)
@@ -60,22 +59,23 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def self.job_seekers_without_job_developer
-    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id)).
-        includes(:job_seeker_status, :job_applications).
-        order("users.last_name")
+    where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id))
+         .includes(:job_seeker_status, :job_applications)
+         .order('users.last_name')
   end
 
   def self.job_seekers_without_case_manager
-    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id)).
-        includes(:job_seeker_status, :job_applications).
-        order("users.last_name")
+    where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id))
+         .includes(:job_seeker_status, :job_applications)
+         .order('users.last_name')
   end
-  
+
   def application_for_job(job)
     job_applications.where(job: job)[0]
   end
 
   private
+
   # Helper methods for associating job seekers with agency people
   # These business rules are enforced:
   # 1) A job seeker can have only one case manager
@@ -89,28 +89,28 @@ class JobSeeker < ActiveRecord::Base
       # If so, is this the same agency person? - then we're done
       return if ap_relation.agency_person == agency_person
 
-		# Otherwise, reassign agency person role for this job seeker
+      # Otherwise, reassign agency person role for this job seeker
       ap_relation.agency_person = agency_person
       ap_relation.save
     else
       # Otherwise, assign this agency person, in this role, to job seeker
       AgencyRelation.create(agency_person: agency_person,
-              job_seeker: self,
-              agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[role_key]))
+                            job_seeker: self,
+                            agency_role: AgencyRole.find_by_role(AgencyRole::ROLE[role_key]))
     end
   end
 
   def find_agency_person(role_key)
     agency_relation = find_agency_person_relation(role_key)
 
-    return (agency_relation ? agency_relation.agency_person : nil)
+    (agency_relation ? agency_relation.agency_person : nil)
   end
 
   def find_agency_person_relation(role_key)
     # Returns AgencyRelation instance if an agency person, acting in the
     # specific role, is found for this job seeker
-    if not self.agency_relations.empty?
-      ap_relation = self.agency_relations.in_role_of(role_key)[0]
+    unless agency_relations.empty?
+      ap_relation = agency_relations.in_role_of(role_key)[0]
       return ap_relation if ap_relation
     end
     nil # return nil if no agency person found for that role
