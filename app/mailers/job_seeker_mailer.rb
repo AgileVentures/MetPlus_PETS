@@ -23,6 +23,13 @@ class JobSeekerMailer < ApplicationMailer
                          job: job, template: 'job_applied_by_job_developer')
   end
 
+  def job_revoked(job_seeker, job)
+    send_job_seeker_mail(job_seeker: job_seeker, 
+                         job: job,
+                         template: 'job_revoked_jobseeker')
+  end
+
+
   private
 
   def send_job_seeker_mail(options = {})
