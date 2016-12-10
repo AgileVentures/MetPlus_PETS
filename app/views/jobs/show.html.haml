@@ -1,28 +1,33 @@
 - provide(:title, @job.title)
 
 .col-sm-offset-1.col-sm-10
-  .pull-right#job-show-links-id
-    - if pets_user
-      - if @job.active? && policy(@job).revoke?
-        = render partial: 'revoke_modal'
-        = link_to "Revoke", '#', id: 'revoke_link',
-                  data: { "job-id" => "#{@job.id}",
-                          "job-title" => "#{@job.title}",
-                          "job-companyJobId" => "#{@job.company_job_id}" }
-      - if policy(@job).update?
-        |
-        = link_to "Edit Job", edit_job_path(@job)
-      - if policy(@job).match_job_seekers?
-        |
-        = link_to 'Match Job Seekers', match_job_seekers_job_path(@job), |
-                  data: {confirm: "Search for matching job seekers? " +  |
-                                  "(this may take a while)"}             |
-    - if @resume
-      |
-      = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
-                data: { job_id: @job.id, job_seeker_id: pets_user.id }
+  .links
+    .pull-left.all-jobs-link
+      = link_to jobs_path, class: 'btn btn-default' do
+        %span{ class: 'glyphicon glyphicon-chevron-left'}
+        Back
+    .pull-right#job-show-links-id
+      - if policy(@job).match_jd_job_seekers?
+        = render 'match_jd_job_seekers_form'
+      - if pets_user
+        - if policy(@job).match_job_seekers?
+          = link_to 'Match all job seekers', match_job_seekers_job_path(@job), |
+                    class: 'btn btn-info',                                 |
+                    data: {confirm: "Search for matching job seekers? " +  |
+                                    "(this may take a while)"}             |
+        - if @job.active? && policy(@job).revoke?
+          = render partial: 'revoke_modal'
+          = link_to 'Revoke', '#', class: 'btn btn-danger', id: 'revoke_link',
+                   data: { 'job-id' => "#{@job.id}",
+                           'job-title' => "#{@job.title}",
+                           'job-companyJobId' => "#{@job.company_job_id}" }
+        - if policy(@job).update?
+          = link_to 'Edit Job', edit_job_path(@job), class: 'btn btn-default'
+        - if @resume
+          = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
+                  class: 'btn btn-primary', data: { job_id: @job.id, job_seeker_id: pets_user.id }
 
-  .clearfix
+    .clearfix
 
   = render partial: 'job_info'
 

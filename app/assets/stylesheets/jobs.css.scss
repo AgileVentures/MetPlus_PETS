@@ -23,14 +23,24 @@ $state-danger-text: #a94442;
   margin-bottom: 50px;
 }
 
-.pull-right#job-show-links-id {
-  margin-top: 20px;
+.links {
+  margin-bottom: 20px;
+}
 
+.pull-left.all-jobs-link {
+  margin-top: 80px;
+}
+
+.pull-right#job-show-links-id {
+  margin-top: 80px;
   a {
     text-decoration: underline;
   }
-
+  a.btn {
+    text-decoration: none;
+  }
 }
+
 .pull-right#application-show-links {
   margin-top: 80px;
 }
@@ -127,4 +137,29 @@ $state-danger-text: #a94442;
 
 .recent-jobs {
   background: rgba(255,255,0,0.4);
+}
+
+/** resume matches view **/
+#resume-matches-table {
+  margin-top: 15px;
+}
+
+.blur {
+  opacity: 0.5;
+}
+
+.back-btn {
+  margin-top: 30px;
+}
+
+.select2-search__field {
+  width: auto !important;
+}
+
+.select2.select2-container.select2-container--default.select2-container {
+  width: 60% !important;
+}
+
+.job-title {
+  color: $light-blue;
 }
