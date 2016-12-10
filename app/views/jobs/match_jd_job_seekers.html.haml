@@ -1,0 +1,26 @@
+.container
+  %h2
+    Matching Job Seekers for the job
+    %span{class: 'job-title'}
+      = @job.title
+
+  .row
+    .col-sm-12.col-md-6.col-md-offset-3
+      = link_to jobs_path(@job), class: 'btn btn-primary back-btn' do
+        %i{ class: 'glyphicon glyphicon-chevron-left'}
+        &nbsp;Back
+    .col-sm-12.col-md-6.col-md-offset-3#resume-matches-table
+      %table{ class: 'table table-hover table-bordered' }
+        %thead
+          %tr
+            %th Job Seeker
+            %th Score
+        %tbody
+          - @match_results.each do |result|
+            %tr{ class: result[:message] && 'blur' }
+              %td= result[:job_seeker_name]
+              %td
+                - if result[:score]
+                  = show_stars(result[:score])
+                - else
+                  = result[:message]
