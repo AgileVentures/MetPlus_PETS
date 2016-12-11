@@ -2,8 +2,6 @@ class JobSeeker < ActiveRecord::Base
   acts_as :user
   has_many   :resumes
 
-  # belongs_to :address
-
   has_one :address, as: :location, dependent: :destroy
 
   accepts_nested_attributes_for :address

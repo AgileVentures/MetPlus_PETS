@@ -92,9 +92,9 @@ module TaskManager
                     :job_application, job)
       end
 
-      def new_company_interest_task(job_developer, agency)
+      def new_company_interest_task(job_seeker, company, job, agency)
         create_task({ agency: { agency: agency, role: :AA } },
-                    :company_interest, job_developer)
+                    :company_interest, job_seeker, company, job)
       end
     end
 

@@ -454,7 +454,9 @@ class Event
                                  evt_obj.job_seeker,
                                  evt_obj.job)
 
-    Task.new_company_interest_task(evt_obj.job_developer,
+    Task.new_company_interest_task(evt_obj.job_seeker,
+                                   evt_obj.company_person.company,
+                                   evt_obj.job,
                                    evt_obj.job_developer.agency)
   end
 
