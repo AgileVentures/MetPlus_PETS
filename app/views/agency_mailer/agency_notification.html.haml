@@ -48,6 +48,17 @@
     A job (
     = link_to @obj.title, job_url(id: @obj.id)
     ) has been revoked for company: #{@obj.company.name}.
+
+  - elsif @obj_type == 'Company interest in JS'
+    Company person
+    = link_to @company_person.full_name(last_name_first: false),
+        company_person_url(@company_person)
+    has indicated interest in job seeker
+    = link_to @job_seeker.full_name(last_name_first: false),
+        job_seeker_url(@job_seeker)
+    for the job
+    = link_to @job.title, job_url(@job)
+
 %p
   If you have any questions please contact the PETS administrator at:
   = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',

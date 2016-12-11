@@ -63,7 +63,7 @@ class CompanyPeopleController < ApplicationController
     @company_all    = 'company-all'
     @company_new    = 'company-new'
     @company_closed = 'company-closed'
-    
+
     @job_type    = 'my-company-all'
     @people_type = 'my-company-all'
     @company     = pets_user.company

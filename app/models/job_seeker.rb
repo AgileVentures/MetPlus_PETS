@@ -2,8 +2,12 @@ class JobSeeker < ActiveRecord::Base
   acts_as :user
   has_many   :resumes
 
-  belongs_to :address
+  # belongs_to :address
+
+  has_one :address, as: :location, dependent: :destroy
+
   accepts_nested_attributes_for :address
+
   has_many   :agency_relations
   has_many   :agency_people, through: :agency_relations
 

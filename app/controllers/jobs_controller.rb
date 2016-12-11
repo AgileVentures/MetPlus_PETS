@@ -2,7 +2,8 @@ class JobsController < ApplicationController
   include JobsViewer
 
   before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
-                                  :match_resume, :match_job_seekers]
+                                  :match_resume, :match_job_seekers,
+                                  :notify_job_developer]
   before_action :user_logged!, except: [:index, :list_search_jobs, :show]
 
   def index
@@ -232,6 +233,32 @@ class JobsController < ApplicationController
       flash[:alert] = "Error: #{exc.message}"
       redirect_to(action: 'show', id: @job.id) && return
     end
+  end
+
+  def notify_job_developer
+    # This action handles the request from a company person to notify
+    # This action handles the request from a company person to notify
+    # a job developer of their interest in a job seeker.
+    # This action is invoked from the view showing all job seekers
+    # that match a particular job (jobs/match_job_seekers.html.haml)
+
+    # Parameters: {"job_developer_id"=>"3", "job_id"=>"1",
+    #              "job_seeker_id"=>"3", "id"=>"202"}
+
+    raise 'Unsupported request' unless request.xhr?
+
+    authorize @job
+    company_person = CompanyPerson.find(params[:company_person_id])
+    job_developer  = AgencyPerson.find(params[:job_developer_id])
+    job_seeker     = JobSeeker.find(params[:job_seeker_id])
+
+    # Anonymous class to contain event data
+    obj = Struct.new(:job, :company_person, :job_developer, :job_seeker)
+
+    Event.create(:CP_INTEREST_IN_JS,
+                 obj.new(@job, company_person, job_developer, job_seeker))
+
+    render json: { status: 200 }
   end
 
   private

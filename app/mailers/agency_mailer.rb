@@ -46,6 +46,13 @@ class AgencyMailer < ApplicationMailer
                            'job_applied_by_job_developer')
   end
 
+  def cp_interest_in_js(email_list, company_person, job_seeker, job)
+    @company_person = company_person
+    @job_seeker     = job_seeker
+    @job = job
+    send_notification_mail(email_list, nil, 'Company interest in JS')
+  end
+
   private
 
   def send_notification_mail(email_list, obj, obj_type,

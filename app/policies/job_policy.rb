@@ -48,6 +48,10 @@ class JobPolicy < ApplicationPolicy
     User.is_job_developer?(user) || correct_company_person?
   end
 
+  def notify_job_developer?
+    record.company.company_people.include? user
+  end
+
   private
 
   def correct_company_person?

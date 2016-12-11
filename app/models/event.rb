@@ -25,7 +25,8 @@ class Event
                JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
                CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
                JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
-               CM_SELF_ASSIGN_JS: 'cm_self_assigned_js' }.freeze
+               CM_SELF_ASSIGN_JS: 'cm_self_assigned_js',
+               CP_INTEREST_IN_JS: 'cp_interest_in_js'}.freeze
 
   # Add events as required below.  Each event may have business rules around
   # 1) who is to be notified of the event occurence, and/or 2) task(s)
@@ -63,6 +64,8 @@ class Event
       evt_jd_self_assigned_js(evt_obj)
     when :CM_SELF_ASSIGN_JS
       evt_cm_self_assigned_js(evt_obj)
+    when :CP_INTEREST_IN_JS
+      evt_cp_interest_in_js(evt_obj)
     end
   end
 
@@ -426,6 +429,33 @@ class Event
                                    EVT_TYPE[:JOB_REVOKED],
                                    evt_obj.job)
     end
+  end
+
+  def self.evt_cp_interest_in_js(evt_obj)
+    # evt_obj = struct(:job, :company_person, :job_developer, :job_seeker)
+    # Business rules:
+    # Notify job developer of company person interest in job seeker
+    # Add task for job developer to respond to company person
+
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:CP_INTEREST_IN_JS],
+                   jd_user_id: evt_obj.job_developer.user.id,
+                   cp_id:      evt_obj.company_person.id,
+                   cp_name:    evt_obj.company_person.full_name(last_name_first: false),
+                   job_id:     evt_obj.job.id,
+                   job_title:  evt_obj.job.title,
+                   js_id:      evt_obj.job_seeker.id,
+                   js_name:    evt_obj.job_seeker.full_name(last_name_first: false))
+
+    NotifyEmailJob.set(wait: delay_seconds.seconds)
+                  .perform_later([evt_obj.job_developer.email],
+                                 EVT_TYPE[:CP_INTEREST_IN_JS],
+                                 evt_obj.company_person,
+                                 evt_obj.job_seeker,
+                                 evt_obj.job)
+
+    Task.new_company_interest_task(evt_obj.job_developer,
+                                   evt_obj.job_developer.agency)
   end
 
   def self.notify_list_for_js_apply_event(appl)

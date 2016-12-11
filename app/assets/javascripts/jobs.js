@@ -32,6 +32,33 @@ var JobAndResume = {
   }
 };
 
+var ContactJobDeveloper = {
+  js_interest: function () {
+    $('.js_interest').on('click', function() {
+      var answer = confirm("Notify job developer of your " +
+                           "interest in this job seeker?");
+      if (answer) {
+
+        var url = '/jobs/' + $(this).data('jobId') + '/notify_job_developer' +
+                  '?job_seeker_id=' + $(this).data('jobSeekerId') +
+                  '&company_person_id=' + $(this).data('companyPersonId') +
+                  '&job_developer_id=' + $(this).data('jobDeveloperId');
+
+        $.ajax({type: 'GET',
+                url: url,
+                timeout: 10000,
+                success: function () {
+                  Notification.success_notification('Notified job developer');
+                },
+                error: function () {
+                  Notification.error_notification('Unable to notify job developer');
+                }
+        });
+      }
+    });
+  }
+};
+
 $(function () {
   $('#toggle_search_form').click(ManageData.toggle);
   $(document).on('change', '#job_company_id', function() {
@@ -69,4 +96,5 @@ $(function () {
 
   JobAndResume.match();
 
+  ContactJobDeveloper.js_interest();
 });
