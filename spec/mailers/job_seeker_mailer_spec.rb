@@ -69,7 +69,6 @@ RSpec.describe JobSeekerMailer, type: :mailer do
   end
 
   describe 'Job revoked' do
-
     let(:job)           { FactoryGirl.create(:job) }
     let(:job_seeker) { FactoryGirl.create(:job_seeker)}
 
@@ -93,5 +92,4 @@ RSpec.describe JobSeekerMailer, type: :mailer do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
   end
-
 end
