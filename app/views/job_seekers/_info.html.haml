@@ -36,9 +36,13 @@
           &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
       %td
         - if offer_download
-          = button_to "Download Resume",
-            download_resume_path(job_seeker.job_applications.last), target: '_self',
+          = button_to "View Resume",
+            job_seeker_path(job_seeker, format: 'pdf'), target: '_self',
             method: :get, class: 'btn btn-success btn-s pull-right'
+        / - if offer_download
+        /   = button_to "Download Resume",
+        /     download_resume_path(job_seeker.job_applications.last), target: '_self',
+        /     method: :get, class: 'btn btn-success btn-s pull-right'
 
 
     %tr

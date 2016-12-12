@@ -106,6 +106,35 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
     @offer_download = pets_user.is_a?(CompanyPerson)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        begin
+          resume = @jobseeker.resumes[0]
+          raise 'Resume not found in DB' unless resume
+          
+          tempfile = ResumeCruncher.download_resume(resume.id)
+          raise 'Resume not found in Cruncher' unless tempfile
+
+          pdf_filename = Docsplit.extract_pdf(tempfile.path, output: './tmp')
+          # pdf_file = File.open(pdf_filename[0])
+          
+          send_file "#{pdf_filename[0]}.pdf", 
+                    # filename: "#{resume.file_name[/(.+)\./]}pdf",
+                    type: 'application/pdf',
+                    disposition: 'inline'
+          
+        rescue RuntimeError => e
+          flash[:alert] = "Error: #{e.message}"
+          redirect_back_or_default
+        ensure
+          if tempfile
+            tempfile.close
+            tempfile.unlink
+          end
+        end
+      end
+    end
   end
 
   def preview_info

@@ -78,6 +78,8 @@ gem 'ransack'
 
 gem 'mailgun_rails'
 
+gem 'docsplit', '~> 0.7.6'
+
 group :development do
   gem 'haml-rails'
   gem 'bullet'

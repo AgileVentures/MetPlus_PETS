@@ -201,7 +201,7 @@ if Rails.env.development? || Rails.env.staging?
   addresses = Address.all.to_a
 
   # Create jobs for 'known_company'
-  50.times do |n|
+  25.times do |n|
     Job.create(title: FFaker::Job.title,
                description: Faker::Lorem.sentence,
                shift: %w(Day Evening Morning)[r.rand(3)],
@@ -213,7 +213,7 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   # Create random jobs
-  200.times do |n|
+  100.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3, false, 4)
     shift = %w(Day Evening Morning)[r.rand(3)]
@@ -294,6 +294,10 @@ if Rails.env.development? || Rails.env.staging?
                          year_of_birth: '1970', phone: '111-222-3333',
                          job_seeker_status: @jss2, confirmed_at: Time.now,
                          address: create_address)
+  doc_file = File.new('spec/fixtures/files/Janitor-Resume.doc')  
+  doc_resume = Resume.create(file: doc_file,
+                             file_name: 'Janitor-Resume.doc',
+                             job_seeker_id: js2.id)
 
   js3 = JobSeeker.create(first_name: 'Frank', last_name: 'Williams',
                          email: 'fwilliamspets@gmail.com', password: 'qwerty123',
