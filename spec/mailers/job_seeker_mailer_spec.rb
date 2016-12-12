@@ -92,4 +92,5 @@ RSpec.describe JobSeekerMailer, type: :mailer do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
   end
+
 end
