@@ -30,7 +30,6 @@ class JobSeekerMailerPreview < ActionMailer::Preview
                      description: 'description of test job')
     FactoryGirl.create(:resume, job_seeker: job_seeker)
     job.apply(job_seeker)
-
     JobSeekerMailer.job_revoked(job_seeker, job)
   end
 end
