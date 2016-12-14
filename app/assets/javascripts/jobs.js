@@ -33,10 +33,10 @@ var JobAndResume = {
 };
 
 var ContactJobDeveloper = {
-  js_interest: function () {
+  jsInterest: function () {
     $('.js_interest').on('click', function() {
-      var answer = confirm("Notify job developer of your " +
-                           "interest in this job seeker?");
+      var answer = confirm('Notify job developer of your ' +
+                           'interest in this job seeker?');
       if (answer) {
 
         var url = '/jobs/' + $(this).data('jobId') + '/notify_job_developer' +
@@ -96,5 +96,5 @@ $(function () {
 
   JobAndResume.match();
 
-  ContactJobDeveloper.js_interest();
+  ContactJobDeveloper.jsInterest();
 });

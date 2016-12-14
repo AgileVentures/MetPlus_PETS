@@ -207,8 +207,8 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail.from).to eq(['from@example.com'])
     end
     it 'renders the body' do
-      str = /A new job \(\n.*#{job.title}.*\n\) has been posted for company: #{job.company.name}/
-      expect(mail).to have_body_text(str)
+      expect(mail).to have_body_text(/A new job \(\n.*#{job.title}.*\n\)/)
+      expect(mail).to have_body_text(/has been posted for company: #{job.company.name}/)
     end
     it 'includes link to show job' do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
