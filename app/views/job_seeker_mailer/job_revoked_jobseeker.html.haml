@@ -1,0 +1,18 @@
+%p
+  Hello #{@job_seeker.full_name(last_name_first: false)},
+%p
+  This message is from the administrator of the PETS system for
+  the jobseekers:
+%p
+  A job you had applied to has been removed from PETS by the company which posted that job.
+%p
+  This is to let you know that you had applied to the job
+  %strong
+  = link_to @job.title, job_url(id: @job.id)
+  on 
+  = @job_seeker.application_for_job(@job).created_at.strftime('%A, %B %d, %Y')
+%p
+  If you have any other questions about the use of PETS
+  then please contact the PETS administrator at:
+  = mail_to("#{ENV['NOTIFICATION_EMAIL']}", 'PETS Admin',
+         subject: 'Job revoked email notification')
