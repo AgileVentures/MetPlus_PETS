@@ -46,7 +46,7 @@ class AgencyMailer < ApplicationMailer
                            'job_applied_by_job_developer')
   end
 
-  def cp_interest_in_js(email_list, company_person, job_seeker, job)
+  def company_interest_in_job_seeker(email_list, company_person, job_seeker, job)
     @company_person = company_person
     @job_seeker     = job_seeker
     @job = job

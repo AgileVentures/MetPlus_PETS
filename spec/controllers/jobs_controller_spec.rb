@@ -34,6 +34,12 @@ RSpec.describe JobsController, type: :controller do
                                         max_years: 5,
                                         _destroy: false } } }
   end
+  let(:job_seeker) do
+    js = FactoryGirl.create(:job_seeker)
+    FactoryGirl.create(:resume, job_seeker: js)
+    bosh_job.apply js
+    js
+  end
   let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
   let!(:stub) do
     stub_cruncher_authenticate
@@ -956,6 +962,87 @@ RSpec.describe JobsController, type: :controller do
     context 'authorization' do
       let(:request) { get :match_job_seekers, id: bosh_job.id }
       let(:user)    { FactoryGirl.create(:company_contact) }
+
+      describe 'visitor' do
+        it_behaves_like 'unauthorized', 'visitor'
+      end
+      describe 'job seeker' do
+        it_behaves_like 'unauthorized', 'job_seeker'
+      end
+      describe 'case manager' do
+        it_behaves_like 'unauthorized', 'case_manager'
+      end
+      describe 'company person - wrong company' do
+        it_behaves_like 'unauthorized request'
+      end
+    end
+  end
+
+  describe 'GET #notify_job_developer' do
+    context 'happy path' do
+      before(:each) do
+        allow(Event).to receive(:create).and_call_original
+        warden.set_user bosh_person
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+            job_developer_id: job_developer.id,
+            company_person_id: bosh_person.id,
+            job_seeker_id: job_seeker.id
+      end
+
+      it 'creates CP_INTEREST_IN_JS event' do
+        expect(Event).to have_received(:create)
+          .with(:CP_INTEREST_IN_JS, evt_obj(:job, :company_person,
+                                            :job_developer, :job_seeker))
+      end
+      it 'returns success status' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'sad path' do
+      before(:each) do
+        warden.set_user bosh_person
+      end
+      it 'returns 404 if company_person not found' do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+            job_developer_id: job_developer.id,
+            company_person_id: 0,
+            job_seeker_id: job_seeker.id
+      end
+      it 'returns 404 if job_developer not found' do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+            job_developer_id: 0,
+            company_person_id: bosh_person.id,
+            job_seeker_id: job_seeker.id
+      end
+      it 'returns 404 if job_seeker not found' do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+            job_developer_id: job_developer.id,
+            company_person_id: bosh_person.id,
+            job_seeker_id: 0
+      end
+    end
+
+    context 'authentication' do
+      let(:request) do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+            job_developer_id: job_developer.id,
+            company_person_id: bosh_person.id,
+            job_seeker_id: job_seeker.id
+      end
+
+      describe 'not logged in' do
+        it_behaves_like 'unauthenticated XHR request'
+      end
+    end
+
+    context 'authorization' do
+      let(:request) do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+            job_developer_id: job_developer.id,
+            company_person_id: bosh_person.id,
+            job_seeker_id: job_seeker.id
+      end
 
       describe 'visitor' do
         it_behaves_like 'unauthorized', 'visitor'

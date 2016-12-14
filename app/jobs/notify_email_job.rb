@@ -34,8 +34,9 @@ class NotifyEmailJob < ActiveJob::Base
       # evt_obj[0] == company_person
       # evt_obj[1] == job_seeker
       # evt_obj[2] == job
-      AgencyMailer.cp_interest_in_js(email_addresses, evt_obj[0],
-                                     evt_obj[1], evt_obj[2]).deliver_later
+      AgencyMailer.company_interest_in_job_seeker(email_addresses, evt_obj[0],
+                                                  evt_obj[1],
+                                                  evt_obj[2]).deliver_later
     end
   end
 end

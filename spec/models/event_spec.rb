@@ -42,6 +42,13 @@ RSpec.describe Event, type: :model do
     app
   end
 
+  let(:evt_obj_cp_interest_class) do
+    Struct.new(:job, :company_person, :job_developer, :job_seeker)
+  end
+  let(:evt_obj_cp_interest) do
+    evt_obj_cp_interest_class.new(job, company_person, job_developer, job_seeker)
+  end
+
   let(:testfile_resume) { 'files/Admin-Assistant-Resume.pdf' }
 
   before(:each) do
@@ -471,6 +478,33 @@ RSpec.describe Event, type: :model do
     it 'sends event notification email to job seeker' do
       expect { Event.create(:CM_SELF_ASSIGN_JS, evt_obj_jd) }
         .to change(all_emails, :count).by(+1)
+    end
+  end
+
+  describe 'cp_interest_in_js event' do
+    it 'triggers Pusher message to job develper' do
+      Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest)
+      expect(Pusher).to have_received(:trigger).with(
+        'pusher_control',
+        'cp_interest_in_js',
+        jd_user_id: job_developer.user.id,
+        cp_id:      company_person.id,
+        cp_name:    company_person.full_name(last_name_first: false),
+        job_id:     job.id,
+        job_title:  job.title,
+        js_id:      job_seeker.id,
+        js_name:    job_seeker.full_name(last_name_first: false)
+      )
+    end
+
+    it 'sends event notification email to job developer' do
+      expect { Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest) }
+        .to change(all_emails, :count).by(+1)
+    end
+
+    it 'creates task' do
+      expect { Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest) }
+        .to change(Task, :count).by(+1)
     end
   end
 end

@@ -237,20 +237,24 @@ class JobsController < ApplicationController
 
   def notify_job_developer
     # This action handles the request from a company person to notify
-    # This action handles the request from a company person to notify
-    # a job developer of their interest in a job seeker.
+    # a job developer of his/her interest in a job seeker.
     # This action is invoked from the view showing all job seekers
     # that match a particular job (jobs/match_job_seekers.html.haml)
 
-    # Parameters: {"job_developer_id"=>"3", "job_id"=>"1",
+    # Parameters: {"job_developer_id"=>"3", "company_person_id"=>"1",
     #              "job_seeker_id"=>"3", "id"=>"202"}
 
     raise 'Unsupported request' unless request.xhr?
 
     authorize @job
-    company_person = CompanyPerson.find(params[:company_person_id])
-    job_developer  = AgencyPerson.find(params[:job_developer_id])
-    job_seeker     = JobSeeker.find(params[:job_seeker_id])
+
+    begin
+      company_person = CompanyPerson.find(params[:company_person_id])
+      job_developer  = AgencyPerson.find(params[:job_developer_id])
+      job_seeker     = JobSeeker.find(params[:job_seeker_id])
+    rescue ActiveRecord::RecordNotFound => exc
+      render json: { status: 404 } and return
+    end
 
     # Anonymous class to contain event data
     obj = Struct.new(:job, :company_person, :job_developer, :job_seeker)

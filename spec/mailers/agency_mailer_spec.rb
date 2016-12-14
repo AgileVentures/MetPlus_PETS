@@ -260,4 +260,41 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
     end
   end
+
+  describe 'Company interested in job seeker' do
+    let(:agency)         { FactoryGirl.create(:agency) }
+    let(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
+    let(:job)            { FactoryGirl.create(:job) }
+    let(:company_person) { FactoryGirl.create(:company_person) }
+    let(:mail) do
+      AgencyMailer.company_interest_in_job_seeker(job_developer.email,
+                                                  company_person,
+                                                  job_seeker, job)
+    end
+    before do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'Company interest in job seeker'
+      expect(mail.to).to eq([job_developer.email.to_s])
+      expect(mail.from).to eq(['from@example.com'])
+    end
+    it 'renders the body' do
+      expect(mail).to have_body_text(company_person.full_name(last_name_first: false))
+      expect(mail).to have_body_text(/as indicated interest in job seeker/)
+      expect(mail).to have_body_text(job_seeker.full_name(last_name_first: false))
+    end
+    it 'includes link to show job' do
+      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+    end
+    it 'includes link to show job seeker' do
+      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+    end
+    it 'includes link to show company person' do
+      expect(mail).to have_body_text(/#{company_person_url(id: 1)}/)
+    end
+  end
 end
