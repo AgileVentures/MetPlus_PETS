@@ -1044,17 +1044,14 @@ RSpec.describe JobsController, type: :controller do
             job_seeker_id: job_seeker.id
       end
 
-      describe 'visitor' do
-        it_behaves_like 'unauthorized', 'visitor'
-      end
       describe 'job seeker' do
-        it_behaves_like 'unauthorized', 'job_seeker'
+        it_behaves_like 'unauthorized XHR', 'job_seeker'
       end
       describe 'case manager' do
-        it_behaves_like 'unauthorized', 'case_manager'
+        it_behaves_like 'unauthorized XHR', 'case_manager'
       end
       describe 'company person - wrong company' do
-        it_behaves_like 'unauthorized request'
+        it_behaves_like 'unauthorized XHR', 'company_person'
       end
     end
   end

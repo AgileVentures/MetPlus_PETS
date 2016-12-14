@@ -95,6 +95,23 @@ RSpec.shared_examples 'unauthorized' do |role|
   end
 end
 
+RSpec.shared_examples 'unauthorized XHR' do |role|
+  assign_role(role)
+  before :each do
+    warden.set_user person
+    request
+  end
+
+  it 'returns http unauthorized' do
+    expect(response).to have_http_status(403)
+  end
+
+  it 'check content' do
+    expect(response.body).to match(/You are not authorized to/)
+  end
+end
+
+
 RSpec.shared_examples 'return success and render' do |action|
   it { expect(response).to have_http_status(:success) }
   it { expect(response).to render_template action.to_s }
