@@ -984,9 +984,9 @@ RSpec.describe JobsController, type: :controller do
         allow(Event).to receive(:create).and_call_original
         warden.set_user bosh_person
         xhr :get, :notify_job_developer, id: bosh_job.id,
-            job_developer_id: job_developer.id,
-            company_person_id: bosh_person.id,
-            job_seeker_id: job_seeker.id
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
       end
 
       it 'creates CP_INTEREST_IN_JS event' do
@@ -1005,30 +1005,30 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'returns 404 if company_person not found' do
         xhr :get, :notify_job_developer, id: bosh_job.id,
-            job_developer_id: job_developer.id,
-            company_person_id: 0,
-            job_seeker_id: job_seeker.id
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: 0,
+                                         job_seeker_id: job_seeker.id
       end
       it 'returns 404 if job_developer not found' do
         xhr :get, :notify_job_developer, id: bosh_job.id,
-            job_developer_id: 0,
-            company_person_id: bosh_person.id,
-            job_seeker_id: job_seeker.id
+                                         job_developer_id: 0,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
       end
       it 'returns 404 if job_seeker not found' do
         xhr :get, :notify_job_developer, id: bosh_job.id,
-            job_developer_id: job_developer.id,
-            company_person_id: bosh_person.id,
-            job_seeker_id: 0
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: 0
       end
     end
 
     context 'authentication' do
       let(:request) do
         xhr :get, :notify_job_developer, id: bosh_job.id,
-            job_developer_id: job_developer.id,
-            company_person_id: bosh_person.id,
-            job_seeker_id: job_seeker.id
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
       end
 
       describe 'not logged in' do
@@ -1039,9 +1039,9 @@ RSpec.describe JobsController, type: :controller do
     context 'authorization' do
       let(:request) do
         xhr :get, :notify_job_developer, id: bosh_job.id,
-            job_developer_id: job_developer.id,
-            company_person_id: bosh_person.id,
-            job_seeker_id: job_seeker.id
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
       end
 
       describe 'job seeker' do

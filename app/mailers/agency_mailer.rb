@@ -1,5 +1,4 @@
 class AgencyMailer < ApplicationMailer
-
   def job_seeker_registered(email_list, job_seeker)
     send_notification_mail(email_list, job_seeker, 'Job Seeker')
   end
@@ -61,5 +60,4 @@ class AgencyMailer < ApplicationMailer
     @obj_type = obj_type
     mail to: email_list, template_name: template
   end
-
 end

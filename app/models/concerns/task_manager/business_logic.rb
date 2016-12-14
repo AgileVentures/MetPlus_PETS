@@ -64,7 +64,7 @@ module TaskManager
         need_case_manager:  { type: :agency, function: :case_managers },
         company_registration: { type: :agency, function: :agency_admins },
         job_application:  { type: :company, function: :everyone },
-        company_interest: { type: :agency, function: :job_developers } }
+        company_interest: { type: :agency, function: :job_developers } }.freeze
 
     module ClassMethods
       def new_js_registration_task(jobseeker, agency)

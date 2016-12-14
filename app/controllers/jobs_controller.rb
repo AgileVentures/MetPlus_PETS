@@ -252,8 +252,8 @@ class JobsController < ApplicationController
       company_person = CompanyPerson.find(params[:company_person_id])
       job_developer  = AgencyPerson.find(params[:job_developer_id])
       job_seeker     = JobSeeker.find(params[:job_seeker_id])
-    rescue ActiveRecord::RecordNotFound => exc
-      render json: { status: 404 } and return
+    rescue ActiveRecord::RecordNotFound
+      render json: { status: 404 } && return
     end
 
     # Anonymous class to contain event data

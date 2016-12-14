@@ -107,10 +107,9 @@ RSpec.shared_examples 'unauthorized XHR' do |role|
   end
 
   it 'check content' do
-    expect(response.body).to match /You are not authorized to/
+    expect(response.body).to match(/You are not authorized to/)
   end
 end
-
 
 RSpec.shared_examples 'return success and render' do |action|
   it { expect(response).to have_http_status(:success) }
