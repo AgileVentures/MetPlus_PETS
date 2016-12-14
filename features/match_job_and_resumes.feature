@@ -52,12 +52,14 @@ Feature: Match a Job to a Job Seeker's Résumé
      | ruby developer | john.seeker@gmail.com |
 
     Given the following agency people exist:
-     | agency  | role  | first_name | last_name | email            | password  | phone        |
-     | MetPlus | JD    | Mike       | Check     | mike@metplus.org | qwerty123 | 555-222-3334 |
+     | agency  | role  | first_name | last_name | email              | password  | phone        |
+     | MetPlus | JD    | Mike       | Check     | mike@metplus.org   | qwerty123 | 555-222-3334 |
+     | MetPlus | JD    | Joseph     | Jobber    | joseph@metplus.org | qwerty123 | 555-222-3334 |
 
     Given the following agency relations exist:
-     | job_seeker            | agency_person    | role |
-     | john.seeker@gmail.com | mike@metplus.org | JD   |
+     | job_seeker            | agency_person      | role |
+     | john.seeker@gmail.com | mike@metplus.org   | JD   |
+     | jane.seeker@gmail.com | joseph@metplus.org | JD   |
 
   @javascript
   Scenario: Match job to my resume
@@ -98,3 +100,18 @@ Feature: Match a Job to a Job Seeker's Résumé
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Seeker, John"
     And I should see "Mike Check"
+    And show me the page
+
+  @javascript
+  Scenario: Contact job developer for job seeker
+    Given I am on the home page
+    And I login as "ca@widgets.com" with password "qwerty123"
+    Then I click the "ruby developer" link
+    And I wait 1 second
+    Then I click the "Match Job Seekers" link
+    And I wait 2 seconds
+    Then I should see "Job Seeker matches for job: ruby developer"
+    And I should see "Joseph Jobber"
+    Then I click the "Joseph Jobber" link
+    And I wait 1 second
+    Then I should see notification "Notified job developer"

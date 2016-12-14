@@ -107,7 +107,7 @@ RSpec.shared_examples 'unauthorized XHR' do |role|
   end
 
   it 'check content' do
-    expect(response.body).to match(/You are not authorized to/)
+    expect(response.body).to match /You are not authorized to/
   end
 end
 
