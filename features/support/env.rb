@@ -97,7 +97,8 @@ else
     Capybara::Poltergeist::Driver.new(
       app,
       window_size: [1280, 1024],
-      js_errors: false
+      js_errors: false,
+      timeout: 10
       # debug: true
     )
   end

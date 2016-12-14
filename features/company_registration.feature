@@ -81,7 +81,7 @@ Scenario: company registration approval
   When "hughjobs@widgets.com" opens the email with subject "Confirmation instructions"
   Then they should see "You can confirm your account email through the link below:" in the email body
 
-@selenium
+@javascript
 Scenario: company registration delete
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -94,7 +94,7 @@ Scenario: company registration delete
   And I wait 1 second
   Then I should see "Registration for 'Widgets, Inc.' deleted."
 
-@selenium
+@javascript
 Scenario: attempt login after registration is deleted
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -109,7 +109,7 @@ Scenario: attempt login after registration is deleted
   And I login as "hughjobs@widgets.com" with password "qwerty123"
   Then I should see "Invalid email or password."
 
-@selenium
+@javascript
 Scenario: company registration denial
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -126,7 +126,7 @@ Scenario: company registration denial
   Then I should see "Registration Denied"
   Then "hughjobs@widgets.com" should receive an email with subject "Registration denied"
 
-@selenium
+@javascript
 Scenario: attempt login after registration is denied
   And I click the "Create" button
   Given I am logged in as agency admin

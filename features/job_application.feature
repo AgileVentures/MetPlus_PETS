@@ -45,7 +45,7 @@ Given the following job applications exist:
   | job title          | job seeker             |
   | software developer | jane.seeker@places.com |
 
-  @selenium
+  @javascript
   Scenario: Job seeker applies to job
     When I am in Job Developer's browser
     Given I am on the home page
@@ -79,7 +79,7 @@ Given the following job applications exist:
     And I wait for 1 second
     And I should see "Application process"
     Then I click the "Apply Now" link
-    And I wait 2 seconds
+    And I wait 4 seconds
     And I should see "Congratulations, you were able to apply with success"
 
     Then "corp@widgets.com" should receive an email with subject "Job Application received"
