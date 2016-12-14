@@ -100,7 +100,6 @@ Feature: Match a Job to a Job Seeker's Résumé
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Seeker, John"
     And I should see "Mike Check"
-    And show me the page
 
   @javascript
   Scenario: Contact job developer for job seeker
