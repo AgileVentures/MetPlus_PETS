@@ -202,6 +202,7 @@ class JobsController < ApplicationController
   end
 
   def match_jd_job_seekers
+    authorize @job
     job_seeker_ids = params[:job_seeker_ids].map(&:to_i)
 
     @match_results = []
