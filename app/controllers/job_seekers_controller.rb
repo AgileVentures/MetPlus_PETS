@@ -104,6 +104,7 @@ class JobSeekersController < ApplicationController
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
+    @job_application_id = params[:job_application_id]
     authorize @jobseeker
     @offer_download = pets_user.is_a?(CompanyPerson)
   end
@@ -141,15 +142,15 @@ class JobSeekersController < ApplicationController
   end
 
   def download_resume
-    @job_application = JobApplication.find(params[:id])
-    job_seeker = @job_application.job_seeker
-
-    raise 'Resume not found in DB' if job_seeker.resumes.empty?
-    resume = job_seeker.resumes[0]
-
+    job_seeker = JobSeeker.find(params[:id])
+    resume = Resume.find_by_id(params[:resume_id])
+    if resume.nil? 
+      raise 'Resume not found in DB'
+    else
+      authorize job_seeker
+    end
     resume_file = ResumeCruncher.download_resume(resume.id)
     raise 'Resume not found in Cruncher' if resume_file.nil?
-
     send_data resume_file.open.read, filename: resume.file_name
 
     rescue RuntimeError => e

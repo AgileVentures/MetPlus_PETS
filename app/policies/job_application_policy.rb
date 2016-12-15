@@ -11,11 +11,7 @@ class JobApplicationPolicy < ApplicationPolicy
   def show?
     correct_company_person? user
   end
-
-  def download_resume?
-    correct_company_person? user
-  end
-
+  
   private
 
   def correct_company_person?(user)
