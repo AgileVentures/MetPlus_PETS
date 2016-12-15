@@ -155,7 +155,8 @@ Rails.application.routes.draw do
   end
 
   get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
-  get 'job_seekers/:id/download_resume' => 'job_seekers#download_resume',
+  get 'job_seekers/:id(/download_resume/:resume_id)' => 
+    'job_seekers#download_resume',
       as: :download_resume
   # --------------------------------------------------------------------------
 
