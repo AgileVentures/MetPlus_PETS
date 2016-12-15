@@ -43,7 +43,7 @@ Feature: Have a task system in the site
       | job_application    | ca@widgets.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
 
-  @selenium
+  @javascript
   Scenario: Agency admin task management
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -72,7 +72,7 @@ Feature: Have a task system in the site
     And I click the "All Agency Closed Tasks" link
     And the task 6 is present
 
-  @selenium
+  @javascript
   Scenario: Agency admin can see company registration
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -83,7 +83,7 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see "Company Registration Information"
 
-  @selenium
+  @javascript
   Scenario: Company admin task management
     Given I am on the home page
     And I login as "ca@widgets.com" with password "qwerty123"

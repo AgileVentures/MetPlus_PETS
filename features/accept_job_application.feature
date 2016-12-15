@@ -74,7 +74,7 @@ Background: data is added to database
     And other applications for "hr assistant" change to not accepted
     And I should see "hr assistant" job changes to status filled
 
-  @selenium
+  @javascript
   Scenario: job developer accept notification when job application accepted
     When I am in Job Developer's browser
     Given I am on the home page

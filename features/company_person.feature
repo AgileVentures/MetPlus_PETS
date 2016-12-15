@@ -187,10 +187,11 @@ Feature: Company Person
     And I should see "Smith, Jane"
     And I should not see "Daniel, Charles"
 
-  @selenium
+  @javascript
   Scenario: Company Contact with tasks on home page
     Given I am on the home page
     And I login as "jane@widgets.com" with password "qwerty123"
+    And I wait 1 second
     And I should see "Your Open Tasks"
     And I should see "Review job application"
     And the task 1 status is "Assigned"

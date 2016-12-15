@@ -175,7 +175,7 @@ When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, 
   # have the same selector (e.g., same label)
   case ordinal
   when nil
-    find(:select, lst).find(:option, item).select_option
+    find(:select, lst, minimum: 1).find(:option, item).select_option
   when ' first'
     all(:select, lst)[0].find(:option, item).select_option
   when ' second'
