@@ -103,7 +103,6 @@ $(function () {
   });
 
   $('#match-resumes-link').click(function () {
-    var mySpinner = PETS.spinner($('#show-panel-id'));
     $('#match-resumes-modal-form').modal();
   });
 
@@ -113,7 +112,7 @@ $(function () {
     $('#message').removeClass('alert alert-danger');
   });
 
-  $('#run-match-btn').click(function (event) {
+  $('#run-match-btn').click(function () {
     var selectedValues = $('#job-seekers-select').val();
     if (selectedValues === null) {
       $('#message').html('Please choose a job seeker');
