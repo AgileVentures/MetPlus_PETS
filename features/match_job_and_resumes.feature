@@ -94,8 +94,8 @@ Feature: Match a Job to a Job Seeker's Résumé
     Then I should see "Signed in successfully"
     Then I click the "ruby developer" link
     And I wait 1 second
-    And I should see "Match Job Seekers"
-    Then I click the "Match Job Seekers" link
+    And I should see "Match all job seekers"
+    Then I click the "Match all job seekers" link
     And I wait 2 seconds
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Seeker, John"

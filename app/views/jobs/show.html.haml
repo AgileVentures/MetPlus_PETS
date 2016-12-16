@@ -4,7 +4,7 @@
   .links
     .pull-left.all-jobs-link
       = link_to jobs_path, class: 'btn btn-default' do
-        %span{ class: 'glyphicon glyphicon-chevron-left'}
+        %span{ class: 'glyphicon glyphicon-chevron-left' }
         Back
     .pull-right#job-show-links-id
       - if policy(@job).match_jd_job_seekers?
@@ -27,7 +27,7 @@
           = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
                   class: 'btn btn-primary', data: { job_id: @job.id, job_seeker_id: pets_user.id }
 
-    .clearfix
+  .clearfix
 
   = render partial: 'job_info'
 
