@@ -7,6 +7,7 @@ RSpec.describe JobPolicy do
   let!(:bosh_mich) { FactoryGirl.create(:address, location: bosh) }
   let(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
   let(:revoked_job) { FactoryGirl.create(:job, status: 'revoked') }
+  let(:widget_job) { FactoryGirl.create(:job) }
 
   let(:bosh_contact) { FactoryGirl.create(:company_contact, company: bosh) }
   let(:bosh_admin) { FactoryGirl.create(:company_admin, company: bosh) }
@@ -123,6 +124,13 @@ RSpec.describe JobPolicy do
 
     it 'disallows access if user is job_seeker' do
       expect(JobPolicy).not_to permit(job_seeker, bosh_job)
+    end
+  end
+  permissions :notify_job_developer? do
+    it 'only allows access if user is company_person' do
+      expect(JobPolicy).to permit(bosh_contact, bosh_job)
+      expect(JobPolicy).to permit(bosh_admin, bosh_job)
+      expect(JobPolicy).not_to permit(job_seeker, widget_job)
     end
   end
 end
