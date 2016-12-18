@@ -72,6 +72,7 @@ Capybara.default_max_wait_time = 5
 # details on how to set this up
 Capybara.register_driver :selenium do |app|
   require 'selenium/webdriver'
+  # FIREFOX_BINARY_PATH (if used) needs to be the path to the FF executable
   Selenium::WebDriver::Firefox::Binary.path =
     ENV['FIREFOX_BINARY_PATH'] || Selenium::WebDriver::Firefox::Binary.path
   Capybara::Selenium::Driver.new(app, browser: :firefox)
