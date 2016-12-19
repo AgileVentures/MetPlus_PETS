@@ -427,8 +427,8 @@ class Event
 
     unless job_apps.empty?
 
-      js_emails = job_apps.map { |ja| ja.job_seeker.email }
       js_ids = job_apps.map { |ja| ja.job_seeker.user.id }
+      js_list =     job_apps.map {|ja| ja.job_seeker}
 
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JOB_REVOKED],
@@ -436,12 +436,16 @@ class Event
                      job_title:    evt_obj.job.title,
                      company_name: evt_obj.job.company.name,
                      notify_list:  js_ids)
+ 
 
-      JobSeekerEmailJob.set(wait: delay_seconds.seconds)
-                       .perform_later(js_emails,
-                                      EVT_TYPE[:JOB_REVOKED],
-                                      evt_obj.job)
+      
+      js_list.each do |js|    
+        JobSeekerEmailJob.set(wait: delay_seconds.seconds)
+                     .perform_later(EVT_TYPE[:JOB_REVOKED],
+                                    js, evt_obj.job)
+      end
     end
+  
   end
 
 

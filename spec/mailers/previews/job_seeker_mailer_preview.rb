@@ -22,7 +22,7 @@ class JobSeekerMailerPreview < ActionMailer::Preview
   end
 
   def job_revoked
-    job_seeker = User.find_by_email('tom@gmail.com').actable
+    job_seeker = User.find_by_email('tomseekerpets@gmail.com').actable
     job = Job.create(title: 'Sr Software Engineer',
                      company: Company.first,
                      company_job_id: 'ABC',
