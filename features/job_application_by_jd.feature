@@ -71,7 +71,7 @@ Background: data is added to database
     Then I am in Company Admin's browser
     And I should see "Job Seeker: John Seeker has applied to this job"
     And I am on the Company Person 'ca@widgets.com' Home page
-    And I wait 1 second
+    And I wait 2 second
     And I should see "Review job application"
     And I should see "Job: software developer"
     Then "ca@widgets.com" should receive an email with subject "Job seeker applied"
@@ -109,7 +109,7 @@ Background: data is added to database
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
     Then I apply to "software developer" from Jobs link
-    And I wait 2 seconds
+    And I wait 3 seconds
     And I should see "Congratulations, you were able to apply with success"
 
     Then I am in Job Developer's browser

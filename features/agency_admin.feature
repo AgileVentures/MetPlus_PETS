@@ -290,7 +290,7 @@ Scenario: show job specialty model validation errors
   And I click the "Add Job Specialty" button
   And I wait 2 seconds
   And I click the "Add Specialty" button
-  And I wait 2 seconds
+  And I wait 3 seconds
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
   Then I fill in "Name:" with "Test Job Specialty"
@@ -307,7 +307,7 @@ Scenario: update job specialty
   And I wait 2 seconds
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 1 second
+  And I wait 2 second
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
