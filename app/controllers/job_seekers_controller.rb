@@ -144,7 +144,7 @@ class JobSeekersController < ApplicationController
   def download_resume
     job_seeker = JobSeeker.find(params[:id])
     resume = Resume.find_by_id(params[:resume_id])
-    if resume.nil? 
+    if resume.nil?
       raise 'Resume not found in DB'
     else
       authorize job_seeker
@@ -156,7 +156,6 @@ class JobSeekersController < ApplicationController
     rescue RuntimeError => e
       flash[:alert] = "Error: #{e}"
       redirect_back_or_default
-
     ensure
       if resume_file
         resume_file.close

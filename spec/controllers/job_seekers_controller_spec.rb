@@ -806,9 +806,9 @@ RSpec.describe JobSeekersController, type: :controller do
   end
   describe 'GET download_resume' do
     let(:company)       { FactoryGirl.create(:company) }
-    let(:company2)       { FactoryGirl.create(:company) }
+    let(:company2)      { FactoryGirl.create(:company) }
     let(:job)           { FactoryGirl.create(:job, company: company) }
-    let(:job2)           { FactoryGirl.create(:job, company: company2) }
+    let(:job2)          { FactoryGirl.create(:job, company: company2) }
     let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
     let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
     let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }

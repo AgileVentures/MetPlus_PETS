@@ -17,11 +17,10 @@ RSpec.describe JobSeekerPolicy do
   let!(:ja) do
     FactoryGirl.create(:job_application, job: job, job_seeker: js1)
   end
-  let!(:ca)      { FactoryGirl.create(:company_admin, company: comp) }
-  let(:comp2)   { FactoryGirl.create(:company) }  
+  let!(:ca)     { FactoryGirl.create(:company_admin, company: comp) }
+  let(:comp2)   { FactoryGirl.create(:company) }
   let(:job2)    { FactoryGirl.create(:job, company: comp2) }
   let(:ca2)     { FactoryGirl.create(:company_admin, company: comp2) }
-
   permissions :update?, :edit? do
     it 'only allows access if user is the account owner' do
       expect(JobSeekerPolicy).to permit(js1, js1)
