@@ -6,22 +6,28 @@
   %thead
     %tr
       %th
-        Name (if applied)
+        Name
+        %i.fa.fa-question-circle{ data_toggle: 'tooltip', data_placement: 'top',
+          title: 'Only job seekers who have applied to this job are shown' }
       %th
         City
       %th
         Match Rating
       %th
         Job Developer
+        %i.fa.fa-question-circle{ data_toggle: 'tooltip', data_placement: 'top',
+          title: 'Click on name to contact job developer regarding the job seeker' }
   %tbody
     - @job_matches.each do |job_match|
       %tr
         %td
           - if job_match[2]
             = link_to(job_match[0].full_name, job_seeker_path(job_match[0]))
+          - else
+            %i Not Available
         %td
           - address = job_match[0].address
-          #{address.city}, #{address.state}
+          = "#{address.city}, #{address.state}" if address
         %td
           = show_stars(job_match[1])
           #{job_match[1]} / 5.0
@@ -38,3 +44,11 @@
                             "\n" +                                            |
                             "Applicant: " + "#{job_match[0].full_name}" +     |
                             "\n\n" + "(your message here)")                   |
+
+          - elsif job_developer = job_match[0].job_developer
+            = link_to job_developer.full_name(last_name_first: false),
+                '#', class: 'js_interest',
+                data: { job_id: @job.id,
+                        company_person_id: pets_user.id,
+                        job_developer_id: job_developer.id,
+                        job_seeker_id: job_match[0].id }

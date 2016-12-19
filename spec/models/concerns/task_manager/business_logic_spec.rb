@@ -12,15 +12,16 @@ RSpec.describe TaskManager::BusinessLogic do
       @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
       @agency = FactoryGirl.create(:agency)
 
-      @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+      @agency_admin = FactoryGirl.create(:agency_person, agency: @agency,
+                                                         agency_roles: [@aa_role])
       @case_mgr1 = FactoryGirl.create(:case_manager, agency: @agency)
       @case_mgr2 = FactoryGirl.create(:case_manager, agency: @agency)
     end
     describe '#new_js_unassigned_cm_task' do
-      subject {TaskTester.new_js_unassigned_cm_task @job_seeker, @agency}
-      it('owner is agency admin'){expect(subject.task_owner).to eq([@agency_admin])}
-      it('target job seeker'){expect(subject.target).to eq(@job_seeker)}
-      it('check type'){expect(subject.task_type.to_sym).to eq(:need_case_manager)}
+      subject { TaskTester.new_js_unassigned_cm_task @job_seeker, @agency }
+      it('owner is agency admin') { expect(subject.task_owner).to eq([@agency_admin]) }
+      it('target job seeker') { expect(subject.target).to eq(@job_seeker) }
+      it('check type') { expect(subject.task_type.to_sym).to eq(:need_case_manager) }
       it 'has assignable list of all case managers in the agency' do
         expect(subject.assignable_list).to include(@case_mgr1, @case_mgr2)
       end
@@ -32,15 +33,16 @@ RSpec.describe TaskManager::BusinessLogic do
       @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
       @agency = FactoryGirl.create(:agency)
 
-      @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+      @agency_admin = FactoryGirl.create(:agency_person, agency: @agency,
+                                                         agency_roles: [@aa_role])
       @job_dev1  = FactoryGirl.create(:job_developer, agency: @agency)
       @job_dev2  = FactoryGirl.create(:job_developer, agency: @agency)
     end
     describe '#new_js_unassigned_jd_task' do
-      subject {TaskTester.new_js_unassigned_jd_task @job_seeker, @agency}
-      it('owner is agency admin'){expect(subject.task_owner).to eq([@agency_admin])}
-      it('target job seeker'){expect(subject.target).to eq(@job_seeker)}
-      it('check type'){expect(subject.task_type.to_sym).to eq(:need_job_developer)}
+      subject { TaskTester.new_js_unassigned_jd_task @job_seeker, @agency }
+      it('owner is agency admin') { expect(subject.task_owner).to eq([@agency_admin]) }
+      it('target job seeker') { expect(subject.target).to eq(@job_seeker) }
+      it('check type') { expect(subject.task_type.to_sym).to eq(:need_job_developer) }
       it 'has assignable list of all job developers in the agency' do
         expect(subject.assignable_list).to include(@job_dev1, @job_dev2)
       end
@@ -52,28 +54,37 @@ RSpec.describe TaskManager::BusinessLogic do
       @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
       @agency = FactoryGirl.create(:agency)
 
-      @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+      @agency_admin = FactoryGirl.create(:agency_person, agency: @agency,
+                                                         agency_roles: [@aa_role])
       @case_mgr1 = FactoryGirl.create(:case_manager, agency: @agency)
       @case_mgr2 = FactoryGirl.create(:case_manager, agency: @agency)
       @job_dev1  = FactoryGirl.create(:job_developer, agency: @agency)
       @job_dev2  = FactoryGirl.create(:job_developer, agency: @agency)
-
     end
     describe '#new_js_registration_task' do
-      subject {TaskTester.new_js_registration_task @job_seeker, @agency}
-      it('two tasks created'){expect(subject.size).to be 2}
+      subject { TaskTester.new_js_registration_task @job_seeker, @agency }
+      it('two tasks created') { expect(subject.size).to be 2 }
       describe 'check need_job_developer task' do
-        it('check type'){expect(subject[0].task_type.to_sym).to eq(:need_job_developer)}
-        it('owner is agency admin'){expect(subject[0].task_owner).to eq([@agency_admin])}
-        it('target job seeker'){expect(subject[0].target).to eq(@job_seeker)}
+        it('check type') do
+          expect(subject[0].task_type.to_sym).to eq(:need_job_developer)
+        end
+        it('owner is agency admin') do
+          expect(subject[0].task_owner).to eq([@agency_admin])
+        end
+        it('target job seeker') { expect(subject[0].target).to eq(@job_seeker) }
         it 'has assignable list of all job developers in the agency' do
           expect(subject[0].assignable_list).to include(@job_dev1, @job_dev2)
         end
       end
       describe 'check need_case_manager task' do
-        it('check type'){expect(subject[1].task_type.to_sym).to eq(:need_case_manager)}
-        it('owner is agency admin'){expect(subject[1].task_owner).to eq([@agency_admin])}
-        it('target job seeker'){expect(subject[1].target).to eq(@job_seeker)}
+        it('check type') do
+          expect(subject[1].task_type.to_sym).to eq(:need_case_manager)
+        end
+        it('owner is agency admin') do
+          expect(subject[1].task_owner)
+            .to eq([@agency_admin])
+        end
+        it('target job seeker') { expect(subject[1].target).to eq(@job_seeker) }
         it 'has assignable list of all case managers in the agency' do
           expect(subject[1].assignable_list).to include(@case_mgr1, @case_mgr2)
         end
@@ -87,12 +98,15 @@ RSpec.describe TaskManager::BusinessLogic do
     let!(:agency_admin2) { FactoryGirl.create(:agency_admin, agency: agency) }
 
     describe '#new_review_company_registration_task' do
-      subject {TaskTester.new_review_company_registration_task company, agency}
+      subject { TaskTester.new_review_company_registration_task company, agency }
       it 'owner is agency admins' do
         expect(subject.task_owner).to match_array [agency_admin, agency_admin2]
       end
-      it('target company'){expect(subject.target).to eq(company)}
-      it('check type'){expect(subject.task_type.to_sym).to eq(:company_registration)}
+      it('target company') { expect(subject.target).to eq(company) }
+      it('check type') do
+        expect(subject.task_type.to_sym)
+          .to eq(:company_registration)
+      end
       it 'has assignable list of all admins in the agency' do
         expect(subject.assignable_list).to include(agency_admin, agency_admin2)
       end
@@ -105,8 +119,10 @@ RSpec.describe TaskManager::BusinessLogic do
     let(:company_admin)  { FactoryGirl.create(:company_admin, company: company) }
     let(:company_cc1)    { FactoryGirl.create(:company_contact, company: company) }
     let(:company_cc2)    { FactoryGirl.create(:company_contact, company: company) }
-    let(:job)            { FactoryGirl.create(:job, company: company,
-                                              company_person: company_admin) }
+    let(:job)            do
+      FactoryGirl.create(:job, company: company,
+                               company_person: company_admin)
+    end
 
     describe '#new_review_job_application_task' do
       before(:each) do
@@ -114,14 +130,49 @@ RSpec.describe TaskManager::BusinessLogic do
         stub_cruncher_job_create
       end
 
-      subject {TaskTester.new_review_job_application_task job, company}
-      it('owner is company admin'){expect(subject.task_owner).to eq([company_admin])}
-      it('target application'){expect(subject.target).to eq(job)}
-      it('check type'){expect(subject.task_type.to_sym).to eq(:job_application)}
+      subject { TaskTester.new_review_job_application_task job, company }
+      it('owner is company admin') { expect(subject.task_owner).to eq([company_admin]) }
+      it('target application') { expect(subject.target).to eq(job) }
+      it('check type') { expect(subject.task_type.to_sym).to eq(:job_application) }
       it 'has assignable list of everyone in the company' do
-        expect(subject.assignable_list).to include(company_admin, company_cc1, company_cc2)
+        expect(subject.assignable_list)
+          .to include(company_admin, company_cc1, company_cc2)
       end
     end
   end
 
+  describe 'Company interested in job seeker' do
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:agency)        { FactoryGirl.create(:agency) }
+    let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+    let!(:jd1)          { FactoryGirl.create(:job_developer, agency: agency) }
+    let!(:jd2)          { FactoryGirl.create(:job_developer, agency: agency) }
+    let!(:jd3)          { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:company)       { FactoryGirl.create(:company) }
+    let(:job)           { FactoryGirl.create(:job, company: company) }
+
+    describe '#new_company_interest_task' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
+
+      subject do
+        TaskTester.new_company_interest_task(job_seeker, company, job, agency)
+      end
+
+      it('owner is agency admin') do
+        expect(subject.task_owner).to eq([agency_admin])
+      end
+      it('target person')  { expect(subject.person).to eq(job_seeker) }
+      it('target job')     { expect(subject.job).to eq(job) }
+      it('target company') { expect(subject.company).to eq(company) }
+
+      it('check type') { expect(subject.task_type.to_sym).to eq(:company_interest) }
+
+      it 'has assignable list of all job developers in the agency' do
+        expect(subject.assignable_list).to include(jd1, jd2, jd3)
+      end
+    end
+  end
 end
