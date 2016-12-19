@@ -85,6 +85,6 @@ class JobSeekerPolicy < ApplicationPolicy
   end
   def download_resume?
     User.is_company_person?(user) && 
-    record.job_applications.where(job: user.company.jobs).exists?
+    record.job_applications.where(job: user.company.jobs.active).exists?
   end
 end
