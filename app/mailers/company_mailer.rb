@@ -26,7 +26,7 @@ class CompanyMailer < ApplicationMailer
     file_name = @job_seeker.resumes.first.file_name
     attachments[file_name] = File.read(resume_temp_file.path)
 
-    mail(to: company.job_email, from: ENV['ADMIN_EMAIL'],
+    mail(to: company.job_email, from: ENV['NOTIFICATION_EMAIL'],
          subject: 'Job Application received')
 
     # On windows, unlinking a file before closing fails
@@ -41,6 +41,6 @@ class CompanyMailer < ApplicationMailer
     @company = company
     @agency  = company.agencies[0]
     @email_text = email_text
-    mail(to: company_person.email, from: ENV['ADMIN_EMAIL'])
+    mail(to: company_person.email, from: ENV['NOTIFICATION_EMAIL'])
   end
 end

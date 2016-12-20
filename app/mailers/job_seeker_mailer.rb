@@ -28,7 +28,7 @@ class JobSeekerMailer < ApplicationMailer
   def send_job_seeker_mail(options = {})
     template = options.delete(:template)
     options.each { |key, value| instance_variable_set("@#{key}", value) }
-    mail(to: options[:job_seeker].email, from: ENV['ADMIN_EMAIL'],
+    mail(to: options[:job_seeker].email, from: ENV['NOTIFICATION_EMAIL'],
          template_name: template)
   end
 end
