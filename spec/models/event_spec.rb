@@ -183,15 +183,15 @@ RSpec.describe Event, type: :model do
       end
 
       it 'triggers a Pusher message to Company Person' do
-          Event.create(:JD_APPLY, application_diff_jd)
-          expect(Pusher).to have_received(:trigger).with(
-            'pusher_control',
-            'jobseeker_applied',
-            job_id:  job.id,
-            js_id:   job_seeker.id,
-            js_name: job_seeker.full_name(last_name_first: false),
-            notify_list: [company_person.user.id]
-          )
+        Event.create(:JD_APPLY, application_diff_jd)
+        expect(Pusher).to have_received(:trigger).with(
+          'pusher_control',
+          'jobseeker_applied',
+          job_id:  job.id,
+          js_id:   job_seeker.id,
+          js_name: job_seeker.full_name(last_name_first: false),
+          notify_list: [company_person.user.id]
+        )
       end
     end
 
