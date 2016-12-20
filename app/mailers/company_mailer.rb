@@ -26,7 +26,8 @@ class CompanyMailer < ApplicationMailer
     file_name = @job_seeker.resumes.first.file_name
     attachments[file_name] = File.read(resume_temp_file.path)
 
-    mail to: company.job_email, subject: 'Job Application received'
+    mail(to: company.job_email, from: ENV['ADMIN_EMAIL'],
+         subject: 'Job Application received')
 
     # On windows, unlinking a file before closing fails
     # For more, see http://docs.cs.up.ac.za/programming/ruby/ruby_2_2_0_stdlib/libdoc/tempfile/rdoc/Tempfile.html#method-i-unlink-label-Unlink-before-close
@@ -40,6 +41,6 @@ class CompanyMailer < ApplicationMailer
     @company = company
     @agency  = company.agencies[0]
     @email_text = email_text
-    mail to: company_person.email
+    mail(to: company_person.email, from: ENV['ADMIN_EMAIL'])
   end
 end

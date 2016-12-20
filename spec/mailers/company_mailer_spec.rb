@@ -20,7 +20,7 @@ RSpec.describe CompanyMailer, type: :mailer do
       it "renders the headers" do
         expect(mail.subject).to eq 'Pending approval'
         expect(mail.to).to eq(["#{company_person.email}"])
-        expect(mail.from).to eq(["from@example.com"])
+        expect(mail.from).to eq([ENV['ADMIN_EMAIL']])
       end
       it "renders the body" do
         expect(mail.body.encoded).
@@ -34,7 +34,7 @@ RSpec.describe CompanyMailer, type: :mailer do
       it "renders the headers" do
         expect(mail.subject).to eq 'Registration approved'
         expect(mail.to).to eq(["#{company_person.email}"])
-        expect(mail.from).to eq(["from@example.com"])
+        expect(mail.from).to eq([ENV['ADMIN_EMAIL']])
       end
       it "renders the body" do
         expect(mail.body.encoded).
@@ -67,7 +67,7 @@ RSpec.describe CompanyMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job Application received'
-      expect(mail.from).to eq (["from@example.com"])
+      expect(mail.from).to eq ([ENV['ADMIN_EMAIL']])
       expect(mail.to).to eq ([company.job_email])
     end
 
