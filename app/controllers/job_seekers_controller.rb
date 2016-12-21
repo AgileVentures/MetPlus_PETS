@@ -100,11 +100,11 @@ class JobSeekersController < ApplicationController
   def index
     @jobseeker = JobSeeker.all
     authorize @jobseeker
+    @offer_download = pets_user.is_a?(CompanyPerson)
   end
 
   def show
     @jobseeker = JobSeeker.find(params[:id])
-    @job_application_id = params[:job_application_id]
     authorize @jobseeker
     @offer_download = pets_user.is_a?(CompanyPerson)
   end
@@ -143,12 +143,8 @@ class JobSeekersController < ApplicationController
 
   def download_resume
     job_seeker = JobSeeker.find(params[:id])
-    resume = Resume.find_by_id(params[:resume_id])
-    if resume.nil?
-      raise 'Resume not found in DB'
-    else
-      authorize job_seeker
-    end
+    authorize job_seeker
+    resume = Resume.find(params[:resume_id])
     resume_file = ResumeCruncher.download_resume(resume.id)
     raise 'Resume not found in Cruncher' if resume_file.nil?
     send_data resume_file.open.read, filename: resume.file_name
