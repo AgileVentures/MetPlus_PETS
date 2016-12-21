@@ -28,7 +28,7 @@ class JobSeekerMailerPreview < ActionMailer::Preview
                      company_job_id: 'ABC',
                      shift: Job::SHIFT_OPTIONS[0],
                      description: 'description of test job')
-    
+
     job.apply(job_seeker)
     JobSeekerMailer.job_revoked(job_seeker, job)
   end

@@ -239,10 +239,12 @@ class Event
       )
     end
 
-    NotifyEmailJob.set(wait: delay_seconds.seconds)
-                  .perform_later(notify_list,
-                                 EVT_TYPE[:APP_ACCEPTED],
-                                 evt_obj) unless notify_list.empty?
+    unless notify_list.empty?
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(notify_list,
+                                   EVT_TYPE[:APP_ACCEPTED],
+                                   evt_obj)
+    end
   end
 
   def self.evt_app_rejected(evt_obj)
@@ -282,10 +284,12 @@ class Event
       )
     end
 
-    NotifyEmailJob.set(wait: delay_seconds.seconds)
-                  .perform_later(notify_list,
-                                 EVT_TYPE[:APP_REJECTED],
-                                 evt_obj) unless notify_list.empty?
+    unless notify_list.empty?
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(notify_list,
+                                   EVT_TYPE[:APP_REJECTED],
+                                   evt_obj)
+    end
   end
 
   def self.evt_jd_assigned_js(evt_obj)
@@ -410,45 +414,38 @@ class Event
     jd_ids     = job_developers.map { |jd| jd.user.id }
     jd_emails  = job_developers.map(&:email)
 
-      Pusher.trigger('pusher_control',
-                     EVT_TYPE[:JOB_REVOKED],
-                     job_id:       evt_obj.job.id,
-                     job_title:    evt_obj.job.title,
-                     company_name: evt_obj.job.company.name,
-                     notify_list:  jd_ids)
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:JOB_REVOKED],
+                   job_id:       evt_obj.job.id,
+                   job_title:    evt_obj.job.title,
+                   company_name: evt_obj.job.company.name,
+                   notify_list:  jd_ids)
 
-      NotifyEmailJob.set(wait: delay_seconds.seconds)
-                    .perform_later(jd_emails,
-                                   EVT_TYPE[:JOB_REVOKED],
-                                   evt_obj.job)
-    end
+    NotifyEmailJob.set(wait: delay_seconds.seconds)
+                  .perform_later(jd_emails,
+                                 EVT_TYPE[:JOB_REVOKED],
+                                 evt_obj.job)
     
     job_apps = evt_obj.job.job_applications
 
-    unless job_apps.empty?
+    return if job_apps.empty?
 
-      js_ids = job_apps.map { |ja| ja.job_seeker.user.id }
-      js_list =     job_apps.map {|ja| ja.job_seeker}
+    js_ids = job_apps.map { |ja| ja.job_seeker.user.id }
+    js_list = job_apps.map(&:job_seeker)
 
-      Pusher.trigger('pusher_control',
-                     EVT_TYPE[:JOB_REVOKED],
-                     job_id:       evt_obj.job.id,
-                     job_title:    evt_obj.job.title,
-                     company_name: evt_obj.job.company.name,
-                     notify_list:  js_ids)
- 
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:JOB_REVOKED],
+                   job_id:       evt_obj.job.id,
+                   job_title:    evt_obj.job.title,
+                   company_name: evt_obj.job.company.name,
+                   notify_list:  js_ids)
 
-      
-      js_list.each do |js|    
-        JobSeekerEmailJob.set(wait: delay_seconds.seconds)
-                     .perform_later(EVT_TYPE[:JOB_REVOKED],
-                                    js, evt_obj.job)
-      end
+    js_list.each do |js|
+      JobSeekerEmailJob.set(wait: delay_seconds.seconds)
+                       .perform_later(EVT_TYPE[:JOB_REVOKED],
+                                      js, evt_obj.job)
     end
-  
   end
-
-
 
   def self.evt_cp_interest_in_js(evt_obj)
     # evt_obj = struct(:job, :company_person, :job_developer, :job_seeker)
@@ -478,7 +475,7 @@ class Event
                                    evt_obj.job,
                                    evt_obj.job_developer.agency)
   end
- 
+
   def self.notify_list_for_js_apply_event(appl)
     # Returns an array containing two arrays.  The first such array contains
     # user ids, and the second email addresses of the people to be notified
