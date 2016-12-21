@@ -457,7 +457,7 @@ RSpec.describe Event, type: :model do
     it 'triggers mass Pusher message to js' do
       application
       Event.create(:JOB_REVOKED, evt_obj_jobpost)
-      
+
       expect(Pusher).to have_received(:trigger)
         .with('pusher_control',
               'job_revoked',
@@ -474,7 +474,7 @@ RSpec.describe Event, type: :model do
               company_name: company.name,
               notify_list: [job_seeker.user.id])
     end
-    
+
     it 'sends mass event notification email' do
       application
       expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }
