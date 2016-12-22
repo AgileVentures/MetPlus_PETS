@@ -205,8 +205,13 @@ class JobsController < ApplicationController
 
   def match_jd_job_seekers
     authorize @job
-    job_seeker_ids = params[:job_seeker_ids].map(&:to_i)
 
+    unless params[:job_seeker_ids]
+      flash[:alert] =  'Please choose a job seeker'
+      redirect_to @job and return
+    end
+
+    job_seeker_ids = params[:job_seeker_ids].map(&:to_i)
     match_results = get_matches(job_seeker_ids)
     @match_results = self.class.sort_by_score(match_results)
   end
