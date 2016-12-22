@@ -47,6 +47,7 @@ $state-danger-text: #a94442;
 
 .panel.panel-default#show-panel-id {
   margin-bottom: 0;
+  margin-top: 20px;
 
   .panel-heading#panel-heading-show-id {
     background: $light-blue;
@@ -140,6 +141,10 @@ $state-danger-text: #a94442;
 }
 
 /** resume matches view **/
+#match-resumes-link {
+  background: #0C7BA1;
+  border: none;
+}
 #resume-matches-table {
   margin-top: 15px;
 }
