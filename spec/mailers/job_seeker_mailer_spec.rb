@@ -68,14 +68,13 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     let(:job) { FactoryGirl.create(:job) }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let!(:resume)      { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let!(:application) do
-      job.apply job_seeker
-    end
 
     let(:mail) do
       allow(Pusher).to receive(:trigger)
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      stub_cruncher_file_download("files/#{resume.file_name}")
+      job.apply job_seeker
       JobSeekerMailer.job_revoked(job_seeker, job)
     end
 
