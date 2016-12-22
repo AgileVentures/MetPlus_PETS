@@ -1,3 +1,6 @@
+include WebMock::API
+require './spec/support/service_stub_helpers'
+include ServiceStubHelpers::Cruncher
 # Preview all emails at http://localhost:3000/rails/mailers/company_mailer
 class CompanyMailerPreview < ActionMailer::Preview
 
@@ -22,10 +25,12 @@ class CompanyMailerPreview < ActionMailer::Preview
   end
 
   def application_received
+    WebMock.enable!
+    stub_cruncher_authenticate
+    stub_cruncher_file_download('./spec/fixtures/files/Janitor-Resume.doc')
     company = Company.last
     job_application = JobApplication.last
-    CompanyMailer.application_received(company, job_application,
-        "#{Rails.root}/spec/fixtures/files/Janitor-Resume.doc")
+    CompanyMailer.application_received(company, job_application, 1)
   end
 
 end
