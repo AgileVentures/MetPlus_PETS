@@ -10,7 +10,7 @@
   You had applied to the job:
   %strong
   = link_to @job.title, job_url(id: @job.id)
-  on 
+  on
   = @job_seeker.application_for_job(@job).created_at.strftime('%A, %B %d, %Y') + '.'
 %p
   If you have any other questions about this email
