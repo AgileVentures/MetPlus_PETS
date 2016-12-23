@@ -851,8 +851,8 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'Error: Resume not found in DB' do
       it 'raises AR Not Found Exception' do
-        expect { get :download_resume, id: valid_application, resume_id: 999 }.
-          to raise_error(ActiveRecord::RecordNotFound)
+        expect { get :download_resume, id: valid_application, resume_id: 999 }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
     context 'Error: Resume not found in Cruncher' do
