@@ -21,7 +21,7 @@ Background: adding jobs data to DB
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
     | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
@@ -34,9 +34,9 @@ Background: adding jobs data to DB
   Given the following jobs exist:
     | title | description | company      | creator          | shift   | skills         | city  |
     | Job1  | About job1. | Widgets Inc. | jane@ymail.com | Day     | Skill1, Skill2 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com.com   | Day     | Skill3         | city2 |
-    | Job3  | About job3. | Feature Inc. | carter@ymail.com.com   | Evening | Skill1, Skill3 | city3 |
-    | Job4  | About job4. | Feature Inc. | carter@ymail.com.com   | Evening |                | city4 |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com   | Day     | Skill3         | city2 |
+    | Job3  | About job3. | Feature Inc. | carter@ymail.com   | Evening | Skill1, Skill3 | city3 |
+    | Job4  | About job4. | Feature Inc. | carter@ymail.com   | Evening |                | city4 |
 
 
 @javascript

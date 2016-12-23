@@ -20,24 +20,24 @@ Background: data is added to database
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
     | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
-  Given the following jobseeker exist:
+  Given the following jobseekers exist:
     | first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
     | John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | carter@ymail.com.com | revoked |
-    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | carter@ymail.com.com | active  |
-    | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | carter@ymail.com.com | active  |
+    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | carter@ymail.com | revoked |
+    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | carter@ymail.com | active  |
+    | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | carter@ymail.com | active  |
 
   @javascript
   Scenario: company person revoke a job
     Given I am on the home page
-    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
     And I visit the jobs page
     And I should not see "Revoked" next to "hr manager"
     But I should see "revoke" button for "hr manager"
