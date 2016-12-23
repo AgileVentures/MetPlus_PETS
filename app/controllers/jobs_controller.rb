@@ -62,8 +62,6 @@ class JobsController < ApplicationController
   end
 
   def create
-    @companies = Company.order(:name)
-    set_company_address
     @job = Job.new(job_params)
     if pets_user.is_a?(CompanyPerson)
       @job.company_id = pets_user.company.id
@@ -79,6 +77,8 @@ class JobsController < ApplicationController
 
       redirect_to jobs_path
     else
+      @companies = Company.order(:name)
+      set_company_address
       render :new
     end
   end
@@ -97,12 +97,12 @@ class JobsController < ApplicationController
 
   def update
     authorize @job
-    @companies = Company.order(:name)
-    set_company_address
     if @job.update_attributes(job_params)
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job
     else
+      @companies = Company.order(:name)
+      set_company_address
       render :edit
     end
   end
