@@ -84,7 +84,7 @@ RSpec.describe JobSeekerMailer, type: :mailer do
       expect(mail.from).to eq(['from@example.com'])
     end
     it 'renders the body' do
-      expect(mail).to have_body_text(/This is to let you know that you had applied to the job/)
+      expect(mail).to have_body_text(/This is to let you know that a job that you had applied to has been removed and thus is no longer active/)
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
     it 'includes link to show job' do
