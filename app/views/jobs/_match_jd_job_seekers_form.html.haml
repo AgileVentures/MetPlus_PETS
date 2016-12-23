@@ -1,4 +1,3 @@
-- opt = options_for_select(@job_seekers.all.collect { |j| [j.full_name, j.id] })
 .modal.fade#match-resumes-modal-form{ role: 'dialog', tabindex: '-1' }
   .modal-dialog{ role: 'document' }
     .modal-content
@@ -12,8 +11,8 @@
         .col-sm-12
           = form_tag(match_jd_job_seekers_job_path(@job), method: :get) do
             .input-field
-              = select_tag('job_seeker_ids[]', opt, include_blank: true,
-                id: 'job-seekers-select', multiple: true)
+              %select{ name: 'job_seeker_ids[]', include_blank: true, id: 'job-seekers-select', multiple: true }
+                = options_for_select(@job_seekers.all.collect { |j| [j.full_name, j.id] })
               = submit_tag 'Run match', id: 'run-match-btn',
                 class: 'btn btn-primary'
 = link_to 'Match your job seekers against job', '#', class: 'btn btn-primary',
