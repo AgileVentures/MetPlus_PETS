@@ -37,7 +37,7 @@ RSpec.describe Event, type: :model do
   let(:application) { job.apply job_seeker }
   let(:application_wo_cp) { job_wo_cp.apply job_seeker }
   let(:application_diff_jd) do
-    app = job_wo_cp.apply job_seeker
+    app = job.apply job_seeker
     app.job_developer = job_developer1
     app
   end
@@ -166,20 +166,32 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger)
           .with('pusher_control',
                 'job_applied_by_other_job_developer',
-                job_id:  job_wo_cp.id,
+                job_id:  job.id,
                 js_user_id: job_seeker.user.id,
                 jd_id: job_developer1.id,
                 jd_name: job_developer1.full_name(last_name_first: false))
       end
 
-      it 'sends event notification email to Primary Job Developer' do
-        expect { Event.create(:JD_APPLY, application_diff_jd) }
-          .to change(all_emails, :count).by(+3)
-      end
-
       it 'creates one task' do
         expect { Event.create(:JD_APPLY, application_diff_jd) }
           .to change(Task, :count).by(+1)
+      end
+
+      it 'sends email to the JS, Company Person and the Primary JD' do
+        expect { Event.create(:JD_APPLY, application_diff_jd) }
+          .to change(all_emails, :count).by(+4)
+      end
+
+      it 'triggers a Pusher message to Company Person' do
+        Event.create(:JD_APPLY, application_diff_jd)
+        expect(Pusher).to have_received(:trigger).with(
+          'pusher_control',
+          'jobseeker_applied',
+          job_id:  job.id,
+          js_id:   job_seeker.id,
+          js_name: job_seeker.full_name(last_name_first: false),
+          notify_list: [company_person.user.id]
+        )
       end
     end
 
