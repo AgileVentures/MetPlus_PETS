@@ -58,6 +58,6 @@ class AgencyMailer < ApplicationMailer
                              template = 'agency_notification')
     @obj      = obj
     @obj_type = obj_type
-    mail to: email_list, template_name: template
+    mail(to: email_list, from: ENV['NOTIFICATION_EMAIL'], template_name: template)
   end
 end
