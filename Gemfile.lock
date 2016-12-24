@@ -57,9 +57,9 @@ GEM
     bootstrap-will_paginate (0.0.10)
       will_paginate
     builder (3.2.2)
-    bullet (5.0.0)
+    bullet (5.4.3)
       activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.9.0)
+      uniform_notifier (~> 1.10.0)
     byebug (8.2.1)
     capybara (2.5.0)
       mime-types (>= 1.16)
@@ -320,7 +320,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
-    uniform_notifier (1.9.0)
+    uniform_notifier (1.10.0)
     warden (1.2.4)
       rack (>= 1.0)
     web-console (2.2.1)

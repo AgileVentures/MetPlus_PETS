@@ -140,6 +140,24 @@ class JobSeekersController < ApplicationController
     end
   end
 
+  def download_resume
+    job_seeker = JobSeeker.find(params[:id])
+    authorize job_seeker
+    resume = Resume.find(params[:resume_id])
+    resume_file = ResumeCruncher.download_resume(resume.id)
+    raise 'Resume not found in Cruncher' if resume_file.nil?
+    send_data resume_file.open.read, filename: resume.file_name
+
+  rescue RuntimeError => e
+    flash[:alert] = "Error: #{e}"
+    redirect_back_or_default
+  ensure
+    if resume_file
+      resume_file.close
+      resume_file.unlink
+    end
+  end
+
   private
 
   def form_params
