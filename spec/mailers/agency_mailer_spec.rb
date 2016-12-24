@@ -14,7 +14,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job seeker registered'
       expect(mail.to).to eq([agency_person.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail)
@@ -38,7 +38,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Company registered'
       expect(mail.to).to eq([agency_person.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail)
@@ -78,7 +78,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job seeker applied'
       expect(mail.to).to eq([agency_person.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text('A job seeker has applied to this job:')
@@ -106,7 +106,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job application accepted'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text('A job application is accepted:')
@@ -131,7 +131,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job application rejected'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text('A job application is rejected:')
@@ -153,7 +153,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job seeker assigned jd'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text('A job seeker has been assigned ' \
@@ -176,7 +176,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job seeker assigned cm'
       expect(mail.to).to eq([case_manager.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text('A job seeker has been assigned ' \
@@ -204,7 +204,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job posted'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text(/A new job \(\n.*#{job.title}.*\n\)/)
@@ -229,7 +229,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job revoked'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text(/A job \(\n.*#{Regexp.quote(job.title)}.*\n\) has been revoked for company: #{Regexp.quote(job.company.name)}\./)
@@ -261,7 +261,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job applied by other job developer'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
@@ -295,7 +295,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Company interest in job seeker'
       expect(mail.to).to eq([job_developer.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text(company_person.full_name(last_name_first: false))
