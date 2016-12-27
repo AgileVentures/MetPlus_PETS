@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe Skill, type: :model do
   describe 'Fixtures' do
@@ -28,5 +29,24 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :name }
     it { is_expected.to have_db_column :description }
+    it { is_expected.to have_db_column :jobs_count }
+  end
+
+  describe 'counter_cache' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    it 'increments jobs_count when a new row is created in job_skill table' do
+      waiter = FactoryGirl.create(:job)
+      phone_operator = FactoryGirl.create(:job)
+      speak_english = FactoryGirl.create(:skill)
+      JobSkill.create(job: waiter, skill: speak_english, min_years: 0, max_years: 10)
+      JobSkill.create(job: phone_operator, skill: speak_english, min_years: 0, 
+                      max_years: 10)
+      expect(speak_english.jobs_count).to eql 2
+      expect(speak_english.jobs_count).to eql speak_english.jobs.count
+    end
   end
 end
