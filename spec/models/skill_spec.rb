@@ -14,7 +14,7 @@ RSpec.describe Skill, type: :model do
   end
 
   describe 'Validations' do
-    subject {FactoryGirl.build(:skill)}
+    subject { FactoryGirl.build(:skill) }
 
     describe 'Name' do
       it { is_expected.to validate_presence_of(:name) }
@@ -43,7 +43,7 @@ RSpec.describe Skill, type: :model do
       phone_operator = FactoryGirl.create(:job)
       speak_english = FactoryGirl.create(:skill)
       JobSkill.create(job: waiter, skill: speak_english, min_years: 0, max_years: 10)
-      JobSkill.create(job: phone_operator, skill: speak_english, min_years: 0, 
+      JobSkill.create(job: phone_operator, skill: speak_english, min_years: 0,
                       max_years: 10)
       expect(speak_english.jobs_count).to eql 2
       expect(speak_english.jobs_count).to eql speak_english.jobs.count
