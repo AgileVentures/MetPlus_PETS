@@ -31,9 +31,9 @@
 # Ignore application configuration
 /config/application.yml
 
-
 # Ignore Editor files
 .idea/*
 
+/spec/examples.txt
 
 .DS_Store
