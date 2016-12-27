@@ -184,7 +184,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
         end
 
         it 'sets flash message' do
-          expect(flash[:notice]).to eq 'Your profile was updated successfully.'
+          expect(flash[:notice]).to eq 'Your profile was updated successfully.' \
+          ' Any change to your email will be applied after confirmation.'
         end
         it 'returns redirect status' do
           expect(response).to have_http_status(:redirect)
@@ -226,7 +227,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
           expect(@company_person.encrypted_password).to eq @password
         end
         it 'sets flash message' do
-          expect(flash[:notice]).to eq 'Your profile was updated successfully.'
+          expect(flash[:notice]).to eq 'Your profile was updated successfully.' \
+          ' Any change to your email will be applied after confirmation.'
         end
         it 'returns redirect status' do
           expect(response).to have_http_status(:redirect)

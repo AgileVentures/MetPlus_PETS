@@ -2,15 +2,9 @@
 
 %p
   - if (inviter = @resource.invited_by.actable).class == AgencyPerson
-    = t("devise.mailer.invitation_instructions.admin_invited_you", org: inviter.agency.name)
-    %br/
-    %br/
-    = t("devise.mailer.invitation_instructions.why_join_agency", org: inviter.agency.name)
+    =t("Please confirm your changed account email through the link below:").html_safe
   - else
-    = t("devise.mailer.invitation_instructions.admin_invited_you", org: inviter.company.name)
-    %br/
-    %br/
-    = t("devise.mailer.invitation_instructions.why_join_company", org: inviter.company.name)
+    =t("Please confirm your registration through the link below:").html_safe
 
 %p
   = link_to t("devise.mailer.invitation_instructions.accept"),            |
