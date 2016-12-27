@@ -102,7 +102,7 @@ Feature: Company Person
     And I should see "John"
     And I fill in "First Name" with "Tom"
     Then I click "Update Company person" button
-    And I should see "Your profile was updated successfully."
+    And I should see "Your profile was updated successfully. Any change to your email will be applied after confirmation."
     And I should not see "John"
     And I should see "Tom"
 
@@ -114,7 +114,7 @@ Feature: Company Person
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
     Then I click "Update Company person" button
-    And I should see "Your profile was updated successfully."
+    And I should see "Your profile was updated successfully. Any change to your email will be applied after confirmation."
     And I should not see "Jane"
     And I should see "Mary"
 
@@ -136,7 +136,7 @@ Feature: Company Person
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
     Then I click "Update Company person" button
-    And I should see "Your profile was updated successfully."
+    And I should see "Your profile was updated successfully. Any change to your email will be applied after confirmation."
     And I should not see "Jane"
     And I should see "Mary"
 
@@ -149,7 +149,7 @@ Feature: Company Person
     And I should see "John"
     And I fill in "First Name" with "Tom"
     Then I click "Update Company person" button
-    And I should see "Your profile was updated successfully."
+    And I should see "Your profile was updated successfully. Any change to your email will be applied after confirmation."
     And I should not see "John"
     And I should see "Tom"
 
@@ -175,7 +175,7 @@ Feature: Company Person
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
     And I should be on the Company Person 'jane@widgets.com' Home page
-    And I should see "Your profile was updated successfully."
+    And I should see "Your profile was updated successfully. Any change to your email will be applied after confirmation."
 
   @javascript
   Scenario: verify people listing in home page
