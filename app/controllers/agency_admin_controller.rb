@@ -33,7 +33,6 @@ class AgencyAdminController < ApplicationController
   end
 
   def job_properties
-
     check_authorization(Agency.this_agency(current_user))
 
     if request.xhr?
