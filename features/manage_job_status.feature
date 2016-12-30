@@ -15,13 +15,13 @@ Background: data is added to database
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
     | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
     | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
   Given the following jobseeker exist:
@@ -30,14 +30,14 @@ Background: data is added to database
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | ca@widgets.com | revoked |
-    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
-    | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | ca@widgets.com | active  |
+    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | carter@ymail.com.com | revoked |
+    | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | carter@ymail.com.com | active  |
+    | hr associate | KRK03K         | Day   | true     | internship  | Widgets Inc. | carter@ymail.com.com | active  |
 
   @javascript
   Scenario: company person revoke a job
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     And I visit the jobs page
     And I should not see "Revoked" next to "hr manager"
     But I should see "revoke" button for "hr manager"
