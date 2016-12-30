@@ -40,7 +40,7 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com           |
     | Mime       | tommy1@gmail.com           |
 
-   
+
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | vijaya.karumudi@gmail.com |
@@ -210,6 +210,7 @@ Scenario: Job Developer sees job seeker's job applications
 Scenario: Download resume file_name as a Company Admin
   Given I am on the home page
   And I am logged in as "carter@ymail.com.com" with password "qwerty123"
+  And I wait 1 second
   And I should see "SW dev"
   When I click the "SW dev" link
   And I wait 1 second
@@ -218,9 +219,9 @@ Scenario: Download resume file_name as a Company Admin
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
   Then I should get a download with the filename "Janitor-Resume.doc"
-  
-  
-  @selenium 
+
+
+  @selenium
 
   @javascript
   Scenario: non-admin and non-agency person trying to access to admin home page
