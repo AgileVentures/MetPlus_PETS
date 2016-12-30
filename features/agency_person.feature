@@ -84,6 +84,7 @@ Given the following agency relations exist:
     Given I am on the home page
     And I login as "jane-dev@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'jane-dev@metplus.org' Home page
+    And I wait 2 seconds
     And I should see "Your Open Tasks"
     And I should see "Job Seeker has no assigned Job Developer"
     And I should not see "Job Seeker has no assigned Case Manager"
@@ -205,5 +206,5 @@ Given the following agency relations exist:
     Given I am on the home page
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
-    Then I click the first "Seeker, John" link 
+    Then I click the first "Seeker, John" link
     And I should not see "Edit Job Seeker"
