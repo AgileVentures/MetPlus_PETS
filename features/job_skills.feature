@@ -9,12 +9,12 @@ Background: adding job to database
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following job skills exist:
     | name       | description                            |
@@ -24,14 +24,14 @@ Background: adding job to database
 
   Given the following jobs exist:
     | title | description | company      | creator          | shift   | skills         | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@widgets.com | Day     | Skill1, Skill2 | city1 |
-    | Job2  | About job2. | Widgets Inc. | ca@widgets.com   | Day     | Skill3         | city2 |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com | Day     | Skill1, Skill2 | city1 |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com.com   | Day     | Skill3         | city2 |
 
 
 @javascript
 Scenario: Create job with associated skills
   Given I am on the home page
-	And I am logged in as "ca@widgets.com" with password "qwerty123"
+	And I am logged in as "carter@ymail.com.com" with password "qwerty123"
 	When I click the "Post jobs" link
 	And I fill in the fields:
 		| Title                  | cashier|
@@ -60,7 +60,7 @@ Scenario: Create job with associated skills
 @javascript
 Scenario: Edit job and change associated skills
   Given I am on the home page
-	And I am logged in as "ca@widgets.com" with password "qwerty123"
+	And I am logged in as "carter@ymail.com.com" with password "qwerty123"
   And I click the "Jobs" link
   Then I click the "Job1" link
   And I wait 1 second

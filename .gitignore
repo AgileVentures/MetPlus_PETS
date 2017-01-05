@@ -31,9 +31,11 @@
 # Ignore application configuration
 /config/application.yml
 
+# See comment in spec_helper.rb
+/spec/examples.txt
+
 # Ignore Editor files
 .idea/*
 
-/spec/examples.txt
 
 .DS_Store
