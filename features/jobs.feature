@@ -14,16 +14,16 @@ Background: adding job to database
 
   Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
   | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | corp@gadgets.com | 12-3456791 | active |
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
   | title         | company_job_id  | shift  | fulltime | description | company      | creator          |
-  | software dev  | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@widgets.com |
+  | software dev  | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com |
 
   Given the following company addresses exist:
   | company      | street       | city    | state    | zipcode |
@@ -37,7 +37,7 @@ Background: adding job to database
 @selenium
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
-  And I login as "jane@widgets.com" with password "qwerty123"
+  And I login as "jane@ymail.com" with password "qwerty123"
   When I click the "Post jobs" link
   And I wait 1 second
   And I fill in the fields:
@@ -62,7 +62,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Then I should see "cab-driver has been updated successfully."
   And I should verify the change of title "cab-driver", shift "Day" and jobId "KRT123"
 
-  Then I go to the Company Person 'jane@widgets.com' Home page
+  Then I go to the Company Person 'jane@ymail.com' Home page
   And I click the "software dev" link
   And I click the "Edit Job" link
   And  I fill in the fields:
@@ -141,8 +141,8 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
 @javascript
 Scenario: Cancel out of job edit
   Given I am on the home page
-  And I login as "jane@widgets.com" with password "qwerty123"
-  Then I should be on the Company Person 'jane@widgets.com' Home page
+  And I login as "jane@ymail.com" with password "qwerty123"
+  Then I should be on the Company Person 'jane@ymail.com' Home page
   And I click the "software dev" link
   And I wait 1 second
   And I should see "Revoke"

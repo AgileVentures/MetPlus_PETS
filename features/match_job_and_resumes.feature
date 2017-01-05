@@ -34,18 +34,18 @@ Feature: Match a Job to a Job Seeker's Résumé
 
     Given the following companies exist:
      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
     Given the following company people exist:
      | company      | role  | first_name | last_name | email            | password  | phone        |
-     | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
+     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
      | title            | company_job_id| shift| fulltime | description| company      | creator        |
-     | ruby developer   | KRK01         | Day  | true     | internship | Widgets Inc. | ca@widgets.com |
-     | java developer   | KRK02         | Day  | true     | internship | Widgets Inc. | ca@widgets.com |
-     | c++ developer    | KRK03         | Day  | true     | internship | Widgets Inc. | ca@widgets.com |
-     | node developer   | KRK04         | Day  | true     | internship | Widgets Inc. | ca@widgets.com |
+     | ruby developer   | KRK01         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
+     | java developer   | KRK02         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
+     | c++ developer    | KRK03         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
+     | node developer   | KRK04         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
 
     Given the following job applications exist:
      | job title      | job seeker            |
@@ -90,7 +90,7 @@ Feature: Match a Job to a Job Seeker's Résumé
   @javascript
   Scenario: Match job to job seekers
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     Then I should see "Signed in successfully"
     Then I click the "ruby developer" link
     And I wait 1 second
@@ -104,7 +104,7 @@ Feature: Match a Job to a Job Seeker's Résumé
   @javascript
   Scenario: Contact job developer for job seeker
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     Then I click the "ruby developer" link
     And I wait 1 second
     Then I click the "Match Job Seekers" link
