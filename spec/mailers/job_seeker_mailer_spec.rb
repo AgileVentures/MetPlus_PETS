@@ -11,9 +11,9 @@ RSpec.describe JobSeekerMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job developer assigned'
-      expect(mail.to).to eq(["#{job_seeker.email}"])
+      expect(mail.to).to eq([job_seeker.email.to_s])
       expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
-     end
+    end
     it 'renders the body' do
       expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
       expect(mail).to have_body_text("has been assigned to you as your #{agency.name} Job Developer.")
@@ -29,7 +29,7 @@ RSpec.describe JobSeekerMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.subject).to eq 'Case manager assigned'
-      expect(mail.to).to eq(["#{job_seeker.email}"])
+      expect(mail.to).to eq([job_seeker.email.to_s])
       expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
@@ -52,7 +52,7 @@ RSpec.describe JobSeekerMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job applied by job developer'
-      expect(mail.to).to eq(["#{job_seeker.email}"])
+      expect(mail.to).to eq([job_seeker.email.to_s])
       expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
