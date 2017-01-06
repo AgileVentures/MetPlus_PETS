@@ -13,12 +13,12 @@ Feature: Reject a job application
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CC    | Cicil      | Smith     | cicil@widgets.com | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CA    | Cane       | Daniel    | cane@widgets.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CC    | Cicil      | Smith     | cicil@ymail.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
 
     Given the following jobseeker exist:
       | first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
@@ -33,7 +33,7 @@ Feature: Reject a job application
 
     Given the following jobs exist:
       | title        | company_job_id | shift | fulltime | description | company      | creator          |
-      | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com |
+      | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@ymail.com |
 
     Given the following job applications exist:
       | job title 	 | job seeker 	 | status 			|
@@ -44,7 +44,7 @@ Feature: Reject a job application
   @javascript
   Scenario: company contact reject a job application
     Given I am on the home page
-    And I login as "cicil@widgets.com" with password "qwerty123"
+    And I login as "cicil@ymail.com" with password "qwerty123"
     And I wait 1 second
     Then I click the "hr manager" link
     And I should see "3" active applications for "hr manager"
@@ -60,7 +60,7 @@ Feature: Reject a job application
   @javascript
   Scenario: company admin reject a job application
     Given I am on the home page
-    And I login as "cane@widgets.com" with password "qwerty123"
+    And I login as "cane@ymail.com" with password "qwerty123"
     And I wait 1 second
     Then I click the "hr manager" link
     And I should see "3" active applications for "hr manager"
@@ -82,7 +82,7 @@ Feature: Reject a job application
 
     When I am in Company Admin's browser
     Given I am on the home page
-    And I login as "cane@widgets.com" with password "qwerty123"
+    And I login as "cane@ymail.com" with password "qwerty123"
     Then I click the "hr manager" link
     And I reject "john@mail.com" application for "hr manager"
     And I input "Not enough experience" as the reason for rejection

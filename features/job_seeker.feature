@@ -16,20 +16,20 @@ Background: seed data added to database
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
     | title   | shift  | fulltime | description | company      | creator        |
-    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | ca@widgets.com |
-    | Trucker | Day    | true     | drive truck | Widgets Inc. | ca@widgets.com |
-    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | ca@widgets.com |
-    | Clerk   | Day    | true     | service     | Widgets Inc. | ca@widgets.com |
-    | Mime    | Day    | true     | freeze      | Widgets Inc. | ca@widgets.com |
+    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | carter@ymail.com.com |
+    | Trucker | Day    | true     | drive truck | Widgets Inc. | carter@ymail.com.com |
+    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | carter@ymail.com.com |
+    | Clerk   | Day    | true     | service     | Widgets Inc. | carter@ymail.com.com |
+    | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com.com |
 
   Given the following job applications exist:
     | job title  | job seeker                |
@@ -40,7 +40,7 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com           |
     | Mime       | tommy1@gmail.com           |
 
-   
+
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | vijaya.karumudi@gmail.com |
@@ -131,11 +131,11 @@ Scenario: job seeker finds new job opportunities
   And I should see "Clerk" after "Job Opportunities - New"
   When I am in Company Contact's browser
   Given I am on the home page
-  And I login as "jane@widgets.com" with password "qwerty123"
+  And I login as "jane@ymail.com" with password "qwerty123"
   And I create the following jobs
   | title          | shift   | fulltime | description       | company      | creator        |
-  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | ca@widgets.com |
-  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | ca@widgets.com |
+  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | carter@ymail.com.com |
+  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | carter@ymail.com.com |
   When I am in Job Seeker's browser
   And I reload the page
   And I wait 1 second
@@ -209,7 +209,8 @@ Scenario: Job Developer sees job seeker's job applications
 @javascript
 Scenario: Download resume file_name as a Company Admin
   Given I am on the home page
-  And I am logged in as "ca@widgets.com" with password "qwerty123"
+  And I am logged in as "carter@ymail.com.com" with password "qwerty123"
+  And I wait 1 second
   And I should see "SW dev"
   When I click the "SW dev" link
   And I wait 1 second
@@ -218,9 +219,9 @@ Scenario: Download resume file_name as a Company Admin
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
   Then I should get a download with the filename "Janitor-Resume.doc"
-  
-  
-  @selenium 
+
+
+  @selenium
 
   @javascript
   Scenario: non-admin and non-agency person trying to access to admin home page

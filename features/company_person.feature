@@ -27,7 +27,7 @@ Feature: Company Person
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
       | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
 
     Given the following company addresses exist:
@@ -39,18 +39,18 @@ Feature: Company Person
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
       | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
     Given the following tasks exist:
       | task_type          | owner                | deferred_date | status      | targets               |
-      | job_application    | jane@widgets.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+      | job_application    | jane@ymail.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
 
   Scenario: company admin edits company info
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     And I should see "Edit Company Info"
     Then I click the "Edit Company Info" link
     Then I should see "Edit Company"
@@ -61,7 +61,7 @@ Feature: Company Person
   @javascript
   Scenario: company admin can edit and delete company person
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     And I wait 1 second
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
@@ -70,7 +70,7 @@ Feature: Company Person
   @javascript
   Scenario: company admin can edit but not delete himself
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     And I wait 1 second
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
@@ -90,14 +90,14 @@ Feature: Company Person
 
   Scenario: company contact cannot edit company nor invite person_type
     Given I am on the home page
-    And I login as "jane@widgets.com" with password "qwerty123"
+    And I login as "jane@ymail.com" with password "qwerty123"
     And I should not see "Edit Company Info"
     And I should not see "Invite Colleague"
 
   Scenario: company admin login and edit profile from home page
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'ca@widgets.com' Home page
+    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I should be on the Company Person 'carter@ymail.com.com' Home page
     Then I press "edit-profile"
     And I should see "John"
     And I fill in "First Name" with "Tom"
@@ -108,8 +108,8 @@ Feature: Company Person
 
   Scenario: company contact login and edit profile from home page
     Given I am on the home page
-    And I login as "jane@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'jane@widgets.com' Home page
+    And I login as "jane@ymail.com" with password "qwerty123"
+    And I should be on the Company Person 'jane@ymail.com' Home page
     Then I press "edit-profile"
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
@@ -120,19 +120,19 @@ Feature: Company Person
 
   Scenario: company contact cancel out of edit profile
     Given I am on the home page
-    And I login as "jane@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'jane@widgets.com' Home page
+    And I login as "jane@ymail.com" with password "qwerty123"
+    And I should be on the Company Person 'jane@ymail.com' Home page
     Then I press "edit-profile"
     And I should see "Update Your Profile"
     Then I click the "Cancel" link
-    Then I should be on the Company Person 'jane@widgets.com' Home page
+    Then I should be on the Company Person 'jane@ymail.com' Home page
 
   Scenario: company contact login and edit profile from name
     Given I am on the home page
-    And I login as "jane@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'jane@widgets.com' Home page
+    And I login as "jane@ymail.com" with password "qwerty123"
+    And I should be on the Company Person 'jane@ymail.com' Home page
     Then I press "Jane"
-    And I am on the 'jane@widgets.com' edit profile page
+    And I am on the 'jane@ymail.com' edit profile page
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
     Then I click "Update Company person" button
@@ -142,10 +142,10 @@ Feature: Company Person
 
   Scenario: company admin login and edit profile from name
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'ca@widgets.com' Home page
+    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I should be on the Company Person 'carter@ymail.com.com' Home page
     Then I press "John"
-    And I am on the 'ca@widgets.com' edit profile page
+    And I am on the 'carter@ymail.com.com' edit profile page
     And I should see "John"
     And I fill in "First Name" with "Tom"
     Then I click "Update Company person" button
@@ -155,33 +155,34 @@ Feature: Company Person
 
   Scenario: company admin can update address
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     Then I press "edit-profile"
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
-    And I should be on the Company person 'ca@widgets.com' show page
+    And I should be on the Company person 'carter@ymail.com.com' show page
     And I should see "12 Main Street Detroit, Michigan 02034"
 
   Scenario: company contact can update address
     Given I am on the home page
-    And I login as "jane@widgets.com" with password "qwerty123"
+    And I login as "jane@ymail.com" with password "qwerty123"
     Then I press "edit-profile"
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
     Then I click "Update Company person" button
-    And I should be on the Company Person 'jane@widgets.com' Home page
+    And I should be on the Company Person 'jane@ymail.com' Home page
     And I should see "Your profile was updated successfully. Any change to your email will be applied after confirmation."
+    And I should see "Your profile was updated successfully."
 
   @javascript
   Scenario: verify people listing in home page
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'ca@widgets.com' Home page
+    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I should be on the Company Person 'carter@ymail.com.com' Home page
     And I wait 2 seconds
     And I should see "Smith, John"
     And I should see "Smith, Jane"
@@ -190,7 +191,7 @@ Feature: Company Person
   @javascript
   Scenario: Company Contact with tasks on home page
     Given I am on the home page
-    And I login as "jane@widgets.com" with password "qwerty123"
+    And I login as "jane@ymail.com" with password "qwerty123"
     And I wait 1 second
     And I should see "Your Open Tasks"
     And I should see "Review job application"
