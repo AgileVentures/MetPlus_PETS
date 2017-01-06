@@ -5,7 +5,6 @@ class JobApplicationsController < ApplicationController
   before_action :find_application, except: :list
 
   def accept
-    byebug
     if @job_application.active?
       @job_application.accept
       @job_dev = @job_application.job_seeker.job_developer
