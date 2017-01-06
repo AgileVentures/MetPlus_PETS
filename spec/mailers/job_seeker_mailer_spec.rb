@@ -81,7 +81,7 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Job revoked'
       expect(mail.to).to eq([job_seeker.email.to_s])
-      expect(mail.from).to eq(['from@example.com'])
+      expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
       expect(mail).to have_body_text(/This is to let you know that a job that you had applied to has been removed and thus is no longer active/)
