@@ -1,6 +1,5 @@
 class EmailValidator < ActiveModel::EachValidator
   def validate_each(object, attribute, value)
-    byebug
     valid_check = EmailValidateService.validate_email(value)
 
     if valid_check[:status] == 'SUCCESS'
