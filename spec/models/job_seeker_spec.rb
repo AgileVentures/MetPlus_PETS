@@ -22,9 +22,9 @@ describe JobSeeker, type: :model do
     it { is_expected.to have_many(:jobs).through(:job_applications) }
     it { is_expected.to belong_to(:address) }
     it { is_expected.to belong_to(:job_seeker_status) }
-    time = Time.now
-    it { should allow_value('1987', time.year - 100, '2000', '2014').for(:year_of_birth) }
-    it { should_not allow_value(time.year - 101, '899', '1890', 'salem').for(:year_of_birth) }
+
+    it { should allow_value('1987', '2000', '2014').for(:year_of_birth) }
+    it { should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth) }
   end
 
   describe 'job applications' do
