@@ -1,29 +1,8 @@
-And(/^I click "([^"]*)" link to job applications index page$/) do |job_title|
-  job = Job.find_by(title: job_title.to_s)
-  find("a[href='/jobs/#{job.id}/applications']").click
-end
-
-And(/^I click "([^"]*)" link to job show page$/) do |job_title|
-  job = Job.find_by(title: job_title.to_s)
-  find("#applications-job_seeker a[href='/jobs/#{job.id}']").click
-end
-
-And(/^I click "([^"]*)" link to "([^"]*)'s" job application show page$/) do |email, _js_name|
+And(/^I (accept|reject) "([^"]*)" application for "([^"]*)"$/) do |action, email, job|
+  job = Job.find_by(title: job.to_s)
   job_seeker = User.find_by_email(email).actable
-  @job_app = JobApplication.find_by(job_seeker: job_seeker)
-  find("a[href='/job_applications/#{@job_app.id}']").click
-end
-
-And(/^I accept "([^"]*)" application$/) do |email|
-  job_seeker = User.find_by_email(email).actable
-  @job_app = JobApplication.find_by(job_seeker: job_seeker)
-  find("#applications-#{@job_app.id} #accept_link").click
-end
-
-And(/^I reject "([^"]*)" application$/) do |email|
-  job_seeker = User.find_by_email(email).actable
-  @job_app = JobApplication.find_by(job_seeker: job_seeker)
-  find("#applications-#{@job_app.id} #reject_link").click
+  @job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
+  find("#applications-#{@job_app.id} ##{action}_link").click
 end
 
 And(/^I should see an "([^"]*)" confirmation$/) do |action|
@@ -38,33 +17,33 @@ And(/^I click the "([^"]*)" confirmation$/) do |action|
   find("a[href='/job_applications/#{@job_app.id}/#{action.downcase}']").click
 end
 
-And(/^I should see "([^"]*)" active applications for the job$/) do |count|
-  @app_ids = JobApplication.select(:id).where(status: 'active')
-  expect(@app_ids.count).to eq count.to_i
-end
-
-And(/^I should see "([^"]*)" application changes to accepted$/) do |email|
-  job_seeker = User.find_by_email(email).actable
-  @app_accepted = JobApplication.find_by(job_seeker: job_seeker)
-  within("#applications-#{@app_accepted.id}") do
-    expect(page).to have_content('accepted')
+And(/^I\sshould\ssee\s"([^"]*)"\sactive\sapplications\s(for|by)\s
+    "([^"]*)"$/x) do |count, created, source|
+  if created == 'for'
+    job = Job.find_by(title: source.to_s)
+    app_ids = JobApplication.select(:id).where(status: 'active', job: job)
+  else
+    job_seeker = User.find_by_email(source).actable
+    app_ids = JobApplication.select(:id).where(status: 'active', job_seeker: job_seeker)
   end
+  expect(app_ids.count).to eq count.to_i
 end
 
-And(/^I should see "([^"]*)" application changes to not_accepted$/) do |email|
+And(/I\sshould\ssee\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\schanges\sto\s
+  (accepted|not_accepted)$/x) do |email, job, state|
+  job = Job.find_by(title: job.to_s)
   job_seeker = User.find_by_email(email).actable
-  @app_rejected = JobApplication.find_by(job_seeker: job_seeker)
-  within("#applications-#{@app_rejected.id}") do
-    expect(page).to have_content('not_accepted')
-  end
+  app = JobApplication.find_by(job_seeker: job_seeker, job: job)
+  within("#applications-#{app.id}") { expect(page).to have_content(state) }
 end
 
-# this step can only be used in a scenario that includes
-# steps line:35 and line:42 which define @app_ids, @app_accepted
-And(/^other applications change to not accepted$/) do
-  @app_ids.each do |app|
+And(/^other applications for "([^"]*)" change to not accepted$/) do |job|
+  job = Job.find_by(title: job.to_s)
+  app_ids = JobApplication.select(:id).where.not(status: 'active', job: job)
+  app_accepted = JobApplication.select(:id).where(status: 'active', job: job)
+  app_ids.each do |app|
     expect(page.find("#applications-#{app.id}"))
-      .to have_content('not_accepted') unless app.id == @app_accepted.id
+      .to have_content('not_accepted') unless app.id == app_accepted.id
   end
 end
 
@@ -76,32 +55,23 @@ Then(/^I should( not)? see(?: an)? "([^"]*)" link$/) do |not_see, action|
   end
 end
 
-And(/^I should see "([^"]*)" application is listed first$/) do |email|
+And(/^I should see "([^"]*)" application is listed (first|last)$/) do |email, position|
   job_seeker = User.find_by_email(email).actable
-  within('.pagination-div > table > tbody > tr:first-child') do
+  within(".pagination-div > table > tbody > tr:#{position}-child") do
     expect(page).to have_content(job_seeker.first_name.to_s)
   end
 end
 
-And(/^I should see "([^"]*)" application is listed last$/) do |email|
-  job_seeker = User.find_by_email(email).actable
-  within('.pagination-div > table > tbody > tr:last-child') do
-    expect(page).to have_content(job_seeker.first_name.to_s)
-  end
-end
-
-And(/^I should see "([^"]*)" job changes to status filled/) do |_job_title|
+And(/^I should see "([^"]*)" job changes to status filled/) do |job|
+  find('#job-title') { expect(page).to have_content(job) }
   find('#job-status') { expect(page).to have_content('filled') }
 end
 
-And(/^I should see my application for "([^"]*)" show status "([^"]*)"$/) do |job_title, status|
+And(/^I\sshould\ssee\smy\sapplication\sfor\s"([^"]*)"\sshow\sstatus\s
+  "([^"]*)"$/x) do |job_title, status|
   job = Job.find_by(title: job_title.to_s)
   job_app = JobApplication.find_by(job: job)
   expect(page.find("#applications-#{job_app.id}")).to have_content(status.to_s)
-end
-
-And(/^I am returned to "([^"]*)" job application index page$/) do |job_title|
-  expect(page.find('#job-title')).to have_content(job_title.to_s)
 end
 
 And(/^I should see "(?:[^"]*)" show status "([^"]*)"$/) do |status|
@@ -118,14 +88,3 @@ And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
 
-Then(/^I should get a download file for resume "(.*?)"$/) do |_resume|
-  page.driver.response.headers['Content-Disposition']
-      .should include("filename=\"#{filename}\"")
-end
-
-Then(/^I should get a download with the filename "([^\"]*)"$/) do |filename|
-  expect(page.driver.response_headers['Content-Disposition'])
-    .to include("attachment; filename=\"#{filename}\"")
-  expect(page.driver.response_headers['Content-Type'])
-    .to eq 'application/octet-stream'
-end

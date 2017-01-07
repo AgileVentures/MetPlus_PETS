@@ -31,9 +31,8 @@ class JobSeekersController < ApplicationController
     end
 
     if models_saved
-      flash[:notice] = 'A message with a confirmation and link has been sent to
-      your email address. ' \
-                       'Please follow the link to activate your account.'
+      flash[:notice] = 'A message with a confirmation and link has been sent '\
+      'to your email address. Please follow the link to activate your account.'
       redirect_to root_path
     else
       render 'new'
@@ -95,9 +94,9 @@ class JobSeekersController < ApplicationController
     @jobseeker = JobSeeker.find(params[:id])
     @recent_jobs_type = 'recent-jobs'
     authorize @jobseeker
-    @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at).paginate(page: params[:page], per_page: 5)
-    @js_last_sign_in = @jobseeker.last_sign_in_at
-    @application_type = 'job_seeker'
+    @newjobs = Job.new_jobs(@jobseeker.last_sign_in_at)
+                  .paginate(page: params[:page], per_page: 5)
+    @application_type = 'job_seeker-default'
   end
 
   def index
@@ -108,7 +107,7 @@ class JobSeekersController < ApplicationController
   def show
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
-    @application_type = 'job_seeker'
+    @offer_download = pets_user.is_a?(CompanyPerson)
   end
 
   def preview_info
@@ -140,6 +139,24 @@ class JobSeekersController < ApplicationController
       @list_jobs = Job.all.where(id: @star_rating.keys).includes(:company)
                       .sort { |x, y| @star_rating[y.id] <=> @star_rating[x.id] }
                       .paginate(page: params[:jobs_page], per_page: 20)
+    end
+  end
+
+  def download_resume
+    job_seeker = JobSeeker.find(params[:id])
+    authorize job_seeker
+    resume = Resume.find(params[:resume_id])
+    resume_file = ResumeCruncher.download_resume(resume.id)
+    raise 'Resume not found in Cruncher' if resume_file.nil?
+    send_data resume_file.open.read, filename: resume.file_name
+
+  rescue RuntimeError => e
+    flash[:alert] = "Error: #{e}"
+    redirect_back_or_default
+  ensure
+    if resume_file
+      resume_file.close
+      resume_file.unlink
     end
   end
 

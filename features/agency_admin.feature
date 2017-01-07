@@ -31,16 +31,16 @@ Background: seed data added to database and log in as agency admim
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
     | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | corp@gadgets.com | 12-3456791 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
   | title         | company_job_id  | shift  | fulltime | description | company      | creator          | skills    |
-  | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@widgets.com | Web Research |
+  | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Given the following jobseeker exist:
   | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
@@ -261,7 +261,7 @@ Scenario: non-admin does not see 'admin' in menu
   Then I should see "Signed in successfully."
   And I should not see "Admin"
 
-@selenium
+@javascript
 Scenario: add job specialty
   And I click the "Job Properties" link
   And I click the "Add Job Specialty" button
@@ -273,7 +273,7 @@ Scenario: add job specialty
   Then I should see "Test Job Specialty"
   And I should see "Description of Test Job Specialty"
 
-@selenium
+@javascript
 Scenario: cancel add job specialty
   And I click the "Job Properties" link
   And I click the "Add Job Specialty" button
@@ -284,13 +284,13 @@ Scenario: cancel add job specialty
   Then I should not see "Test Job Specialty"
   And I should not see "Description of Test Job Specialty"
 
-@selenium
+@javascript
 Scenario: show job specialty model validation errors
   And I click the "Job Properties" link
   And I click the "Add Job Specialty" button
   And I wait 2 seconds
   And I click the "Add Specialty" button
-  And I wait 2 seconds
+  And I wait 3 seconds
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
   Then I fill in "Name:" with "Test Job Specialty"
@@ -300,13 +300,14 @@ Scenario: show job specialty model validation errors
   Then I should see "Test Job Specialty"
   And I should see "Description of Test Job Specialty"
 
-@selenium
+@javascript
 Scenario: update job specialty
   And I click the "Job Properties" link
   And I click the "Software Engineer - RoR" link
   And I wait 2 seconds
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
+  And I wait 2 second
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
@@ -314,7 +315,7 @@ Scenario: update job specialty
   Then "Update Job Specialty" should not be visible
   And I should see "Backend RoR Development"
 
-@selenium
+@javascript
 Scenario: delete job specialty
   And I click the "Job Properties" link
   And I click the link with url "/job_categories/1"
@@ -322,7 +323,7 @@ Scenario: delete job specialty
   Then I should not see "Software Engineer - RoR"
   And I should see "There are no job specialties."
 
-  @selenium
+  @javascript
   Scenario: add job skill
     And I click the "Job Properties" link
     And I click the "Add Job Skill" button
@@ -334,7 +335,7 @@ Scenario: delete job specialty
     Then I should see "Test Job Skill"
     And I should see "Description of Test Job Skill"
 
-  @selenium
+  @javascript
   Scenario: cancel add job skill
     And I click the "Job Properties" link
     And I click the "Add Job Skill" button
@@ -345,7 +346,7 @@ Scenario: delete job specialty
     Then I should not see "Test Job Skill"
     And I should not see "Description of Test Job Skill"
 
-  @selenium
+  @javascript
   Scenario: show job skill model validation errors
     And I click the "Job Properties" link
     And I click the "Add Job Skill" button
@@ -361,7 +362,7 @@ Scenario: delete job specialty
     Then I should see "Test Job Skill"
     And I should see "Description of Test Job Skill"
 
-  @selenium
+  @javascript
   Scenario: update job skill
     And I click the "Job Properties" link
     And I click the "Web Research" link
@@ -376,14 +377,14 @@ Scenario: delete job specialty
     Then "Update Job Skill" should not be visible
     And I should see "Anaytics using web data"
 
-  @selenium
+  @javascript
   Scenario: delete job skill not associated with a job
     And I click the "Job Properties" link
     And I click the link with url "/skills/2"
     And I wait 2 seconds
     Then I should not see "Visual Analysis"
 
-  @selenium
+  @javascript
   Scenario: attempt to delete job skill associated with a job
     And I click the "Job Properties" link
     And I should not see the "/skills/1" link

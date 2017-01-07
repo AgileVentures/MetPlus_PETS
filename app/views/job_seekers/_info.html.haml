@@ -1,5 +1,5 @@
 - preview_mode = false unless defined? preview_mode
-%table.table.table-hover#info_table(style='margin-top: 20px;')
+%table.table.table-hover#info_table{ style: 'margin-top: 20px;' }
   %tbody
     %tr
       %td
@@ -36,10 +36,9 @@
           &nbsp; &nbsp (updated #{time_ago_in_words(resume.created_at)} ago)
       %td
         - if offer_download
-          = button_to "Download Resume", download_resume_path(@job_application), target: '_self',
+          = button_to "Download Resume",
+            download_resume_path(@jobseeker.id, @jobseeker.resumes[0]), target: '_self',
             method: :get, class: 'btn btn-success btn-s pull-right'
-
-
     %tr
       %td
         %strong Case Manager

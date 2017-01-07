@@ -51,6 +51,12 @@ class JobSeekerPolicy < ApplicationPolicy
     user.nil? || user == record
   end
 
+  def apply?
+    # job seeker's job developer with approval from job seeker
+    # job seeker himself
+    (record.consent && record.job_developer == user) || user == record
+  end
+
   def permitted_attributes
     if user == record 
       [ :first_name,
@@ -77,5 +83,8 @@ class JobSeekerPolicy < ApplicationPolicy
       ]
     end
   end
-
+  def download_resume?
+    User.is_company_person?(user) && 
+    record.job_applications.where(job: user.company.jobs.active).exists?
+  end
 end

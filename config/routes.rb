@@ -128,12 +128,12 @@ Rails.application.routes.draw do
       as: :list_search_jobs
   get 'jobs/update_addresses'       => 'jobs#update_addresses',
       as: :update_addresses
-  get 'jobs/:id/applications_list/:application_type' =>
-                'jobs#applications_list', as: :applications_list
 
   resources :jobs do
-    get 'applications', on: :member, as: :applications
-    patch 'revoke', on: :member, as: :revoke
+    patch 'revoke',            on: :member, as: :revoke
+    get 'match_resume',        on: :member, as: :match_resume
+    get 'match_job_seekers',   on: :member, as: :match_job_seekers
+    get :notify_job_developer, on: :member, as: :notify_jd
   end
   # --------------------------------------------------------------------------
 
@@ -142,10 +142,8 @@ Rails.application.routes.draw do
         as: :accept_application
   patch 'job_applications/:id/reject' => 'job_applications#reject',
         as: :reject_application
-  get 'job_applications/:id'                 => 'job_applications#show',
+  get 'job_applications/:id' => 'job_applications#show',
       as: :application
-  get 'job_applications/:id/download_resume' => 'job_applications#download_resume',
-      as: :download_resume
   get 'job_applications/:type/:entity_id' => 'job_applications#list',
       as: :list_applications
   # --------------------------------------------------------------------------
@@ -158,6 +156,9 @@ Rails.application.routes.draw do
   end
 
   get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
+  get 'job_seekers/:id(/download_resume/:resume_id)' => 
+    'job_seekers#download_resume',
+      as: :download_resume
   # --------------------------------------------------------------------------
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -36,3 +36,54 @@ describe('Jobs', function () {
         });
     });
 });
+
+describe('Match resume and job', function() {
+  beforeEach(function () {
+    loadFixtures('jobs/job_show.html');
+    JobAndResume.match();
+    spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(PETS, 'spinner').and
+      .returnValue(jasmine.createSpyObj('spinner', ['start', 'stop']));
+  });
+
+  it('confirms user intent to perform match', function() {
+    spyOn($, 'ajax');
+    $('#match_my_resume').trigger('click');
+    expect(window.confirm).toHaveBeenCalled();
+  });
+
+  it('calls ajax for matching function', function() {
+    spyOn($, 'ajax');
+    $('#match_my_resume').trigger('click');
+    expect($.ajax).toHaveBeenCalled();
+  });
+
+  it('calls correct URL with ajax', function () {
+    spyOn($, 'ajax');
+    $('#match_my_resume').trigger('click');
+    expect($.ajax).toHaveBeenCalled();
+    expect($.ajax.calls.mostRecent().args[0].url).
+                    toEqual('/jobs/152/match_resume?job_seeker_id=201');
+  });
+
+  it('sets stars html on success', function () {
+    spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+      var data = {'status': 200, 'stars_html': 'div for stars'};
+      ajaxArgs.success(data);
+    });
+    spyOn($('#resumeMatchModal'), 'modal');
+    $('#match_my_resume').trigger('click');
+    expect($('#resumeMatchScore').html()).toEqual('div for stars');
+  });
+
+  it('shows error message if resource not found', function () {
+    spyOn(Notification, 'error_notification');
+    spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+      var data = {'status': 404, 'message': 'cannot find resource'};
+      ajaxArgs.success(data);
+    });
+    $('#match_my_resume').trigger('click');
+    expect(Notification.error_notification).
+            toHaveBeenCalledWith('An error occurred: cannot find resource');
+  });
+});

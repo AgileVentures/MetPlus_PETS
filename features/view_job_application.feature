@@ -9,11 +9,11 @@ Background: data is added to database
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
   	| company      | role  | first_name | last_name | email            | password  | phone        |
-  	| Widgets Inc. | CA    | Cane       | Daniel    | cane@widgets.com | qwerty123 | 555-222-3334 |
+  	| Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobseeker exist:
   	| first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
@@ -22,8 +22,8 @@ Background: data is added to database
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | cane@widgets.com | filled  |
-    | hr associate | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com | filled  |
+    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
+    | hr associate | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
 
 	Given the following job applications exist:
 		| job title 	 | job seeker 	 | status 			|
@@ -37,11 +37,11 @@ Background: data is added to database
     And I login as "july@mail.com" with password "qwerty123"
     And I wait 1 second
     And I should see my application for "hr assistant" show status "Accepted"
-    Then I click "hr assistant" link to job show page
+    Then I click the first "hr assistant" link
     And I should see "hr assistant" show status "filled"
     And I should not see "Click Here To Apply Online"
     Then I return to my "july@mail.com" home page
     And I should see my application for "hr associate" show status "Not Accepted"
-    Then I click "hr associate" link to job show page
+    Then I click the first "hr associate" link
     And I should see "hr associate" show status "filled"
     And I should not see "Click Here To Apply Online"

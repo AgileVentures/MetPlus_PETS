@@ -4,10 +4,12 @@
 
 var Notification = {
     notify: function(text, type) {
+        var closeWith = (/href ?=/.test(text) ? ['button'] : ['click']);
         noty({text: text,
             theme: 'bootstrapTheme',
             layout: 'bottomRight',
-            type: type});
+            type: type,
+            closeWith: closeWith});
     },
     success_notification: function(text) {
         Notification.notify(text, 'success');

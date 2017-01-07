@@ -22,9 +22,9 @@ require 'email-spec'
 require 'codeclimate-test-reporter'
 require 'webmock/rspec'
 require 'pundit/rspec'
-require './spec/support/service_stub_helpers'
-include ServiceStubHelpers::EmailValidator
 
+Dir['./spec/support/**/*.rb'].each { |f| require f }
+include ServiceStubHelpers::EmailValidator
 # WebMock config
 
 #  Uncomment to disable Webmock and access external services during test:
@@ -112,6 +112,7 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+  config.example_status_persistence_file_path = "spec/examples.txt"
   config.include FactoryGirl::Syntax::Methods
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction

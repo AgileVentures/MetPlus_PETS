@@ -65,7 +65,7 @@ Given the following agency relations exist:
     And I should see "There are no job seekers assigned to you yet."
     And I should not see "Job Seekers without a Case Manager"
 
-  @selenium
+  @javascript
   Scenario: Case Manager with tasks on home page
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
@@ -79,11 +79,12 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
-  @selenium
+  @javascript
   Scenario: Job Developer with tasks on home page
     Given I am on the home page
     And I login as "jane-dev@metplus.org" with password "qwerty123"
     And I should be on the Agency Person 'jane-dev@metplus.org' Home page
+    And I wait 2 seconds
     And I should see "Your Open Tasks"
     And I should see "Job Seeker has no assigned Job Developer"
     And I should not see "Job Seeker has no assigned Case Manager"
@@ -96,7 +97,7 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see notification "Work on the task is done"
 
-@selenium
+@javascript
   Scenario: Agency admin can see all tabs
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -118,7 +119,7 @@ Given the following agency relations exist:
     And the task 7 is present
     And the tasks 1,2,3,4 are hidden
 
-  @selenium
+  @javascript
   Scenario: Agency admin assign task to other JD and task is removed from his view
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
@@ -135,7 +136,7 @@ Given the following agency relations exist:
     And I click the "All Agency Open Tasks" link
     And the task 2 is present
 
-  @selenium
+  @javascript
   Scenario: Job developer assigns self to job seeker
     Given I am on the home page
     And I login as "bill@metplus.org" with password "qwerty123"
@@ -148,7 +149,7 @@ Given the following agency relations exist:
     Then I should see "Bill Developer"
     And I should not see "Assign Myself"
 
-  @selenium
+  @javascript
   Scenario: Case manager assigns self to job seeker
     Given I am on the home page
     And I login as "jane@metplus.org" with password "qwerty123"
@@ -205,5 +206,5 @@ Given the following agency relations exist:
     Given I am on the home page
     And I login as "mark@metplus.org" with password "qwerty123"
     And I wait 1 second
-    Then I click the first "Seeker, John" link 
+    Then I click the first "Seeker, John" link
     And I should not see "Edit Job Seeker"

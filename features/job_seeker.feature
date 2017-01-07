@@ -11,24 +11,25 @@ Background: seed data added to database
   Given the following jobseeker exist:
     | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
     | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-    | thomas    | jones    | tommy1@gmail.com           | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+    | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
     | title   | shift  | fulltime | description | company      | creator        |
-    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | ca@widgets.com |
-    | Trucker | Day    | true     | drive truck | Widgets Inc. | ca@widgets.com |
-    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | ca@widgets.com |
-    | Clerk   | Day    | true     | service     | Widgets Inc. | ca@widgets.com |
-    | Mime    | Day    | true     | freeze      | Widgets Inc. | ca@widgets.com |
+    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | carter@ymail.com.com |
+    | Trucker | Day    | true     | drive truck | Widgets Inc. | carter@ymail.com.com |
+    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | carter@ymail.com.com |
+    | Clerk   | Day    | true     | service     | Widgets Inc. | carter@ymail.com.com |
+    | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com.com |
 
   Given the following job applications exist:
     | job title  | job seeker                |
@@ -38,6 +39,11 @@ Background: seed data added to database
     | Clerk      | tommy1@gmail.com           |
     | Doctor     | tommy1@gmail.com           |
     | Mime       | tommy1@gmail.com           |
+
+
+  Given the following resumes exist:
+    | file_name          | job_seeker             |
+    | Janitor-Resume.doc | vijaya.karumudi@gmail.com |
 
   Given the following agency people exist:
     | agency  | role  | first_name | last_name | phone        | email          | password  |
@@ -117,24 +123,26 @@ Scenario: login jobseeker, land on home page, see applied jobs
   And I should see "Trucker" before "Job Opportunities - New"
   And I should see "Doctor" before "Job Opportunities - New"
 
-@selenium
+@javascript
 Scenario: job seeker finds new job opportunities
   When I am in Job Seeker's browser
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
+  And I wait 1 second
   Then I should see "Signed in successfully"
   And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
   And I should see "Mime" after "Job Opportunities - New"
   And I should see "Clerk" after "Job Opportunities - New"
   When I am in Company Contact's browser
   Given I am on the home page
-  And I login as "jane@widgets.com" with password "qwerty123"
+  And I login as "jane@ymail.com" with password "qwerty123"
   And I create the following jobs
   | title          | shift   | fulltime | description       | company      | creator        |
-  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | ca@widgets.com |
-  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | ca@widgets.com |
+  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | carter@ymail.com.com |
+  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | carter@ymail.com.com |
   When I am in Job Seeker's browser
   And I reload the page
+  And I wait 1 second
   Then I should see "UI Developer" after "Job Opportunities - New"
   And I should see "RoR Developer" after "UI Developer"
 
@@ -173,7 +181,7 @@ Scenario: edit Js Registration without password change
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
-@selenium
+@javascript
 Scenario: delete jobseeker
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
@@ -201,3 +209,30 @@ Scenario: Job Developer sees job seeker's job applications
   And I should see "Doctor"
   And I should see "Mime"
   And I should not see "Trucker"
+
+@javascript
+Scenario: Download resume file_name as a Company Admin
+  Given I am on the home page
+  And I am logged in as "carter@ymail.com.com" with password "qwerty123"
+  And I wait 1 second
+  And I should see "SW dev"
+  When I click the "SW dev" link
+  And I wait 1 second
+  And I should see "Applications for this Job"
+  Then I click the "karumudi, vijaya" link
+  Then I should see button "Download Resume"
+  And I click the "Download Resume" button
+  Then I should get a download with the filename "Janitor-Resume.doc"
+
+
+  @selenium
+
+  @javascript
+  Scenario: non-admin and non-agency person trying to access to admin home page
+    Given I am on the home page
+    And I login as "vijaya.karumudi@gmail.com" with password "password"
+    Then I should see "Signed in successfully."
+    And I should not see "Admin"
+    When I type agency_admin home in the URL address bar
+    Then I should see "Current agency cannot be determined"
+    And I should be on the home page

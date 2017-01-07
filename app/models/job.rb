@@ -11,9 +11,9 @@ class Job < ActiveRecord::Base
                                              reject_if: :all_blank
 
   has_many   :required_skills, -> { where job_skills: { required: true } },
-                through: :job_skills, class_name: 'Skill', source: :skill
+             through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :nice_to_have_skills, -> { where job_skills: { required: false } },
-                through: :job_skills, class_name: 'Skill', source: :skill
+             through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
@@ -22,7 +22,7 @@ class Job < ActiveRecord::Base
   validates_presence_of :company_job_id
   validates_presence_of :fulltime, allow_blank: true
   validates_inclusion_of :shift, in: SHIFT_OPTIONS,
-                        message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
+                                 message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10_000
@@ -47,21 +47,18 @@ class Job < ActiveRecord::Base
   end
 
   def apply(job_seeker)
-    job_seekers << job_seeker
-    save!
-
-    resume_id = job_seeker.resumes[0].id
-    job_application = last_application_by_job_seeker(job_seeker)
-
-    # Send mail to the company with the attached resume
-    CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
-                    .perform_later(Event::EVT_TYPE[:JS_APPLY],
-                                   company,
-                                   nil,
-                                   application: job_application,
-                                   resume_id: resume_id)
-
-    last_application_by_job_seeker(job_seeker)
+    job_application = job_applications.build(job_seeker_id: job_seeker.id)
+    if job_application.save!
+      # Send mail to the company with the attached resume
+      CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                      .perform_later(Event::EVT_TYPE[:JS_APPLY],
+                                     company,
+                                     nil,
+                                     application: job_application,
+                                     resume_id: job_seeker.resumes[0].id)
+      yield(job_application, self, job_seeker) if block_given?
+      job_application
+    end
   end
 
   def status_change_time(status, which = :latest)
@@ -85,8 +82,8 @@ class Job < ActiveRecord::Base
     job_applications.where(job_seeker: job_seeker).order(:created_at).last
   end
 
-  def is_recent?(time)
-    created_at > time
+  def recent_for?(user)
+    created_at > user.last_sign_in_at
   end
 
   private
@@ -121,7 +118,7 @@ class Job < ActiveRecord::Base
       # and, 2) force a return value of 'false' from save (update)
       # See: http://tech.taskrabbit.com/blog/2013/05/23/rollback-after-save/
 
-      raise ActiveRecord::RecordInvalid.new(self)
+      raise ActiveRecord::RecordInvalid, self
     end
     true
   end

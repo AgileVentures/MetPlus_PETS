@@ -11,7 +11,7 @@ describe JobSeeker, type: :model do
   describe 'Database schema' do
     it { is_expected.to have_db_column :year_of_birth }
     it { is_expected.to have_db_column :job_seeker_status_id }
-    it { is_expected.not_to have_db_column :address_id }
+    it { is_expected.to have_db_column :address_id }
     it { is_expected.to have_db_column :consent }
   end
   describe 'check model restrictions' do
@@ -20,39 +20,37 @@ describe JobSeeker, type: :model do
     it { is_expected.to have_many(:agency_people).through(:agency_relations) }
     it { is_expected.to have_many(:job_applications) }
     it { is_expected.to have_many(:jobs).through(:job_applications) }
-    it { is_expected.to have_one(:address) }
+    it { is_expected.to belong_to(:address) }
     it { is_expected.to belong_to(:job_seeker_status) }
 
-    it { should allow_value('1987', '1916', '2000', '2014').for(:year_of_birth) }
+    it { should allow_value('1987', '2000', '2014').for(:year_of_birth) }
     it { should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth) }
   end
 
-  describe '#latest_application' do
+  describe 'job applications' do
     let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
     let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let(:job1)        { FactoryGirl.create(:job) }
     let(:job2)        { FactoryGirl.create(:job) }
     let(:test_file)   { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
-    it 'returns last application for job seeker' do
+    before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
       stub_cruncher_file_download test_file
+    end
 
+    it '#latest_application' do
       job1.apply job_seeker
       expect(job_seeker.latest_application).to eq job1.job_applications[0]
       job2.apply job_seeker
       expect(job_seeker.latest_application).to eq job2.job_applications[0]
     end
-  end
 
-  describe 'When job seeker is destroyed' do
-    let(:location) { FactoryGirl.build(:address) }
-    let!(:job_seeker) { FactoryGirl.create(:job_seeker, address: location) }
-    it 'destroys the associated address' do
-      address = job_seeker.address
-      job_seeker.destroy
-      expect { Address.find(address.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    it '#applied_to_job?' do
+      job1.apply job_seeker
+      job2.apply job_seeker
+      expect(job_seeker.applied_to_job?(job1)).to be true
     end
   end
 
@@ -76,14 +74,18 @@ describe JobSeeker, type: :model do
 
     before(:each) do
       FactoryGirl.create(:agency_relation, job_seeker: job_seeker1,
-                                           agency_person: job_developer, agency_role: jd_role)
+                                           agency_person: job_developer,
+                                           agency_role: jd_role)
       FactoryGirl.create(:agency_relation, job_seeker: job_seeker2,
-                                           agency_person: job_developer, agency_role: jd_role)
+                                           agency_person: job_developer,
+                                           agency_role: jd_role)
 
       FactoryGirl.create(:agency_relation, job_seeker: job_seeker3,
-                                           agency_person: case_manager, agency_role: cm_role)
+                                           agency_person: case_manager,
+                                           agency_role: cm_role)
       FactoryGirl.create(:agency_relation, job_seeker: job_seeker4,
-                                           agency_person: case_manager, agency_role: cm_role)
+                                           agency_person: case_manager,
+                                           agency_role: cm_role)
     end
 
     it 'returns IDs of job seekers assigned to this job developer' do
@@ -117,15 +119,25 @@ describe JobSeeker, type: :model do
   context 'job_seeker / agency_person relationships' do
     let(:agency) { FactoryGirl.create(:agency) }
 
-    let!(:cm_person) { FactoryGirl.create(:case_manager, first_name: 'John', last_name: 'Manager', agency: agency) }
-    let!(:cm_person2) { FactoryGirl.create(:case_manager, first_name: 'Jane', last_name: 'Manager2', agency: agency) }
-    let!(:jd_person) { FactoryGirl.create(:job_developer, first_name: 'John', last_name: 'Developer', agency: agency) }
-    let!(:aa_person) { FactoryGirl.create(:agency_admin, first_name: 'John', last_name: 'Admin', agency: agency) }
+    let!(:cm_person) do
+      FactoryGirl.create(:case_manager,
+                         first_name: 'John',
+                         last_name: 'Manager',
+                         agency: agency)
+    end
+    let!(:cm_person2) { FactoryGirl.create(:case_manager, agency: agency) }
+    let!(:jd_person)  do
+      FactoryGirl.create(:job_developer,
+                         first_name: 'John',
+                         last_name: 'Developer',
+                         agency: agency)
+    end
+    let!(:aa_person) { FactoryGirl.create(:agency_admin, agency: agency) }
 
-    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
-    let!(:bob)     { FactoryGirl.create(:job_seeker, first_name: 'Bob', last_name: 'Smith') }
-    let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
-    let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
+    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam') }
+    let!(:bob)     { FactoryGirl.create(:job_seeker, first_name: 'Bob') }
+    let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles') }
+    let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave') }
 
     FactoryGirl.create(:agency_role)
     FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
@@ -150,7 +162,8 @@ describe JobSeeker, type: :model do
         expect(bob.case_manager).to eq(cm_person)
       end
       it 'not a case manager' do
-        expect { bob.assign_case_manager jd_person, agency }.to raise_error('User Developer, John is not a Case Manager')
+        expect { bob.assign_case_manager jd_person, agency }
+          .to raise_error('User Developer, John is not a Case Manager')
       end
     end
     describe '#assign_job_developer' do
@@ -159,7 +172,8 @@ describe JobSeeker, type: :model do
         expect(bob.job_developer).to eq(jd_person)
       end
       it 'not a job developer' do
-        expect { bob.assign_job_developer cm_person, agency }.to raise_error('User Manager, John is not a Job Developer')
+        expect { bob.assign_job_developer cm_person, agency }
+          .to raise_error('User Manager, John is not a Job Developer')
       end
     end
     describe '#case_manager' do
@@ -190,3 +204,4 @@ describe JobSeeker, type: :model do
     end
   end
 end
+

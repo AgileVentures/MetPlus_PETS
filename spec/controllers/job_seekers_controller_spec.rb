@@ -150,7 +150,8 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'authorized to create / destroy job seeker', 'visitor', 'create'
     end
     context 'agency_person' do
-      it_behaves_like 'authorized to create / destroy job seeker', 'agency_person', 'create'
+      it_behaves_like 'authorized to create / destroy job seeker', 'agency_person',
+                      'create'
     end
     context 'job_seeker' do
       it_behaves_like 'unauthorized to js controller', 'job_seeker'
@@ -187,9 +188,11 @@ RSpec.describe JobSeekersController, type: :controller do
 
         # Verify email details
         it { is_expected.to deliver_to(@js_hash[:email]) }
-        it { is_expected.to have_body_text(/Welcome #{@js_hash[:first_name]} #{@js_hash[:last_name]}!/) }
+        it { is_expected.to have_body_text(/Welcome/) }
+        it { is_expected.to have_body_text(/#{@js_hash[:first_name]}/) }
+        it { is_expected.to have_body_text(/#{@js_hash[:last_name]}/) }
         it { is_expected.to have_body_text(/You can confirm your account/) }
-        it { is_expected.to have_body_text(/users\/confirmation\?confirmation/) }
+        it { is_expected.to have_body_text(%r{users\/confirmation\?confirmation}) }
         it { is_expected.to have_subject(/Confirmation instructions/) }
       end
     end
@@ -202,9 +205,10 @@ RSpec.describe JobSeekersController, type: :controller do
         ActionMailer::Base.deliveries.clear
 
         js_status = FactoryGirl.create(:job_seeker_status)
-        @js_hash = FactoryGirl.attributes_for(:job_seeker,
-                                              resume: fixture_file_upload('files/Janitor-Resume.doc'))
-                              .merge(FactoryGirl.attributes_for(:user))
+        @js_hash = FactoryGirl.attributes_for(
+          :job_seeker,
+          resume: fixture_file_upload('files/Janitor-Resume.doc')
+        ).merge(FactoryGirl.attributes_for(:user))
                               .merge(job_seeker_status_id: js_status.id)
       end
 
@@ -228,17 +232,16 @@ RSpec.describe JobSeekersController, type: :controller do
                                 phone: '890-789-9087')
         @jobseekerstatus.assign_attributes(description: 'MyText')
         @jobseeker.valid?
-        js1_hash = FactoryGirl.attributes_for(:job_seeker,
-                                              year_of_birth: '198',
-                                              resume: fixture_file_upload('files/Janitor-Resume.doc'))
-                              .merge(FactoryGirl.attributes_for(:user,
-                                                                first_name: 'John',
-                                                                last_name: 'Smith',
-                                                                phone: '890-789-9087'))
-                              .merge(FactoryGirl.attributes_for(:job_seeker_status,
-                                                                description: 'MyText'))
-                              .merge(FactoryGirl.attributes_for(:address,
-                                                                zipcode: '12345131231231231231236'))
+        js1_hash = FactoryGirl.attributes_for(
+          :job_seeker, year_of_birth: '198',
+                       resume: fixture_file_upload('files/Janitor-Resume.doc')
+        ).merge(FactoryGirl.attributes_for(
+                  :user, first_name: 'John', last_name: 'Smith', phone: '890-789-9087'
+        )).merge(FactoryGirl.attributes_for(
+                   :job_seeker_status, description: 'MyText'
+        )).merge(FactoryGirl.attributes_for(
+                   :address, zipcode: '12345131231231231231236'
+        ))
         post :create, job_seeker: js1_hash
       end
       it 'renders new template' do
@@ -288,8 +291,10 @@ RSpec.describe JobSeekersController, type: :controller do
           expect do
             patch :update,
                   id: owner,
-                  job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                         resume: fixture_file_upload('files/Janitor-Resume.doc'))
+                  job_seeker: FactoryGirl.attributes_for(
+                    :job_seeker,
+                    resume: fixture_file_upload('files/Janitor-Resume.doc')
+                  )
           end.to change(Resume, :count).by(+1)
           expect(flash[:notice]).to eq 'Jobseeker was updated successfully.'
         end
@@ -302,17 +307,19 @@ RSpec.describe JobSeekersController, type: :controller do
                              job_seeker: owner)
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       year_of_birth: '1980',
-                                                       first_name: 'John',
-                                                       last_name: 'Smith',
-                                                       password: '',
-                                                       password_confirmation: '',
-                                                       phone: '780-890-8976',
-                                                       resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf'))
-                  .merge(job_seeker_status_id: js_status.id)
-                  .merge(address_attributes: FactoryGirl.attributes_for(:address,
-                                                                        zipcode: '12346'))
+                job_seeker: FactoryGirl.attributes_for(
+                  :job_seeker,
+                  year_of_birth: '1980',
+                  first_name: 'John',
+                  last_name: 'Smith',
+                  password: '',
+                  password_confirmation: '',
+                  phone: '780-890-8976',
+                  resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')
+                ).merge(job_seeker_status_id: js_status.id)
+                  .merge(address_attributes: FactoryGirl.attributes_for(
+                    :address, zipcode: '12346'
+                  ))
           owner.reload
         end
         it 'sets the valid attributes' do
@@ -346,8 +353,10 @@ RSpec.describe JobSeekersController, type: :controller do
                              job_seeker: owner)
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       resume: fixture_file_upload('files/Example Excel File.xls'))
+                job_seeker: FactoryGirl.attributes_for(
+                  :job_seeker,
+                  resume: fixture_file_upload('files/Example Excel File.xls')
+                )
           owner.reload
         end
         it 'does not update existing resume' do
@@ -584,7 +593,7 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(response).to have_http_status(:success)
       end
       it 'assigns application_type for pagination' do
-        expect(assigns(:application_type)).to eq 'job_seeker'
+        expect(assigns(:application_type)).to eq 'job_seeker-default'
       end
       it 'returns jobs posted since last login' do
         stub_cruncher_authenticate
@@ -648,9 +657,6 @@ RSpec.describe JobSeekersController, type: :controller do
         sign_in owner
         request
       end
-      it 'assigns application_type for pagination' do
-        expect(assigns(:application_type)).to eq 'job_seeker'
-      end
       it 'it renders the show template' do
         expect(response).to render_template 'show'
       end
@@ -705,7 +711,8 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'unauthorized to js controller', 'visitor'
     end
     context 'agency_person' do
-      it_behaves_like 'authorized to create / destroy job seeker', 'agency_admin', 'destroy'
+      it_behaves_like 'authorized to create / destroy job seeker', 'agency_admin',
+                      'destroy'
       it_behaves_like 'unauthorized to js controller', 'job_developer'
       it_behaves_like 'unauthorized to js controller', 'case_manager'
     end
@@ -794,6 +801,65 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'list of jobs' do
           expect(assigns(:list_jobs)).to eq([job3, job2, job6, job9, job8])
         end
+      end
+    end
+  end
+  describe 'GET download_resume' do
+    let(:company)       { FactoryGirl.create(:company) }
+    let(:company2)      { FactoryGirl.create(:company) }
+    let(:job)           { FactoryGirl.create(:job, company: company) }
+    let(:job2)          { FactoryGirl.create(:job, company: company2) }
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
+    let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+    let!(:company_admin2) { FactoryGirl.create(:company_admin, company: company2) }
+    let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:valid_application) do
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    end
+    let!(:valid_application2) do
+      FactoryGirl.create(:job_application, job: job2, job_seeker: job_seeker2)
+    end
+    let(:invalid_application) do
+      FactoryGirl.create(:job_application,
+                         job: job, job_seeker: job_seeker2,
+                         status: 'accepted')
+    end
+    let(:agency)       { FactoryGirl.create(:agency) }
+    let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
+    let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:resume2)       { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in company_admin
+    end
+    context 'Successful download' do
+      it 'does not raise exception' do
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
+        get :download_resume, id: job_seeker, resume_id: resume
+        expect(response).to_not set_flash
+      end
+    end
+    context 'Error: Unauthorised Download' do
+      it 'sets flash message' do
+        get :download_resume, id: job_seeker2, resume_id: resume2
+        expect(flash[:alert]).to eq 'You are not authorized to perform this action.'
+      end
+    end
+    context 'Error: Resume not found in DB' do
+      it 'raises AR Not Found Exception' do
+        expect { get :download_resume, id: valid_application, resume_id: 999 }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+    context 'Error: Resume not found in Cruncher' do
+      it 'sets flash message' do
+        stub_cruncher_file_download_notfound
+        get :download_resume, id: valid_application, resume_id: resume
+        expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
       end
     end
   end
