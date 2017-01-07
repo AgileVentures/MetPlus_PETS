@@ -239,10 +239,12 @@ class Event
       )
     end
 
-    NotifyEmailJob.set(wait: delay_seconds.seconds)
-                  .perform_later(notify_list,
-                                 EVT_TYPE[:APP_ACCEPTED],
-                                 evt_obj) unless notify_list.empty?
+    unless notify_list.empty?
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(notify_list,
+                                   EVT_TYPE[:APP_ACCEPTED],
+                                   evt_obj)
+    end
   end
 
   def self.evt_app_rejected(evt_obj)
@@ -282,10 +284,12 @@ class Event
       )
     end
 
-    NotifyEmailJob.set(wait: delay_seconds.seconds)
-                  .perform_later(notify_list,
-                                 EVT_TYPE[:APP_REJECTED],
-                                 evt_obj) unless notify_list.empty?
+    unless notify_list.empty?
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(notify_list,
+                                   EVT_TYPE[:APP_REJECTED],
+                                   evt_obj)
+    end
   end
 
   def self.evt_jd_assigned_js(evt_obj)
@@ -421,6 +425,26 @@ class Event
                   .perform_later(jd_emails,
                                  EVT_TYPE[:JOB_REVOKED],
                                  evt_obj.job)
+    
+    job_apps = evt_obj.job.job_applications
+
+    return if job_apps.empty?
+
+    js_ids = job_apps.map { |ja| ja.job_seeker.user.id }
+    js_list = job_apps.map(&:job_seeker)
+
+    Pusher.trigger('pusher_control',
+                   EVT_TYPE[:JOB_REVOKED],
+                   job_id:       evt_obj.job.id,
+                   job_title:    evt_obj.job.title,
+                   company_name: evt_obj.job.company.name,
+                   notify_list:  js_ids)
+
+    js_list.each do |js|
+      JobSeekerEmailJob.set(wait: delay_seconds.seconds)
+                       .perform_later(EVT_TYPE[:JOB_REVOKED],
+                                      js, evt_obj.job)
+    end
   end
 
   def self.evt_cp_interest_in_js(evt_obj)
