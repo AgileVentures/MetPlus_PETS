@@ -26,7 +26,7 @@ Feature: Company Person Jobs View
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
       | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
 
     Given the following company addresses exist:
@@ -38,39 +38,39 @@ Feature: Company Person Jobs View
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
       | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
       | title               | company_job_id  | shift  | fulltime | description                 | company      | creator        |
-      | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK02K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK03K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK04K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK05K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK06K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK07K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK08K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | software developer  | KRK10K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK11K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK02K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK03K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK04K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK05K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK06K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK07K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK08K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | software developer  | KRK10K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK11K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
       | Doctor              | AAEE1K          | Evening| true     | internship position with pay| Feature Inc. | ca@feature.com |
-      | Cook                | KRK12K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK13K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK14K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK15K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK16K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK17K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK18K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK19K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-      | Cook                | KRK20K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+      | Cook                | KRK12K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK13K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK14K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK15K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK16K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK17K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK18K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK19K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+      | Cook                | KRK20K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
 
   @javascript
   Scenario: verify job listing in home page
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
-    And I should be on the Company Person 'ca@widgets.com' Home page
+    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I should be on the Company Person 'carter@ymail.com.com' Home page
     And I wait for 5 seconds
     And I should see "Cook"
     And I should not see "Doctor"
