@@ -4,7 +4,6 @@ class JobSeekersController < ApplicationController
 
   def new
     @jobseeker = JobSeeker.new
-    @jobseeker.build_address
     authorize @jobseeker
   end
 
@@ -44,6 +43,7 @@ class JobSeekersController < ApplicationController
   def edit
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
+    @jobseeker.build_address unless @jobseeker.address.present?
     @current_resume = @jobseeker.resumes[0]
   end
 
@@ -52,6 +52,7 @@ class JobSeekersController < ApplicationController
     authorize @jobseeker
     jobseeker_params = handle_user_form_parameters(permitted_attributes(@jobseeker))
     dispatch_file    = jobseeker_params.delete 'resume'
+    jobseeker_params.delete 'address_attributes' if address_is_empty?
 
     models_saved = @jobseeker.update_attributes(jobseeker_params)
 
@@ -81,8 +82,8 @@ class JobSeekersController < ApplicationController
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
       flash[:notice] = 'Jobseeker was updated successfully.'
-      redirect_to(@jobseeker)
-      return if (pets_user == @jobseeker.case_manager) || (pets_user == @jobseeker.job_developer)
+      redirect_to(@jobseeker) && return if(pets_user == @jobseeker.case_manager) ||
+                                          (pets_user == @jobseeker.job_developer)
       redirect_to root_path
     else
       @resume = resume
@@ -143,6 +144,11 @@ class JobSeekersController < ApplicationController
   end
 
   private
+
+  def address_is_empty?
+    address = form_params[:address_attributes]
+    address[:street].empty? && address[:city].empty? && address[:state].empty?
+  end
 
   def form_params
     params.require(:job_seeker).permit(:first_name,
