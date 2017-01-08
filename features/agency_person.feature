@@ -171,6 +171,24 @@ Given the following agency relations exist:
     And I should see "Seeker, Tom" between "Your Job Seekers (as job developer)" and "Your Job Seekers (as case manager)"
     And I should see "Jones, Mary" after "Your Job Seekers (as case manager)"
 
+  Scenario: Agency person can update his email address
+    Given I am on the home page
+    And I login as "aa@metplus.org" with password "qwerty123"
+    And I wait 1 second
+    Then I press "edit-profile"
+    And I wait 1 second
+    And I should see "Update Your Profile"
+    When I fill in "Email" with "aaa@metplus.org"
+    And I click "Update Agency person" button
+    Then I should be on the Agency Person 'aa@metplus.org' Home page
+    And I should see "Please check your inbox to confirm your email address"
+    And "aaa@metplus.org" should receive an email with subject "Confirmation instructions"
+    When I open the email
+    And I follow "Confirm my account" in the email
+    Then I should see "Your email address has been successfully confirmed."
+    When I click the "John" link
+    Then I should see "aaa@metplus.org" in the email field
+
   @javascript
   Scenario: Case manager can edit his job seeker's profile
     Given I am on the home page

@@ -18,6 +18,8 @@ class JobSeeker < ActiveRecord::Base
 
   scope :consent, -> { where(consent: true) }
 
+  delegate :unconfirmed_email, to: :user
+
   def status
     job_seeker_status
   end
