@@ -14,7 +14,7 @@ Feature: Have a task system in the site
       | MetPlus | CM        | Jane       | Jones     | jane@metplus.org     | qwerty123 |
       | MetPlus | JD        | Jane       | Developer | jane-dev@metplus.org | qwerty123 |
 
-    Given the following jobseeker exist:
+    Given the following jobseekers exist:
       | first_name| last_name| email                     | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
       | John      | Seeker   | john.seeker@gmail.com     | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
       | John      | Worker   | john.worker@gmail.com     | 345-890-7890| password |password             | 1990          |Employed Looking   |
@@ -25,7 +25,7 @@ Feature: Have a task system in the site
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | Steve      | Jobs      | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CA    | Steve      | Jobs      | carter@ymail.com   | qwerty123 | 555-222-3334 |
       | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
 
@@ -40,7 +40,7 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john.worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
       | job_application    | Widgets Inc.,CA      | 2016-03-10    | NEW         | john-seeker@gmail.com |
-      | job_application    | carter@ymail.com.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+      | job_application    | carter@ymail.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
 
   @javascript
@@ -86,7 +86,7 @@ Feature: Have a task system in the site
   @javascript
   Scenario: Company admin task management
     Given I am on the home page
-    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully."
     And I click the "Unassigned Company Tasks" link
     And the task 9 is present

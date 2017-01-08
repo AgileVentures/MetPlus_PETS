@@ -97,4 +97,32 @@ $(function () {
   JobAndResume.match();
 
   ContactJobDeveloper.jsInterest();
+
+  $('#job-seekers-select').select2({
+    placeholder: 'Choose Job Seekers'
+  });
+
+  $('#match-resumes-link').click(function () {
+    $('#match-resumes-modal-form').modal();
+  });
+
+  // To remove the alert after the user has selected a job seeker from dropdown
+  $('#job-seekers-select').on('change', function() {
+    $('#message').html('');
+    $('#message').removeClass('alert alert-danger');
+  });
+
+  $('#run-match-btn').click(function () {
+    var selectedValues = $('#job-seekers-select').val();
+    if (selectedValues === null) {
+      $('#message').html('Please choose a job seeker');
+      $('#message').addClass('alert alert-danger');
+      var glyphicon = '<i class="glyphicon glyphicon-exclamation-sign">&nbsp;';
+      $('#message').prepend(glyphicon);
+      return false;
+    }
+    return confirm("This will match your job seekers' résumés against the job" +
+                    " and may take a while. Do you want to proceed?");
+  });
+
 });

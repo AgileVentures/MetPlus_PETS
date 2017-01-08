@@ -13,7 +13,7 @@ Background: adding job to database
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following job skills exist:
@@ -25,13 +25,13 @@ Background: adding job to database
   Given the following jobs exist:
     | title | description | company      | creator          | shift   | skills         | city  |
     | Job1  | About job1. | Widgets Inc. | jane@ymail.com | Day     | Skill1, Skill2 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com.com   | Day     | Skill3         | city2 |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com   | Day     | Skill3         | city2 |
 
 
 @javascript
 Scenario: Create job with associated skills
   Given I am on the home page
-	And I am logged in as "carter@ymail.com.com" with password "qwerty123"
+	And I am logged in as "carter@ymail.com" with password "qwerty123"
 	When I click the "Post jobs" link
 	And I fill in the fields:
 		| Title                  | cashier|
@@ -60,7 +60,7 @@ Scenario: Create job with associated skills
 @javascript
 Scenario: Edit job and change associated skills
   Given I am on the home page
-	And I am logged in as "carter@ymail.com.com" with password "qwerty123"
+	And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I click the "Jobs" link
   Then I click the "Job1" link
   And I wait 1 second

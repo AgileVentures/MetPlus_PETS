@@ -20,7 +20,7 @@ Feature: Reject a job application
       | Widgets Inc. | CC    | Cicil      | Smith     | cicil@ymail.com | qwerty123 | 555-222-3334 |
       | Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
 
-    Given the following jobseeker exist:
+    Given the following jobseekers exist:
       | first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
       | John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
       | Jane       | Seeker    | jane@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |

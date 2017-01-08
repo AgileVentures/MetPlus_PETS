@@ -42,7 +42,7 @@ Background: seed data added to database and log in as agency admim
   | title         | company_job_id  | shift  | fulltime | description | company      | creator          | skills    |
   | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
-  Given the following jobseeker exist:
+  Given the following jobseekers exist:
   | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
   | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| password   |password             | 1990          |Unemployed Seeking |
   | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| password   |password             | 1990          |Unemployed Seeking |
