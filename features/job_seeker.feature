@@ -8,7 +8,7 @@ Background: seed data added to database
 
   Given the default settings are present
 
-  Given the following jobseeker exist:
+  Given the following jobseekers exist:
     | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
     | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
     | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
@@ -20,16 +20,16 @@ Background: seed data added to database
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
     | title   | shift  | fulltime | description | company      | creator        |
-    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | carter@ymail.com.com |
-    | Trucker | Day    | true     | drive truck | Widgets Inc. | carter@ymail.com.com |
-    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | carter@ymail.com.com |
-    | Clerk   | Day    | true     | service     | Widgets Inc. | carter@ymail.com.com |
-    | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com.com |
+    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | carter@ymail.com |
+    | Trucker | Day    | true     | drive truck | Widgets Inc. | carter@ymail.com |
+    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | carter@ymail.com |
+    | Clerk   | Day    | true     | service     | Widgets Inc. | carter@ymail.com |
+    | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
     | job title  | job seeker                |
@@ -138,8 +138,8 @@ Scenario: job seeker finds new job opportunities
   And I login as "jane@ymail.com" with password "qwerty123"
   And I create the following jobs
   | title          | shift   | fulltime | description       | company      | creator        |
-  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | carter@ymail.com.com |
-  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | carter@ymail.com.com |
+  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | carter@ymail.com |
+  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | carter@ymail.com |
   When I am in Job Seeker's browser
   And I reload the page
   And I wait 1 second
@@ -213,7 +213,7 @@ Scenario: Job Developer sees job seeker's job applications
 @javascript
 Scenario: Download resume file_name as a Company Admin
   Given I am on the home page
-  And I am logged in as "carter@ymail.com.com" with password "qwerty123"
+  And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I wait 1 second
   And I should see "SW dev"
   When I click the "SW dev" link

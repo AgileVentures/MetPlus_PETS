@@ -1,10 +1,13 @@
 class JobsController < ApplicationController
   include JobsViewer
+  include CruncherUtility
 
   before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
                                   :match_resume, :match_job_seekers,
-                                  :notify_job_developer]
-  before_action :user_logged!, except: [:index, :list_search_jobs, :show]
+                                  :match_jd_job_seekers, :notify_job_developer]
+
+  before_action :user_logged!, except: [:index, :list_search_jobs, :show,
+                                        :match_jd_job_seekers]
 
   def index
     @jobs = policy_scope(Job).order(:title).includes(:company)
@@ -87,6 +90,7 @@ class JobsController < ApplicationController
     authorize @job
     @resume = nil
     @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
+    set_job_seekers
   end
 
   def edit
@@ -199,6 +203,19 @@ class JobsController < ApplicationController
     render(json: { stars_html: str, status: 200 })
   end
 
+  def match_jd_job_seekers
+    authorize @job
+
+    unless params[:job_seeker_ids]
+      flash[:alert] =  'Please choose a job seeker'
+      redirect_to @job and return
+    end
+
+    job_seeker_ids = params[:job_seeker_ids].map(&:to_i)
+    match_results = get_matches(job_seeker_ids)
+    @match_results = self.class.sort_by_score(match_results)
+  end
+
   def match_job_seekers
     authorize @job
     Pusher.trigger('pusher_control',
@@ -268,6 +285,11 @@ class JobsController < ApplicationController
 
   private
 
+  def set_job_seekers
+    return unless pets_user && pets_user.is_job_developer?(current_agency)
+    @job_seekers = pets_user.job_seekers
+  end
+
   def set_company_address
     case params[:action]
     when 'new', 'create'
@@ -289,6 +311,21 @@ class JobsController < ApplicationController
     flash[:alert] = "#{job_seeker.full_name(last_name_first: false)} "\
                     'has already applied to this job.'
     redirect_to(job_path(@job)) && return
+  end
+
+  def get_matches(job_seeker_ids)
+    job_seeker_ids.map do |id|
+      job_seeker = JobSeeker.find(id)
+      resume = job_seeker.resumes[0]
+
+      # Only make the API call if the job seeker has a resume
+      result = if resume
+                 ResumeCruncher.match_resume_and_job(resume.id, @job.id)
+               else
+                 { message: 'No résumé on file' }
+               end
+      result.update(job_seeker_name: job_seeker.full_name)
+    end
   end
 
   def find_job

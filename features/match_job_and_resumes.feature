@@ -8,7 +8,7 @@ Feature: Match a Job to a Job Seeker's Résumé
 
     Given the default settings are present
 
-    Given the following jobseeker exist:
+    Given the following jobseekers exist:
       | first_name| last_name| email                  | phone       |password  |password_confirmation| year_of_birth |job_seeker_status |
       | John      | Seeker   | john.seeker@gmail.com  | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
       | Jane      | Seeker   | jane.seeker@gmail.com  | 345-890-7890| password |password             | 1990          |Unemployed Seeking |
@@ -38,14 +38,14 @@ Feature: Match a Job to a Job Seeker's Résumé
 
     Given the following company people exist:
      | company      | role  | first_name | last_name | email            | password  | phone        |
-     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
      | title            | company_job_id| shift| fulltime | description| company      | creator        |
-     | ruby developer   | KRK01         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
-     | java developer   | KRK02         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
-     | c++ developer    | KRK03         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
-     | node developer   | KRK04         | Day  | true     | internship | Widgets Inc. | carter@ymail.com.com |
+     | ruby developer   | KRK01         | Day  | true     | internship | Widgets Inc. | carter@ymail.com |
+     | java developer   | KRK02         | Day  | true     | internship | Widgets Inc. | carter@ymail.com |
+     | c++ developer    | KRK03         | Day  | true     | internship | Widgets Inc. | carter@ymail.com |
+     | node developer   | KRK04         | Day  | true     | internship | Widgets Inc. | carter@ymail.com |
 
     Given the following job applications exist:
      | job title      | job seeker            |
@@ -90,12 +90,12 @@ Feature: Match a Job to a Job Seeker's Résumé
   @javascript
   Scenario: Match job to job seekers
     Given I am on the home page
-    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully"
     Then I click the "ruby developer" link
     And I wait 1 second
-    And I should see "Match Job Seekers"
-    Then I click the "Match Job Seekers" link
+    And I should see "Match all job seekers"
+    Then I click the "Match all job seekers" link
     And I wait 2 seconds
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Seeker, John"
@@ -104,10 +104,10 @@ Feature: Match a Job to a Job Seeker's Résumé
   @javascript
   Scenario: Contact job developer for job seeker
     Given I am on the home page
-    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
     Then I click the "ruby developer" link
     And I wait 1 second
-    Then I click the "Match Job Seekers" link
+    Then I click the "Match all job seekers" link
     And I wait 2 seconds
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Joseph Jobber"

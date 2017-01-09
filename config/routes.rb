@@ -134,6 +134,7 @@ Rails.application.routes.draw do
     get 'match_resume',        on: :member, as: :match_resume
     get 'match_job_seekers',   on: :member, as: :match_job_seekers
     get :notify_job_developer, on: :member, as: :notify_jd
+    get 'match_jd_job_seekers', on: :member, as: :match_jd_job_seekers
   end
   # --------------------------------------------------------------------------
 
@@ -156,7 +157,7 @@ Rails.application.routes.draw do
   end
 
   get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
-  get 'job_seekers/:id(/download_resume/:resume_id)' => 
+  get 'job_seekers/:id(/download_resume/:resume_id)' =>
     'job_seekers#download_resume',
       as: :download_resume
   # --------------------------------------------------------------------------
