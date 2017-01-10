@@ -19,13 +19,13 @@ Background: data is added to database
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
   | title               | company_job_id  | shift  | fulltime | description                 | company      | creator        |
-  | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+  | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com |
 
-  Given the following jobseeker exist:
+  Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
   | John      | Seeker   | john.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
   | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
@@ -46,7 +46,7 @@ Background: data is added to database
   Scenario: Successful application for his job seeker
     When I am in Company Admin's browser
     Given I am on the home page
-    And I login as "carter@ymail.com.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
 
     When I am in Job Seeker's browser
     Given I am on the home page
@@ -70,14 +70,14 @@ Background: data is added to database
 
     Then I am in Company Admin's browser
     And I should see "Job Seeker: John Seeker has applied to this job"
-    And I am on the Company Person 'carter@ymail.com.com' Home page
+    And I am on the Company Person 'carter@ymail.com' Home page
     And I wait 2 second
     And I should see "Review job application"
     And I should see "Job: software developer"
-    Then "carter@ymail.com.com" should receive an email with subject "Job seeker applied"
-    When "carter@ymail.com.com" opens the email
+    Then "carter@ymail.com" should receive an email with subject "Job seeker applied"
+    When "carter@ymail.com" opens the email
     Then they should see "A job seeker has applied to this job:" in the email body
-    And "carter@ymail.com.com" follows "software developer" in the email
+    And "carter@ymail.com" follows "software developer" in the email
     Then they should see "Widgets Inc."
 
   Scenario: job developer not logged in

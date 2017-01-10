@@ -19,7 +19,7 @@ Background: seed data added to database and log in as agency admim
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  |
-  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 |
   | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 |
 
 Scenario: invite (and reinvite) new agency person

@@ -250,3 +250,7 @@ end
 When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
   expect(page).to have_field(field, with: value)
 end
+
+Then(/^I should see "([^"]+)" in the email field$/) do |value|
+  step %{The field 'Email' should have the value '#{value}'}
+end
