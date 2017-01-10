@@ -33,7 +33,7 @@ Background: seed data added to database
 
   Given the following job applications exist:
     | job title  | job seeker                |
-    | SW dev     | vijaya.karumudi@gmail.com |
+    | SW dev     | vijaya.karumudi@gmail.com   |
     | Trucker    | vijaya.karumudi@gmail.com |
     | Doctor     | vijaya.karumudi@gmail.com |
     | Clerk      | tommy1@gmail.com           |
