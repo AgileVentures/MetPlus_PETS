@@ -86,6 +86,7 @@ class JobSeekersController < ApplicationController
       redirect_to root_path
     else
       @resume = resume
+      @jobseeker.build_address unless @jobseeker.address.present?
       render 'edit'
     end
   end
@@ -164,6 +165,7 @@ class JobSeekersController < ApplicationController
 
   def address_is_empty?
     address = form_params[:address_attributes]
+    return true unless address
     address[:street].empty? && address[:city].empty? && address[:state].empty?
   end
 

@@ -743,7 +743,7 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(flash[:error]).to be_present
       end
       it 'correct content' do
-        expect(flash[:error]).to eq('John Doe does not have a résumé on file')
+        expect(flash[:error]).to eq('John Doe does not have a resume on file')
       end
       it 'redirects to root' do
         expect(response).to redirect_to(root_path)
