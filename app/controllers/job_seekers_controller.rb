@@ -51,7 +51,7 @@ class JobSeekersController < ApplicationController
     authorize @jobseeker
     jobseeker_params = handle_user_form_parameters(permitted_attributes(@jobseeker))
     dispatch_file    = jobseeker_params.delete 'resume'
-    jobseeker_params.delete 'address_attributes' if address_is_empty?
+    jobseeker_params.delete 'address_attributes' if address_is_empty?(jobseeker_params)
 
     models_saved = @jobseeker.update_attributes(jobseeker_params)
 
@@ -163,8 +163,8 @@ class JobSeekersController < ApplicationController
 
   private
 
-  def address_is_empty?
-    address = form_params[:address_attributes]
+  def address_is_empty?(jobseeker_params)
+    address = jobseeker_params[:address_attributes]
     return true unless address
     address[:street].empty? && address[:city].empty? && address[:state].empty?
   end
