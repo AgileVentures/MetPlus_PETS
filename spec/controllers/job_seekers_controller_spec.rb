@@ -286,6 +286,10 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_file_upload
         sign_in owner
       end
+      it 'updates email address' do
+        patch :update, id: owner, job_seeker: FactoryGirl.attributes_for(:job_seeker, email: 'test@test.com')
+        expect(flash[:warning]).to eq 'Please check your inbox to update your email address'
+      end
       context 'successful initial résumé upload' do
         it 'saves the first resume record' do
           expect do

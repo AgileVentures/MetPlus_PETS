@@ -36,9 +36,9 @@ Background: seed data added to database
     | SW dev     | vijaya.karumudi@gmail.com |
     | Trucker    | vijaya.karumudi@gmail.com |
     | Doctor     | vijaya.karumudi@gmail.com |
-    | Clerk      | tommy1@gmail.com           |
-    | Doctor     | tommy1@gmail.com           |
-    | Mime       | tommy1@gmail.com           |
+    | Clerk      | tommy1@gmail.com          |
+    | Doctor     | tommy1@gmail.com          |
+    | Mime       | tommy1@gmail.com          |
 
 
   Given the following resumes exist:

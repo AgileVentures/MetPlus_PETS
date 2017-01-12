@@ -80,9 +80,19 @@ class JobSeekersController < ApplicationController
 
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
+<<<<<<< HEAD
       flash[:notice] = 'Jobseeker was updated successfully.'
       redirect_to(@jobseeker) && return if(pets_user == @jobseeker.case_manager) ||
                                           (pets_user == @jobseeker.job_developer)
+=======
+      if @jobseeker.user.unconfirmed_email?
+        flash[:warning] = 'Please check your inbox to update your email address'
+      else
+        flash[:notice] = 'Jobseeker was updated successfully.'
+      end
+      redirect_to(@jobseeker) && return if (pets_user == @jobseeker.case_manager) ||
+                                           (pets_user == @jobseeker.job_developer)
+>>>>>>> upstream/development
       redirect_to root_path
     else
       @resume = resume
