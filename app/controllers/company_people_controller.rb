@@ -21,8 +21,11 @@ class CompanyPeopleController < ApplicationController
     person_params = handle_user_form_parameters company_person_params
     if @company_person.update_attributes(person_params)
       sign_in :user, @company_person.user, bypass: true
-      flash[:notice] = 'Your profile was updated successfully. ' \
-                       'Any change to your email will be applied after confirmation.'
+      if @company_person.user.unconfirmed_email?
+        flash[:warning] = 'Please check your inbox to update your email address.'
+      else
+        flash[:notice] = 'Your profile was updated successfully.'
+      end
       is_company_admin = @company_person.is_company_admin? @company_person.company
 
       redirect_to is_company_admin ?
