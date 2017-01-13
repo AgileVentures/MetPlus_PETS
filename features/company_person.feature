@@ -101,7 +101,7 @@ Feature: Company Person
     Then I press "edit-profile"
     And I should see "John"
     And I fill in "First Name" with "Tom"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
@@ -113,7 +113,7 @@ Feature: Company Person
     Then I press "edit-profile"
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Mary"
@@ -135,7 +135,7 @@ Feature: Company Person
     And I am on the 'jane@ymail.com' edit profile page
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Mary"
@@ -148,7 +148,7 @@ Feature: Company Person
     And I am on the 'carter@ymail.com' edit profile page
     And I should see "John"
     And I fill in "First Name" with "Tom"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
@@ -161,7 +161,7 @@ Feature: Company Person
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should be on the Company person 'carter@ymail.com' show page
     And I should see "12 Main Street Detroit, Michigan 02034"
 
@@ -173,7 +173,7 @@ Feature: Company Person
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should be on the Company Person 'jane@ymail.com' Home page
     And I should see "Your profile was updated successfully."
 
