@@ -1,0 +1,12 @@
+- if @verified
+  $('.contact-form .form-control').val('');
+  grecaptcha.reset();
+
+// Move to the top of the form container so that the user can see the alert
+// We're using promise() to prevent the callback from firing twice
+// Ref: http://stackoverflow.com/questions/8790752/callback-of-animate-gets-called-twice-jquery
+
+$('html, body').animate({ scrollTop: $('.contact-row').position().top}, 500).promise().then(function() {
+$('.alert-message').html("#{ j(render @alert_template) }");
+});
+
