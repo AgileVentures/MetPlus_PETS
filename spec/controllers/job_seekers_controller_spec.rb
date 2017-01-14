@@ -203,7 +203,6 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_file_upload
 
         ActionMailer::Base.deliveries.clear
-
         js_status = FactoryGirl.create(:job_seeker_status)
         @js_hash = FactoryGirl.attributes_for(
           :job_seeker,
@@ -287,8 +286,10 @@ RSpec.describe JobSeekersController, type: :controller do
         sign_in owner
       end
       it 'updates email address' do
-        patch :update, id: owner, job_seeker: FactoryGirl.attributes_for(:job_seeker, email: 'test@test.com')
-        expect(flash[:warning]).to eq 'Please check your inbox to update your email address'
+        patch :update, id: owner, job_seeker: FactoryGirl
+          .attributes_for(:job_seeker, email: 'test@test.com')
+        expect(flash[:warning])
+          .to eq 'Please check your inbox to update your email address'
       end
       context 'successful initial résumé upload' do
         it 'saves the first resume record' do
@@ -829,12 +830,12 @@ RSpec.describe JobSeekersController, type: :controller do
                          job: job, job_seeker: job_seeker2,
                          status: 'accepted')
     end
-    let(:agency)       { FactoryGirl.create(:agency) }
+    let(:agency) { FactoryGirl.create(:agency) }
     let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
     let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
-    let!(:resume)       { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let!(:resume2)       { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
+    let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:resume2) { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
