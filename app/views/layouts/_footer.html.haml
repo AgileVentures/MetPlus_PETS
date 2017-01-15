@@ -1,5 +1,5 @@
 %div{class: "footer text-center"}
-    %div{:class => "container"}
+    %div{ :class => "container" }
         %div{:class => "footer-left"}
             %span= "&reg;".html_safe+" MetPlus #{Date.today.year}"
             %span= " | Terms and Conditions Apply"
@@ -12,7 +12,6 @@
                 = link_to "Search Resumes", '#', class: "#{yield(:search_resume_active)}"
                 |
             - elsif pets_user.try(:agency)  && pets_user.is_job_developer?(pets_user.try(:agency))
-                
                 = link_to "Post jobs", new_job_path, class: "#{yield(:new_job_active)}"
                 |
                 = link_to "Search Resumes", '#', class: "#{yield(:search_resume_active)}"
