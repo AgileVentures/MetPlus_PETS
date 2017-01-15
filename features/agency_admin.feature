@@ -31,16 +31,16 @@ Background: seed data added to database and log in as agency admim
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
     | MetPlus | Gadgets Inc. | gadgets.com | 555-222-4444 | corp@gadgets.com | corp@gadgets.com | 12-3456791 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
   | title         | company_job_id  | shift  | fulltime | description | company      | creator          | skills    |
-  | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@widgets.com | Web Research |
+  | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Given the following jobseeker exist:
   | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |

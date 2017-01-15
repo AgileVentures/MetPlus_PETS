@@ -32,25 +32,25 @@ Feature: Match Jobs to a Job Seeker
 
    Given the following companies exist:
      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
      | MetPlus | Hammer Inc.  | hammer.com  | 555-222-4444 | corp@hammer.com  | corp@hammer.com  | 13-3456789 | active |
 
    Given the following company people exist:
      | company      | role  | first_name | last_name | email            | password  | phone        |
-     | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
+     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
      | Hammer Inc.  | CA    | Tom        | Hammer    | ca@hammer.com    | qwerty123 | 555-222-4445 |
 
    Given the following jobs exist:
      | title            | company_job_id  | shift  | fulltime | description                 | company      | creator        |
-     | ruby developer   | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-     | c++ developer    | KRK02K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-     | erlang developer | KRK03K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+     | ruby developer   | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+     | c++ developer    | KRK02K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+     | erlang developer | KRK03K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
      | hammer expert    | KRK04K          | Evening| true     | internship position with pay| Hammer Inc.  | ca@hammer.com |
      | nailer           | KRK05K          | Evening| true     | internship position with pay| Hammer Inc.  | ca@hammer.com |
-     | devops           | KRK06K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-     | master developer | KRK07K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-     | coffee breaker   | KRK08K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
-     | doer             | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+     | devops           | KRK06K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+     | master developer | KRK07K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+     | coffee breaker   | KRK08K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
+     | doer             | KRK09K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com.com |
      | breaker          | KRK10K          | Evening| true     | internship position with pay| Hammer Inc.  | ca@hammer.com |
 
   @javascript

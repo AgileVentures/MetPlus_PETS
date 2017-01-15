@@ -21,12 +21,12 @@ Feature: Have a task system in the site
 
     Given the following companies exist:
       | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | pending_registration |
+      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | pending_registration |
 
     Given the following company people exist:
       | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | Steve      | Jobs      | ca@widgets.com   | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CA    | Steve      | Jobs      | carter@ymail.com.com   | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
 
     Given the following tasks exist:
@@ -40,7 +40,7 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john.worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
       | job_application    | Widgets Inc.,CA      | 2016-03-10    | NEW         | john-seeker@gmail.com |
-      | job_application    | ca@widgets.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+      | job_application    | carter@ymail.com.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
 
   @javascript
@@ -86,7 +86,7 @@ Feature: Have a task system in the site
   @javascript
   Scenario: Company admin task management
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com.com" with password "qwerty123"
     Then I should see "Signed in successfully."
     And I click the "Unassigned Company Tasks" link
     And the task 9 is present

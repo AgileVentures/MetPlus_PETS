@@ -31,6 +31,9 @@
 # Ignore application configuration
 /config/application.yml
 
+spec/examples.txt
+
+
 # Ignore Editor files
 .idea/*
 

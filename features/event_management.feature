@@ -16,11 +16,11 @@ Background: seed data
 
   Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456799 | active |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456799 | active |
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following company addresses exist:
   | company      | street           | city    | state    | zipcode |
@@ -77,8 +77,8 @@ Scenario: Company registration request in PETS
   | Street                         | 12 Main Street      |
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
-  | Email                          | contact@widgets.com |
-  | Job Email                      | hr@widgets.com      |
+  | Email                          | contact@ymail.com   |
+  | Job Email                      | hr_dept@ymail.com   |
   | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
   | Website                        | www.widgets.com     |
@@ -88,7 +88,7 @@ Scenario: Company registration request in PETS
   | First Name                     | Hugh                |
   | Last Name                      | Jobs                |
   | Contact Phone                  | 555-555-1212        |
-  | Contact Email                  | hughjobs@widgets.com|
+  | Contact Email                  | hughjobs@ymail.com  |
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
   And  I select "Michigan" in select list "State"
