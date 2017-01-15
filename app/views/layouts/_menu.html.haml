@@ -4,11 +4,11 @@
       =link_to 'MET|PLUS', root_path ,{class: 'navbar-brand'}
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
-        %li{:class => "menu-item #{yield(:job_active)}"}
+        %li{:class => "menu-item #{ yield(:job_active) }"}
           %a{:href => '/jobs', id: 'job'} Jobs
-        %li{:class => "menu-item #{yield(:about_active)}"}
+        %li{:class => "menu-item #{ yield(:about_active) }"}
           %a{:href => '#', id: 'about'} About
-        %li{:class => "menu-item #{yield(:contact_active)}"}
+        %li{:class => "menu-item #{ yield(:contact_active) }"}
           %a{:href => '#', id: 'contact'} Contact
         %li{:class => 'menu-item'}
           - if user_signed_in?
@@ -19,9 +19,9 @@
                          id: 'dd_menu', 'aria-expanded' => 'false'}
                   = ("Admin" + "<span class='caret'></span>").html_safe
                 %ul.dropdown-menu{'aria-labelledby' => 'dd_menu'}
-                  %li{:class => "#{yield(:agency_admin_active)}"}
+                  %li{:class => "#{ yield(:agency_admin_active) }"}
                     = link_to('Agency and Partner Companies', agency_admin_home_path)
-                  %li{:class => "#{yield(:agency_admin_job_active)}"}
+                  %li{:class => "#{ yield(:agency_admin_job_active) }"}
                     = link_to('Job Properties',                 |
                             agency_admin_job_properties_path)   |
       %ul{:class => 'nav navbar-nav navbar-right'}
