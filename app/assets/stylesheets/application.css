@@ -160,6 +160,11 @@ body {
   color: yellow;
 }
 
+.navbar-default .nav > .dropdown > .dropdown-menu > .active > a {
+  background: none;
+  color: yellow;
+}
+
 .navbar-default .navbar-text > a {
     color: yellow;
 }
