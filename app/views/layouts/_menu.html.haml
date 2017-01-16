@@ -31,15 +31,15 @@
               %div{:class => 'button-menu'}
                 = link_to 'Log In', login_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
         - else
-          %li{:class => 'menu-item'}
-            %li{:class => 'menu-item dropdown'}
-              %a{href: '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown',
+          %li.menu-item
+            %li.menu-item.dropdown
+              %a{ href: '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown',
                         role: 'button', 'aria-haspopup' => 'true',
-                         id: 'dd_menu', 'aria-expanded' => 'false'}
+                         id: 'dd_menu', 'aria-expanded' => 'false' }
                 Hello,
                 %span.navbar-name= current_user.first_name
                 = ("<span class='caret'></span>").html_safe
-              %ul.dropdown-menu{'aria-labelledby' => 'dd_menu'}
+              %ul.dropdown-menu{ 'aria-labelledby' => 'dd_menu' }
                 %li
                   = link_to 'Log out', logout_path, :role => 'button', method: :delete
           %li
