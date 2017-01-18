@@ -177,6 +177,33 @@ Scenario: edit Js Registration without password change
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
+Scenario: edit Js Registration with one address field missing
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully"
+  When I click the "vijaya" link
+  And I fill in "City" with ""
+  Then I click the "Update Job seeker" button
+  Then I should see "Address city can't be blank"
+  When I fill in "Street" with ""
+  Then I click the "Update Job seeker" button
+  Then I should see "Address street can't be blank"
+
+Scenario: edit Js Registration with all address fields
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully"
+  When I click the "vijaya" link
+  And I fill in "City" with "Nairobi"
+  Then I fill in "Street" with "Tom Mboya"
+  Then I select "Idaho" in select list "State"
+  Then I click the "Update Job seeker" button
+  Then I should see "Jobseeker was updated successfully."
+  When I click the "vijaya" link
+  Then The field 'City' should have the value 'Nairobi'
+  And The field 'Street' should have the value 'Tom Mboya'
+  And The field 'State' should have the value 'Idaho'
+
 @javascript
 Scenario: delete jobseeker
   Given I am on the home page

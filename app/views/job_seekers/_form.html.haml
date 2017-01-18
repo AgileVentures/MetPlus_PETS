@@ -3,7 +3,7 @@
     = render 'shared/error_messages', object: @jobseeker
     %br
   .clearfix
-  
+
   - @user_form = js
   = render partial: 'users/subform',
       locals: {new_form: (new_form if defined? new_form)}
