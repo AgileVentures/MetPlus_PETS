@@ -41,13 +41,13 @@
                 = ("<span class='caret'></span>").html_safe
               %ul.dropdown-menu{ 'aria-labelledby' => 'dd_menu' }
                 %li
-                  -if current_user.actable_type == 'JobSeeker'
+                  - if current_user.actable_type == 'JobSeeker'
                     = link_to 'Edit Profile', edit_job_seeker_path(current_user.actable_id)
-                  -elsif current_user.actable_type == 'CompanyPerson'
+                  - elsif current_user.actable_type == 'CompanyPerson'
                     = link_to 'Edit Profile', edit_profile_company_person_path(current_user.actable_id)
-                  -elsif current_user.actable_type == 'AgencyPerson'
+                  - elsif current_user.actable_type == 'AgencyPerson'
                     = link_to 'Edit Profile', edit_profile_agency_person_path(current_user.actable_id)
-                  -else
+                  - else
                     = link_to 'Edit Profile', edit_user_registration_path(current_user)
           %li
             %div{:class => 'button-menu'}
