@@ -119,6 +119,15 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
+  config.before(:each) do
+    DatabaseCleaner.start
+    Settings.reload!
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
 
