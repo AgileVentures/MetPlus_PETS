@@ -155,7 +155,8 @@ Scenario: edit Js Registration
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "vijaya" link
+  When I click the "Hello, vijaya" link
+  And I click the "Edit Profile" link
   And I fill in "First Name" with "vijaya1"
   And I fill in "Zipcode" with "54321"
   Then I select "Employed Not Looking" in select list "Status"
@@ -163,7 +164,8 @@ Scenario: edit Js Registration
   And I fill in "Password Confirmation" with "password"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-  When I click the "vijaya" link
+  When I click the "Hello, vijaya" link
+  And I click the "Edit Profile" link
   Then The field 'First Name' should have the value 'vijaya1'
   And The field 'Zipcode' should have the value '54321'
 
@@ -171,7 +173,8 @@ Scenario: edit Js Registration without password change
   Given I am on the home page
   And I login as "vijaya.karumudi@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "vijaya" link
+  When I click the "Hello, vijaya" link
+  And I click the "Edit Profile" link
   And I fill in "First Name" with "vijaya1"
   Then I select "Employed Not Looking" in select list "Status"
   Then I click the "Update Job seeker" button
