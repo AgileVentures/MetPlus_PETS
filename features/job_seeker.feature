@@ -9,6 +9,7 @@ Background: seed data added to database
   Given the default settings are present
 
   Given the following jobseekers exist:
+
     | first_name| last_name| email                     | phone       | password | year_of_birth |job_seeker_status  |
     | Mike      | Smith    | mike.smith@gmail.com      | 345-890-7890| password | 1990          |Unemployed Seeking |
     | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password | 1990          |Unemployed Seeking |
@@ -31,6 +32,7 @@ Background: seed data added to database
     | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
+
     | job title  | job seeker           |
     | SW dev     | mike.smith@gmail.com |
     | Trucker    | mike.smith@gmail.com |
@@ -39,6 +41,7 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com     |
     | Mime       | tommy1@gmail.com     |
 
+   
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | mike.smith@gmail.com |
@@ -95,7 +98,6 @@ Scenario: JS Registration and model(s) validation
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent to your email address."
 
-
 @javascript
 Scenario: job seeker sees applied jobs and new job opportunities
   Given I am on the home page
@@ -137,7 +139,6 @@ Scenario: edit Js profile
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
-
 @javascript
 Scenario: Agency and Company people actions
   # admin: delete jobseeker
@@ -148,7 +149,16 @@ Scenario: Agency and Company people actions
   And I wait 1 second
   Then I should see "Jobseeker was deleted successfully."
 
-  # Job Developer sees job seeker's job applications
+Scenario: cancel redirects to JS home page
+  Given I am on the home page
+  And I login as "mike.smith@gmail.com" with password "password"
+  And I should see "Your Information"
+  Then I click the "Mike" link
+  Then I click the "Cancel" link
+  And I should be on the Job Seeker 'mike.smith@gmail.com' Home page
+
+@javascript
+Scenario: Job Developer sees job seeker's job applications
   Then I am on the JobSeeker Show page for "tommy1@gmail.com"
   And I wait 1 second
   And I should see "Clerk"
@@ -168,3 +178,4 @@ Scenario: Agency and Company people actions
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
   Then I should get a download with the filename "Janitor-Resume.doc"
+
