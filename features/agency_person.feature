@@ -50,7 +50,7 @@ Given the following agency relations exist:
     Then I press "edit-profile"
     And I should see "Jane"
     And I fill in "First Name" with "Samantha"
-    Then I click "Update Agency person" button
+    Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Samantha"
@@ -179,7 +179,7 @@ Given the following agency relations exist:
     And I wait 1 second
     And I should see "Update Your Profile"
     When I fill in "Email" with "aaa@metplus.org"
-    And I click "Update Agency person" button
+    And I click "Update Your Profile" button
     Then I should be on the Agency Person 'aa@metplus.org' Home page
     And I should see "Please check your inbox to confirm your email address"
     And "aaa@metplus.org" should receive an email with subject "Confirmation instructions"
