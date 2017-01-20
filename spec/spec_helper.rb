@@ -114,17 +114,32 @@ RSpec.configure do |config|
 =end
   config.example_status_persistence_file_path = "spec/examples.txt"
   config.include FactoryGirl::Syntax::Methods
+
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(:each) do
-    DatabaseCleaner.start
-    Settings.reload!
+    DatabaseCleaner.strategy = :transaction
   end
 
-  config.after(:each) do
+  config.before(:each, type: :feature) do
+    # :rack_test driver's Rack app under test shares database connection
+    # with the specs, so continue to use transaction strategy for speed.
+
+    unless Capybara.current_driver == :rack_test
+      # Driver is probably for an external browser with an app
+      # under test that does *not* share a database connection with the
+      # specs, so use truncation strategy.
+      DatabaseCleaner.strategy = :truncation
+    end
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
