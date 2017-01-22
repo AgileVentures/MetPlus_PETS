@@ -1,8 +1,8 @@
 class JobSeeker < ActiveRecord::Base
   acts_as :user
-  has_many   :resumes
+  has_many :resumes
 
-  belongs_to :address
+  has_one :address, as: :location, dependent: :destroy
   accepts_nested_attributes_for :address
   has_many   :agency_relations
   has_many   :agency_people, through: :agency_relations
@@ -47,7 +47,9 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def assign_job_developer(job_developer, agency)
-    raise "User #{job_developer.full_name} is not a Job Developer" unless job_developer.is_job_developer? agency
+    unless job_developer.is_job_developer? agency
+      raise "User #{job_developer.full_name} is not a Job Developer"
+    end
     assign_agency_person(job_developer, :JD)
   end
 
@@ -56,7 +58,9 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def assign_case_manager(case_manager, agency)
-    raise "User #{case_manager.full_name} is not a Case Manager" unless case_manager.is_case_manager? agency
+    unless case_manager.is_case_manager? agency
+      raise "User #{case_manager.full_name} is not a Case Manager"
+    end
     assign_agency_person(case_manager, :CM)
   end
 
@@ -87,7 +91,6 @@ class JobSeeker < ActiveRecord::Base
     ap_relation = find_agency_person_relation(role_key)
     if ap_relation
       # Is this role assigned already to an agency person?
-
       # If so, is this the same agency person? - then we're done
       return if ap_relation.agency_person == agency_person
 

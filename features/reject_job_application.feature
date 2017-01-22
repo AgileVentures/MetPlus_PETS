@@ -12,19 +12,19 @@ Feature: Reject a job application
       | MetPlus | JD        | Dave       | Smith     | dave@metplus.org     | qwerty123 |
 
     Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+      | agency  | name         | website     | phone        | email          | job_email      | ein        | status |
       | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
     Given the following company people exist:
-      | company      | role  | first_name | last_name | email            | password  | phone        |
+      | company      | role  | first_name | last_name | email           | password  | phone        |
       | Widgets Inc. | CC    | Cicil      | Smith     | cicil@ymail.com | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com  | qwerty123 | 555-222-3334 |
 
     Given the following jobseekers exist:
-      | first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
-      | John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
-      | Jane       | Seeker    | jane@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
-      | June       | Seeker    | june@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+      | first_name | last_name | email         | phone        | password  | year_of_birth | job_seeker_status  |
+      | John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
+      | Jane       | Seeker    | jane@mail.com | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
+      | June       | Seeker    | june@mail.com | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
 
     Given the following agency relations exist:
       | job_seeker    | agency_person    | role |
@@ -55,24 +55,7 @@ Feature: Reject a job application
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
     And I should see "jane@mail.com" application is listed last
-    And I should see "jane@mail.com" application for "hr manager" changes to not_accepted 
-
-  @javascript
-  Scenario: company admin reject a job application
-    Given I am on the home page
-    And I login as "cane@ymail.com" with password "qwerty123"
-    And I wait 1 second
-    Then I click the "hr manager" link
-    And I should see "3" active applications for "hr manager"
-    Then I click the "Seeker, June" link
-    And I wait 1 second
-    Then I reject "june@mail.com" application for "hr manager"
-    And I should see an "reject" confirmation
-    And I click the "Reject" button
-    And I should see "Please enter a reason for rejecting this application."
-    And I input "Skillset not matching" as the reason for rejection
-    Then I click the "Reject" button
-    And I should see "june@mail.com" application for "hr manager" changes to not_accepted
+    And I should see "jane@mail.com" application for "hr manager" changes to not_accepted
 
   @javascript
   Scenario: job developer reject notification when job application rejected
