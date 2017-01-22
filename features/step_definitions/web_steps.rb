@@ -57,6 +57,7 @@ And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |to_search
 end
 
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
+  expect(page.body).to have_text toSearch
   regex = /#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
   if not_see
     expect(page.text).not_to match regex
@@ -66,6 +67,7 @@ Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, 
 end
 
 Then(/^(?:I|they) should( not)? see "([^"]*)" after "([^"]*)"$/) do |not_see, toSearch, first|
+  expect(page.body).to have_text toSearch
   regex = /#{Regexp.quote("#{first}")}.+#{Regexp.quote("#{toSearch}")}/
   if not_see
     expect(page.text).not_to match regex
