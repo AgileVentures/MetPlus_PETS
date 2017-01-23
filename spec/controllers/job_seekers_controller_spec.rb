@@ -809,7 +809,14 @@ RSpec.describe JobSeekersController, type: :controller do
       end
     end
   end
+
   describe 'GET download_resume' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in company_admin
+    end
+
     let(:company)       { FactoryGirl.create(:company) }
     let(:company2)      { FactoryGirl.create(:company) }
     let(:job)           { FactoryGirl.create(:job, company: company) }
@@ -836,11 +843,7 @@ RSpec.describe JobSeekersController, type: :controller do
     let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
     let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let!(:resume2) { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
-      sign_in company_admin
-    end
+
     context 'Successful download' do
       it 'does not raise exception' do
         stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
