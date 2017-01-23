@@ -105,7 +105,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
-    
+
   Scenario: company admin login and edit email from home page
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
@@ -113,7 +113,7 @@ Feature: Company Person
     Then I press "edit-profile"
     And I should see "John"
     And I fill in "Email" with "carter1@ymail.com"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should see "Please check your inbox to update your email address."
     And I should not see "carter1@ymail.com"
     And I should see "carter@ymail.com"
@@ -129,7 +129,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Mary"
-    
+
   Scenario: company contact cancel out of edit profile
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
