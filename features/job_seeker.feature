@@ -149,16 +149,7 @@ Scenario: Agency and Company people actions
   And I wait 1 second
   Then I should see "Jobseeker was deleted successfully."
 
-Scenario: cancel redirects to JS home page
-  Given I am on the home page
-  And I login as "mike.smith@gmail.com" with password "password"
-  And I should see "Your Information"
-  Then I click the "Mike" link
-  Then I click the "Cancel" link
-  And I should be on the Job Seeker 'mike.smith@gmail.com' Home page
-
-@javascript
-Scenario: Job Developer sees job seeker's job applications
+  # Job Developer sees job seeker's job applications
   Then I am on the JobSeeker Show page for "tommy1@gmail.com"
   And I wait 1 second
   And I should see "Clerk"
