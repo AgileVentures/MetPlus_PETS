@@ -233,6 +233,8 @@ if Rails.env.development? || Rails.env.staging?
   puts "Jobs created: #{Job.count}"
 
   #-------------------------- Job Seekers ---------------------------------
+  #
+  # This JobSeeker is used in email previews too :-)
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                          email: 'tomseekerpets@gmail.com', password: 'qwerty123',
                          year_of_birth: '1980', phone: '111-222-3333',
