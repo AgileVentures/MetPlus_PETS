@@ -9,6 +9,7 @@ Background: seed data added to database
   Given the default settings are present
 
   Given the following jobseekers exist:
+
     | first_name| last_name| email                     | phone       | password | year_of_birth |job_seeker_status  |
     | Mike      | Smith    | mike.smith@gmail.com      | 345-890-7890| password | 1990          |Unemployed Seeking |
     | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password | 1990          |Unemployed Seeking |
@@ -31,6 +32,7 @@ Background: seed data added to database
     | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
+
     | job title  | job seeker           |
     | SW dev     | mike.smith@gmail.com |
     | Trucker    | mike.smith@gmail.com |
@@ -39,6 +41,7 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com     |
     | Mime       | tommy1@gmail.com     |
 
+   
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | mike.smith@gmail.com |
@@ -95,7 +98,6 @@ Scenario: JS Registration and model(s) validation
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent to your email address."
 
-
 @javascript
 Scenario: job seeker sees applied jobs and new job opportunities
   Given I am on the home page
@@ -136,7 +138,6 @@ Scenario: edit Js profile
   Then I select "Idaho" in select list "State"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-
 
 @javascript
 Scenario: Agency and Company people actions
