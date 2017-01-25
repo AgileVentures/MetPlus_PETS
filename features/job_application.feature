@@ -148,4 +148,3 @@ Given the following job applications exist:
     Then I should see button "Download Resume"
     And I click the "Download Resume" button
     Then I should get a download with the filename "Janitor-Resume.doc"
-

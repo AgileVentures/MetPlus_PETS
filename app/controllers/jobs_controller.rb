@@ -10,6 +10,7 @@ class JobsController < ApplicationController
                                         :match_jd_job_seekers]
 
   def index
+
     # Make a copy of q params since we will strip out any commas separating
     # words - need to retain any commas in the form (so user is not surprised)
     q_params = params[:q] ? params[:q].dup : params[:q]
@@ -245,6 +246,44 @@ class JobsController < ApplicationController
       flash[:alert] = "Error: #{exc.message}"
       redirect_to(action: 'show', id: @job.id) && return
     end
+  end
+
+  def notify_job_developer
+    # This action handles the request from a company person to notify
+    # a job developer of his/her interest in a job seeker.
+    # This action is invoked from the view showing all job seekers
+    # that match a particular job (jobs/match_job_seekers.html.haml)
+
+    # Parameters: {"job_developer_id"=>"3", "company_person_id"=>"1",
+    #              "job_seeker_id"=>"3", "id"=>"202"}
+
+    raise 'Unsupported request' unless request.xhr?
+
+    authorize @job
+
+    begin
+      company_person = CompanyPerson.find(params[:company_person_id])
+      job_developer  = AgencyPerson.find(params[:job_developer_id])
+      job_seeker     = JobSeeker.find(params[:job_seeker_id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { status: 404 }
+      return
+    end
+
+    # Anonymous class to contain event data
+    obj = Struct.new(:job, :company_person, :job_developer, :job_seeker)
+
+    Event.create(:CP_INTEREST_IN_JS,
+                 obj.new(@job, company_person, job_developer, job_seeker))
+
+    render json: { status: 200 }
+  end
+
+  private
+
+  def set_job_seekers
+    return unless pets_user && pets_user.is_job_developer?(current_agency)
+    @job_seekers = pets_user.job_seekers
   end
 
   def notify_job_developer

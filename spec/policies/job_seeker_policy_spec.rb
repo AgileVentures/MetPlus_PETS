@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekerPolicy do
   let(:visitor) { nil }
@@ -14,13 +15,12 @@ RSpec.describe JobSeekerPolicy do
   let(:cc2)     { FactoryGirl.create(:company_contact) }
   let(:comp)    { FactoryGirl.create(:company) }
   let(:job)     { FactoryGirl.create(:job, company: comp) }
-  let!(:ja) do
-    FactoryGirl.create(:job_application, job: job, job_seeker: js1)
-  end
+
   let!(:ca)     { FactoryGirl.create(:company_admin, company: comp) }
   let(:comp2)   { FactoryGirl.create(:company) }
   let(:job2)    { FactoryGirl.create(:job, company: comp2) }
   let(:ca2)     { FactoryGirl.create(:company_admin, company: comp2) }
+
   permissions :update?, :edit? do
     it 'only allows access if user is the account owner' do
       expect(JobSeekerPolicy).to permit(js1, js1)
@@ -156,7 +156,17 @@ RSpec.describe JobSeekerPolicy do
       expect(JobSeekerPolicy).not_to permit(js2, js1)
     end
   end
+
   permissions :download_resume? do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+
+    before do
+      FactoryGirl.create(:job_application, job: job, job_seeker: js1)
+    end
+
     it 'allows access if user is a company admin/contact' do
       expect(JobSeekerPolicy).to permit(ca, js1)
       expect(JobSeekerPolicy).to permit(cc, js1)

@@ -9,22 +9,22 @@ Background: seed data added to database
   Given the default settings are present
 
   Given the following jobseekers exist:
-    | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
-    | vijaya    | karumudi | vijaya.karumudi@gmail.com | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-    | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-    | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+
+    | first_name| last_name| email                     | phone       | password | year_of_birth |job_seeker_status  |
+    | Mike      | Smith    | mike.smith@gmail.com      | 345-890-7890| password | 1990          |Unemployed Seeking |
+    | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password | 1990          |Unemployed Seeking |
+    | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password | 1990          |Unemployed Seeking |
 
   Given the following companies exist:
-    | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+    | agency  | name         | website     | phone        | email          | job_email      | ein        | status |
     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
     | company      | role  | first_name | last_name | email            | password  | phone        |
-    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
-    | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
+    | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
-    | title   | shift  | fulltime | description | company      | creator        |
+    | title   | shift  | fulltime | description | company      | creator          |
     | SW dev  | Evening| true     | develop SW  | Widgets Inc. | carter@ymail.com |
     | Trucker | Day    | true     | drive truck | Widgets Inc. | carter@ymail.com |
     | Doctor  | Day    | true     | heal sick   | Widgets Inc. | carter@ymail.com |
@@ -32,43 +32,39 @@ Background: seed data added to database
     | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
-    | job title  | job seeker                |
-    | SW dev     | vijaya.karumudi@gmail.com |
-    | Trucker    | vijaya.karumudi@gmail.com |
-    | Doctor     | vijaya.karumudi@gmail.com |
-    | Clerk      | tommy1@gmail.com          |
-    | Doctor     | tommy1@gmail.com          |
-    | Mime       | tommy1@gmail.com          |
 
+    | job title  | job seeker           |
+    | SW dev     | mike.smith@gmail.com |
+    | Trucker    | mike.smith@gmail.com |
+    | Doctor     | mike.smith@gmail.com |
+    | Clerk      | tommy1@gmail.com     |
+    | Doctor     | tommy1@gmail.com     |
+    | Mime       | tommy1@gmail.com     |
 
+   
   Given the following resumes exist:
     | file_name          | job_seeker             |
-    | Janitor-Resume.doc | vijaya.karumudi@gmail.com |
+    | Janitor-Resume.doc | mike.smith@gmail.com |
 
   Given the following agency people exist:
     | agency  | role  | first_name | last_name | phone        | email          | password  |
     | MetPlus | AA,JD | John       | Smith     | 555-111-2222 | aa@metplus.org | qwerty123 |
 
   Given the following agency relations exist:
-  	| job_seeker      | agency_person    | role |
+  	| job_seeker       | agency_person    | role |
   	| tommy1@gmail.com | aa@metplus.org   | JD   |
 
-Scenario: new Js Registration
+Scenario: JS Registration and model(s) validation
   Given I am on the Jobseeker Registration page
   When I fill in "First Name" with "test"
   And I fill in "Last Name" with "js80"
-  And I fill in "Email" with "testjobseeker80@gmail.com"
   And I fill in "Phone" with "345-890-7890"
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
   And I select "1990" in select list "Year Of Birth"
   Then I select "Employed Not Looking" in select list "Status"
-  And I choose resume file "Admin-Assistant-Resume.pdf"
-  Then I click the "Create Job seeker" button
-  Then I should see "A message with a confirmation and link has been sent to your email address. Please follow the link to activate your account."
 
-Scenario: validate email address
-  Given I am on the Jobseeker Registration page
+  # Validate email address
   And I fill in "Email" with "test@gmal.com"
   Then I click the "Create Job seeker" button
   And I should see "Email is not valid (did you mean ... test@gmail.com?"
@@ -88,117 +84,72 @@ Scenario: validate email address
   Then I click the "Create Job seeker" button
   And I should see "Email is not valid (did you mean ... test@yahoo.com?"
   And I fill in "Email" with "test.addr@yahoo.com"
-  Then I click the "Create Job seeker" button
-  And I should not see "Email is not a valid address"
-  And I fill in "Email" with "test_addr@yahoo.com"
-  Then I click the "Create Job seeker" button
-  And I should not see "Email is not a valid address"
 
-Scenario: Invalid résumé file type
-  Given I am on the Jobseeker Registration page
-  When I fill in "First Name" with "test"
-  And I fill in "Last Name" with "js80"
-  And I fill in "Email" with "testjobseeker80@gmail.com"
-  And I fill in "Phone" with "345-890-7890"
+  # invalid résumé file type
   And I fill in "Password" with "password"
   And I fill in "Password Confirmation" with "password"
-  And I select "1990" in select list "Year Of Birth"
-  Then I select "Employed Not Looking" in select list "Status"
   And I choose resume file "Test File.zzz"
   Then I click the "Create Job seeker" button
-  Then I should see "File name unsupported file type"
+  And I should not see "Email is not a valid address"
+  And I should see "File name unsupported file type"
+  And I choose resume file "Admin-Assistant-Resume.pdf"
+  And I fill in "Password" with "password"
+  And I fill in "Password Confirmation" with "password"
+  Then I click the "Create Job seeker" button
+  Then I should see "A message with a confirmation and link has been sent to your email address."
 
 @javascript
-Scenario: login jobseeker, land on home page, see applied jobs
+Scenario: job seeker sees applied jobs and new job opportunities
   Given I am on the home page
-  And I login as "vijaya.karumudi@gmail.com" with password "password"
-  Then I should see "Signed in successfully."
-  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
-  And I should see "vijaya"
+  And I login as "mike.smith@gmail.com" with password "password"
+  And I wait 1 second
+  Then I should see "Signed in successfully"
+  And I should be on the Job Seeker 'mike.smith@gmail.com' Home page
   And I should see "SW dev" before "Job Opportunities - New"
   And I should see "Trucker" before "Job Opportunities - New"
   And I should see "Doctor" before "Job Opportunities - New"
-
-@javascript
-Scenario: job seeker finds new job opportunities
-  When I am in Job Seeker's browser
-  Given I am on the home page
-  And I login as "vijaya.karumudi@gmail.com" with password "password"
-  And I wait 1 second
-  Then I should see "Signed in successfully"
-  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
   And I should see "Mime" after "Job Opportunities - New"
   And I should see "Clerk" after "Job Opportunities - New"
-  When I am in Company Contact's browser
-  Given I am on the home page
-  And I login as "jane@ymail.com" with password "qwerty123"
-  And I create the following jobs
-  | title          | shift   | fulltime | description       | company      | creator        |
-  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | carter@ymail.com |
-  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | carter@ymail.com |
-  When I am in Job Seeker's browser
-  And I reload the page
-  And I wait 1 second
-  Then I should see "UI Developer" after "Job Opportunities - New"
-  And I should see "RoR Developer" after "UI Developer"
 
-Scenario: jobseeker homepage with no agency relations
+Scenario: edit Js profile
+  # without password change
   Given I am on the home page
-  And I login as "vijaya.karumudi@gmail.com" with password "password"
-  Then I should see "Signed in successfully."
-  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
-  And I should see "Name vijaya karumudi"
-  And I should see "Case Manager None assigned"
-  And I should see "Job Developer None assigned"
-
-Scenario: edit Js Registration
-  Given I am on the home page
-  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  And I login as "mike.smith@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "vijaya" link
-  And I fill in "First Name" with "vijaya1"
-  And I fill in "Zipcode" with "54321"
+  When I click the "Mike" link
+  And I fill in "First Name" with "Mikes"
   Then I select "Employed Not Looking" in select list "Status"
-  And I fill in "Password" with "password"
-  And I fill in "Password Confirmation" with "password"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-  When I click the "vijaya" link
-  Then The field 'First Name' should have the value 'vijaya1'
-  And The field 'Zipcode' should have the value '54321'
 
-Scenario: edit Js Registration without password change
-  Given I am on the home page
-  And I login as "vijaya.karumudi@gmail.com" with password "password"
-  Then I should see "Signed in successfully"
-  When I click the "vijaya" link
-  And I fill in "First Name" with "vijaya1"
-  Then I select "Employed Not Looking" in select list "Status"
+  # edit profile with address fields missing
+  Then I click the "Mikes" link
+  And I fill in "City" with ""
+  Then I click the "Update Job seeker" button
+  Then I should see "Address city can't be blank"
+  When I fill in "Street" with ""
+  Then I click the "Update Job seeker" button
+  Then I should see "Address street can't be blank"
+
+  # edit profile with all address fields
+  Then I click the "Mikes" link
+  And I fill in "City" with "Nairobi"
+  Then I fill in "Street" with "Tom Mboya"
+  Then I select "Idaho" in select list "State"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
 
 @javascript
-Scenario: delete jobseeker
+Scenario: Agency and Company people actions
+  # admin: delete jobseeker
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
-  Then I am on the JobSeeker Show page for "vijaya.karumudi@gmail.com"
+  Then I am on the JobSeeker Show page for "jane.seeker@places.com"
   Then I click and accept the "Delete Job Seeker" button
   And I wait 1 second
   Then I should see "Jobseeker was deleted successfully."
 
-Scenario: cancel redirects to JS home page
-  Given I am on the home page
-  And I login as "vijaya.karumudi@gmail.com" with password "password"
-  And I should see "Your Information"
-  Then I click the "vijaya" link
-  Then I click the "Cancel" link
-  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
-
-@javascript
-Scenario: Job Developer sees job seeker's job applications
-  Given I am on the home page
-  And I login as "aa@metplus.org" with password "qwerty123"
-  Then I should see "Welcome back to PETS, John Smith"
+  # Job Developer sees job seeker's job applications
   Then I am on the JobSeeker Show page for "tommy1@gmail.com"
   And I wait 1 second
   And I should see "Clerk"
@@ -206,29 +157,15 @@ Scenario: Job Developer sees job seeker's job applications
   And I should see "Mime"
   And I should not see "Trucker"
 
-@javascript
-Scenario: Download resume file_name as a Company Admin
-  Given I am on the home page
+  # company admin: download job seeker résumé
+  Then I logout
   And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I wait 1 second
   And I should see "SW dev"
   When I click the "SW dev" link
   And I wait 1 second
   And I should see "Applications for this Job"
-  Then I click the "karumudi, vijaya" link
+  Then I click the "Smith, Mike" link
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
   Then I should get a download with the filename "Janitor-Resume.doc"
-
-
-  @selenium
-
-  @javascript
-  Scenario: non-admin and non-agency person trying to access to admin home page
-    Given I am on the home page
-    And I login as "vijaya.karumudi@gmail.com" with password "password"
-    Then I should see "Signed in successfully."
-    And I should not see "Admin"
-    When I type agency_admin home in the URL address bar
-    Then I should see "Current agency cannot be determined"
-    And I should be on the home page
