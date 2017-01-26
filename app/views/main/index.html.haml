@@ -21,40 +21,41 @@
       MET|PLUS.
     %br
 .row
-  .col-xs-5.grey-block
-    = image_tag('MetPlus_employer.png')
-    %p
-    .button.btn.btn-primary.btn-lg.button-white
-      = link_to 'Register as a Job Seeker', 'new_job_seeker_path'
-    %br
-    %br
-    .h4 MET|PLUS helps you get ready for your next job opportunity by providing you with:
-    %p
-    %br
-      Hands-on Job Training
-    %br
-      Employment Services
-    %br
-      Job Skill Enhancement
-    %br
-      Entrepreneurial Guidance
-    %br
-      PETS resources, including job postings and online applications
+  .container.col-md-12
+    .col-md-6.grey-block.home-block-1
+      = image_tag('MetPlus_employer.png')
+      %p
+      .button.btn.btn-primary.btn-lg.button-white
+        = link_to 'Register as a Job Seeker', 'new_job_seeker_path'
+      %br
+      %br
+      .h4 MET|PLUS helps you get ready for your next job opportunity by providing you with:
+      %p
+      %br
+        Hands-on Job Training
+      %br
+        Employment Services
+      %br
+        Job Skill Enhancement
+      %br
+        Entrepreneurial Guidance
+      %br
+        PETS resources, including job postings and online applications
 
-  .col-xs-5.col-xs-offset-6.grey-block
-    = image_tag('MetPlus_job_seeker.png')
-    %p
-    .button.btn.btn-primary.btn-lg.button-white
-      = link_to 'Register as an Employer', 'new_company_registration_path'
-    %br
-    %br
-    .h4 MET|PLUS partners with you to help find quality employees from our list of job seekers:
-    %p
-    Prescreening Job Seekers
-    %br Recruiting and Tracking
-    %br Job Fair Facilitation
-    %br Statistical Research
-    %br PETS resources, such as job posting, job seeker matching, and others
+    .col-md-6.grey-block.home-block-2
+      = image_tag('MetPlus_job_seeker.png')
+      %p
+      .button.btn.btn-primary.btn-lg.button-white
+        = link_to 'Register as an Employer', 'new_company_registration_path'
+      %br
+      %br
+      .h4 MET|PLUS partners with you to help find quality employees from our list of job seekers:
+      %p
+      Prescreening Job Seekers
+      %br Recruiting and Tracking
+      %br Job Fair Facilitation
+      %br Statistical Research
+      %br PETS resources, such as job posting, job seeker matching, and others
 
 -# = render partial: 'jobs/list'
 -# = yield
