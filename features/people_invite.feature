@@ -15,12 +15,12 @@ Background: seed data added to database and log in as agency admim
 
   Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  |
-  | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 |
-  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 |
 
 Scenario: invite (and reinvite) new agency person
   Given I am on the home page
@@ -79,18 +79,18 @@ Scenario: invite (and reinvite) new Company person
   Then I click the "Widgets Inc." link
   And I click the "Invite Person" link
   And I should see "Send invitation"
-  And I fill in "Email" with "newguy@widgets.com"
+  And I fill in "Email" with "newguy@ymail.com"
   And I fill in "First name" with "New"
   And I fill in "Last name" with "Guy"
   And I click the "Send an invitation" button
-  And I should see "An invitation email has been sent to newguy@widgets.com."
+  And I should see "An invitation email has been sent to newguy@ymail.com."
   And I should see "Edit Company Person: New Guy"
   And I click the "Cancel" link
   Then I should see "New Guy"
   And I click the "Invite Again" link
-  And I should see "An invitation email has been sent to newguy@widgets.com."
-  Then "newguy@widgets.com" should receive 2 emails with subject "Invitation instructions"
-  When "newguy@widgets.com" opens the email
+  And I should see "An invitation email has been sent to newguy@ymail.com."
+  Then "newguy@ymail.com" should receive 2 emails with subject "Invitation instructions"
+  When "newguy@ymail.com" opens the email
   Then they should see "MetPlus has invited you confirm your account in PETS" in the email body
 
 Scenario: company person accepts invitation in email
@@ -102,16 +102,16 @@ Scenario: company person accepts invitation in email
   And I click the "Agency and Partner Companies" link
   Then I click the "Widgets Inc." link
   Then I click the "Invite Person" link
-  And I fill in "Email" with "newguy@widgets.com"
+  And I fill in "Email" with "newguy@ymail.com"
   And I fill in "First name" with "New"
   And I fill in "Last name" with "Guy"
   And I click the "Send an invitation" button
-  And I should see "An invitation email has been sent to newguy@widgets.com."
+  And I should see "An invitation email has been sent to newguy@ymail.com."
   And I log out
-  Then "newguy@widgets.com" should receive 1 email with subject "Invitation instructions"
-  When "newguy@widgets.com" opens the email
+  Then "newguy@ymail.com" should receive 1 email with subject "Invitation instructions"
+  When "newguy@ymail.com" opens the email
   Then they should see "Accept invitation" in the email body
-  And "newguy@widgets.com" follows "Accept invitation" in the email
+  And "newguy@ymail.com" follows "Accept invitation" in the email
   Then they should see "Set your password"
   And they fill in "Password" with "qwerty123"
   And they fill in "Password confirmation" with "qwerty123"

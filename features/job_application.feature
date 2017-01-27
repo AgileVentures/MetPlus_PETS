@@ -15,18 +15,18 @@ Given the following agency people exist:
 
 Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
 Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
-  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
 Given the following jobs exist:
   | title               | company_job_id  | shift  | fulltime | description                 | company      | creator        |
-  | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+  | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com |
 
-Given the following jobseeker exist:
+Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
   | John      | Seeker   | john.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
   | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
@@ -45,7 +45,7 @@ Given the following job applications exist:
   | job title          | job seeker             |
   | software developer | jane.seeker@places.com |
 
-  @selenium
+  @javascript
   Scenario: Job seeker applies to job
     When I am in Job Developer's browser
     Given I am on the home page
@@ -60,7 +60,7 @@ Given the following job applications exist:
 
     When I am in Company Admin's browser
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully."
 
     Then I am in Seeker's browser
@@ -79,11 +79,11 @@ Given the following job applications exist:
     And I wait for 1 second
     And I should see "Application process"
     Then I click the "Apply Now" link
-    And I wait 2 seconds
+    And I wait 4 seconds
     And I should see "Congratulations, you were able to apply with success"
 
-    Then "corp@widgets.com" should receive an email with subject "Job Application received"
-    When "corp@widgets.com" opens the email
+    Then "corp@ymail.com" should receive an email with subject "Job Application received"
+    When "corp@ymail.com" opens the email
     Then they should see "you have received an application for the job" in the email body
     And there should be an attachment named "Janitor-Resume.doc"
     And attachment 1 should be of type "application/msword"
@@ -98,14 +98,14 @@ Given the following job applications exist:
 
     Then "jane@metplus.org" should receive an email with subject "Job seeker applied"
     Then "mike@metplus.org" should receive an email with subject "Job seeker applied"
-    Then "ca@widgets.com" should receive an email with subject "Job seeker applied"
-    When "ca@widgets.com" opens the email
+    Then "carter@ymail.com" should receive an email with subject "Job seeker applied"
+    When "carter@ymail.com" opens the email
     Then they should see "A job seeker has applied to this job:" in the email body
-    And "ca@widgets.com" follows "software developer" in the email
+    And "carter@ymail.com" follows "software developer" in the email
     Then they should see "Widgets Inc."
 
     Then I am in Company Admin's browser
-    And I am on the Company Person 'ca@widgets.com' Home page
+    And I am on the Company Person 'carter@ymail.com' Home page
     And I wait 1 second
     And I should see "Review job application"
     And I should see "Job: software developer"
@@ -122,7 +122,7 @@ Given the following job applications exist:
 
   Scenario: Company person should not be able to apply
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully"
     Then I click the "Jobs" link
     And I should see "software developer"
@@ -139,7 +139,7 @@ Given the following job applications exist:
   @javascript
   Scenario: Download resume file_name as a Company Admin
     Given I am on the home page
-    And I am logged in as "ca@widgets.com" with password "qwerty123"
+    And I am logged in as "carter@ymail.com" with password "qwerty123"
     And I wait 1 second
     Then I click the "software developer" link
     And I wait 1 second

@@ -67,11 +67,12 @@ WebMock.allow_net_connect!
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = 10
 # see http://blog.pixarea.com/2013/02/locking-the-firefox-version-when-testing-rails-with-capybara-and-selenium/ for
 # details on how to set this up
 Capybara.register_driver :selenium do |app|
   require 'selenium/webdriver'
+  # FIREFOX_BINARY_PATH (if used) needs to be the path to the FF executable
   Selenium::WebDriver::Firefox::Binary.path =
     ENV['FIREFOX_BINARY_PATH'] || Selenium::WebDriver::Firefox::Binary.path
   Capybara::Selenium::Driver.new(app, browser: :firefox)
@@ -97,7 +98,8 @@ else
     Capybara::Poltergeist::Driver.new(
       app,
       window_size: [1280, 1024],
-      js_errors: false
+      js_errors: false,
+      timeout: 10
       # debug: true
     )
   end

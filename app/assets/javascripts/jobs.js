@@ -32,6 +32,33 @@ var JobAndResume = {
   }
 };
 
+var ContactJobDeveloper = {
+  jsInterest: function () {
+    $('.js_interest').on('click', function() {
+      var answer = confirm('Notify job developer of your ' +
+                           'interest in this job seeker?');
+      if (answer) {
+
+        var url = '/jobs/' + $(this).data('jobId') + '/notify_job_developer' +
+                  '?job_seeker_id=' + $(this).data('jobSeekerId') +
+                  '&company_person_id=' + $(this).data('companyPersonId') +
+                  '&job_developer_id=' + $(this).data('jobDeveloperId');
+
+        $.ajax({type: 'GET',
+                url: url,
+                timeout: 10000,
+                success: function () {
+                  Notification.success_notification('Notified job developer');
+                },
+                error: function () {
+                  Notification.error_notification('Unable to notify job developer');
+                }
+        });
+      }
+    });
+  }
+};
+
 $(function () {
   $('#toggle_search_form').click(ManageData.toggle);
   $(document).on('change', '#job_company_id', function() {
@@ -68,5 +95,34 @@ $(function () {
   $('#q_company_id_in').select2();
 
   JobAndResume.match();
+
+  ContactJobDeveloper.jsInterest();
+
+  $('#job-seekers-select').select2({
+    placeholder: 'Choose Job Seekers'
+  });
+
+  $('#match-resumes-link').click(function () {
+    $('#match-resumes-modal-form').modal();
+  });
+
+  // To remove the alert after the user has selected a job seeker from dropdown
+  $('#job-seekers-select').on('change', function() {
+    $('#message').html('');
+    $('#message').removeClass('alert alert-danger');
+  });
+
+  $('#run-match-btn').click(function () {
+    var selectedValues = $('#job-seekers-select').val();
+    if (selectedValues === null) {
+      $('#message').html('Please choose a job seeker');
+      $('#message').addClass('alert alert-danger');
+      var glyphicon = '<i class="glyphicon glyphicon-exclamation-sign">&nbsp;';
+      $('#message').prepend(glyphicon);
+      return false;
+    }
+    return confirm("This will match your job seekers' résumés against the job" +
+                    " and may take a while. Do you want to proceed?");
+  });
 
 });

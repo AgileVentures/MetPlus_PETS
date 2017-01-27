@@ -1,6 +1,9 @@
+require 'webmock'
+include WebMock::API
+require './spec/support/service_stub_helpers'
+include ServiceStubHelpers::Cruncher
 # Preview all emails at http://localhost:3000/rails/mailers/company_mailer
 class CompanyMailerPreview < ActionMailer::Preview
-
   # Preview this email at http://localhost:3000/rails/mailers/company_mailer/pending_approval
   def pending_approval
     company        = Company.first
@@ -18,14 +21,25 @@ class CompanyMailerPreview < ActionMailer::Preview
     company        = Company.first
     company_person = CompanyPerson.first
     CompanyMailer.registration_denied(company, company_person,
-            reason: "Your EIN is not valid and we think you're a scam operation.")
+                                      reason: "Your EIN is not valid and we think you're a scam operation.")
   end
 
   def application_received
-    company = Company.last
-    job_application = JobApplication.last
-    CompanyMailer.application_received(company, job_application,
-        "#{Rails.root}/spec/fixtures/files/Janitor-Resume.doc")
-  end
+    WebMock.enable!
+    stub_cruncher_authenticate
+    stub_cruncher_file_download('./spec/fixtures/files/Janitor-Resume.doc')
 
+    job_application = nil
+    JobApplication.all.each do |ja|
+      next if ja.job_seeker.resumes.empty?
+      job_application = ja
+      break
+    end
+
+    raise 'Cannot find application with resume' unless job_application
+
+    CompanyMailer.application_received(job_application.job.company,
+                                       job_application,
+                                       job_application.job_seeker.resumes[0].id)
+  end
 end

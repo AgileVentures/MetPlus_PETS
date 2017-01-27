@@ -15,17 +15,17 @@ Background: data is added to database
 
   Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CA    | John       | Smith     | ca@widgets.com   | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
   | title               | company_job_id  | shift  | fulltime | description                 | company      | creator        |
-  | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | ca@widgets.com |
+  | software developer  | KRK01K          | Evening| true     | internship position with pay| Widgets Inc. | carter@ymail.com |
 
-  Given the following jobseeker exist:
+  Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
   | John      | Seeker   | john.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
   | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
@@ -42,11 +42,11 @@ Background: data is added to database
   | june.seeker@places.com | jane@metplus.org | JD   |
   | july.seeker@places.com | jane@metplus.org | CM   |
 
-  @selenium
+  @javascript
   Scenario: Successful application for his job seeker
     When I am in Company Admin's browser
     Given I am on the home page
-    And I login as "ca@widgets.com" with password "qwerty123"
+    And I login as "carter@ymail.com" with password "qwerty123"
 
     When I am in Job Seeker's browser
     Given I am on the home page
@@ -70,13 +70,14 @@ Background: data is added to database
 
     Then I am in Company Admin's browser
     And I should see "Job Seeker: John Seeker has applied to this job"
-    And I am on the Company Person 'ca@widgets.com' Home page
+    And I am on the Company Person 'carter@ymail.com' Home page
+    And I wait 2 second
     And I should see "Review job application"
     And I should see "Job: software developer"
-    Then "ca@widgets.com" should receive an email with subject "Job seeker applied"
-    When "ca@widgets.com" opens the email
+    Then "carter@ymail.com" should receive an email with subject "Job seeker applied"
+    When "carter@ymail.com" opens the email
     Then they should see "A job seeker has applied to this job:" in the email body
-    And "ca@widgets.com" follows "software developer" in the email
+    And "carter@ymail.com" follows "software developer" in the email
     Then they should see "Widgets Inc."
 
   Scenario: job developer not logged in
@@ -102,12 +103,13 @@ Background: data is added to database
     Then I find "Seeker, June" from my job seekers list and proceed with the application
     And I should see "* Job Seeker cannot be empty"
 
-  @selenium
+  @javascript
   Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
     When I am in Job Seeker's browser
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
     Then I apply to "software developer" from Jobs link
+    And I wait 3 seconds
     And I should see "Congratulations, you were able to apply with success"
 
     Then I am in Job Developer's browser

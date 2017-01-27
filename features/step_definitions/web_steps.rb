@@ -57,6 +57,7 @@ And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |to_search
 end
 
 Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
+  expect(page.body).to have_text toSearch
   regex = /#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
   if not_see
     expect(page.text).not_to match regex
@@ -66,6 +67,7 @@ Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, 
 end
 
 Then(/^(?:I|they) should( not)? see "([^"]*)" after "([^"]*)"$/) do |not_see, toSearch, first|
+  expect(page.body).to have_text toSearch
   regex = /#{Regexp.quote("#{first}")}.+#{Regexp.quote("#{toSearch}")}/
   if not_see
     expect(page.text).not_to match regex
@@ -175,7 +177,7 @@ When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, 
   # have the same selector (e.g., same label)
   case ordinal
   when nil
-    find(:select, lst).find(:option, item).select_option
+    find(:select, lst, minimum: 1).find(:option, item).select_option
   when ' first'
     all(:select, lst)[0].find(:option, item).select_option
   when ' second'
@@ -249,4 +251,8 @@ end
 
 When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
   expect(page).to have_field(field, with: value)
+end
+
+Then(/^I should see "([^"]+)" in the email field$/) do |value|
+  step %{The field 'Email' should have the value '#{value}'}
 end

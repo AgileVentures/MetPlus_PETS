@@ -203,7 +203,6 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_file_upload
 
         ActionMailer::Base.deliveries.clear
-
         js_status = FactoryGirl.create(:job_seeker_status)
         @js_hash = FactoryGirl.attributes_for(
           :job_seeker,
@@ -285,6 +284,12 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
         sign_in owner
+      end
+      it 'updates email address' do
+        patch :update, id: owner, job_seeker: FactoryGirl
+          .attributes_for(:job_seeker, email: 'test@test.com')
+        expect(flash[:warning])
+          .to eq 'Please check your inbox to update your email address'
       end
       context 'successful initial résumé upload' do
         it 'saves the first resume record' do
@@ -743,7 +748,7 @@ RSpec.describe JobSeekersController, type: :controller do
         expect(flash[:error]).to be_present
       end
       it 'correct content' do
-        expect(flash[:error]).to eq('John Doe does not have a résumé on file')
+        expect(flash[:error]).to eq('John Doe does not have a resume on file')
       end
       it 'redirects to root' do
         expect(response).to redirect_to(root_path)
@@ -801,6 +806,68 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'list of jobs' do
           expect(assigns(:list_jobs)).to eq([job3, job2, job6, job9, job8])
         end
+      end
+    end
+  end
+
+  describe 'GET download_resume' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in company_admin
+    end
+
+    let(:company)       { FactoryGirl.create(:company) }
+    let(:company2)      { FactoryGirl.create(:company) }
+    let(:job)           { FactoryGirl.create(:job, company: company) }
+    let(:job2)          { FactoryGirl.create(:job, company: company2) }
+    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
+    let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+    let!(:company_admin2) { FactoryGirl.create(:company_admin, company: company2) }
+    let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:valid_application) do
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    end
+    let!(:valid_application2) do
+      FactoryGirl.create(:job_application, job: job2, job_seeker: job_seeker2)
+    end
+    let(:invalid_application) do
+      FactoryGirl.create(:job_application,
+                         job: job, job_seeker: job_seeker2,
+                         status: 'accepted')
+    end
+    let(:agency) { FactoryGirl.create(:agency) }
+    let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+    let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:resume2) { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
+
+    context 'Successful download' do
+      it 'does not raise exception' do
+        stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')
+        get :download_resume, id: job_seeker, resume_id: resume
+        expect(response).to_not set_flash
+      end
+    end
+    context 'Error: Unauthorised Download' do
+      it 'sets flash message' do
+        get :download_resume, id: job_seeker2, resume_id: resume2
+        expect(flash[:alert]).to eq 'You are not authorized to perform this action.'
+      end
+    end
+    context 'Error: Resume not found in DB' do
+      it 'raises AR Not Found Exception' do
+        expect { get :download_resume, id: valid_application, resume_id: 999 }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+    context 'Error: Resume not found in Cruncher' do
+      it 'sets flash message' do
+        stub_cruncher_file_download_notfound
+        get :download_resume, id: valid_application, resume_id: resume
+        expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
       end
     end
   end

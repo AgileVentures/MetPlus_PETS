@@ -16,11 +16,11 @@ Background: seed data
 
   Given the following companies exist:
   | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456799 | active |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456799 | active |
 
   Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CC    | Jane       | Smith     | jane@widgets.com | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following company addresses exist:
   | company      | street           | city    | state    | zipcode |
@@ -31,7 +31,7 @@ Background: seed data
   | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
   | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
 
-@selenium
+@javascript
 Scenario: Job Seeker registers in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -61,7 +61,7 @@ Scenario: Job Seeker registers in PETS
   And I wait for 1 second
   And I should see "Job Seeker has no assigned Job Developer"
 
-@selenium
+@javascript
 Scenario: Company registration request in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -77,8 +77,8 @@ Scenario: Company registration request in PETS
   | Street                         | 12 Main Street      |
   | City                           | Detroit             |
   | Zipcode                        | 02034               |
-  | Email                          | contact@widgets.com |
-  | Job Email                      | hr@widgets.com      |
+  | Email                          | contact@ymail.com   |
+  | Job Email                      | hr_dept@ymail.com   |
   | Fax                            | 333-222-4321        |
   | Phone                          | 222-333-4567        |
   | Website                        | www.widgets.com     |
@@ -88,7 +88,7 @@ Scenario: Company registration request in PETS
   | First Name                     | Hugh                |
   | Last Name                      | Jobs                |
   | Contact Phone                  | 555-555-1212        |
-  | Contact Email                  | hughjobs@widgets.com|
+  | Contact Email                  | hughjobs@ymail.com  |
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
   And  I select "Michigan" in select list "State"
@@ -111,7 +111,7 @@ Scenario: Company registration request in PETS
   And I wait for 1 second
   And I should see "Review company registration"
 
-@selenium
+@javascript
 Scenario: Job developer assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -150,7 +150,7 @@ Scenario: Job developer assigned to job seeker by agency admin
   When "dave@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-@selenium
+@javascript
 Scenario: Case manager assigned to job seeker by agency admin
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -189,7 +189,7 @@ Scenario: Case manager assigned to job seeker by agency admin
   When "jane@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-@selenium
+@javascript
 Scenario: Job developer assigns self to job seeker
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -198,13 +198,14 @@ Scenario: Job developer assigns self to job seeker
   When I am in Job Developer's browser
   Given I am on the home page
   And I login as "dave@metplus.org" with password "qwerty123"
+  And I wait 2 seconds
   Then I should see "Signed in successfully."
   And I should see "Seeker, Sam" after "Job Seekers without a Job Developer"
   And I click the "Seeker, Sam" link
   And I wait 1 second
   And I should see "Assign Myself"
   And I click the "Assign Myself" button
-  And I wait 1 second
+  And I wait 2 seconds
   And I should see "Dave Developer" after "Job Developer"
   And I should not see "Assign Myself"
   Then I am in Job Seeker's browser
@@ -214,7 +215,7 @@ Scenario: Job developer assigns self to job seeker
   Then they should see "Dave Developer" in the email body
   And they should see "has been assigned to you as your MetPlus Job Developer" in the email body
 
-@selenium
+@javascript
 Scenario: Case manager assigns self to job seeker
   When I am in Job Seeker's browser
   Given I am on the home page
@@ -223,6 +224,7 @@ Scenario: Case manager assigns self to job seeker
   When I am in Case Manager's browser
   Given I am on the home page
   And I login as "jane@metplus.org" with password "qwerty123"
+  And I wait 2 seconds
   Then I should see "Signed in successfully."
   And I should see "Seeker, Sam" after "Job Seekers without a Case Manager"
   And I click the "Seeker, Sam" link

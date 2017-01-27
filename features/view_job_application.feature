@@ -9,21 +9,21 @@ Background: data is added to database
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@widgets.com | corp@widgets.com | 12-3456789 | active |
+    | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
   	| company      | role  | first_name | last_name | email            | password  | phone        |
-  	| Widgets Inc. | CA    | Cane       | Daniel    | cane@widgets.com | qwerty123 | 555-222-3334 |
+  	| Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
 
-  Given the following jobseeker exist:
+  Given the following jobseekers exist:
   	| first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
   	| John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
   	| July       | Seeker    | july@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following jobs exist:
     | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | cane@widgets.com | filled  |
-    | hr associate | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@widgets.com | filled  |
+    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
+    | hr associate | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
 
 	Given the following job applications exist:
 		| job title 	 | job seeker 	 | status 			|

@@ -37,9 +37,16 @@ RSpec.describe Event, type: :model do
   let(:application) { job.apply job_seeker }
   let(:application_wo_cp) { job_wo_cp.apply job_seeker }
   let(:application_diff_jd) do
-    app = job_wo_cp.apply job_seeker
+    app = job.apply job_seeker
     app.job_developer = job_developer1
     app
+  end
+
+  let(:evt_obj_cp_interest_class) do
+    Struct.new(:job, :company_person, :job_developer, :job_seeker)
+  end
+  let(:evt_obj_cp_interest) do
+    evt_obj_cp_interest_class.new(job, company_person, job_developer, job_seeker)
   end
 
   let(:testfile_resume) { 'files/Admin-Assistant-Resume.pdf' }
@@ -48,6 +55,7 @@ RSpec.describe Event, type: :model do
     allow(Pusher).to receive(:trigger) # stub and spy on 'Pusher'
     stub_cruncher_authenticate
     stub_cruncher_job_create
+    stub_cruncher_file_download(testfile_resume)
 
     3.times do
       FactoryGirl.create(:agency_person, agency: agency)
@@ -159,20 +167,32 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger)
           .with('pusher_control',
                 'job_applied_by_other_job_developer',
-                job_id:  job_wo_cp.id,
+                job_id:  job.id,
                 js_user_id: job_seeker.user.id,
                 jd_id: job_developer1.id,
                 jd_name: job_developer1.full_name(last_name_first: false))
       end
 
-      it 'sends event notification email to Primary Job Developer' do
-        expect { Event.create(:JD_APPLY, application_diff_jd) }
-          .to change(all_emails, :count).by(+3)
-      end
-
       it 'creates one task' do
         expect { Event.create(:JD_APPLY, application_diff_jd) }
           .to change(Task, :count).by(+1)
+      end
+
+      it 'sends email to the JS, Company Person and the Primary JD' do
+        expect { Event.create(:JD_APPLY, application_diff_jd) }
+          .to change(all_emails, :count).by(+4)
+      end
+
+      it 'triggers a Pusher message to Company Person' do
+        Event.create(:JD_APPLY, application_diff_jd)
+        expect(Pusher).to have_received(:trigger).with(
+          'pusher_control',
+          'jobseeker_applied',
+          job_id:  job.id,
+          js_id:   job_seeker.id,
+          js_name: job_seeker.full_name(last_name_first: false),
+          notify_list: [company_person.user.id]
+        )
       end
     end
 
@@ -422,19 +442,43 @@ RSpec.describe Event, type: :model do
   describe 'job_revoked event' do
     it 'triggers mass Pusher message' do
       Event.create(:JOB_REVOKED, evt_obj_jobpost)
-      expect(Pusher).to have_received(:trigger).with(
-        'pusher_control',
-        'job_revoked',
-        job_id: job.id,
-        job_title: job.title,
-        company_name: company.name,
-        notify_list: [job_developer.user.id, job_developer1.user.id]
-      )
+      expect(Pusher).to have_received(:trigger)
+        .with('pusher_control',
+              'job_revoked',
+              job_id: job.id,
+              job_title: job.title,
+              company_name: company.name,
+              notify_list: [job_developer.user.id, job_developer1.user.id])
     end
-
     it 'sends mass event notification email' do
       expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }
         .to change(all_emails, :count).by(+1)
+    end
+    it 'triggers mass Pusher message to js' do
+      application
+      Event.create(:JOB_REVOKED, evt_obj_jobpost)
+
+      expect(Pusher).to have_received(:trigger)
+        .with('pusher_control',
+              'job_revoked',
+              job_id: job.id,
+              job_title: job.title,
+              company_name: company.name,
+              notify_list: [job_developer.user.id, job_developer1.user.id])
+
+      expect(Pusher).to have_received(:trigger)
+        .with('pusher_control',
+              'job_revoked',
+              job_id: job.id,
+              job_title: job.title,
+              company_name: company.name,
+              notify_list: [job_seeker.user.id])
+    end
+
+    it 'sends mass event notification email' do
+      application
+      expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }
+        .to change(all_emails, :count).by(+2)
     end
   end
 
@@ -471,6 +515,33 @@ RSpec.describe Event, type: :model do
     it 'sends event notification email to job seeker' do
       expect { Event.create(:CM_SELF_ASSIGN_JS, evt_obj_jd) }
         .to change(all_emails, :count).by(+1)
+    end
+  end
+
+  describe 'cp_interest_in_js event' do
+    it 'triggers Pusher message to job develper' do
+      Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest)
+      expect(Pusher).to have_received(:trigger).with(
+        'pusher_control',
+        'cp_interest_in_js',
+        jd_user_id: job_developer.user.id,
+        cp_id:      company_person.id,
+        cp_name:    company_person.full_name(last_name_first: false),
+        job_id:     job.id,
+        job_title:  job.title,
+        js_id:      job_seeker.id,
+        js_name:    job_seeker.full_name(last_name_first: false)
+      )
+    end
+
+    it 'sends event notification email to job developer' do
+      expect { Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest) }
+        .to change(all_emails, :count).by(+1)
+    end
+
+    it 'creates task' do
+      expect { Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest) }
+        .to change(Task, :count).by(+1)
     end
   end
 end

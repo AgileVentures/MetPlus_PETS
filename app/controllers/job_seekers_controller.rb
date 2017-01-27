@@ -16,7 +16,7 @@ class JobSeekersController < ApplicationController
     models_saved = @jobseeker.save
 
     if models_saved
-      if dispatch_file          # If there is a résumé, try to save that
+      if dispatch_file          # If there is a resume, try to save that
         tempfile = dispatch_file.tempfile
         filename = dispatch_file.original_filename
 
@@ -42,6 +42,7 @@ class JobSeekersController < ApplicationController
   def edit
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
+    @jobseeker.build_address unless @jobseeker.address.present?
     @current_resume = @jobseeker.resumes[0]
   end
 
@@ -50,15 +51,16 @@ class JobSeekersController < ApplicationController
     authorize @jobseeker
     jobseeker_params = handle_user_form_parameters(permitted_attributes(@jobseeker))
     dispatch_file    = jobseeker_params.delete 'resume'
+    jobseeker_params.delete 'address_attributes' if address_is_empty?(jobseeker_params)
 
     models_saved = @jobseeker.update_attributes(jobseeker_params)
 
     if models_saved
-      if dispatch_file          # If there is a résumé, try to save/update that
+      if dispatch_file          # If there is a resume, try to save/update that
         tempfile = dispatch_file.tempfile
         filename = dispatch_file.original_filename
 
-        # Update current résumé if present, otherwise save new
+        # Update current resume if present, otherwise save new
         # (Statement below needs to change if more than one resume per JS)
         resume = @jobseeker.resumes[0]
         if resume
@@ -78,12 +80,17 @@ class JobSeekersController < ApplicationController
 
     if models_saved
       sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
-      flash[:notice] = 'Jobseeker was updated successfully.'
+      if @jobseeker.user.unconfirmed_email?
+        flash[:warning] = 'Please check your inbox to update your email address'
+      else
+        flash[:notice] = 'Jobseeker was updated successfully.'
+      end
       redirect_to(@jobseeker) && return if (pets_user == @jobseeker.case_manager) ||
                                            (pets_user == @jobseeker.job_developer)
       redirect_to root_path
     else
       @resume = resume
+      @jobseeker.build_address unless @jobseeker.address.present?
       render 'edit'
     end
   end
@@ -130,7 +137,7 @@ class JobSeekersController < ApplicationController
     if @jobseeker.resumes.empty?
       flash[:error] =
         "#{@jobseeker.full_name(last_name_first: false)} " \
-        'does not have a résumé on file'
+        'does not have a resume on file'
       redirect_to(root_path)
     else
       @star_rating = JobCruncher.match_jobs(@jobseeker.resumes[0].id).to_h
@@ -140,7 +147,31 @@ class JobSeekersController < ApplicationController
     end
   end
 
+  def download_resume
+    job_seeker = JobSeeker.find(params[:id])
+    authorize job_seeker
+    resume = Resume.find(params[:resume_id])
+    resume_file = ResumeCruncher.download_resume(resume.id)
+    raise 'Resume not found in Cruncher' if resume_file.nil?
+    send_data resume_file.open.read, filename: resume.file_name
+
+  rescue RuntimeError => e
+    flash[:alert] = "Error: #{e}"
+    redirect_back_or_default
+  ensure
+    if resume_file
+      resume_file.close
+      resume_file.unlink
+    end
+  end
+
   private
+
+  def address_is_empty?(jobseeker_params)
+    address = jobseeker_params[:address_attributes]
+    return true unless address
+    address[:street].empty? && address[:city].empty? && address[:state].empty?
+  end
 
   def form_params
     params.require(:job_seeker).permit(:first_name,

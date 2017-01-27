@@ -34,6 +34,12 @@ RSpec.describe JobsController, type: :controller do
                                         max_years: 5,
                                         _destroy: false } } }
   end
+  let(:job_seeker) do
+    js = FactoryGirl.create(:job_seeker)
+    FactoryGirl.create(:resume, job_seeker: js)
+    bosh_job.apply js
+    js
+  end
   let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
   let!(:stub) do
     stub_cruncher_authenticate
@@ -874,6 +880,95 @@ RSpec.describe JobsController, type: :controller do
     end
   end
 
+  describe 'GET #match_jd_job_seekers' do
+    let(:job_seeker_ids) { [1, 2, 3, 4] }
+    let(:request) do
+      get :match_jd_job_seekers,
+          id: bosh_job.id,
+          job_seeker_ids: job_seeker_ids
+    end
+
+    context 'happy path' do
+      context 'non-nil job-seeker ids' do
+        let(:results) { double('results') }
+        let(:sorted_results) { double('sorted_results') }
+
+        before do
+          warden.set_user job_developer
+          stub_cruncher_match_resume_and_job
+          allow(controller).to receive(:get_matches).with(job_seeker_ids)
+            .and_return(results)
+          allow(described_class).to receive(:sort_by_score).with(results)
+            .and_return(sorted_results)
+        end
+
+        it 'calls sort_by_score' do
+          expect(described_class).to receive(:sort_by_score).with(results)
+          request
+        end
+
+        it 'assigns an instance variable' do
+          request
+          expect(assigns(:match_results)).to eq(sorted_results)
+        end
+
+        it 'renders the template' do
+          request
+          expect(response).to render_template(:match_jd_job_seekers)
+        end
+      end
+
+      context 'nil job-seeker ids' do
+        let(:request) { get :match_jd_job_seekers, id: bosh_job.id }
+
+        before do
+          warden.set_user job_developer
+          request
+        end
+
+        it 'redirects to the job show view' do
+          expect(response).to redirect_to(job_path(bosh_job))
+        end
+
+        it 'sets the flash' do
+          expect(flash[:alert]).to eq('Please choose a job seeker')
+        end
+      end
+    end
+
+    context 'sad path' do
+      context 'agency admin' do
+        it_behaves_like 'unauthorized request' do
+          let(:user) { agency_admin }
+        end
+      end
+
+      context 'case manager' do
+        it_behaves_like 'unauthorized request' do
+          let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+        end
+      end
+
+      context 'company person' do
+        it_behaves_like 'unauthorized request' do
+          let(:user) { bosh_person }
+        end
+      end
+
+      context 'company contact' do
+        it_behaves_like 'unauthorized request' do
+          let(:user) { FactoryGirl.create(:company_contact, company: bosh) }
+        end
+      end
+
+      context 'job seeker' do
+        it_behaves_like 'unauthorized request' do
+          let(:user) { FactoryGirl.create(:job_seeker) }
+        end
+      end
+    end
+  end
+
   describe 'GET #match_job_seekers' do
     let(:cmpy_contact) { FactoryGirl.create(:company_contact) }
     8.times do |n|
@@ -968,6 +1063,84 @@ RSpec.describe JobsController, type: :controller do
       end
       describe 'company person - wrong company' do
         it_behaves_like 'unauthorized request'
+      end
+    end
+  end
+
+  describe 'GET #notify_job_developer' do
+    context 'happy path' do
+      before(:each) do
+        allow(Event).to receive(:create).and_call_original
+        warden.set_user bosh_person
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
+      end
+
+      it 'creates CP_INTEREST_IN_JS event' do
+        expect(Event).to have_received(:create)
+          .with(:CP_INTEREST_IN_JS, evt_obj(:job, :company_person,
+                                            :job_developer, :job_seeker))
+      end
+      it 'returns success status' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'sad path' do
+      before(:each) do
+        warden.set_user bosh_person
+      end
+      it 'returns 404 if company_person not found' do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: 0,
+                                         job_seeker_id: job_seeker.id
+      end
+      it 'returns 404 if job_developer not found' do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+                                         job_developer_id: 0,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
+      end
+      it 'returns 404 if job_seeker not found' do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: 0
+      end
+    end
+
+    context 'authentication' do
+      let(:request) do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
+      end
+
+      describe 'not logged in' do
+        it_behaves_like 'unauthenticated XHR request'
+      end
+    end
+
+    context 'authorization' do
+      let(:request) do
+        xhr :get, :notify_job_developer, id: bosh_job.id,
+                                         job_developer_id: job_developer.id,
+                                         company_person_id: bosh_person.id,
+                                         job_seeker_id: job_seeker.id
+      end
+
+      describe 'job seeker' do
+        it_behaves_like 'unauthorized XHR', 'job_seeker'
+      end
+      describe 'case manager' do
+        it_behaves_like 'unauthorized XHR', 'case_manager'
+      end
+      describe 'company person - wrong company' do
+        it_behaves_like 'unauthorized XHR', 'company_person'
       end
     end
   end

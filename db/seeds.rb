@@ -307,9 +307,9 @@ if Rails.env.development? || Rails.env.staging?
                          job_seeker_status: @jss3, confirmed_at: Time.now,
                          address: create_address)
 
-  JobSeeker.create(first_name: 'abc', last_name: 'def',
-                   email: 'vijaya.karumudi1@gmail.com',
-                   password: 'dfg123', password_confirmation: 'dfg123',
+  JobSeeker.create(first_name: 'Mike', last_name: 'Smith',
+                   email: 'mike.smith@gmail.com',
+                   password: 'qwerty123', password_confirmation: 'qwerty123',
                    year_of_birth: '1990',
                    confirmed_at: Time.now, phone: '111-222-3333',
                    job_seeker_status: @jss1,
@@ -345,7 +345,8 @@ if Rails.env.development? || Rails.env.staging?
   #-------------------------- Agency People -------------------------------
 
   agency_aa = AgencyPerson.new(first_name: 'John', last_name: 'Smith',
-                               agency_id: agency.id, email: 'pets_admin@metplus.org',
+                               agency_id: agency.id,
+                               email: ENV['ADMIN_EMAIL'],
                                password: 'qwerty123', confirmed_at: Time.now,
                                branch_id: agency.branches[0].id,
                                status: 'active')
