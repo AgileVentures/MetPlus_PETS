@@ -1,9 +1,15 @@
 // Place all the styles related to the Main controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.h4 {
+  font-weight: bold;
+  line-height: 3rem;
+}
+
 .content-center{
   text-align: center;
 }
+
 .blue-bar{
   background-color: #0c7ba1;
   color: #fff;
@@ -14,16 +20,19 @@
   line-height: 4.5rem;
   margin-bottom: 2rem;
 }
+
 .grey-block{
   background-color: #d9d9d9;
   padding: 3rem;
   text-align: center;
   margin-bottom: 2rem;
 }
-.button-white a, a:active, a:visited{
+
+.button-white a, .button-white a:active, .button-white a:visited{
   color: #ffffff;
   text-decoration: none;
 }
+
 .button-white a:hover{
   color: #f2bc60;
   text-decoration: none;
@@ -34,7 +43,7 @@
   margin-right: 5px;
   float: left;
   height: 650px;
-  width: 48%;
+  width: 45%;
 }
 
 .home-block-2 {
@@ -42,5 +51,5 @@
   margin-left: 5px;
   float: right;
   height: 650px;
-  width: 48%;
+  width: 45%;
 }
