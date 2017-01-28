@@ -63,6 +63,7 @@ Scenario: Case Manager actions
   And I follow "Confirm my account" in the email
   Then I should see "Your email address has been successfully confirmed."
   When I click the "Janey" link
+  And I click the "Edit Profile" link
   Then I should see "janey@metplus.org" in the email field
 
   # See tasks on home page

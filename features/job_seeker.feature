@@ -117,20 +117,20 @@ Scenario: edit Js profile
   And I login as "mike.smith@gmail.com" with password "password"
   Then I should see "Signed in successfully"
   When I click the "Mike" link
+  And I click the "Edit Profile" link
   And I fill in "First Name" with "Mikes"
   Then I select "Employed Not Looking" in select list "Status"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-
   # edit profile with address fields missing
   Then I click the "Mikes" link
+  And I click the "Edit Profile" link
   And I fill in "City" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address city can't be blank"
   When I fill in "Street" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address street can't be blank"
-
   # edit profile with all address fields
   Then I click the "Mikes" link
   And I fill in "City" with "Nairobi"
