@@ -158,6 +158,7 @@ Scenario: Agency and Company people actions
   And I should not see "Trucker"
 
   # company admin: download job seeker résumé
+  And I click the "Hello, John" link
   Then I logout
   And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I wait 1 second

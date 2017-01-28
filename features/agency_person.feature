@@ -116,6 +116,7 @@ Scenario: Job Developer actions
   And I should see "There are no job seekers assigned to you yet."
 
   # JD with tasks
+  And I click the "Hello, Bill" link
   Then I logout
   And I login as "jane-dev@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'jane-dev@metplus.org' Home page
