@@ -109,6 +109,46 @@ Scenario: job seeker sees applied jobs and new job opportunities
   And I should see "Mime" after "Job Opportunities - New"
   And I should see "Clerk" after "Job Opportunities - New"
 
+  When I am in Company Contact's browser
+  Given I am on the home page
+  And I login as "jane@ymail.com" with password "qwerty123"
+  And I create the following jobs
+  | title          | shift   | fulltime | description       | company      | creator        |
+  | RoR Developer  | Evening | true     | develop WA        | Widgets Inc. | carter@ymail.com |
+  | UI Developer   | Day     | true     | design interfaces | Widgets Inc. | carter@ymail.com |
+  When I am in Job Seeker's browser
+  And I reload the page
+  And I wait 1 second
+  Then I should see "UI Developer" after "Job Opportunities - New"
+  And I should see "RoR Developer" after "UI Developer"
+
+Scenario: jobseeker homepage with no agency relations
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully."
+  And I should be on the Job Seeker 'vijaya.karumudi@gmail.com' Home page
+  And I should see "Name vijaya karumudi"
+  And I should see "Case Manager None assigned"
+  And I should see "Job Developer None assigned"
+
+Scenario: edit Js Registration
+  Given I am on the home page
+  And I login as "vijaya.karumudi@gmail.com" with password "password"
+  Then I should see "Signed in successfully"
+  When I click the "Hello, vijaya" link
+  And I click the "Edit Profile" link
+  And I fill in "First Name" with "vijaya1"
+  And I fill in "Zipcode" with "54321"
+  Then I select "Employed Not Looking" in select list "Status"
+  And I fill in "Password" with "password"
+  And I fill in "Password Confirmation" with "password"
+  Then I click the "Update Job seeker" button
+  Then I should see "Jobseeker was updated successfully."
+  When I click the "Hello, vijaya" link
+  And I click the "Edit Profile" link
+  Then The field 'First Name' should have the value 'vijaya1'
+  And The field 'Zipcode' should have the value '54321'
+
 Scenario: edit Js profile
   # without password change
   Given I am on the home page
