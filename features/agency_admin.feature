@@ -43,19 +43,18 @@ Background: seed data added to database and log in as agency admim
   | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Given the following jobseekers exist:
-  | first_name| last_name| email         | phone       | password   |password_confirmation| year_of_birth |job_seeker_status  |
-  | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| password   |password             | 1990          |Unemployed Seeking |
-  | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| password   |password             | 1990          |Unemployed Seeking |
+  | first_name| last_name| email            | phone       | password  | year_of_birth |job_seeker_status  |
+  | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| password  | 1990          |Unemployed Seeking |
+  | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| password  | 1990          |Unemployed Seeking |
 
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
-  And I wait 1 second
   Then I should see "Signed in successfully."
   And I should see "Admin"
   And I click the "Admin" link
 
 @javascript
-Scenario: toggle data tables - home page
+Scenario: toggle data tables - agency and job properties
   And I click the "Agency and Partner Companies" link
   And I wait 1 second
   And I should see "123 Main Street"
@@ -63,7 +62,6 @@ Scenario: toggle data tables - home page
   And I wait 1 second
   Then "123 Main Street" should not be visible
   Then I click the "Show Branches" link
-  And I wait 1 second
   Then "123 Main Street" should be visible
   And I should see "Smith, John"
   Then I click the "Hide People" link
@@ -71,10 +69,8 @@ Scenario: toggle data tables - home page
   Then "Smith, John" should not be visible
   Then I click the "Show People" link
   And I wait 1 second
-  Then "Smith, John" should be visible
-
-@javascript
-Scenario: toggle data tables - job properties page
+  And "Smith, John" should be visible
+  Then I click the "Admin" link
   And I click the "Job Properties" link
   And I wait 1 second
   And I should see "Software Engineer - RoR"
@@ -85,7 +81,6 @@ Scenario: toggle data tables - job properties page
   And I wait 1 second
   Then "Software Engineer - RoR" should be visible
 
-
 Scenario: edit agency information
   And I click the "Agency and Partner Companies" link
   Then I should see "PETS Administration"
@@ -95,22 +90,14 @@ Scenario: edit agency information
   And I click "Update Agency" button
   Then I should see "Agency was successfully updated."
   And I should see "MetPlus Two"
-
-Scenario: cancel edit agency information
-  And I click the "Agency and Partner Companies" link
-  And I should see "PETS Administration - Branches, People, Companies"
+  # cancel edit
   Then I click the "Edit Agency" button
-  Then I should see "MetPlus"
-  And I fill in "Name" with "MetPlus Two"
+  And I fill in "Name" with "MetPlus Three"
   And I click the "Cancel" link
   Then I should not see "Agency was successfully updated."
-  And I should not see "MetPlus Two"
-  And I should see "PETS Administration - Branches, People, Companies"
-
-Scenario: errors for edit agency information
-  And I click the "Agency and Partner Companies" link
+  And I should see "MetPlus Two"
+  # data errors in agency edit form
   Then I click the "Edit Agency" button
-  Then I should see "MetPlus"
   And I fill in "Phone" with ""
   And I fill in "Website" with "nodomain"
   And I click "Update Agency" button
@@ -118,13 +105,11 @@ Scenario: errors for edit agency information
   And I should see "Phone can't be blank"
   And I should see "Phone incorrect format"
   And I should see "Website is not a valid website address"
-
-Scenario: edit branch
+  # edit branch
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
-  Then I should see "Agency Branches"
-  And I click the "001" link
+  Then I click the "001" link
   Then I should see "Branch Code:"
-  And I should see "001"
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "004"
@@ -132,22 +117,20 @@ Scenario: edit branch
   Then I select "California" in select list "State"
   And I click the "Update" button
   Then I should see "Branch was successfully updated."
-
-Scenario: cancel edit branch
+  # cancel edit branch
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
-  And I click the "001" link
-  And I should see "Agency Branch"
+  And I click the "004" link
   Then I click the "Edit Branch" button
   Then I should see "Edit Branch"
-  And I fill in "Branch Code" with "004"
+  And I fill in "Branch Code" with "005"
   Then I click the "Cancel" link
   Then I should see "Agency Branch"
-  And I should not see "004"
-  And I should see "Agency Branch"
-
-Scenario: error for edit branch
+  And I should not see "005"
+  # data errors in branch edit form
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
-  And I click the "001" link
+  And I click the "004" link
   Then I click the "Edit Branch" button
   And I fill in "Branch Code" with "002"
   And I fill in "Zipcode" with "1234567"
@@ -155,28 +138,27 @@ Scenario: error for edit branch
   Then I should see "The form contains 2 errors"
   And I should see "Code has already been taken"
   And I should see "Address zipcode should be in form of 12345 or 12345-1234"
-
-Scenario: new agency branch
+  # new agency branch
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I click the "Add Branch" button
-  Then I fill in "Branch Code" with "004"
+  Then I fill in "Branch Code" with "005"
   And I fill in "Street" with "10 Ford Way"
   And I fill in "City" with "Detroit"
   Then I select "Michigan" in select list "State"
   And I fill in "Zipcode" with "48208"
   And I click the "Create" button
   Then I should see "Branch was successfully created."
-  And I should see "004"
-
-@javascript
-Scenario: delete agency branch
+  # cannot remove sole agency admin
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
-  And I click the "003" link
-  Then I click and accept the "Delete Branch" button
-  And I wait for 3 seconds
-  Then I should see "Branch '003' deleted."
-
-Scenario: edit agency person
+  And I click the "Smith, John" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: John Smith"
+  And I should see "Agency Admin"
+  And the selection "Agency Admin" should be disabled
+  # edit agency person
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I should see "Agency Personnel"
   And I click the "Jones, Jane" link
@@ -189,26 +171,59 @@ Scenario: edit agency person
   And I should see "Jane Jones"
   And I should see "002"
   And I should see "Agency Admin"
-
-Scenario: cancel agency person edit
+  # cancel edit agency person
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: Jane Jones"
-  Then I select "002" in select list "Branch"
+  Then I select "003" in select list "Branch"
   Then I click the "Cancel" link
-  Then I should see "Jane Jones"
-  And I should not see "002"
+  And I should see "Jane Jones"
+  And I should not see "003"
+  # non-admin does not see 'admin' in menu
+  Given I log out
+  Given I am on the home page
+  And I login as "mike@metplus.org" with password "qwerty123"
+  Then I should see "Signed in successfully."
+  And I should not see "Admin"
 
 @javascript
-Scenario: delete agency person
+Scenario: delete agency objects
+  # branch
+  And I click the "Agency and Partner Companies" link
+  And I click the "003" link
+  Then I click and accept the "Delete Branch" button
+  And I wait for 3 seconds
+  Then I should see "Branch '003' deleted."
+  # agency person
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
   And I wait for 3 seconds
   Then I should see "Person 'Jane Jones' deleted."
 
-Scenario: assign job seeker to job developer
+Scenario: assign job seeker to agency person
+  # case manager
+  And I click the "Agency and Partner Companies" link
+  Then I should see "Agency Personnel"
+  And I click the "Jones, Jane" link
+  Then I click the "Edit Person" button
+  And I should see "Edit Agency Person: Jane Jones"
+  Then I check second "Seeker, Sam"
+  And I check second "Terrific, Tom"
+  And I click the "Update" button
+  Then I should see "Agency person was successfully updated."
+  And I should see "Seeker, Sam" after "Assigned Job Seekers to Jane Jones as Case Manager:"
+  And I should see "Terrific, Tom" after "Assigned Job Seekers to Jane Jones as Case Manager:"
+  Then "jane@metplus.org" should receive 2 emails with subject "Job seeker assigned cm"
+  When "jane@metplus.org" opens the email
+  Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
+  When "jane@metplus.org" follows "Sam Seeker" in the email
+  Then they should see "Sam Seeker" after "Name"
+  # job developer
+  Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I should see "Agency Personnel"
   And I click the "Check, Mike" link
@@ -226,43 +241,9 @@ Scenario: assign job seeker to job developer
   When "mike@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-Scenario: assign job seeker to case manager
-  And I click the "Agency and Partner Companies" link
-  Then I should see "Agency Personnel"
-  And I click the "Jones, Jane" link
-  Then I click the "Edit Person" button
-  And I should see "Edit Agency Person: Jane Jones"
-  Then I check second "Seeker, Sam"
-  And I check second "Terrific, Tom"
-  And I click the "Update" button
-  Then I should see "Agency person was successfully updated."
-  And I should see "Seeker, Sam" after "Assigned Job Seekers to Jane Jones as Case Manager:"
-  And I should see "Terrific, Tom" after "Assigned Job Seekers to Jane Jones as Case Manager:"
-  Then "jane@metplus.org" should receive 2 emails with subject "Job seeker assigned cm"
-  When "jane@metplus.org" opens the email
-  Then they should see "A job seeker has been assigned to you as Case Manager:" in the email body
-  When "jane@metplus.org" follows "Sam Seeker" in the email
-  Then they should see "Sam Seeker" after "Name"
-
-
-Scenario: cannot remove sole agency admin
-  And I click the "Agency and Partner Companies" link
-  And I click the "Smith, John" link
-  Then I click the "Edit Person" button
-  And I should see "Edit Agency Person: John Smith"
-  And I should see "Agency Admin"
-  And the selection "Agency Admin" should be disabled
-
-Scenario: non-admin does not see 'admin' in menu
-  And I click the "Agency and Partner Companies" link
-  Given I log out
-  Given I am on the home page
-  And I login as "jane@metplus.org" with password "qwerty123"
-  Then I should see "Signed in successfully."
-  And I should not see "Admin"
-
 @javascript
-Scenario: add job specialty
+Scenario: manage job properties
+  # add job specialty
   And I click the "Job Properties" link
   And I click the "Add Job Specialty" button
   And I wait 2 seconds
@@ -273,41 +254,37 @@ Scenario: add job specialty
   Then I should see "Test Job Specialty"
   And I should see "Description of Test Job Specialty"
 
-@javascript
-Scenario: cancel add job specialty
-  And I click the "Job Properties" link
+  # cancel add job specialty
   And I click the "Add Job Specialty" button
   And I wait 2 seconds
-  And I fill in "Name:" with "Test Job Specialty"
+  And I fill in "Name:" with "Test 2nd Job Specialty"
   And I click the "Cancel" button
   And I wait 2 seconds
-  Then I should not see "Test Job Specialty"
-  And I should not see "Description of Test Job Specialty"
+  Then I should not see "Test 2nd Job Specialty"
+  And I should not see "Description of 2nd Test Job Specialty"
 
-@javascript
-Scenario: show job specialty model validation errors
-  And I click the "Job Properties" link
-  And I click the "Add Job Specialty" button
+  # show job specialty model validation errors
+  Then I click the "Add Job Specialty" button
   And I wait 2 seconds
+  And I fill in "Name:" with ""
+  And I fill in "Description:" with ""
   And I click the "Add Specialty" button
-  And I wait 3 seconds
+  And I wait 2 seconds
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
-  Then I fill in "Name:" with "Test Job Specialty"
-  And I fill in "Description:" with "Description of Test Job Specialty"
+  Then I fill in "Name:" with "Test 3rd Job Specialty"
+  And I fill in "Description:" with "Description of 3rd Test Job Specialty"
   And I click the "Add Specialty" button
   And I wait 2 seconds
-  Then I should see "Test Job Specialty"
-  And I should see "Description of Test Job Specialty"
+  Then I should see "Test 3rd Job Specialty"
+  And I should see "Description of 3rd Test Job Specialty"
 
-@javascript
-Scenario: update job specialty
-  And I click the "Job Properties" link
+  # update job specialty
   And I click the "Software Engineer - RoR" link
   And I wait 2 seconds
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 2 second
+  And I wait 2 seconds
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
@@ -315,76 +292,61 @@ Scenario: update job specialty
   Then "Update Job Specialty" should not be visible
   And I should see "Backend RoR Development"
 
-@javascript
-Scenario: delete job specialty
-  And I click the "Job Properties" link
+  # delete job specialty
   And I click the link with url "/job_categories/1"
   And I wait 2 seconds
   Then I should not see "Software Engineer - RoR"
-  And I should see "There are no job specialties."
 
-  @javascript
-  Scenario: add job skill
-    And I click the "Job Properties" link
-    And I click the "Add Job Skill" button
-    And I wait 2 seconds
-    And I fill in "Name:" with "Test Job Skill"
-    And I fill in "Description:" with "Description of Test Job Skill"
-    And I click the "Add Skill" button
-    And I wait 2 seconds
-    Then I should see "Test Job Skill"
-    And I should see "Description of Test Job Skill"
+  # add job skill
+  And I click the "Add Job Skill" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test Job Skill"
+  And I fill in "Description:" with "Description of Test Job Skill"
+  And I click the "Add Skill" button
+  And I wait 2 seconds
+  Then I should see "Test Job Skill"
+  And I should see "Description of Test Job Skill"
 
-  @javascript
-  Scenario: cancel add job skill
-    And I click the "Job Properties" link
-    And I click the "Add Job Skill" button
-    And I wait 2 seconds
-    And I fill in "Name:" with "Test Job Skill"
-    And I click the "Cancel" button
-    And I wait 2 seconds
-    Then I should not see "Test Job Skill"
-    And I should not see "Description of Test Job Skill"
+  # cancel add job skill
+  And I click the "Add Job Skill" button
+  And I wait 2 seconds
+  And I fill in "Name:" with "Test 2nd Job Skill"
+  And I click the "Cancel" button
+  And I wait 2 seconds
+  Then I should not see "Test 2nd Job Skill"
 
-  @javascript
-  Scenario: show job skill model validation errors
-    And I click the "Job Properties" link
-    And I click the "Add Job Skill" button
-    And I wait 2 seconds
-    And I click the "Add Skill" button
-    And I wait 2 seconds
-    Then I should see "Name can't be blank"
-    And I should see "Description can't be blank"
-    Then I fill in "Name:" with "Test Job Skill"
-    And I fill in "Description:" with "Description of Test Job Skill"
-    And I click the "Add Skill" button
-    And I wait 2 seconds
-    Then I should see "Test Job Skill"
-    And I should see "Description of Test Job Skill"
+  # show job skill model validation errors
+  Then I click the "Add Job Skill" button
+  And I wait 2 seconds
+  And I fill in "Name:" with ""
+  And I fill in "Description:" with ""
+  And I click the "Add Skill" button
+  And I wait 2 seconds
+  Then I should see "Name can't be blank"
+  And I should see "Description can't be blank"
+  Then I fill in "Name:" with "Test 3rd Job Skill"
+  And I fill in "Description:" with "Description of 3rd Test Job Skill"
+  And I click the "Add Skill" button
+  And I wait 2 seconds
+  Then I should see "Test 3rd Job Skill"
 
-  @javascript
-  Scenario: update job skill
-    And I click the "Job Properties" link
-    And I click the "Web Research" link
-    And I wait 2 seconds
-    And I fill in "Description:" with ""
-    And I click the "Update Skill" button
-    And I wait 1 second
-    And I should see "Description can't be blank"
-    And I fill in "Description:" with "Anaytics using web data"
-    And I click the "Update Skill" button
-    And I wait 2 seconds
-    Then "Update Job Skill" should not be visible
-    And I should see "Anaytics using web data"
+  # update job skill
+  And I click the "Web Research" link
+  And I wait 2 seconds
+  And I fill in "Description:" with ""
+  And I click the "Update Skill" button
+  And I wait 1 second
+  And I should see "Description can't be blank"
+  And I fill in "Description:" with "Anaytics using web data"
+  And I click the "Update Skill" button
+  And I wait 2 seconds
+  Then "Update Job Skill" should not be visible
+  And I should see "Anaytics using web data"
 
-  @javascript
-  Scenario: delete job skill not associated with a job
-    And I click the "Job Properties" link
-    And I click the link with url "/skills/2"
-    And I wait 2 seconds
-    Then I should not see "Visual Analysis"
+  # delete job skill not associated with a job
+  And I click the link with url "/skills/2"
+  And I wait 2 seconds
+  Then I should not see "Visual Analysis"
 
-  @javascript
-  Scenario: attempt to delete job skill associated with a job
-    And I click the "Job Properties" link
-    And I should not see the "/skills/1" link
+  # attempt to delete job skill associated with a job
+  And I should not see the "/skills/1" link

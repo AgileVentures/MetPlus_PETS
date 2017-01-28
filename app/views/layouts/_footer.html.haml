@@ -1,10 +1,8 @@
 %div{class: "footer text-center"}
     %div{ :class => "container" }
-        %div{:class => "footer-left"}
+        %div{ :class => "footer-left" }
             %span= "&reg;".html_safe+" MetPlus #{Date.today.year}"
-            %span= " | Terms and Conditions Apply"
-            %span= " | All Rights Reserved"
-        %div{:class => "footer-right"}
+        %div{ :class => "footer-right" }
             For employers:
             - if pets_user.is_a?(CompanyPerson)
                 = link_to "Post jobs", new_job_path(company_id: current_user, company_person_id: current_user.try(:actable_id)), class: "#{yield(:new_job_active)}"
@@ -18,11 +16,3 @@
                 |
 
             #{ link_to "Partner with Us", new_company_registration_path, class: yield(:new_company_active) }
-            |
-            #{ link_to "Home", root_path, class: yield(:home_active)}
-            |
-            #{ link_to "About", '#', class: yield(:about_active) }
-            |
-            #{ link_to "Contact", '#', class: yield(:contact_active) }
-            |
-            #{ link_to "Site Map", '#', class: yield(:site_map_active) }
