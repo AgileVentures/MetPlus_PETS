@@ -4,6 +4,8 @@
       =link_to 'MET|PLUS', root_path ,{class: 'navbar-brand'}
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
+        %li{:class => "menu-item #{ yield(:person_home_active) }"}
+          = link_to "Home", show_person_home_page_path(pets_user)
         %li{:class => "menu-item #{ yield(:job_active) }"}
           %a{:href => '/jobs', id: 'job'} Jobs
         %li{:class => "menu-item #{ yield(:about_active) }"}
