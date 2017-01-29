@@ -23,7 +23,7 @@ class JobSeekerPolicy < ApplicationPolicy
   def show?
     # all agency people
     # all company people
-    user == user.is_a?(AgencyPerson) || user.is_a?(CompanyPerson)
+    user.is_a?(AgencyPerson) || user.is_a?(CompanyPerson)
   end
 
   def destroy?
