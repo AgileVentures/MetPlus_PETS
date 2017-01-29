@@ -72,7 +72,7 @@ RSpec.describe JobSeekerPolicy do
   end
 
   permissions :show? do
-    it 'only allows access if user is account owner' do
+    it 'does not allow access if user is job seeker' do
       expect(JobSeekerPolicy).not_to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)
     end
