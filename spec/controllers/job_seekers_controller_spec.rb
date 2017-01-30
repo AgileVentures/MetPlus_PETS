@@ -662,11 +662,10 @@ RSpec.describe JobSeekersController, type: :controller do
         sign_in owner
         request
       end
-      it 'it renders the show template' do
-        expect(response).to render_template 'show'
-      end
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
+      # the job seeker should not be able to see their show page
+      # this information is already available in their home page
+      it 'it does not render the show template' do
+        expect(response).not_to render_template 'show'
       end
     end
   end
@@ -809,7 +808,14 @@ RSpec.describe JobSeekersController, type: :controller do
       end
     end
   end
+
   describe 'GET download_resume' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+      sign_in company_admin
+    end
+
     let(:company)       { FactoryGirl.create(:company) }
     let(:company2)      { FactoryGirl.create(:company) }
     let(:job)           { FactoryGirl.create(:job, company: company) }
@@ -836,11 +842,7 @@ RSpec.describe JobSeekersController, type: :controller do
     let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
     let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
     let!(:resume2) { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
-    before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
-      sign_in company_admin
-    end
+
     context 'Successful download' do
       it 'does not raise exception' do
         stub_cruncher_file_download('files/Admin-Assistant-Resume.pdf')

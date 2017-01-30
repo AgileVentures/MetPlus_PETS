@@ -95,7 +95,7 @@ Feature: Match a Job to a Job Seeker's Résumé
     And I wait 1 second
     And I should see "Match all job seekers"
     Then I click the "Match all job seekers" link
-    And I wait 2 seconds
+    And I wait 4 seconds
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Seeker, John"
     And I should see "Mike Check"
