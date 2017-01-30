@@ -662,11 +662,10 @@ RSpec.describe JobSeekersController, type: :controller do
         sign_in owner
         request
       end
-      it 'it renders the show template' do
-        expect(response).to render_template 'show'
-      end
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
+      # the job seeker should not be able to see their show page
+      # this information is already available in their home page
+      it 'it does not render the show template' do
+        expect(response).not_to render_template 'show'
       end
     end
   end
