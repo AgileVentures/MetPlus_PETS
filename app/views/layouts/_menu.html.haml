@@ -4,13 +4,13 @@
       =link_to 'MET|PLUS', root_path ,{class: 'navbar-brand'}
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
-        %li{:class => 'menu-item'}
-          = link_to('Home', show_person_home_page_path(pets_user))
-        %li{:class => 'menu-item'}
+        %li{ :class => "menu-item #{ yield(:person_home_active) }" }
+          = link_to "Home", show_person_home_page_path(pets_user)
+        %li{:class => "menu-item #{ yield(:job_active) }"}
           %a{:href => '/jobs', id: 'job'} Jobs
-        %li{:class => 'menu-item'}
+        %li{ :class => "menu-item #{ yield(:about_active) }" }
           %a{:href => '#', id: 'about'} About
-        %li{:class => 'menu-item'}
+        %li{ :class => "menu-item #{ yield(:contact_active) }" }
           %a{:href => '#', id: 'contact'} Contact
         %li{:class => 'menu-item'}
           - if user_signed_in?
@@ -21,9 +21,9 @@
                          id: 'dd_menu', 'aria-expanded' => 'false'}
                   = ("Admin" + "<span class='caret'></span>").html_safe
                 %ul.dropdown-menu{'aria-labelledby' => 'dd_menu'}
-                  %li
+                  %li{ :class => "#{ yield(:agency_admin_active) }" }
                     = link_to('Agency and Partner Companies', agency_admin_home_path)
-                  %li
+                  %li{ :class => "#{ yield(:agency_admin_job_active) }" }
                     = link_to('Job Properties',                 |
                             agency_admin_job_properties_path)   |
       %ul{:class => 'nav navbar-nav navbar-right'}
@@ -33,19 +33,24 @@
               %div{:class => 'button-menu'}
                 = link_to 'Log In', login_path, :role => 'button', :class => 'btn btn-default btn-xs', :id => 'login_button'
         - else
-          %li
-            %div{:class => 'navbar-text'}
-              Hello,
+          %li.menu-item
+            %li.menu-item.dropdown
+              %a{ href: '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown',
+                        role: 'button', 'aria-haspopup' => 'true',
+                         id: 'dd_menu', 'aria-expanded' => 'false' }
+                Hello,
+                %span.navbar-name= current_user.first_name
+                = ("<span class='caret'></span>").html_safe
+              %ul.dropdown-menu{ 'aria-labelledby' => 'dd_menu' }
+                %li
+                  - if current_user.actable_type == 'JobSeeker'
+                    = link_to 'Edit Profile', edit_job_seeker_path(current_user.actable_id)
+                  - elsif current_user.actable_type == 'CompanyPerson'
+                    = link_to 'Edit Profile', edit_profile_company_person_path(current_user.actable_id)
+                  - elsif current_user.actable_type == 'AgencyPerson'
+                    = link_to 'Edit Profile', edit_profile_agency_person_path(current_user.actable_id)
+                  - else
+                    = link_to 'Edit Profile', edit_user_registration_path(current_user)
+                %li
+                  = link_to 'Log out', logout_path, :role => 'button', method: :delete
 
-              -if current_user.actable_type == 'JobSeeker'
-                = link_to current_user.first_name, edit_job_seeker_path(current_user.actable_id)
-              -elsif current_user.actable_type == 'CompanyPerson'
-                = link_to current_user.first_name, edit_profile_company_person_path(current_user.actable_id)
-              -elsif current_user.actable_type == 'AgencyPerson'
-                = link_to current_user.first_name, edit_profile_agency_person_path(current_user.actable_id)
-              -else
-                = link_to current_user.first_name, edit_user_registration_path(current_user)
-
-          %li
-            %div{:class => 'button-menu'}
-              = link_to 'Log out', logout_path, :role => 'button', method: :delete, :class => 'btn btn-default btn-xs', :id => 'logout_button'
