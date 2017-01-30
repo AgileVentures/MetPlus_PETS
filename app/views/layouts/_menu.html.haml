@@ -10,7 +10,7 @@
           %a{:href => '/jobs', id: 'job'} Jobs
         %li{ :class => "menu-item #{ yield(:about_active) }" }
           %a{:href => '#', id: 'about'} About
-        %li{ :class => "menu-item #{ yield(:contact_active) }" }
+        %li{:class => 'menu-item'}
           %a{:href => '#', id: 'contact'} Contact
         %li{:class => 'menu-item'}
           - if user_signed_in?
