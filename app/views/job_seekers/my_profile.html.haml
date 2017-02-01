@@ -1,0 +1,16 @@
+%div.row
+  %div.col-md-4
+    %h1.my-profile-header Your Profile
+    %h4
+      %strong First Name:
+      = @jobseeker.first_name
+    %h4
+      %strong Surname:
+      = @jobseeker.last_name
+    %h4
+      %strong Email:
+      = @jobseeker.email
+    %h4
+      %strong Phone:
+      = @jobseeker.phone
+    = link_to "Edit", edit_job_seeker_path(@jobseeker), class: "btn btn-lg edit-profile-btn"

@@ -10,7 +10,7 @@
         %li{:class => "menu-item #{ yield(:job_active) }"}
           %a{:href => '/jobs', id: 'job'} Jobs
         %li{ :class => "menu-item #{ yield(:about_active) }" }
-          %a{:href => '#', id: 'about'} About
+          %a{:href => '/about', id: 'about'} About
         %li{ :class => "menu-item #{ yield(:contact_active) }" }
           %a{:href => '#', id: 'contact'} Contact
         %li{:class => 'menu-item'}
@@ -45,11 +45,11 @@
               %ul.dropdown-menu{ 'aria-labelledby' => 'dd_menu' }
                 %li
                   - if current_user.actable_type == 'JobSeeker'
-                    = link_to 'Edit Profile', edit_job_seeker_path(current_user.actable_id)
+                    = link_to 'My Profile', my_profile_job_seeker_path(current_user.actable_id)
                   - elsif current_user.actable_type == 'CompanyPerson'
-                    = link_to 'Edit Profile', edit_profile_company_person_path(current_user.actable_id)
+                    = link_to 'My Profile', my_profile_company_person_path(current_user.actable_id)
                   - elsif current_user.actable_type == 'AgencyPerson'
-                    = link_to 'Edit Profile', edit_profile_agency_person_path(current_user.actable_id)
+                    = link_to 'My Profile', my_profile_agency_person_path(current_user.actable_id)
                   - else
                     = link_to 'Edit Profile', edit_user_registration_path(current_user)
                 %li

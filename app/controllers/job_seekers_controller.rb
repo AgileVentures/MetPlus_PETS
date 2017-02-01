@@ -96,6 +96,7 @@ class JobSeekersController < ApplicationController
   end
 
   def home
+    logger.info("Person: #{pets_user.inspect}")
     @jobseeker = JobSeeker.find(params[:id])
     @recent_jobs_type = 'recent-jobs'
     authorize @jobseeker
@@ -163,6 +164,11 @@ class JobSeekersController < ApplicationController
       resume_file.close
       resume_file.unlink
     end
+  end
+
+  def my_profile
+    @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
   end
 
   private
