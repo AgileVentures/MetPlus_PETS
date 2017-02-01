@@ -9,6 +9,7 @@ Background: seed data added to database
   Given the default settings are present
 
   Given the following jobseekers exist:
+
     | first_name| last_name| email                     | phone       | password | year_of_birth |job_seeker_status  |
     | Mike      | Smith    | mike.smith@gmail.com      | 345-890-7890| password | 1990          |Unemployed Seeking |
     | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password | 1990          |Unemployed Seeking |
@@ -31,6 +32,7 @@ Background: seed data added to database
     | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
+
     | job title  | job seeker           |
     | SW dev     | mike.smith@gmail.com |
     | Trucker    | mike.smith@gmail.com |
@@ -39,6 +41,7 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com     |
     | Mime       | tommy1@gmail.com     |
 
+   
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | mike.smith@gmail.com |
@@ -95,7 +98,6 @@ Scenario: JS Registration and model(s) validation
   Then I click the "Create Job seeker" button
   Then I should see "A message with a confirmation and link has been sent to your email address."
 
-
 @javascript
 Scenario: job seeker sees applied jobs and new job opportunities
   Given I am on the home page
@@ -115,20 +117,20 @@ Scenario: edit Js profile
   And I login as "mike.smith@gmail.com" with password "password"
   Then I should see "Signed in successfully"
   When I click the "Mike" link
+  And I click the "Edit Profile" link
   And I fill in "First Name" with "Mikes"
   Then I select "Employed Not Looking" in select list "Status"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-
   # edit profile with address fields missing
   Then I click the "Mikes" link
+  And I click the "Edit Profile" link
   And I fill in "City" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address city can't be blank"
   When I fill in "Street" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address street can't be blank"
-
   # edit profile with all address fields
   Then I click the "Mikes" link
   And I fill in "City" with "Nairobi"
@@ -136,7 +138,6 @@ Scenario: edit Js profile
   Then I select "Idaho" in select list "State"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-
 
 @javascript
 Scenario: Agency and Company people actions
@@ -157,6 +158,7 @@ Scenario: Agency and Company people actions
   And I should not see "Trucker"
 
   # company admin: download job seeker résumé
+  And I click the "Hello, John" link
   Then I logout
   And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I wait 1 second

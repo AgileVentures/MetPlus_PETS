@@ -103,6 +103,7 @@ Scenario: attempt login after registration is deleted
   And I wait 2 seconds
   Then I click the "Widgets, Inc." link
   Then I click and accept the "Delete Registration" button
+  And I click the "Hello, John" link
   And I log out
   And I wait 1 second
   Then I am on the home page
@@ -140,6 +141,7 @@ Scenario: attempt login after registration is denied
   And I click the "Send email" button
   And I wait 5 seconds
   Then I should see "Registration Denied"
+  And I click the "Hello, John" link
   And I log out
   And I wait 1 second
   Then I am on the home page

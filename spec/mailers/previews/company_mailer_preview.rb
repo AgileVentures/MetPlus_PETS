@@ -36,7 +36,7 @@ class CompanyMailerPreview < ActionMailer::Preview
       break
     end
 
-    railse 'Cannot find application with resume' unless job_application
+    raise 'Cannot find application with resume' unless job_application
 
     CompanyMailer.application_received(job_application.job.company,
                                        job_application,

@@ -156,7 +156,7 @@ Feature: Company Person
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'carter@ymail.com' Home page
-    Then I press "John"
+    Then I press "Hello, John"
     And I am on the 'carter@ymail.com' edit profile page
     And I should see "John"
     And I fill in "First Name" with "Tom"
