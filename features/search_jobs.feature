@@ -113,9 +113,9 @@ Scenario: Search by city
   And I select "city3" in select list "City"
   And I click the "Search Jobs" button
   Then I should see "Job1"
-  And I should see "Job4"
+  And I should see "Job3"
   And I should not see "Job2"
-  And I should not see "Job3"
+  And I should not see "Job4"
 
 @javascript
 Scenario: Search by title and description
@@ -136,7 +136,6 @@ Scenario: Search by title and description
   And I click the "Search Jobs" button
   Then I should see "Job1"
   And I should not see "Job3"
-  And I should see "Job3"
   And I should not see "Job4"
   And I should not see "Job2"
 
@@ -150,7 +149,7 @@ Scenario: Search by company
   And I select "Widgets Inc." in select list "Company"
   And I click the "Search Jobs" button
   Then I should see "Job1"
-  And I should not see "Job2"
+  And I should see "Job2"
   And I should not see "Job3"
   And I should not see "Job4"
   And I click the "Show Search Form" link
