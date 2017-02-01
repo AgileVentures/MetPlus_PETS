@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     match  '/logout'  => 'users/sessions#destroy',    via: 'delete'
   end
 
+  get 'about', to: 'pages#about'
+  match 'contact', to: 'pages#contact', via: [:get, :post]
+
   # ----------------------- Agency Branches ----------------------------------
   # Agency admin can create a branch within the agency
   resources :agencies, path: '/admin/agencies', only: [:edit, :update] do

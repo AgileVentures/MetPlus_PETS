@@ -89,6 +89,7 @@ Feature: Match a Job to a Job Seeker's Résumé
     And I should see "3.1 stars"
 
     # Job developer: match job to job seekers
+    And I click the "Hello, John" link
     Then I logout
     And I am logged in as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully"
