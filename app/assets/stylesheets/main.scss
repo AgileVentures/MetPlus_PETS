@@ -46,17 +46,17 @@ $grey-color: #d9d9d9;
 }
 
 .home-block-1 {
-  display: block;
+  display: inline-block;
   float: left;
-  height: 650px;
+  height: 100%;
   margin-right: 5px;
   width: 45%;
 }
 
 .home-block-2 {
-  display: block;
+  display: inline-block;
   float: right;
-  height: 650px;
+  height: 100%;
   margin-left: 5px;
   width: 45%;
 }
