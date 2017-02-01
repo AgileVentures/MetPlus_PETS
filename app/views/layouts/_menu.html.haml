@@ -10,9 +10,9 @@
         %li{:class => "menu-item #{ yield(:job_active) }"}
           %a{:href => '/jobs', id: 'job'} Jobs
         %li{ :class => "menu-item #{ yield(:about_active) }" }
-          %a{:href => '/about', id: 'about'} About
+          = link_to 'About', about_path, id: 'about'
         %li{ :class => "menu-item #{ yield(:contact_active) }" }
-          %a{:href => '#', id: 'contact'} Contact
+          = link_to 'Contact', contact_path, id: 'contact'
         %li{:class => 'menu-item'}
           - if user_signed_in?
             - if current_user_agency_admin?

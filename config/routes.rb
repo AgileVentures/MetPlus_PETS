@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   end
 
   get 'about', to: 'pages#about'
+  match 'contact', to: 'pages#contact', via: [:get, :post]
 
   # ----------------------- Agency Branches ----------------------------------
   # Agency admin can create a branch within the agency

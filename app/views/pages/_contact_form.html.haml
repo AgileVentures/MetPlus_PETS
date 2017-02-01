@@ -1,0 +1,25 @@
+= form_tag(contact_path, class: 'form-horizontal contact-form', remote: true) do
+  .form-group
+    = label_tag :full_name, 'Full Name', class: 'col-sm-3 control-label'
+    .col-sm-9
+      = text_field_tag :full_name, '', placeholder: 'Enter your full name',
+        required: true, class: 'form-control'
+
+  .form-group
+    = label_tag :email, 'Email', class: 'col-sm-3 control-label'
+    .col-sm-9
+      = email_field_tag :email, '', placeholder: 'Enter your email address',
+        required: true, class: 'form-control'
+
+  .form-group
+    = label_tag :message, 'Message', class: 'col-sm-3 control-label'
+    .col-sm-9
+      = text_area_tag :message, '', placeholder: 'Enter your message',
+        required: true, class: 'form-control message-textarea', rows: '7'
+
+  .form-group
+    .col-sm-9.col-sm-offset-3
+      .g-recaptcha{ data: { sitekey: ENV['RECAPTCHA_PUBLIC_KEY'] }}
+  .form-group
+    .col-sm-9.col-sm-offset-3
+      = submit_tag 'Send Message', class: 'btn btn-primary send-message-btn'

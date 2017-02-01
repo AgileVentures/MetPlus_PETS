@@ -1,0 +1,47 @@
+// Place all the styles related to the Pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/** contact page **/
+.contact-row {
+  margin-bottom: 25px;
+}
+
+.contact-us-img {
+  width: 100%;
+}
+
+.contact-form-wrapper {
+  padding-bottom: 20px;
+}
+
+.contact-form, .info {
+  padding: 15px;
+}
+
+.send-message-btn:focus {
+  outline: 0;
+}
+
+.contact-dl dt {
+  text-align: left;
+}
+
+.info {
+  text-align: left;
+}
+
+.message-textarea {
+  max-width: 100%; // to avoid resizing on x-axis
+}
+
+.google-map {
+  width: 100%;
+}
+
+@media all and (max-width: 768px) {
+  .contact-dl dt,
+  .contact-dl dd {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,7 @@
+%p
+  Hello! You've received a new message from
+  = link_to "#{@name}", "mailto:#{@email}"
+
+%p
+  %strong Message:
+  = @message
