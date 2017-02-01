@@ -15,7 +15,6 @@ RSpec.describe JobSeekerPolicy do
   let(:cc2)     { FactoryGirl.create(:company_contact) }
   let(:comp)    { FactoryGirl.create(:company) }
   let(:job)     { FactoryGirl.create(:job, company: comp) }
-
   let!(:ca)     { FactoryGirl.create(:company_admin, company: comp) }
   let(:comp2)   { FactoryGirl.create(:company) }
   let(:job2)    { FactoryGirl.create(:job, company: comp2) }

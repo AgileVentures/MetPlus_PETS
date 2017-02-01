@@ -269,7 +269,7 @@ Scenario: manage job properties
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
   And I click the "Add Specialty" button
-  And I wait 3 seconds
+  And I wait 2 seconds
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
   Then I fill in "Name:" with "Test 3rd Job Specialty"
