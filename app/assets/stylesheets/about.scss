@@ -1,0 +1,37 @@
+.about-buttons {
+  margin-top: 73px;
+
+  a {
+    background-color: #0c7ba1;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    height: 50px;
+    padding: 12px 16px;
+    width: 250px;
+    
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.about {
+
+  h1 {
+    color: #0c7ba1;
+    font-weight: bold;
+  }
+
+  h3 {
+    color: #0c7ba1;
+    font-weight: bold;
+  }
+}
+
+.about-image {
+
+  img {
+    width: 100%;
+  }
+}
