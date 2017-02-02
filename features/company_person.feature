@@ -113,7 +113,7 @@ Feature: Company Person
     Then I press "edit-profile"
     And I should see "John"
     And I fill in "Email" with "carter1@ymail.com"
-    Then I click "Update Company person" button
+    Then I click "Update Your Profile" button
     And I should see "Please check your inbox to update your email address."
     And I should not see "carter1@ymail.com"
     And I should see "carter@ymail.com"
