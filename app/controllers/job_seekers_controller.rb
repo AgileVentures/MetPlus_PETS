@@ -87,7 +87,7 @@ class JobSeekersController < ApplicationController
       end
       redirect_to(@jobseeker) && return if (pets_user == @jobseeker.case_manager) ||
                                            (pets_user == @jobseeker.job_developer)
-      redirect_to root_path
+      redirect_to home_job_seeker_path
     else
       @resume = resume
       @jobseeker.build_address unless @jobseeker.address.present?
