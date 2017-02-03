@@ -169,6 +169,7 @@ class JobSeekersController < ApplicationController
   def my_profile
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
+    @current_resume = @jobseeker.resumes[0]
   end
 
   private
