@@ -37,6 +37,5 @@
 # Ignore Editor files
 .idea/*
 
-/spec/examples.txt
 
 .DS_Store

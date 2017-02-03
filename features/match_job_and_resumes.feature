@@ -45,7 +45,6 @@ Feature: Match a Job to a Job Seeker's Résumé
      | ruby developer   | KRK01         | Day  | true     | internship | Widgets Inc. | carter@ymail.com |
      | java developer   | KRK02         | Day  | true     | internship | Widgets Inc. | carter@ymail.com |
 
-
     Given the following job applications exist:
      | job title      | job seeker            |
      | ruby developer | john.seeker@gmail.com |

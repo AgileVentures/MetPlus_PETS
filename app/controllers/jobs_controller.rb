@@ -256,6 +256,7 @@ class JobsController < ApplicationController
 
     # Parameters: {"job_developer_id"=>"3", "company_person_id"=>"1",
     #              "job_seeker_id"=>"3", "id"=>"202"}
+    
     raise 'Unsupported request' unless request.xhr?
 
     authorize @job

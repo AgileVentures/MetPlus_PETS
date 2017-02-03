@@ -345,8 +345,8 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'returns redirect status' do
           expect(response).to have_http_status(:redirect)
         end
-        it 'redirects to mainpage' do
-          expect(response).to redirect_to(root_path)
+        it 'redirects to homepage' do
+          expect(response).to redirect_to(home_job_seeker_path)
         end
       end
       context 'unsuccessful résumé upload' do
