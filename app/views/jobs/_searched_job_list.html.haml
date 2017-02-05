@@ -30,4 +30,8 @@
 				%td
 					-if job.address
 						= job.address.city
+				%td
+					-unless job.active?
+						%span.label.label-info
+							#{job.status.capitalize}
 = will_paginate @jobs

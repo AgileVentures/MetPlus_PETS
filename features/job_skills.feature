@@ -51,7 +51,7 @@ Scenario: Create job with associated skills
   And I select "12" in second select list "Max years:"
 	And  I press "Create"
 	Then I should see "cashier has been created successfully."
-  And I should be on the jobs page
+  And I should be on the company jobs page
   Then I click the "cashier" link
   And I wait 1 second
   And I should see "Skill1"

@@ -31,6 +31,16 @@ Then(/^I should( not)? see "Revoked" next to "([^"]*)"$/) do |negate, job_title|
 	end
 end
 
+Then(/^I should( not)? see "Revoked" for "([^"]*)"$/) do |negate, job_title|
+	@job ||= Job.find_by(title: job_title)
+	if negate
+		find('tr', text: job_title).should_not have_content("Revoked")
+	else
+	#	expect(page).to have_css("#job-#{@job.id} span", text: "Revoked")
+		find('tr', text: job_title).should have_content("Revoked")
+	end
+end
+
 Then(/^I should( not)? see "revoke" button for "([^"]*)"$/) do |negate, job_title|
 	@job ||= Job.find_by(title: job_title)
 	if negate

@@ -180,7 +180,7 @@ class JobsController < ApplicationController
     else
       flash[:alert] = 'Only active job can be revoked.'
     end
-    redirect_to jobs_path
+    redirect_to company_jobs_path
   end
 
   def match_resume
