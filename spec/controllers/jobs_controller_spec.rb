@@ -214,7 +214,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'visitor'
     end
   end
-  
+
   describe 'GET #company_jobs' do
     let!(:rand_job1) { FactoryGirl.create(:job) }
     let!(:rand_job2) { FactoryGirl.create(:job) }
