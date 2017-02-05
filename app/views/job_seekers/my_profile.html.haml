@@ -1,5 +1,5 @@
 .row
-  .col-md-8
+  .col-md-8.my-profile-info
     %h1.my-profile-header Your Profile
     %table.table
       %tbody
@@ -28,4 +28,9 @@
               %span.utc_to_local_time= @current_resume.updated_at
             - else
               You have no current resume
+        - if @jobseeker.address.present?
+          %tr
+            %td
+              %strong Address
+            %td= @jobseeker.address.street + ', ' + @jobseeker.address.city + ', ' + @jobseeker.address.zipcode
     = link_to "Edit", edit_job_seeker_path(@jobseeker), class: "btn btn-lg edit-profile-btn"

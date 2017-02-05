@@ -96,7 +96,6 @@ class JobSeekersController < ApplicationController
   end
 
   def home
-    logger.info("Person: #{pets_user.inspect}")
     @jobseeker = JobSeeker.find(params[:id])
     @recent_jobs_type = 'recent-jobs'
     authorize @jobseeker
