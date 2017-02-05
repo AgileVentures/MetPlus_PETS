@@ -5,11 +5,15 @@
         %div{ :class => "footer-right" }
             For employers:
             - if pets_user.is_a?(CompanyPerson)
+                = link_to "List jobs", company_jobs_path
+                |
                 = link_to "Post jobs", new_job_path(company_id: current_user, company_person_id: current_user.try(:actable_id)), class: "#{yield(:new_job_active)}"
                 |
                 = link_to "Search Resumes", '#', class: "#{yield(:search_resume_active)}"
                 |
             - elsif pets_user.try(:agency)  && pets_user.is_job_developer?(pets_user.try(:agency))
+                = link_to "List jobs", company_jobs_path
+                |
                 = link_to "Post jobs", new_job_path, class: "#{yield(:new_job_active)}"
                 |
                 = link_to "Search Resumes", '#', class: "#{yield(:search_resume_active)}"

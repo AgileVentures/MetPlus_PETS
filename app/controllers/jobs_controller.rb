@@ -74,7 +74,7 @@ class JobsController < ApplicationController
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_POSTED, obj.new(@job, current_agency))
 
-      redirect_to jobs_path
+      redirect_to company_jobs_path
     else
       @companies = Company.order(:name)
       set_company_address
@@ -82,6 +82,11 @@ class JobsController < ApplicationController
     end
   end
 
+  def company_jobs
+    @jobs = policy_scope(Job).order(:title).includes(:company)
+                             .paginate(page: params[:page], per_page: 20)
+  end
+  
   def show
     authorize @job
     @resume = nil

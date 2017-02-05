@@ -133,9 +133,9 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
-        it 'redirects to the jobs index ' do
+        it 'redirects to the company jobs list' do
           request
-          expect(response).to redirect_to(action: 'index')
+          expect(response).to redirect_to(action: 'company_jobs')
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \
                                        'has been created successfully.'
         end
@@ -159,9 +159,9 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
-        it 'redirects to the jobs index ' do
+        it 'redirects to the company jobs list' do
           request
-          expect(response).to redirect_to(action: 'index')
+          expect(response).to redirect_to(action: 'company_jobs')
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \
                                        'has been created successfully.'
         end
@@ -188,9 +188,9 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
-        it 'redirects to the jobs index ' do
+        it 'redirects to the company jobs list' do
           request
-          expect(response).to redirect_to(action: 'index')
+          expect(response).to redirect_to(action: 'company_jobs')
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \
                                        'has been created successfully.'
         end
@@ -212,6 +212,38 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'visitor' do
       it_behaves_like 'unauthorized', 'visitor'
+    end
+  end
+  
+  describe 'GET #company_jobs' do
+    let!(:rand_job1) { FactoryGirl.create(:job) }
+    let!(:rand_job2) { FactoryGirl.create(:job) }
+    context 'company person' do
+      before(:each) do
+        bosh_job
+        warden.set_user bosh_person
+        get :company_jobs
+      end
+      it { expect(assigns(:jobs).count).to eq 1 }
+      it_behaves_like 'return success and render', 'jobs/company_jobs'
+    end
+    context 'agency admin' do
+      before(:each) do
+        bosh_job
+        warden.set_user agency_admin
+        get :company_jobs
+      end
+      it { expect(assigns(:jobs).count).to eq 3 }
+      it_behaves_like 'return success and render', 'jobs/company_jobs'
+    end
+    context 'job developer' do
+      before(:each) do
+        bosh_job
+        warden.set_user job_developer
+        get :company_jobs
+      end
+      it { expect(assigns(:jobs).count).to eq 3 }
+      it_behaves_like 'return success and render', 'jobs/company_jobs'
     end
   end
 

@@ -1,0 +1,17 @@
+- provide(:title, 'List of jobs')
+- provide(:job_active, 'active')
+
+.well.well-sm.col-sm-offset-2.col-sm-8#jobs-well-lg
+  .col-sm-6
+    %h4#list-header
+      List of job opportunities
+- if @jobs.empty?
+  .well.well-lg.col-sm-offset-2.col-sm-8#sub-list-id
+    %strong.text-center
+      %h3 There are no jobs available.
+- else
+  = render partial: "revoke_modal"
+  = render partial: "job", collection: @jobs
+
+.col-sm-offset-4.col-sm-6
+  = will_paginate @jobs
