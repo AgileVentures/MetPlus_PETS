@@ -5,8 +5,8 @@
     %h2 Search Jobs
 .row
   .col-sm-3
-    %a(id='toggle_search_form' href='#job_search_form' class='text-danger'
-                    style='padding-left: 10px;')
+    %a{ id: 'toggle_search_form', href: '#job_search_form', class: 'text-danger',
+      style: 'padding-left: 10px;' }
       Show Search Form
 
 #job_search_form(style = 'display: none;')
@@ -48,8 +48,8 @@
       .col-sm-6
         = f.grouped_collection_select :address_city_in, states_and_cities,
             :second, :first, :to_s, :to_s, {include_blank: true},
-            {multiple: true, size: 8, class: 'form-control',
-              style: 'width: 100%;'}
+            { multiple: true, size: 8, class: 'form-control',
+              style: 'width: 100%;' }
 
     .form-group
       = f.label :skills_id_in, 'Skills', class: 'control-label col-sm-3'
@@ -72,11 +72,11 @@
       .col-sm-3.col-sm-offset-3
         = submit_tag 'Search Jobs', class: 'btn btn-primary'
 
-%table(style='width: 100%')
+%table{style: 'width: 100%'}
   %tr
     %td
       %hr
-    %td(style='width: 1px; padding: 0 10px; white-space: nowrap; font-weight: bold;')
+    %td{ style:'width: 1px; padding: 0 10px; white-space: nowrap; font-weight: bold;' }
       = "#{pluralize(@jobs.count, 'Job')} Found." + "#{sort_instruction(@jobs.count)}"
     %td
       %hr
