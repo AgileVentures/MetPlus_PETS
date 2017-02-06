@@ -762,9 +762,9 @@ RSpec.describe JobsController, type: :controller do
           expect(Event).to receive(:create).with(:JOB_REVOKED, evt_obj(:job, :agency))
           request
         end
-        it 'flash[:alert] & redirects to jobs_path' do
+        it 'flash[:alert] & redirects to company_jobs_path' do
           request
-          expect(response).to redirect_to(jobs_path)
+          expect(response).to redirect_to(company_jobs_path)
           expect(flash[:alert]).to be_present.and eq "#{bosh_job.title} is revoked "\
           'successfully.'
         end
@@ -777,7 +777,7 @@ RSpec.describe JobsController, type: :controller do
         it 'flash[:alert]' do
           expect(flash[:alert]).to be_present.and eq 'Only active job can be revoked.'
         end
-        it { expect(response).to redirect_to(jobs_path) }
+        it { expect(response).to redirect_to(company_jobs_path) }
       end
     end
     context 'case manager' do
@@ -797,7 +797,7 @@ RSpec.describe JobsController, type: :controller do
         end
         it 'flash[:alert] & redirects to jobs_path' do
           request
-          expect(response).to redirect_to(jobs_path)
+          expect(response).to redirect_to(company_jobs_path)
           expect(flash[:alert]).to be_present.and eq "#{bosh_job.title} is revoked "\
           'successfully.'
         end
@@ -810,7 +810,7 @@ RSpec.describe JobsController, type: :controller do
         it 'flash[:alert]' do
           expect(flash[:alert]).to be_present.and eq 'Only active job can be revoked.'
         end
-        it { expect(response).to redirect_to(jobs_path) }
+        it { expect(response).to redirect_to(company_jobs_path) }
       end
     end
     context 'random company person' do
