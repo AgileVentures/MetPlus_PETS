@@ -27,6 +27,7 @@ $grey-color: #d9d9d9;
 }
 
 .grey-block {
+  display: block;
   background-color: $grey-color;
   margin-bottom: 2rem;
   padding: 3rem;
@@ -46,7 +47,7 @@ $grey-color: #d9d9d9;
 }
 
 .home-block-1 {
-  display: inline-block;
+  display: block;
   float: left;
   height: 100%;
   margin-right: 5px;
@@ -54,7 +55,7 @@ $grey-color: #d9d9d9;
 }
 
 .home-block-2 {
-  display: inline-block;
+  display: block;
   float: right;
   height: 100%;
   margin-left: 5px;
