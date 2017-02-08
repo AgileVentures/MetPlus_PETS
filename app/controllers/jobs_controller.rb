@@ -86,7 +86,7 @@ class JobsController < ApplicationController
     @jobs = policy_scope(Job).order(:title).includes(:company)
                              .paginate(page: params[:page], per_page: 20)
   end
-  
+
   def show
     authorize @job
     @resume = nil
@@ -261,7 +261,7 @@ class JobsController < ApplicationController
 
     # Parameters: {"job_developer_id"=>"3", "company_person_id"=>"1",
     #              "job_seeker_id"=>"3", "id"=>"202"}
-    
+  
     raise 'Unsupported request' unless request.xhr?
 
     authorize @job
