@@ -1,0 +1,18 @@
+.row
+  .col-md-4.my-profile-info
+    %h1.my-profile-header Your Profile
+    %table.table
+      %tbody
+        %tr
+          %td
+            %strong Full Name
+          %td= @agency_person.first_name + ' ' + @agency_person.last_name
+        %tr
+          %td
+            %strong Email
+          %td= @agency_person.email
+        %tr
+          %td
+            %strong Phone
+          %td= @agency_person.phone
+    = link_to "Edit", edit_profile_agency_person_path(@agency_person), class: "btn btn-lg edit-profile-btn"
