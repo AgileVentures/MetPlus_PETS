@@ -165,6 +165,12 @@ class JobSeekersController < ApplicationController
     end
   end
 
+  def my_profile
+    @jobseeker = JobSeeker.find(params[:id])
+    authorize @jobseeker
+    @current_resume = @jobseeker.resumes[0]
+  end
+
   private
 
   def address_is_empty?(jobseeker_params)

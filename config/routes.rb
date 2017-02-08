@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     member do
       get :home
       get :edit_profile, to: 'agency_people#edit_profile'
+      get :my_profile, to: :my_profile
       patch :update_profile, to: 'agency_people#update_profile'
       patch 'assign_job_seeker/:job_seeker_id/:agency_role',
             to: 'agency_people#assign_job_seeker',
@@ -87,6 +88,7 @@ Rails.application.routes.draw do
     member do
       get 'edit_profile', as: :edit_profile
       patch 'update_profile', as: :update_profile
+      get 'my_profile', as: :my_profile
       get 'home', as: :home
     end
   end
@@ -157,6 +159,7 @@ Rails.application.routes.draw do
     get 'home', on: :member, as: :home
     get 'match_jobs', on: :member, as: :match_jobs
     get 'list_match_jobs', on: :member, as: :list_match_jobs
+    get 'my_profile', on: :member, as: :my_profile
   end
 
   get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'

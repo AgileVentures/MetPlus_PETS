@@ -1,0 +1,26 @@
+.row
+  .col-md-4.my-profile-info
+    %h1.my-profile-header Your Profile
+    %table.table
+      %tbody
+        %tr
+          %td
+            %strong Title
+          %td= @company_person.title
+        %tr
+          %td
+            %strong Full Name
+          %td= @company_person.first_name + ' ' + @company_person.last_name
+        %tr
+          %td
+            %strong Email
+          %td= @company_person.email
+        %tr
+          %td
+            %strong Phone
+          %td= @company_person.phone
+        %tr
+          %td
+            %strong Address
+          %td= @company_person.address.street + ', ' + @company_person.address.city + ', ' + @company_person.address.zipcode
+    = link_to "Edit", edit_profile_company_person_path(@company_person), class: "btn btn-lg edit-profile-btn"

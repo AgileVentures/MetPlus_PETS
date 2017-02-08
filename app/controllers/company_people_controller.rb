@@ -73,6 +73,8 @@ class CompanyPeopleController < ApplicationController
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
+  def my_profile; end
+
   private
 
   def load_and_authorize_company_person
