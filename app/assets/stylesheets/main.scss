@@ -1,3 +1,63 @@
 // Place all the styles related to the Main controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$white-color: #fff;
+$over-color: #f2bc60;
+$blue-color: #0c7ba1;
+$grey-color: #d9d9d9;
+
+.h4 {
+  font-weight: bold;
+  line-height: 3rem;
+}
+
+.content-center {
+  text-align: center;
+}
+
+.blue-bar {
+  background-color: $blue-color;
+  color: $white-color;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 4.5rem;
+  line-height: 4.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.grey-block {
+  display: block;
+  background-color: $grey-color;
+  margin-bottom: 2rem;
+  padding: 3rem;
+  text-align: center;
+}
+
+.button-white a,
+.button-white a:active,
+.button-white a:visited {
+  color: $white-color;
+  text-decoration: none;
+}
+
+.button-white a:hover {
+  color: $over-color;
+  text-decoration: none;
+}
+
+.home-block-1 {
+  display: block;
+  float: left;
+  height: 100%;
+  margin-right: 5px;
+  width: 45%;
+}
+
+.home-block-2 {
+  display: block;
+  float: right;
+  height: 100%;
+  margin-left: 5px;
+  width: 45%;
+}
