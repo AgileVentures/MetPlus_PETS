@@ -19,8 +19,9 @@
           %td
             %strong Phone
           %td= @company_person.phone
-        %tr
-          %td
-            %strong Address
-          %td= @company_person.address.street + ', ' + @company_person.address.city + ', ' + @company_person.address.zipcode
+        -if @company_person.address.present?
+          %tr
+            %td
+              %strong Address
+            %td= @company_person.address.street + ', ' + @company_person.address.city + ', ' + @company_person.address.zipcode
     = link_to "Edit", edit_profile_company_person_path(@company_person), class: "btn btn-lg edit-profile-btn"

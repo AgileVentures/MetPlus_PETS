@@ -98,8 +98,10 @@ Feature: Company Person
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'carter@ymail.com' Home page
-    Then I press "edit-profile"
+    And I click the "Hello, John" link
+    Then I click the "My Profile" link
     And I should see "John"
+    And I click the "Edit" link
     And I fill in "First Name" with "Tom"
     Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
@@ -110,8 +112,10 @@ Feature: Company Person
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'carter@ymail.com' Home page
-    Then I press "edit-profile"
+    And I click the "Hello, John" link
+    Then I click the "My Profile" link
     And I should see "John"
+    And I click the "Edit" link
     And I fill in "Email" with "carter1@ymail.com"
     Then I click "Update Your Profile" button
     And I should see "Please check your inbox to update your email address."
@@ -122,8 +126,10 @@ Feature: Company Person
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'jane@ymail.com' Home page
-    Then I press "edit-profile"
+    And I click the "Hello, Jane" link
+    Then I click the "My Profile" link
     And I should see "Jane"
+    Then I click the "Edit" link
     And I fill in "First Name" with "Mary"
     Then I click "Update Your Profile" button
     And I should see "Your profile was updated successfully."
@@ -134,10 +140,12 @@ Feature: Company Person
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'jane@ymail.com' Home page
-    Then I press "edit-profile"
+    And I click the "Hello, Jane" link
+    And I click the "My Profile" link
+    Then I click the "Edit" link
     And I should see "Update Your Profile"
     Then I click the "Cancel" link
-    Then I should be on the Company Person 'jane@ymail.com' Home page
+    Then I should be on the Company Person 'jane@ymail.com' profile page
 
   Scenario: company contact login and edit profile from name
     Given I am on the home page
@@ -157,6 +165,8 @@ Feature: Company Person
     And I login as "carter@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'carter@ymail.com' Home page
     Then I press "Hello, John"
+    And I click the "My Profile" link
+    And I click the "Edit" link
     And I am on the 'carter@ymail.com' edit profile page
     And I should see "John"
     And I fill in "First Name" with "Tom"
@@ -168,7 +178,9 @@ Feature: Company Person
   Scenario: company admin can update address
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    Then I press "edit-profile"
+    And I press the "Hello, John" link
+    And I press the "My Profile" link
+    Then I press the "Edit" link
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
@@ -180,7 +192,9 @@ Feature: Company Person
   Scenario: company contact can update address
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
-    Then I press "edit-profile"
+    And I click the "Hello, Jane" link
+    And I click the "My Profile" link
+    Then I click the "Edit" link
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
