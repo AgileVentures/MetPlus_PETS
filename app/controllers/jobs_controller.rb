@@ -74,17 +74,12 @@ class JobsController < ApplicationController
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_POSTED, obj.new(@job, current_agency))
 
-      redirect_to company_jobs_path
+      redirect_to jobs_url
     else
       @companies = Company.order(:name)
       set_company_address
       render :new
     end
-  end
-
-  def company_jobs
-    @jobs = policy_scope(Job).order(:title).includes(:company)
-                             .paginate(page: params[:page], per_page: 20)
   end
 
   def show
@@ -180,7 +175,7 @@ class JobsController < ApplicationController
     else
       flash[:alert] = 'Only active job can be revoked.'
     end
-    redirect_to company_jobs_path
+    redirect_to jobs_path
   end
 
   def match_resume
