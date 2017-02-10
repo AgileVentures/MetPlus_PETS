@@ -178,9 +178,9 @@ Feature: Company Person
   Scenario: company admin can update address
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    And I press the "Hello, John" link
-    And I press the "My Profile" link
-    Then I press the "Edit" link
+    And I click the "Hello, John" link
+    And I click the "My Profile" link
+    Then I click the "Edit" link
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses

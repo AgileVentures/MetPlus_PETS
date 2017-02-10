@@ -19,7 +19,7 @@
           %td
             %strong Phone
           %td= @company_person.phone
-        -if @company_person.address.present?
+        - if @company_person.address.present?
           %tr
             %td
               %strong Address
