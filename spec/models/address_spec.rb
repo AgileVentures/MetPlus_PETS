@@ -36,6 +36,9 @@ RSpec.describe Address, type: :model do
   end
   
   describe 'Class methods' do
+    it "should be in the correct format" do
+      expect(FactoryGirl.create(:address).full_address).to eq("3940 Main Street Detroit, Michigan 92105")
+    end
   end
   
   describe 'Instance methods' do
