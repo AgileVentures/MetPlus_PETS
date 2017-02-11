@@ -36,12 +36,23 @@ RSpec.describe Address, type: :model do
   end
   
   describe 'Class methods' do
-    it "should be in the correct format" do
-      expect(FactoryGirl.create(:address).full_address).to eq("3940 Main Street Detroit, Michigan 92105")
+    it "should contain Alabama, AL state in array" do
+      expect(Address.us_states).to include(["Alabama", "AL"])
+    end
+
+    it "should output alabama" do
+      expect(Address.states_full_name).to include("Alabama")
+    end
+
+    it "should output AL" do
+      expect(Address.states_small_name).to include("AL")
     end
   end
   
   describe 'Instance methods' do
+    it "should be in the correct format" do
+      expect(FactoryGirl.create(:address).full_address).to eq("3940 Main Street Detroit, Michigan 92105")
+    end
   end
   
 end
