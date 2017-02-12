@@ -131,7 +131,7 @@ Scenario: Resend confirmation email - sad path
   And I should see "Email was already confirmed, please try signing in"
 
   @javascript
-  Scenario: Remember user for session only
+  Scenario: Do not remember user on login
     Given I am on the home page
     Then I click the "Log In" link
     And I fill in "user_email" with "salemamba@gmail.com"
