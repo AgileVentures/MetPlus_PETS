@@ -21,4 +21,21 @@ Then(/^I should verify the change of first_name "(.*?)", last_name "(.*?)" and p
     expect(user.phone).to        eql phone 
 end
 
+Then(/^I should( not)? be remembered$/) do |remember|
+  cookies = page.driver.cookies
+  user_id = cookies['user_id']
+  person_type = cookies['person_type']
+  if remember == nil
+    expect(user_id.expires).to be_future
+    expect(person_type.expires).to be_future
+  else
+    expect(user_id.expires).to be nil
+    expect(person_type).to be nil
+  end
+end
+j
+Then(/^I should be logged out$/) do
+  cookies = page.driver.cookies
+  expect(cookies['person_type']).to be nil
+end
 
