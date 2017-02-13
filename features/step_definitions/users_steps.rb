@@ -25,7 +25,7 @@ Then(/^I should( not)? be remembered$/) do |remember|
   cookies = page.driver.cookies
   user_id = cookies['user_id']
   person_type = cookies['person_type']
-  if remember == nil
+  if remember.nil?
     expect(user_id.expires).to be_future
     expect(person_type.expires).to be_future
   else
