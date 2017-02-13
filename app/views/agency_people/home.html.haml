@@ -2,10 +2,6 @@
 
 %h2
   = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
-  = link_to edit_profile_agency_person_path(pets_user),
-    :title => 'Edit profile',
-    :id => 'edit-profile' do
-    %i.fa.fa-pencil-square-o.fa-1
 
 %div.panel.with-nav-tabs.panel-success
   .panel-heading

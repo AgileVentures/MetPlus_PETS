@@ -301,6 +301,11 @@ class AgencyPeopleController < ApplicationController
     end
   end
 
+  def my_profile
+    @agency_person = AgencyPerson.find(params[:id])
+    authorize @agency_person
+  end
+
   private
 
   def agency_person_params

@@ -124,7 +124,8 @@ Background: data is added to database
     Given I am on the home page
     And I login as "john.seeker@places.com" with password "password"
     Then I click the "Hello, John" link
-    Then I click the "Edit Profile" link
+    And I click the "My Profile" link
+    Then I click the "Edit" link
     Then I update my profile to not permit job developer to apply a job for me
 
     Then I am in Job Developer's browser

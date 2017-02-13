@@ -26,6 +26,11 @@ class CompanyPersonPolicy < ApplicationPolicy
   def update_profile?
     user.is_company_person? record.company and user == record
   end
+
+  def my_profile?
+    (agency_admin? user and agency_related_to_company?(user.agency, record.company)) or
+      user.is_company_person? record.company
+  end
   
   def edit_profile?
     update_profile?

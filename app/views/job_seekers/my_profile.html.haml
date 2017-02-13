@@ -1,0 +1,40 @@
+.row
+  .col-md-8.my-profile-info
+    %h1.my-profile-header Your Profile
+    %table.table
+      %tbody
+        %tr
+          %td
+            %strong Full Name
+          %td= @jobseeker.first_name + ' ' + @jobseeker.last_name
+        %tr
+          %td
+            %strong Email
+          %td= @jobseeker.email
+        %tr
+          %td
+            %strong Phone
+          %td= @jobseeker.phone
+        %tr
+          %td
+            %strong Year Of Birth
+          %td= @jobseeker.year_of_birth
+        %tr
+          %td
+            %strong Resume
+          %td
+            - if @current_resume
+              Your current resume is #{@current_resume.file_name} and was uploaded on
+              %span.utc_to_local_time= @current_resume.updated_at
+            - else
+              You have no current resume
+        - if @jobseeker.address.present?
+          %tr
+            %td
+              %strong Address
+            %td= @jobseeker.address.street + ', ' + @jobseeker.address.city + ', ' + @jobseeker.address.zipcode
+        %tr
+          %td
+            %strong Status
+          %td= @jobseeker.status.short_description
+    = link_to "Edit", edit_job_seeker_path(@jobseeker), class: "btn btn-lg edit-profile-btn"
