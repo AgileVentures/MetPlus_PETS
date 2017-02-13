@@ -52,28 +52,6 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #index' do
-    let!(:rand_job1) { FactoryGirl.create(:job) }
-    let!(:rand_job2) { FactoryGirl.create(:job) }
-    context 'company person' do
-      before(:each) do
-        bosh_job
-        warden.set_user bosh_person
-        get :index
-      end
-      it { expect(assigns(:jobs).count).to eq 1 }
-      it_behaves_like 'return success and render', 'index'
-    end
-    context 'others' do
-      before(:each) do
-        bosh_job
-        get :index
-      end
-      it { expect(assigns(:jobs).count).to eq 3 }
-      it_behaves_like 'return success and render', 'index'
-    end
-  end
-
-  describe 'GET #list_search_jobs' do
     let(:job1) do
       FactoryGirl.create(:job, title: 'Customer Manager',
                                description: 'Provide resposive customer service')
@@ -90,11 +68,11 @@ RSpec.describe JobsController, type: :controller do
                          skill: FactoryGirl.create(:skill, name: 'New Skill 2'))
     end
     before(:each) do
-      get :list_search_jobs,
+      get :index,
           q: { 'title_cont_any': 'customer manager',
                'description_cont_any': 'responsive service' }
     end
-    it_behaves_like 'return success and render', 'list_search_jobs'
+    it_behaves_like 'return success and render', 'index'
     it { expect(assigns(:title_words)).to match %w(customer manager) }
     it 'assigns description words for view' do
       expect(assigns(:description_words)).to match %w(responsive service)

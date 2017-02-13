@@ -10,11 +10,7 @@ class JobsController < ApplicationController
                                         :match_jd_job_seekers]
 
   def index
-    @jobs = policy_scope(Job).order(:title).includes(:company)
-                             .paginate(page: params[:page], per_page: 20)
-  end
 
-  def list_search_jobs
     # Make a copy of q params since we will strip out any commas separating
     # words - need to retain any commas in the form (so user is not surprised)
     q_params = params[:q] ? params[:q].dup : params[:q]
@@ -54,7 +50,7 @@ class JobsController < ApplicationController
     @jobs  = Job.ransack(q_params).result(distinct: true)
                 .includes(:company)
                 .includes(:address)
-                .page(params[:page]).per_page(5)
+                .page(params[:page]).per_page(8)
   end
 
   def new
@@ -260,7 +256,7 @@ class JobsController < ApplicationController
 
     # Parameters: {"job_developer_id"=>"3", "company_person_id"=>"1",
     #              "job_seeker_id"=>"3", "id"=>"202"}
-
+    
     raise 'Unsupported request' unless request.xhr?
 
     authorize @job

@@ -1,21 +1,172 @@
-- provide(:title, 'List of jobs')
-- provide(:job_active, 'active')
+- provide(:title, 'Jobs Search')
 
-.well.well-sm.col-sm-offset-2.col-sm-8#jobs-well-lg
-  .col-sm-6
-    %h4#list-header
-      List of job opportunities
-  .col-sm-6
-    = button_to 'Search Jobs', list_search_jobs_path, method: :get,
-      class: 'btn btn-primary pull-right', style: 'margin-top: 20px;'
+.row
+  .col-sm-3
+    %h2 Search Jobs
+.row
+  .col-sm-3
+    %a(id='toggle_search_form' href='#job_search_form' class='text-danger'
+                    style='padding-left: 10px;')
+      Show Search Form
 
-- if @jobs.empty?
-  .well.well-lg.col-sm-offset-2.col-sm-8#sub-list-id
-    %strong.text-center
-      %h3 There are no jobs available.
-- else
-  = render partial: "revoke_modal"
-  = render partial: "job", collection: @jobs
+#job_search_form(style = 'display: none;')
+  = search_form_for @query, method: :get, url: jobs_path,
+                                        class: 'form-horizontal' do |f|
+    .form-group
+      = f.label :title_cont_any, class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.search_field :title_cont_any, class: 'form-control'
+      .col-sm-3
+        %a{'data-toggle': 'modal', 'href': '#search_help'}
+          Search Help
 
-.col-sm-offset-4.col-sm-6
-  = will_paginate @jobs
+    .form-group
+      = f.label :title_cont_all, class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.search_field :title_cont_all, class: 'form-control'
+
+    .form-group
+      = f.label :description_cont_any, class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.search_field :description_cont_any, class: 'form-control'
+
+    .form-group
+      = f.label :description_cont_all, class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.search_field :description_cont_all, class: 'form-control'
+
+    .form-group
+      - states = Job.joins(:address).order('addresses.state').pluck(:state).uniq
+      - states_and_cities = []
+      - states.each do |state|
+        - cities_in_state = Job.joins(:address).                  |
+                      where('addresses.state = ?', state).        |
+                      order('addresses.city').pluck(:city).uniq   |
+        - states_and_cities << [state, cities_in_state]
+
+      = f.label :address_city_in, 'City', class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.grouped_collection_select :address_city_in, states_and_cities,
+            :second, :first, :to_s, :to_s, {include_blank: true},
+            {multiple: true, size: 8, class: 'form-control',
+              style: 'width: 100%;'}
+
+    .form-group
+      = f.label :skills_id_in, 'Skills', class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.collection_select :skills_id_in, Skill.order(:name),
+                        :id, :name, {include_blank: true},
+                        {multiple: true, size: 5, class: 'form-control',
+                         style: 'width: 100%;'}
+
+    .form-group
+      = f.label :company_id_in, 'Company', class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.collection_select :company_id_in,
+              Company.all_with_active_jobs,
+              :id, :name, {include_blank: true},
+              {multiple: true, size: 5,
+                class: 'form-control', style: 'width: 100%;'}
+
+    .form-group
+      .col-sm-3.col-sm-offset-3
+        = submit_tag 'Search Jobs', class: 'btn btn-primary'
+
+%table(style='width: 100%')
+  %tr
+    %td
+      %hr
+    %td(style='width: 1px; padding: 0 10px; white-space: nowrap; font-weight: bold;')
+      = "#{pluralize(@jobs.count, 'Job')} Found." + "#{sort_instruction(@jobs.count)}"
+    %td
+      %hr
+
+
+= render partial: 'searched_job_list'
+
+#search_help.modal.fade(role='dialog' tabindex='-1')
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %button.close(type='button' class='close' data-dismiss='modal')
+          %span(aria-hidden='true') &times;
+        %h4.modal-title
+          Searching for Jobs
+      .modal-body
+        The individual search fields are described below.
+        %br
+        %br
+        Please note that
+        %i job matches are performed using all search fields which you have set.
+        For example, if you specify that the job title should contain all of
+        the words "Project Manager" and have selected the job skill
+        "Budget Development" then only jobs that meet
+        %i both
+        of those criteria will be shown.
+        %br
+        %br
+
+        %table.table.table-hover(style='margin-bottom: 0px;')
+          %tbody
+            %tr
+              %td
+                %strong Title contains any
+              %td
+                Will match any title that contains one or more of the
+                entered words.
+                %br Separate words with spaces or commas.
+            %tr
+              %td
+                %strong Title contains all
+              %td
+                Will match any title that contains
+                %i all
+                of the entered words.
+                %br Separate words with spaces or commas.
+            %tr
+              %td
+                %strong Description contains any
+              %td
+                Will match any description that contains one or more of the
+                entered words.
+                %br Separate words with spaces or commas.
+            %tr
+              %td
+                %strong Description contains all
+              %td
+                Will match any description that contains
+                %i all
+                of the entered words.
+                %br Separate words with spaces or commas.
+            %tr
+              %td
+                %strong City
+              %td
+                All cities with one or more available jobs are listed.
+                Click in the search box and select a city from the list that appears.
+                %br
+                You can select multiple cities by repeatedly clicking
+                in the search box.
+            %tr
+              %td
+                %strong Skills
+              %td
+                All job skills are listed.
+                Click in the search box and select a skill from the list that appears.
+                %br
+                You can select multiple skills by repeatedly clicking
+                in the search box.
+            %tr
+              %td
+                %strong Company
+              %td
+                All companies with one or more
+                %i active
+                jobs are listed.
+                Click in the search box and select a company from the list that appears.
+                %br
+                You can select multiple companies by repeatedly clicking
+                in the search box.
+
+      .modal-footer
+        %button.btn.btn-default(type='button' data-dismiss='modal') Close
