@@ -37,5 +37,6 @@ j
 Then(/^I should be logged out$/) do
   cookies = page.driver.cookies
   expect(cookies['person_type']).to be nil
+  expect(cookies['person_id']).to be nil
 end
 
