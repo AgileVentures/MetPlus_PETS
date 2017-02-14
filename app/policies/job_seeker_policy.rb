@@ -10,6 +10,10 @@ class JobSeekerPolicy < ApplicationPolicy
     update?
   end
 
+  def my_profile?
+    user == record
+  end
+
   def home?
     # account owner
     user == record
@@ -21,10 +25,9 @@ class JobSeekerPolicy < ApplicationPolicy
   end
 
   def show?
-    # account's owner
     # all agency people
     # all company people
-    user == record || user.is_a?(AgencyPerson) || user.is_a?(CompanyPerson)
+    user.is_a?(AgencyPerson) || user.is_a?(CompanyPerson)
   end
 
   def destroy?
@@ -58,10 +61,10 @@ class JobSeekerPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    if user == record 
+    if user == record
       [ :first_name,
-        :last_name, 
-        :email, 
+        :last_name,
+        :email,
         :phone,
         :password,
         :password_confirmation,
@@ -73,8 +76,8 @@ class JobSeekerPolicy < ApplicationPolicy
       ]
     elsif (user == record.case_manager) || (user == record.job_developer)
       [ :first_name,
-        :last_name, 
-        :email, 
+        :last_name,
+        :email,
         :phone,
         :resume,
         :consent,
@@ -84,7 +87,7 @@ class JobSeekerPolicy < ApplicationPolicy
     end
   end
   def download_resume?
-    User.is_company_person?(user) && 
+    User.is_company_person?(user) &&
     record.job_applications.where(job: user.company.jobs.active).exists?
   end
 end

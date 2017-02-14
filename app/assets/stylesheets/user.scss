@@ -4,3 +4,24 @@
 .has-error {
   color: red;
 }
+
+.edit-profile-btn {
+	background-color: #0c7ba1;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    height: 50px;
+    padding: 12px 16px;
+    width: 250px;
+    margin-top: 20px;
+    &:hover {
+      color: #fff;
+    }
+}
+
+.my-profile-header {
+	font-size: 48px;
+	color: #0c7ba1;
+	font-weight: 700;
+	padding-bottom: 20px;
+}

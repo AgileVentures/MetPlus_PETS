@@ -13,10 +13,10 @@ class JobSeekerMailerPreview < ActionMailer::Preview
   end
 
   def job_applied_by_job_developer
-    job_seeker    = User.find_by_email('tom@gmail.com').actable
-    job_developer = User.find_by_email('chet@metplus.org').actable
-    company       = Company.find_by_email('contact@widgets.com')
-    job           = company.jobs.first
+    # we depend on JobSeeker to find job_developer and the job
+    job_seeker    = JobSeeker.first
+    job_developer = job_seeker.job_developer
+    job           = Job.find(job_seeker.job_applications.first.job_id)
 
     JobSeekerMailer.job_applied_by_job_developer(job_seeker, job_developer, job)
   end

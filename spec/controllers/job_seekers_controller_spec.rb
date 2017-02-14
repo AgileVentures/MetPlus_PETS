@@ -345,8 +345,8 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'returns redirect status' do
           expect(response).to have_http_status(:redirect)
         end
-        it 'redirects to mainpage' do
-          expect(response).to redirect_to(root_path)
+        it 'redirects to homepage' do
+          expect(response).to redirect_to(home_job_seeker_path)
         end
       end
       context 'unsuccessful résumé upload' do
@@ -662,11 +662,10 @@ RSpec.describe JobSeekersController, type: :controller do
         sign_in owner
         request
       end
-      it 'it renders the show template' do
-        expect(response).to render_template 'show'
-      end
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
+      # the job seeker should not be able to see their show page
+      # this information is already available in their home page
+      it 'it does not render the show template' do
+        expect(response).not_to render_template 'show'
       end
     end
   end

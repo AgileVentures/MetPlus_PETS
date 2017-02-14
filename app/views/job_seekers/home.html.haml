@@ -1,11 +1,9 @@
+- provide(:person_home_active, 'active')
+
 .row
   .col-sm-3
     %h3
       Your Information
-      = link_to edit_job_seeker_path(@jobseeker),
-        :title => 'Edit information',
-        :id => 'edit-information' do
-        %i.fa.fa-pencil-square-o.fa-1
     %a(id='toggle_info' href='#info_table' class='text-danger'
                 style='padding-left: 10px;')
       Hide Your Information

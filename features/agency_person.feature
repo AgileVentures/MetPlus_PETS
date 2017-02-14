@@ -49,7 +49,9 @@ Scenario: Case Manager actions
   And I should be on the Agency Person 'jane@metplus.org' Home page
   And I should see "Your Job Seekers (as case manager)"
   And I should not see "Job Seekers without a Job Developer"
-  Then I press "edit-profile"
+  And I click the "Hello, Jane" link
+  And I click the "My Profile" link
+  Then I click the "Edit" link
   And I should see "Jane"
   And I fill in "First Name" with "Janey"
 
@@ -62,7 +64,9 @@ Scenario: Case Manager actions
   When I open the email
   And I follow "Confirm my account" in the email
   Then I should see "Your email address has been successfully confirmed."
-  When I click the "Janey" link
+  When I click the "Hello, Janey" link
+  And I click the "My Profile" link
+  And I click the "Edit" link
   Then I should see "janey@metplus.org" in the email field
 
   # See tasks on home page
@@ -115,6 +119,7 @@ Scenario: Job Developer actions
   And I should see "There are no job seekers assigned to you yet."
 
   # JD with tasks
+  And I click the "Hello, Bill" link
   Then I logout
   And I login as "jane-dev@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'jane-dev@metplus.org' Home page

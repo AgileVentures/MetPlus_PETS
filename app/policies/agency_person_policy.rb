@@ -43,4 +43,8 @@ class AgencyPersonPolicy < ApplicationPolicy
     update_profile?
   end
 
+  def my_profile?
+    user.is_agency_person? record.agency
+  end
+
 end

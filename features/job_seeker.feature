@@ -116,21 +116,23 @@ Scenario: edit Js profile
   Given I am on the home page
   And I login as "mike.smith@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "Mike" link
+  When I click the "Hello, Mike" link
+  And I click the "My Profile" link
+  And I click the "Edit" link
   And I fill in "First Name" with "Mikes"
   Then I select "Employed Not Looking" in select list "Status"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
-
   # edit profile with address fields missing
-  Then I click the "Mikes" link
+  Then I click the "Hello, Mike" link
+  And I click the "My Profile" link
+  And I click the "Edit" link
   And I fill in "City" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address city can't be blank"
   When I fill in "Street" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address street can't be blank"
-
   # edit profile with all address fields
   Then I click the "Mikes" link
   And I fill in "City" with "Nairobi"
@@ -158,6 +160,7 @@ Scenario: Agency and Company people actions
   And I should not see "Trucker"
 
   # company admin: download job seeker résumé
+  And I click the "Hello, John" link
   Then I logout
   And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I wait 1 second
