@@ -18,6 +18,24 @@ RSpec.describe ApplicationHelper, type: :helper do
                                         job_seeker: job_seeker, status: :active)
   end
 
+  context 'flash_to_css method' do
+    it 'returns alert-success for notice' do
+      expect(flash_to_css('notice')).to eq 'alert-success'
+    end
+
+    it 'returns alert-danger for alert' do
+      expect(flash_to_css('alert')).to eq 'alert-danger'
+    end
+
+    it 'returns alert-info for info' do
+      expect(flash_to_css('info')).to eq 'alert-info'
+    end
+
+    it 'returns alert-warning for warning' do
+      expect(flash_to_css('warning')).to eq 'alert-warning'
+    end
+  end
+
   context 'single_line_address method' do
     it 'returns string for address' do
       address = FactoryGirl.build(:address, state: 'MI')
