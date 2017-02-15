@@ -133,7 +133,7 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
-        it 'redirects to the company jobs list' do
+        it 'redirects to the jobs list' do
           request
           expect(response).to redirect_to(action: 'index')
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \
@@ -159,7 +159,7 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
-        it 'redirects to the company jobs list' do
+        it 'redirects to the jobs list' do
           request
           expect(response).to redirect_to(action: 'index')
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \

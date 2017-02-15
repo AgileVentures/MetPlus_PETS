@@ -25,27 +25,9 @@ end
 Then(/^I should( not)? see "Revoked" next to "([^"]*)"$/) do |negate, job_title|
 	@job ||= Job.find_by(title: job_title)
 	if negate
-		expect(page).not_to have_css("#job-#{@job.id} span", text: "Revoked")
+		expect(page).not_to have_selector(:xpath, "//tr[td[contains(.,'#{job_title}')]]/td/span", :text => 'Revoked')
 	else
-		expect(page).to have_css("#job-#{@job.id} span", text: "Revoked")
-	end
-end
-
-Then(/^I should( not)? see "Revoked" for "([^"]*)"$/) do |negate, job_title|
-  @job ||= Job.find_by(title: job_title)
-  if negate
-    find('tr', text: job_title).should_not have_content('Revoked')
-  else
-    find('tr', text: job_title).should have_content('Revoked')
-  end
-end
-
-Then(/^I should( not)? see "revoke" button for "([^"]*)"$/) do |negate, job_title|
-	@job ||= Job.find_by(title: job_title)
-	if negate
-		expect(page).not_to have_css("#job-#{@job.id} button", text: 'revoke')
-	else
-		expect(page).to have_css("#job-#{@job.id} button", text: 'revoke')
+		expect(page).to have_selector(:xpath, "//tr[td[contains(.,'#{job_title}')]]/td/span", :text => 'Revoked')
 	end
 end
 
@@ -66,11 +48,6 @@ Then(/^I should( not)? see "Revoke" link on the page$/) do |negate|
 	else
 		expect(page).to have_css('a#revoke_link', text: 'Revoke')
 	end
-end
-
-Then(/^I click the "revoke" button for "hr manager"/) do
-	job = Job.find_by(title: "hr manager")
-	find("#job-#{job.id} > button[data-action='revoke']").click
 end
 
 Then(/^I click the Revoke confirmation for "([^"]*)"$/) do |job_title|
