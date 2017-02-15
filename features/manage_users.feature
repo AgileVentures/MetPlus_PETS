@@ -18,6 +18,11 @@ Feature: Manage Users
     | email               | password   | password_confirmation | first_name | last_name | phone          | confirmed_at                      |
     | salemamba@gmail.com | secret1234 | secret1234            | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |
 
+
+    And  the following jobseekers exist:
+    | first_name | last_name | email                | phone        | password | year_of_birth | job_seeker_status  |
+    | Mike       | Smith     | mike.smith@gmail.com | 345-890-7890 | password | 1990          | Unemployed Seeking |
+
   Scenario Outline: Updating User successfully
     Given I am on the home page
     And I am logged in as "<email>" with password "secret1234"
@@ -152,7 +157,12 @@ Scenario: Resend confirmation email - sad path
   @javascript
   Scenario: User logs out
     Given I am on the home page
-    And I login as "salemamba@gmail.com" with password "secret1234"
-    And I click the "dd_menu" link
-    Then I log out
+    Then I click the "Log In" link
+    And I fill in "user_email" with "mike.smith@gmail.com"
+    And I fill in "user_password" with "password"
+    And I check "user_remember_me"
+    And I click "Log in" button
+    Then I click the "dd_menu" link
+    And I log out
+    Then I wait for 1 second
     Then I should be logged out
