@@ -91,7 +91,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 Scenario: Creating and Updating Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "hr@metplus.org" with password "qwerty123"
-  When I click the "Post jobs" link
+  When I click the "Post job" link
   And I wait 1 second
   And I fill in the fields:
     | Title                  | cashier|
@@ -125,7 +125,7 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
 
-  When I click the "Post jobs" link
+  When I click the "Post job" link
   And  I fill in the fields:
     | Title                  |  |
   And  I select "Widgets Inc." in select list "Company Name"
