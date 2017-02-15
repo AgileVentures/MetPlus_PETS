@@ -42,7 +42,7 @@ end
 RSpec.describe CompaniesController, type: :controller do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:company) { FactoryGirl.create(:company) }
+  let(:company) { FactoryGirl.create(:company, agencies: [agency] ) }
   let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
   let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
@@ -87,6 +87,10 @@ RSpec.describe CompaniesController, type: :controller do
     before(:each) do
       sign_in admin
       delete :destroy, id: company
+    end
+
+    it 'deletes the company' do
+      expect(assigns(:company).destroyed?).to eq(true)
     end
 
     it 'returns http success' do
