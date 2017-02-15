@@ -27,13 +27,13 @@
         %td
           = job.shift
         %td
-          -if job.address
+          - if job.address
             = job.address.state
         %td
-          -if job.address
+          - if job.address
             = job.address.city
         %td
-          -unless job.active?
+          - unless job.active?
             %span.label.label-info
               #{job.status.capitalize}
 
