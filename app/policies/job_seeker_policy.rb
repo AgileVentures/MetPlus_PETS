@@ -10,6 +10,10 @@ class JobSeekerPolicy < ApplicationPolicy
     update?
   end
 
+  def my_profile?
+    user == record
+  end
+
   def home?
     # account owner
     user == record

@@ -116,15 +116,17 @@ Scenario: edit Js profile
   Given I am on the home page
   And I login as "mike.smith@gmail.com" with password "password"
   Then I should see "Signed in successfully"
-  When I click the "Mike" link
-  And I click the "Edit Profile" link
+  When I click the "Hello, Mike" link
+  And I click the "My Profile" link
+  And I click the "Edit" link
   And I fill in "First Name" with "Mikes"
   Then I select "Employed Not Looking" in select list "Status"
   Then I click the "Update Job seeker" button
   Then I should see "Jobseeker was updated successfully."
   # edit profile with address fields missing
-  Then I click the "Mikes" link
-  And I click the "Edit Profile" link
+  Then I click the "Hello, Mike" link
+  And I click the "My Profile" link
+  And I click the "Edit" link
   And I fill in "City" with ""
   Then I click the "Update Job seeker" button
   Then I should see "Address city can't be blank"
