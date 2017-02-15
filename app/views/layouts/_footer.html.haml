@@ -8,7 +8,8 @@
         company_person_id: current_user.try(:actable_id)),
         class: "#{yield(:new_job_active)}"
         |
-      - elsif pets_user.try(:agency) && pets_user.is_job_developer?(pets_user.try(:agency))
+      - elsif pets_user.try(:agency) && pets_user. |
+        is_job_developer?(pets_user.try(:agency))
         = link_to 'Post job', new_job_path,
         class: "#{yield(:new_job_active)}"
         |

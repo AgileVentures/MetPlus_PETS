@@ -25,11 +25,11 @@ end
 Then(/^I should( not)? see "Revoked" next to "([^"]*)"$/) do |negate, job_title|
 	@job ||= Job.find_by(title: job_title)
   if negate
-      expect(page).not_to have_selector(:xpath, "//tr[td[contains(.,
-      '#{job_title}')]]/td/span", :text => 'Revoked')
+    expect(page).not_to have_selector(:xpath, "//tr[td[contains(.,
+    '#{job_title}')]]/td/span", text: 'Revoked')
   else
-      expect(page).to have_selector(:xpath, "//tr[td[contains(.,
-      '#{job_title}')]]/td/span", :text => 'Revoked')
+    expect(page).to have_selector(:xpath, "//tr[td[contains(.,
+    '#{job_title}')]]/td/span", text: 'Revoked')
   end
 end
 
@@ -39,9 +39,9 @@ end
 
 Then(/^I should see a "([^"]*)" confirmation$/) do |action|
 	expect(page).to have_content("Are you sure you want
- 		         to #{action} the following job:
-                 job title:  #{@job.title}
-                 company job id: #{@job.company_job_id}")
+ 	to #{action} the following job:
+  job title:  #{@job.title}
+  company job id: #{@job.company_job_id}")
 end
 
 Then(/^I should( not)? see "Revoke" link on the page$/) do |negate|
