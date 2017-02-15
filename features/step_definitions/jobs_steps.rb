@@ -24,11 +24,13 @@ end
 
 Then(/^I should( not)? see "Revoked" next to "([^"]*)"$/) do |negate, job_title|
 	@job ||= Job.find_by(title: job_title)
-	if negate
-		expect(page).not_to have_selector(:xpath, "//tr[td[contains(.,'#{job_title}')]]/td/span", :text => 'Revoked')
-	else
-		expect(page).to have_selector(:xpath, "//tr[td[contains(.,'#{job_title}')]]/td/span", :text => 'Revoked')
-	end
+  if negate
+      expect(page).not_to have_selector(:xpath, "//tr[td[contains(.,
+      '#{job_title}')]]/td/span", :text => 'Revoked')
+  else
+      expect(page).to have_selector(:xpath, "//tr[td[contains(.,
+      '#{job_title}')]]/td/span", :text => 'Revoked')
+  end
 end
 
 Then(/^I should see the job status is "([^"]*)"$/) do |status|
