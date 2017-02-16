@@ -42,7 +42,7 @@ end
 RSpec.describe CompaniesController, type: :controller do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:company) { FactoryGirl.create(:company, agencies: [agency] ) }
+  let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
   let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
   let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
