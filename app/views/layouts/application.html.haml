@@ -37,6 +37,7 @@
       %div{:class => 'row'}
         = yield
     = render 'layouts/footer'
+    = content_for :scripts
 
   %script
     $(document).ready(function(){$('[data-toggle="tooltip"]').tooltip(); });

@@ -52,6 +52,7 @@ Scenario: Access job seeker job matching page
   And I should see "2.6 / 5.0" in the same table row as "c++ developer"
 
   # Job seeker has no résumé
+  And I click the "Hello, Jane" link
   Then I logout
   And I am logged in as "mark@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'mark@metplus.org' Home page

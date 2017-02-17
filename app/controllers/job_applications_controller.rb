@@ -29,16 +29,7 @@ class JobApplicationsController < ApplicationController
     end
   end
 
-  def show
-  end
-
-  def find_application
-    @job_application = JobApplication.find(params[:id])
-    authorize @job_application
-  rescue ActiveRecord::RecordNotFound
-    flash[:alert] = 'Job Application Entry not found.'
-    redirect_back_or_default
-  end
+  def show; end
 
   def list
     raise 'Unsupported request' unless request.xhr?
@@ -51,13 +42,20 @@ class JobApplicationsController < ApplicationController
 
   private
 
+  def find_application
+    @job_application = JobApplication.find(params[:id])
+    authorize @job_application
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = 'Job Application Entry not found.'
+    redirect_back_or_default
+  end
+
   def reject_success_response(request)
     if request.xhr?
       render json: { message: 'Job application rejected', status: 200 }
     else
       flash[:notice] = 'Job application rejected.'
-      redirect_to controller: 'jobs', action: 'show',
-                  id: @job_application.job.id
+      redirect_to job_url(@job_application.job)
     end
   end
 
@@ -67,7 +65,7 @@ class JobApplicationsController < ApplicationController
                      status: 405 }
     else
       flash[:alert] = 'Cannot reject an inactive job application.'
-      redirect_to applications_path(@job_application)
+      redirect_to application_path(@job_application)
     end
   end
 end

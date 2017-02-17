@@ -83,6 +83,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And  I check "Fulltime"
   And  I press "new-job-submit"
   Then  I should see "The form contains 3 errors"
+  And I click the "Hello, Jane" link
   And I logout
 
 

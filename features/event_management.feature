@@ -69,7 +69,7 @@ Scenario: Company registration request in PETS
   Then I should see "Signed in successfully."
   Then I am in User's browser
   Given I am on the home page
-  And I click the "request PETS registration" link
+  And I click the "Register as an Employer" button
   And I wait 1 second
   Then I should see "Request Company Registration"
   And I fill in the fields:
