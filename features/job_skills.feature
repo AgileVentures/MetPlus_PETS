@@ -32,7 +32,7 @@ Background: adding job to database
 Scenario: Create job with associated skills
   Given I am on the home page
 	And I am logged in as "carter@ymail.com" with password "qwerty123"
-	When I click the "Post jobs" link
+	When I click the "Post job" link
 	And I fill in the fields:
 		| Title                  | cashier|
 		| Company Job ID         | JOB3   |
