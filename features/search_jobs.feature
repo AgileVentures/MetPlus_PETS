@@ -44,13 +44,25 @@ Scenario: search jobs
   # search by title
   Given I am on the home page
   And I click the "Jobs" link
-  And I click the "Search Jobs" button
   And I wait 1 second
-  Then I should see "Job1"
+  Then I should see "Show Search Form"
+  And I should see "Job1"
   And I should see "Job2"
   And I should see "Job3"
   And I should see "Job4"
-  Then I should see "Title contains any"
+  Then I click the "Show Search Form" link
+  And I wait 1 second
+  Then "Title contains any" should be visible
+  Then I click the "Hide Search Form" link
+  And I wait 1 second
+  Then "Title contains all" should not be visible
+
+@javascript
+Scenario: Go to jobs search page, see all jobs, search by title
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
   And I fill in "Title contains any" with "Job1 Job3"
   And I click the "Search Jobs" button
   And I wait 1 second
@@ -59,6 +71,12 @@ Scenario: search jobs
   And I should not see "Job2"
   And I should not see "Job4"
 
+@javascript
+Scenario: Search by description
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
   # search by description
   Then I fill in "Title contains any" with ""
   And I fill in "Description contains any" with "Job1., Job3."
@@ -68,6 +86,12 @@ Scenario: search jobs
   And I should not see "Job2"
   And I should not see "Job4"
 
+@javascript
+Scenario: Search by skills
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
   # search by skills
   Then I fill in "Description contains any" with ""
   And I select "Skill1" in select list "Skills"
@@ -78,19 +102,62 @@ Scenario: search jobs
   And I should see "Job2"
   And I should not see "Job4"
 
+@javascript
+Scenario: Search by city
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
   # search by city
   And I select "city1" in select list "City"
   And I select "city3" in select list "City"
   And I click the "Search Jobs" button
   Then I should see "Job1"
   And I should see "Job3"
+  And I should not see "Job2"
+  And I should not see "Job4"
+
+@javascript
+Scenario: Search by title and description
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  And I fill in "Title contains all" with "Job4"
+  And I fill in "Description contains any" with "Job1., Job2, Job3."
+  And I click the "Search Jobs" button
+  Then I should not see "Job1"
+  And I should not see "Job3"
+  And I should not see "Job2"
+  And I should not see "Job4"
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  And I fill in "Title contains all" with "Job1"
+  And I click the "Search Jobs" button
+  Then I should see "Job1"
+  And I should not see "Job3"
   And I should not see "Job4"
   And I should not see "Job2"
 
+@javascript
+Scenario: Search by company
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
   # search by company
   And I select "Widgets Inc." in select list "Company"
   And I click the "Search Jobs" button
   Then I should see "Job1"
-  And I should not see "Job2"
+  And I should see "Job2"
   And I should not see "Job3"
   And I should not see "Job4"
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  Then I select "Feature Inc." in select list "Company"
+  And I click the "Search Jobs" button
+  Then I should see "Job1"
+  And I should see "Job2"
+  And I should see "Job3"
+  And I should see "Job4"
+
