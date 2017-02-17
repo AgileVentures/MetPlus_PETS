@@ -32,6 +32,20 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to have_db_column :jobs_count }
   end
 
+  describe 'has jobs' do
+    skill = FactoryGirl.create(:skill)
+
+    it 'returns false without a job' do
+      expect(skill.has_job?).to be false
+    end
+
+    it 'returns true with a job' do 
+      job = FactoryGirl.create(:job)
+      skill.jobs << job
+      expect(skill.has_job?).to be true
+    end
+  end
+
   describe 'counter_cache' do
     before(:each) do
       stub_cruncher_authenticate
