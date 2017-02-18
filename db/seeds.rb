@@ -59,7 +59,7 @@ puts "\nSeeded Production Data"
 puts "\nSeeding development DB"
 
 # seed striction to development, for now
-if Rails.env.development? || Rails.env.staging?
+if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING'
 
   #-------------------------- Companies -----------------------------------
   200.times do |n|
