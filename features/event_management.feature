@@ -34,6 +34,7 @@ Background: seed data
 @javascript
 Scenario: Job Seeker registers in PETS
   When I am in Admin's browser
+  And I wait 1 second
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
@@ -64,6 +65,7 @@ Scenario: Job Seeker registers in PETS
 @javascript
 Scenario: Company registration request in PETS
   When I am in Admin's browser
+  And I wait 1 second
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
