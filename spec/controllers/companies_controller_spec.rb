@@ -42,19 +42,16 @@ end
 RSpec.describe CompaniesController, type: :controller do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:company) { FactoryGirl.create(:company) }
+  let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
   let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
   let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
   let(:cm)     { FactoryGirl.create(:case_manager, agency: agency) }
   let(:js)     { FactoryGirl.create(:job_seeker) }
 
-  before(:each) do
-    sign_in company_admin
-  end
-
   describe 'GET #show' do
     before(:each) do
+      sign_in company_admin
       get :show, id: company
     end
     it 'assigns @company for view' do
@@ -70,6 +67,7 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'GET #edit' do
     before(:each) do
+      sign_in company_admin
       get :edit, id: company
     end
     it 'assigns @company for form' do
@@ -87,6 +85,18 @@ RSpec.describe CompaniesController, type: :controller do
     before(:each) do
       sign_in admin
       delete :destroy, id: company
+    end
+
+    it 'deletes the company' do
+      expect(assigns(:company).destroyed?).to eq(true)
+    end
+
+    it 'shows the flash notice message' do
+      expect(flash[:notice]).to eq("Company '#{company.name}' deleted.")
+    end
+
+    it 'redirects to root path' do
+      expect(response).to redirect_to root_path
     end
 
     it 'returns http success' do
@@ -120,6 +130,10 @@ RSpec.describe CompaniesController, type: :controller do
     let(:hash_params) do
       company.attributes.merge(addresses_attributes:
                       { '0' => attributes_for(:address) })
+    end
+
+    before(:each) do
+      sign_in company_admin
     end
 
     context 'valid attributes' do
@@ -241,7 +255,7 @@ RSpec.describe CompaniesController, type: :controller do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
         xhr :get, :list_people, id: company,
-                                people_type: 'my-company-all'
+                                people_type: 'company-all'
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes company admin' do
