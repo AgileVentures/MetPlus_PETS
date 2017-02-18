@@ -1,8 +1,11 @@
 $light-blue: #12aee2;
 $white: #fff;
-$red: #FF0000;
+$red: #f00;
 $state-danger-text: #a94442;
-
+$light-green: #98fb98;
+$lemon: #fffacd;
+$pale-red: #db7093;
+$dark-grey: #696969;
 
 /*ONLY JOB RELATED CSS*/
 
@@ -167,4 +170,19 @@ $state-danger-text: #a94442;
 
 .job-title {
   color: $light-blue;
+}
+
+.label-active {
+  background-color: $light-green;
+  color: $dark-grey;
+}
+
+.label-filled {
+  background-color: $lemon;
+  color: $dark-grey;
+}
+
+.label-revoked {
+  background-color: $pale-red;
+  color: $dark-grey; 
 }
