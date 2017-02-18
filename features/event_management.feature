@@ -67,6 +67,8 @@ Scenario: Company registration request in PETS
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
+  And I wait 1 second
+
   Then I am in User's browser
   Given I am on the home page
   And I click the "Register as an Employer" button
@@ -114,13 +116,16 @@ Scenario: Company registration request in PETS
 @javascript
 Scenario: Job developer assigned to job seeker by agency admin
   When I am in Job Seeker's browser
+  And I wait 1 second
   Given I am on the home page
   And I login as "sammy1@gmail.com" with password "qwerty123"
   Then I should see "Signed in successfully."
+
   When I am in Job Developer's browser
   Given I am on the home page
   And I login as "dave@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
+
   When I am in Admin's browser
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
@@ -136,8 +141,10 @@ Scenario: Job developer assigned to job seeker by agency admin
   And I click the "Update" button
   Then I should see "Agency person was successfully updated."
   And I should see "Seeker, Sam" after "Assigned Job Seekers to Dave Developer as Job Developer:"
+
   Then I am in Job Seeker's browser
   And I should see "Dave Developer has been assigned to you as your MetPlus Job Developer"
+
   Then I am in Job Developer's browser
   And I should see "Job Seeker: Sam Seeker has been assigned to you as Job Developer"
   And "sammy1@gmail.com" should receive an email with subject "Job developer assigned"
@@ -157,6 +164,7 @@ Scenario: Case manager assigned to job seeker by agency admin
   And I login as "sammy1@gmail.com" with password "qwerty123"
   Then I should see "Signed in successfully."
   When I am in Case Manager's browser
+  And I wait 1 second
   Given I am on the home page
   And I login as "jane@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."

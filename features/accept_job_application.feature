@@ -86,6 +86,7 @@ Background: data is added to database
     Then I click the "hr manager" link
     And I accept "john@ymail.com" application for "hr manager"
     And I click the "Accept" confirmation
+    And I wait 2 seconds
 
     Then I am in Job Developer's browser
     And I should see "Job Application: hr manager by John Seeker is accepted"
