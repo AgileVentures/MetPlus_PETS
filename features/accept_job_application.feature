@@ -81,6 +81,7 @@ Background: data is added to database
     And I login as "dave@metplus.org" with password "qwerty123"
 
     When I am in Company Admin's browser
+    And I wait 1 second
     Given I am on the home page
     And I login as "cane@ymail.com" with password "qwerty123"
     Then I click the "hr manager" link
