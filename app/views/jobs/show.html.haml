@@ -46,10 +46,9 @@
             %h5
               You already have an application submitted for this job.
             %h5
-              If you want the employer to see a revised version of your résumé,
-              simply edit your profile by clicking on this icon:
-              %i.fa.fa-pencil-square-o.fa-1
-              on your home page, and upload the revised résumé.
+              If you want the employer to see a revised version of your résumé
+              = link_to 'edit your profile', edit_job_seeker_path(pets_user)
+              and upload the revised résumé.
       - else
         = link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
                   data: { :toggle => 'modal',
