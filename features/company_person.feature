@@ -66,6 +66,8 @@ Feature: Company Person
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
     And I should see button "Delete Person"
+    And I click "Edit Person" button
+    Then I should see "Company Contact" 
 
   @javascript
   Scenario: company admin can edit but not delete himself
