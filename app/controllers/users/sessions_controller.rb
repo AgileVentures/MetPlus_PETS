@@ -27,7 +27,7 @@ class Users::SessionsController < Devise::SessionsController
   def destroy
     super
     # Remove cookies data
-    cookies.delete :person_id
+    cookies.delete :user_id
     cookies.delete :person_type
   end
 
