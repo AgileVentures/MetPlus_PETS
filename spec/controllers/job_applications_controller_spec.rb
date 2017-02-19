@@ -195,6 +195,28 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
   end
 
+  describe 'Reasons for reject jobapplication' do
+    let(:valid_application) do
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
+                                           reason_for_rejection: 'skills did not match')
+    end
+    let(:request) { patch :reject, id: valid_application }
+    context 'authenticated' do
+      describe 'authorized access' do
+        before(:each) do
+          stub_cruncher_authenticate
+          stub_cruncher_job_create
+          sign_in company_admin
+        end
+        it 'valid job application rejected' do
+          valid_application.reload
+          expect(valid_application.reason_for_rejection).to eq('skills did not match')
+          request
+        end
+      end
+    end
+  end
+
   describe 'GET #list' do
     let(:job1) { FactoryGirl.create(:job) }
     let(:job2) { FactoryGirl.create(:job) }
