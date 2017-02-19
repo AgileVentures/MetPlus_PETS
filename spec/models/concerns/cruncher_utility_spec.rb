@@ -37,7 +37,7 @@ RSpec.describe CruncherUtility do
   end
 
   it 'sorts match results based on score' do
-    match_results =  [{ message: 'No resume on file', job_seeker_name: 'McCaffrey, Mary' },
+    match_results =  [{ message: 'No resume on file', job_seeker_name: 'Caffrey, Mary' },
                       { status: 'SUCCESS', score: 2.0, job_seeker_name: 'Joseph, John' },
                       { status: 'ERROR', message: 'Could not connect to cruncher',
                         job_seeker_name: 'Jobs, Steve' },
@@ -46,7 +46,7 @@ RSpec.describe CruncherUtility do
                       { status: 'SUCCESS', score: 2.0, job_seeker_name: 'Joseph, John' },
                       { status: 'ERROR', message: 'Could not connect to cruncher',
                         job_seeker_name: 'Jobs, Steve' },
-                      { message: 'No resume on file', job_seeker_name: 'McCaffrey, Mary' }]
+                      { message: 'No resume on file', job_seeker_name: 'Caffrey, Mary' }]
 
     expect(ResumeCruncher.sort_by_score(match_results)).to eq output_results
   end
