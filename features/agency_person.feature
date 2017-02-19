@@ -46,6 +46,7 @@ Scenario: Case Manager actions
   # login and edit profile
   Given I am on the home page
   And I login as "jane@metplus.org" with password "qwerty123"
+  And I wait 1 second
   And I should be on the Agency Person 'jane@metplus.org' Home page
   And I should see "Your Job Seekers (as case manager)"
   And I should not see "Job Seekers without a Job Developer"
