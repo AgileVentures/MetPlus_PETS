@@ -119,6 +119,9 @@ Given the following job applications exist:
     Then I click the "Jobs" link
     Then I click the "software developer" link
     And I should see "You already have an application submitted for this job."
+    When I click the "edit your profile" link
+    Then I should see "Update Your Profile"
+    And The field 'Email' should have the value 'john.seeker@places.com'
 
   Scenario: Company person should not be able to apply
     Given I am on the home page
