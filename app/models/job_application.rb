@@ -2,6 +2,7 @@ class JobApplication < ActiveRecord::Base
   belongs_to :job_seeker
   belongs_to :job
   enum status: [:active, :accepted, :not_accepted]
+  attr_accessor :job_developer
   has_many :status_changes, as: :entity, dependent: :destroy
 
   validates_uniqueness_of :job_seeker_id, scope: :job_id
