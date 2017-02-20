@@ -33,8 +33,7 @@
           - if job.address
             = job.address.city
         %td
-          - unless job.active?
-            %span.label.label-info
-              #{job.status.capitalize}
+          %span.label{ class: "label-#{job.status}" }
+            #{job.status.capitalize}
 
 = will_paginate @jobs
