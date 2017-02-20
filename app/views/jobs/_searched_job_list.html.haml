@@ -33,14 +33,7 @@
           - if job.address
             = job.address.city
         %td
-          - if job.status.capitalize == "Active"
-            %span.label.label-active
-              #{job.status.capitalize}
-          - elsif job.status.capitalize == "Filled"
-            %span.label.label-filled
-              #{job.status.capitalize}
-          - elsif job.status.capitalize == "Revoked"
-            %span.label.label-revoked
-              #{job.status.capitalize}
+          %span.label{ class: "label-#{job.status}" }
+            #{job.status.capitalize}
 
 = will_paginate @jobs
