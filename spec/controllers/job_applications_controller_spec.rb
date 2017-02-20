@@ -145,6 +145,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 
   describe 'PATCH #reject' do
     let(:request) { patch :reject, id: valid_application }
+    let(:request) { patch :reject, id: valid_application, reason_for_rejection: 'Skills did not match'}
 
     context 'unauthenticated' do
       it_behaves_like 'unauthenticated request'
@@ -178,6 +179,11 @@ RSpec.describe JobApplicationsController, type: :controller do
             expect_any_instance_of(JobApplication).to receive(:reject)
             request
           end
+          
+          it 'stores rejection in db' do
+             app = JobApplication.find(valid_application.id)
+             expect(app.reason_for_rejection).to eq 'Skills did not match'
+          end
 
           it 'show a flash message of type notice' do
             expect(flash[:notice]).to eq 'Job application rejected.'
@@ -191,28 +197,6 @@ RSpec.describe JobApplicationsController, type: :controller do
 
       describe 'unauthorized access' do
         it_behaves_like 'denies access to unauthorized people'
-      end
-    end
-  end
-
-  describe 'Reasons for reject jobapplication' do
-    let(:valid_application) do
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
-                                           reason_for_rejection: 'skills did not match')
-    end
-    let(:request) { patch :reject, id: valid_application }
-    context 'authenticated' do
-      describe 'authorized access' do
-        before(:each) do
-          stub_cruncher_authenticate
-          stub_cruncher_job_create
-          sign_in company_admin
-        end
-        it 'valid job application rejected' do
-          valid_application.reload
-          expect(valid_application.reason_for_rejection).to eq('skills did not match')
-          request
-        end
       end
     end
   end
