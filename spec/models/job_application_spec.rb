@@ -11,6 +11,7 @@ RSpec.describe JobApplication, type: :model do
     it {is_expected.to have_db_column :job_seeker_id}
     it {is_expected.to have_db_column :job_id }
     it {is_expected.to have_db_column :status }
+    it {is_expected.to have_db_column :reason_for_rejection }
   end
   describe 'Associations' do
     it { is_expected.to belong_to :job_seeker }
