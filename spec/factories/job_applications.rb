@@ -4,5 +4,4 @@ FactoryGirl.define do
     job
     status :active
   end
-
 end
