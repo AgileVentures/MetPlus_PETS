@@ -2,8 +2,7 @@ class JobApplication < ActiveRecord::Base
   belongs_to :job_seeker
   belongs_to :job
   enum status: [:active, :accepted, :not_accepted]
-  attr_accessor :reason_for_rejection, :job_developer
-
+  attr_accessor :job_developer
   has_many :status_changes, as: :entity, dependent: :destroy
 
   validates_uniqueness_of :job_seeker_id, scope: :job_id
@@ -23,11 +22,11 @@ class JobApplication < ActiveRecord::Base
   def accept
     accepted!
     StatusChange.update_status_history(self, :accepted)
-		reject_applications = job.job_applications.where.not(id: self.id)
-		reject_applications.each do |application|
-			application.not_accepted!
+    reject_applications = job.job_applications.where.not(id: id)
+    reject_applications.each do |application|
+      application.not_accepted!
       StatusChange.update_status_history(application, :not_accepted)
-		end
+    end
     job.filled
   end
 
