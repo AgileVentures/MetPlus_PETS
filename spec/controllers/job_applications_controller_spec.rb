@@ -144,7 +144,6 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'PATCH #reject' do
-    let(:request) { patch :reject, id: valid_application }
     let(:request) do
       patch :reject, id: valid_application,
                      reason_for_rejection: 'Skills did not match'
