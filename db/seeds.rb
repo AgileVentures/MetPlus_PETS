@@ -76,10 +76,10 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                       website: website,
                       name: name)
     cmp.agencies << agency
-    if n < 20
-      cmp.pending_registration
-    else
+    if n < 40
       cmp.active
+    else
+      cmp.pending_registration
     end
     cmp.save!
 
