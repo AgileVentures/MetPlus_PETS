@@ -144,7 +144,10 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'PATCH #reject' do
-    let(:request) { patch :reject, id: valid_application }
+    let(:request) do
+      patch :reject, id: valid_application,
+                     reason_for_rejection: 'Skills did not match'
+    end
 
     context 'unauthenticated' do
       it_behaves_like 'unauthenticated request'
@@ -177,6 +180,11 @@ RSpec.describe JobApplicationsController, type: :controller do
           before(:each) do
             expect_any_instance_of(JobApplication).to receive(:reject)
             request
+          end
+
+          it 'stores rejection in db' do
+            app = JobApplication.find(valid_application.id)
+            expect(app.reason_for_rejection).to eq 'Skills did not match'
           end
 
           it 'show a flash message of type notice' do
