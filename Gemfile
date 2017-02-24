@@ -39,6 +39,7 @@ gem 'devise',           '~> 3.5.2'
 gem 'devise_invitable', '~> 1.5.2'
 
 gem 'figaro'
+gem 'pry'
 
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -114,6 +115,7 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver' # Enables running cuke tests with browser (see env.rb)
   gem 'webmock'
+  gem 'simplecov', :require => false
 end
 
 gem 'airbrake', '~> 5.4'
