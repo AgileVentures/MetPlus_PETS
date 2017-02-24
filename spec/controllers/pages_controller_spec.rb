@@ -8,9 +8,13 @@ RSpec.describe PagesController, type: :controller do
     end
   end
 
-  describe 'GET #contact' do
+  describe '#contact' do
     it 'renders the contact view' do
       get :contact
+      expect(response).to render_template(:contact)
+    end
+    it 'POST request renders contact view' do
+      xhr :post, :contact
       expect(response).to render_template(:contact)
     end
   end
