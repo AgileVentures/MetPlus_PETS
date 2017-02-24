@@ -18,7 +18,7 @@ RSpec.describe CompanyPeopleHelper, type: :helper do
 
   it 'returns false when company admin edits another company admin' do
     company = create(:company)
-    company_admin = create(:company_admin, company: company) 
+    create(:company_admin, company: company) 
     company_admin2 = create(:company_admin, company: company)
     expect(disable_company_admin?(company_admin2, 'Company Contact')).to be false
   end
