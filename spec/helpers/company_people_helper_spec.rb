@@ -22,4 +22,9 @@ RSpec.describe CompanyPeopleHelper, type: :helper do
     company_admin2 = create(:company_admin, company: company)
     expect(disable_company_admin?(company_admin2, 'Company Contact')).to be false
   end
+
+  it 'returns false when a company admin edits contact person who is not admin' do
+    company_contact = create(:company_contact)
+    expect(disable_company_admin?(company_contact, 'Company Contact')).to be false
+  end
 end
