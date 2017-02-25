@@ -6,8 +6,6 @@
           %strong Name
         %th
           %strong Description
-        %th
-          %strong Delete
     %tbody
       - job_specialties.each do |job_prop|
         %tr
@@ -16,8 +14,9 @@
           %td
             = job_prop.description
           %td
-            = link_to send(delete_property_path, job_prop), method: :delete do
-              %span.glyphicon.glyphicon-remove          
+            = link_to send(delete_property_path, job_prop), method: :delete, class: 'btn btn-danger' do
+              %span.glyphicon.glyphicon-trash
+              &nbsp;Delete
 
   = will_paginate job_specialties, param_name: "#{data_type}_page",
                      params: {data_type: data_type}

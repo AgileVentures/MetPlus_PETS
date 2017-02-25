@@ -296,12 +296,10 @@ var AgencyData = {
                             ManageData.update_paginate_data);
   },
   setup_job_categories: function () {
-    $('#toggle_job_categories').click(ManageData.toggle);
     $('#job_categories_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_skills: function () {
-    $('#toggle_skills').click(ManageData.toggle);
     $('#skills_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
