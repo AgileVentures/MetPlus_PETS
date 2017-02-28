@@ -18,14 +18,13 @@ RSpec.describe PagesController, type: :controller do
       expect(response).to render_template(:contact)
     end
     it 'shows success with valid captcha' do
-      xhr :post, :contact, params:{
+      xhr :post, :contact, params: {
         full_name:'myfullname',
         surname: 'mysurname',
         email: 'myemail@email.com',
         message:'message',
         'g-recaptcha-response' => 'myresponse'
       }
-      
       expect(response).to render_template(:contact)
     end
   end
