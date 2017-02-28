@@ -1,15 +1,22 @@
 require 'ffaker'
 
-require 'webmock'
-include WebMock::API
+# require 'webmock'
+# include WebMock::API
+#
+# require './spec/support/service_stub_helpers'
+# include ServiceStubHelpers::EmailValidator
+#
+# WebMock.enable!
+# WebMock.allow_net_connect!  # allow non-stubbed service calls to proceed
 
-require './spec/support/service_stub_helpers'
-include ServiceStubHelpers::EmailValidator
+# Prevent email validation
+class EmailValidator
+  # replace method which performs validation using mailgun validator
+  def validate_each(_,_,_)
+  end
+end
 
-WebMock.enable!
-WebMock.allow_net_connect!  # allow non-stubbed service calls to proceed
-
-stub_email_validate_valid   # stub mailgun email validation
+# stub_email_validate_valid   # stub mailgun email validation
 
 def create_address(location = nil)
   street = Faker::Address.street_address
@@ -58,7 +65,6 @@ puts "\nSeeded Production Data"
 
 puts "\nSeeding development DB"
 
-# seed striction to development, for now
 if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING'
 
   #-------------------------- Companies -----------------------------------
