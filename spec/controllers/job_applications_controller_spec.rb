@@ -62,6 +62,11 @@ RSpec.describe JobApplicationsController, type: :controller do
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
   let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
 
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   describe 'GET #show' do
     let(:request) { get :show, id: valid_application }
 
@@ -101,8 +106,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before(:each) do
-          stub_cruncher_authenticate
-          stub_cruncher_job_create
           sign_in company_admin
         end
 
@@ -156,8 +159,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before(:each) do
-          stub_cruncher_authenticate
-          stub_cruncher_job_create
           sign_in company_admin
         end
 
@@ -222,8 +223,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
 
     before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
       xhr :get, :list, type: 'job_seeker-default', entity_id: job_seeker
     end
 
