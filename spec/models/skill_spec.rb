@@ -33,6 +33,11 @@ RSpec.describe Skill, type: :model do
   end
 
   describe 'has jobs' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
+    end
+    
     skill = FactoryGirl.create(:skill)
 
     it 'returns false without a job' do
