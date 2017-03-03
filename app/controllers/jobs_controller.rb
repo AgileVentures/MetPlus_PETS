@@ -47,7 +47,7 @@ class JobsController < ApplicationController
 
     @query = Job.ransack(params[:q]) # For form display of entered values
 
-    @jobs  = Job.ransack(q_params).result(distinct: true)
+    @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
                 .page(params[:page]).per_page(8)
