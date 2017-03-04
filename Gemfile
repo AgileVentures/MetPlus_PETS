@@ -114,6 +114,7 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver' # Enables running cuke tests with browser (see env.rb)
   gem 'webmock'
+  gem 'simplecov', :require => false
 end
 
 gem 'airbrake', '~> 5.4'
