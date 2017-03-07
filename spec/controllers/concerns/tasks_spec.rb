@@ -5,7 +5,6 @@ class TestTasksConcernClass < ApplicationController
 end
 
 RSpec.describe TestTasksConcernClass do
-
   let!(:agency)       { FactoryGirl.create(:agency) }
   let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
@@ -22,7 +21,7 @@ RSpec.describe TestTasksConcernClass do
   let!(:task_company_reg) do
     Task.new_review_company_registration_task(company, agency)
   end
-  let!(:task_cmpy_interest)  do
+  let!(:task_cmpy_interest) do
     Task.new_company_interest_task(job_seeker2, company, job, agency)
   end
   let!(:task_review_jobapp1)  { Task.new_review_job_application_task(job, company) }
@@ -35,9 +34,9 @@ RSpec.describe TestTasksConcernClass do
     end
     it 'gets new agency tasks' do
       # status == new
-      expect(subject.display_tasks('agency-new')).
-        to match_array [task_js_unassigned1, task_js_unassigned2,
-                        task_company_reg, task_cmpy_interest]
+      expect(subject.display_tasks('agency-new'))
+        .to match_array [task_js_unassigned1, task_js_unassigned2,
+                         task_company_reg, task_cmpy_interest]
     end
     it 'gets all agency tasks' do
       # status != done and status != new
@@ -60,28 +59,28 @@ RSpec.describe TestTasksConcernClass do
     end
     it 'gets all open company tasks' do
       # status != done
-      expect(subject.display_tasks('company-open')).
-        to match_array [task_review_jobapp1, task_review_jobapp2]
+      expect(subject.display_tasks('company-open'))
+        .to match_array [task_review_jobapp1, task_review_jobapp2]
     end
     it 'gets all new company tasks' do
       # status == new
       task_review_jobapp1.assign cmpy_person
-      expect(subject.display_tasks('company-open')).
-        to match_array [task_review_jobapp2]
+      expect(subject.display_tasks('company-open'))
+        .to match_array [task_review_jobapp2]
     end
     it 'gets all company tasks' do
       # status != done and status != new
       task_review_jobapp2.assign cmpy_person
-      expect(subject.display_tasks('company-open')).
-        to match_array [task_review_jobapp1]
+      expect(subject.display_tasks('company-open'))
+        .to match_array [task_review_jobapp1]
     end
     it 'gets all closed company tasks' do
       # status == done
       task_review_jobapp2.assign cmpy_person
       task_review_jobapp2.work_in_progress
       task_review_jobapp2.complete
-      expect(subject.display_tasks('company-closed')).
-        to match_array [task_review_jobapp2]
+      expect(subject.display_tasks('company-closed'))
+        .to match_array [task_review_jobapp2]
     end
   end
 
@@ -94,16 +93,16 @@ RSpec.describe TestTasksConcernClass do
       # status != done
       task_js_unassigned1.assign job_developer
       task_js_unassigned2.assign job_developer
-      expect(subject.display_tasks('mine-open')).
-        to match_array [task_js_unassigned1, task_js_unassigned2]
+      expect(subject.display_tasks('mine-open'))
+        .to match_array [task_js_unassigned1, task_js_unassigned2]
     end
     it 'gets my closed tasks' do
       # status == done
       task_js_unassigned1.assign job_developer
       task_js_unassigned1.work_in_progress
       task_js_unassigned1.complete
-      expect(subject.display_tasks('mine-closed')).
-        to match_array [task_js_unassigned1]
+      expect(subject.display_tasks('mine-closed'))
+        .to match_array [task_js_unassigned1]
     end
   end
 
@@ -115,16 +114,16 @@ RSpec.describe TestTasksConcernClass do
     it 'gets my open tasks' do
       # status != done
       task_company_reg.assign cmpy_person
-      expect(subject.display_tasks('mine-open')).
-        to match_array [task_company_reg]
+      expect(subject.display_tasks('mine-open'))
+        .to match_array [task_company_reg]
     end
     it 'gets my closed tasks' do
       # status == done
       task_company_reg.assign cmpy_person
       task_company_reg.work_in_progress
       task_company_reg.complete
-      expect(subject.display_tasks('mine-closed')).
-        to match_array [task_company_reg]
+      expect(subject.display_tasks('mine-closed'))
+        .to match_array [task_company_reg]
     end
   end
 end
