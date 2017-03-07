@@ -2,15 +2,37 @@
   %div{ :class => :container }
     %div{ :class => 'footer-left' }
       %span= "&reg;".html_safe+" MetPlus #{Date.today.year}"
+      | Terms and Conditions Apply
+      | All Rights Reserved
     %div{ :class => "footer-right" }
       - if pets_user.is_a?(CompanyPerson)
-        = link_to 'Post job', new_job_path(company_id: current_user,
-        company_person_id: current_user.try(:actable_id)),
-        class: "#{yield(:new_job_active)}"
+        = link_to 'Home', home_company_person_path(pets_user)
         |
-      - elsif pets_user.try(:agency) && pets_user.is_job_developer?(pets_user.try(:agency))
-        = link_to 'Post job', new_job_path,
-        class: "#{yield(:new_job_active)}"
+        = link_to 'About', about_path
         |
-
-      #{ link_to 'Partner with Us', new_company_registration_path, class: yield(:new_company_active) }
+        = link_to 'Contact', contact_path
+        |
+        = link_to 'Post Job', new_job_path(company_id: pets_user.company.id,
+                                           company_person_id: pets_user.id),
+                                           class: "#{yield(:new_job_active)}"
+        |
+      - elsif pets_user.is_a?(AgencyPerson)
+        = link_to 'Home', home_company_person_path(pets_user)
+        |
+        = link_to 'About', about_path
+        |
+        = link_to 'Contact', contact_path
+        - if pets_user.is_job_developer?(pets_user.agency)
+          |
+          = link_to 'Post Job', new_job_path,
+          class: "#{yield(:new_job_active)}"
+      - elsif pets_user.is_a?(JobSeeker)
+        = link_to 'Home', home_job_seeker_path(pets_user)
+        |
+        = link_to 'About', about_path
+        |
+        = link_to 'Contact', contact_path
+      - else
+        = link_to 'About', about_path
+        |
+        = link_to 'Contact', contact_path
