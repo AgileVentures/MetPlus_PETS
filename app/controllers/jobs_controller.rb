@@ -51,6 +51,8 @@ class JobsController < ApplicationController
                 .includes(:company)
                 .includes(:address)
                 .page(params[:page]).per_page(8)
+
+    render partial: 'searched_job_list' if request.xhr?
   end
 
   def new

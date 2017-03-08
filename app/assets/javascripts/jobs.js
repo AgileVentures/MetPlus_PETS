@@ -125,4 +125,8 @@ $(function () {
                     " and may take a while. Do you want to proceed?");
   });
 
+  $('body').on('ajax:success', '.jobs_pagination', function (e, data) {
+      $('#searched-job-list').html(data);
+  });
+
 });

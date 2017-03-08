@@ -55,4 +55,8 @@ module ApplicationHelper
   def show_stars(rating)
     render_stars(rating)
   end
+
+  def paginate(collection, params= {})
+    will_paginate collection, params.merge(:renderer => RemoteLinkPaginationHelper::BootstrapLinkRenderer)
+  end
 end

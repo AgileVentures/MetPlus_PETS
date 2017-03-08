@@ -1,39 +1,42 @@
-%table.table.table-hover
-  %thead
-    %tr
-      %th
-        = sort_link(@query, :title)
-      %th
-        = sort_link(@query, :description)
-      %th
-        = sort_link(@query, :company_name, 'Company')
-      %th
-        = sort_link(@query, :shift)
-      %th
-        = sort_link(@query, :address_state)
-      %th
-        = sort_link(@query, :address_city)
-      %th
-        = sort_link(@query, :status)
-  %tbody
-    - @jobs.each do |job|
+#searched-job-list  
+  %table.table.table-hover
+    %thead
       %tr
-        %td
-          = link_to highlight(job.title, @title_words), job_path(job)
-        %td
-          = highlight(truncate(job.description, length: 200), @description_words)
-        %td
-          = job.company.name
-        %td
-          = job.shift
-        %td
-          - if job.address
-            = job.address.state
-        %td
-          - if job.address
-            = job.address.city
-        %td
-          %span.label{ class: "label-#{job.status}" }
-            #{job.status.capitalize}
-
-= will_paginate @jobs
+        %th
+          = sort_link(@query, :title)
+        %th
+          = sort_link(@query, :description)
+        %th
+          = sort_link(@query, :company_name, 'Company')
+        %th
+          = sort_link(@query, :shift)
+        %th
+          = sort_link(@query, :address_state)
+        %th
+          = sort_link(@query, :address_city)
+        %th
+          = sort_link(@query, :status)
+    %tbody
+      - @jobs.each do |job|
+        %tr
+          %td
+            = link_to highlight(job.title, @title_words), job_path(job)
+          %td
+            = highlight(truncate(job.description, length: 200), @description_words)
+          %td
+            = job.company.name
+          %td
+            = job.shift
+          %td
+            - if job.address
+              = job.address.state
+          %td
+            - if job.address
+              = job.address.city
+          %td
+            %span.label{ class: "label-#{job.status}" }
+              #{job.status.capitalize}
+  / = will_paginate @jobs, :renderer => WillPaginate::ActionView::LinkRenderer
+  / = will_paginate @jobs, renderer: RemoteLinkPaginationHelper::BootstrapLinkRenderer,
+  /   link_options: { 'data-remote': true, class: 'jobs_pagination' }
+  = paginate @jobs, { class: 'jobs_pagination' }
