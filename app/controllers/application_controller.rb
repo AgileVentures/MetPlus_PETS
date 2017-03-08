@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
 
     def record_not_found(e)
       redirect_to((request.referer.present? ? :back : root_path),
-                  alert: "#{e.message}")
+                  alert: e.message)
     end
 
     def user_not_authorized
