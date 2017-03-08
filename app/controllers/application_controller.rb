@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default = root_path)
     redirect_to (request.referer.present? ? :back : default)
   end
-  
+
   helper_method :pets_user, :current_agency, :determine_if_admin
 
   include Pundit
@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ApplicationController::AuthorizationException, with: :user_not_authenticated
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def after_sign_in_path_for(resource)
     person = resource.pets_user
@@ -61,6 +62,11 @@ class ApplicationController < ActionController::Base
 
     def user_logged!
       raise ApplicationController::AuthorizationException, "must be logged in" unless pets_user
+    end
+
+    def record_not_found(e)
+      redirect_to((request.referer.present? ? :back : root_path),
+                  alert: "#{e.message}")
     end
 
     def user_not_authorized
