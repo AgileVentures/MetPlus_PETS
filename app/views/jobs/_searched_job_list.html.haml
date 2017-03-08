@@ -36,7 +36,5 @@
           %td
             %span.label{ class: "label-#{job.status}" }
               #{job.status.capitalize}
-  / = will_paginate @jobs, :renderer => WillPaginate::ActionView::LinkRenderer
-  / = will_paginate @jobs, renderer: RemoteLinkPaginationHelper::BootstrapLinkRenderer,
-  /   link_options: { 'data-remote': true, class: 'jobs_pagination' }
   = paginate @jobs, { class: 'jobs_pagination' }
+

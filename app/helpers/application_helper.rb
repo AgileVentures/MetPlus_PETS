@@ -57,6 +57,7 @@ module ApplicationHelper
   end
 
   def paginate(collection, params= {})
-    will_paginate collection, params.merge(:renderer => RemoteLinkPaginationHelper::BootstrapLinkRenderer)
+    will_paginate collection, params.merge(renderer: 
+      RemoteLinkPaginationHelper::BootstrapLinkRenderer)
   end
 end
