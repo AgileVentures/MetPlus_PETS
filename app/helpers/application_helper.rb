@@ -13,16 +13,11 @@ module ApplicationHelper
   end
 
   def flash_to_css key
-    case key
-      when 'notice'
-        'alert-success'
-      when 'alert'
-        'alert-danger'
-      when 'info'
-        'alert-info'
-      when 'warning'
-        'alert-warning'
-    end
+    bootstrap_alert_classes.fetch(key, "alert-#{key}")
+  end
+
+  def bootstrap_alert_classes
+    { 'notice' => 'alert-success', 'alert' => 'alert-danger' }
   end
 
   def single_line_address(address)
