@@ -178,7 +178,7 @@ Scenario: edit agency person
   And I should see "Jane Jones"
   And I should not see "003"
   # non-admin does not see 'admin' in menu
-  Given I click the "Hello, John" link
+  Given I click the "John" link
   Given I log out
   Given I am on the home page
   And I login as "mike@metplus.org" with password "qwerty123"
