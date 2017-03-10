@@ -87,7 +87,7 @@ Feature: Company Person
     And I wait 1 second
     And I click the "Admin" link
     And I click the "Agency and Partner Companies" link
-    Then I click the "Agency Personnel" link
+    Then I click the "Companies" link
     And  I wait 1 second
     Then I click the "Widgets Inc." link
     Then I click the "Smith, Jane" link
@@ -157,7 +157,7 @@ Feature: Company Person
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'jane@ymail.com' Home page
-    Then I press "Jane"
+    Then I click the first "Jane" link
     And I am on the 'jane@ymail.com' edit profile page
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
