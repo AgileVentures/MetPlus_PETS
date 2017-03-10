@@ -70,16 +70,6 @@ Scenario: toggle data tables - agency and job properties
   Then I click the "Show People" link
   And I wait 1 second
   And "Smith, John" should be visible
-  Then I click the "Admin" link
-  And I click the "Job Properties" link
-  And I wait 1 second
-  And I should see "Software Engineer - RoR"
-  Then I click the "Hide Job Specialties" link
-  And I wait 1 second
-  Then "Software Engineer - RoR" should not be visible
-  Then I click the "Show Job Specialties" link
-  And I wait 1 second
-  Then "Software Engineer - RoR" should be visible
 
 Scenario: edit agency information
   And I click the "Agency and Partner Companies" link
@@ -245,7 +235,7 @@ Scenario: assign job seeker to agency person
 Scenario: manage job properties
   # add job specialty
   And I click the "Job Properties" link
-  And I click the "Add Job Specialty" button
+  And I click the "add-job-specialty-modal-btn" button
   And I wait 2 seconds
   And I fill in "Name:" with "Test Job Specialty"
   And I fill in "Description:" with "Description of Test Job Specialty"
@@ -255,7 +245,7 @@ Scenario: manage job properties
   And I should see "Description of Test Job Specialty"
 
   # cancel add job specialty
-  And I click the "Add Job Specialty" button
+  And I click the "add-job-specialty-modal-btn" button
   And I wait 2 seconds
   And I fill in "Name:" with "Test 2nd Job Specialty"
   And I click the "Cancel" button
@@ -264,7 +254,7 @@ Scenario: manage job properties
   And I should not see "Description of 2nd Test Job Specialty"
 
   # show job specialty model validation errors
-  Then I click the "Add Job Specialty" button
+  Then I click the "add-job-specialty-modal-btn" button
   And I wait 2 seconds
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
@@ -293,12 +283,13 @@ Scenario: manage job properties
   And I should see "Backend RoR Development"
 
   # delete job specialty
-  And I click the link with url "/job_categories/1"
+  And I click the "Delete" link with url "/job_categories/1"
   And I wait 2 seconds
   Then I should not see "Software Engineer - RoR"
 
-  # add job skill
-  And I click the "Add Job Skill" button
+  # switch to job skills pane and add job skill
+  And I click the "Job Skills" link
+  And I click the "add-job-skill-modal-btn" button
   And I wait 2 seconds
   And I fill in "Name:" with "Test Job Skill"
   And I fill in "Description:" with "Description of Test Job Skill"
@@ -308,7 +299,7 @@ Scenario: manage job properties
   And I should see "Description of Test Job Skill"
 
   # cancel add job skill
-  And I click the "Add Job Skill" button
+  And I click the "add-job-skill-modal-btn" button
   And I wait 2 seconds
   And I fill in "Name:" with "Test 2nd Job Skill"
   And I click the "Cancel" button
@@ -316,7 +307,7 @@ Scenario: manage job properties
   Then I should not see "Test 2nd Job Skill"
 
   # show job skill model validation errors
-  Then I click the "Add Job Skill" button
+  Then I click the "add-job-skill-modal-btn" button
   And I wait 2 seconds
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
@@ -344,7 +335,7 @@ Scenario: manage job properties
   And I should see "Anaytics using web data"
 
   # delete job skill not associated with a job
-  And I click the link with url "/skills/2"
+  And I click the "Delete" link with url "/skills/2"
   And I wait 2 seconds
   Then I should not see "Visual Analysis"
 

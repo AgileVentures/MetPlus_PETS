@@ -122,11 +122,11 @@ When(/^(?:I|they) click the "([^"]*)" link and switch to the new window$/) do |l
   switch_to_window new_window
 end
 
-When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
+When(/^(?:I|they) click the "([^"]+)" link with url "([^"]*)"$/) do |text, url|
   if Capybara.current_driver == :poltergeist
-    find_link('', {href: url}).trigger('click')
+    find_link(text, href: url).trigger('click')
   else
-    click_link('', {href: url})
+    click_link(text, href: url)
   end
 end
 
