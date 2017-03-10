@@ -5,6 +5,8 @@ $white-color: #fff;
 $over-color: #f2bc60;
 $blue-color: #0c7ba1;
 $grey-color: #d9d9d9;
+$gold: #f2bc60;
+$light-grey: #ddd;
 
 .h4 {
   font-weight: bold;
@@ -13,6 +15,13 @@ $grey-color: #d9d9d9;
 
 .content-center {
   text-align: center;
+}
+
+.pad-0 {
+  padding: 0;
+}
+.pad-10 {
+  padding: 10px;
 }
 
 .blue-bar {
@@ -60,4 +69,30 @@ $grey-color: #d9d9d9;
   height: 100%;
   margin-left: 5px;
   width: 45%;
+}
+
+.custom-pills {
+  a {
+    background: $light-grey;
+    border-bottom: 3px solid darken($light-grey, 20%);
+  }
+
+  li.active {
+    a {
+      background: $gold;
+      border-bottom: 3px solid darken($gold, 20%);
+      outline: 0;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background: darken($gold, 20%);
+        border-bottom: 3px solid darken($gold, 30%);
+      }
+
+      &:focus {
+        background: $gold;
+        border-bottom: 3px solid darken($gold, 20%);
+      }
+    }
+  }
 }
