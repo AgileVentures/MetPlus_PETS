@@ -70,6 +70,7 @@ Scenario: company registration approval
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  And I click the "Companies" link
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Approve" link
