@@ -16,7 +16,6 @@ var ManageData = {
 
     return(false);
   },
-
   change_data_error: function (exception, xhrObj, model_errors_id) {
     // This helper function is called when an object 'new' or 'update'
     // action (invoked via ajax) returns with an error.

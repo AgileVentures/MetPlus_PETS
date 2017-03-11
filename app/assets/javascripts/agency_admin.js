@@ -1,17 +1,4 @@
 var AgencyData = {
-  toggle: function () {
-    var toggle_id = $(this).attr('href');
-
-    if (/Show/.test($(this).text())) {
-      $(toggle_id).show(800);
-      $(this).text($(this).text().replace('Show', 'Hide'));
-    } else {
-      $(toggle_id).hide(800);
-      $(this).text($(this).text().replace('Hide', 'Show'));
-    };
-
-    return(false);
-  },
   add_job_category: function () {
     // this function is bound to 'click' event on 'Add Category' button
     // in Bootstrap modal:  'agency_admin/_property_modal.html.haml'
@@ -279,19 +266,15 @@ var AgencyData = {
     $(model_errors_id).html(''); // Clear model errors in modal
     $(modal_id).modal('hide');
   },
-
   setup_branches: function () {
-    $('#toggle_branches').click(ManageData.toggle);
     $('#branches_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_people: function () {
-    $('#toggle_people').click(ManageData.toggle);
     $('#people_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_companies: function () {
-    $('#toggle_companies').click(ManageData.toggle);
     $('#companies_table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },

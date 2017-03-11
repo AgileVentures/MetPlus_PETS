@@ -1,68 +1,65 @@
 - provide(:agency_admin_active, 'active')
 
 %h3 PETS Administration - Branches, People, Companies
-
 .row
-  = render partial: 'agencies/agency', object: @agency
+  %ul.nav.nav-pills
+    %li.active
+      %a{data: {toggle: 'pill'}, href: '#agency_table'}Agency Information
+    %li
+      %a{data: {toggle: 'pill'}, href: '#branches_table'}Agency Branches
+    %li
+      %a{data: {toggle: 'pill'}, href: '#people_table'}Agency Personnel
+    %li
+      %a{data: {toggle: 'pill'}, href: '#companies_table'}Companies
+  %br
+.tab-content
+  .row#agency_table.tab-pane.fade.in.active
+    = render partial: 'agencies/agency', object: @agency
 
-  .col-sm-2.col-sm-offset-10.table_action_button
-    = button_to 'Edit Agency', edit_agency_path(@agency), method: :get, |
-                             class: 'btn btn-primary btn-sm pull-right' |
+    .col-sm-2.col-sm-offset-10.table_action_button
+      = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
+                  class: 'btn btn-primary btn-sm pull-right'
 
-.row
-  %hr
-  .col-sm-3
-    %h4 Agency Branches
-
-  - if @branches.empty?
+  .row#branches_table.tab-pane.fade
+    %hr
     .col-sm-3
-      %h5 There are no branches.
-  - else
-    .col-sm-9
+    - if @branches.empty?
+      .col-sm-3
+        %h5 There are no branches.
+    - else
+      .col-sm-9
       = render 'branches/branches'
-    .clearfix
-    .col-sm-3.col-sm-offset-3
-      %a(id='toggle_branches' href='#branches_table' class='text-danger')
-        Hide Branches
+      .clearfix
+      .col-sm-3.col-sm-offset-3
+    
+    .col-sm-3.col-sm-offset-3.table_action_button
+      = button_to 'Add Branch', new_agency_branch_path(@agency.id),
+                  method: :get, class: 'btn btn-primary btn-sm pull-right'
 
-  .col-sm-3.col-sm-offset-3.table_action_button
-    = button_to 'Add Branch', new_agency_branch_path(@agency.id), |
-        method: :get, class: 'btn btn-primary btn-sm pull-right'  |
-
-.row
-  %hr
-  .col-sm-3
-    %h4 Agency Personnel
-
-  - if @agency_people.empty?
+  .row#people_table.tab-pane.fade
+    %hr
     .col-sm-3
-      %h5 There are no agency people.
-  - else
-    .col-sm-9
+    - if @agency_people.empty?
+      .col-sm-3
+        %h5 There are no agency people.
+    - else
+      .col-sm-9
       = render 'agency_people/agency_people'
-    .clearfix
-    .col-sm-3.col-sm-offset-3
-      %a(id='toggle_people' href='#people_table' class='text-danger')
-        Hide People
+      .clearfix
+      .col-sm-3.col-sm-offset-3
 
-  .col-sm-3.col-sm-offset-3.table_action_button
-    = link_to 'Invite Person',                                    |
-        new_user_invitation_path(person_type: 'AgencyPerson',     |
-                 org_id: @agency.id),                             |
-        method: :get, class: 'btn btn-primary btn-sm pull-right'  |
-
-.row
-  %hr
-  .col-sm-3
-    %h4 Companies
-
-  - if @companies.empty?
+    .col-sm-3.col-sm-offset-3.table_action_button
+      = link_to 'Invite Person',
+                new_user_invitation_path(person_type: 'AgencyPerson',
+                org_id: @agency.id),
+                method: :get, class: 'btn btn-primary btn-sm pull-right'
+              
+  .row#companies_table.tab-pane.fade
+    %hr
     .col-sm-3
-      %h5 There are no companies.
-  - else
-    .col-sm-9
+    - if @companies.empty?
+      .col-sm-3
+        %h5 There are no companies.
+    - else
+      .col-sm-9
       = render 'companies/companies'
-    .clearfix
-    .col-sm-3.col-sm-offset-3
-      %a(id='toggle_companies' href='#companies_table' class='text-danger')
-        Hide Companies

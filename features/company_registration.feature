@@ -88,6 +88,8 @@ Scenario: company registration delete
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
@@ -101,6 +103,8 @@ Scenario: attempt login after registration is deleted
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   Then I click and accept the "Delete Registration" button
   And I click the "Hello, John" link
@@ -117,6 +121,8 @@ Scenario: company registration denial
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
@@ -134,6 +140,8 @@ Scenario: attempt login after registration is denied
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
@@ -182,6 +190,8 @@ Scenario: edit Company Registration: change contact email and job email
   And a clear email queue
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Edit Registration" button
@@ -202,6 +212,8 @@ Scenario: edit Company Registration: change contact password
   And a clear email queue
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Edit Registration" button
