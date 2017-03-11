@@ -1,6 +1,9 @@
 // Place all the styles related to the AgencyAdmin controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$over-color: #f2bc60;
+$blue-color: #0c7ba1;
+$grey-color: #d9d9d9;
 
 .div_align_left {
   float: left;
@@ -18,6 +21,20 @@
   font-weight: bold;
 }
 
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+  color: white;
+  background-color: $blue-color;
+}
+
+.nav-pills > li > a:hover {
+  color:black;
+  background-color: $over-color;
+}
+
+.nav-pills > li > a {
+  color: black;
+  background-color: $grey-color;
+}
 #job_categories_table,
 #skills_table {
   margin-top: 2em;

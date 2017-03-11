@@ -256,3 +256,7 @@ end
 Then(/^I should see "([^"]+)" in the email field$/) do |value|
   step %{The field 'Email' should have the value '#{value}'}
 end
+
+Then(/^I save the page as "([^"]+)"$/) do |screen|
+  page.save_screenshot("#{screen}", full:true)
+end

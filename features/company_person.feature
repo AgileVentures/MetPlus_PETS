@@ -87,6 +87,8 @@ Feature: Company Person
     And I wait 1 second
     And I click the "Admin" link
     And I click the "Agency and Partner Companies" link
+    Then I click the "Agency Personnel" link
+    And  I wait 1 second
     Then I click the "Widgets Inc." link
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"

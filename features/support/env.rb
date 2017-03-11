@@ -104,4 +104,5 @@ else
     )
   end
   Capybara.javascript_driver = :poltergeist
+  Capybara.default_driver = :poltergeist
 end
