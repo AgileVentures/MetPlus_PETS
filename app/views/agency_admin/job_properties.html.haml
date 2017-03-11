@@ -6,16 +6,14 @@
 
 .row
   .col-sm-10.col-sm-offset-1.job-properties-container
-    %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
-      %li.active{ role: 'presentation' }
-        %a{ href: '#job-specialties-pane',  'aria-controls' => 'job-specialties', role: 'tab', data: { toggle: 'tab' } }
-          Job Specialties
-        %li{ role: 'presentation' }
-          %a{ href: '#job-skills-pane',  'aria-controls' => 'job-skills', role: 'tab', data: { toggle: 'tab' } }
-            Job Skills
+    %ul.nav.nav-pills
+      %li.active
+        %a{data: {toggle: 'pill'}, href: '#job-specialties-pane'}Job Specialties
+      %li
+        %a{data: {toggle: 'pill'}, href: '#job-skills-pane'}Job Skills
 
     .tab-content
-      .tab-pane.fade.in.active#job-specialties-pane{ role: 'panel' }
+      .tab-pane.fade.in.active#job-specialties-pane
         .col-xs-12.text-right
           %button.btn.btn-primary.pad-10#add-job-specialty-modal-btn{ data: { toggle: 'modal', target: '#add_job_category' } }
             %span.glyphicon.glyphicon-plus
@@ -31,7 +29,7 @@
                                delete_property_path: :job_category_path }
           .clearfix
 
-      .tab-pane.fade#job-skills-pane{ role: 'panel' }
+      .tab-pane.fade#job-skills-pane
         .col-xs-12.text-right
           %button.btn.btn-primary.pad-10#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
             %span.glyphicon.glyphicon-plus
