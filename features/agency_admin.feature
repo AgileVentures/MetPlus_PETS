@@ -116,6 +116,7 @@ Scenario: edit branch information
   Then I should see "Edit Branch"
   And I fill in "Branch Code" with "005"
   Then I click the "Cancel" link
+  And I wait 1 second
   Then I should see "Agency Branch"
   And I should not see "005"
   # data errors in branch edit form
@@ -144,8 +145,8 @@ Scenario: edit branch information
   Then I should see "Branch was successfully created."
   # cannot remove sole agency admin
   Then I click the "Admin" link
-  And I click the "Agency and Partner Companies" link
   Then I click the "Agency Personnel" link
+  And I wait 3 seconds
   And I click the "Smith, John" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: John Smith"
@@ -180,6 +181,7 @@ Scenario: edit agency person
   # non-admin does not see 'admin' in menu
   Given I click the "John" link
   Given I log out
+  And I wait 1 second
   Given I am on the home page
   And I login as "mike@metplus.org" with password "qwerty123"
   Then I should see "Signed in successfully."
@@ -245,7 +247,8 @@ Scenario: assign job seeker to agency person
 Scenario: manage job properties
   # add job specialty
   And I click the "Job Properties" link
-  And I click the "Add Job Specialty" button
+  And I wait 1 second
+  And I click the "Add job specialty" button
   And I wait 1 second
   And I fill in "Name:" with "Test Job Specialty"
   And I fill in "Description:" with "Description of Test Job Specialty"
@@ -255,14 +258,14 @@ Scenario: manage job properties
   And I should see "Description of Test Job Specialty"
 
   # cancel add job specialty
-  And I click the "Add Job Specialty" button
+  And I click the "Add job specialty" button
   And I fill in "Name:" with "Test 2nd Job Specialty"
   And I click the "Cancel" button
   Then I should not see "Test 2nd Job Specialty"
   And I should not see "Description of 2nd Test Job Specialty"
 
   # show job specialty model validation errors
-  Then I click the "Add Job Specialty" button
+  Then I click the "Add job specialty" button
   And I wait 1 second
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
@@ -281,7 +284,7 @@ Scenario: manage job properties
   And I click the "Software Engineer - RoR" link
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 2 seconds
+  And I wait 5 seconds
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button

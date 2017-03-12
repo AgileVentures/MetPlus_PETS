@@ -149,8 +149,10 @@ Feature: Company Person
     And I click the "Hello, Jane" link
     And I click the "My Profile" link
     Then I click the "Edit" link
+    And I wait 1 second
     And I should see "Update Your Profile"
     Then I click the "Cancel" link
+    And I wait 1 second
     Then I should be on the Company Person 'jane@ymail.com' profile page
 
   Scenario: company contact login and edit profile from name
@@ -187,7 +189,9 @@ Feature: Company Person
     And I click the "Hello, John" link
     And I click the "My Profile" link
     Then I click the "Edit" link
+    And I wait 2 second
     And I do not have an address
+    And I save the page as "screenshot.png"
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"
@@ -201,6 +205,7 @@ Feature: Company Person
     And I click the "Hello, Jane" link
     And I click the "My Profile" link
     Then I click the "Edit" link
+    And I wait 1 second
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
