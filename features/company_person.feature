@@ -182,12 +182,10 @@ Feature: Company Person
   Scenario: company admin can update address
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    And I click the "Hello, John" link
+    And I click the first "Hello, John" link
     And I click the "My Profile" link
     Then I click the "Edit" link
-    And I wait 2 second
     And I do not have an address
-    And I save the page as "screenshot.png"
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
     And I select "12 Main Street Detroit, Michigan 02034" in select list "Address"

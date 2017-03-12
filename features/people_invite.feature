@@ -32,6 +32,7 @@ Scenario: invite (and reinvite) new agency person
   And I click the "Agency Personnel" link
   And I wait 1 second
   Then I click the "Invite Person" link
+  And I wait 1 second
   And I should see "Send invitation"
   And I fill in "Email" with "adam@metplus.org"
   And I fill in "First name" with "Adam"
@@ -62,7 +63,9 @@ Scenario: agency person accepts invitation in email
   And I fill in "Last name" with "Powell"
   And I click the "Send an invitation" button
   And I should see "An invitation email has been sent to adam@metplus.org."
+  Then I click the "John" link
   And I log out
+  And I save the page as "screenshot.png"
   Then "adam@metplus.org" should receive 1 email with subject "Invitation instructions"
   When "adam@metplus.org" opens the email
   Then they should see "Accept invitation" in the email body
@@ -84,6 +87,7 @@ Scenario: invite (and reinvite) new Company person
   And I wait 1 second
   Then I click the "Widgets Inc." link
   And I click the "Invite Person" link
+  And I wait 1 second
   And I should see "Send invitation"
   And I fill in "Email" with "newguy@ymail.com"
   And I fill in "First name" with "New"
@@ -115,6 +119,7 @@ Scenario: company person accepts invitation in email
   And I fill in "Last name" with "Guy"
   And I click the "Send an invitation" button
   And I should see "An invitation email has been sent to newguy@ymail.com."
+  Then I click the "John" link
   And I log out
   Then "newguy@ymail.com" should receive 1 email with subject "Invitation instructions"
   When "newguy@ymail.com" opens the email

@@ -293,7 +293,7 @@ Scenario: manage job properties
   And I should see "Backend RoR Development"
 
   # delete job specialty
-  And I click the link with url "/job_categories/1"
+  And I click the "Delete" link with url "/job_categories/1"
   Then I should not see "Software Engineer - RoR"
 
   # add job skill
@@ -333,7 +333,7 @@ Scenario: manage job properties
   And I should see "Anaytics using web data"
 
   # delete job skill not associated with a job
-  And I click the link with url "/skills/2"
+  And I click the "Delete" link with url "/skills/2"
   Then I should not see "Visual Analysis"
 
   # attempt to delete job skill associated with a job
