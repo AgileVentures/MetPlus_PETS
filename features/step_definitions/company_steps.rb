@@ -1,6 +1,6 @@
 
 And /^I do not have an address$/ do
-	expect(page.find('#company_person_address_id')).not_to have_css("selected")
+	expect(page.find("#company_person_address_id")).not_to have_css("selected")
 end
 
 # Usage:
@@ -15,5 +15,3 @@ And /^I should( not)? see selections of "([^"]*)" addresses$/ do |negate, compan
 		end
 	end
 end
-
-

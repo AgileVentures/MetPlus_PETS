@@ -230,4 +230,5 @@ Scenario: edit Company Registration: change contact password
 
 Scenario: cancel out of registration form
   And I click the "Cancel" link
+  And I wait 1 second
   Then I should be on the home page
