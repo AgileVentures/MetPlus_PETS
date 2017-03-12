@@ -16,5 +16,5 @@
           = person.agency_roles.pluck(:role).join(', ')
         %td
           = person.status if person.status
-= will_paginate @agency_people, param_name: 'people_page', |
-                        params: {data_type: 'people'}      |
+= will_paginate @agency_people, param_name: 'people_page',
+                        params: {data_type: 'people'}

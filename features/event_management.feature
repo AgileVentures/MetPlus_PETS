@@ -167,7 +167,7 @@ Scenario: Case manager assigned to job seeker by agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 1 second
-  Then I should see "Agency Personnel"
+  Then I click the "Agency Personnel" link
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: Jane Jones"

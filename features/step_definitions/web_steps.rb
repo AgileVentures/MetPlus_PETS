@@ -258,5 +258,5 @@ Then(/^I should see "([^"]+)" in the email field$/) do |value|
 end
 
 Then(/^I save the page as "([^"]+)"$/) do |screen|
-  page.save_screenshot("#{screen}", full:true)
+  page.save_screenshot(screen.to_s, full: true)
 end
