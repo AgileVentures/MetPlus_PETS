@@ -284,7 +284,7 @@ Scenario: manage job properties
   And I click the "Software Engineer - RoR" link
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 5 seconds
+  And I wait 2 seconds
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
@@ -294,6 +294,7 @@ Scenario: manage job properties
 
   # delete job specialty
   And I click the "Delete" link with url "/job_categories/1"
+  And I wait 1 second
   Then I should not see "Software Engineer - RoR"
 
   # add job skill
