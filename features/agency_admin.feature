@@ -200,7 +200,7 @@ Scenario: delete agency objects
   Then I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   Then I click the "Agency Personnel" link
-  And  I wait 1 second
+  And  I wait 2 seconds
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
   Then I should see "Person 'Jane Jones' deleted."
@@ -298,7 +298,7 @@ Scenario: manage job properties
   Then I should not see "Software Engineer - RoR"
 
   # add job skill
-  And I click the "Add Job Skill" button
+  And I click the "Add job skill" button
   And I fill in "Name:" with "Test Job Skill"
   And I fill in "Description:" with "Description of Test Job Skill"
   And I click the "Add Skill" button
@@ -306,13 +306,13 @@ Scenario: manage job properties
   And I should see "Description of Test Job Skill"
 
   # cancel add job skill
-  And I click the "Add Job Skill" button
+  And I click the "Add job skill" button
   And I fill in "Name:" with "Test 2nd Job Skill"
   And I click the "Cancel" button
   Then I should not see "Test 2nd Job Skill"
 
   # show job skill model validation errors
-  Then I click the "Add Job Skill" button
+  Then I click the "Add job skill" button
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
   And I click the "Add Skill" button

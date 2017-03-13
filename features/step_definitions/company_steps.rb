@@ -9,9 +9,9 @@ end
 And /^I should( not)? see selections of "([^"]*)" addresses$/ do |negate, company|
   Company.find_by(name: company).addresses.each do |address|
     if negate
-      expect(page).not_to have_content("#{address.full_address}")
+      expect(page).not_to have_content(address.full_address.to_s)
     else
-      expect(page).to have_content("#{address.full_address}")
+      expect(page).to have_content(address.full_address.to_s)
     end
   end
 end
