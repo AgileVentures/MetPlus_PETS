@@ -1,8 +1,11 @@
 - provide(:person_home_active, 'active')
+= link_to "Your Applications", "#app", class: "btn btn-primary" 
+= link_to "Job Opportunities", "#jobs", class: "btn btn-primary" 
+= link_to "Your Profile", "#info", class: "btn btn-primary" 
 
 .row
   .col-sm-3
-    %h3
+    %h3#info
       Your Information
     %a(id='toggle_info' href='#info_table' class='text-danger'
                 style='padding-left: 10px;')
@@ -11,11 +14,11 @@
   .col-sm-9
     = render partial: 'info', locals: {job_seeker: @jobseeker, offer_download: false}
 
-%h3 Your Applications
+%h3#app Your Applications
 .pagination-div{ id: "applications-#{@application_type}",
                  data: { url: list_applications_path(@application_type, @jobseeker) } }
 
-%h3
+%h3#jobs
   Job Opportunities - New
   %span.text-muted.small (Jobs since last login shown in yellow)
 %div
