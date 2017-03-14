@@ -281,7 +281,7 @@ Scenario: manage job properties
   And I click the "Software Engineer - RoR" link
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 1 second
+  And I wait 2 seconds
   Then I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
@@ -295,6 +295,7 @@ Scenario: manage job properties
   Then I should not see "Software Engineer - RoR"
 
   # add job skill
+  And I click the "Job Skills" link
   And I click the "Add job skill" button
   And I fill in "Name:" with "Test Job Skill"
   And I fill in "Description:" with "Description of Test Job Skill"
