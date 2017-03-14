@@ -197,10 +197,7 @@ Scenario: delete agency objects
   Then I click and accept the "Delete Branch" button
   Then I should see "Branch '003' deleted."
   # agency person
-  Then I click the "Admin" link
-  And I click the "Agency and Partner Companies" link
   Then I click the "Agency Personnel" link
-  And  I wait 2 seconds
   And I click the "Jones, Jane" link
   Then I click and accept the "Delete Person" button
   Then I should see "Person 'Jane Jones' deleted."
@@ -284,8 +281,8 @@ Scenario: manage job properties
   And I click the "Software Engineer - RoR" link
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 2 seconds
-  And I should see "Description can't be blank"
+  And I wait 1 second
+  Then I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
   And I wait 2 seconds
