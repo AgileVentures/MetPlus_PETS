@@ -294,7 +294,7 @@ Scenario: manage job properties
   And I wait 1 second
   Then I should not see "Software Engineer - RoR"
 
-  # add job skill
+  # switch to job skills pane and add job skill
   And I click the "Job Skills" link
   And I click the "Add job skill" button
   And I fill in "Name:" with "Test Job Skill"
