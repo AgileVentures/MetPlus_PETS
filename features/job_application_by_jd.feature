@@ -27,20 +27,20 @@ Background: data is added to database
 
   Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
-  | John      | Seeker   | john.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-  | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-  | June      | Seeker   | june.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-  | July      | Seeker   | july.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | John      | Seeker   | john.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | Jane      | Seeker   | jane.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | June      | Seeker   | june.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | July      | Seeker   | july.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
   Given the following resumes exist:
   | file_name          | job_seeker             |
-  | Janitor-Resume.doc | john.seeker@places.com |
+  | Janitor-Resume.doc | john.seeker@gmail.com |
 
   Given the following agency relations exist:
   | job_seeker             | agency_person    | role |
-  | john.seeker@places.com | jane@metplus.org | JD   |
-  | june.seeker@places.com | jane@metplus.org | JD   |
-  | july.seeker@places.com | jane@metplus.org | CM   |
+  | john.seeker@gmail.com | jane@metplus.org | JD   |
+  | june.seeker@gmail.com | jane@metplus.org | JD   |
+  | july.seeker@gmail.com | jane@metplus.org | CM   |
 
   @javascript
   Scenario: Successful application for his job seeker
@@ -50,7 +50,7 @@ Background: data is added to database
 
     When I am in Job Seeker's browser
     Given I am on the home page
-    And I login as "john.seeker@places.com" with password "password"
+    And I login as "john.seeker@gmail.com" with password "password"
 
     Then I am in Job Developer's browser
     Given I am on the home page
@@ -60,8 +60,8 @@ Background: data is added to database
 
     Then I am in Job Seeker's browser
     And I should see "Your job developer has applied to this job for you"
-    Then "john.seeker@places.com" should receive an email with subject "Job applied by job developer"
-    When "john.seeker@places.com" opens the email
+    Then "john.seeker@gmail.com" should receive an email with subject "Job applied by job developer"
+    When "john.seeker@gmail.com" opens the email
     Then they should see "your job developer," in the email body
     Then they should see "Jane Jones" in the email body
     Then they should see "has submitted an application on your behalf to the job:" in the email body
@@ -107,7 +107,7 @@ Background: data is added to database
   Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
     When I am in Job Seeker's browser
     Given I am on the home page
-    And I login as "john.seeker@places.com" with password "password"
+    And I login as "john.seeker@gmail.com" with password "password"
     Then I apply to "software developer" from Jobs link
     And I wait 4 seconds
     And I should see "Congratulations, you were able to apply with success"
@@ -122,7 +122,7 @@ Background: data is added to database
   Scenario: Job developer cannot apply for his job seeker without consent given
     When I am in Job Seeker's browser
     Given I am on the home page
-    And I login as "john.seeker@places.com" with password "password"
+    And I login as "john.seeker@gmail.com" with password "password"
     Then I click the "Hello, John" link
     And I click the "My Profile" link
     Then I click the "Edit" link
