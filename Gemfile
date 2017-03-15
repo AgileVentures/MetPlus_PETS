@@ -69,7 +69,6 @@ gem 'rest-client'
 
 gem 'cocoon'
 gem 'pg'
-gem 'tilt', '>= 1.3.4', '~> 1.3'
 
 # later we can strict the faker
 # to staging && development
