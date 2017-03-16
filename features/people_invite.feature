@@ -65,7 +65,6 @@ Scenario: agency person accepts invitation in email
   And I should see "An invitation email has been sent to adam@metplus.org."
   Then I click the "John" link
   And I log out
-  And I save the page as "screenshot.png"
   Then "adam@metplus.org" should receive 1 email with subject "Invitation instructions"
   When "adam@metplus.org" opens the email
   Then they should see "Accept invitation" in the email body
