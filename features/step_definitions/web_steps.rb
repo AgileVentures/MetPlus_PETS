@@ -17,9 +17,9 @@ def search_text text
 end
 Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   unless not_see
-    expect(page.body).to have_text string
+    assert_text(string)
   else
-    expect(page.body).to_not have_text string
+    assert_no_text(string)
   end
 end
 

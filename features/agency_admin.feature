@@ -91,7 +91,7 @@ Scenario: edit agency information
   And I should see "Phone can't be blank"
   And I should see "Phone incorrect format"
   And I should see "Website is not a valid website address"
-  
+
 Scenario: edit branch information
   And I click the "Agency and Partner Companies" link
   Then "pets_admin@metplus.org" should be visible
@@ -152,7 +152,7 @@ Scenario: edit branch information
   And I should see "Edit Agency Person: John Smith"
   And I should see "Agency Admin"
   And the selection "Agency Admin" should be disabled
-  
+
 Scenario: edit agency person
   And I click the "Agency and Partner Companies" link
   Then I click the "Agency Personnel" link
@@ -250,7 +250,7 @@ Scenario: manage job properties
   And I fill in "Name:" with "Test Job Specialty"
   And I fill in "Description:" with "Description of Test Job Specialty"
   And I click the "Add Specialty" button
-  And I wait 1 second
+  # And I wait 1 second
   Then I should see "Test Job Specialty"
   And I should see "Description of Test Job Specialty"
 
@@ -267,13 +267,13 @@ Scenario: manage job properties
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
   And I click the "Add Specialty" button
-  And I wait 2 seconds
+  # And I wait 2 seconds
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
   Then I fill in "Name:" with "Test 3rd Job Specialty"
   And I fill in "Description:" with "Description of 3rd Test Job Specialty"
   And I click the "Add Specialty" button
-  And I wait 1 second
+  # And I wait 1 second
   Then I should see "Test 3rd Job Specialty"
   And I should see "Description of 3rd Test Job Specialty"
 
@@ -281,7 +281,7 @@ Scenario: manage job properties
   And I click the "Software Engineer - RoR" link
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  And I wait 2 seconds
+  # And I wait 1 second
   Then I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
@@ -291,10 +291,10 @@ Scenario: manage job properties
 
   # delete job specialty
   And I click the "Delete" link with url "/job_categories/1"
-  And I wait 1 second
+  # And I wait 1 second
   Then I should not see "Software Engineer - RoR"
 
-  # switch to job skills pane and add job skill
+  # add job skill
   And I click the "Job Skills" link
   And I click the "Add job skill" button
   And I fill in "Name:" with "Test Job Skill"
@@ -328,6 +328,7 @@ Scenario: manage job properties
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Anaytics using web data"
   And I click the "Update Skill" button
+  And I wait 2 seconds
   Then "Update Job Skill" should not be visible
   And I should see "Anaytics using web data"
 
