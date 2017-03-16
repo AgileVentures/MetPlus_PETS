@@ -107,6 +107,7 @@ Given the following job applications exist:
     Then I am in Company Admin's browser
     And I am on the Company Person 'carter@ymail.com' Home page
     And I wait 1 second
+    And I click the "Unassigned Company Tasks" link
     And I should see "Review job application"
     And I should see "Job: software developer"
 

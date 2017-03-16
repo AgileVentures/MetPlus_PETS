@@ -240,7 +240,7 @@ Scenario: assign job seeker to agency person
   When "mike@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-@javascript
+@selenium
 Scenario: manage job properties
   # add job specialty
   And I click the "Job Properties" link
