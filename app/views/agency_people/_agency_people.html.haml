@@ -1,20 +1,21 @@
-%table.table.table-hover
-  %thead
-    %tr
-      %th
-        %strong Name
-      %th
-        %strong Role(s)
-      %th
-        %strong Status
-  %tbody
-    - @agency_people.each do |person|
+.col-sm-9
+  %table.table.table-hover
+    %thead
       %tr
-        %td
-          = link_to person.full_name, agency_person_path(person)
-        %td
-          = person.agency_roles.pluck(:role).join(', ')
-        %td
-          = person.status if person.status
-= will_paginate @agency_people, param_name: 'people_page',
+        %th
+          %strong Name
+        %th
+          %strong Role(s)
+        %th
+          %strong Status
+    %tbody
+      - @agency_people.each do |person|
+        %tr
+          %td
+            = link_to person.full_name, agency_person_path(person)
+          %td
+            = person.agency_roles.pluck(:role).join(', ')
+          %td
+            = person.status if person.status
+  = will_paginate @agency_people, param_name: 'people_page',
                         params: {data_type: 'people'}

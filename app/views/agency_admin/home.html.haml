@@ -1,66 +1,55 @@
 - provide(:agency_admin_active, 'active')
 
-%h3 PETS Administration - Branches, People, Companies
 .row
-  %ul.nav.nav-pills
-    %li.active
-      %a{ data: { toggle: 'pill' }, href: '#agency_table' }Agency Information
-    %li
-      %a{ data: { toggle: 'pill' }, href: '#branches_table' }Agency Branches
-    %li
-      %a{ data: { toggle: 'pill' }, href: '#people_table' }Agency Personnel
-    %li
-      %a{ data: { toggle: 'pill' }, href: '#companies_table' }Companies
-  %br
+  .col-sm-10.col-sm-offset-1
+    %h3 PETS Administration - Branches, People, Companies
 
-.tab-content
-  .row.tab-pane.fade.in.active#agency_table
-    = render partial: 'agencies/agency', object: @agency
+.row
+  .col-sm-10.col-sm-offset-1.agency-admin-container
+    %ul.nav.nav-pills
+      %li.active
+        %a{ data: { toggle: 'pill' }, href: '#agency_table' }Agency Information
+      %li
+        %a{ data: { toggle: 'pill' }, href: '#branches_table' }Agency Branches
+      %li
+        %a{ data: { toggle: 'pill' }, href: '#people_table' }Agency Personnel
+      %li
+        %a{ data: { toggle: 'pill' }, href: '#companies_table' }Companies
 
-    .col-sm-2.col-sm-offset-10.table_action_button
-      = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
-                  class: 'btn btn-primary btn-sm pull-right'
+    .tab-content
+      .tab-pane.fade.in.active#agency_table
+        .col-xs-12.text-right
+          = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
+            class: 'btn btn-primary btn-sm pull-right'
+        .col-xs-12.pad-0
+        = render partial: 'agencies/agency', object: @agency
+        .clearfix
+          
+      .tab-pane.fade#branches_table
+        .col-xs-12.text-right
+          = button_to 'Add Branch', new_agency_branch_path(@agency.id),
+            method: :get, class: 'btn btn-primary btn-sm pull-right'
+          - if @branches.empty?
+            %h5 There are no branches.
+          - else
+            = render 'branches/branches'
+        .clearfix
 
-  .row.tab-pane.fade#branches_table
-    %hr
-    .col-sm-3
-    - if @branches.empty?
-      .col-sm-3
-        %h5 There are no branches.
-    - else
-      .col-sm-9
-      = render 'branches/branches'
-      .clearfix
-      .col-sm-3.col-sm-offset-3
+      .tab-pane.fade#people_table
+        .col-xs-12.text-right
+          = link_to 'Invite Person',
+            new_user_invitation_path(person_type: 'AgencyPerson',
+            org_id: @agency.id),
+            method: :get, class: 'btn btn-primary btn-sm pull-right'        
+          - if @agency_people.empty?
+            %h5 There are no agency people.
+          - else
+            = render 'agency_people/agency_people'
+        .clearfix
 
-    .col-sm-3.col-sm-offset-3.table_action_button
-      = button_to 'Add Branch', new_agency_branch_path(@agency.id),
-                  method: :get, class: 'btn btn-primary btn-sm pull-right'
-
-  .row.tab-pane.fade#people_table
-    %hr
-    .col-sm-3
-    - if @agency_people.empty?
-      .col-sm-3
-        %h5 There are no agency people.
-    - else
-      .col-sm-9
-      = render 'agency_people/agency_people'
-      .clearfix
-      .col-sm-3.col-sm-offset-3
-
-    .col-sm-3.col-sm-offset-3.table_action_button
-      = link_to 'Invite Person',
-                new_user_invitation_path(person_type: 'AgencyPerson',
-                org_id: @agency.id),
-                method: :get, class: 'btn btn-primary btn-sm pull-right'
-
-  .row.tab-pane.fade#companies_table
-    %hr
-    .col-sm-3
-    - if @companies.empty?
-      .col-sm-3
-        %h5 There are no companies.
-    - else
-      .col-sm-9
-      = render 'companies/companies'
+      .tab-pane.fade#companies_table
+        .col-xs-12.pad-0
+          - if @companies.empty?
+            %h5 There are no companies.
+          - else
+            = render 'companies/companies'
