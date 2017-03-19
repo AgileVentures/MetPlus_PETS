@@ -18,12 +18,16 @@
   font-weight: bold;
 }
 
+#agency_table,
+#branches_table,
+#people_table,
+#companies_table,
 #job_categories_table,
 #skills_table {
   margin-top: 2em;
   padding: 0;
 }
 
-.job-properties-container {
+.agency-admin-container {
   margin-top: 2em;
 }
