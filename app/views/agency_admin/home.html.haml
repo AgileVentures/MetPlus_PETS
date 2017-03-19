@@ -24,7 +24,7 @@
         .col-xs-12.pad-0
         = render partial: 'agencies/agency', object: @agency
         .clearfix
-          
+
       .tab-pane.fade#branches_table
         .col-xs-12.text-right
           = button_to 'Add Branch', new_agency_branch_path(@agency.id),
@@ -40,7 +40,7 @@
           = link_to 'Invite Person',
             new_user_invitation_path(person_type: 'AgencyPerson',
             org_id: @agency.id),
-            method: :get, class: 'btn btn-primary btn-sm pull-right'        
+            method: :get, class: 'btn btn-primary btn-sm pull-right'
           - if @agency_people.empty?
             %h5 There are no agency people.
           - else
