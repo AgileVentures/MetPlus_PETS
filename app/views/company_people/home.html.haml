@@ -46,13 +46,13 @@
   .col-sm-10.col-sm-offset-1.company-people-home
     %ul.nav.nav-pills.custom-pills
       %li.active
-        %a{ data: { target: '.company-people-home #all-jobs-pane', toggle: 'pill' } }
+        %a{ data: { target: '.company-people-home #all-jobs-pane', toggle: 'pill' }, href: '#' }
           All #{@company.name} jobs
       %li
-        %a{ data: { target: '#all-on-pets-pane', toggle: 'pill' } }
+        %a{ data: { target: '#all-on-pets-pane', toggle: 'pill' }, href: '#' }
           All #{@company.name} people who are on PETS
       %li
-        %a{ data: { target: '#company-infomation-pane', toggle: 'pill' } }
+        %a{ data: { target: '#company-infomation-pane', toggle: 'pill' }, href: '#' }
           Company Infomation
 
     .tab-content
