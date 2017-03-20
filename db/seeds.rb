@@ -1,15 +1,11 @@
 require 'ffaker'
 
-require 'webmock'
-include WebMock::API
-
-require './spec/support/service_stub_helpers'
-include ServiceStubHelpers::EmailValidator
-
-WebMock.enable!
-WebMock.allow_net_connect!  # allow non-stubbed service calls to proceed
-
-stub_email_validate_valid   # stub mailgun email validation
+# Prevent email validation
+class EmailValidator
+  # replace method which performs validation using mailgun validator
+  def validate_each(_,_,_)
+  end
+end
 
 def create_address(location = nil)
   street = Faker::Address.street_address
@@ -58,11 +54,10 @@ puts "\nSeeded Production Data"
 
 puts "\nSeeding development DB"
 
-# seed striction to development, for now
-if Rails.env.development? || Rails.env.staging?
+if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING'
 
   #-------------------------- Companies -----------------------------------
-  200.times do |n|
+  50.times do |n|
     ein = Faker::Company.ein
     phone = "(#{(1..9).to_a.sample(3).join})-#{(1..9)
       .to_a.sample(3).join}-#{(1..9).to_a.sample(4).join}"
@@ -76,10 +71,10 @@ if Rails.env.development? || Rails.env.staging?
                       website: website,
                       name: name)
     cmp.agencies << agency
-    if n < 20
-      cmp.pending_registration
+    if n < 40
+      cmp.status = 'active'
     else
-      cmp.active
+      cmp.status = 'pending_registration'
     end
     cmp.save!
 
@@ -110,7 +105,7 @@ if Rails.env.development? || Rails.env.staging?
   puts "Company Addresses created: #{Address.count}"
 
   #-------------------------- Job Categories ------------------------------
-  200.times do |n|
+  20.times do |n|
     name = FFaker::Job.title
     description = FFaker::Lorem.sentence
     JobCategory.create!(name: "#{name}_#{n}", description: description)
@@ -119,7 +114,7 @@ if Rails.env.development? || Rails.env.staging?
   puts "Job Categories created: #{JobCategory.count}"
 
   #-------------------------- Skills --------------------------------------
-  30.times do |_n|
+  20.times do
     Skill.create(name: FFaker::Skill.specialty,
                  description: FFaker::Lorem.sentence)
   end
@@ -129,13 +124,14 @@ if Rails.env.development? || Rails.env.staging?
   #-------------------------- Company People ------------------------------
   companies = Company.all.to_a
   addresses = Address.all.to_a
-  200.times do |n|
+  50.times do |n|
     title = FFaker::Job.title
     password = 'secret123'
     first_name = Faker::Name.first_name
     last_name = Faker::Name.last_name
     email = create_email("#{first_name}#{last_name}")
     confirmed_at = DateTime.now
+    # debugger
     cp = CompanyPerson.new(title: title, email: email, password: password,
                            first_name: first_name,
                            last_name: last_name,
@@ -201,7 +197,7 @@ if Rails.env.development? || Rails.env.staging?
   addresses = Address.all.to_a
 
   # Create jobs for 'known_company'
-  50.times do |n|
+  25.times do |n|
     Job.create(title: FFaker::Job.title,
                description: Faker::Lorem.sentence,
                shift: %w(Day Evening Morning)[r.rand(3)],
@@ -213,12 +209,13 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   # Create random jobs
-  200.times do |n|
+  20.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3, false, 4)
     shift = %w(Day Evening Morning)[r.rand(3)]
     fulltime = [false, true][r.rand(2)]
     job_id = ((1..9).to_a + ('A'..'Z').to_a).sample(8).join
+    # debugger
     Job.create(title: title,
                description: description,
                shift: shift,
@@ -259,7 +256,7 @@ if Rails.env.development? || Rails.env.staging?
   end
 
   jobseekerstatus = JobSeekerStatus.all.to_a
-  200.times do |_n|
+  100.times do |_n|
     password = 'secret123'
     first_name = FFaker::Name.first_name
     last_name = FFaker::Name.last_name
@@ -323,7 +320,7 @@ if Rails.env.development? || Rails.env.staging?
 
   #-------------------------- Agency Branches -----------------------------
   addresses = Address.all.to_a
-  50.times do |_n|
+  10.times do |_n|
     code = Faker::Code.ean.split(//).shuffle[1..3].join
     Branch.create(code: code,
                   agency: agency,

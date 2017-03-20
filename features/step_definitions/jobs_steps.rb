@@ -24,20 +24,13 @@ end
 
 Then(/^I should( not)? see "Revoked" next to "([^"]*)"$/) do |negate, job_title|
 	@job ||= Job.find_by(title: job_title)
-	if negate
-		expect(page).not_to have_css("#job-#{@job.id} span", text: "Revoked")
-	else
-		expect(page).to have_css("#job-#{@job.id} span", text: "Revoked")
-	end
-end
-
-Then(/^I should( not)? see "revoke" button for "([^"]*)"$/) do |negate, job_title|
-	@job ||= Job.find_by(title: job_title)
-	if negate
-		expect(page).not_to have_css("#job-#{@job.id} button", text: "revoke")
-	else
-		expect(page).to have_css("#job-#{@job.id} button", text: "revoke")
-	end
+  if negate
+    expect(page).not_to have_selector(:xpath, "//tr[td[contains(.,
+    '#{job_title}')]]/td/span", text: 'Revoked')
+  else
+    expect(page).to have_selector(:xpath, "//tr[td[contains(.,
+    '#{job_title}')]]/td/span", text: 'Revoked')
+  end
 end
 
 Then(/^I should see the job status is "([^"]*)"$/) do |status|
@@ -46,9 +39,9 @@ end
 
 Then(/^I should see a "([^"]*)" confirmation$/) do |action|
 	expect(page).to have_content("Are you sure you want
- 		         to #{action} the following job:
-                 job title:  #{@job.title}
-                 company job id: #{@job.company_job_id}")
+ 	to #{action} the following job:
+  job title:  #{@job.title}
+  company job id: #{@job.company_job_id}")
 end
 
 Then(/^I should( not)? see "Revoke" link on the page$/) do |negate|
@@ -57,11 +50,6 @@ Then(/^I should( not)? see "Revoke" link on the page$/) do |negate|
 	else
 		expect(page).to have_css('a#revoke_link', text: 'Revoke')
 	end
-end
-
-Then(/^I click the "revoke" button for "hr manager"/) do
-	job = Job.find_by(title: "hr manager")
-	find("#job-#{job.id} > button[data-action='revoke']").click
 end
 
 Then(/^I click the Revoke confirmation for "([^"]*)"$/) do |job_title|
@@ -97,7 +85,7 @@ end
 Then(/^I apply to "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
   step %{I want to apply to "#{job_title}" for "#{job_seeker}"}
   step %{I find "#{job_seeker}" from my job seekers list and proceed with the application}
-  step %{I wait 1 second}
+  step %{I wait 1 seconds}
   step %{I press "Apply Now"}
 end
 

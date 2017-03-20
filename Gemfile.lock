@@ -387,6 +387,7 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   selenium-webdriver
   shoulda-matchers!
+  simplecov
   spring
   sqlite3
   turbolinks
@@ -395,5 +396,8 @@ DEPENDENCIES
   webmock
   will_paginate
 
+RUBY VERSION
+   ruby 2.3.3p222
+
 BUNDLED WITH
-   1.13.6
+   1.14.5

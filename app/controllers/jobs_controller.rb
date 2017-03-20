@@ -10,11 +10,7 @@ class JobsController < ApplicationController
                                         :match_jd_job_seekers]
 
   def index
-    @jobs = policy_scope(Job).order(:title).includes(:company)
-                             .paginate(page: params[:page], per_page: 20)
-  end
 
-  def list_search_jobs
     # Make a copy of q params since we will strip out any commas separating
     # words - need to retain any commas in the form (so user is not surprised)
     q_params = params[:q] ? params[:q].dup : params[:q]
@@ -51,10 +47,12 @@ class JobsController < ApplicationController
 
     @query = Job.ransack(params[:q]) # For form display of entered values
 
-    @jobs  = Job.ransack(q_params).result(distinct: true)
+    @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
-                .page(params[:page]).per_page(5)
+                .page(params[:page]).per_page(8)
+
+    render partial: 'searched_job_list' if request.xhr?
   end
 
   def new
@@ -78,7 +76,7 @@ class JobsController < ApplicationController
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_POSTED, obj.new(@job, current_agency))
 
-      redirect_to jobs_path
+      redirect_to jobs_url
     else
       @companies = Company.order(:name)
       set_company_address

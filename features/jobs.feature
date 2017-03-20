@@ -38,7 +38,7 @@ Background: adding job to database
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "jane@ymail.com" with password "qwerty123"
-  When I click the "Post jobs" link
+  When I click the "Post Job" link
   And I wait 1 second
   And I fill in the fields:
     | Title            | cashier|
@@ -49,8 +49,8 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I check "Fulltime"
   And I press "new-job-submit"
   Then I should see "cashier has been created successfully."
-
-  Then I click the first "edit" link
+  Then I click the "cashier" link to job show page
+  Then I click the "Edit Job" link
   And I fill in the fields:
     | Title                  | cab-driver|
     | Company Job ID         | KRT123    |
@@ -74,7 +74,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
 
-  When I click the "Post jobs" link
+  When I click the "Post Job" link
   And  I fill in the fields:
     | Title                  |  |
     | Company Job ID         |  |
@@ -91,7 +91,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
 Scenario: Creating and Updating Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "hr@metplus.org" with password "qwerty123"
-  When I click the "Post jobs" link
+  When I click the "Post Job" link
   And I wait 1 second
   And I fill in the fields:
     | Title                  | cashier|
@@ -125,7 +125,7 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
 
-  When I click the "Post jobs" link
+  When I click the "Post Job" link
   And  I fill in the fields:
     | Title                  |  |
   And  I select "Widgets Inc." in select list "Company Name"

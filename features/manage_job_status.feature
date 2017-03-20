@@ -38,10 +38,12 @@ Background: data is added to database
   Scenario: company person revoke a job
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    And I visit the jobs page
+    And I go to the jobs page
     And I should not see "Revoked" next to "hr manager"
-    But I should see "revoke" button for "hr manager"
-    Then I click the "revoke" button for "hr manager"
+    Then I click the "hr manager" link to job show page
+    And I should see the job status is "active"
+    And I should see "Revoke" link on the page
+    Then I click the "Revoke" link
     And I wait 1 second
     And I should see a "revoke" confirmation
     Then I click the Revoke confirmation for "hr manager"
@@ -51,7 +53,7 @@ Background: data is added to database
   Scenario: job developer revoke a job
     Given I am on the home page
     And I login as "john@metplus.org" with password "qwerty123"
-    And I visit the jobs page
+    And I go to the jobs page
     And I should see "Revoked" next to "hr assistant"
     Then I click the "hr assistant" link to job show page
     And I wait 1 second

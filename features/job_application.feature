@@ -28,22 +28,22 @@ Given the following jobs exist:
 
 Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
-  | John      | Seeker   | john.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-  | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | John      | Seeker   | john.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | Jane      | Seeker   | jane.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
 Given the following resumes exist:
   | file_name          | job_seeker             |
-  | Janitor-Resume.doc | john.seeker@places.com |
-  | Janitor-Resume.doc | jane.seeker@places.com |
+  | Janitor-Resume.doc | john.seeker@gmail.com |
+  | Janitor-Resume.doc | jane.seeker@gmail.com |
 
 Given the following agency relations exist:
   | job_seeker             | agency_person    | role |
-  | john.seeker@places.com | jane@metplus.org | JD   |
-  | john.seeker@places.com | mike@metplus.org | CM   |
+  | john.seeker@gmail.com | jane@metplus.org | JD   |
+  | john.seeker@gmail.com | mike@metplus.org | CM   |
 
 Given the following job applications exist:
   | job title          | job seeker             |
-  | software developer | jane.seeker@places.com |
+  | software developer | jane.seeker@gmail.com |
 
   @javascript
   Scenario: Job seeker applies to job
@@ -65,7 +65,7 @@ Given the following job applications exist:
 
     Then I am in Seeker's browser
     Given I am on the home page
-    And I login as "john.seeker@places.com" with password "password"
+    And I login as "john.seeker@gmail.com" with password "password"
     Then I should see "Signed in successfully"
     Then I click the "Jobs" link
     And I should see "software developer"
@@ -112,13 +112,16 @@ Given the following job applications exist:
 
   Scenario: Job seeker cannot re-apply to the same job
     Given I am on the home page
-    And I login as "john.seeker@places.com" with password "password"
+    And I login as "john.seeker@gmail.com" with password "password"
     Then I should see "Signed in successfully"
     Then I apply to "software developer" from Jobs link
     And I should see "Congratulations, you were able to apply with success"
     Then I click the "Jobs" link
     Then I click the "software developer" link
     And I should see "You already have an application submitted for this job."
+    When I click the "edit your profile" link
+    Then I should see "Update Your Profile"
+    And The field 'Email' should have the value 'john.seeker@gmail.com'
 
   Scenario: Company person should not be able to apply
     Given I am on the home page

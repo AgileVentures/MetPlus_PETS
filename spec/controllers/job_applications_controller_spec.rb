@@ -62,6 +62,11 @@ RSpec.describe JobApplicationsController, type: :controller do
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
   let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
 
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   describe 'GET #show' do
     let(:request) { get :show, id: valid_application }
 
@@ -101,8 +106,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before(:each) do
-          stub_cruncher_authenticate
-          stub_cruncher_job_create
           sign_in company_admin
         end
 
@@ -144,7 +147,10 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'PATCH #reject' do
-    let(:request) { patch :reject, id: valid_application }
+    let(:request) do
+      patch :reject, id: valid_application,
+                     reason_for_rejection: 'Skills did not match'
+    end
 
     context 'unauthenticated' do
       it_behaves_like 'unauthenticated request'
@@ -153,8 +159,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before(:each) do
-          stub_cruncher_authenticate
-          stub_cruncher_job_create
           sign_in company_admin
         end
 
@@ -177,6 +181,11 @@ RSpec.describe JobApplicationsController, type: :controller do
           before(:each) do
             expect_any_instance_of(JobApplication).to receive(:reject)
             request
+          end
+
+          it 'stores rejection in db' do
+            app = JobApplication.find(valid_application.id)
+            expect(app.reason_for_rejection).to eq 'Skills did not match'
           end
 
           it 'show a flash message of type notice' do
@@ -214,8 +223,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
 
     before(:each) do
-      stub_cruncher_authenticate
-      stub_cruncher_job_create
       xhr :get, :list, type: 'job_seeker-default', entity_id: job_seeker
     end
 

@@ -13,7 +13,7 @@ Background: seed data added to database
     | first_name| last_name| email                     | phone       | password | year_of_birth |job_seeker_status  |
     | Mike      | Smith    | mike.smith@gmail.com      | 345-890-7890| password | 1990          |Unemployed Seeking |
     | thomas    | jones    | tommy1@gmail.com          | 345-890-7890| password | 1990          |Unemployed Seeking |
-    | Jane      | Seeker   | jane.seeker@places.com    | 345-890-7890| password | 1990          |Unemployed Seeking |
+    | Jane      | Seeker   | jane.seeker@gmail.com    | 345-890-7890| password | 1990          |Unemployed Seeking |
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email          | job_email      | ein        | status |
@@ -41,7 +41,7 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com     |
     | Mime       | tommy1@gmail.com     |
 
-   
+
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | mike.smith@gmail.com |
@@ -146,7 +146,7 @@ Scenario: Agency and Company people actions
   # admin: delete jobseeker
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
-  Then I am on the JobSeeker Show page for "jane.seeker@places.com"
+  Then I am on the JobSeeker Show page for "jane.seeker@gmail.com"
   Then I click and accept the "Delete Job Seeker" button
   And I wait 1 second
   Then I should see "Jobseeker was deleted successfully."

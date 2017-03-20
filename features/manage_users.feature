@@ -14,20 +14,20 @@ Feature: Manage Users
     | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
     | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
-    Given the following user records:
-    | email               | password   | password_confirmation | first_name | last_name | phone          | confirmed_at                      |
-    | salemamba@gmail.com | secret1234 | secret1234            | salem      | amba      | (619) 123-1234 | "Sat, 14 Nov 2015 22:52:26 -0800" |
+    And  the following jobseekers exist:
+    | first_name | last_name | email                | phone        | password | year_of_birth | job_seeker_status  |
+    | Mike       | Smith     | mike.smith@gmail.com | 345-890-7890 | password | 1990          | Unemployed Seeking |
 
   Scenario Outline: Updating User successfully
     Given I am on the home page
-    And I am logged in as "<email>" with password "secret1234"
-    And   I visit profile for "salem"
+    And I am logged in as "<email>" with password "password"
+    And   I visit profile for "Mike"
     Then  I should see "Edit User"
 
       When  I fill in the fields:
       | Password              | newsecret1234 |
       | Password confirmation | newsecret1234 |
-      | Current password      | secret1234    |
+      | Current password      | password      |
       | First name            | Jon           |
       | Last name             | Doe           |
       | Phone                 | 714-123-1234  |
@@ -37,8 +37,8 @@ Feature: Manage Users
     And   I should verify the change of first_name "Jon", last_name "Doe" and phone "714-123-1234"
 
     Examples:
-      | email               |
-      | salemamba@gmail.com |
+      | email                |
+      | mike.smith@gmail.com |
 
   Scenario: One canceling login page
     Given I am on the Jobseeker Registration page
@@ -51,6 +51,7 @@ Feature: Manage Users
     And I press "Log In"
     Then I press "Cancel"
     And I should be on the home page
+
   # maybe fail after cancancan implementation
 
   # Scenario removed because now the users are redirected to they page
@@ -69,7 +70,6 @@ Feature: Manage Users
     | Password              | qwerty123       |
     | Password Confirmation | qwerty123       |
     And I select "1980" in select list "Year Of Birth"
-
     And I select "Employed Looking" in select list "Status"
     And I click the "Create Job seeker" button
     Then I should see "A message with a confirmation and link has been sent to your email address."
@@ -91,7 +91,6 @@ Scenario: Resend confirmation email - happy path
   | Password              | qwerty123       |
   | Password Confirmation | qwerty123       |
   And I select "1980" in select list "Year Of Birth"
-
   And I select "Employed Looking" in select list "Status"
   And I click the "Create Job seeker" button
   And I should see "A message with a confirmation and link has been sent to your email address."
@@ -115,7 +114,6 @@ Scenario: Resend confirmation email - sad path
   | Password              | qwerty123       |
   | Password Confirmation | qwerty123       |
   And I select "1980" in select list "Year Of Birth"
-
   And I select "Employed Looking" in select list "Status"
   And I click the "Create Job seeker" button
   And I should see "A message with a confirmation and link has been sent to your email address."
@@ -129,3 +127,35 @@ Scenario: Resend confirmation email - sad path
   And I click the "Resend confirmation instructions" button
   Then I should see "1 error prevented resending a confirmation email:"
   And I should see "Email was already confirmed, please try signing in"
+
+  @javascript
+  Scenario: Do not remember user on login
+    Given I am on the home page
+    Then I click the "Log In" link
+    And I fill in "user_email" with "mike.smith@gmail.com"
+    And I fill in "user_password" with "password"
+    And I click "Log in" button
+    Then I should not be remembered
+
+  @javascript
+  Scenario: Remember user on log in
+    Given I am on the home page
+    Then I click the "Log In" link
+    And I fill in "user_email" with "mike.smith@gmail.com"
+    And I fill in "user_password" with "password"
+    And I check "user_remember_me"
+    And I click "Log in" button
+    Then I should be remembered
+
+  @javascript
+  Scenario: User logs out
+    Given I am on the home page
+    Then I click the "Log In" link
+    And I fill in "user_email" with "mike.smith@gmail.com"
+    And I fill in "user_password" with "password"
+    And I check "user_remember_me"
+    And I click "Log in" button
+    Then I click the "dd_menu" link
+    And I log out
+    Then I wait for 1 second
+    Then I should be logged out
