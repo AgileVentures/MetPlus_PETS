@@ -89,7 +89,7 @@ When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
   # have the same selector (e.g., same label)
   if not ordinal
     if Capybara.current_driver == :poltergeist
-      find_link(link).trigger('click')
+      find('a', text: link).trigger('click')
     else
       click_link link
     end
