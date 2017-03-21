@@ -15,7 +15,7 @@
               %a(href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab")
                 Unassigned Company Tasks
           %li.active.in
-            %a(data-target=".tasks #tab2" aria-controls="tab2" role="tab" data-toggle="tab")
+            %a(href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab")
               Your Open Tasks
           - if @company_person.is_company_admin?(@company)
             %li
