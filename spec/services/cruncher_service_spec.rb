@@ -417,11 +417,12 @@ RSpec.describe CruncherService, type: :request do
       expect(CruncherService).to receive(:auth_token)
         .twice.and_call_original
 
-      file = fixture_file_upload('files/Janitor-Resume.doc')
+      file = File.new("spec/fixtures/#{testfile_word}")
       expect(CruncherService.upload_file(file,
                                          'Janitor-Resume.doc',
                                          'test_id')).to be true
     end
+
     it 'retries for expired auth_token - file download' do
       stub_cruncher_authenticate
       stub_cruncher_file_download_retry_auth(testfile_pdf)
