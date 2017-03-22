@@ -56,6 +56,23 @@
         %li
           %a{ href: '#js-without-cm', 'aria-controls' => 'js-without-cm', role: 'tab', data: { toggle: 'tab' } }
             Job Seekers without a Case Manager     
+    - if @agency_person.is_job_developer?(@agency)
+      %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
+        %li.active
+          %a{ data: { target: '.agency-people-home #js-as-jd', toggle: 'tab' }, 'aria-controls' => 'js-as-jd', role: 'tab' }
+            Your Job Seekers (as job developer)
+        %li
+          %a{ href: '#js-without-jd', 'aria-controls' => 'js-without-jd', role: 'tab', data: { toggle: 'tab' } }
+            Job Seekers without a Job Developer
+    - if @agency_person.is_case_manager?(@agency)
+      %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
+        %li.active
+          %a{ data: { target: '.agency-people-home #js-as-cm', toggle: 'tab' }, 'aria-controls' => 'js-as-cm', role: 'tab' }
+            Your Job Seekers (as case manager)
+        %li
+          %a{ href: '#js-without-cm', 'aria-controls' => 'js-without-cm', role: 'tab', data: { toggle: 'tab' } }
+            Job Seekers without a Case Manager
+      
     .tab-content
       - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
         .tab-pane.fade.in.active#js-as-jd{ role: 'tabpanel' }
@@ -82,4 +99,29 @@
           - else
             .pagination-div{ id: "agency_person-#{@people_type_without_cm}",
              data: { url: list_js_without_cm_agency_people_path(@agency_person.id,@people_type_without_cm) } }
-        
+      - if @agency_person.is_job_developer?(@agency)
+        .tab-pane.fade.in.active#js-as-jd{ role: 'tabpanel' }
+          - if @your_jobseekers_jd.empty?
+            %i There are no job seekers assigned to you yet.
+          - else
+            .pagination-div{ id: "agency_person-#{@people_type_jd}",
+             data: { url: list_js_jd_agency_people_path(@agency_person.id,@people_type_jd) } }
+        .tab-pane.fade#js-without-jd{ role: 'tabpanel' }
+          - if @js_without_jd.empty?
+            %i All job seekers have a Job Developer at the moment.
+          - else
+            .pagination-div{ id: "agency_person-#{@people_type_without_jd}",
+             data: { url: list_js_without_jd_agency_people_path(@agency_person.id,@people_type_without_jd) } }
+      - if @agency_person.is_case_manager?(@agency)
+        .tab-pane.fade.in.active#js-as-cm{ role: 'tabpanel' }
+          - if @your_jobseekers_cm.empty?
+            %i There are no job seekers assigned to you yet.
+          - else
+            .pagination-div{ id: "agency_person-#{@people_type_cm}",
+            data: { url: list_js_cm_agency_people_path(@agency_person.id,@people_type_cm) } }
+        .tab-pane.fade#js-without-cm{ role: 'tabpanel' }
+          - if @js_without_cm.empty?
+            %i All job seekers have a Case Manager at the moment.
+          - else
+            .pagination-div{ id: "agency_person-#{@people_type_without_cm}",
+             data: { url: list_js_without_cm_agency_people_path(@agency_person.id,@people_type_without_cm) } }
