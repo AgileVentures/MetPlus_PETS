@@ -20,15 +20,15 @@
       .tab-pane.fade.in.active#agency_table
         .col-xs-12.text-right
           = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
-            class: 'btn btn-primary'
+            class: 'btn btn-primary table_action_button'
         .col-xs-12.pad-0
           = render partial: 'agencies/agency', object: @agency
-          -# .clearfix
+          .clearfix
 
       .tab-pane.fade#branches_table
         .col-xs-12.text-right
           = button_to 'Add Branch', new_agency_branch_path(@agency.id),
-            method: :get, class: 'btn btn-primary'
+            method: :get, class: 'btn btn-primary table_action_button'
         .col-xs-12.pad-0
           - if @branches.empty?
             %h5 There are no branches.
@@ -41,7 +41,8 @@
           = link_to 'Invite Person',
             new_user_invitation_path(person_type: 'AgencyPerson',
             org_id: @agency.id),
-            method: :get, class: 'btn btn-primary btn-sm pull-right'
+            method: :get, class: 'btn btn-primary table_action_button'
+        .col-xs-12.pad-0
           - if @agency_people.empty?
             %h5 There are no agency people.
           - else
