@@ -82,6 +82,8 @@ Scenario: Case Manager actions
   And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
+  And I click the "Job Seekers without a Case Manager" link
+  And I wait 1 second
   And I click the "Worker, Wanda" link
   And I wait 1 second
   And I should not see "Janey Jones"
@@ -138,6 +140,8 @@ Scenario: Job Developer actions
   And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
+  And I click the "Job Seekers without a Job Developer" link
+  And I wait 1 second
   Then I click the "Worker, John" link
   And I wait 1 second
   And I should see "Assign Myself"
@@ -187,5 +191,8 @@ Scenario: Job seekers assigned to person as Job developer and case manager
   And I login as "mark@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'mark@metplus.org' Home page
   And I wait 1 second
-  And I should see "Seeker, Tom" between "Your Job Seekers (as job developer)" and "Your Job Seekers (as case manager)"
-  And I should see "Jones, Mary" after "Your Job Seekers (as case manager)"
+  And I should see "Your Job Seekers (as job developer)"
+  And I should see "Seeker, Tom"
+  And I click the "Your Job Seekers (as case manager)" link
+  And I wait 1 second
+  And I should see "Jones, Mary"
