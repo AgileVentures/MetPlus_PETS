@@ -49,24 +49,33 @@
 
 %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
   %li.active{ role: 'presentation' }
-    %a{ href: '#company-jobs-pane',  'aria-controls' => 'company-jobs', role: 'tab', data: { toggle: 'tab' } }
+    %a{ href: '#company-jobs-pane',
+        'aria-controls' => 'company-jobs', 
+        role: 'tab',
+        data: { toggle: 'tab' } }
       All #{@company.name} jobs
   %li{ role: 'presentation' }
-    %a{ href: '#company-users-pane',  'aria-controls' => 'company-users', role: 'tab', data: { toggle: 'tab' } }
+    %a{ href: '#company-users-pane',
+        'aria-controls' => 'company-users',
+        role: 'tab',
+        data: { toggle: 'tab' } }
       All #{@company.name} PETS Users
   %li{ role: 'presentation' }
-    %a{ href: '#company-information-pane',  'aria-controls' => 'company-information', role: 'tab', data: { toggle: 'tab' } }
+    %a{ href: '#company-information-pane',
+        'aria-controls' => 'company-information',
+        role: 'tab',
+        data: { toggle: 'tab' } }
       Company Information
 
 
 .tab-content
   .tab-pane.fade.in.active#company-jobs-pane{ role: 'panel' }
-    .pagination-div{id: "jobs-#{@job_type}",
-                    data: {url: list_jobs_path(@job_type)}}
+    .pagination-div{ id: "jobs-#{@job_type}",
+                    data: { url: list_jobs_path(@job_type) } }
 
   .tab-pane.fade#company-users-pane{ role: 'panel' }
-    .pagination-div{id: "people-#{@people_type}",
-                    data: {url: list_people_company_path(@company.id, @people_type)}}
+    .pagination-div{ id: "people-#{@people_type}",
+                    data: { url: list_people_company_path(@company.id, @people_type) } }
 
   .tab-pane.fade#company-information-pane{ role: 'panel' }
     .col-sm-8
