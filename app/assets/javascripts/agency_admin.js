@@ -267,45 +267,45 @@ var AgencyData = {
     $(modal_id).modal('hide');
   },
   setup_branches: function () {
-    $('#branches_table').on('click', '.pagination a',
+    $('#branches-table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_people: function () {
-    $('#people_table').on('click', '.pagination a',
+    $('#people-table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_companies: function () {
-    $('#companies_table').on('click', '.pagination a',
+    $('#companies-table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_job_categories: function () {
-    $('#job_categories_table').on('click', '.pagination a',
+    $('#job-categories-table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_skills: function () {
-    $('#skills_table').on('click', '.pagination a',
+    $('#skills-table').on('click', '.pagination a',
                             ManageData.update_paginate_data);
   },
   setup_manage_job_category: function () {
     $('#add_job_category_button').click(AgencyData.add_job_category);
-    $('#job_categories_table').on('click',
+    $('#job-categories-table').on('click',
                   // bind to 'edit category' anchor element
                   "a[href^='/job_categories/'][data-method='edit']",
                                 AgencyData.edit_job_category);
     $('#update_job_category_button').click(AgencyData.update_job_category);
-    $('#job_categories_table').on('click',
+    $('#job-categories-table').on('click',
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
                                 AgencyData.delete_job_category);
   },
   setup_manage_skill: function () {
     $('#add_skill_button').click(AgencyData.add_skill);
-    $('#skills_table').on('click',
+    $('#skills-table').on('click',
                   // bind to 'edit skill' anchor element
                   "a[href^='/skills/'][data-method='edit']",
                                 AgencyData.edit_skill);
     $('#update_skill_button').click(AgencyData.update_skill);
-    $('#skills_table').on('click',
+    $('#skills-table').on('click',
                   // bind to 'delete category' anchor element
                   "a[data-method='delete']",
                                 AgencyData.delete_skill);
