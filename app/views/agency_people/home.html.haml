@@ -38,8 +38,6 @@
           .tab-pane#tab4{ role: 'tabpanel' }
             = render partial: 'tasks/tasks_structure' , :locals => { task_type: @agency_closed }
       .clearfix
-
-
 .row
   .col-sm-10.col-sm-offset-1.agency-people-home
     - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
@@ -49,13 +47,13 @@
             Your Job Seekers (as job developer)
         %li
           %a{ href: '#js-as-cm', 'aria-controls' => 'js-as-cm', role: 'tab', data: { toggle: 'tab' } }
-            Your Job Seekers (as case manager)     
+            Your Job Seekers (as case manager)
         %li
           %a{ href: '#js-without-jd', 'aria-controls' => 'js-without-jd', role: 'tab', data: { toggle: 'tab' } }
-            Job Seekers without a Job Developer     
+            Job Seekers without a Job Developer
         %li
           %a{ href: '#js-without-cm', 'aria-controls' => 'js-without-cm', role: 'tab', data: { toggle: 'tab' } }
-            Job Seekers without a Case Manager     
+            Job Seekers without a Case Manager
     - if @agency_person.is_job_developer?(@agency)
       %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
         %li.active
@@ -72,7 +70,6 @@
         %li
           %a{ href: '#js-without-cm', 'aria-controls' => 'js-without-cm', role: 'tab', data: { toggle: 'tab' } }
             Job Seekers without a Case Manager
-      
     .tab-content
       - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
         .tab-pane.fade.in.active#js-as-jd{ role: 'tabpanel' }
