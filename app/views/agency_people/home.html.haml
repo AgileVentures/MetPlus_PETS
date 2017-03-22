@@ -1,10 +1,10 @@
 - provide(:person_home_active, 'active')
 .row
-  .col-sm-10.col-sm-offset-1
+  .col-sm-12
     %h2
       = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
 .row
-  .col-sm-10.col-sm-offset-1
+  .col-sm-12
     .panel.with-nav-tabs.panel-success
       .panel-heading
         %ul.nav.nav-tabs{ role: 'tablist' }
@@ -39,7 +39,7 @@
             = render partial: 'tasks/tasks_structure' , :locals => { task_type: @agency_closed }
       .clearfix
 .row
-  .col-sm-10.col-sm-offset-1.agency-people-home
+  .col-sm-12.agency-people-home
     - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
       %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
         %li.active
