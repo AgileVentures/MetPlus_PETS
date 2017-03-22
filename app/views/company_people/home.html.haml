@@ -11,16 +11,6 @@
                     method: :get, class: 'btn btn-primary btn-sm pull-right'
 
 .clearfix
-.col-sm-3
-  %h4 Company Information
-  %a(id='toggle_company_info' href='#company_info_table' class='text-danger'
-              style='padding-left: 10px;')
-    Hide Company Information
-.col-sm-9
-  = render partial: 'companies/company_info',
-            locals: {company: @company,
-                     admin_aa: @admin_aa,
-                     company_admins: @company_admins}
 
 .col-sm-12
   %div.panel.with-nav-tabs.panel-success
@@ -57,20 +47,39 @@
         .tab-pane#tab4(role="tabpanel")
           = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_closed}
 
-.col-sm-12
-  %h3 All #{@company.name} jobs
-  .pagination-div{id: "jobs-#{@job_type}",
-                  data: {url: list_jobs_path(@job_type)}}
+%ul.nav.nav-pills.custom-pills{ role: 'tablist' }
+  %li.active{ role: 'presentation' }
+    %a{ href: '#company-jobs-pane',  'aria-controls' => 'company-jobs', role: 'tab', data: { toggle: 'tab' } }
+      All #{@company.name} jobs
+  %li{ role: 'presentation' }
+    %a{ href: '#company-users-pane',  'aria-controls' => 'company-users', role: 'tab', data: { toggle: 'tab' } }
+      All #{@company.name} PETS Users
+  %li{ role: 'presentation' }
+    %a{ href: '#company-information-pane',  'aria-controls' => 'company-information', role: 'tab', data: { toggle: 'tab' } }
+      Company Information
+
+
+.tab-content
+  .tab-pane.fade.in.active#company-jobs-pane{ role: 'panel' }
+    .pagination-div{id: "jobs-#{@job_type}",
+                    data: {url: list_jobs_path(@job_type)}}
+
+  .tab-pane.fade#company-users-pane{ role: 'panel' }
+    .pagination-div{id: "people-#{@people_type}",
+                    data: {url: list_people_company_path(@company.id, @people_type)}}
+
+  .tab-pane.fade#company-information-pane{ role: 'panel' }
+    .col-sm-8
+      = render partial: 'companies/company_info',
+                locals: {company: @company,
+                         admin_aa: @admin_aa,
+                         company_admins: @company_admins}
 
 .col-sm-9
-  %h3 All #{@company.name} people who are on PETS
+  %h3
 - if @company_person.is_company_admin? @company
   .col-sm-3{style: 'margin-top: 20px;'}
     = link_to 'Invite Colleague',
                   new_user_invitation_path(person_type: 'CompanyPerson',
                   org_id: pets_user.company.id),
                   method: :get, class: 'btn btn-primary btn-sm pull-right'
-
-.col-sm-12
-  .pagination-div{id: "people-#{@people_type}",
-                  data: {url: list_people_company_path(@company.id, @people_type)}}

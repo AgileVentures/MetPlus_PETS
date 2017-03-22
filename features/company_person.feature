@@ -63,6 +63,7 @@ Feature: Company Person
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
     And I wait 1 second
+    Then I click the "All Widgets Inc. PETS Users" link
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
     And I should see button "Delete Person"
@@ -72,6 +73,7 @@ Feature: Company Person
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
     And I wait 1 second
+    Then I click the "All Widgets Inc. PETS Users" link
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
     And I should see button "Delete Person"
@@ -107,7 +109,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
-  
+
   Scenario: company admin login and edit email from home page
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
@@ -135,7 +137,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Mary"
-  
+
   Scenario: company contact cancel out of edit profile
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
