@@ -350,7 +350,7 @@ RSpec.describe TasksController, type: :controller do
 
         it 'check task status' do
           subject
-          expect(subject.body).not_to include("No outstanding tasks")
+          expect(subject.body).not_to include('No outstanding tasks')
         end
       end
     end
