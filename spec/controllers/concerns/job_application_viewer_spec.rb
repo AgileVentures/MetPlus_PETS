@@ -95,14 +95,14 @@ RSpec.describe TestJobApplicationsViewerClass do
       end
     end
     describe 'All applications for a job seeker' do
-      context 'Job seeker never applied' do
+      context 'that never applied' do
         it 'return empty list' do
           expect(subject
            .display_job_applications('job_seeker-default',
                                     job_seeker1.id)).to eq([])
         end
       end
-      context 'Job Seeker applied to one job' do
+      context 'that applied to one job' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -117,7 +117,7 @@ RSpec.describe TestJobApplicationsViewerClass do
            .to eq([@job_application])
         end
       end
-      context 'Job Seeker applied to multiple jobs' do
+      context 'that applied to multiple jobs' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -154,6 +154,79 @@ RSpec.describe TestJobApplicationsViewerClass do
 
           it 'found 3 job applications' do
             expect(result.count).to be(3)
+          end
+
+          it 'return first job application' do
+            expect(result).to include(@job_application)
+          end
+        end
+      end
+    end
+    describe 'Application to a Job by Job Seekers related to the current Job Developer' do
+      before(:each) do
+        allow(subject).to receive(:pets_user).and_return(job_developer)
+      end
+      context 'no applications' do
+        it 'return empty list' do
+          expect(subject
+           .display_job_applications('job-job-developer',
+                                    job.id)).to eq([])
+        end
+      end
+      context 'one application' do
+        before(:each) do
+          job_seeker1.assign_job_developer(job_developer, agency)
+          @job_application = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker1,
+            :job => job)
+        end
+
+        it 'return one job application' do
+          expect(subject
+           .display_job_applications('job-job-developer',
+                                     job.id))
+           .to eq([@job_application])
+        end
+      end
+      context 'two applications' do
+        before(:each) do
+          job_seeker1.assign_job_developer(job_developer, agency)
+          job_seeker2.assign_job_developer(job_developer, agency)
+          @job_application = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker1,
+            :job => job)
+          @job_application1 = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker2,
+            :job => job)
+          @job_application2 = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker3,
+            :job => job)
+        end
+
+        context 'using default restriction of applications per page' do
+          it 'return 2 job applications' do
+              expect(subject
+               .display_job_applications('job-job-developer',
+                                         job.id))
+               .to include(@job_application,
+                            @job_application1)
+          end
+        end
+
+        context 'restricting 1 applications per page' do
+          let(:result) {subject
+           .display_job_applications('job-job-developer',
+                                     job.id, 1)}
+          it 'return 1 job application' do
+            expect(result.size).to be(1)
+          end
+
+          it 'found 2 job applications' do
+            expect(result.count).to be(2)
           end
 
           it 'return first job application' do
