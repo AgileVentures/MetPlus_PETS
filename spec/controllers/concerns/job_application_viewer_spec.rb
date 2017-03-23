@@ -235,5 +235,72 @@ RSpec.describe TestJobApplicationsViewerClass do
         end
       end
     end
+    describe 'When a Company person retrieve applications to a Job' do
+      context 'no applications' do
+        it 'return empty list' do
+          expect(subject
+           .display_job_applications('job-company-person',
+                                    job.id)).to eq([])
+        end
+      end
+      context 'one application' do
+        before(:each) do
+          @job_application = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker1,
+            :job => job)
+        end
+
+        it 'return one job application' do
+          expect(subject
+           .display_job_applications('job-company-person',
+                                     job.id))
+           .to eq([@job_application])
+        end
+      end
+      context 'two applications' do
+        before(:each) do
+          @job_application = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker1,
+            :job => job)
+          @job_application1 = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker2,
+            :job => job)
+          @job_application2 = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker3,
+            :job => job1)
+        end
+
+        context 'using default restriction of applications per page' do
+          it 'return 2 job applications' do
+              expect(subject
+               .display_job_applications('job-company-person',
+                                         job.id))
+               .to include(@job_application,
+                            @job_application1)
+          end
+        end
+
+        context 'restricting 1 applications per page' do
+          let(:result) {subject
+           .display_job_applications('job-company-person',
+                                     job.id, 1)}
+          it 'return 1 job application' do
+            expect(result.size).to be(1)
+          end
+
+          it 'found 2 job applications' do
+            expect(result.count).to be(2)
+          end
+
+          it 'return first job application' do
+            expect(result).to include(@job_application)
+          end
+        end
+      end
+    end
   end
 end
