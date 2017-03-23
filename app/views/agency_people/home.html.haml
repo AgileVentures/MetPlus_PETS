@@ -4,23 +4,23 @@
     %h2
       = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
 .row
-  .col-sm-12
+  .col-sm-10.col-sm-offset-1.tasks
     .panel.with-nav-tabs.panel-success
       .panel-heading
-        %ul.nav.nav-tabs{ role: 'tablist' }
+        %ul.nav.nav-tabs
           - if @agency_person.is_agency_admin?(@agency)
-            %li{ role: 'presentation' }
-              %a{ href: '#tab1', 'aria-controls' => 'tab1', role: 'tab', data: { toggle: 'tab' } }
+            %li
+              %a{ href: '#tab1', data: { target: '.tasks #tab1', toggle: 'pill' } }
                 Unassigned Agency Tasks
-          %li.active.in{ role: 'presentation' }
-            %a{ data: { target: '.tasks #tab2', toggle: 'tab' }, 'aria-controls' => 'tab2', role: 'tab' }
+          %li.active.in
+            %a{ href: '#tab2', data: { target: '.tasks #tab2', toggle: 'pill' } }
               Your Open Tasks
           - if @agency_person.is_agency_admin?(@agency)
-            %li{ role: 'presentation' }
-              %a{ href: '#tab3', 'aria-controls' => 'tab3', role: 'tab', data: { toggle: 'tab' } }
+            %li
+              %a{ href: '#tab3', data: { target: '.tasks #tab3', toggle: 'pill' } }
                 All Agency Open Tasks
-          %li{ role: 'presentation' }
-            %a{ href: '#tab4', 'aria-controls' => 'tab4', role: 'tab', data: { toggle: 'tab' } }
+          %li
+            %a{ href: '#tab4', data: { target: '.tasks #tab4', toggle: 'pill' } }
               - if @agency_person.is_agency_admin?(@agency)
                 All Agency Closed Tasks
               - if !@agency_person.is_agency_admin?(@agency)
@@ -28,51 +28,51 @@
       .panel-body
         .tab-content
           - if @agency_person.is_agency_admin?(@agency)
-            .tab-pane#tab1{ role: 'tabpanel' }
+            .tab-pane#tab1
               = render partial: 'tasks/tasks_structure' , :locals => { task_type: @agency_new }
-          .tab-pane.active#tab2{ role: 'tabpanel' }
+          .tab-pane.active#tab2
             = render partial: 'tasks/tasks_structure' , :locals => { task_type: @task_type }
           - if @agency_person.is_agency_admin?(@agency)
-            .tab-pane#tab3{ role: 'tabpanel' }
+            .tab-pane#tab3
               = render partial: 'tasks/tasks_structure' , :locals => { task_type: @agency_all }
-          .tab-pane#tab4{ role: 'tabpanel' }
+          .tab-pane#tab4
             = render partial: 'tasks/tasks_structure' , :locals => { task_type: @agency_closed }
       .clearfix
 .row
   .col-sm-12.agency-people-home
     - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
-      %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
+      %ul.nav.nav-pills.custom-pills
+        %li.active
+          %a{ href: '#js-as-jd', data: { target: '.agency-people-home #js-as-jd', toggle: 'tab' } }
+            Your Job Seekers (as JD)
+        %li
+          %a{ href: '#js-as-cm', data: { target: '.agency-people-home #js-as-cm', toggle: 'tab' } }
+            Your Job Seekers (as CM)
+        %li
+          %a{ href: '#js-without-jd', data: { target: '.agency-people-home #js-without-jd', toggle: 'tab' } }
+            Job Seekers without a JD
+        %li
+          %a{ href: '#js-without-cm', data: { target: '.agency-people-home #js-without-cm', toggle: 'tab' } }
+            Job Seekers without a CM
+    - elsif @agency_person.is_job_developer?(@agency)
+      %ul.nav.nav-pills.custom-pills
         %li.active
           %a{ data: { target: '.agency-people-home #js-as-jd', toggle: 'tab' }, 'aria-controls' => 'js-as-jd', role: 'tab' }
-            Your Job Seekers (as job developer)
-        %li
-          %a{ href: '#js-as-cm', 'aria-controls' => 'js-as-cm', role: 'tab', data: { toggle: 'tab' } }
-            Your Job Seekers (as case manager)
+            Your Job Seekers (as JD)
         %li
           %a{ href: '#js-without-jd', 'aria-controls' => 'js-without-jd', role: 'tab', data: { toggle: 'tab' } }
-            Job Seekers without a Job Developer
-        %li
-          %a{ href: '#js-without-cm', 'aria-controls' => 'js-without-cm', role: 'tab', data: { toggle: 'tab' } }
-            Job Seekers without a Case Manager
-    - if @agency_person.is_job_developer?(@agency) && !@agency_person.is_case_manager?(@agency)
-      %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
-        %li.active
-          %a{ data: { target: '.agency-people-home #js-as-jd', toggle: 'tab' }, 'aria-controls' => 'js-as-jd', role: 'tab' }
-            Your Job Seekers (as job developer)
-        %li
-          %a{ href: '#js-without-jd', 'aria-controls' => 'js-without-jd', role: 'tab', data: { toggle: 'tab' } }
-            Job Seekers without a Job Developer
-    - if @agency_person.is_case_manager?(@agency) && !@agency_person.is_job_developer?(@agency)
-      %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
+            Job Seekers without a JD
+    - elsif @agency_person.is_case_manager?(@agency)
+      %ul.nav.nav-pills.custom-pills
         %li.active
           %a{ data: { target: '.agency-people-home #js-as-cm', toggle: 'tab' }, 'aria-controls' => 'js-as-cm', role: 'tab' }
-            Your Job Seekers (as case manager)
+            Your Job Seekers (as CM)
         %li
           %a{ href: '#js-without-cm', 'aria-controls' => 'js-without-cm', role: 'tab', data: { toggle: 'tab' } }
-            Job Seekers without a Case Manager
+            Job Seekers without a CM
     .tab-content
       - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
-        .tab-pane.fade.in.active#js-as-jd{ role: 'tabpanel' }
+        .tab-pane.fade.in.active#js-as-jd
           - if @your_jobseekers_jd.empty?
             %i There are no job seekers assigned to you yet.
           - else
@@ -84,39 +84,39 @@
           - else
             .pagination-div{ id: "agency_person-#{@people_type_cm}",
             data: { url: list_js_cm_agency_people_path(@agency_person.id,@people_type_cm) } }
-        .tab-pane.fade#js-without-jd{ role: 'tabpanel' }
+        .tab-pane.fade#js-without-jd
           - if @js_without_jd.empty?
             %i All job seekers have a Job Developer at the moment.
           - else
             .pagination-div{ id: "agency_person-#{@people_type_without_jd}",
              data: { url: list_js_without_jd_agency_people_path(@agency_person.id,@people_type_without_jd) } }
-        .tab-pane.fade#js-without-cm{ role: 'tabpanel' }
+        .tab-pane.fade#js-without-cm
           - if @js_without_cm.empty?
             %i All job seekers have a Case Manager at the moment.
           - else
             .pagination-div{ id: "agency_person-#{@people_type_without_cm}",
              data: { url: list_js_without_cm_agency_people_path(@agency_person.id,@people_type_without_cm) } }
-      - if @agency_person.is_job_developer?(@agency) && !@agency_person.is_case_manager?(@agency)
-        .tab-pane.fade.in.active#js-as-jd{ role: 'tabpanel' }
+      - if @agency_person.is_job_developer?(@agency)
+        .tab-pane.fade.in.active#js-as-jd
           - if @your_jobseekers_jd.empty?
             %i There are no job seekers assigned to you yet.
           - else
             .pagination-div{ id: "agency_person-#{@people_type_jd}",
              data: { url: list_js_jd_agency_people_path(@agency_person.id,@people_type_jd) } }
-        .tab-pane.fade#js-without-jd{ role: 'tabpanel' }
+        .tab-pane.fade#js-without-jd
           - if @js_without_jd.empty?
             %i All job seekers have a Job Developer at the moment.
           - else
             .pagination-div{ id: "agency_person-#{@people_type_without_jd}",
              data: { url: list_js_without_jd_agency_people_path(@agency_person.id,@people_type_without_jd) } }
-      - if @agency_person.is_case_manager?(@agency) && !@agency_person.is_job_developer?(@agency)
-        .tab-pane.fade.in.active#js-as-cm{ role: 'tabpanel' }
+      - if @agency_person.is_case_manager?(@agency)
+        .tab-pane.fade.in.active#js-as-cm
           - if @your_jobseekers_cm.empty?
             %i There are no job seekers assigned to you yet.
           - else
             .pagination-div{ id: "agency_person-#{@people_type_cm}",
             data: { url: list_js_cm_agency_people_path(@agency_person.id,@people_type_cm) } }
-        .tab-pane.fade#js-without-cm{ role: 'tabpanel' }
+        .tab-pane.fade#js-without-cm
           - if @js_without_cm.empty?
             %i All job seekers have a Case Manager at the moment.
           - else
