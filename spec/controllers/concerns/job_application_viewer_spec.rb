@@ -8,12 +8,10 @@ end
 RSpec.describe TestJobApplicationsViewerClass do
   describe '#display_job_application' do
     let!(:agency) { FactoryGirl.create(:agency) }
-    let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
     let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
     let(:company)       { FactoryGirl.create(:company, agencies: [agency]) }
     let(:company1)       { FactoryGirl.create(:company, agencies: [agency]) }
     let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-    let(:cmpy_person)   { FactoryGirl.create(:company_contact, company: company) }
     let(:job_seeker1)   { FactoryGirl.create(:job_seeker) }
     let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
     let(:job_seeker3)   { FactoryGirl.create(:job_seeker) }
@@ -21,7 +19,6 @@ RSpec.describe TestJobApplicationsViewerClass do
     let(:job1)           { FactoryGirl.create(:job, company: company) }
     let(:job2)           { FactoryGirl.create(:job, company: company) }
     let(:company1_job1)  { FactoryGirl.create(:job, company: company1) }
-    let(:company1_job2)  { FactoryGirl.create(:job, company: company1) }
 
     let!(:stub) do
       stub_cruncher_authenticate
@@ -29,19 +26,28 @@ RSpec.describe TestJobApplicationsViewerClass do
       stub_cruncher_job_update
     end
 
-    before(:each) do
-      allow(subject).to receive(:pets_user).and_return(company_admin)
-    end
 
-    describe 'All applications from a JS to a specific company' do
-      context 'Job seeker never applied to current company' do
+    describe 'When Company Admin check applications from a specific JS' do
+      before(:each) do
+        allow(subject).to receive(:pets_user).and_return(company_admin)
+      end
+
+      context 'When Job Seeker did not apply to the company' do
+        before(:each) do
+          @job_application = FactoryGirl.create(
+            :job_application,
+            :job_seeker => job_seeker1,
+            :job => company1_job1)
+        end
+
         it 'return empty list' do
           expect(subject
            .display_job_applications('job_seeker-company-person',
                                     job_seeker1.id)).to eq([])
         end
       end
-      context 'One Job Seeker applied' do
+
+      context 'When Job Seeker applied to one Job' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -56,7 +62,8 @@ RSpec.describe TestJobApplicationsViewerClass do
            .to eq([@job_application])
         end
       end
-      context 'Job Seeker applied to multiple jobs' do
+
+      context 'When JS applied to multiple jobs in different companies' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -71,7 +78,8 @@ RSpec.describe TestJobApplicationsViewerClass do
             :job_seeker => job_seeker1,
             :job => job2)
         end
-        context 'using default restriction of applications per page' do
+
+        context 'When no Application per page restriction is set' do
           it 'return 3 job applications' do
               expect(subject
                .display_job_applications('job_seeker-company-person',
@@ -81,28 +89,34 @@ RSpec.describe TestJobApplicationsViewerClass do
                             @job_application2)
           end
         end
-        context 'restricting 1 applications per page' do
+
+        context 'When restrict 1 Applications per page' do
           let(:result) {subject
            .display_job_applications('job_seeker-company-person',
                                      job_seeker1.id, 1)}
+
           it 'return 1 job application' do
               expect(result.size).to be(1)
           end
+
           it 'return first job application' do
               expect(result).to include(@job_application)
           end
         end
       end
     end
-    describe 'All applications for a job seeker' do
-      context 'that never applied' do
+
+    describe 'When retrieving applications for Job Seeker' do
+
+      context 'When never applied' do
         it 'return empty list' do
           expect(subject
            .display_job_applications('job_seeker-default',
                                     job_seeker1.id)).to eq([])
         end
       end
-      context 'that applied to one job' do
+
+      context 'When applied to one job' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -117,7 +131,8 @@ RSpec.describe TestJobApplicationsViewerClass do
            .to eq([@job_application])
         end
       end
-      context 'that applied to multiple jobs' do
+
+      context 'When applied to multiple jobs' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -133,7 +148,7 @@ RSpec.describe TestJobApplicationsViewerClass do
             :job => company1_job1)
         end
 
-        context 'using default restriction of applications per page' do
+        context 'When no Application per page restriction is set' do
           it 'return 3 job applications' do
               expect(subject
                .display_job_applications('job_seeker-default',
@@ -144,7 +159,7 @@ RSpec.describe TestJobApplicationsViewerClass do
           end
         end
 
-        context 'restricting 1 applications per page' do
+        context 'When restrincting 1 applications per page' do
           let(:result) {subject
            .display_job_applications('job_seeker-default',
                                      job_seeker1.id, 1)}
@@ -162,18 +177,21 @@ RSpec.describe TestJobApplicationsViewerClass do
         end
       end
     end
-    describe 'Application to a Job by Job Seekers related to the current Job Developer' do
+
+    describe 'Application to a Job by JS related to the current JD' do
       before(:each) do
         allow(subject).to receive(:pets_user).and_return(job_developer)
       end
-      context 'no applications' do
+
+      context 'When no Job Seeker applicated' do
         it 'return empty list' do
           expect(subject
            .display_job_applications('job-job-developer',
                                     job.id)).to eq([])
         end
       end
-      context 'one application' do
+
+      context 'When 1 Job Seeker applied' do
         before(:each) do
           job_seeker1.assign_job_developer(job_developer, agency)
           @job_application = FactoryGirl.create(
@@ -189,7 +207,8 @@ RSpec.describe TestJobApplicationsViewerClass do
            .to eq([@job_application])
         end
       end
-      context 'two applications' do
+
+      context 'When 2 Job Seekers applied' do
         before(:each) do
           job_seeker1.assign_job_developer(job_developer, agency)
           job_seeker2.assign_job_developer(job_developer, agency)
@@ -207,7 +226,7 @@ RSpec.describe TestJobApplicationsViewerClass do
             :job => job)
         end
 
-        context 'using default restriction of applications per page' do
+        context 'When no Application per page restriction is set' do
           it 'return 2 job applications' do
               expect(subject
                .display_job_applications('job-job-developer',
@@ -217,7 +236,7 @@ RSpec.describe TestJobApplicationsViewerClass do
           end
         end
 
-        context 'restricting 1 applications per page' do
+        context 'When restricting 1 applications per page' do
           let(:result) {subject
            .display_job_applications('job-job-developer',
                                      job.id, 1)}
@@ -235,15 +254,17 @@ RSpec.describe TestJobApplicationsViewerClass do
         end
       end
     end
+
     describe 'When a Company person retrieve applications to a Job' do
-      context 'no applications' do
+      context 'When no Job Seeker applied' do
         it 'return empty list' do
           expect(subject
            .display_job_applications('job-company-person',
                                     job.id)).to eq([])
         end
       end
-      context 'one application' do
+
+      context 'When 1 Job Seeker applied' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -258,7 +279,8 @@ RSpec.describe TestJobApplicationsViewerClass do
            .to eq([@job_application])
         end
       end
-      context 'two applications' do
+
+      context 'When 2 Job Seekers applied' do
         before(:each) do
           @job_application = FactoryGirl.create(
             :job_application,
@@ -274,7 +296,7 @@ RSpec.describe TestJobApplicationsViewerClass do
             :job => job1)
         end
 
-        context 'using default restriction of applications per page' do
+        context 'When no Application per page restriction is set' do
           it 'return 2 job applications' do
               expect(subject
                .display_job_applications('job-company-person',
@@ -284,7 +306,7 @@ RSpec.describe TestJobApplicationsViewerClass do
           end
         end
 
-        context 'restricting 1 applications per page' do
+        context 'When restricting 1 applications per page' do
           let(:result) {subject
            .display_job_applications('job-company-person',
                                      job.id, 1)}
