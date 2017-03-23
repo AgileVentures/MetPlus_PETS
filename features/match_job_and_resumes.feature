@@ -73,7 +73,6 @@ Feature: Match a Job to a Job Seeker's Résumé
     And I should see "Match against my Résumé"
     Then I click the "Match against my Résumé" link
     And I wait 2 seconds
-    And I save the page as "ss.png"
     Then I should see "Job match against your résumé"
     And I should see "1.3 stars"
     Then I click the "Close" button
