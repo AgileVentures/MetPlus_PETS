@@ -2,10 +2,7 @@
 .row
   .col-sm-12
     %h2
-      // silence haml-lint to allow string interpolation
-      -# haml-lint:disable UnnecessaryStringOutput
       = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
-      -# haml-lint:enable UnnecessaryStringOutput
 .row
   .col-sm-10.col-sm-offset-1.tasks
     .panel.with-nav-tabs.panel-success
@@ -51,8 +48,7 @@
       .clearfix
 .row
   .col-sm-10.col-sm-offset-1.agency-people-home
-    - if @agency_person.is_job_developer?(@agency) && |
-         @agency_person.is_case_manager?(@agency)     |
+    - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
       %ul.nav.nav-pills.custom-pills
         %li.active
           %a{ href: '#js-as-jd',
@@ -99,15 +95,14 @@
                       toggle: 'tab' } }
             Job Seekers without a CM
     .tab-content
-      - if @agency_person.is_job_developer?(@agency) && |
-           @agency_person.is_case_manager?(@agency)     |
+      - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
         .tab-pane.fade.in.active#js-as-jd
           - if @your_jobseekers_jd.empty?
             %i There are no job seekers assigned to you yet.
           - else
-            .pagination-div{ id: "agency_person-#{@people_type_jd}", 
+            .pagination-div{ id: "agency_person-#{@people_type_jd}",
             data: { url: list_js_jd_agency_people_path(@agency_person.id,@people_type_jd) } }
-        .tab-pane.fade#js-as-cm{ role: 'tabpanel' }
+        .tab-pane.fade#js-as-cm
           - if @your_jobseekers_cm.empty?
             %i There are no job seekers assigned to you yet.
           - else
