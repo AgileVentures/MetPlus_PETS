@@ -115,7 +115,6 @@ RSpec.describe TestJobApplicationsViewerClass do
                                     job_seeker1.id)).to eq([])
         end
       end
-
       context 'When applied to one job' do
         before(:each) do
           @job_application = FactoryGirl.create(
