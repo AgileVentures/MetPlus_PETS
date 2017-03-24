@@ -8,16 +8,16 @@
   .col-sm-10.col-sm-offset-1.agency-admin-container
     %ul.nav.nav-pills
       %li.active
-        %a{ data: { toggle: 'pill' }, href: '#agency-table' }Agency Information
+        %a{ data: { toggle: 'pill' }, href: '#agency_table' }Agency Information
       %li
-        %a{ data: { toggle: 'pill' }, href: '#branches-table' }Agency Branches
+        %a{ data: { toggle: 'pill' }, href: '#branches_table' }Agency Branches
       %li
-        %a{ data: { toggle: 'pill' }, href: '#people-table' }Agency Personnel
+        %a{ data: { toggle: 'pill' }, href: '#people_table' }Agency Personnel
       %li
-        %a{ data: { toggle: 'pill' }, href: '#companies-table' }Companies
+        %a{ data: { toggle: 'pill' }, href: '#companies_table' }Companies
 
     .tab-content
-      .tab-pane.fade.in.active#agency-table
+      .tab-pane.fade.in.active#agency_table
         .col-xs-12.text-right
           = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
             class: 'btn btn-primary table_action_button'
@@ -25,7 +25,7 @@
         = render partial: 'agencies/agency', object: @agency
         .clearfix
 
-      .tab-pane.fade#branches-table
+      .tab-pane.fade#branches_table
         .col-xs-12.text-right
           = button_to 'Add Branch', new_agency_branch_path(@agency.id),
             method: :get, class: 'btn btn-primary table_action_button'
@@ -36,7 +36,7 @@
             = render 'branches/branches'
         .clearfix
 
-      .tab-pane.fade#people-table
+      .tab-pane.fade#people_table
         .col-xs-12.text-right
           = link_to 'Invite Person',
             new_user_invitation_path(person_type: 'AgencyPerson',
@@ -49,7 +49,7 @@
             = render 'agency_people/agency_people'
         .clearfix
 
-      .tab-pane.fade#companies-table
+      .tab-pane.fade#companies_table
         .col-xs-12.pad-0
           - if @companies.empty?
             %h5 There are no companies.
