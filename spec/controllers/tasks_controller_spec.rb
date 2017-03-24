@@ -1,23 +1,55 @@
 require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
-  describe 'PATCH #assign' do
+  describe 'GET #index' do
     describe 'successful' do
       before :each do
         agency = FactoryGirl.create(:agency)
-        FactoryGirl.create(:agency_admin, agency: agency)
+        @aa = FactoryGirl.create(:agency_admin, agency: agency)
         @jd1 = FactoryGirl.create(:job_developer, agency: agency)
         @jd2 = FactoryGirl.create(:job_developer, agency: agency)
         @jd3 = FactoryGirl.create(:job_developer, agency: agency)
         @jd4 = FactoryGirl.create(:job_developer, agency: agency)
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
-        sign_in @jd1
+        sign_in @aa
       end
 
-      subject { xhr :patch, :assign, { id: @task.id }, format: :json }
+      subject { xhr :get, :index }
       it 'returns http success' do
-        expect(response).to have_http_status(:success)
+        expect(subject).to have_http_status(:success)
+      end
+      it 'render template index' do
+        expect(subject).to render_template(:index)
+      end
+    end
+  end
+
+  describe 'PATCH #assign' do
+    describe 'successful' do
+      before :each do
+        agency = FactoryGirl.create(:agency)
+        @aa = FactoryGirl.create(:agency_admin, agency: agency)
+        @jd1 = FactoryGirl.create(:job_developer, agency: agency)
+        @jd2 = FactoryGirl.create(:job_developer, agency: agency)
+        @jd3 = FactoryGirl.create(:job_developer, agency: agency)
+        @jd4 = FactoryGirl.create(:job_developer, agency: agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        sign_in @aa
+      end
+
+      subject { xhr :patch, :assign, { id: @task.id, to: @jd1.id }, format: :json }
+      it 'returns http success' do
+        expect(subject).to have_http_status(:success)
+      end
+      it 'returns the message "Task assigned"' do
+        expect(subject.body).to eq({ message: 'Task assigned' }.to_json)
+      end
+      it 'assigned task to jd1' do
+        subject
+        @task.reload
+        expect(@task.task_owner).to eq(@jd1)
       end
     end
 
@@ -292,6 +324,33 @@ RSpec.describe TasksController, type: :controller do
       context 'job seeker' do
         it_behaves_like 'unauthorized XHR request' do
           let(:user) { FactoryGirl.create(:job_seeker) }
+        end
+      end
+    end
+
+    describe 'success' do
+      before(:each) do
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:agency_admin, agency: agency)
+        @jd1 = FactoryGirl.create(:job_developer, agency: agency)
+        js = FactoryGirl.create(:job_seeker)
+        @task = Task.new_js_unassigned_jd_task js, agency
+        sign_in @jd1
+      end
+
+      subject { xhr :get, :tasks, { task_type: 'mine-open' }, format: :json }
+      context 'have open tasks' do
+        before(:each) do
+          @task.assign @jd1
+          @task.work_in_progress
+        end
+        it 'returns http success' do
+          expect(subject).to have_http_status(:success)
+        end
+
+        it 'check task status' do
+          subject
+          expect(subject.body).not_to include('No outstanding tasks')
         end
       end
     end
