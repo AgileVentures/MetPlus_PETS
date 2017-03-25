@@ -35,7 +35,7 @@ class CruncherService
       self.auth_token = nil
       if retry_upload
         retry_upload = false
-        file = File.open(file) # reopen as .post closes the file
+        file = file.open # reopen as .post closes the file
         retry
       end
       raise
