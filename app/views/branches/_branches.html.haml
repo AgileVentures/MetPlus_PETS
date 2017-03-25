@@ -1,4 +1,4 @@
-#branches_table
+.div
   %table.table.table-hover
     %thead
       %tr
@@ -30,5 +30,5 @@
             %td
             %td
             %td
-  = will_paginate @branches, param_name: 'branches_page', |
-                     params: {data_type: 'branches'}      |
+  = will_paginate @branches, param_name: 'branches_page',
+                   params: {data_type: 'branches'}

@@ -70,9 +70,12 @@ Scenario: company registration approval
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  And I click the "Companies" link
   Then I click the "Widgets, Inc." link
+  And I wait 2 seconds
   Then I should see "Pending Registration"
   And I click the "Approve" link
+  And I wait 3 seconds
   Then I should see "Company contact has been notified of registration approval."
   Then "hughjobs@ymail.com" should receive an email with subject "Registration approved"
   When "hughjobs@ymail.com" opens the email with subject "Registration approved"
@@ -88,7 +91,10 @@ Scenario: company registration delete
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
+  And I wait 1 second
   And I should see "Pending Registration"
   Then I click and accept the "Delete Registration" button
   And I wait 1 second
@@ -101,6 +107,8 @@ Scenario: attempt login after registration is deleted
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   Then I click and accept the "Delete Registration" button
   And I click the "Hello, John" link
@@ -117,6 +125,8 @@ Scenario: company registration denial
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
@@ -134,6 +144,8 @@ Scenario: attempt login after registration is denied
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 2 seconds
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   And I should see "Pending Registration"
   And I click the "Deny" button
@@ -182,6 +194,8 @@ Scenario: edit Company Registration: change contact email and job email
   And a clear email queue
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Edit Registration" button
@@ -202,6 +216,8 @@ Scenario: edit Company Registration: change contact password
   And a clear email queue
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
+  Then I click the "Companies" link
+  And  I wait 1 second
   Then I click the "Widgets, Inc." link
   Then I should see "Pending Registration"
   And I click the "Edit Registration" button
@@ -214,4 +230,5 @@ Scenario: edit Company Registration: change contact password
 
 Scenario: cancel out of registration form
   And I click the "Cancel" link
+  And I wait 1 second
   Then I should be on the home page

@@ -41,7 +41,6 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com     |
     | Mime       | tommy1@gmail.com     |
 
-
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | mike.smith@gmail.com |
