@@ -43,7 +43,7 @@ class AgencyAdminController < ApplicationController
 
         render partial: 'job_specialties', object: @job_categories,
                 locals: {data_type:  'job_categories',
-                         partial_id: 'job-categories-table',
+                         partial_id: 'job_categories_table',
                          show_property_path:   :job_category_path,
                          delete_property_path: :job_category_path}
       when 'skills'
@@ -52,7 +52,7 @@ class AgencyAdminController < ApplicationController
 
         render partial: 'job_skills', object: @skills,
                 locals: {data_type:  'skills',
-                         partial_id: 'skills-table',
+                         partial_id: 'skills_table',
                          show_property_path:   :skill_path,
                          delete_property_path: :skill_path}
       else

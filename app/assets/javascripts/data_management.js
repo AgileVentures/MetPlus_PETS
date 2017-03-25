@@ -49,7 +49,7 @@ var ManageData = {
     // This function is bound to the 'click' event for the div_id, which
     // is delegated to the pagination anchor element.  For example:
 
-    // $('#branches-table').on('click', '.pagination a',
+    // $('#branches_table').on('click', '.pagination a',
     //                          ManageData.update_data);
 
     // Check if this anchor element is disabled (e.g. 'Previous'

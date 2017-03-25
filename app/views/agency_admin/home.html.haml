@@ -22,8 +22,8 @@
           = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
             class: 'btn btn-primary table_action_button'
         .col-xs-12.pad-0
-        = render partial: 'agencies/agency', object: @agency
-        .clearfix
+          = render partial: 'agencies/agency', object: @agency
+          .clearfix
 
       .tab-pane.fade#branches_table
         .col-xs-12.text-right

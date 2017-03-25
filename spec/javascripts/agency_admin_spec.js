@@ -96,7 +96,7 @@ describe('Job Categories', function () {
   });
   describe('delete job category', function () {
     beforeEach(function () {
-      $('#job-categories-table').on('click',
+      $('#job_categories_table').on('click',
                     "a[data-method='delete']",
                                   AgencyData.delete_job_category);
     });
@@ -168,7 +168,7 @@ describe('Skills', function () {
   });
   describe('Edit skill', function () {
     beforeEach(function () {
-      $('#skills-table').on('click',
+      $('#skills_table').on('click',
                     "a[href^='/skills/'][href$='edit']",
                                   AgencyData.edit_skill);
     });
@@ -220,7 +220,7 @@ describe('Skills', function () {
   });
   describe('delete skill', function () {
     beforeEach(function () {
-      $('#skills-table').on('click',
+      $('#skills_table').on('click',
                     "a[data-method='delete']",
                                   AgencyData.delete_skill);
     });
