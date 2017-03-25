@@ -62,8 +62,6 @@ Feature: Company Person
   Scenario: company admin can edit and delete company person
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    And I wait 1 seconds
-    And I click the "All Widgets Inc. people who are on PETS" link
     And I wait 1 second
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
@@ -73,8 +71,6 @@ Feature: Company Person
   Scenario: company admin can edit but not delete himself
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    And I wait 1 second
-    And I click the "All Widgets Inc. people who are on PETS" link
     And I wait 1 second
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"

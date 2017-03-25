@@ -44,7 +44,7 @@ describe('Job Categories', function () {
   });
   describe('Edit job category', function () {
     beforeEach(function () {
-      $('#job-categories-table').on('click',
+      $('#job_categories_table').on('click',
                     "a[href^='/job_categories/'][href$='edit']",
                                   AgencyData.edit_job_category);
     });
