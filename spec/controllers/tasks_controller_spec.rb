@@ -25,7 +25,7 @@ RSpec.describe TasksController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       describe 'missing parameters' do
@@ -61,7 +61,7 @@ RSpec.describe TasksController, type: :controller do
           aa = FactoryGirl.create(:agency_admin, agency: agency)
           js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
-          sign_in aa
+          sign_in aa.user
         end
 
         subject do
@@ -83,7 +83,7 @@ RSpec.describe TasksController, type: :controller do
           aa = FactoryGirl.create(:agency_admin, agency: agency)
           @js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task @js, agency
-          sign_in aa
+          sign_in aa.user
         end
 
         subject do
@@ -125,7 +125,7 @@ RSpec.describe TasksController, type: :controller do
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       subject { xhr :patch, :in_progress, { id: @task.id }, format: :json }
@@ -143,7 +143,7 @@ RSpec.describe TasksController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       describe 'Cannot find task' do
@@ -210,7 +210,7 @@ RSpec.describe TasksController, type: :controller do
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
         @task.work_in_progress
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       subject { xhr :patch, :done, { id: @task.id }, format: :json }
@@ -228,7 +228,7 @@ RSpec.describe TasksController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       describe 'Cannot find task' do
@@ -302,7 +302,7 @@ RSpec.describe TasksController, type: :controller do
     describe 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       describe 'retrieve information' do

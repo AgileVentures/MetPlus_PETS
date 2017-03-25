@@ -41,7 +41,7 @@ RSpec.describe JobCategoriesController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       it 'creates new job category for valid parameters' do
         expect { xhr :post, :create, job_category: jobcat_params }
@@ -71,7 +71,7 @@ RSpec.describe JobCategoriesController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       context 'job category found' do
         before(:each) do
@@ -110,7 +110,7 @@ RSpec.describe JobCategoriesController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       it 'returns success for valid parameters' do
@@ -141,7 +141,7 @@ RSpec.describe JobCategoriesController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       context 'job category found' do
         it 'deletes job category' do

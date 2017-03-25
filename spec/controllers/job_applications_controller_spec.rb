@@ -77,7 +77,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before do
-          sign_in company_admin
+          sign_in company_admin.user
           request
         end
 
@@ -106,7 +106,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before(:each) do
-          sign_in company_admin
+          sign_in company_admin.user
         end
 
         context 'inactive job application' do
@@ -159,7 +159,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before(:each) do
-          sign_in company_admin
+          sign_in company_admin.user
         end
 
         context 'inactive job application' do

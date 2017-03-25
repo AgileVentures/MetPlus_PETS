@@ -30,7 +30,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       context 'company admin' do
         before(:each) do
           @company_admin = FactoryGirl.create(:company_admin)
-          sign_in @company_admin
+          sign_in @company_admin.user
           get :edit_profile, id: @company_admin
         end
 
@@ -45,7 +45,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       context 'company contact' do
         before(:each) do
           @company_contact = FactoryGirl.create(:company_contact)
-          sign_in @company_contact
+          sign_in @company_contact.user
           get :edit_profile, id: @company_contact
         end
 
@@ -112,7 +112,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'GET #home' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_person
+        sign_in company_person.user
         get :home, id: company_person
       end
 
@@ -174,7 +174,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       context 'valid attributes' do
         before(:each) do
-          sign_in company_person
+          sign_in company_person.user
           company_person.company_roles <<
             FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
           company_person.save
@@ -200,7 +200,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
                                password: 'testing.....',
                                password_confirmation: 'testing.....')
           @password = @company_person.encrypted_password
-          sign_in @company_person
+          sign_in @company_person.user
           patch :update_profile,
                 company_person:
                   FactoryGirl.attributes_for(:company_person,
@@ -314,7 +314,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'GET #show' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_admin
+        sign_in company_admin.user
         get :show, id: company_admin
       end
 
@@ -330,7 +330,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'GET #edit' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_admin
+        sign_in company_admin.user
         get :edit, id: company_admin
       end
 
@@ -346,7 +346,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'PATCH #destroy' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_admin
+        sign_in company_admin.user
         patch :destroy, id: company_person
       end
 
@@ -370,7 +370,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       before(:each) do
         updated_fields = company_admin.attributes
                                       .merge(company_admin.user.attributes)
-        sign_in company_admin
+        sign_in company_admin.user
         patch :update, id: company_admin, company_person: updated_fields
       end
 
@@ -392,7 +392,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         updated_fields = company_admin.attributes
                                       .merge(company_admin.user.attributes)
         updated_fields[:company_role_ids] = []
-        sign_in company_admin
+        sign_in company_admin.user
         patch :update, id: company_admin, company_person: updated_fields
       end
 

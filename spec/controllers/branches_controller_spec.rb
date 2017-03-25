@@ -62,7 +62,7 @@ RSpec.describe BranchesController, type: :controller do
   let(:js)      { FactoryGirl.create(:job_seeker) }
   describe 'GET #show' do
     before(:each) do
-      sign_in admin
+      sign_in admin.user
       get :show, id: branch.id
     end
     it 'assigns @branch for view' do
@@ -82,7 +82,7 @@ RSpec.describe BranchesController, type: :controller do
     end
     context 'valid attributes' do
       before(:each) do
-        sign_in admin
+        sign_in admin.user
         post :create,
              agency_id: agency,
              branch: FactoryGirl.attributes_for(:branch)
@@ -103,7 +103,7 @@ RSpec.describe BranchesController, type: :controller do
     context 'invalid attributes' do
       render_views
       before(:each) do
-        sign_in admin
+        sign_in admin.user
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
         branch_hash = FactoryGirl.attributes_for(:branch, code: branch1.code)
@@ -127,7 +127,7 @@ RSpec.describe BranchesController, type: :controller do
   end
   describe 'GET #new' do
     before(:each) do
-      sign_in admin
+      sign_in admin.user
       get :new, agency_id: agency
     end
     it 'assigns @agency for branch creation' do
@@ -140,7 +140,7 @@ RSpec.describe BranchesController, type: :controller do
   end
   describe 'GET #edit' do
     before(:each) do
-      sign_in admin
+      sign_in admin.user
       get :edit, id: branch.id
     end
     it 'assigns @branch for form' do
@@ -158,7 +158,7 @@ RSpec.describe BranchesController, type: :controller do
     let(:branch2)  { FactoryGirl.create(:branch, agency: agency) }
     context 'valid attributes' do
       before(:each) do
-        sign_in admin
+        sign_in admin.user
         patch :update, branch: FactoryGirl.attributes_for(:branch),
                        id: branch1.id
       end
@@ -178,7 +178,7 @@ RSpec.describe BranchesController, type: :controller do
     context 'invalid attributes' do
       render_views
       before(:each) do
-        sign_in admin
+        sign_in admin.user
         branch2.assign_attributes(code: branch1.code)
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
@@ -201,7 +201,7 @@ RSpec.describe BranchesController, type: :controller do
   end
   describe 'DELETE #destroy' do
     before(:each) do
-      sign_in admin
+      sign_in admin.user
       delete :destroy, id: branch.id
     end
     it 'sets flash message' do
