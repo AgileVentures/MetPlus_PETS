@@ -858,14 +858,14 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'Error: Resume not found in DB' do
       it 'sets flash message' do
-        get :download_resume, id: valid_application, resume_id: 999
+        get :download_resume, id: job_seeker, resume_id: 999
         expect(flash[:alert]).to eq "Couldn't find Resume with 'id'=999"
       end
     end
     context 'Error: Resume not found in Cruncher' do
       it 'sets flash message' do
         stub_cruncher_file_download_notfound
-        get :download_resume, id: valid_application, resume_id: resume
+        get :download_resume, id: job_seeker, resume_id: resume
         expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
       end
     end
