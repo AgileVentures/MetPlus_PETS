@@ -200,7 +200,9 @@ Scenario: Job developer assigns self to job seeker
   And I login as "dave@metplus.org" with password "qwerty123"
   And I wait 2 seconds
   Then I should see "Signed in successfully."
-  And I should see "Seeker, Sam" after "Job Seekers without a Job Developer"
+  And I click the "Job Seekers without a JD" link
+  And I wait 1 second
+  And I should see "Seeker, Sam"
   And I click the "Seeker, Sam" link
   And I wait 1 second
   And I should see "Assign Myself"
@@ -226,7 +228,9 @@ Scenario: Case manager assigns self to job seeker
   And I login as "jane@metplus.org" with password "qwerty123"
   And I wait 2 seconds
   Then I should see "Signed in successfully."
-  And I should see "Seeker, Sam" after "Job Seekers without a Case Manager"
+  And I click the "Job Seekers without a CM" link
+  And I wait 1 second
+  And I should see "Seeker, Sam"
   And I click the "Seeker, Sam" link
   And I wait 1 second
   And I should see "Assign Myself"
