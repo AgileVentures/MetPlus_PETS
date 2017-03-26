@@ -294,6 +294,21 @@ module ServiceStubHelpers
     def stub_cruncher_match_resumes_fail(resultCode)
       stub_request(:get, url_match_resumes)
         .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
+
+    def stub_cruncher_match_resumes_return_no_resume_found
+      body_json = JSON.generate('resultCode' => 'SUCCESS',
+                                'message' => 'Success',
+                                'resumes' => {})
+      stub_request(:get, %r{#{CruncherService.service_url}/resume/match/\d+})
+        .to_return(body: body_json, status: 200,
+                   headers: { 'Content-Type': 'application/json' })
+    end
+
+    def stub_cruncher_match_resumes_return_no_job_found(job_id)
+      body_json = JSON.generate('resultCode' => 'JOB_NOT_FOUND',
+                                'message' => "No job with id: #{job_id}")
+      stub_request(:get, %r{#{CruncherService.service_url}/resume/match/\d+})
+        .to_return(body: body_json, status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
   end
