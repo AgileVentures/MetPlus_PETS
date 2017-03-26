@@ -994,12 +994,11 @@ RSpec.describe JobsController, type: :controller do
     end
 
     context 'sad path' do
-      # before(:each) do
-      #   warden.set_user bosh_person
-      # end
-      it 'sets flash and redirects if job ID not found' do
-        stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
+      before(:each) do
         warden.set_user bosh_person
+      end
+      it 'sets flash and redirects if job ID not found' do
+        stub_cruncher_match_resumes_return_no_job_found(bosh_job.id)
         get :match_job_seekers, id: bosh_job.id
 
         expect(flash[:alert])
@@ -1007,13 +1006,11 @@ RSpec.describe JobsController, type: :controller do
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
       it 'sets flash and redirects if resume not found' do
-        stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
-        warden.set_user bosh_person
-        byebug
+        stub_cruncher_match_resumes_return_no_resume_found
         get :match_job_seekers, id: bosh_job.id
 
         expect(flash[:alert])
-          .to eq "Error: Couldn't find Resume with 'id'=7"
+          .to eq "No matching job seekers found."
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
       it 'sets flash and redirects if job seeker not found' do
@@ -1022,15 +1019,6 @@ RSpec.describe JobsController, type: :controller do
         end
         job_seeker = Resume.find(7).job_seeker
         job_seeker.delete # use 'delete' to prevent destroying associated objects
-
-        stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
-        warden.set_user bosh_person
-        get :match_job_seekers, id: bosh_job.id
-
-        expect(flash[:alert])
-          .to eq "Error: Couldn't find JobSeeker for Resume with 'id' = 7"
-        expect(response).to redirect_to(job_path(bosh_job.id))
-      end
     end
 
     context 'authorization' do
