@@ -267,6 +267,7 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized).then
         .to_return(body: JSON_MATCHED_RESUMES, status: 200,
                    headers: { 'Content-Type': 'application/json' })
+    end
 
     def stub_cruncher_match_resumes(args = [0,1,2,3,4,5,6,7])
       body_json = JSON.generate('resultCode' => 'SUCCESS',
@@ -284,9 +285,9 @@ module ServiceStubHelpers
         .to_return(body: body_json, status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
-    
+
     def stub_cruncher_match_resumes_fail(resultCode)
-      stub_request(:get, CruncherService.service_url + '/resume/match/1')
+      stub_request(:get, url_match_resumes)
         .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
@@ -296,10 +297,6 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized).then
         .to_raise(RestClient::Unauthorized)
     end
-
-    def stub_cruncher_match_resumes_fail(resultCode)
-      stub_request(:get, url_match_resumes)
-        .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
 
     def stub_cruncher_match_resumes_return_no_resume_found
       body_json = JSON.generate('resultCode' => 'SUCCESS',
