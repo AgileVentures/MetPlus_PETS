@@ -268,7 +268,7 @@ module ServiceStubHelpers
         .to_return(body: JSON_MATCHED_RESUMES, status: 200,
                    headers: { 'Content-Type': 'application/json' })
 
-    def stub_cruncher_match_resumes(args)
+    def stub_cruncher_match_resumes(args = [0,1,2,3,4,5,6,7])
       body_json = JSON.generate('resultCode' => 'SUCCESS',
                                 'message' => 'Success',
                                 'resumes' => { 'matcher1' =>
@@ -282,6 +282,12 @@ module ServiceStubHelpers
 
       stub_request(:get, %r{#{CruncherService.service_url}/resume/match/\d+})
         .to_return(body: body_json, status: 200,
+                   headers: { 'Content-Type': 'application/json' })
+    end
+    
+    def stub_cruncher_match_resumes_fail(resultCode)
+      stub_request(:get, CruncherService.service_url + '/resume/match/1')
+        .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
