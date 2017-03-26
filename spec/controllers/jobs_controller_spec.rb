@@ -1019,6 +1019,13 @@ RSpec.describe JobsController, type: :controller do
         end
         job_seeker = Resume.find(7).job_seeker
         job_seeker.delete # use 'delete' to prevent destroying associated objects
+
+        get :match_job_seekers, id: bosh_job.id
+
+        expect(flash[:alert])
+          .to eq "Error: Couldn't find JobSeeker for Resume with 'id' = 7"
+        expect(response).to redirect_to(job_path(bosh_job.id))
+      end
     end
 
     context 'authorization' do
