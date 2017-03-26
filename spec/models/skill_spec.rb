@@ -37,7 +37,7 @@ RSpec.describe Skill, type: :model do
       stub_cruncher_authenticate
       stub_cruncher_job_create
     end
-
+    
     let(:skill) { FactoryGirl.create(:skill) }
     let(:job)   { FactoryGirl.create(:job) }
 
