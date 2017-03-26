@@ -115,36 +115,6 @@ RSpec.describe AgencyAdminController, type: :controller do
     end
   end
 
-  describe 'action authorization' do
-    context '.home' do
-      it 'authorizes agency_admin' do
-        expect(subject).to_not receive(:user_not_authorized)
-        sign_in agency_admin.user
-        get :home
-      end
-      it 'does not authorize non-admin user' do
-        sign_in case_manager.user
-        get :home
-        expect(flash[:alert]).
-          to eq "You are not authorized to administer #{agency.name} agency."
-      end
-    end
-
-    context '.job_properties' do
-      it 'authorizes agency_admin' do
-        expect(subject).to_not receive(:user_not_authorized)
-        sign_in agency_admin.user
-        expect {get :job_properties}.to_not raise_error
-      end
-      it 'does not authorize non-admin user' do
-        sign_in case_manager.user
-        get :job_properties
-        expect(flash[:alert]).
-          to eq "You are not authorized to administer #{agency.name} agency."
-      end
-    end
-  end
-
   describe 'Determine from signed-in user:' do
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -177,6 +147,36 @@ RSpec.describe AgencyAdminController, type: :controller do
     it 'agency admin - from job developer' do
       sign_in job_developer.user
       expect(Agency.agency_admins(agency)).to eq [agency_admin]
+    end
+  end
+
+  describe 'action authorization' do
+    context '.home' do
+      it 'authorizes agency_admin' do
+        expect(subject).to_not receive(:user_not_authorized)
+        sign_in agency_admin.user
+        get :home
+      end
+      it 'does not authorize non-admin user' do
+        sign_in case_manager.user
+        get :home
+        expect(flash[:alert]).
+          to eq "You are not authorized to administer #{agency.name} agency."
+      end
+    end
+
+    context '.job_properties' do
+      it 'authorizes agency_admin' do
+        expect(subject).to_not receive(:user_not_authorized)
+        sign_in agency_admin.user
+        expect {get :job_properties}.to_not raise_error
+      end
+      it 'does not authorize non-admin user' do
+        sign_in case_manager.user
+        get :job_properties
+        expect(flash[:alert]).
+          to eq "You are not authorized to administer #{agency.name} agency."
+      end
     end
   end
 end
