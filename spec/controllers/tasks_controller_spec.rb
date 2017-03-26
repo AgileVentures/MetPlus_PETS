@@ -321,7 +321,6 @@ RSpec.describe TasksController, type: :controller do
         end
 
         it 'check content' do
-<<<<<<< HEAD
           results = JSON.parse(subject.body)
           expect(results).to include('results')
           expect(results['results'])
@@ -333,20 +332,6 @@ RSpec.describe TasksController, type: :controller do
                           'text' => @jd3.full_name },
                         'id' => @jd4.id,
                         'text' => @jd4.full_name)
-=======
-          expect(JSON.parse(subject.body))
-            .to eq('results' =>
-                        [
-                          { 'id' => @jd1.user.id,
-                            'text' => @jd1.full_name },
-                          { 'id' => @jd2.user.id,
-                            'text' => @jd2.full_name },
-                          { 'id' => @jd3.user.id,
-                            'text' => @jd3.full_name },
-                          { 'id' => @jd4.user.id,
-                            'text' => @jd4.full_name }
-                        ])
->>>>>>> correct params[:to] to use id in User model
         end
       end
 
