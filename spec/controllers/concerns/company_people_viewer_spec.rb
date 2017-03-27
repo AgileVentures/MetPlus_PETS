@@ -5,11 +5,11 @@ class TestConcernCompanyPeopleClass < ApplicationController
 end
 
 RSpec.describe TestConcernCompanyPeopleClass do
-  let(:company)        { FactoryGirl.create(:company) }
-  let(:cmpy_person1)   { FactoryGirl.create(:company_contact, company: company) }
-  let(:cmpy_person2)   { FactoryGirl.create(:company_contact, company: company) }
-  let(:cmpy_person3)   { FactoryGirl.create(:company_contact, company: company) }
-  let (:people_fields) { TestConcernCompanyPeopleClass::FIELDS_IN_PEOPLE_TYPE }
+  let(:company)       { FactoryGirl.create(:company) }
+  let(:cmpy_person1)  { FactoryGirl.create(:company_contact, company: company) }
+  let(:cmpy_person2)  { FactoryGirl.create(:company_contact, company: company) }
+  let(:cmpy_person3)  { FactoryGirl.create(:company_contact, company: company) }
+  let(:people_fields) { TestConcernCompanyPeopleClass::FIELDS_IN_PEOPLE_TYPE }
 
   describe '#display_company_people' do
     it 'returns all company people for a specified company' do
