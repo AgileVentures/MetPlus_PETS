@@ -1,25 +1,30 @@
 require 'rails_helper'
 
-class TestConcernCompanyPeopleClass
-  extend CompanyPeopleViewer
+class TestConcernCompanyPeopleClass <ApplicationController
+  include CompanyPeopleViewer
 end
 
-RSpec.describe CompanyPeopleViewer do
+RSpec.describe TestConcernCompanyPeopleClass do
+  let(:company)      { FactoryGirl.create(:company) }
+  let(:cmpy_person1) { FactoryGirl.create(:company_contact, company: company) }
+  let(:cmpy_person2) { FactoryGirl.create(:company_contact, company: company) }
+  let(:cmpy_person3) { FactoryGirl.create(:company_contact, company: company) }
+  let (:people_fields)      { TestConcernCompanyPeopleClass::FIELDS_IN_PEOPLE_TYPE }
+
   describe '#display_company_people' do
-    let(:no_company_people)  {{pets_user: '',
-                               full_name: '',
-                               email: 'bob@hrsolutions.com',
-                               phone: '011 555 555',
-                               roles: 'Admin',
-                               status: 'Active',
-                               company: 'HR Soultions'}}
-    it 'no company people present' do
-    expect(TestConcernCompanyPeopleClass.display_company_people no_company_people).to eq(
-                               email: 'bob@hrsolutions.com',
-                               phone: '011 555 555',
-                               roles: 'Admin',
-                               status: 'Active',
-                               company: 'HR Soultions')
-  end
+    it 'returns all company people for a specified company' do
+      expect(subject.display_company_people('company-all', company))
+        .to match_array [cmpy_person1, cmpy_person2, cmpy_person3]
+    end
+
+    it 'returns all fields for company people' do
+      expect(subject.company_people_fields('company-all'))
+          .to match_array people_fields['company-all'.to_sym]
+    end
+
+    it 'returns all fields for my company people' do
+      expect(subject.company_people_fields('my-company-all'))
+          .to match_array people_fields['my-company-all'.to_sym]
+    end
   end
 end
