@@ -128,7 +128,7 @@ Scenario: Job developer assigned to job seeker by agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 1 second
-  Then I should see "Agency Personnel"
+  Then I click the "Agency Personnel" link
   And I click the "Developer, Dave" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: Dave Developer"
@@ -167,7 +167,7 @@ Scenario: Case manager assigned to job seeker by agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
   And I wait 1 second
-  Then I should see "Agency Personnel"
+  Then I click the "Agency Personnel" link
   And I click the "Jones, Jane" link
   Then I click the "Edit Person" button
   And I should see "Edit Agency Person: Jane Jones"
@@ -200,7 +200,9 @@ Scenario: Job developer assigns self to job seeker
   And I login as "dave@metplus.org" with password "qwerty123"
   And I wait 2 seconds
   Then I should see "Signed in successfully."
-  And I should see "Seeker, Sam" after "Job Seekers without a Job Developer"
+  And I click the "Job Seekers without a JD" link
+  And I wait 1 second
+  And I should see "Seeker, Sam"
   And I click the "Seeker, Sam" link
   And I wait 1 second
   And I should see "Assign Myself"
@@ -226,7 +228,9 @@ Scenario: Case manager assigns self to job seeker
   And I login as "jane@metplus.org" with password "qwerty123"
   And I wait 2 seconds
   Then I should see "Signed in successfully."
-  And I should see "Seeker, Sam" after "Job Seekers without a Case Manager"
+  And I click the "Job Seekers without a CM" link
+  And I wait 1 second
+  And I should see "Seeker, Sam"
   And I click the "Seeker, Sam" link
   And I wait 1 second
   And I should see "Assign Myself"

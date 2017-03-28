@@ -83,6 +83,8 @@ Feature: Company Person
     And I wait 1 second
     And I click the "Admin" link
     And I click the "Agency and Partner Companies" link
+    Then I click the "Companies" link
+    And  I wait 1 second
     Then I click the "Widgets Inc." link
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
@@ -107,7 +109,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "John"
     And I should see "Tom"
-  
+
   Scenario: company admin login and edit email from home page
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
@@ -135,7 +137,7 @@ Feature: Company Person
     And I should see "Your profile was updated successfully."
     And I should not see "Jane"
     And I should see "Mary"
-  
+
   Scenario: company contact cancel out of edit profile
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
@@ -143,15 +145,17 @@ Feature: Company Person
     And I click the "Hello, Jane" link
     And I click the "My Profile" link
     Then I click the "Edit" link
+    And I wait 1 second
     And I should see "Update Your Profile"
     Then I click the "Cancel" link
+    And I wait 1 second
     Then I should be on the Company Person 'jane@ymail.com' profile page
 
   Scenario: company contact login and edit profile from name
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
     And I should be on the Company Person 'jane@ymail.com' Home page
-    Then I press "Jane"
+    Then I click the first "Jane" link
     And I am on the 'jane@ymail.com' edit profile page
     And I should see "Jane"
     And I fill in "First Name" with "Mary"
@@ -178,7 +182,7 @@ Feature: Company Person
   Scenario: company admin can update address
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
-    And I click the "Hello, John" link
+    And I click the first "Hello, John" link
     And I click the "My Profile" link
     Then I click the "Edit" link
     And I do not have an address
@@ -195,6 +199,7 @@ Feature: Company Person
     And I click the "Hello, Jane" link
     And I click the "My Profile" link
     Then I click the "Edit" link
+    And I wait 1 second
     And I do not have an address
     And I should see selections of "Widgets Inc." addresses
     And I should not see selections of "Feature Inc." addresses
