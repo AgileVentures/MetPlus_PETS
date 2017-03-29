@@ -137,7 +137,7 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
   And  I check "Fulltime"
   And  I press "new-job-submit"
   And I wait 1 second
-  Then  I should see "The form contains 3 errors"
+  Then I should see "The form contains 3 errors"
 
 @javascript
 Scenario: Cancel out of job edit
