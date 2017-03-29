@@ -53,7 +53,7 @@ module ServiceStubHelpers
       url_root + '/resume/upload'
     end
 
-    def url_file_download(file = nil)
+    def url_file_download
       %r{#{url_root}/resume/\d+}
     end
 
@@ -138,7 +138,7 @@ module ServiceStubHelpers
                         'inline; filename="Admin-Assistant-Resume.pdf"' })
     end
 
-    def stub_cruncher_file_download_retry_auth_fail(testfile)
+    def stub_cruncher_file_download_retry_auth_fail
       stub_request(:get, url_file_download)
         .to_raise(RestClient::Unauthorized).then
         .to_raise(RestClient::Unauthorized)

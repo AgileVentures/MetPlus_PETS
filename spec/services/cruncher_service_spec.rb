@@ -457,7 +457,7 @@ RSpec.describe CruncherService, type: :request do
       end
       it 're-raises auth exception if auth retry fails' do
         stub_cruncher_authenticate
-        stub_cruncher_file_download_retry_auth_fail(testfile_pdf)
+        stub_cruncher_file_download_retry_auth_fail
 
         CruncherService.auth_token = 'expired'
 
