@@ -125,20 +125,6 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
 
-  When I click the "Post Job" link
-  And  I fill in the fields:
-    | Title                  |  |
-  And  I select "Widgets Inc." in select list "Company Name"
-  And I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
-  And I fill in the fields:
-    | Company Job ID         |  |
-    | Description            |  |
-  And  I select "Day" in select list "Shift"
-  And  I check "Fulltime"
-  And  I press "new-job-submit"
-  And I wait 2 seconds
-  Then I should see "The form contains 3 errors"
-
 @javascript
 Scenario: Cancel out of job edit
   Given I am on the home page
