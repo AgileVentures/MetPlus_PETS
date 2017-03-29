@@ -34,7 +34,7 @@ Background: adding job to database
   | Gadgets Inc. | 2 Ford Drive | Detroit | Michigan | 02094   |
 
 
-@selenium
+@javascript
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "jane@ymail.com" with password "qwerty123"
@@ -87,7 +87,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I logout
 
 
-@selenium
+@javascript
 Scenario: Creating and Updating Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "hr@metplus.org" with password "qwerty123"

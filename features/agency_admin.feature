@@ -240,7 +240,7 @@ Scenario: assign job seeker to agency person
   When "mike@metplus.org" follows "Sam Seeker" in the email
   Then they should see "Sam Seeker" after "Name"
 
-@selenium
+@javascript
 Scenario: manage job properties
   # add job specialty
   And I click the "Job Properties" link
@@ -267,25 +267,26 @@ Scenario: manage job properties
   And I fill in "Name:" with ""
   And I fill in "Description:" with ""
   And I click the "Add Specialty" button
-  # And I wait 2 seconds
+  And I wait 1 second
   Then I should see "Name can't be blank"
   And I should see "Description can't be blank"
   Then I fill in "Name:" with "Test 3rd Job Specialty"
   And I fill in "Description:" with "Description of 3rd Test Job Specialty"
   And I click the "Add Specialty" button
-  # And I wait 1 second
+  And I wait 1 second
   Then I should see "Test 3rd Job Specialty"
   And I should see "Description of 3rd Test Job Specialty"
 
   # update job specialty
   And I click the "Software Engineer - RoR" link
+  And I wait 1 seconds
   And I fill in "Description:" with ""
   And I click the "Update Specialty" button
-  # And I wait 1 second
+  And I wait 1 second
   Then I should see "Description can't be blank"
   And I fill in "Description:" with "Backend RoR Development"
   And I click the "Update Specialty" button
-  And I wait 2 seconds
+  And I wait 1 second
   Then "Update Job Specialty" should not be visible
   And I should see "Backend RoR Development"
 
@@ -323,12 +324,14 @@ Scenario: manage job properties
 
   # update job skill
   And I click the "Web Research" link
+  And I wait 1 second
   And I fill in "Description:" with ""
   And I click the "Update Skill" button
+  And I wait 1 second
   And I should see "Description can't be blank"
   And I fill in "Description:" with "Anaytics using web data"
   And I click the "Update Skill" button
-  And I wait 2 seconds
+  And I wait 1 second
   Then "Update Job Skill" should not be visible
   And I should see "Anaytics using web data"
 
