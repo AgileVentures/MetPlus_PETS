@@ -5,30 +5,29 @@ module ServiceStubHelpers
   #       allow(Pusher).to receive(:trigger)
 
   module Cruncher
-
     JSON_MATCHED_RESUMES =
       JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'resumes' => { 'matcher1' =>
-                                  [{ 'resumeId' => '2', 'stars' => 2.0 },
-                                   { 'resumeId' => '7', 'stars' => 4.9 },
-                                   { 'resumeId' => '5', 'stars' => 3.6 }],
-                                             'matcher2' =>
-                                  [{ 'resumeId' => '8', 'stars' => 1.8 },
-                                   { 'resumeId' => '5', 'stars' => 3.8 },
-                                   { 'resumeId' => '6', 'stars' => 1.7 }] })
+                                   [{ 'resumeId' => '2', 'stars' => 2.0 },
+                                    { 'resumeId' => '7', 'stars' => 4.9 },
+                                    { 'resumeId' => '5', 'stars' => 3.6 }],
+                                   'matcher2' =>
+                                   [{ 'resumeId' => '8', 'stars' => 1.8 },
+                                    { 'resumeId' => '5', 'stars' => 3.8 },
+                                    { 'resumeId' => '6', 'stars' => 1.7 }] })
 
     JSON_MATCHED_JOBS =
       JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'jobs' => { 'matcher1' =>
-                               [{ 'jobId' => '2', 'stars' => 3.8 },
-                                { 'jobId' => '3', 'stars' => 4.7 },
-                                { 'jobId' => '6', 'stars' => 3.2 }],
-                                   'matcher2' =>
+                                [{ 'jobId' => '2', 'stars' => 3.8 },
+                                 { 'jobId' => '3', 'stars' => 4.7 },
+                                 { 'jobId' => '6', 'stars' => 3.2 }],
+                                'matcher2' =>
                                 [{ 'jobId' => '8', 'stars' => 2.8 },
-                                { 'jobId' => '9', 'stars' => 2.9 },
-                                { 'jobId' => '6', 'stars' => 3.4 }] })
+                                 { 'jobId' => '9', 'stars' => 2.9 },
+                                 { 'jobId' => '6', 'stars' => 3.4 }] })
 
     JSON_MATCHED_RESUME_AND_JOB =
       JSON.generate('resultCode' => 'SUCCESS',
@@ -54,7 +53,7 @@ module ServiceStubHelpers
       url_root + '/resume/upload'
     end
 
-    def url_file_download
+    def url_file_download(file = nil)
       %r{#{url_root}/resume/\d+}
     end
 
@@ -68,10 +67,6 @@ module ServiceStubHelpers
 
     def url_match_resume_job
       %r{#{url_root}/resume/\d+/compare/\d+}
-    end
-
-    def url_match_jobs
-      %r{#{url_root}/job/match/\d+}
     end
 
     def url_match_jobs
@@ -144,8 +139,6 @@ module ServiceStubHelpers
     end
 
     def stub_cruncher_file_download_retry_auth_fail(testfile)
-      file = fixture_file_upload(testfile)
-
       stub_request(:get, url_file_download)
         .to_raise(RestClient::Unauthorized).then
         .to_raise(RestClient::Unauthorized)

@@ -433,10 +433,11 @@ RSpec.describe CruncherService, type: :request do
           .twice.and_call_original
 
         file = fixture_file_upload('files/Janitor-Resume.doc')
-        expect { CruncherService.upload_file(file,
-                                             'Janitor-Resume.doc',
-                                             'test_id')
-        }.to raise_error(RestClient::Unauthorized)
+        expect do
+          CruncherService.upload_file(file,
+                                      'Janitor-Resume.doc',
+                                      'test_id')
+        end .to raise_error(RestClient::Unauthorized)
       end
     end
 
@@ -463,7 +464,6 @@ RSpec.describe CruncherService, type: :request do
         expect(CruncherService).to receive(:auth_token)
           .twice.and_call_original
 
-        file = fixture_file_upload('files/Janitor-Resume.doc')
         expect { CruncherService.download_file(1) }
           .to raise_error(RestClient::Unauthorized)
       end
