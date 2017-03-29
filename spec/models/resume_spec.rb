@@ -91,13 +91,16 @@ RSpec.describe Resume, type: :model do
 
     it 'raises an error when the external cruncher raises an exception' do
       stub_cruncher_file_upload_error
+      file = fixture_file_upload('files/Test File.zzz')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: job_seeker.id)
       expect do
-        file = fixture_file_upload('files/Test File.zzz')
-        resume = Resume.new(file: file,
-                            file_name: 'Admin-Assistant-Resume.pdf',
-                            job_seeker_id: job_seeker.id)
         resume.save
       end .to raise_error(RuntimeError)
+      expect(resume.errors.full_messages)
+        .to contain_exactly("File could not be uploaded - see system admin")
+      expect(resume.destroyed?).to be true
     end
   end
 end
