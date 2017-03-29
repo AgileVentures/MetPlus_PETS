@@ -407,33 +407,206 @@ RSpec.describe CruncherService, type: :request do
     end
   end
 
-  context 'Cruncher service recover expired token' do
-    it 'retries for expired auth_token - file upload' do
-      stub_cruncher_authenticate
-      stub_cruncher_file_upload_retry_auth
+  context 'Cruncher service tries to recover expired token' do
+    context 'file upload' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_file_upload_retry_auth
 
-      CruncherService.auth_token = 'expired'
+        CruncherService.auth_token = 'expired'
 
-      expect(CruncherService).to receive(:auth_token)
-        .twice.and_call_original
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
 
-      file = fixture_file_upload('files/Janitor-Resume.doc')
-      expect(CruncherService.upload_file(file,
-                                         'Janitor-Resume.doc',
-                                         'test_id')).to be true
+        file = fixture_file_upload('files/Janitor-Resume.doc')
+        expect(CruncherService.upload_file(file,
+                                           'Janitor-Resume.doc',
+                                           'test_id')).to be true
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_file_upload_retry_auth_fail
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        file = fixture_file_upload('files/Janitor-Resume.doc')
+        expect { CruncherService.upload_file(file,
+                                             'Janitor-Resume.doc',
+                                             'test_id')
+        }.to raise_error(RestClient::Unauthorized)
+      end
     end
-    it 'retries for expired auth_token - file download' do
-      stub_cruncher_authenticate
-      stub_cruncher_file_download_retry_auth(testfile_pdf)
 
-      CruncherService.auth_token = 'expired'
+    context 'file download' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_file_download_retry_auth(testfile_pdf)
 
-      expect(CruncherService).to receive(:auth_token)
-        .twice.and_call_original
+        CruncherService.auth_token = 'expired'
 
-      file = fixture_file_upload(testfile_pdf)
-      expect(CruncherService.download_file(1).open.read)
-        .to eq file.read
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        file = fixture_file_upload(testfile_pdf)
+        expect(CruncherService.download_file(1).open.read)
+          .to eq file.read
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_file_download_retry_auth_fail(testfile_pdf)
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        file = fixture_file_upload('files/Janitor-Resume.doc')
+        expect { CruncherService.download_file(1) }
+          .to raise_error(RestClient::Unauthorized)
+      end
+    end
+
+    context 'create job' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create_retry_auth
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect(CruncherService.create_job(10, 'Software Engineer',
+                                          'description of the job')).to be true
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create_retry_auth_fail
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect do
+          CruncherService.create_job(10, 'Software Engineer',
+                                     'description of the job')
+        end .to raise_error(RestClient::Unauthorized)
+      end
+    end
+
+    context 'update job' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_job_update_retry_auth
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect(CruncherService.update_job(10, 'Software Engineer',
+                                          'revised description')).to be true
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_job_update_retry_auth_fail
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect do
+          CruncherService.update_job(10, 'Software Engineer',
+                                     'revised description')
+        end .to raise_error(RestClient::Unauthorized)
+      end
+    end
+
+    context 'match resume and job' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_match_resume_and_job_retry_auth
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        result = CruncherService.match_resume_and_job(1, 1)
+
+        expect(result[:status]).to eq 'SUCCESS'
+        expect(result[:stars])
+          .to include 'NaiveBayes' => 3.4, 'ExpressionCruncher' => 2.3
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_match_resume_and_job_retry_auth_fail
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect { CruncherService.match_resume_and_job(1, 1) }
+          .to raise_error(RestClient::Unauthorized)
+      end
+    end
+
+    context 'match jobs' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_match_jobs_retry_auth
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect(CruncherService.match_jobs(1)).not_to be nil
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_match_jobs_retry_auth_fail
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect { CruncherService.match_jobs(1) }
+          .to raise_error(RestClient::Unauthorized)
+      end
+    end
+
+    context 'match resumes' do
+      it 'reauthorizes if expired auth_token' do
+        stub_cruncher_authenticate
+        stub_cruncher_match_resumes_retry_auth
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect(CruncherService.match_resumes(1)).not_to be nil
+      end
+      it 're-raises auth exception if auth retry fails' do
+        stub_cruncher_authenticate
+        stub_cruncher_match_resumes_retry_auth_fail
+
+        CruncherService.auth_token = 'expired'
+
+        expect(CruncherService).to receive(:auth_token)
+          .twice.and_call_original
+
+        expect { CruncherService.match_resumes(1) }
+          .to raise_error(RestClient::Unauthorized)
+      end
     end
   end
 end
