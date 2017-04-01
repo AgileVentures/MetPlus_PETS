@@ -340,13 +340,13 @@ class JobsController < ApplicationController
                                                         :required, :min_years,
                                                         :max_years])
   end
-  
+
   def record_history
     session[:referer] ||= []
     session[:referer] << request.url
     session[:referer] = session[:referer].last(5) # Limit size to five
   end
-  
+
   def back
     session[:referer] ? session[:referer].pop : nil
   end
