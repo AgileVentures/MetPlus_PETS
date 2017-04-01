@@ -90,6 +90,7 @@ class JobsController < ApplicationController
     @resume = nil
     @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
     set_job_seekers
+    @back = back || jobs_url
   end
 
   def edit
