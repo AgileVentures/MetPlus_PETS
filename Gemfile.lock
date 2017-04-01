@@ -192,6 +192,9 @@ GEM
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
+    parallel (1.11.1)
+    parallel_tests (2.14.0)
+      parallel
     pg (0.18.4)
     phantomjs (2.1.1.0)
     poltergeist (1.8.1)
@@ -374,6 +377,7 @@ DEPENDENCIES
   json
   launchy
   mailgun_rails
+  parallel_tests
   pg
   poltergeist
   puma

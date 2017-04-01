@@ -19,7 +19,7 @@ development:
 # Do not set this db to the same as development or production.
 test: &test
   <<: *default
-  database: metplus_pets_test
+  database: metplus_pets_test<%= ENV['TEST_ENV_NUMBER'] %>
 
 production:
   <<: *default
