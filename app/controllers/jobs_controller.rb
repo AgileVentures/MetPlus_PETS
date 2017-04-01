@@ -348,6 +348,6 @@ class JobsController < ApplicationController
   end
   
   def back
-    session[:referer].pop
+    session[:referer] ? session[:referer].pop : nil
   end
 end
