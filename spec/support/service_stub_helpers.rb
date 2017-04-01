@@ -269,7 +269,7 @@ module ServiceStubHelpers
                    headers: { 'Content-Type': 'application/json' })
     end
 
-    def stub_cruncher_match_resumes(args = [0,1,2,3,4,5,6,7])
+    def stub_cruncher_match_resumes(args = [1,2,3,4,5,6,7,8])
       body_json = JSON.generate('resultCode' => 'SUCCESS',
                                 'message' => 'Success',
                                 'resumes' => { 'matcher1' =>
