@@ -53,6 +53,7 @@ class JobsController < ApplicationController
                 .page(params[:page]).per_page(8)
 
     render partial: 'searched_job_list' if request.xhr?
+    record_history
   end
 
   def new
