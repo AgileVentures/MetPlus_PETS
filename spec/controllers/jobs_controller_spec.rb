@@ -223,6 +223,10 @@ RSpec.describe JobsController, type: :controller do
     let(:request) { get :show, id: bosh_job }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
 
+    it 'assigns a url to @back' do
+      assigns(:back)
+    end
+    
     context 'agency admin' do
       before(:each) do
         warden.set_user agency_admin
