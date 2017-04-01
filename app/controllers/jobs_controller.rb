@@ -344,7 +344,7 @@ class JobsController < ApplicationController
   def record_history
     session[:referer] ||= []
     session[:referer] << request.url
-    session[:referer].last(5)
+    session[:referer] = session[:referer].last(5) # Limit size to five
   end
   
   def back
