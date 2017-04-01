@@ -340,7 +340,7 @@ class JobsController < ApplicationController
                                                         :required, :min_years,
                                                         :max_years])
   end
-  
+
   def record_history
     session[:referer] ||= []
     session[:referer] << request.url
