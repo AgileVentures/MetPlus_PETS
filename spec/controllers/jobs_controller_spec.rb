@@ -78,6 +78,10 @@ RSpec.describe JobsController, type: :controller do
       expect(assigns(:description_words)).to match %w(responsive service)
     end
     it { expect(assigns(:jobs)[0]).to eq job1 }
+    
+    it 'updates the sessions hash with request url' do
+      expect(session[:referer].last).to eq(request.url)
+    end
   end
 
   describe 'GET #new' do
