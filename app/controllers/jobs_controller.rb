@@ -346,7 +346,7 @@ class JobsController < ApplicationController
     session[:referer] << request.url
     session[:referer] = session[:referer].last(5) # Limit size to five
   end
-  
+
   def back
     session[:referer] ? session[:referer].pop : nil
   end
