@@ -84,8 +84,8 @@ RSpec.describe User, type: :model do
 
          user = FactoryGirl.build(:user, email: 'emailaddress@gmal.com')
          user.valid?
-         expect(user.errors[:email]).to include('is not valid (did you mean\
-                                                  ... myaddress@gmail.com?)')
+         expect(user.errors[:email]).to include(
+           'is not valid (did you mean ... myaddress@gmail.com?)')
        end
      end
    end
