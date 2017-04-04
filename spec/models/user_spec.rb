@@ -78,6 +78,15 @@ RSpec.describe User, type: :model do
          user.email = 'emailaddress@gmal.com'
          expect(user).to be_valid
        end
+
+       it 'adds an error to object when validation fails' do
+         stub_email_validate_invalid
+
+         user = FactoryGirl.build(:user, email: 'emailaddress@gmal.com')
+         user.valid?
+         expect(user.errors[:email]).to include('is not valid (did you mean ...
+                                                myaddress@gmail.com?)')
+       end
      end
    end
 
