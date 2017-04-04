@@ -15,40 +15,36 @@ RSpec.describe Resume, type: :model do
   end
 
   describe 'Resume instance' do
-
     it 'is valid with all required fields' do
-
       stub_cruncher_authenticate
       stub_cruncher_file_upload
 
       file = fixture_file_upload('files/Janitor-Resume.doc')
       resume = Resume.new(file_name: 'testfile.doc',
-              job_seeker_id: FactoryGirl.create(:job_seeker).id,
-              file: file)
+                          job_seeker_id: FactoryGirl.create(:job_seeker).id,
+                          file: file)
 
       expect(resume).to be_valid
     end
     it 'is invalid without all required fields' do
-
       file = fixture_file_upload('files/Janitor-Resume.doc')
 
       resume = Resume.new(file_name: 'testfile.doc',
-              job_seeker_id: FactoryGirl.create(:job_seeker).id)
+                          job_seeker_id: FactoryGirl.create(:job_seeker).id)
       expect(resume).not_to be_valid
       resume = Resume.new(file_name: nil,
-              job_seeker_id: FactoryGirl.create(:job_seeker).id,
-              file: file)
+                          job_seeker_id: FactoryGirl.create(:job_seeker).id,
+                          file: file)
       expect(resume).not_to be_valid
       resume = Resume.new(file_name: 'testfile.doc',
-              job_seeker_id: nil,
-              file: file)
+                          job_seeker_id: nil,
+                          file: file)
       expect(resume).not_to be_valid
-
     end
   end
 
   context 'saving model instance and resume file' do
-    let(:job_seeker) {FactoryGirl.create(:job_seeker)}
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
 
     before(:each) do
       stub_cruncher_authenticate
@@ -56,7 +52,6 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'succeeds with valid model and file type' do
-
       file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
       resume = Resume.new(file: file,
                           file_name: 'Admin-Assistant-Resume.pdf',
@@ -66,19 +61,17 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'fails with invalid model and valid file type' do
-
       file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
       resume = Resume.new(file: file,
                           file_name: 'Admin-Assistant-Resume.pdf',
                           job_seeker_id: nil)
       expect(resume.save).to be false
-      expect(resume.errors.full_messages).
-              to contain_exactly("Job seeker can't be blank")
+      expect(resume.errors.full_messages)
+        .to contain_exactly("Job seeker can't be blank")
       expect(Resume.count).to eq 0
     end
 
     it 'fails with valid model and invalid file type' do
-
       file = fixture_file_upload('files/Test File.zzz')
       resume = Resume.new(file: file,
                           file_name: 'Test File.zzz',
@@ -88,7 +81,6 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'fails with invalid model and invalid file type' do
-
       file = fixture_file_upload('files/Test File.zzz')
       resume = Resume.new(file: file,
                           file_name: 'nil',
@@ -96,6 +88,19 @@ RSpec.describe Resume, type: :model do
       expect(resume.save).to be false
       expect(Resume.count).to eq 0
     end
-  end
 
+    it 'raises an error when the external cruncher raises an exception' do
+      stub_cruncher_file_upload_error
+      file = fixture_file_upload('files/Test File.zzz')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: job_seeker.id)
+      expect do
+        resume.save
+      end .to raise_error(RuntimeError)
+      expect(resume.errors.full_messages)
+        .to contain_exactly("File could not be uploaded - see system admin")
+      expect(resume.destroyed?).to be true
+    end
+  end
 end
