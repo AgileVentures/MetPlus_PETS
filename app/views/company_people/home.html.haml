@@ -26,14 +26,18 @@
         .tab-content
           - if @company_person.is_company_admin?(@company)
             .tab-pane#tab1
-              = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_new}
+              = render partial: 'tasks/tasks_structure',
+                       :locals => {task_type: @company_new}
           .tab-pane.active#tab2
-            = render partial: 'tasks/tasks_structure' , :locals => {task_type: @task_type}
+            = render partial: 'tasks/tasks_structure',
+                       :locals => {task_type: @task_type}
           - if @company_person.is_company_admin?(@company)
             .tab-pane#tab3
-              = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_all}
+              = render partial: 'tasks/tasks_structure',
+                       :locals => {task_type: @company_all}
           .tab-pane#tab4
-            = render partial: 'tasks/tasks_structure' , :locals => {task_type: @company_closed}
+            = render partial: 'tasks/tasks_structure',
+                       :locals => {task_type: @company_closed}
       .clearfix
 .row
   .col-sm-10.col-sm-offset-1.company-people-home
@@ -41,42 +45,46 @@
       %li.active
         -# href attribute needed for Capybara to find the 'a' element
         %a{ href: '#',
-            data: { target: '.company-people-home #all-jobs-pane', toggle: 'pill' }, href: '#' }
+            data: { target: '.company-people-home #all-jobs-pane',
+                    toggle: 'pill' }, href: '#' }
           All #{@company.name} jobs
       %li
         %a{ href: '#',
-            data: { target: '#all-on-pets-pane', toggle: 'pill' }, href: '#' }
+            data: { target: '#all-on-pets-pane',
+                    toggle: 'pill' }, href: '#' }
           All #{@company.name} people who are on PETS
       %li
         %a{ href: '#',
-            data: { target: '#company-infomation-pane', toggle: 'pill' }, href: '#' }
+            data: { target: '#company-infomation-pane',
+                    toggle: 'pill' }, href: '#' }
           Company Infomation
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
         .col-xs-12
-          .pagination-div{id: "jobs-#{@job_type}",
-                          data: {url: list_jobs_path(@job_type)}}
+          .pagination-div{ id: "jobs-#{@job_type}",
+                           data: { url: list_jobs_path(@job_type) } }
       .tab-pane.fade#all-on-pets-pane
         .col-xs-12
           - if @company_person.is_company_admin? @company
-            .col-xs-12{style: 'text-align: right;'}
+            .col-xs-12{ style: 'text-align: right;' }
               = link_to 'Invite Colleague',
                          new_user_invitation_path(person_type: 'CompanyPerson',
                          org_id: pets_user.company.id),
                          method: :get, class: 'btn btn-primary btn-sm pull-right'
         .col-xs-12
-          .pagination-div{id: "people-#{@people_type}",
-                          data: {url: list_people_company_path(@company.id, @people_type)}}
+          .pagination-div{ id: "people-#{@people_type}",
+                           data: { url: list_people_company_path(@company.id,
+                                                                 @people_type) } }
       .tab-pane.fade#company-infomation-pane
         .clearfix
           .col-xs-12
           - if @admin_ca
-            .col-sm-3.col-sm-offset-9{style: 'margin-top: 20px;'}
+            .col-sm-3.col-sm-offset-9{ style: 'margin-top: 20px;' }
               = link_to 'Edit Company Info',
                         edit_company_path(id: @company.id),
                         method: :get, class: 'btn btn-primary btn-sm pull-right'
           .col-xs-12
             = render partial: 'companies/company_info',
-                     locals: {company: @company,
-                              admin_aa: @admin_aa,
-                              company_admins: @company_admins}
+                     locals: { company: @company,
+                               admin_aa: @admin_aa,
+                               company_admins: @company_admins }
