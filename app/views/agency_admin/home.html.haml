@@ -19,7 +19,7 @@
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#agency_table
         .col-xs-12.text-right
-          = button_to 'Edit Your Profile', edit_agency_path(@agency), method: :get,
+          = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
             class: 'btn btn-primary table_action_button'
         .col-xs-12.pad-0
           = render partial: 'agencies/agency', object: @agency
