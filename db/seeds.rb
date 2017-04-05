@@ -238,7 +238,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                          job_seeker_status: @jss1, confirmed_at: Time.now,
                          address: create_address)
 
-
   # Have this JS apply to every other known_company jobs
   Job.where(company: known_company).each do |job|
     JobApplication.create(job: job, job_seeker: js1) unless job.id.even?
