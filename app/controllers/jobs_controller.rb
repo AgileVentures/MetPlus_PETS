@@ -53,7 +53,6 @@ class JobsController < ApplicationController
                 .page(params[:page]).per_page(8)
 
     render partial: 'searched_job_list' if request.xhr?
-    record_history
   end
 
   def new
@@ -90,7 +89,6 @@ class JobsController < ApplicationController
     @resume = nil
     @resume = pets_user.resumes[0] if pets_user.is_a?(JobSeeker)
     set_job_seekers
-    @back = back || jobs_url
   end
 
   def edit
@@ -339,15 +337,5 @@ class JobsController < ApplicationController
                                 job_skills_attributes: [:id, :_destroy, :skill_id,
                                                         :required, :min_years,
                                                         :max_years])
-  end
-
-  def record_history
-    session[:referer] ||= []
-    session[:referer] << request.url
-    session[:referer] = session[:referer].last(5) # Limit size to five
-  end
-
-  def back
-    session[:referer] ? session[:referer].pop : nil
   end
 end
