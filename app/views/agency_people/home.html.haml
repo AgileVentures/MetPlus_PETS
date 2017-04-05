@@ -1,10 +1,7 @@
 - provide(:person_home_active, 'active')
+
 .row
-  .col-sm-12
-    %h2
-      = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
-.row
-  .col-sm-10.col-sm-offset-1.tasks
+  .col-sm-10.col-sm-offset-1.tasks.margin-top
     .panel.with-nav-tabs.panel-success
       .panel-heading
         %ul.nav.nav-tabs
@@ -30,7 +27,7 @@
               - if !@agency_person.is_agency_admin?(@agency)
                 Your Closed Tasks
       .panel-body
-        .tab-content
+        .tab-content.tab-content-margin
           - if @agency_person.is_agency_admin?(@agency)
             .tab-pane#tab1
               = render partial: 'tasks/tasks_structure',
@@ -94,7 +91,7 @@
               data: { target: '.agency-people-home #cm-js-without-cm',
                       toggle: 'tab' } }
             Job Seekers without a CM
-    .tab-content
+    .tab-content.tab-content-margin
       - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
         .tab-pane.fade.in.active#js-as-jd
           - if @your_jobseekers_jd.empty?

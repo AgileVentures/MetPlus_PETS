@@ -79,7 +79,7 @@
     margin: 25px 0 12px 0;
 }
 
-/* this is for a button associated with a table above it. It is set close
+/* this is for a button associated with a table below it. It is set close
    to the table. See agency admin home view for example. */
 .table_action_button {
   margin-bottom: 10px;
@@ -88,6 +88,10 @@
 
 .margin-top {
    margin-top: 20px;
+}
+
+.tab-content-margin {
+  margin-top: 15px;
 }
 
 .navbar {
