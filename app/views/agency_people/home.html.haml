@@ -1,10 +1,7 @@
 - provide(:person_home_active, 'active')
+
 .row
-  .col-sm-12
-    %h2
-      = "Welcome back to PETS, #{pets_user.full_name(last_name_first: false)}"
-.row
-  .col-sm-10.col-sm-offset-1.tasks
+  .col-sm-10.col-sm-offset-1.tasks.margin-top
     .panel.with-nav-tabs.panel-success
       .panel-heading
         %ul.nav.nav-tabs
@@ -51,50 +48,42 @@
     - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
       %ul.nav.nav-pills.custom-pills
         %li.active
-          %a{ href: '#js-as-jd',
-              data: { target: '.agency-people-home #js-as-jd',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #js-as-jd', toggle: 'pill' } }
             Your Job Seekers (as JD)
         %li
-          %a{ href: '#js-as-cm',
-              data: { target: '.agency-people-home #js-as-cm',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #js-as-cm', toggle: 'pill' } }
             Your Job Seekers (as CM)
         %li
-          %a{ href: '#js-without-jd',
-              data: { target: '.agency-people-home #js-without-jd',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #js-without-jd', toggle: 'pill' } }
             Job Seekers without a JD
         %li
-          %a{ href: '#js-without-cm',
-              data: { target: '.agency-people-home #js-without-cm',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #js-without-cm', toggle: 'pill' } }
             Job Seekers without a CM
     - elsif @agency_person.is_job_developer?(@agency)
       %ul.nav.nav-pills.custom-pills
         %li.active
-          %a{ href: '#js-as-jd',
-              data: { target: '.agency-people-home #jd-js-as-jd',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #jd-js-as-jd', toggle: 'pill' } }
             Your Job Seekers (as JD)
         %li
-          %a{ href: '#js-without-jd',
-              data: { target: '.agency-people-home #jd-js-without-jd',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #jd-js-without-jd', toggle: 'pill' } }
             Job Seekers without a JD
     - elsif @agency_person.is_case_manager?(@agency)
       %ul.nav.nav-pills.custom-pills
         %li.active
-          %a{ href: '#js-as-cm',
-              data: { target: '.agency-people-home #cm-js-as-cm',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #cm-js-as-cm', toggle: 'pill' } }
             Your Job Seekers (as CM)
         %li
-          %a{ href: '#js-without-cm',
-              data: { target: '.agency-people-home #cm-js-without-cm',
-                      toggle: 'tab' } }
+          %a{ href: '#',
+              data: { target: '.agency-people-home #cm-js-without-cm', toggle: 'pill' } }
             Job Seekers without a CM
-    .tab-content
+    .tab-content.tab-content-margin
       - if @agency_person.is_job_developer?(@agency) && @agency_person.is_case_manager?(@agency)
         .tab-pane.fade.in.active#js-as-jd
           - if @your_jobseekers_jd.empty?

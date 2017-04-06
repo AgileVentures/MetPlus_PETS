@@ -109,7 +109,7 @@ Scenario: Case Manager actions
   # cannot edit other job seekers' profile
   Given I am on the Agency Person 'janey@metplus.org' Home page
   And I wait 1 second
-  And I click the "Job Seekers without a CM" link  
+  And I click the "Job Seekers without a CM" link
   And I wait 1 second
   Then I click the first "Seeker, John" link
   And I should not see "Edit Job Seeker"

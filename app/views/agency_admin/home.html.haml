@@ -16,7 +16,7 @@
       %li
         %a{ data: { toggle: 'pill' }, href: '#companies_table' }Companies
 
-    .tab-content
+    .tab-content.tab-content-margin
       .tab-pane.fade.in.active#agency_table
         .col-xs-12.text-right
           = button_to 'Edit Agency', edit_agency_path(@agency), method: :get,
