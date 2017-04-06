@@ -13,26 +13,26 @@ require 'rails_helper'
 RSpec.describe AgencyPeopleHelper, type: :helper do
   context 'disable agency admin check_box' do
     let(:agency) { FactoryGirl.create(:agency) }
-    let!(:aa_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
-                                      role: AgencyRole::ROLE[:AA])
-      $person.save
-      $person
+    let!(:aa_person) do
+      person = FactoryGirl.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryGirl.create(:agency_role,
+                                                role: AgencyRole::ROLE[:AA])
+      person.save
+      person
     end
-    let(:aa_person2)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
-                                      role: AgencyRole::ROLE[:AA])
-      $person.save
-      $person
+    let(:aa_person2) do
+      person = FactoryGirl.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryGirl.create(:agency_role,
+                                                role: AgencyRole::ROLE[:AA])
+      person.save
+      person
     end
-    let(:jd_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
-                                      role: AgencyRole::ROLE[:JD])
-      $person.save
-      $person
+    let(:jd_person) do
+      person = FactoryGirl.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryGirl.create(:agency_role,
+                                                role: AgencyRole::ROLE[:JD])
+      person.save
+      person
     end
 
     it 'returns true for sole agency admin' do
@@ -55,35 +55,50 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
     let!(:jd_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD]) }
     let!(:cm_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM]) }
 
-    let!(:aa_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << aa_role
-      $person.save
-      $person
+    let!(:aa_person) do
+      person = FactoryGirl.build(:agency_person, agency: agency)
+      person.agency_roles << aa_role
+      person.save
+      person
     end
-    let!(:cm_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << cm_role
-      $person.save
-      $person
+    let!(:cm_person) do
+      person = FactoryGirl.build(:agency_person, agency: agency)
+      person.agency_roles << cm_role
+      person.save
+      person
     end
-    let!(:jd_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << jd_role
-      $person.save
-      $person
+    let!(:jd_person) do
+      person = FactoryGirl.build(:agency_person, agency: agency)
+      person.agency_roles << jd_role
+      person.save
+      person
     end
-    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam', last_name: 'Smith') }
-    let!(:bob)     { FactoryGirl.create(:job_seeker, first_name: 'Bob', last_name: 'Smith') }
-    let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles', last_name: 'Smith') }
-    let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave', last_name: 'Smith') }
-
+    let!(:adam) do
+      FactoryGirl.create(:job_seeker,
+                         first_name: 'Adam',
+                         last_name: 'Smith')
+    end
+    let!(:bob) do
+      FactoryGirl.create(:job_seeker,
+                         first_name: 'Bob',
+                         last_name: 'Smith')
+    end
+    let!(:charles) do
+      FactoryGirl.create(:job_seeker,
+                         first_name: 'Charles',
+                         last_name: 'Smith')
+    end
+    let!(:dave) do
+      FactoryGirl.create(:job_seeker,
+                         first_name: 'Dave',
+                         last_name: 'Smith')
+    end
     before(:each) do
       cm_person.agency_relations << AgencyRelation.new(agency_role: cm_role,
-                                          job_seeker: adam)
+                                                       job_seeker: adam)
       cm_person.save!
       jd_person.agency_relations << AgencyRelation.new(agency_role: jd_role,
-                                          job_seeker: dave)
+                                                       job_seeker: dave)
       jd_person.save!
     end
     it 'returns job seekers for job developer role' do
