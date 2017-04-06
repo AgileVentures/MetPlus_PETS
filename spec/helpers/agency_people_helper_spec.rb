@@ -100,5 +100,12 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
       expect(job_seekers_assigned_or_assignable_to_ap(jd_person, :CM))
         .to match_array [bob, charles, dave]
     end
+    it 'returns job seekers for this role' do
+      expect(job_seekers_assigned_for_role(cm_person, :CM))
+        .to match_array [adam]
+
+      expect(job_seekers_assigned_for_role(jd_person, :JD))
+        .to match_array [dave]
+    end
   end
 end
