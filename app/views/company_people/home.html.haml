@@ -60,31 +60,28 @@
           Company Infomation
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
-        .col-xs-12
-          .pagination-div{ id: "jobs-#{@job_type}",
-                           data: { url: list_jobs_path(@job_type) } }
+        = link_to 'Post Job',
+                  new_job_path(company_id: @company_person.company.id,
+                               company_person_id: @company_person.id),
+                               class: 'table_action_button btn btn-primary btn-sm pull-right'
+        .pagination-div{ id: "jobs-#{@job_type}",
+                         data: { url: list_jobs_path(@job_type) } }
       .tab-pane.fade#all-on-pets-pane
-        .col-xs-12
-          - if @company_person.is_company_admin? @company
-            .col-xs-12{ style: 'text-align: right;' }
-              = link_to 'Invite Colleague',
-                         new_user_invitation_path(person_type: 'CompanyPerson',
-                         org_id: pets_user.company.id),
-                         method: :get, class: 'btn btn-primary btn-sm pull-right'
-        .col-xs-12
-          .pagination-div{ id: "people-#{@people_type}",
-                           data: { url: list_people_company_path(@company.id,
+        - if @company_person.is_company_admin? @company
+          = link_to 'Invite Colleague',
+                     new_user_invitation_path(person_type: 'CompanyPerson',
+                     org_id: pets_user.company.id),
+                     method: :get, class: 'table_action_button btn btn-primary btn-sm pull-right'
+        .pagination-div{ id: "people-#{@people_type}",
+                         data: { url: list_people_company_path(@company.id,
                                                                  @people_type) } }
       .tab-pane.fade#company-infomation-pane
-        .clearfix
-          .col-xs-12
-          - if @admin_ca
-            .col-sm-3.col-sm-offset-9{ style: 'margin-top: 20px;' }
-              = link_to 'Edit Company Info',
-                        edit_company_path(id: @company.id),
-                        method: :get, class: 'btn btn-primary btn-sm pull-right'
-          .col-xs-12
-            = render partial: 'companies/company_info',
-                     locals: { company: @company,
-                               admin_aa: @admin_aa,
-                               company_admins: @company_admins }
+        - if @admin_ca
+          = link_to 'Edit Company Info',
+                    edit_company_path(id: @company.id),
+                    method: :get, class: 'table_action_button btn btn-primary btn-sm pull-right'
+          .clearfix
+        = render partial: 'companies/company_info',
+                 locals: { company: @company,
+                           admin_aa: @admin_aa,
+                           company_admins: @company_admins }
