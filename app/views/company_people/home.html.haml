@@ -60,26 +60,33 @@
           Company Infomation
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
-        = link_to 'Post Job',
-                  new_job_path(company_id: @company_person.company.id,
-                               company_person_id: @company_person.id),
-                               class: 'table_action_button btn btn-primary btn-sm pull-right'
+        = link_to 'Post Job',                                                 |
+                  new_job_path(company_id: @company_person.company.id,        |
+                               company_person_id: @company_person.id),        |
+                               class: 'table_action_button btn btn-primary' + |
+                                      ' btn-sm pull-right'                    |
+
         .pagination-div{ id: "jobs-#{@job_type}",
                          data: { url: list_jobs_path(@job_type) } }
+
       .tab-pane.fade#all-on-pets-pane
         - if @company_person.is_company_admin? @company
           = link_to 'Invite Colleague',
                      new_user_invitation_path(person_type: 'CompanyPerson',
                      org_id: pets_user.company.id),
-                     method: :get, class: 'table_action_button btn btn-primary btn-sm pull-right'
+                     method: :get,
+                     class: 'table_action_button btn btn-primary btn-sm pull-right'
+
         .pagination-div{ id: "people-#{@people_type}",
                          data: { url: list_people_company_path(@company.id,
                                                                  @people_type) } }
+
       .tab-pane.fade#company-infomation-pane
         - if @admin_ca
           = link_to 'Edit Company Info',
                     edit_company_path(id: @company.id),
-                    method: :get, class: 'table_action_button btn btn-primary btn-sm pull-right'
+                    method: :get,
+                    class: 'table_action_button btn btn-primary btn-sm pull-right'
           .clearfix
         = render partial: 'companies/company_info',
                  locals: { company: @company,
