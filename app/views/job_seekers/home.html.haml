@@ -32,11 +32,9 @@
                          data: { url: list_jobs_path(@recent_jobs_type) } }
 
       .tab-pane.fade#profile
-        .col-xs-12.text-right
-          = button_to 'Edit Your Profile', edit_job_seeker_path(@jobseeker),
-                      method: :get,
-                      class: 'btn btn-primary table_action_button'
-        .col-xs-12.pad-0
-          = render partial: 'info', locals: {job_seeker: @jobseeker,
-                                           offer_download: false}
-          .clearfix
+        = button_to 'Edit Your Profile', edit_job_seeker_path(@jobseeker),
+                    method: :get,
+                    class: 'table_action_button btn btn-primary btn-sm pull-right'
+        = render partial: 'info', locals: {job_seeker: @jobseeker,
+                                         offer_download: false}
+        .clearfix
