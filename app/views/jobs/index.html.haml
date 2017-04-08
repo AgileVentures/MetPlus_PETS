@@ -3,6 +3,18 @@
 .row
   .col-sm-3
     %h2 Search Jobs
+
+  - if pets_user.is_a?(AgencyPerson) && pets_user.is_job_developer?(pets_user.agency)
+    .col-sm-9{ style: 'margin-top: 20px;' }
+      = link_to 'Post Job', new_job_path,
+                class: 'btn btn-primary btn-sm pull-right'
+
+  - elsif pets_user.is_a?(CompanyPerson)
+    .col-sm-9{ style: 'margin-top: 20px;' }
+      = link_to 'Post Job', new_job_path(company_id: pets_user.company.id,
+                                         company_person_id: pets_user.id),
+                                         class: 'btn btn-primary btn-sm pull-right'
+
 .row
   .col-sm-3
     %a.text-danger#toggle_search_form{ href: '#job_search_form',
