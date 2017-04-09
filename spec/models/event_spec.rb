@@ -429,8 +429,7 @@ RSpec.describe Event, type: :model do
         job_id:    job.id,
         job_title: job.title,
         company_name: company.name,
-        notify_list: [job_developer.user.id, job_developer1.user.id]
-      )
+        notify_list: [job_developer.user.id, job_developer1.user.id])
     end
 
     it 'sends event notification email' do

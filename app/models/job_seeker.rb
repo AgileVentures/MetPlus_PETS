@@ -1,14 +1,15 @@
 class JobSeeker < ActiveRecord::Base
   acts_as :user
-  has_many :resumes
+  has_many :resumes, dependent: :destroy
 
   has_one :address, as: :location, dependent: :destroy
   accepts_nested_attributes_for :address
-  has_many   :agency_relations
+
+  has_many   :agency_relations, dependent: :destroy
   has_many   :agency_people, through: :agency_relations
 
   validates_presence_of :year_of_birth
-  has_many   :job_applications
+  has_many   :job_applications, dependent: :destroy
   has_many   :jobs, through: :job_applications
 
   validates  :year_of_birth, year_of_birth: true

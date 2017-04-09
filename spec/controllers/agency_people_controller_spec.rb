@@ -220,7 +220,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'assigns job seekers to the job developer' do
         patch :update, id: jd_person, agency_person: person_hash
         expect(assigns(:agency_person).as_jd_job_seeker_ids)
-          .to eq [job_seeker.id, adam.id]
+          .to contain_exactly(job_seeker.id, adam.id)
       end
 
       it 'sends notification emails to job seekers and to JD for each job seeker' do
@@ -246,7 +246,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'assigns job seekers to the case manager' do
         patch :update, id: cm_person, agency_person: person_hash
         expect(assigns(:agency_person).as_cm_job_seeker_ids)
-          .to eq [job_seeker.id, adam.id]
+          .to contain_exactly(job_seeker.id, adam.id)
       end
       it 'sends notification emails to job seekers and to CM for each job seeker' do
         expect { patch :update, id: cm_person, agency_person: person_hash }

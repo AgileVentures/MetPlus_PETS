@@ -321,18 +321,17 @@ RSpec.describe TasksController, type: :controller do
         end
 
         it 'check content' do
-          expect(JSON.parse(subject.body))
-            .to eq('results' =>
-                        [
-                          { 'id' => @jd1.id,
-                            'text' => @jd1.full_name },
-                          { 'id' => @jd2.id,
-                            'text' => @jd2.full_name },
-                          { 'id' => @jd3.id,
-                            'text' => @jd3.full_name },
-                          { 'id' => @jd4.id,
-                            'text' => @jd4.full_name }
-                        ])
+          results = JSON.parse(subject.body)
+          expect(results).to include('results')
+          expect(results['results'])
+            .to include({ 'id' => @jd1.id,
+                          'text' => @jd1.full_name },
+                        { 'id' => @jd2.id,
+                          'text' => @jd2.full_name },
+                        { 'id' => @jd3.id,
+                          'text' => @jd3.full_name },
+                        { 'id' => @jd4.id,
+                          'text' => @jd4.full_name })
         end
       end
 
