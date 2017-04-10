@@ -53,6 +53,7 @@ Background: seed data added to database
   	| job_seeker       | agency_person    | role |
   	| tommy1@gmail.com | aa@metplus.org   | JD   |
 
+@mailgun
 Scenario: JS Registration and model(s) validation
   Given I am on the Jobseeker Registration page
   When I fill in "First Name" with "test"
