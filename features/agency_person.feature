@@ -48,8 +48,8 @@ Scenario: Case Manager actions
   And I login as "jane@metplus.org" with password "qwerty123"
   And I wait 1 second
   And I should be on the Agency Person 'jane@metplus.org' Home page
-  And I should see "Your Job Seekers (as case manager)"
-  And I should not see "Job Seekers without a Job Developer"
+  And I should see "Your Job Seekers (as CM)"
+  And I should not see "Job Seekers without a JD"
   And I click the "Hello, Jane" link
   And I click the "My Profile" link
   Then I click the "Edit" link
@@ -82,6 +82,8 @@ Scenario: Case Manager actions
   And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
+  And I click the "Job Seekers without a CM" link
+  And I wait 1 second
   And I click the "Worker, Wanda" link
   And I wait 1 second
   And I should not see "Janey Jones"
@@ -107,6 +109,8 @@ Scenario: Case Manager actions
   # cannot edit other job seekers' profile
   Given I am on the Agency Person 'janey@metplus.org' Home page
   And I wait 1 second
+  And I click the "Job Seekers without a CM" link
+  And I wait 1 second
   Then I click the first "Seeker, John" link
   And I should not see "Edit Job Seeker"
 
@@ -116,7 +120,7 @@ Scenario: Job Developer actions
   Given I am on the home page
   And I login as "bill@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'bill@metplus.org' Home page
-  And I should see "Your Job Seekers (as job developer)"
+  And I should see "Your Job Seekers (as JD)"
   And I should see "There are no job seekers assigned to you yet."
 
   # JD with tasks
@@ -138,6 +142,8 @@ Scenario: Job Developer actions
   And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
+  And I click the "Job Seekers without a JD" link
+  And I wait 1 second
   Then I click the "Worker, John" link
   And I wait 1 second
   And I should see "Assign Myself"
@@ -187,5 +193,8 @@ Scenario: Job seekers assigned to person as Job developer and case manager
   And I login as "mark@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'mark@metplus.org' Home page
   And I wait 1 second
-  And I should see "Seeker, Tom" between "Your Job Seekers (as job developer)" and "Your Job Seekers (as case manager)"
-  And I should see "Jones, Mary" after "Your Job Seekers (as case manager)"
+  And I should see "Your Job Seekers (as JD)"
+  And I should see "Seeker, Tom"
+  And I click the "Your Job Seekers (as CM)" link
+  And I wait 1 second
+  And I should see "Jones, Mary"

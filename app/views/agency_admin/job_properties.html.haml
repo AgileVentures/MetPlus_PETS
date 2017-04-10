@@ -5,46 +5,42 @@
     %h3 PETS Administration - Job Properties
 
 .row
-  .col-sm-10.col-sm-offset-1.job-properties-container
-    %ul.nav.nav-pills.custom-pills{ role: 'tablist' }
-      %li.active{ role: 'presentation' }
-        %a{ href: '#job-specialties-pane',  'aria-controls' => 'job-specialties', role: 'tab', data: { toggle: 'tab' } }
-          Job Specialties
-        %li{ role: 'presentation' }
-          %a{ href: '#job-skills-pane',  'aria-controls' => 'job-skills', role: 'tab', data: { toggle: 'tab' } }
-            Job Skills
+  .col-sm-10.col-sm-offset-1.agency-admin-container
+    %ul.nav.nav-pills
+      %li.active
+        %a{ data: { toggle: 'pill'}, href: '#job-specialties-pane' }Job Specialties
+      %li
+        %a{ data: { toggle: 'pill'}, href: '#job-skills-pane' }Job Skills
 
-    .tab-content
-      .tab-pane.fade.in.active#job-specialties-pane{ role: 'panel' }
+    .tab-content.tab-content-margin
+      .tab-pane.fade.in.active#job-specialties-pane
         .col-xs-12.text-right
-          %button.btn.btn-primary.pad-10#add-job-specialty-modal-btn{ data: { toggle: 'modal', target: '#add_job_category' } }
-            %span.glyphicon.glyphicon-plus
-            &nbsp; Add job specialty
+          %button.btn.btn-primary.table_action_button#add-job-specialty-modal-btn{ data: { toggle: 'modal', target: '#add_job_category' } }
+            Add job specialty
         .col-xs-12.pad-0
-          - if @job_categories.empty?
-            %h5 There are no job specialties.
-          - else
-            = render partial: 'job_specialties', object: @job_categories,
-                      locals: { data_type:  'job_categories',
-                               partial_id: 'job_categories_table',
-                               show_property_path:   :job_category_path,
-                               delete_property_path: :job_category_path }
+        - if @job_categories.empty?
+          %h5 There are no job specialties.
+        - else
+          = render partial: 'job_specialties', object: @job_categories,
+                    locals: { data_type:  'job_categories',
+                              partial_id: 'job_categories_table',
+                              show_property_path:   :job_category_path,
+                              delete_property_path: :job_category_path }
           .clearfix
 
-      .tab-pane.fade#job-skills-pane{ role: 'panel' }
+      .tab-pane.fade#job-skills-pane
         .col-xs-12.text-right
-          %button.btn.btn-primary.pad-10#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
-            %span.glyphicon.glyphicon-plus
-            &nbsp; Add job skill
+          %button.btn.btn-primary.table_action_button#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
+            Add job skill
         .col-xs-12.pad-0
-          - if @skills.empty?
-            %h5 There are no job skills.
-          - else
-            = render partial: 'job_skills', object: @skills,
-                      locals: {data_type:  'skills',
-                               partial_id: 'skills_table',
-                               show_property_path:   :skill_path,
-                               delete_property_path: :skill_path}
+        - if @skills.empty?
+          %h5 There are no job skills.
+        - else
+          = render partial: 'job_skills', object: @skills,
+                    locals: {data_type:  'skills',
+                              partial_id: 'skills_table',
+                              show_property_path:   :skill_path,
+                              delete_property_path: :skill_path}
           .clearfix
 
 = render partial: 'property_modal',

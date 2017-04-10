@@ -1,4 +1,4 @@
-#companies_table
+%div
   %table.table.table-hover
     %thead
       %tr
@@ -20,5 +20,5 @@
             = single_line_address(company.addresses.first)
           %td
             = status_desc(company)
-  = will_paginate @companies, param_name: 'companies_page', |
-                      params: {data_type: 'companies'}      |
+  = will_paginate @companies, param_name: 'companies_page',
+                      params: {data_type: 'companies'}

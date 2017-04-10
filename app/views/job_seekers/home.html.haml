@@ -1,24 +1,40 @@
 - provide(:person_home_active, 'active')
 
 .row
-  .col-sm-3
-    %h3
-      Your Information
-    %a(id='toggle_info' href='#info_table' class='text-danger'
-                style='padding-left: 10px;')
-      Hide Your Information
+  .col-sm-10.col-sm-offset-1.job-seeker-home.margin-top
+    %ul.nav.nav-pills.custom-pills
+      %li.active
+        %a{ href: '#applications', data: { toggle: 'pill' } }
+          Your Applications
+      %li
+        %a{ href: '#opportunities', data: { toggle: 'pill' } }
+          New Job Opportunities
+      %li
+        %a{ href: '#profile', data: { toggle: 'pill' } }
+          Your Profile
 
-  .col-sm-9
-    = render partial: 'info', locals: {job_seeker: @jobseeker, offer_download: false}
+    .tab-content.tab-content-margin
+      .tab-pane.fade.in.active#applications
 
-%h3 Your Applications
-.pagination-div{ id: "applications-#{@application_type}",
-                 data: { url: list_applications_path(@application_type, @jobseeker) } }
+        .pagination-div{ id: "applications-#{@application_type}",
+                         data: { url: list_applications_path(@application_type,
+                                                             @jobseeker) } }
 
-%h3
-  Job Opportunities - New
-  %span.text-muted.small (Jobs since last login shown in yellow)
-%div
-  .pagination-div{ id: 'recent-jobs',
-                   data: { url: list_jobs_path(@recent_jobs_type) } }
-.clearfix
+      .tab-pane.fade#opportunities
+
+        %span.text-muted.small
+          (Jobs since last login shown in
+          %span.recent-jobs yellow
+          )
+          -# %span.text-muted.small.recent-jobs yellow)
+
+        .pagination-div{ id: 'recent-jobs',
+                         data: { url: list_jobs_path(@recent_jobs_type) } }
+
+      .tab-pane.fade#profile
+        = button_to 'Edit Your Profile', edit_job_seeker_path(@jobseeker),
+                    method: :get,
+                    class: 'table_action_button btn btn-primary btn-sm pull-right'
+        = render partial: 'info', locals: {job_seeker: @jobseeker,
+                                         offer_download: false}
+        .clearfix

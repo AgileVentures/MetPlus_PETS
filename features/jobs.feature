@@ -34,11 +34,11 @@ Background: adding job to database
   | Gadgets Inc. | 2 Ford Drive | Detroit | Michigan | 02094   |
 
 
-@selenium
+@javascript
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "jane@ymail.com" with password "qwerty123"
-  When I click the "Post Job" link
+  When I click the first "Post Job" link
   And I wait 1 second
   And I fill in the fields:
     | Title            | cashier|
@@ -87,7 +87,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I logout
 
 
-@selenium
+@javascript
 Scenario: Creating and Updating Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "hr@metplus.org" with password "qwerty123"
@@ -124,20 +124,6 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
   And  I check "Fulltime"
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
-
-  When I click the "Post Job" link
-  And  I fill in the fields:
-    | Title                  |  |
-  And  I select "Widgets Inc." in select list "Company Name"
-  And I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
-  And I fill in the fields:
-    | Company Job ID         |  |
-    | Description            |  |
-  And  I select "Day" in select list "Shift"
-  And  I check "Fulltime"
-  And  I press "new-job-submit"
-  And I wait 1 second
-  Then  I should see "The form contains 3 errors"
 
 @javascript
 Scenario: Cancel out of job edit

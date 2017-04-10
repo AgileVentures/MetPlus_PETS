@@ -41,7 +41,6 @@ Background: seed data added to database
     | Doctor     | tommy1@gmail.com     |
     | Mime       | tommy1@gmail.com     |
 
-
   Given the following resumes exist:
     | file_name          | job_seeker             |
     | Janitor-Resume.doc | mike.smith@gmail.com |
@@ -105,11 +104,12 @@ Scenario: job seeker sees applied jobs and new job opportunities
   And I wait 1 second
   Then I should see "Signed in successfully"
   And I should be on the Job Seeker 'mike.smith@gmail.com' Home page
-  And I should see "SW dev" before "Job Opportunities - New"
-  And I should see "Trucker" before "Job Opportunities - New"
-  And I should see "Doctor" before "Job Opportunities - New"
-  And I should see "Mime" after "Job Opportunities - New"
-  And I should see "Clerk" after "Job Opportunities - New"
+  And I click the "New Job Opportunities" link
+  And I should see "SW dev"
+  And I should see "Trucker"
+  And I should see "Doctor"
+  And I should see "Mime"
+  And I should see "Clerk"
 
 Scenario: edit Js profile
   # without password change
