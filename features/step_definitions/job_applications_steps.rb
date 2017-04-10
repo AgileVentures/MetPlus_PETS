@@ -70,8 +70,7 @@ end
 And(/^I\sshould\ssee\smy\sapplication\sfor\s"([^"]*)"\sshow\sstatus\s
   "([^"]*)"$/x) do |job_title, status|
   job = Job.find_by(title: job_title.to_s)
-  status_enum = JobApplication.statuses[status.downcase.tr(' ', '_')]
-  job_app = JobApplication.find_by(job: job, status: status_enum)
+  job_app = JobApplication.find_by(job: job, job_seeker: @user)
   expect(page.find("#applications-#{job_app.id}")).to have_content(status.to_s)
 end
 
