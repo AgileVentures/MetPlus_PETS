@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-
-
 ruby '2.3.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -102,6 +100,8 @@ group :development, :test do
 
   gem 'jasmine'
   gem 'jasmine-jquery-rails'
+
+  gem "cucumber_in_groups", :require => false
 end
 
 group :test do
