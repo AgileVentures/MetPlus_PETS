@@ -121,19 +121,19 @@ Scenario: Job Developer actions
   And I should see "There are no job seekers assigned to you yet."
 
   # JD with tasks
-  And I click the "Hello, Bill" link
-  Then I logout
-  And I login as "jane-dev@metplus.org" with password "qwerty123"
-  And I should be on the Agency Person 'jane-dev@metplus.org' Home page
-  And I should see "Your Open Tasks"
-  And I should see "Job Seeker has no assigned Job Developer"
-  And I should not see "Job Seeker has no assigned Case Manager"
-  And the task 3 status is "Assigned"
-  Then I press the wip button of the task 3
-  And I should see notification "Work on the task started"
-  And the task 3 status is "Work in progress"
-  Then I press the done button of the task 3
-  And I should see notification "Work on the task is done"
+  #And I click the "Hello, Bill" link
+  #Then I logout
+  #And I login as "jane-dev@metplus.org" with password "qwerty123"
+  #And I should be on the Agency Person 'jane-dev@metplus.org' Home page
+  #And I should see "Your Open Tasks"
+  #And I should see "Job Seeker has no assigned Job Developer"
+  #And I should not see "Job Seeker has no assigned Case Manager"
+  #And the task 3 status is "Assigned"
+  #Then I press the wip button of the task 3
+  #And I should see notification "Work on the task started"
+  #And the task 3 status is "Work in progress"
+  #Then I press the done button of the task 3
+  #And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
   #And I click the "Job Seekers without a JD" link
