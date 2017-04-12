@@ -149,10 +149,12 @@ describe JobSeeker, type: :model do
 
     describe 'class methods for job seekers agency relations' do
       it '.job_seekers_without_job_developer returns job seekers with no job developer' do
-        expect(JobSeeker.job_seekers_without_job_developer).to match([adam, bob, charles])
+        expect(JobSeeker.job_seekers_without_job_developer)
+          .to contain_exactly(adam, bob, charles)
       end
       it '.job_seekers_without_case_manager returns job seekers with no case manager' do
-        expect(JobSeeker.job_seekers_without_case_manager).to match([bob, charles, dave])
+        expect(JobSeeker.job_seekers_without_case_manager)
+          .to contain_exactly(bob, charles, dave)
       end
     end
 

@@ -72,7 +72,6 @@ Scenario: Case Manager actions
 
   # See tasks on home page
   Given I am on the Agency Person 'janey@metplus.org' Home page
-  And I wait 2 seconds
   And I should see "Your Open Tasks"
   And I should see "Job Seeker has no assigned Case Manager"
   And I should see "Work in progress( Jones, Janey )"
@@ -85,11 +84,9 @@ Scenario: Case Manager actions
   And I click the "Job Seekers without a CM" link
   And I wait 1 second
   And I click the "Worker, Wanda" link
-  And I wait 1 second
   And I should not see "Janey Jones"
   And I should see "Assign Myself"
   And I click the "Assign Myself" button
-  And I wait 2 seconds
   Then I should see "Janey Jones"
   And I should not see "Assign Myself"
 
@@ -128,29 +125,23 @@ Scenario: Job Developer actions
   Then I logout
   And I login as "jane-dev@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'jane-dev@metplus.org' Home page
-  And I wait 2 seconds
   And I should see "Your Open Tasks"
   And I should see "Job Seeker has no assigned Job Developer"
   And I should not see "Job Seeker has no assigned Case Manager"
   And the task 3 status is "Assigned"
   Then I press the wip button of the task 3
-  And I wait 5 seconds
   And I should see notification "Work on the task started"
   And the task 3 status is "Work in progress"
   Then I press the done button of the task 3
-  And I wait 1 second
   And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
   And I click the "Job Seekers without a JD" link
   And I wait 1 second
   Then I click the "Worker, John" link
-  And I wait 1 second
   And I should see "Assign Myself"
   And I click the "Assign Myself" button
-  And I wait 2 seconds
   Then I should see "Jane Developer"
-  And I should not see "Assign Myself"
 
 @javascript
 Scenario: Agency Admin actions
@@ -158,7 +149,6 @@ Scenario: Agency Admin actions
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'aa@metplus.org' Home page
-  And I wait 2 seconds
   And I should see "Unassigned Agency Tasks"
   And I should see "Your Open Tasks"
   And I should see "All Agency Open Tasks"
@@ -181,8 +171,8 @@ Scenario: Agency Admin actions
   And I should see "Select the user to assign the task to:"
   And I select2 "Jones, Jane" from "task_assign_select"
   Then I press "Assign"
-  And I wait 1 second
   And I should see notification "Task assigned"
+  And I wait 2 seconds
   And the task 2 is not present
   And I click the "All Agency Open Tasks" link
   And the task 2 is present
@@ -192,9 +182,7 @@ Scenario: Job seekers assigned to person as Job developer and case manager
   Given I am on the home page
   And I login as "mark@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'mark@metplus.org' Home page
-  And I wait 1 second
   And I should see "Your Job Seekers (as JD)"
   And I should see "Seeker, Tom"
   And I click the "Your Job Seekers (as CM)" link
-  And I wait 1 second
   And I should see "Jones, Mary"

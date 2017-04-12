@@ -56,12 +56,18 @@ RSpec.describe TaskManager::TaskManager do
       end
       describe 'Task to all JD with JS as target' do
         subject {TaskTester.create_task({:agency => {agency: @agency, role: :JD}}, 'simple', @job_seeker)}
-        it('check owner'){expect(subject.task_owner).to eq [@job_developer1, @job_developer2, @cm_and_jd]}
+        it('check owner') do
+          expect(subject.task_owner)
+            .to contain_exactly(@job_developer1, @job_developer2, @cm_and_jd)
+        end
         it('check target'){expect(subject.target).to eq @job_seeker}
       end
       describe 'Task to all CM with JS and Company as target' do
         subject {TaskTester.create_task({:agency => {agency: @agency, role: :CM}}, 'simple', @job_seeker, @company)}
-        it('check owner'){expect(subject.task_owner).to eq [@case_manager1, @case_manager2, @cm_and_jd]}
+        it('check owner') do
+          expect(subject.task_owner)
+            .to contain_exactly(@case_manager1, @case_manager2, @cm_and_jd)
+        end
         it('check target'){expect(subject.target).to eq @job_seeker}
         it('check company'){expect(subject.company).to eq @company}
       end
@@ -73,7 +79,10 @@ RSpec.describe TaskManager::TaskManager do
       end
       describe 'Task to all CC with JS, Company and Job as target' do
         subject {TaskTester.create_task({:company => {company: @company, role: :CC}}, 'simple', @job_seeker, @job, @company)}
-        it('check owner'){expect(subject.task_owner).to eq [@company_contact1, @company_contact2]}
+        it('check owner') do
+          expect(subject.task_owner)
+            .to contain_exactly(@company_contact1, @company_contact2)
+        end
         it('check target'){expect(subject.target).to eq @job_seeker}
         it('check job'){expect(subject.job).to eq @job}
         it('check company'){expect(subject.company).to eq @company}
