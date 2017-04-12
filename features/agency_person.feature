@@ -136,12 +136,12 @@ Scenario: Job Developer actions
   And I should see notification "Work on the task is done"
 
   # Assigns self to job seeker
-  And I click the "Job Seekers without a JD" link
-  And I wait 1 second
-  Then I click the "Worker, John" link
-  And I should see "Assign Myself"
-  And I click the "Assign Myself" button
-  Then I should see "Jane Developer"
+  #And I click the "Job Seekers without a JD" link
+  #And I wait 1 second
+  #Then I click the "Worker, John" link
+  #And I should see "Assign Myself"
+  #And I click the "Assign Myself" button
+  #Then I should see "Jane Developer"
 
 @javascript
 Scenario: Agency Admin actions
