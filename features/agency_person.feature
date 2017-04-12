@@ -142,7 +142,6 @@ Scenario: Job Developer actions
   And I should see "Assign Myself"
   And I click the "Assign Myself" button
   Then I should see "Jane Developer"
-  And I should not see "Assign Myself"
 
 @javascript
 Scenario: Agency Admin actions
