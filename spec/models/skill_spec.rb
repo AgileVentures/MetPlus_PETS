@@ -46,7 +46,7 @@ RSpec.describe Skill, type: :model do
     end
 
     it 'returns true with a job' do
-      job_skill = FactoryGirl.create(:job_skill, job: job, skill: skill)
+      FactoryGirl.create(:job_skill, job: job, skill: skill)
       expect(skill.has_job?).to be true
     end
   end
