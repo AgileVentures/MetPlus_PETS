@@ -330,8 +330,8 @@ RSpec.describe TasksController, type: :controller do
                           'text' => @jd2.full_name },
                         { 'id' => @jd3.id,
                           'text' => @jd3.full_name },
-                          'id' => @jd4.id,
-                          'text' => @jd4.full_name )
+                        'id' => @jd4.id,
+                        'text' => @jd4.full_name)
         end
       end
 
