@@ -9,7 +9,7 @@ class ChangeJsApAssociation < ActiveRecord::Migration
 
     add_index :agency_relations, :agency_person_id
     add_index :agency_relations, :job_seeker_id
-    add_foreign_key :agency_relations, :agency_people
-    add_foreign_key :agency_relations, :job_seekers
+    # add_foreign_key :agency_relations, :agency_people
+    # add_foreign_key :agency_relations, :job_seekers
   end
 end

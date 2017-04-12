@@ -70,7 +70,8 @@ end
 And(/^I\sshould\ssee\smy\sapplication\sfor\s"([^"]*)"\sshow\sstatus\s
   "([^"]*)"$/x) do |job_title, status|
   job = Job.find_by(title: job_title.to_s)
-  job_app = JobApplication.find_by(job: job)
+  status_enum = JobApplication.statuses[status.downcase.gsub(' ','_')]
+  job_app = JobApplication.find_by(job: job, status: status_enum)
   expect(page.find("#applications-#{job_app.id}")).to have_content(status.to_s)
 end
 
@@ -87,4 +88,3 @@ end
 And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
-

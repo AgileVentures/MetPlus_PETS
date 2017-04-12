@@ -387,7 +387,7 @@ class Event
 
     return if job_developers.empty?
 
-    jd_ids    = job_developers.map { |jd| jd.user.id }
+    jd_ids    = job_developers.map { |jd| jd.user.id }.sort # for test purposes
     jd_emails = job_developers.map(&:email)
 
     Pusher.trigger('pusher_control',
@@ -411,7 +411,7 @@ class Event
 
     return if job_developers.empty?
 
-    jd_ids     = job_developers.map { |jd| jd.user.id }
+    jd_ids     = job_developers.map { |jd| jd.user.id }.sort
     jd_emails  = job_developers.map(&:email)
 
     Pusher.trigger('pusher_control',
@@ -425,12 +425,12 @@ class Event
                   .perform_later(jd_emails,
                                  EVT_TYPE[:JOB_REVOKED],
                                  evt_obj.job)
-    
+
     job_apps = evt_obj.job.job_applications
 
     return if job_apps.empty?
 
-    js_ids = job_apps.map { |ja| ja.job_seeker.user.id }
+    js_ids = job_apps.map { |ja| ja.job_seeker.user.id }.sort
     js_list = job_apps.map(&:job_seeker)
 
     Pusher.trigger('pusher_control',
