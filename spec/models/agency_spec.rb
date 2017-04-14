@@ -116,17 +116,18 @@ RSpec.describe Agency, type: :model do
     end
 
     it 'identifies agency admins' do
-      expect(Agency.agency_admins(agency)).to eq [aa_person1, aa_person2]
+      expect(Agency.agency_admins(agency))
+        .to contain_exactly(aa_person1, aa_person2)
     end
 
     it 'identifies agency' do
       expect(Agency.this_agency(jd_person)).to eq agency
       expect(Agency.this_agency(aa_person1)).to eq agency
     end
-    
+
     it 'identifies non-agency' do
       expect(Agency.this_agency(js_person)).to eq nil
-    end  
+    end
   end
 
   describe 'Class methods' do
@@ -138,7 +139,7 @@ RSpec.describe Agency, type: :model do
 
     it 'returns all emails for people in the agency' do
       expect(Agency.all_agency_people_emails).
-        to eq [person1.email, person2.email, person3.email]
+        to contain_exactly(person1.email, person2.email, person3.email)
     end
   end
 end

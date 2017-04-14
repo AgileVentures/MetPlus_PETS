@@ -1016,7 +1016,7 @@ RSpec.describe JobsController, type: :controller do
           FactoryGirl.create(:resume)
         end
         job_seeker = Resume.find(7).job_seeker
-        job_seeker.destroy
+        job_seeker.delete # use 'delete' to prevent destroying associated objects
 
         get :match_job_seekers, id: bosh_job.id
 

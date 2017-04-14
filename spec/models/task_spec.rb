@@ -117,11 +117,13 @@ RSpec.describe Task, type: :model do
     end
     it 'job developer role' do
       @task.task_owner = {:agency => {agency: @agency, role: :JD}}
-      expect(@task.task_owner).to eq [@job_developer1, @job_developer2, @cm_and_jd]
+      expect(@task.task_owner)
+        .to contain_exactly(@job_developer1, @job_developer2, @cm_and_jd)
     end
     it 'case manager role' do
       @task.task_owner = {:agency => {agency: @agency, role: :CM}}
-      expect(@task.task_owner).to eq [@case_manager1, @case_manager2, @cm_and_jd]
+      expect(@task.task_owner)
+        .to contain_exactly(@case_manager1, @case_manager2, @cm_and_jd)
     end
     it 'agency admin role' do
       @task.task_owner = {:agency => {agency: @agency, role: :AA}}
@@ -133,7 +135,8 @@ RSpec.describe Task, type: :model do
     end
     it 'company contact role' do
       @task.task_owner = {:company => {company: @company, role: :CC}}
-      expect(@task.task_owner).to eq [@company_contact1, @company_contact2]
+      expect(@task.task_owner)
+        .to contain_exactly(@company_contact1, @company_contact2)
     end
   end
   describe 'Setting target of the task' do
