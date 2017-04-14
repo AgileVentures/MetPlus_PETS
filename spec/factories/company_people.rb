@@ -13,7 +13,8 @@ FactoryGirl.define do
     user
     title "Admin"
     status 'active'
-    company_roles {[CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) || FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]}
+    company_roles {[CompanyRole.find_by_role(CompanyRole::ROLE[:CC]) || FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])]
+                   [CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) || FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]}
   end
 
   factory :company_contact, class: CompanyPerson do
