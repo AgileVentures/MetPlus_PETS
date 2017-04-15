@@ -94,9 +94,9 @@ Scenario: Case Manager actions
   And I reload the page
   Then I click "Edit Job Seeker" button
   And I should see "Edit JobSeeker Registration"
-  And I should not see "Password"
-  And I should not see "Password Confirmation"
-  And I should not see "Year of Birth"
+  And I should see "Password"
+  And I should see "Password Confirmation"
+  And I should see "Year Of Birth"
   Then I fill in "First Name" with "Samantha"
   Then I click "Update Job seeker" button
   And I should see "Jobseeker was updated successfully."
@@ -186,3 +186,19 @@ Scenario: Job seekers assigned to person as Job developer and case manager
   And I should see "Seeker, Tom"
   And I click the "Your Job Seekers (as CM)" link
   And I should see "Jones, Mary"
+
+Scenario: Case Manager can create a Job Developer
+  Given I am on the home page
+  And I login as "jane@metplus.org" with password "qwerty123"
+  Then I should see "Add Job Seeker"
+  And I click the "Add Job Seeker" link
+  And I fill in "First Name" with "Joe"
+  And I fill in "Last Name" with "Bloggs"
+  And I fill in "Email" with "Joe.Bloggs@test.com"
+  And I fill in "Phone" with "345-890-7890"
+  And I fill in "Password" with "password"
+  And I fill in "Password Confirmation" with "password"
+  And I select "1990" in select list "Year Of Birth"
+  And I select "Employed Not Looking" in select list "Status"
+  Then I click the "Create Job seeker" button
+  Then I should see "A message with a confirmation and link has been sent to your email address."

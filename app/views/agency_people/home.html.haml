@@ -1,6 +1,10 @@
 - provide(:person_home_active, 'active')
 
 .row
+  .col-sm-10.col-sm-offset-1.margin-top
+    = link_to "Add Job Seeker", new_job_seeker_path, class: 'btn btn-primary btn-lg'
+
+.row
   .col-sm-10.col-sm-offset-1.tasks.margin-top
     .panel.with-nav-tabs.panel-success
       .panel-heading
