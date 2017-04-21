@@ -68,6 +68,7 @@ gem 'json'
 gem 'rest-client'
 
 gem 'cocoon'
+gem 'pg'
 
 # later we can strict the faker
 # to staging && development
@@ -86,8 +87,7 @@ group :development do
 end
 
 group :development, :test do
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -119,8 +119,6 @@ end
 
 gem 'airbrake', '~> 5.4'
 group :production do
-  # Use Postgres as the database for Active Record
-  gem 'pg'
   gem 'rails_12factor'
   gem 'puma'
 end

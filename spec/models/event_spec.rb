@@ -423,14 +423,13 @@ RSpec.describe Event, type: :model do
   describe 'job_posted event' do
     it 'triggers a Pusher message' do
       Event.create(:JOB_POSTED, evt_obj_jobpost)
-      expect(Pusher).to have_received(:trigger).with(
-        'pusher_control',
-        'job_posted',
-        job_id:    job.id,
-        job_title: job.title,
-        company_name: company.name,
-        notify_list: [job_developer.user.id, job_developer1.user.id]
-      )
+      expect(Pusher).to have_received(:trigger)
+        .with('pusher_control',
+              'job_posted',
+              job_id:    job.id,
+              job_title: job.title,
+              company_name: company.name,
+              notify_list: [job_developer.user.id, job_developer1.user.id])
     end
 
     it 'sends event notification email' do
