@@ -127,11 +127,16 @@ RSpec.describe JobSeekerPolicy do
       js1.assign_job_developer(jd1, agency)
       expect(JobSeekerPolicy).to permit(js1, js1)
       expect(JobSeekerPolicy).not_to permit(js2, js1)
-      expect(JobSeekerPolicy).not_to permit(cm1, js1)
-      expect(JobSeekerPolicy).not_to permit(jd1, js1)
-      expect(JobSeekerPolicy).not_to permit(admin, js1)
+      expect(JobSeekerPolicy).to permit(cm1, js1)
+      expect(JobSeekerPolicy).to permit(jd1, js1)
+      expect(JobSeekerPolicy).to permit(admin, js1)
       expect(JobSeekerPolicy).not_to permit(ca, js1)
       expect(JobSeekerPolicy).not_to permit(cc, js1)
+    end
+
+    it 'only allows access if the user is an agency person' do
+      expect(JobSeekerPolicy).to permit(cm1, js1)
+      expect(JobSeekerPolicy).to permit(jd1, js1)
     end
   end
 

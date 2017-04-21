@@ -51,7 +51,7 @@ class JobSeekerPolicy < ApplicationPolicy
   end
 
   def allow?
-    user.nil? || user == record
+    user.nil? || user == record || user.is_a?(AgencyPerson) || user == record.case_manager || user == record.job_developer
   end
 
   def apply?

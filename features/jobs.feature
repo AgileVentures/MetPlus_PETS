@@ -38,7 +38,7 @@ Background: adding job to database
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
   And I login as "jane@ymail.com" with password "qwerty123"
-  When I click the "Post Job" link
+  When I click the first "Post Job" link
   And I wait 1 second
   And I fill in the fields:
     | Title            | cashier|

@@ -6,6 +6,7 @@
         %strong Name
       %td
         = job_seeker.full_name(last_name_first: false)
+      %td
     %tr
       %td
         %strong Email
@@ -66,10 +67,12 @@
         %td
           %strong Status
         %td
-          = job_seeker.status.short_description
+          = job_seeker.status&.short_description
+        %td
       %tr
         %td
           %strong Last Login
         %td
           - unless job_seeker.last_sign_in_at.nil?
             = job_seeker.last_sign_in_at.strftime('%x')
+        %td

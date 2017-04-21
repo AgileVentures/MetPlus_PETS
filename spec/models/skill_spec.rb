@@ -32,21 +32,21 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to have_db_column :jobs_count }
   end
 
-  describe 'has jobs' do
+  describe 'has_job?' do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
     end
-    
-    skill = FactoryGirl.create(:skill)
+
+    let(:skill) { FactoryGirl.create(:skill) }
+    let(:job)   { FactoryGirl.create(:job) }
 
     it 'returns false without a job' do
       expect(skill.has_job?).to be false
     end
 
     it 'returns true with a job' do
-      job = FactoryGirl.create(:job)
-      skill.jobs << job
+      FactoryGirl.create(:job_skill, job: job, skill: skill)
       expect(skill.has_job?).to be true
     end
   end
