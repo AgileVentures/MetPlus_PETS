@@ -108,7 +108,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                        name: 'Bayer-Raynor',
                        agencies: [metplus])
   end
-  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let!(:company_admin) { FactoryGirl.create(:first_company_admin, company: company) }
   let(:bayer_admin) { FactoryGirl.create(:company_admin, company: comp_bayer) }
 
   let(:jd) { FactoryGirl.create(:job_developer, agency: agency) }
