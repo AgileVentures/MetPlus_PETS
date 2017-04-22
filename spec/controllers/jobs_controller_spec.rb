@@ -86,7 +86,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'agency admin' do
       before(:each) do
-        warden.set_user agency_admin
+        sign_in agency_admin.user
         request
       end
       it { expect(assigns(:companies)).to eq Company.all.order(:name) }
@@ -95,7 +95,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'job developer' do
       before(:each) do
-        warden.set_user job_developer
+        sign_in job_developer.user
         request
       end
       it { expect(assigns(:companies)).to eq Company.all.order(:name) }
@@ -107,7 +107,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'company person' do
       before(:each) do
-        warden.set_user bosh_person
+        sign_in bosh_person.user
         request
       end
       it { expect(assigns(:companies)).to eq Company.all.order(:name) }
@@ -126,7 +126,7 @@ RSpec.describe JobsController, type: :controller do
     let(:request) { post :create, job: valid_params }
 
     context 'agency admin' do
-      before(:each) { warden.set_user agency_admin }
+      before(:each) { sign_in agency_admin.user }
       describe 'successful POST #create' do
         it 'chanage job count & job skill count by 1' do
           expect { post :create, job: valid_params }
@@ -152,7 +152,7 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     context 'job developer' do
-      before(:each) { warden.set_user job_developer }
+      before(:each) { sign_in job_developer.user }
       describe 'successful POST #create' do
         it 'change job & job skill count by 1' do
           expect { post :create, job: valid_params }
@@ -181,7 +181,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'case_manager'
     end
     context 'correct company person' do
-      before(:each) { warden.set_user bosh_person }
+      before(:each) { sign_in bosh_person.user }
       describe 'successful POST #create' do
         it 'chanage job & job skill count by 1' do
           expect { post :create, job: valid_params }
@@ -220,7 +220,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'agency admin' do
       before(:each) do
-        warden.set_user agency_admin
+        sign_in agency_admin.user
         request
       end
       it { expect(assigns(:job)).to eq bosh_job }
@@ -228,7 +228,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'job developer' do
       before(:each) do
-        warden.set_user job_developer
+        sign_in job_developer.user
         request
       end
       it { expect(assigns(:job)).to eq bosh_job }
@@ -239,7 +239,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'correct company person' do
       before(:each) do
-        warden.set_user bosh_person
+        sign_in bosh_person.user
         request
       end
       it { expect(assigns(:job)).to eq bosh_job }
@@ -250,7 +250,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'job seeker' do
       before(:each) do
-        warden.set_user job_seeker
+        sign_in job_seeker.user
         request
       end
       it { expect(assigns(:job)).to eq bosh_job }
@@ -270,7 +270,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'agency admin' do
       before(:each) do
-        warden.set_user agency_admin
+        sign_in agency_admin.user
         request
       end
       it { expect(assigns(:companies)).to eq Company.all.order(:name) }
@@ -279,7 +279,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'job developer' do
       before(:each) do
-        warden.set_user job_developer
+        sign_in job_developer.user
         request
       end
       it { expect(assigns(:companies)).to eq Company.all.order(:name) }
@@ -291,7 +291,7 @@ RSpec.describe JobsController, type: :controller do
     end
     context 'own company person' do
       before(:each) do
-        warden.set_user bosh_person
+        sign_in bosh_person.user
         request
       end
       it { expect(assigns(:companies)).to eq Company.all.order(:name) }
@@ -316,7 +316,7 @@ RSpec.describe JobsController, type: :controller do
     let!(:job_skill) { FactoryGirl.create(:job_skill, job: job_w_skill, skill: skill) }
 
     context 'agency admin' do
-      before(:each) { warden.set_user agency_admin }
+      before(:each) { sign_in agency_admin.user }
       describe 'successful update' do
         it 'add job_skill: remain job count, increase 1 job_skill' do
           expect { patch :update, id: job_wo_skill, job: valid_params }
@@ -350,7 +350,7 @@ RSpec.describe JobsController, type: :controller do
       end
     end
     context 'job developer' do
-      before(:each) { warden.set_user job_developer }
+      before(:each) { sign_in job_developer.user }
       describe 'successful update' do
         it 'add job_skill: remain job count, increase 1 job_skill' do
           expect { patch :update, id: job_wo_skill, job: valid_params }
@@ -387,7 +387,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'case_manager'
     end
     context 'correct company person' do
-      before(:each) { warden.set_user bosh_person }
+      before(:each) { sign_in bosh_person.user }
       describe 'successful update' do
         it 'add job_skill: remain job count, increase 1 job_skill' do
           expect { patch :update, id: job_wo_skill, job: valid_params }
@@ -446,7 +446,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'case_manager'
     end
     context 'correct company person' do
-      before(:each) { warden.set_user bosh_person }
+      before(:each) { sign_in bosh_person.user }
       it 'destroys job and associated job_skill' do
         expect { delete :destroy, id: job_w_skill }.to change(Job, :count).by(-1)
       end
@@ -472,10 +472,10 @@ RSpec.describe JobsController, type: :controller do
     let!(:dyson_person) { FactoryGirl.create(:company_person, company: dyson) }
     let(:request_first_page) { xhr :get, :list, job_type: 'my-company-all' }
     let(:request_last_page) do
-      xhr :get, :list, job_type: 'my-company-all', jobs_page: 4
+      xhr :get, :list, job_type: 'my-company-all', jobs_page: 3
     end
     before(:each) do
-      31.times.each do |i|
+      21.times.each do |i|
         title = i < 10 ? "Awesome job 0#{i}" : "Awesome job #{i}"
         FactoryGirl.create(:job, title: title, company: bosh,
                                  company_person: bosh_person)
@@ -486,61 +486,46 @@ RSpec.describe JobsController, type: :controller do
       end
     end
 
-    describe 'company_person with 3 pages' do
-      before(:each) { warden.set_user bosh_person }
+    describe 'company_person with 2 pages' do
+      before(:each) { sign_in bosh_person.user }
 
       it 'first_page: is a success' do
         request_first_page
+        
         expect(response).to have_http_status(:ok)
-      end
-      it "first_page: renders 'jobs/_list_jobs' template" do
-        request_first_page
         expect(response).to render_template('jobs/_list_jobs')
-      end
-      it 'first_page: jobs' do
-        # Next line added to ensure the query is done and that the
-        # paginate is also called
-        request_first_page
-        assigns(:jobs).each {}
+
         expect(assigns(:jobs).all.size).to be 10
         expect(assigns(:jobs).first.title).to eq 'Awesome job 00'
         expect(assigns(:jobs).last.title).to eq 'Awesome job 09'
-      end
-      it 'first_page: should not set flash' do
-        request_first_page
         should_not set_flash
       end
+
       it 'last_page: is a success' do
         request_last_page
+
         expect(response).to have_http_status(:ok)
-      end
-      it "last_page: renders 'jobs/_list_jobs' template" do
-        request_last_page
         expect(response).to render_template('jobs/_list_jobs')
-      end
-      it 'last_page: check jobs' do
-        # Next line added to ensure the query is done and that the
-        # paginate is also called
-        request_last_page
-        assigns(:jobs).each {}
-        expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
-        expect(assigns(:jobs).size).to eq 1
-      end
-      it 'last_page: should not set flash' do
-        request_last_page
         should_not set_flash
+        
+        assigns(:jobs).each {}
+        expect(assigns(:jobs).first.title).to eq 'Awesome job 20'
+        expect(assigns(:jobs).size).to eq 1
       end
     end
 
     describe 'company_person with 1 page' do
       before :each do
-        warden.set_user dyson_person
-        request_first_page
+        sign_in dyson_person.user
       end
 
-      it { expect(response).to have_http_status(:ok) }
-      it {  expect(response).to render_template('jobs/_list_jobs') }
-      it 'check jobs' do
+      it 'first_page' do 
+        request_first_page
+        
+        expect(response).to have_http_status(:ok) 
+        expect(response).to render_template('jobs/_list_jobs')
+        should_not set_flash
+
         # Next line added to ensure the query is done and that the
         # paginate is also called
         assigns(:jobs).each {}
@@ -548,14 +533,13 @@ RSpec.describe JobsController, type: :controller do
         expect(assigns(:jobs).first.title).to eq 'Awesome new job 0'
         expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'
       end
-      it { should_not set_flash }
     end
   end
 
   describe 'GET #update_addresses' do
     render_views
     before(:each) do
-      warden.set_user agency_admin
+      sign_in agency_admin.user
       xhr :get, :update_addresses, company_id: bosh.id
     end
     it 'returns success status' do
@@ -585,7 +569,7 @@ RSpec.describe JobsController, type: :controller do
 
     describe 'unknown job' do
       before :each do
-        warden.set_user job_seeker
+        sign_in job_seeker.user
         get :apply, job_id: 1000, user_id: job_seeker.id
       end
       it { expect(response).to redirect_to(action: 'index') }
@@ -596,7 +580,7 @@ RSpec.describe JobsController, type: :controller do
     end
     describe 'not active job' do
       before :each do
-        warden.set_user job_seeker
+        sign_in job_seeker.user
         get :apply, job_id: revoked_job.id, user_id: job_seeker.id
       end
       it 'check set flash' do
@@ -606,7 +590,7 @@ RSpec.describe JobsController, type: :controller do
     end
     describe 'unknown job seeker' do
       before :each do
-        warden.set_user job_developer
+        sign_in job_developer.user
         get :apply, job_id: bosh_job.id, user_id: 10_000
       end
       it { expect(response).to redirect_to(action: 'show', id: bosh_job.id) }
@@ -618,7 +602,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'agency_admin'
     end
     context 'job developer' do
-      before(:each) { warden.set_user job_developer }
+      before(:each) { sign_in job_developer.user }
       describe 'successful application' do
         before(:each) do
           allow(Event).to receive(:create).and_call_original
@@ -672,7 +656,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'company_person'
     end
     context 'job seeker' do
-      before(:each) { warden.set_user job_seeker }
+      before(:each) { sign_in job_seeker.user }
       describe 'successful application' do
         before :each do
           allow(Event).to receive(:create).and_call_original
@@ -718,7 +702,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'agency_admin'
     end
     context 'job developer' do
-      before(:each) { warden.set_user job_developer }
+      before(:each) { sign_in job_developer.user }
       context 'active job' do
         it 'changes job status from active to revoked' do
           request
@@ -738,7 +722,7 @@ RSpec.describe JobsController, type: :controller do
       end
       context 'revoked job' do
         before :each do
-          warden.set_user job_developer
+          sign_in job_developer.user
           patch :revoke, id: revoked_job.id
         end
         it 'flash[:alert]' do
@@ -751,7 +735,7 @@ RSpec.describe JobsController, type: :controller do
       it_behaves_like 'unauthorized', 'case_manager'
     end
     context 'company person' do
-      before(:each) { warden.set_user bosh_person }
+      before(:each) { sign_in bosh_person.user }
       context 'active job' do
         it 'changes job status from active to revoked' do
           request
@@ -771,7 +755,7 @@ RSpec.describe JobsController, type: :controller do
       end
       context 'revoked job' do
         before :each do
-          warden.set_user job_developer
+          sign_in job_developer.user
           patch :revoke, id: revoked_job.id
         end
         it 'flash[:alert]' do
@@ -809,7 +793,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'happy path' do
       before(:each) do
-        warden.set_user job_seeker
+        sign_in job_seeker.user
         stub_cruncher_match_resume_and_job
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
       end
@@ -824,7 +808,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'sad path' do
       it 'returns 404 status when job seeker does not have resume' do
-        warden.set_user job_seeker2
+        sign_in job_seeker2.user
         stub_cruncher_match_resume_and_job
 
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker2.id
@@ -834,7 +818,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'returns 404 status when job not in Cruncher' do
-        warden.set_user job_seeker
+        sign_in job_seeker.user
         stub_cruncher_match_resume_and_job_error(:no_job, job.id)
 
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
@@ -845,7 +829,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'returns 404 status when resume not in Cruncher' do
-        warden.set_user job_seeker
+        sign_in job_seeker.user
         stub_cruncher_match_resume_and_job_error(:no_resume, resume.id)
 
         xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
@@ -871,7 +855,7 @@ RSpec.describe JobsController, type: :controller do
         let(:sorted_results) { double('sorted_results') }
 
         before do
-          warden.set_user job_developer
+          sign_in job_developer.user
           stub_cruncher_match_resume_and_job
           allow(controller).to receive(:get_matches).with(job_seeker_ids)
             .and_return(results)
@@ -899,7 +883,7 @@ RSpec.describe JobsController, type: :controller do
         let(:request) { get :match_jd_job_seekers, id: bosh_job.id }
 
         before do
-          warden.set_user job_developer
+          sign_in job_developer.user
           request
         end
 
@@ -969,7 +953,7 @@ RSpec.describe JobsController, type: :controller do
 
         # stub_cruncher_match_resumes
         stub_cruncher_match_resumes(Resume.all.map(&:id))
-        warden.set_user bosh_person
+        sign_in bosh_person.user
         get :match_job_seekers, id: bosh_job.id
       end
 
@@ -995,7 +979,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'sad path' do
       before(:each) do
-        warden.set_user bosh_person
+        sign_in bosh_person.user
       end
       it 'sets flash and redirects if job ID not found' do
         stub_cruncher_match_resumes_return_no_job_found(bosh_job.id)
@@ -1013,10 +997,9 @@ RSpec.describe JobsController, type: :controller do
           .to eq "No matching job seekers found."
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
-      it 'sets flash and redirects if job seeker not found' do
+      xit 'sets flash and redirects if job seeker not found' do
         8.times do
           FactoryGirl.create(:resume)
-          byebug
         end
         job_seeker = Resume.find(7).job_seeker
         job_seeker.delete # use 'delete' to prevent destroying associated objects
@@ -1052,7 +1035,7 @@ RSpec.describe JobsController, type: :controller do
     context 'happy path' do
       before(:each) do
         allow(Event).to receive(:create).and_call_original
-        warden.set_user bosh_person
+        sign_in bosh_person.user
         xhr :get, :notify_job_developer, id: bosh_job.id,
                                          job_developer_id: job_developer.id,
                                          company_person_id: bosh_person.id,
@@ -1071,7 +1054,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'sad path' do
       before(:each) do
-        warden.set_user bosh_person
+        sign_in bosh_person.user
       end
       it 'returns 404 if company_person not found' do
         xhr :get, :notify_job_developer, id: bosh_job.id,

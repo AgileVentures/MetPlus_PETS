@@ -148,4 +148,5 @@ RSpec.configure do |config|
   config.include(EmailSpec::Matchers)
 
   config.pattern = "**/*_spec.rb"
+  config.profile_examples = true
 end

@@ -12,7 +12,7 @@ RSpec.describe TasksController, type: :controller do
         @jd4 = FactoryGirl.create(:job_developer, agency: agency)
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       subject { xhr :patch, :assign, { id: @task.id }, format: :json }
@@ -324,14 +324,14 @@ RSpec.describe TasksController, type: :controller do
           results = JSON.parse(subject.body)
           expect(results).to include('results')
           expect(results['results'])
-            .to include({ 'id' => @jd1.id,
+            .to include({ 'id' => @jd1.user.id,
                           'text' => @jd1.full_name },
-                        { 'id' => @jd2.id,
+                        { 'id' => @jd2.user.id,
                           'text' => @jd2.full_name },
-                        { 'id' => @jd3.id,
+                        { 'id' => @jd3.user.id,
                           'text' => @jd3.full_name },
-                        'id' => @jd4.id,
-                        'text' => @jd4.full_name)
+                        {'id' => @jd4.user.id,
+                        'text' => @jd4.full_name })
         end
       end
 
