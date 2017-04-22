@@ -59,7 +59,7 @@ Feature: Match a Job to a Job Seeker's Résumé
      | john.seeker@gmail.com | mike@metplus.org   | JD   |
      | jane.seeker@gmail.com | joseph@metplus.org | JD   |
 
-  @javascript
+  @selenium
   Scenario: match job to my resume(s)
 
     # Job seeker: match job to my résumé
@@ -72,6 +72,7 @@ Feature: Match a Job to a Job Seeker's Résumé
     And I wait 1 second
     And I should see "Match against my Résumé"
     Then I click the "Match against my Résumé" link
+    When I confirm popup
     And I wait 2 seconds
     Then I should see "Job match against your résumé"
     And I should see "1.3 stars"
@@ -83,9 +84,11 @@ Feature: Match a Job to a Job Seeker's Résumé
     And I wait 1 second
     And I should see "Match against my Résumé"
     Then I click the "Match against my Résumé" link
+    When I confirm popup
     And I wait 2 seconds
     Then I should see "Job match against your résumé"
     And I should see "3.1 stars"
+    Then I click the "Close" button
 
     # Job developer: match job to job seekers
     And I click the "Hello, John" link
@@ -93,10 +96,11 @@ Feature: Match a Job to a Job Seeker's Résumé
     And I am logged in as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully"
     Then I click the "ruby developer" link
-    And I wait 1 second
+    And I wait 1 seconds
     And I should see "Match all job seekers"
     Then I click the "Match all job seekers" link
-    And I wait 4 seconds
+    When I confirm popup
+    And I wait 5 seconds
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Seeker, John"
     And I should see "Mike Check"
@@ -106,9 +110,11 @@ Feature: Match a Job to a Job Seeker's Résumé
     Then I click the "ruby developer" link
     And I wait 1 second
     Then I click the "Match all job seekers" link
+    When I confirm popup
     And I wait 2 seconds
     Then I should see "Job Seeker matches for job: ruby developer"
     And I should see "Joseph Jobber"
     Then I click the "Joseph Jobber" link
-    And I wait 1 second
+    When I confirm popup
+    And I wait 2 seconds
     Then I should see notification "Notified job developer"

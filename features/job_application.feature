@@ -68,7 +68,7 @@ Given the following job applications exist:
     And I login as "john.seeker@gmail.com" with password "password"
     Then I should see "Signed in successfully"
     Then I click the "Jobs" link
-    And I should see "software developer"
+   
     Then I click the "software developer" link
     And I wait for 5 second
     Then I click the "Click Here To Apply Online" link
