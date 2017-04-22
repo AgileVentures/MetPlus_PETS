@@ -258,6 +258,13 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       it 'sets User approved to false' do
         expect(assigns(:company).company_people[0].user.approved).to be false
       end
+      
+      it 'sets User roles to CC and CA' do
+        expect(assigns(:company).company_people[0].company_roles[0].role)
+          .to eq 'Company Contact'
+        expect(assigns(:company).company_people[0].company_roles[1].role)
+          .to eq 'Company Admin' 
+      end
 
       it 'sets company status to Pending' do
         expect(assigns(:company).pending_registration?).to be true
