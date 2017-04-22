@@ -352,5 +352,6 @@ module ServiceStubHelpers
                    %r{^#{EmailValidateService.service_url}/validate?.*})
         .to_raise(RuntimeError)
     end
+    
   end
 end
