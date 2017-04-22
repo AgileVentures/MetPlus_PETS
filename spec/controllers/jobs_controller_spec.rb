@@ -1016,6 +1016,7 @@ RSpec.describe JobsController, type: :controller do
       it 'sets flash and redirects if job seeker not found' do
         8.times do
           FactoryGirl.create(:resume)
+          byebug
         end
         job_seeker = Resume.find(7).job_seeker
         job_seeker.delete # use 'delete' to prevent destroying associated objects
