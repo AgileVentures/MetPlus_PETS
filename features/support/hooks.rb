@@ -9,14 +9,9 @@ Before('@selenium') do
   Capybara.javascript_driver = :selenium
 end
 
-# WebMock.after_request do |request_signature, response|
-#   puts "Request #{request_signature} was made and #{response} was returned"
-# end
-
 Before('~@mailgun') do
   stub_request(:get, %r{^#{EmailValidateService.service_url}/validate?.*})
         .to_return do |request|
-          # byebug
           address = request.uri.to_s.split('?').last.split('=').last
           local_part, domain = address.split('@')
           hash = { address: "#{address}",

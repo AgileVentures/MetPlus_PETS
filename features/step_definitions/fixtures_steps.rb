@@ -295,39 +295,3 @@ Given(/^the default settings are present$/) do
   })
 end
 
-Given(/^the following company registration exist:$/) do |table|  
-  table.hashes.each do |hash|
-    cmp = Company.create(ein: hash['ein'],
-                         phone: '222-333-4567',
-                         email: 'contact@ymail.com',
-                         job_email: 'jobs@ymail.com',
-                         website: 'www.widgets.com',
-                         name: hash['company name'],
-                         status: 0)
-    cmp.assign_attributes({
-      "addresses_attributes"=>{
-        "0"=>{ "street"=>"12 Main Street", 
-               "city"=>"Detroit", 
-               "state"=>"Michigan", 
-               "zipcode"=>"02034" }
-      }, 
-      "company_people_attributes"=>{
-        "0"=>{ "first_name"=>"#{hash['first_name']}", 
-               "last_name"=>"#{hash['last_name']}", 
-               "title"=>"#{hash['title']}", 
-               "phone"=>"#{hash['contact']}", 
-               "email"=>"#{hash['email']}",
-               "password" => "qwerty123",
-               "password_confirmation" => "qwerty123" } 
-        }
-      })
-    cmp_person = cmp.company_people[0]
-    cmp_person.company_roles << CompanyRole.create!(role: CompanyRole::ROLE[:CA])
-    cmp_person_user = cmp.company_people[0].user
-    cmp_person.skip_confirmation_notification!
-    cmp_person.approved = false
-    cmp.agencies << Agency.first
-    cmp.save!
-    Task.new_review_company_registration_task(cmp, cmp.agencies[0])
-  end
-end
