@@ -69,7 +69,8 @@ And(/^I should see "([^"]*)" job changes to status filled/) do |job|
   find('#job-status') { expect(page).to have_content('filled') }
 end
 
-And(/^I\sshould\ssee\smy\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\swas\s"([^"]*)"$/x) do |email, job_title, status|
+And(/^I\sshould\ssee\smy\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\swas\s
+  "([^"]*)"$/x) do |email, job_title, status|
   job_seeker = User.find_by_email(email).actable
   job = Job.find_by(title: job_title.to_s)
   job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
