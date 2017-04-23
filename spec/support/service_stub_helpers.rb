@@ -273,13 +273,13 @@ module ServiceStubHelpers
       body_json = JSON.generate('resultCode' => 'SUCCESS',
                                 'message' => 'Success',
                                 'resumes' => { 'matcher1' =>
-                                    [{ 'resumeId' => "args[1].to_s", 'stars' => 2.0 },
-                                     { 'resumeId' => "args[6].to_s", 'stars' => 4.9 },
-                                     { 'resumeId' => "args[4].to_s", 'stars' => 3.6 }],
+                                    [{ 'resumeId' => args[1], 'stars' => 2.0 },
+                                     { 'resumeId' => args[6], 'stars' => 4.9 },
+                                     { 'resumeId' => args[4], 'stars' => 3.6 }],
                                                'matcher2' =>
-                                    [{ 'resumeId' => "args[7].to_s", 'stars' => 1.8 },
-                                     { 'resumeId' => "args[4].to_s", 'stars' => 3.8 },
-                                     { 'resumeId' => "args[5].to_s", 'stars' => 1.7 }] })
+                                    [{ 'resumeId' => args[7], 'stars' => 1.8 },
+                                     { 'resumeId' => args[4], 'stars' => 3.8 },
+                                     { 'resumeId' => args[5], 'stars' => 1.7 }] })
 
       stub_request(:get, %r{#{CruncherService.service_url}/resume/match/\d+})
         .to_return(body: body_json, status: 200,
