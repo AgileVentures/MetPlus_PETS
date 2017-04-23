@@ -119,7 +119,7 @@ RSpec.describe Job, type: :model do
         first_appl = job.apply job_seeker
         second_appl = job.apply job_seeker2
         job.reload
-        expect(job.job_seekers).to eq [job_seeker, job_seeker2]
+        expect(job.job_seekers).to contain_exactly(job_seeker, job_seeker2)
         expect(job.number_applicants).to be(num_applications + 2)
         expect(job.last_application_by_job_seeker(job_seeker))
           .to eq first_appl
