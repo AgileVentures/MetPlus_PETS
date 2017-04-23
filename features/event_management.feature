@@ -92,8 +92,7 @@ Scenario: Company registration request in PETS
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
   And  I select "Michigan" in select list "State"
-  And I click the "Create" button
-  And I wait 2 seconds
+  And I click the Create button
   Then I should see "Thank you for your registration request."
   And "aa@metplus.org" should receive an email with subject "Company registered"
   And "jane@metplus.org" should receive an email with subject "Company registered"

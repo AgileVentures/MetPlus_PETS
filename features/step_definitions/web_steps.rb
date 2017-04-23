@@ -130,6 +130,11 @@ When(/^(?:I|they) click the "([^"]+)" link with url "([^"]*)"$/) do |text, url|
   end
 end
 
+When(/^I click the Create button$/) do
+  page.execute_script("$('.btn-primary').focus()")
+  find(:xpath, "//input[@value='Create' and @type='submit']").click
+end
+
 When(/^(?:I|they) click(?: the)?( \w*)? "([^"]*)" button$/) do |ordinal, button|
   if not ordinal
     click_button button

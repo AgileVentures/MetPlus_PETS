@@ -102,7 +102,7 @@ Scenario: company registration delete
 
 @javascript
 Scenario: attempt login after registration is deleted
-  And I click the "Create" button
+  And I click the Create button
   Given I am logged in as agency admin
   And I click the "Admin" link
   And I click the "Agency and Partner Companies" link
