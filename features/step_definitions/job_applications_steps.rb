@@ -42,8 +42,10 @@ And(/^other applications for "([^"]*)" change to not accepted$/) do |job|
   app_ids = JobApplication.select(:id).where.not(status: 'active', job: job)
   app_accepted = JobApplication.select(:id).where(status: 'active', job: job)
   app_ids.each do |app|
-    expect(page.find("#applications-#{app.id}"))
-      .to have_content('not_accepted') unless app.id == app_accepted.id
+    unless app.id == app_accepted.id
+      expect(page.find("#applications-#{app.id}"))
+        .to have_content('not_accepted')
+    end
   end
 end
 
@@ -67,11 +69,10 @@ And(/^I should see "([^"]*)" job changes to status filled/) do |job|
   find('#job-status') { expect(page).to have_content('filled') }
 end
 
-And(/^I\sshould\ssee\smy\sapplication\sfor\s"([^"]*)"\sshow\sstatus\s
-  "([^"]*)"$/x) do |job_title, status|
+And(/^I\sshould\ssee\smy\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\swas\s"([^"]*)"$/x) do |email, job_title, status|
+  job_seeker = User.find_by_email(email).actable
   job = Job.find_by(title: job_title.to_s)
-  status_enum = JobApplication.statuses[status.downcase.tr(' ', '_')]
-  job_app = JobApplication.find_by(job: job, status: status_enum)
+  job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
   expect(page.find("#applications-#{job_app.id}")).to have_content(status.to_s)
 end
 
