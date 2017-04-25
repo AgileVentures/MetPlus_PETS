@@ -99,6 +99,16 @@ Feature: Company Person
     And I should not see "Edit Company Info"
     And I should not see "Invite Colleague"
 
+  @javascript
+  Scenario: company contact can view but not edit other company people
+    Given I am on the home page
+    And I login as "jane@ymail.com" with password "qwerty123"
+    And I click the "All Widgets Inc. people who are on PETS" link
+    And I wait 1 second
+    Then I click the "Smith, John" link
+    And I should not see button "Edit Person"
+    And I should not see button "Delete Person"
+
   Scenario: company admin login and edit profile from home page
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
