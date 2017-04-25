@@ -180,7 +180,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let(:request) { delete :destroy, id: company }
     context 'authorized access' do
       before do
-        sign_in agency_admin
+        sign_in agency_admin.user
         request
       end
       it 'sets flash message' do
@@ -211,7 +211,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     context 'authorized access' do
       before(:each) do
-        sign_in agency_admin
+        sign_in agency_admin.user
       end
 
       it 'delete company person(s)' do
@@ -348,7 +348,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         3.times do
           FactoryGirl.create(:agency_person, agency: agency)
         end
-        sign_in agency_admin
+        sign_in agency_admin.user
         post :create, company: registration_params
       end
 
@@ -400,7 +400,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           FactoryGirl.create(:agency_person, agency: agency)
         end
         post :create, company: registration_params
-        sign_in agency_admin
+        sign_in agency_admin.user
       end
 
       it 'sends registration-denied email' do
@@ -472,7 +472,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           FactoryGirl.create(:agency_person, agency: agency)
         end
         post :create, company: registration_params
-        sign_in agency_admin
+        sign_in agency_admin.user
       end
 
       it 'updates person and address but does not add person or address' do

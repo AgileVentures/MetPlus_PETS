@@ -116,11 +116,12 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation, pre_count: true, reset_ids: true)
+    # DatabaseCleaner.clean_with(:truncation, pre_count: true, reset_ids: true)
+    DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :transaction
   end
 
   config.before(:each, type: :feature) do
@@ -147,4 +148,5 @@ RSpec.configure do |config|
   config.include(EmailSpec::Matchers)
 
   config.pattern = "**/*_spec.rb"
+  config.profile_examples = true
 end

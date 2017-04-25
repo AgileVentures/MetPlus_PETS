@@ -51,7 +51,7 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'GET #show' do
     before(:each) do
-      sign_in company_admin
+      sign_in company_admin.user
       get :show, id: company
     end
     it 'assigns @company for view' do
@@ -67,7 +67,7 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'GET #edit' do
     before(:each) do
-      sign_in company_admin
+      sign_in company_admin.user
       get :edit, id: company
     end
     it 'assigns @company for form' do
@@ -83,7 +83,7 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'DELETE #destroy' do
     before(:each) do
-      sign_in admin
+      sign_in admin.user
       delete :destroy, id: company
     end
 
@@ -111,7 +111,7 @@ RSpec.describe CompaniesController, type: :controller do
     let!(:cp4) { FactoryGirl.create(:company_contact, company: company) }
 
     before(:each) do
-      sign_in cp1
+      sign_in cp1.user
       xhr :get, :list_people, id: company,
                               people_type: 'my-company-all'
     end
@@ -133,7 +133,7 @@ RSpec.describe CompaniesController, type: :controller do
     end
 
     before(:each) do
-      sign_in company_admin
+      sign_in company_admin.user
     end
 
     context 'valid attributes' do

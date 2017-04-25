@@ -57,18 +57,16 @@ Scenario: Create job with associated skills
   And I should see "Skill1"
   And I should see "Skill2"
 
-@javascript
+@selenium
 Scenario: Edit job and change associated skills
   Given I am on the home page
 	And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I click the "Jobs" link
   Then I click the "Job1" link
-  And I wait 1 second
   And I should see "Skill1"
   And I should see "Skill2"
   Then I click the "Edit Job" link
-  And I wait 1 second
-  And I click the second "remove job skill" link
+  And I remove job skill named "Skill2"
   And I click the "Add Job Skill" link
   And I select "Skill3" in second select list "Name:"
   And  I press "Update"

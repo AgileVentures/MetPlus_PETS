@@ -130,6 +130,11 @@ When(/^(?:I|they) click the "([^"]+)" link with url "([^"]*)"$/) do |text, url|
   end
 end
 
+When(/^I click the Create button$/) do
+  page.execute_script("$('.btn-primary').focus()")
+  find(:xpath, "//input[@value='Create' and @type='submit']").click
+end
+
 When(/^(?:I|they) click(?: the)?( \w*)? "([^"]*)" button$/) do |ordinal, button|
   if not ordinal
     click_button button
@@ -259,4 +264,23 @@ end
 
 Then(/^I save the page as "([^"]+)"$/) do |screen|
   page.save_screenshot(screen.to_s, full: true)
+end
+
+When /^I confirm popup$/ do
+  page.driver.browser.switch_to.alert.accept    
+end
+
+When /^I dismiss popup$/ do
+  page.driver.browser.switch_to.alert.dismiss
+end
+
+When(/^I (remove job skill) named "([^"]+)"$/) do |link, skill|
+  within('#job_skills') do
+    nested_field = "//option[@selected='selected'][text()='#{skill}']/../../../.."
+    if Capybara.current_driver == :poltergeist
+      find(:xpath, nested_field).find_link(link).trigger('click')
+    else
+      find(:xpath, nested_field).click_link(link)
+    end
+  end
 end

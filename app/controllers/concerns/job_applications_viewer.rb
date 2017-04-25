@@ -10,15 +10,17 @@ module JobApplicationsViewer
     when 'job_seeker-default'
       collection = JobApplication.where(job_seeker: id).order(:id)
     when 'job-job-developer'
+      job_seeker_id = AgencyRelation.where(
+                          agency_person: pets_user, 
+                          agency_role_id: AgencyRole.where(role: "Job Developer")
+                      ).select(:job_seeker_id)
       collection = JobApplication.order(:id)
-                                 .where(job: id, job_seeker_id: AgencyRelation
-                                 .where(agency_person: pets_user, agency_role_id: 1)
-                                 .select(:job_seeker_id))
-                                 .includes(:job_seeker).order(:status)
+                                 .where(job: id, job_seeker_id: job_seeker_id)
+                                 .includes(:job_seeker)
     when 'job-company-person'
       collection = JobApplication.where(job: id)
                                  .includes(:job_seeker)
-                                 .order(:status)
+                                 .order(:id)
     end
     return collection if collection.nil?
     collection.paginate(page: params[:applications_page], per_page: per_page)

@@ -51,9 +51,10 @@ RSpec.describe Branch, type: :model do
           .to include('is too long (maximum is 8 characters)')
       end
       it 'with a non-unique code' do
-        FactoryGirl.create(:branch, code: '999', agency_id: 1)
+        agency = FactoryGirl.create(:agency)
+        FactoryGirl.create(:branch, code: '999', agency_id: agency.id)
         branch.code = '999'
-        branch.agency_id = 1
+        branch.agency_id = agency.id
         branch.valid?
         expect(branch).to_not be_valid
         expect(branch.errors[:code]).to include('has already been taken')

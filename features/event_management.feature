@@ -61,7 +61,7 @@ Scenario: Job Seeker registers in PETS
   And I wait for 1 second
   And I should see "Job Seeker has no assigned Job Developer"
 
-@javascript
+@selenium
 Scenario: Company registration request in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -69,7 +69,7 @@ Scenario: Company registration request in PETS
   Then I should see "Signed in successfully."
   Then I am in User's browser
   Given I am on the home page
-  And I click the "Register as an Employer" button
+  And I click the "Register as an Employer" link
   And I wait 1 second
   Then I should see "Request Company Registration"
   And I fill in the fields:
@@ -92,7 +92,7 @@ Scenario: Company registration request in PETS
   | Password                       | qwerty123           |
   | Password Confirmation          | qwerty123           |
   And  I select "Michigan" in select list "State"
-  And I click the "Create" button
+  And I click the Create button
   Then I should see "Thank you for your registration request."
   And "aa@metplus.org" should receive an email with subject "Company registered"
   And "jane@metplus.org" should receive an email with subject "Company registered"

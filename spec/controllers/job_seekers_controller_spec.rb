@@ -283,7 +283,7 @@ RSpec.describe JobSeekersController, type: :controller do
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
-        sign_in owner
+        sign_in owner.user
       end
       it 'updates email address' do
         patch :update, id: owner, job_seeker: FactoryGirl
@@ -395,7 +395,7 @@ RSpec.describe JobSeekersController, type: :controller do
     context ' related case manager ' do
       let(:password) { owner.encrypted_password }
       before(:each) do
-        sign_in owner_case_manager
+        sign_in owner_case_manager.user
       end
       context 'valid attributes' do
         it 'locates the requested @jobseeker' do
@@ -454,7 +454,7 @@ RSpec.describe JobSeekersController, type: :controller do
     context ' related job_developer ' do
       let(:password) { owner.encrypted_password }
       before(:each) do
-        sign_in owner_job_developer
+        sign_in owner_job_developer.user
       end
       context 'valid attributes' do
         it 'locates the requested @jobseeker' do
@@ -553,7 +553,7 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
 
-        sign_in owner
+        sign_in owner.user
         request
       end
       it 'assigns jobseeker and current_resume for view' do
@@ -588,7 +588,7 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'owner' do
       before :each do
-        sign_in owner
+        sign_in owner.user
         request
       end
       it 'renders homepage template' do
@@ -633,7 +633,7 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     it 'renders the index template' do
-      sign_in FactoryGirl.create(:agency_admin)
+      sign_in FactoryGirl.create(:agency_admin).user
       request
       expect(response.body).to render_template 'index'
     end
@@ -659,7 +659,7 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'owner' do
       before(:each) do
-        sign_in owner
+        sign_in owner.user
         request
       end
       # the job seeker should not be able to see their show page
@@ -701,7 +701,7 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'related job_developer' do
       it "it renders job seeker's info partial" do
-        sign_in owner_job_developer
+        sign_in owner_job_developer.user
         request
         expect(response).to render_template(partial: '_info')
       end
@@ -737,7 +737,7 @@ RSpec.describe JobSeekersController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      sign_in jobseeker
+      sign_in jobseeker.user
     end
     context 'User without a resume' do
       before(:each) do
@@ -813,7 +813,7 @@ RSpec.describe JobSeekersController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      sign_in company_admin
+      sign_in company_admin.user
     end
 
     let(:company)       { FactoryGirl.create(:company) }
@@ -858,14 +858,14 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'Error: Resume not found in DB' do
       it 'sets flash message' do
-        get :download_resume, id: valid_application, resume_id: 999
+        get :download_resume, id: job_seeker, resume_id: 999
         expect(flash[:alert]).to eq "Couldn't find Resume with 'id'=999"
       end
     end
     context 'Error: Resume not found in Cruncher' do
       it 'sets flash message' do
         stub_cruncher_file_download_notfound
-        get :download_resume, id: valid_application, resume_id: resume
+        get :download_resume, id: job_seeker, resume_id: resume
         expect(flash[:alert]).to eq 'Error: Resume not found in Cruncher'
       end
     end

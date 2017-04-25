@@ -34,10 +34,11 @@ Given(/^the following companies exist:$/) do |table|
 end
 
 Given(/^the following agency people exist:$/) do |table|
+  @all_agency_people = {}
+
   table.hashes.each do |hash|
     agency_name = hash.delete 'agency'
     hash['agency_id'] = Agency.find_by_name(agency_name).id
-
 
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
@@ -50,6 +51,9 @@ Given(/^the following agency people exist:$/) do |table|
     end
 
     agency_person.save
+
+    email = hash['email']
+    @all_agency_people[email] = agency_person
   end
 end
 
@@ -105,18 +109,59 @@ Given(/^the following jobseekerstatus values exist:$/) do |table|
   end
 end
 
-Given(/^the following jobseeker(?:s?) exist:$/) do |table|
+# Given(/^the following jobseeker(?:s?) exist:$/) do |table|
+#   table.hashes.each do |hash|
+#     jobseeker = hash.delete 'jobseeker'
+#     hash['actable_type'] = 'JobSeeker'
+#     hash['password_confirmation'] = hash['password']
+#     hash['confirmed_at'] = Time.now
+#     seeker_status = hash.delete 'job_seeker_status'
+#     job_seeker_status = JobSeekerStatus.find_by_short_description(seeker_status)
+#     jobseeker = JobSeeker.new(hash)
+#     jobseeker.job_seeker_status = job_seeker_status
+#     jobseeker.address = FactoryGirl.create(:address)
+#     jobseeker.save!
+#   end
+# end
+
+Given(/^the following jobseekers exist:$/) do |table|
+  @all_job_seekers = {}
+
   table.hashes.each do |hash|
-    jobseeker = hash.delete 'jobseeker'
-    hash['actable_type'] = 'JobSeeker'
-    hash['password_confirmation'] = hash['password']
-    hash['confirmed_at'] = Time.now
-    seeker_status = hash.delete 'job_seeker_status'
-    job_seeker_status = JobSeekerStatus.find_by_short_description(seeker_status)
-    jobseeker = JobSeeker.new(hash)
-    jobseeker.job_seeker_status = job_seeker_status
-    jobseeker.address = FactoryGirl.create(:address)
-    jobseeker.save!
+    address = Address.create(street: Faker::Address.street_address,
+      city: Faker::Address.city, 
+      zipcode: Faker::Address.zip_code,
+      state: Faker::Address.state)
+
+    job_seeker_status = JobSeekerStatus.find_or_create_by(
+      short_description: hash['job_seeker_status']) do |status|
+      status.short_description = hash['job_seeker_status'],
+      status.description = hash['job_seeker_status']
+    end
+
+    email = hash['email']
+    # job_seeker_status.job_seekers << JobSeeker.create(first_name: hash['first_name'], 
+    #     last_name: hash['last_name'],
+    #     email: email, 
+    #     password: hash['password'],
+    #     password_confirmation: hash['password_confirmation'],
+    #     year_of_birth: hash['year_of_birth'], 
+    #     phone: hash['phone'],
+    #     confirmed_at: Time.now,
+    #     address: address
+    #   )
+    # @all_job_seekers[email] = job_seeker_status.job_seekers.last
+    @all_job_seekers[email] = JobSeeker.create(first_name: hash['first_name'], 
+        last_name: hash['last_name'],
+        email: email, 
+        password: hash['password'],
+        password_confirmation: hash['password_confirmation'],
+        year_of_birth: hash['year_of_birth'], 
+        phone: hash['phone'],
+        confirmed_at: Time.now,
+        address: address,
+        job_seeker_status_id: job_seeker_status.id
+      )
   end
 end
 
@@ -134,32 +179,36 @@ end
 
 Given(/^the following tasks exist:$/) do |table|
   table.hashes.each do |hash|
+    task_attributes = {
+      task_type: hash['task_type'].to_sym,
+      status: Task::STATUS[hash['status'].to_sym],
+      deferred_date: Date.parse(hash['deferred_date'])
+    }
+    task = FactoryGirl.build(:task, task_attributes)
 
-    owner = hash.delete 'owner'
-    targets = hash.delete 'targets'
-    hash['task_type'] = hash['task_type'].to_sym
-    hash['status'] = Task::STATUS[hash['status'].to_sym]
-    hash['deferred_date'] = Date.parse(hash.delete 'deferred_date')
-
-    task = FactoryGirl.build(:task, hash)
-
-    if owner =~ /,/
-      agency = Agency.find_by_name(owner.split(/,/)[0])
-      role = owner.split(/,/)[1]
-      if agency.nil?
-        company = Company.find_by_name(owner.split(/,/)[0])
-        task.task_owner = {:company => {company: company, role: role.to_sym}}
-      else
-        task.task_owner = {:agency => {agency: agency, role: role.to_sym}}
-      end
+    owner = hash['owner'].split(',')
+    if owner.count == 1
+      task.task_owner = {:user => User.find_by_email(owner.first).pets_user}
     else
-      task.task_owner = {:user => User.find_by_email(owner).pets_user}
+      role = owner.last.to_sym
+
+      agency = Agency.find_by_name(owner.first)
+      if agency.nil?
+        company = Company.find_by_name(owner.first)
+        task.task_owner = {:company => {company: company, role: role}}
+      else
+        task.task_owner = {:agency => {agency: agency, role: role}}
+      end
     end
+
+    targets = hash['targets']
     if targets =~ /@/
-      task.target = User.find_by_email targets
+      @all_job_seekers ||= {}
+      task.target = @all_job_seekers[targets] || User.find_by_email(targets)
     else
       task.target = Company.find_by_name targets
     end
+
     task.save!
   end
 end
@@ -172,7 +221,6 @@ Given(/^the following resumes exist:$/) do |table|
                                 job_seeker: job_seeker)
   end
 end
-
 
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
@@ -219,7 +267,6 @@ Given(/^the following job applications exist:$/) do |table|
   end
 end
 
-
 Given(/^the default settings are present$/) do
   [
     { :short_description => 'Unemployed Seeking',
@@ -229,7 +276,7 @@ Given(/^the default settings are present$/) do
     { :short_description => 'Employed Not Looking',
       :description => 'A jobseeker with a job and not looking for a job for now.'}
   ].each do |values|
-    FactoryGirl.create(:job_seeker_status, values)
+    JobSeekerStatus.create(values)
   end
   step "the following agency roles exist:", table(%{
     | role  |
@@ -247,3 +294,4 @@ Given(/^the default settings are present$/) do
     | CC    |
   })
 end
+

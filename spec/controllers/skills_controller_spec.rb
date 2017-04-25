@@ -44,7 +44,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       it 'creates new skill for valid parameters' do
         expect { xhr :post, :create, skill: skill_params }
@@ -74,7 +74,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       context 'skill found' do
         before(:each) do
@@ -113,7 +113,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       it 'returns success for valid parameters' do
         xhr :patch, :update, id: skill, skill: skill_params
@@ -142,7 +142,7 @@ RSpec.describe SkillsController, type: :controller do
       let(:agency) { FactoryGirl.create(:agency) }
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
       let(:skill) { FactoryGirl.create(:skill) }
       let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill) }

@@ -12,7 +12,7 @@ RSpec.describe TasksController, type: :controller do
         @jd4 = FactoryGirl.create(:job_developer, agency: agency)
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       subject { xhr :patch, :assign, { id: @task.id }, format: :json }
@@ -25,7 +25,7 @@ RSpec.describe TasksController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       describe 'missing parameters' do
@@ -61,7 +61,7 @@ RSpec.describe TasksController, type: :controller do
           aa = FactoryGirl.create(:agency_admin, agency: agency)
           js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
-          sign_in aa
+          sign_in aa.user
         end
 
         subject do
@@ -83,11 +83,11 @@ RSpec.describe TasksController, type: :controller do
           aa = FactoryGirl.create(:agency_admin, agency: agency)
           @js = FactoryGirl.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task @js, agency
-          sign_in aa
+          sign_in aa.user
         end
 
         subject do
-          xhr :patch, :assign, { id: @task.id, to: @js.id }, format: :json
+          xhr :patch, :assign, { id: @task.id, to: @js.user.id }, format: :json
         end
         it 'returns error' do
           expect(subject).to have_http_status(403)
@@ -125,7 +125,7 @@ RSpec.describe TasksController, type: :controller do
         js = FactoryGirl.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       subject { xhr :patch, :in_progress, { id: @task.id }, format: :json }
@@ -143,7 +143,7 @@ RSpec.describe TasksController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       describe 'Cannot find task' do
@@ -210,7 +210,7 @@ RSpec.describe TasksController, type: :controller do
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
         @task.work_in_progress
-        sign_in @jd1
+        sign_in @jd1.user
       end
 
       subject { xhr :patch, :done, { id: @task.id }, format: :json }
@@ -228,7 +228,7 @@ RSpec.describe TasksController, type: :controller do
       before :each do
         agency = FactoryGirl.create(:agency)
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       describe 'Cannot find task' do
@@ -302,7 +302,7 @@ RSpec.describe TasksController, type: :controller do
     describe 'authorized access' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
-        sign_in aa
+        sign_in aa.user
       end
 
       describe 'retrieve information' do
@@ -324,14 +324,14 @@ RSpec.describe TasksController, type: :controller do
           results = JSON.parse(subject.body)
           expect(results).to include('results')
           expect(results['results'])
-            .to include({ 'id' => @jd1.id,
+            .to include({ 'id' => @jd1.user.id,
                           'text' => @jd1.full_name },
-                        { 'id' => @jd2.id,
+                        { 'id' => @jd2.user.id,
                           'text' => @jd2.full_name },
-                        { 'id' => @jd3.id,
+                        { 'id' => @jd3.user.id,
                           'text' => @jd3.full_name },
-                        'id' => @jd4.id,
-                        'text' => @jd4.full_name)
+                        {'id' => @jd4.user.id,
+                        'text' => @jd4.full_name })
         end
       end
 

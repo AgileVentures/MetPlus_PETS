@@ -77,7 +77,7 @@ gem 'faker'
 
 gem 'ransack'
 
-gem 'mailgun_rails'
+gem 'mailgun_rails' 
 
 group :development do
   gem 'haml-rails'
@@ -99,6 +99,8 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'parallel_tests'
 
   gem 'jasmine'
   gem 'jasmine-jquery-rails'

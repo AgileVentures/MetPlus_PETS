@@ -26,8 +26,7 @@
   .col-md-5.col-md-offset-0.grey-block
     = image_tag('MetPlus_employer.png')
     %p
-    %button.btn.btn-primary.btn-lg.button-white
-      = link_to 'Register as a Job Seeker', new_job_seeker_path
+    = link_to "Register as a Job Seeker", new_job_seeker_path, class: "btn btn-primary btn-lg button-white"
     %br
     %br
     .h4
@@ -43,8 +42,7 @@
   .col-md-5.col-md-offset-2.grey-block
     = image_tag('MetPlus_job_seeker.png')
     %p
-    %button.btn.btn-primary.btn-lg.button-white
-      = link_to 'Register as an Employer', new_company_registration_path
+    = link_to "Register as an Employer", new_company_registration_path, class: "btn btn-primary btn-lg button-white"
     %br
     %br
     .h4

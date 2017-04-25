@@ -22,7 +22,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     end
     it 'includes link to show job seeker' do
       expect(mail)
-        .to have_body_text(/#{job_seeker_url(id: 1)}/)
+        .to have_body_text(%r{/job_seekers/#{job_seeker.id}})
     end
   end
 
@@ -84,10 +84,10 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text('A job seeker has applied to this job:')
     end
     it 'includes link to show job' do
-      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/jobs/#{job.id}})
     end
     it 'includes link to show job seeker' do
-      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_seekers/#{job_seeker.id}})
     end
   end
 
@@ -112,7 +112,7 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text('A job application is accepted:')
     end
     it 'includes link to show job application' do
-      expect(mail).to have_body_text(/#{application_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_applications/#{app.id}})
     end
   end
 
@@ -137,7 +137,7 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text('A job application is rejected:')
     end
     it 'includes link to show job application' do
-      expect(mail).to have_body_text(/#{application_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_applications/#{app.id}})
     end
   end
 
@@ -160,7 +160,7 @@ RSpec.describe AgencyMailer, type: :mailer do
                                      'to you as Job Developer:')
     end
     it 'includes link to show job seeker' do
-      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_seekers/#{job_seeker.id}})
     end
   end
 
@@ -183,7 +183,7 @@ RSpec.describe AgencyMailer, type: :mailer do
                                      'to you as Case Manager:')
     end
     it 'includes link to show job seeker' do
-      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_seekers/#{job_seeker.id}})
     end
   end
 
@@ -211,7 +211,7 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text(/has been posted for company: #{job.company.name}/)
     end
     it 'includes link to show job' do
-      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/jobs/#{job.id}})
     end
   end
 
@@ -235,7 +235,7 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text(/A job \(\n.*#{Regexp.quote(job.title)}.*\n\) has been revoked for company: #{Regexp.quote(job.company.name)}\./)
     end
     it 'includes link to show job' do
-      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/jobs/#{job.id}})
     end
   end
 
@@ -269,10 +269,10 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text(/Doe, John/)
     end
     it 'includes link to show job' do
-      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/jobs/#{job.id}})
     end
     it 'includes link to show job seeker' do
-      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_seekers/#{job_seeker.id}})
     end
   end
 
@@ -303,13 +303,13 @@ RSpec.describe AgencyMailer, type: :mailer do
       expect(mail).to have_body_text(job_seeker.full_name(last_name_first: false))
     end
     it 'includes link to show job' do
-      expect(mail).to have_body_text(/#{job_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/jobs/#{job.id}})
     end
     it 'includes link to show job seeker' do
-      expect(mail).to have_body_text(/#{job_seeker_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/job_seekers/#{job_seeker.id}})
     end
     it 'includes link to show company person' do
-      expect(mail).to have_body_text(/#{company_person_url(id: 1)}/)
+      expect(mail).to have_body_text(%r{/company_people/#{company_person.id}})
     end
   end
 end

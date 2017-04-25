@@ -10,7 +10,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       before(:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in agency_admin
+        sign_in agency_admin.user
         get :new, {person_type: 'AgencyPerson', org_id: agency.id}
       end
       it 'sets session key for person_type' do
@@ -35,7 +35,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
     it 'sends invitation email' do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in agency_admin
+      sign_in agency_admin.user
       expect{ post :create, user: FactoryGirl.attributes_for(:user) }.
                     to change(all_emails, :count).by(+1)
     end
@@ -48,7 +48,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       before(:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in agency_admin
+        sign_in agency_admin.user
         post :create, { user: user_hash },
                         # following arg is session variables
                       { person_type: 'AgencyPerson', org_id: agency.id }
@@ -77,14 +77,14 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       it 'creates user once upon initial invite' do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in agency_admin
+        sign_in agency_admin.user
         expect { 4.times {post :create, user: user_hash } }.
                         to change(User, :count).by(+1)
       end
 
       it 'resends invitation to same user' do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in agency_admin
+        sign_in agency_admin.user
         expect { 4.times {post :create, user: user_hash } }.
                         to change(all_emails, :count).by(+4)
       end
@@ -102,7 +102,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       before(:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in agency_admin
+        sign_in agency_admin.user
         post :create, { user: user_hash },
                         # following arg is session variables
                       { person_type: 'AgencyPerson', org_id: agency.id }
@@ -133,7 +133,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       before(:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in company_admin
+        sign_in company_admin.user
         get :new, {person_type: 'CompanyPerson', org_id: company.id}
       end
       it 'sets session key for person_type' do
@@ -166,7 +166,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
     it 'sends invitation email' do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in company_admin
+      sign_in company_admin.user
       expect{ post :create, user: FactoryGirl.attributes_for(:user) }.
                     to change(all_emails, :count).by(+1)
     end
@@ -187,7 +187,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       before(:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in company_admin
+        sign_in company_admin.user
         post :create, { user: user_hash },
                         # following arg is session variables
                       { person_type: 'CompanyPerson', org_id: company.id }
@@ -224,14 +224,14 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       it 'creates user once upon initial invite' do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in company_admin
+        sign_in company_admin.user
         expect { 4.times {post :create, user: user_hash } }.
                         to change(User, :count).by(+1)
       end
 
       it 'resends invitation to same user' do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in company_admin
+        sign_in company_admin.user
         expect { 4.times {post :create, user: user_hash } }.
                         to change(all_emails, :count).by(+4)
       end
@@ -257,7 +257,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
       before(:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
-        sign_in company_admin
+        sign_in company_admin.user
         post :create, { user: user_hash },
                         # following arg is session variables
                       { person_type: 'CompanyPerson', org_id: company.id }
