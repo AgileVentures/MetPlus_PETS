@@ -260,7 +260,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       end
 
       it 'sets User roles to CC and CA' do
-        expect(assigns(:company).company_people[0].company_roles[0, 2].map{|x| x[:role]})
+        expect(assigns(:company).company_people[0].company_roles[0, 2].map { |x| x[:role] })
           .to contain_exactly 'Company Contact', 'Company Admin'
       end
 
