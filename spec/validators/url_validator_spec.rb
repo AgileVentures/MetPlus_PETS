@@ -3,7 +3,7 @@ require 'support/validator_helper'
 include ValidatorHelper
 
 RSpec.describe UrlValidator do
-  let(:model) { ValidatorHelper::test_model_class } 
+  let(:model) { ValidatorHelper.test_model_class }
   let(:record) { model.new }
 
   before(:each) do
