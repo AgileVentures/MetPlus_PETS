@@ -25,6 +25,35 @@ RSpec.describe CompanyPeopleController, type: :controller do
   end
   let(:job_seeker) { FactoryGirl.create(:job_seeker) }
 
+  describe 'GET #show' do
+    context 'company admin' do
+      before(:each) do
+        @company_admin = FactoryGirl.create(:company_admin)
+        sign_in @company_admin
+        get :show, id: @company_admin
+      end
+      it 'renders show template' do
+        expect(response).to render_template('show')
+      end
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+    end
+    context 'company contact' do
+      before(:each) do
+        @company_contact = FactoryGirl.create(:company_contact)
+        sign_in @company_contact
+        get :show, id: @company_contact
+      end
+      it 'renders show template' do
+        expect(response).to render_template('show')
+      end
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
   describe 'GET #edit_profile' do
     describe 'authorized access' do
       context 'company admin' do
@@ -33,7 +62,6 @@ RSpec.describe CompanyPeopleController, type: :controller do
           sign_in @company_admin
           get :edit_profile, id: @company_admin
         end
-
         it 'renders edit_profile template' do
           expect(response).to render_template 'edit_profile'
         end
