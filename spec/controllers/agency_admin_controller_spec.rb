@@ -27,6 +27,15 @@ RSpec.describe AgencyAdminController, type: :controller do
             controller: 'agency_admin', action: 'job_properties')
     end
 
+    context 'non agency person attempts access' do
+      it 'prevents non agency access' do
+        sign_in agency_admin
+        agency_admin.update_attribute(:actable_type, nil)
+        get :home
+        expect(flash[:notice]).
+        to eq "Current agency cannot be determined"
+      end
+    end
     context 'controller actions and helper - home page' do
       before(:each) do
         sign_in agency_admin
@@ -113,6 +122,18 @@ RSpec.describe AgencyAdminController, type: :controller do
       expect(response).to render_template(partial: '_job_specialties')
       expect(response).to have_http_status(:success)
     end
+    it 'renders partial for job skills' do
+      xhr :get, :job_properties, {skills_page: 1,
+                      data_type: 'skills'}
+      expect(response).to render_template(partial: 'agency_admin/_job_skills')
+      expect(response).to have_http_status(:success)
+    end
+    it 'raises data type error' do
+      expect {
+        xhr :get, :job_properties, {skills_page: 1,
+                      data_type: 'xxxxx'}
+      }.to raise_error "Do not recognize data type: xxxxx"
+    end
   end
 
   describe 'Determine from signed-in user:' do
@@ -178,7 +199,5 @@ RSpec.describe AgencyAdminController, type: :controller do
           to eq "You are not authorized to administer #{agency.name} agency."
       end
     end
-
   end
-
 end
