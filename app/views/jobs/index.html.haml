@@ -81,6 +81,13 @@
                 class: 'form-control', style: 'width: 100%;'}
 
     .form-group
+      = f.label :status_eq, 'Status', class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.collection_select :status_eq, Job.statuses, :last, :first,
+              {multiple: true, size: 5,
+                class: 'form-control', style: 'width: 100%;'}              
+
+    .form-group
       .col-sm-3.col-sm-offset-3
         = submit_tag 'Search Jobs', class: 'btn btn-primary'
 
