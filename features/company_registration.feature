@@ -16,6 +16,7 @@ Background: seed data added to database
 
   Given the following company roles exist:
   | role  |
+  | CC    |
   | CA    |
 
   Given the following agencies exist:

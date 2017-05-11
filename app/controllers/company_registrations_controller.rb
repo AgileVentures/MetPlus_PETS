@@ -36,6 +36,8 @@ class CompanyRegistrationsController < ApplicationController
     @company.company_people[0].user.approved = false
 
     @company.company_people[0].company_roles <<
+      CompanyRole.find_by(role: CompanyRole::ROLE[:CC])
+    @company.company_people[0].company_roles <<
       CompanyRole.find_by(role: CompanyRole::ROLE[:CA])
 
     # MULTIPLE AGENCIES: the line below needs to change
