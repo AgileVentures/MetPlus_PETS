@@ -181,10 +181,10 @@ Scenario: Search by status
   And I wait 1 second
   Then I select "revoked" in select list "Status"
   And I click the "Search Jobs" button
-  Then I should see "Job6"
+  Then I should see "Job5"
+  And I should see "Job6"
   And I should not see "Job1"
   And I should not see "Job2"
   And I should not see "Job3"
   And I should not see "Job4"
-  And I should not see "Job5"
   
