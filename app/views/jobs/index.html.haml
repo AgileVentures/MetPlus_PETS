@@ -86,7 +86,7 @@
         = f.collection_select :status_in, Job.statuses, :last, :first,
                {include_blank: false},
                {multiple: true, size: 5,
-                class: 'form-control', style: 'width: 100%;'}              
+                class: 'form-control', style: 'width: 100%;'}     
 
     .form-group
       .col-sm-3.col-sm-offset-3
@@ -192,10 +192,10 @@
                 %strong Status
               %td
                 All possible statuses for jobs are listed with
-                %i active 
+                %i active
                 as the default.
                 %br
-                You can select another status for searching by clicking
+                You can select multiple statuses by repeatedly clicking
                 in the search box.
 
       .modal-footer
