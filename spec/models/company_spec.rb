@@ -167,7 +167,7 @@ RSpec.describe Company, type: :model do
     let(:cmpy1_person) { FactoryGirl.create(:company_contact, company: company1) }
     let(:cmpy2_person) { FactoryGirl.create(:company_contact, company: company2) }
     let(:cmpy4_person) { FactoryGirl.create(:company_contact, company: company4) }
-    let(:cmpy5_person) { FactoryGirl.create(:company_contact, company: company5) }    
+    let(:cmpy5_person) { FactoryGirl.create(:company_contact, company: company5) }
 
     let!(:job1) do
       FactoryGirl.create(:job, company: company1,
@@ -205,7 +205,7 @@ RSpec.describe Company, type: :model do
     describe '.all_with_jobs' do
       it 'returns all companies with job(s)' do
         expect(Company.all_with_jobs).to match_array [company1, company2,
-          company4, company5]
+                                                      company4, company5]
       end
     end
     describe '.company_admins' do
