@@ -40,14 +40,8 @@ class Company < ActiveRecord::Base
     StatusChange.update_status_history(self, :registration_denied)
   end
 
-  def self.all_with_active_jobs
-    companies = []
-    Company.active.order(:name).each do |cmpy|
-      unless cmpy.jobs.where(status: 'active').empty?
-        companies << cmpy
-      end
-    end
-    companies
+  def self.all_with_jobs
+    Company.order(:name).joins(:jobs).uniq.all
   end
 
   def self.company_admins(company)

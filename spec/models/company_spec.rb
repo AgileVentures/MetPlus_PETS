@@ -161,9 +161,13 @@ RSpec.describe Company, type: :model do
     let(:company1) { FactoryGirl.create(:company) }
     let(:company2) { FactoryGirl.create(:company, name: 'Gadgets, Inc.') }
     let!(:company3) { FactoryGirl.create(:company, name: 'Things, Inc.') }
+    let!(:company4) { FactoryGirl.create(:company, name: 'Widgets, Inc.') }
+    let!(:company5) { FactoryGirl.create(:company, name: 'Acme, Inc.') }
 
     let(:cmpy1_person) { FactoryGirl.create(:company_contact, company: company1) }
     let(:cmpy2_person) { FactoryGirl.create(:company_contact, company: company2) }
+    let(:cmpy4_person) { FactoryGirl.create(:company_contact, company: company4) }
+    let(:cmpy5_person) { FactoryGirl.create(:company_contact, company: company5) }    
 
     let!(:job1) do
       FactoryGirl.create(:job, company: company1,
@@ -181,6 +185,16 @@ RSpec.describe Company, type: :model do
       FactoryGirl.create(:job, company: company2,
                                company_person: cmpy2_person)
     end
+    let!(:job5) do
+      FactoryGirl.create(:job, company: company4,
+                               company_person: cmpy4_person,
+                               status: :filled)
+    end
+    let!(:job6) do
+      FactoryGirl.create(:job, company: company5,
+                               company_person: cmpy5_person,
+                               status: :revoked)
+    end
 
     let!(:cmpy1_admin1) { FactoryGirl.create(:company_admin, company: company1) }
     let!(:cmpy1_admin2) { FactoryGirl.create(:company_admin, company: company1) }
@@ -188,9 +202,10 @@ RSpec.describe Company, type: :model do
     let!(:cmpy2_admin2) { FactoryGirl.create(:company_admin, company: company2) }
     let!(:cmpy3_admin)  { FactoryGirl.create(:company_admin, company: company3) }
 
-    describe '.all_with_active_jobs' do
-      it 'returns all companies with active job(s)' do
-        expect(Company.all_with_active_jobs).to match_array [company1, company2]
+    describe '.all_with_jobs' do
+      it 'returns all companies with job(s)' do
+        expect(Company.all_with_jobs).to match_array [company1, company2,
+          company4, company5]
       end
     end
     describe '.company_admins' do
