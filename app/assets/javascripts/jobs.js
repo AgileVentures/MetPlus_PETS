@@ -93,6 +93,7 @@ $(function () {
   $('#q_address_city_in').select2();
   $('#q_skills_id_in').select2();
   $('#q_company_id_in').select2();
+  $('#q_status_in').select2();
 
   JobAndResume.match();
 
