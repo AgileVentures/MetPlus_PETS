@@ -13,6 +13,7 @@ Background: adding jobs data to DB
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com   | corp@ymail.com   | 12-3456789 | active |
     | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
+    | MetPlus | Acme Inc.    | acme.com    | 555-222-3333 | corp@acme.com    | corp@acme.com    | 12-3456787 | active |
 
   Given the following company roles exist:
     | role  |
@@ -24,6 +25,7 @@ Background: adding jobs data to DB
     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com   | qwerty123 | 555-222-3334 |
     | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
+    | Acme Inc.    | CA    | Barry      | Nichols   | bn@acme.com      | qwerty123 | 555-222-3334 |
 
   Given the following job skills exist:
     | name       | description                            |
@@ -154,10 +156,10 @@ Scenario: Search by company
   And I should not see "Job4"
   And I click the "Show Search Form" link
   And I wait 1 second
+  Then "Acme Inc." should not be an option for select list "Company"
   Then I select "Feature Inc." in select list "Company"
   And I click the "Search Jobs" button
   Then I should see "Job1"
   And I should see "Job2"
   And I should see "Job3"
   And I should see "Job4"
-
