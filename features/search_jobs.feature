@@ -34,12 +34,13 @@ Background: adding jobs data to DB
     | Skill3     | Long haul driver with Class C license  |
 
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills         | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1, Skill2 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3         | city2 |
-    | Job3  | About job3. | Feature Inc. | carter@ymail.com | Evening | Skill1, Skill3 | city3 |
-    | Job4  | About job4. | Feature Inc. | carter@ymail.com | Evening |                | city4 |
-
+    | title | description | company      | creator          | shift   | skills         | city  |status   |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1, Skill2 | city1 | active  |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3         | city2 | active  |
+    | Job3  | About job3. | Feature Inc. | carter@ymail.com | Evening | Skill1, Skill3 | city3 | active  |
+    | Job4  | About job4. | Feature Inc. | carter@ymail.com | Evening |                | city4 | active  |
+    | Job5  | About job5. | Feature Inc. | carter@ymail.com | Day     | Skill2         | city3 | filled  |
+    | Job6  | About job6. | Widgets Inc. | jane@ymail.com   | Evening | Skill3         | city1 | revoked |
 
 @javascript
 Scenario: search jobs
@@ -163,3 +164,29 @@ Scenario: Search by company
   And I should see "Job2"
   And I should see "Job3"
   And I should see "Job4"
+  
+  @javascript
+Scenario: Search by status
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  # search by status
+  And I select "filled" in select list "Status"
+  And I click the "Search Jobs" button
+  Then I should see "Job5"
+  And I should not see "Job1"
+  And I should not see "Job2"
+  And I should not see "Job3"
+  And I should not see "Job4"
+  And I should not see "Job6"
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  Then I select "revoked" in select list "Status"
+  And I click the "Search Jobs" button
+  Then I should see "Job5"
+  And I should see "Job6"
+  And I should not see "Job1"
+  And I should not see "Job2"
+  And I should not see "Job3"
+  And I should not see "Job4"
