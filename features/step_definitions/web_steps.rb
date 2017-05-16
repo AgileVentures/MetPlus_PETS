@@ -173,8 +173,8 @@ When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
   end
 end
 
-When(/^(?:I|they) select "([^"]*)" in( \w*)?
-  select list "([^"]*)"$/) do |item, ordinal, lst|
+When(/^(?:I|they)\sselect\s"([^"]*)"\sin(\s\w*)?\sselect\slist\s
+  "([^"]*)"$/x) do |item, ordinal, lst|
   # use 'ordinal' when selecting among select lists all of which
   # have the same selector (e.g., same label)
   case ordinal
@@ -191,18 +191,18 @@ When(/^(?:I|they) select "([^"]*)" in( \w*)?
   end
 end
 
-Then(/^"([^"]*)" should( not)? be an option for
-  select list "([^"]*)"$/) do |option, negate, lst|
+Then(/^"([^"]*)"\sshould(\snot)?\sbe\san\soption\sfor\sselect\slist\s
+  "([^"]*)"$/x) do |option, negate, lst|
   if negate
-    begin
-      find(:select, lst, minimum: 1).find(:option, option)
-      raise ArgumentError, 'Option unexpectedly found!'
-    rescue Capybara::ElementNotFound
-      # Return true if there was an element not found exception
-      true
-    end
+    expect(page).not_to have_selector(:xpath,
+                                      "//label[. = '#{lst}']" \
+                                      '/following-sibling::div' \
+                                      "/select/option[. = '#{option}']")
   else
-    find(:select, lst, minimum: 1).find(:option, item)
+    expect(page).to have_selector(:xpath,
+                                  "//label[. = '#{lst}']" \
+                                  '/following-sibling::div' \
+                                  "/select/option[. = '#{option}']")
   end
 end
 
