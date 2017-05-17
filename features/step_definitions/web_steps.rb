@@ -257,8 +257,7 @@ Then(/^I( cannot)? select2 "([^"]*)" from "([^"]*)"$/) do |cannot, value, select
   find('.select2-search__field').set(value)
   if cannot
     within('.select2-results') do
-      expect(page.find('li')).to
-      have_text('No results found')
+      expect(page.find('li')).to have_text('No results found')
     end
   else
     within('.select2-results') { find('li', text: value).click }
