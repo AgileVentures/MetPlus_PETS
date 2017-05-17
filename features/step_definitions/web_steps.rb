@@ -44,20 +44,20 @@ And(/^I press "([^"]*)"$/) do |name|
   click_on name
 end
 
-Then(/^I should see "([^"]*)"
-  between "([^"]*)" and "([^"]*)"$/) do |to_search, first, last|
+Then(/^I\sshould\ssee\s"([^"]*)"\s
+  between\s"([^"]*)"\sand\s"([^"]*)"$/x) do |to_search, first, last|
   regex = /#{Regexp.quote(first.to_s)}.+#{Regexp.quote(to_search.to_s)}.
   +#{Regexp.quote(last.to_s)}/
   search_text regex
 end
 
-And(/^I should see "([^"]*)" in the same table row as
-  "([^"]*)"$/) do |to_search, anchor_text|
+And(/^I\sshould\ssee\s"([^"]*)"\sin\sthe\ssame\stable\srow\sas\s
+  "([^"]*)"$/x) do |to_search, anchor_text|
   expect(find('tr', text: anchor_text)).to have_content(to_search)
 end
 
-Then(/^I should( not)? see "([^"]*)"
-  before "([^"]*)"$/) do |not_see, to_search, last|
+Then(/^I\sshould(\snot)?\ssee\s"([^"]*)"\s
+  before\s"([^"]*)"$/x) do |not_see, to_search, last|
   expect(page.body).to have_text to_search
   regex = /#{Regexp.quote(to_search.to_s)}.+#{Regexp.quote(last.to_s)}/
   if not_see
@@ -67,8 +67,8 @@ Then(/^I should( not)? see "([^"]*)"
   end
 end
 
-Then(/^(?:I|they) should( not)? see "([^"]*)"
-  after "([^"]*)"$/) do |not_see, to_search, first|
+Then(/^(?:I|they)\sshould(\snot)?\ssee\s"([^"]*)"\s
+  after\s"([^"]*)"$/x) do |not_see, to_search, first|
   expect(page.body).to have_text to_search
   regex = /#{Regexp.quote(first.to_s)}.+#{Regexp.quote(to_search.to_s)}/
   if not_see
