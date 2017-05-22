@@ -1,4 +1,5 @@
 class Company < ActiveRecord::Base
+  scope :all_active, -> {where(status: Company.statuses[:active])}
   has_many :company_people, dependent: :destroy
   accepts_nested_attributes_for :company_people
 
@@ -39,8 +40,8 @@ class Company < ActiveRecord::Base
     StatusChange.update_status_history(self, :registration_denied)
   end
 
-  def self.all_with_jobs
-    Company.order(:name).joins(:jobs).uniq.all
+  def self.all_active_with_jobs
+    Company.all_active.order(:name).joins(:jobs).uniq.all
   end
 
   def self.company_admins(company)
