@@ -1,5 +1,4 @@
 class Company < ActiveRecord::Base
-
   has_many :company_people, dependent: :destroy
   accepts_nested_attributes_for :company_people
 
