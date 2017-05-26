@@ -1,29 +1,28 @@
 class Company < ActiveRecord::Base
   has_many :company_people, dependent: :destroy
-    accepts_nested_attributes_for :company_people
+  accepts_nested_attributes_for :company_people
 
   has_many :jobs
 
   has_many :addresses, as: :location, dependent: :destroy
-    accepts_nested_attributes_for :addresses, reject_if: :all_blank,
-                                  allow_destroy: true
+  accepts_nested_attributes_for :addresses, reject_if: :all_blank,
+                                            allow_destroy: true
 
   has_and_belongs_to_many :agencies
 
   enum status: [:pending_registration, :active, :inactive, :registration_denied]
   has_many :status_changes, as: :entity, dependent: :destroy
 
-
-  validates :ein,   :ein_number => true
+  validates :ein, ein_number: true
   validates_uniqueness_of :ein, case_sensitive: false,
-                  message: 'has already been registered'
-  validates :phone, :phone => true
-  validates :fax, :phone => true, allow_blank: true
-  validates :email, :email => true
-  validates :website, :website => true
+                                message: 'has already been registered'
+  validates :phone, phone: true
+  validates :fax, phone: true, allow_blank: true
+  validates :email, email: true
+  validates :website, website: true
   validates_presence_of :name
   validates_presence_of :job_email
-  validates :job_email, :email => true
+  validates :job_email, email: true
 
   def pending_registration
     pending_registration!
@@ -40,14 +39,8 @@ class Company < ActiveRecord::Base
     StatusChange.update_status_history(self, :registration_denied)
   end
 
-  def self.all_with_active_jobs
-    companies = []
-    Company.active.order(:name).each do |cmpy|
-      unless cmpy.jobs.where(status: 'active').empty?
-        companies << cmpy
-      end
-    end
-    companies
+  def self.all_active_with_jobs
+    Company.active.order(:name).joins(:jobs).uniq.all
   end
 
   def self.company_admins(company)
@@ -58,20 +51,19 @@ class Company < ActiveRecord::Base
     company.company_people.joins(:user).order('users.last_name')
   end
 
-  def people_on_role role
+  def people_on_role(role)
     users = []
     company_people.each do |person|
       users << person if person.company_roles &&
-          person.company_roles.pluck(:role).include?(role)
+                         person.company_roles.pluck(:role).include?(role)
     end
 
     users
   end
 
-  private
+  private_class_method
 
   def self.find_users_with_role(company, role)
     company.people_on_role role
   end
-
 end
