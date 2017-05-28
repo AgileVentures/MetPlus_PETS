@@ -475,6 +475,7 @@ RSpec.describe JobsController, type: :controller do
     let(:request_last_page) do
       xhr :get, :list, job_type: 'my-company-all', jobs_page: 4
     end
+    let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs'}
     before(:each) do
       31.times.each do |i|
         title = i < 10 ? "Awesome job 0#{i}" : "Awesome job #{i}"
@@ -550,6 +551,26 @@ RSpec.describe JobsController, type: :controller do
         expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'
       end
       it { should_not set_flash }
+    end
+
+    describe 'company_person with recent jobs filter' do
+      before :each do
+        warden.set_user dyson_person
+        request_recent_jobs
+      end
+
+      it 'recent_jobs: is a success' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "recent_jobs: renders 'jobs/_list_jobs' template" do
+        expect(response).to render_template('jobs/_list_jobs')
+      end
+
+      it 'recent_jobs: check_jobs' do
+        assigns(:jobs).each {}
+        expect(assigns(:jobs).first.title).to eq 'Awesome new job 3'
+      end
     end
   end
 
