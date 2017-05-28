@@ -24,7 +24,7 @@ class Company < ActiveRecord::Base
   validates_presence_of :job_email
   validates :job_email, email: true
 
-  def pending_regisration
+  def pending_registration
     pending_registration!
     StatusChange.update_status_history(self, :pending_registration)
   end
