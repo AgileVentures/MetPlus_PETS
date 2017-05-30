@@ -2,11 +2,12 @@ require 'rails_helper'
 
 describe Devise::SessionsController, type: :controller do
   describe 'user logs in with cookies' do
-    before_action :user_logged!
-    include UserParameters
-    cookies[:user_id]     = current_user.id
-    cookies[:person_type] = current_user.actable_type
-    expect(:get => 'login').to route_to(controller: "users/sessions", action: 'new')
+    it "logs in using cookies" do
+      js = FactoryGirl.create(:job_seeker)
+      @request.cookies[:user_id]     = js.id
+      @request.cookies[:person_type] = js.actable_type
+      expect(:get => 'login').to route_to(controller: "users/sessions", action: 'new')
+    end
   end
   describe 'user logs in' do
 	  it "should route '/login' correctly" do
