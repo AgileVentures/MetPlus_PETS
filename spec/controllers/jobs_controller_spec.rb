@@ -95,9 +95,10 @@ RSpec.describe JobsController, type: :controller do
       end
       let!(:jobp) do
         FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company, name: 'Pending inc',
-                                                                 status:  'pending_registration',
-                                                                 agencies: [agency]))
+                           company: FactoryGirl.create(:company,
+                                                       name: 'Pending inc',
+                                                       status:  'pending_registration',
+                                                       agencies: [agency]))
       end
       let!(:job_skillp) do
         FactoryGirl.create(:job_skill,
@@ -106,9 +107,10 @@ RSpec.describe JobsController, type: :controller do
       end
       let!(:jobi) do
         FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company, name: 'Inact inc',
-                                                                 status:  'inactive',
-                                                                 agencies: [agency]))
+                           company: FactoryGirl.create(:company,
+                                                       name: 'Inact inc',
+                                                       status:  'inactive',
+                                                       agencies: [agency]))
       end
       let!(:job_skilli) do
         FactoryGirl.create(:job_skill,
@@ -117,9 +119,10 @@ RSpec.describe JobsController, type: :controller do
       end
       let!(:jobd) do
         FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company, name: 'Denied inc',
-                                                                 status:  'registration_denied',
-                                                                 agencies: [agency]))
+                           company: FactoryGirl.create(:company,
+                                                       name: 'Denied inc',
+                                                       status: 'registration_denied',
+                                                       agencies: [agency]))
       end
       let!(:job_skilld) do
         FactoryGirl.create(:job_skill,
