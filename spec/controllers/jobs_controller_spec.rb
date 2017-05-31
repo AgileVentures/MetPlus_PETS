@@ -52,32 +52,90 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #index' do
-    let(:job1) do
-      FactoryGirl.create(:job, title: 'Customer Manager',
-                               description: 'Provide resposive customer service')
+    context 'search by title and description' do
+      let(:job1) do
+        FactoryGirl.create(:job, title: 'Customer Manager',
+                                 description: 'Provide resposive customer service')
+      end
+      let(:job2) { FactoryGirl.create(:job) }
+      let!(:job_skill1) do
+        FactoryGirl.create(:job_skill,
+                           job: job1,
+                           skill: FactoryGirl.create(:skill, name: 'New Skill 1'))
+      end
+      let!(:job_skill2) do
+        FactoryGirl.create(:job_skill,
+                           job: job2,
+                           skill: FactoryGirl.create(:skill, name: 'New Skill 2'))
+      end
+      before(:each) do
+        get :index,
+            q: { 'title_cont_any': 'customer manager',
+                 'description_cont_any': 'responsive service' }
+      end
+      it_behaves_like 'return success and render', 'index'
+      it { expect(assigns(:title_words)).to match %w(customer manager) }
+      it 'assigns description words for view' do
+        expect(assigns(:description_words)).to match %w(responsive service)
+      end
+      it { expect(assigns(:jobs)[0]).to eq job1 }
     end
-    let(:job2) { FactoryGirl.create(:job) }
-    let!(:job_skill1) do
-      FactoryGirl.create(:job_skill,
-                         job: job1,
-                         skill: FactoryGirl.create(:skill, name: 'New Skill 1'))
+    context 'only active company jobs are returned' do
+      let!(:skill_s) { FactoryGirl.create(:skill, name: 'Search Skill') }
+      let!(:joba) do
+        FactoryGirl.create(:job,
+                           company: FactoryGirl.create(:company, name: 'Active inc',
+                                                                 status:  'active',
+                                                                 agencies: [agency]))
+      end
+      let!(:job_skilla) do
+        FactoryGirl.create(:job_skill,
+                           job: joba,
+                           skill: skill_s)
+      end
+      let!(:jobp) do
+        FactoryGirl.create(:job,
+                           company: FactoryGirl.create(:company, name: 'Pending inc',
+                                                                 status:  'pending_registration',
+                                                                 agencies: [agency]))
+      end
+      let!(:job_skillp) do
+        FactoryGirl.create(:job_skill,
+                           job: jobp,
+                           skill: skill_s)
+      end
+      let!(:jobi) do
+        FactoryGirl.create(:job,
+                           company: FactoryGirl.create(:company, name: 'Inact inc',
+                                                                 status:  'inactive',
+                                                                 agencies: [agency]))
+      end
+      let!(:job_skilli) do
+        FactoryGirl.create(:job_skill,
+                           job: jobi,
+                           skill: skill_s)
+      end
+      let!(:jobd) do
+        FactoryGirl.create(:job,
+                           company: FactoryGirl.create(:company, name: 'Denied inc',
+                                                                 status:  'registration_denied',
+                                                                 agencies: [agency]))
+      end
+      let!(:job_skilld) do
+        FactoryGirl.create(:job_skill,
+                           job: jobd,
+                           skill: skill_s)
+      end
+      it 'Only active company jobs are listed in the initial display' do
+        get :index
+        expect(assigns(:jobs)).to eq [joba]
+      end
+      it 'Search on skill only returns active company jobs' do
+        get :index,
+            q: { 'skills_id_in': [skill_s.id.to_s] }
+        expect(assigns(:jobs)).to eq [joba]
+      end
     end
-    let!(:job_skill2) do
-      FactoryGirl.create(:job_skill,
-                         job: job2,
-                         skill: FactoryGirl.create(:skill, name: 'New Skill 2'))
-    end
-    before(:each) do
-      get :index,
-          q: { 'title_cont_any': 'customer manager',
-               'description_cont_any': 'responsive service' }
-    end
-    it_behaves_like 'return success and render', 'index'
-    it { expect(assigns(:title_words)).to match %w(customer manager) }
-    it 'assigns description words for view' do
-      expect(assigns(:description_words)).to match %w(responsive service)
-    end
-    it { expect(assigns(:jobs)[0]).to eq job1 }
   end
 
   describe 'GET #new' do
@@ -129,7 +187,7 @@ RSpec.describe JobsController, type: :controller do
     context 'agency admin' do
       before(:each) { warden.set_user agency_admin }
       describe 'successful POST #create' do
-        it 'chanage job count & job skill count by 1' do
+        it 'change job count & job skill count by 1' do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end

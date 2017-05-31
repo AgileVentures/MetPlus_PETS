@@ -44,13 +44,13 @@ class JobsController < ApplicationController
       @description_words += q_params[:description_cont_all]
     end
 
-    params[:q] = if params[:q].present?
-                   params[:q].merge('company_status_eq' => ['active'])
-                 else
-                   { 'company_status_eq' => ['active'] }
-                 end
+    #  ensure only jobs for active are returned.
+    q_params = if q_params.present?
+                 q_params.merge('company_status_eq' => 'active')
+               else
+                 { 'company_status_eq' => 'active' }
+               end
     @query = Job.ransack(params[:q]) # For form display of entered values
-
     @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
