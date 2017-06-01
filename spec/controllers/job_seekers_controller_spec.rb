@@ -349,6 +349,10 @@ RSpec.describe JobSeekersController, type: :controller do
           expect(response).to redirect_to(home_job_seeker_path)
         end
       end
+      it 'update email address' do
+        patch :update, id: owner, job_seeker: FactoryGirl.attributes_for(:job_seeker, email: 'test@test.com')
+        expect(flash[:warning]).to eq 'Please check your inbox to update your email address'
+      end
       context 'unsuccessful résumé upload' do
         render_views
         before(:each) do
