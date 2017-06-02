@@ -39,6 +39,8 @@ class Company < ActiveRecord::Base
     StatusChange.update_status_history(self, :registration_denied)
   end
 
+  ransacker :status, formatter: proc { |v| statuses[v] }
+
   def self.all_active_with_jobs
     Company.active.order(:name).joins(:jobs).uniq.all
   end
