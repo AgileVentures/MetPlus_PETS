@@ -14,7 +14,7 @@ RSpec.describe Users::SessionsController, type: :controller do
       expect(cookies[:user_id]).to eq user.id
       expect(cookies[:person_type]).to eq user.actable_type
     end
-    it 'logs in with remember me' do
+    it 'sets user id cookie  expiry with remember me' do
       # stubs out the #cookies method
       stub_cookie_jar = HashWithIndifferentAccess.new
       controller.stub(:cookies) { stub_cookie_jar }
@@ -22,13 +22,22 @@ RSpec.describe Users::SessionsController, type: :controller do
            user: { email: user.email, password: user.password,
                    remember_me: '1',
                    person_type: user.actable_type }
-      expect(cookies[:user_id]).to eq user.id
-      expect(cookies[:person_type]).to eq user.actable_type
-      expiring_user_id_cookie = stub_cookie_jar[:user_id]
-      expect(expiring_user_id_cookie[:expires])
+      user_id_cookie = stub_cookie_jar[:user_id]
+      expect(user_id_cookie[:value]).to eq user.id
+      expect(user_id_cookie[:expires])
         .to be_within(5.seconds).of 1.year.from_now
-      expiring_person_type_cookie = stub_cookie_jar[:person_type]
-      expect(expiring_person_type_cookie[:expires])
+    end
+    it 'sets person type cookie expiry with remember me' do
+      # stubs out the #cookies method
+      stub_cookie_jar = HashWithIndifferentAccess.new
+      controller.stub(:cookies) { stub_cookie_jar }
+      post :create,
+           user: { email: user.email, password: user.password,
+                   remember_me: '1',
+                   person_type: user.actable_type }
+      person_type_cookie = stub_cookie_jar[:person_type]
+      expect(person_type_cookie[:value]).to eq user.actable_type
+      expect(person_type_cookie[:expires])
         .to be_within(5.seconds).of 1.year.from_now
     end
   end
