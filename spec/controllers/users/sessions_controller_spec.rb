@@ -6,9 +6,6 @@ RSpec.describe Users::SessionsController, type: :controller do
 
     before(:each) do
       @request.env['devise.mapping'] = Devise.mappings[:user]
-      # sign_in user
-      @request.cookies[:user_id]     = user.id
-      @request.cookies[:person_type] = user.actable_type
     end
     it 'logs in without remember me' do
       post :create,
