@@ -62,32 +62,32 @@ class JobSeekerPolicy < ApplicationPolicy
 
   def permitted_attributes
     if user == record
-      [ :first_name,
-        :last_name,
-        :email,
-        :phone,
-        :password,
-        :password_confirmation,
-        :year_of_birth,
-        :resume,
-        :consent,
-        :job_seeker_status_id,
-        address_attributes: [:id, :street, :city, :zipcode, :state]
-      ]
+      [:first_name,
+       :last_name,
+       :email,
+       :phone,
+       :password,
+       :password_confirmation,
+       :year_of_birth,
+       :resume,
+       :consent,
+       :job_seeker_status_id,
+       address_attributes: [:id, :street, :city, :zipcode, :state]]
     elsif (user == record.case_manager) || (user == record.job_developer)
-      [ :first_name,
-        :last_name,
-        :email,
-        :phone,
-        :resume,
-        :consent,
-        :job_seeker_status_id,
-        address_attributes: [:id, :street, :city, :zipcode, :state]
-      ]
+      [:first_name,
+       :last_name,
+       :email,
+       :phone,
+       :resume,
+       :consent,
+       :job_seeker_status_id,
+       address_attributes: [:id, :street, :city, :zipcode, :state]]
     end
   end
+
   def download_resume?
-    User.is_company_person?(user) &&
-    record.job_applications.where(job: user.company.jobs.active).exists?
+    user.is_a?(AgencyPerson) ||
+      User.is_company_person?(user) &&
+        record.job_applications.where(job: user.company.jobs.active).exists?
   end
 end
