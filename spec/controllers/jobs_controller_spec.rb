@@ -568,7 +568,6 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it 'recent_jobs: check_jobs' do
-        assigns(:jobs).each {}
         expect(assigns(:jobs).first.title).to eq 'Awesome new job 3'
       end
     end
