@@ -10,7 +10,6 @@ class JobsController < ApplicationController
                                         :match_jd_job_seekers]
 
   def index
-
     # Make a copy of q params since we will strip out any commas separating
     # words - need to retain any commas in the form (so user is not surprised)
     q_params = params[:q] ? params[:q].dup : params[:q]
@@ -45,8 +44,13 @@ class JobsController < ApplicationController
       @description_words += q_params[:description_cont_all]
     end
 
+    #  ensure only jobs for active are returned.
+    q_params = if q_params.present?
+                 q_params.merge('company_status_eq' => 'active')
+               else
+                 { 'company_status_eq' => 'active' }
+               end
     @query = Job.ransack(params[:q]) # For form display of entered values
-
     @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
@@ -186,13 +190,17 @@ class JobsController < ApplicationController
     job_seeker = JobSeeker.find(params[:job_seeker_id])
     resume = job_seeker.resumes[0]
 
-    return render(json: { message: 'No résumé on file',
-                          status: 404 }) unless resume
+    unless resume
+      return render(json: { message: 'No résumé on file',
+                            status: 404 })
+    end
 
     result = ResumeCruncher.match_resume_and_job(resume.id, @job.id)
 
-    return render(json: { message: result[:message],
-                          status: 404 }) if result[:status] == 'ERROR'
+    if result[:status] == 'ERROR'
+      return render(json: { message: result[:message],
+                            status: 404 })
+    end
 
     @score = result[:score]
 
@@ -205,8 +213,8 @@ class JobsController < ApplicationController
     authorize @job
 
     unless params[:job_seeker_ids]
-      flash[:alert] =  'Please choose a job seeker'
-      redirect_to @job and return
+      flash[:alert] = 'Please choose a job seeker'
+      redirect_to(@job) && return
     end
 
     job_seeker_ids = params[:job_seeker_ids].map(&:to_i)

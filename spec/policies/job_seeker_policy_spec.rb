@@ -171,16 +171,16 @@ RSpec.describe JobSeekerPolicy do
       FactoryGirl.create(:job_application, job: job, job_seeker: js1)
     end
 
-    it 'allows access if user is a company admin/contact' do
+    it 'allows access if user is a company admin/contact or agency person' do
       expect(JobSeekerPolicy).to permit(ca, js1)
       expect(JobSeekerPolicy).to permit(cc, js1)
+      expect(JobSeekerPolicy).to permit(jd1, js1)
+      expect(JobSeekerPolicy).to permit(cm1, js1)
+      expect(JobSeekerPolicy).to permit(admin, js1)
     end
 
-    it 'denies access if user is not a company admin/contact' do
+    it 'denies access if user is not a company admin/contact or agency person' do
       expect(JobSeekerPolicy).not_to permit(js1, js1)
-      expect(JobSeekerPolicy).not_to permit(admin, js1)
-      expect(JobSeekerPolicy).not_to permit(jd1, js1)
-      expect(JobSeekerPolicy).not_to permit(cm1, js1)
     end
 
     it 'denies company people of the wrong company' do

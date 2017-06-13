@@ -13,6 +13,8 @@ Background: adding jobs data to DB
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com   | corp@ymail.com   | 12-3456789 | active |
     | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
+    | MetPlus | Acme Inc.    | acme.com    | 555-222-3333 | corp@acme.com    | corp@acme.com    | 12-3456787 | active |
+    | MetPlus | Inact Inc.   | inact.com   | 555-222-3333 | corp@ia.com      | corp@ia.com      | 12-3456786 | inactive |
 
   Given the following company roles exist:
     | role  |
@@ -24,6 +26,8 @@ Background: adding jobs data to DB
     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com   | qwerty123 | 555-222-3334 |
     | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
+    | Acme Inc.    | CA    | Barry      | Nichols   | bn@acme.com      | qwerty123 | 555-222-3334 |
+    | Inact Inc.   | CA    | Bruce      | Oswald    | bn@ia.com        | qwerty123 | 555-222-3334 |
 
   Given the following job skills exist:
     | name       | description                            |
@@ -32,12 +36,14 @@ Background: adding jobs data to DB
     | Skill3     | Long haul driver with Class C license  |
 
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills         | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1, Skill2 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3         | city2 |
-    | Job3  | About job3. | Feature Inc. | carter@ymail.com | Evening | Skill1, Skill3 | city3 |
-    | Job4  | About job4. | Feature Inc. | carter@ymail.com | Evening |                | city4 |
-
+    | title | description | company      | creator          | shift   | skills         | city  |status   |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1, Skill2 | city1 | active  |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3         | city2 | active  |
+    | Job3  | About job3. | Feature Inc. | carter@ymail.com | Evening | Skill1, Skill3 | city3 | active  |
+    | Job4  | About job4. | Feature Inc. | carter@ymail.com | Evening |                | city4 | active  |
+    | Job5  | About job5. | Feature Inc. | carter@ymail.com | Day     | Skill2         | city3 | filled  |
+    | Job6  | About job6. | Widgets Inc. | jane@ymail.com   | Evening | Skill3         | city1 | revoked |
+    | Job7  | About job7. | Inact Inc.   | bn@ia.com        | Day     |                | city1 | revoked |
 
 @javascript
 Scenario: search jobs
@@ -154,10 +160,37 @@ Scenario: Search by company
   And I should not see "Job4"
   And I click the "Show Search Form" link
   And I wait 1 second
+  Then "Acme Inc." should not be an option for select list "Company"
+  And "Inact Inc." should not be an option for select list "Company"
   Then I select "Feature Inc." in select list "Company"
   And I click the "Search Jobs" button
   Then I should see "Job1"
   And I should see "Job2"
   And I should see "Job3"
   And I should see "Job4"
-
+  
+  @javascript
+Scenario: Search by status
+  Given I am on the home page
+  And I click the "Jobs" link
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  # search by status
+  And I select "filled" in select list "Status"
+  And I click the "Search Jobs" button
+  Then I should see "Job5"
+  And I should not see "Job1"
+  And I should not see "Job2"
+  And I should not see "Job3"
+  And I should not see "Job4"
+  And I should not see "Job6"
+  And I click the "Show Search Form" link
+  And I wait 1 second
+  Then I select "revoked" in select list "Status"
+  And I click the "Search Jobs" button
+  Then I should see "Job5"
+  And I should see "Job6"
+  And I should not see "Job1"
+  And I should not see "Job2"
+  And I should not see "Job3"
+  And I should not see "Job4"
