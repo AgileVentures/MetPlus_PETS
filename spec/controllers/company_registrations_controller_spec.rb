@@ -108,7 +108,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                        name: 'Bayer-Raynor',
                        agencies: [metplus])
   end
-  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let!(:company_admin) { FactoryGirl.create(:first_company_admin, company: company) }
   let(:bayer_admin) { FactoryGirl.create(:company_admin, company: comp_bayer) }
 
   let(:jd) { FactoryGirl.create(:job_developer, agency: agency) }
@@ -257,6 +257,12 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
       it 'sets User approved to false' do
         expect(assigns(:company).company_people[0].user.approved).to be false
+      end
+
+      it 'sets User roles to CC and CA' do
+        expect(assigns(:company).company_people[0].company_roles[0, 2]
+          .map { |x| x[:role] })
+          .to contain_exactly 'Company Contact', 'Company Admin'
       end
 
       it 'sets company status to Pending' do

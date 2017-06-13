@@ -75,9 +75,16 @@
       = f.label :company_id_in, 'Company', class: 'control-label col-sm-3'
       .col-sm-6
         = f.collection_select :company_id_in,
-              Company.all_with_active_jobs,
+              Company.all_active_with_jobs,
               :id, :name, {include_blank: true},
               {multiple: true, size: 5,
+                class: 'form-control', style: 'width: 100%;'}
+
+    .form-group
+      = f.label :status_in, 'Status', class: 'control-label col-sm-3'
+      .col-sm-6
+        = f.collection_select :status_in, Job.statuses, :last, :first, {},
+               {multiple: true, size: 5,
                 class: 'form-control', style: 'width: 100%;'}
 
     .form-group
@@ -172,12 +179,18 @@
               %td
                 %strong Company
               %td
-                All companies with one or more
-                %i active
-                jobs are listed.
+                All active companies with one or more jobs are listed.
                 Click in the search box and select a company from the list that appears.
                 %br
                 You can select multiple companies by repeatedly clicking
+                in the search box.
+            %tr
+              %td
+                %strong Status
+              %td
+                All possible states for filtering jobs are listed.
+                %br
+                You can select multiple job states by repeatedly clicking
                 in the search box.
 
       .modal-footer
