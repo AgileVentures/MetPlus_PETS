@@ -158,6 +158,13 @@ Scenario: Agency and Company people actions
   And I should see "Doctor"
   And I should see "Mime"
   And I should not see "Trucker"
+  
+  # agency person: download job seeker résumé
+  Then I am on the JobSeeker Show page for "mike.smith@gmail.com"
+  And I wait 1 second
+  Then I should see button "Download Resume"
+  And I click the "Download Resume" button
+  Then I should get a download with the filename "Janitor-Resume.doc"
 
   # company admin: download job seeker résumé
   And I click the "Hello, John" link
