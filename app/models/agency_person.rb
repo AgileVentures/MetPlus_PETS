@@ -140,6 +140,9 @@ class AgencyPerson < ActiveRecord::Base
     self.agency == agency
   end
 
+  def decrement_invitation_limit!
+    true
+  end
 
   private
   def has_role? role

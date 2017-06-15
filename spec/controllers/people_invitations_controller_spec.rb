@@ -271,5 +271,55 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       end
     end
   end
-
+  describe 'GET #update AgencyPerson' do
+    context 'valid attributes' do
+      let(:agency)        { FactoryGirl.create(:agency) }
+      let!(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
+      let!(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
+      let!(:job_developer) { FactoryGirl.create(:job_developer, 
+                                                status: 'inactive', 
+                                                agency: agency) }
+      let(:company)       { FactoryGirl.create(:company) }
+      let!(:ca_role)      { FactoryGirl.create(:company_role,
+                              role: CompanyRole::ROLE[:CA]) }
+      let(:company_admin) do
+        $ca = FactoryGirl.create(:company_person, company: company)
+        $ca.company_roles << ca_role
+        $ca.save
+        $ca
+      end
+      let(:company_person) { FactoryGirl.create(:company_person,
+                                                status: 'inactive', 
+                                                company: company) }
+      before(:each) do
+        @request.env['devise.mapping'] = Devise.mappings[:user]
+      end
+      it 'accepts job developer invitation token and sets to active' do
+        job_developer.invite!(agency_admin) do |u|
+          u.skip_invitation = true
+        end
+        @invite_token = job_developer.raw_invitation_token
+        post :update,
+        user: { invitation_token: @invite_token,
+                  password: 'qwerty123', 
+                  password_confirmation: 'qwerty123' }
+        job_developer.reload
+        expect(job_developer.active?).to be true
+      end
+      it 'accepts company person invitation token and sets to active' do
+        company_person.invite!(company_admin) do |u|
+          u.skip_invitation = true
+        end
+        @invite_token = company_person.raw_invitation_token
+        post :update,
+        user: { invitation_token: @invite_token,
+                  password: 'qwerty123', 
+                  password_confirmation: 'qwerty123' }
+        company_person.reload
+        expect(company_person.active?).to be true
+      end
+    end
+  end
 end
+
+                 
