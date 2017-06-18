@@ -78,11 +78,7 @@ class CompanyPerson < ActiveRecord::Base
   def is_company_person? company
     self.company == company
   end
-  
-  def decrement_invitation_limit!
-    true
-  end
-  
+
   private
   def has_role? role
     company_roles.pluck(:role).include?CompanyRole::ROLE[role]
