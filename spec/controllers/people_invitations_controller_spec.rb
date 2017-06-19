@@ -1,17 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe PeopleInvitationsController, type: :controller do
-
   describe 'GET #new AgencyPerson' do
-
     context 'valid attributes' do
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
 
       before(:each) do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        get :new, {person_type: 'AgencyPerson', org_id: agency.id}
+        get :new, person_type: 'AgencyPerson', org_id: agency.id
       end
       it 'sets session key for person_type' do
         expect(session[:person_type]).to eq 'AgencyPerson'
@@ -22,45 +20,43 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       it 'renders new_agency_person template' do
         expect(response).to render_template('new_agency_person')
       end
-      it "returns http success" do
+      it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
     end
   end
 
   describe 'POST #create AgencyPerson' do
-
     let(:agency)        { FactoryGirl.create(:agency) }
     let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
 
     it 'sends invitation email' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in agency_admin
-      expect{ post :create, user: FactoryGirl.attributes_for(:user) }.
-                    to change(all_emails, :count).by(+1)
+      expect { post :create, user: FactoryGirl.attributes_for(:user) }
+        .to change(all_emails, :count).by(+1)
     end
 
     context 'valid attributes' do
-
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
       let(:user_hash)     { FactoryGirl.attributes_for(:user) }
 
       before(:each) do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
         post :create, { user: user_hash },
-                        # following arg is session variables
-                      { person_type: 'AgencyPerson', org_id: agency.id }
+             # following arg is session variables
+             person_type: 'AgencyPerson', org_id: agency.id
       end
 
       it 'sets flash message' do
-        expect(flash[:notice]).
-            to eq "An invitation email has been sent to #{user_hash[:email]}."
+        expect(flash[:notice])
+          .to eq "An invitation email has been sent to #{user_hash[:email]}."
       end
       it 'redirects as specified' do
-        expect(response).
-            to render_template("devise/mailer/invitation_instructions")
+        expect(response)
+          .to render_template('devise/mailer/invitation_instructions')
       end
 
       it 'resets session hash values to nil' do
@@ -70,71 +66,70 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     end
 
     context 'reinviting a user' do
-
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
       let!(:user_hash)    { FactoryGirl.attributes_for(:user) }
 
       it 'creates user once upon initial invite' do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        expect { 4.times {post :create, user: user_hash } }.
-                        to change(User, :count).by(+1)
+        expect { 4.times { post :create, user: user_hash } }
+          .to change(User, :count).by(+1)
       end
 
       it 'resends invitation to same user' do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        expect { 4.times {post :create, user: user_hash } }.
-                        to change(all_emails, :count).by(+4)
+        expect { 4.times { post :create, user: user_hash } }
+          .to change(all_emails, :count).by(+4)
       end
     end
 
     context 'invalid attributes' do
-
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
       let(:user_hash) do
-        $hash = FactoryGirl.attributes_for(:user)
-        $hash[:email] = agency_admin.email
-        $hash
+        hash = FactoryGirl.attributes_for(:user)
+        hash[:email] = agency_admin.email
+        hash
       end
 
       before(:each) do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
         post :create, { user: user_hash },
-                        # following arg is session variables
-                      { person_type: 'AgencyPerson', org_id: agency.id }
+             # following arg is session variables
+             person_type: 'AgencyPerson', org_id: agency.id
       end
 
       it 'renders new template' do
         expect(response).to render_template('new')
       end
-      it "returns http success" do
+      it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
     end
   end
 
   describe 'GET #new CompanyPerson' do
-
     context 'valid attributes' do
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:company)       { FactoryGirl.create(:company) }
-      let!(:ca_role)      { FactoryGirl.create(:company_role,
-                              role: CompanyRole::ROLE[:CA]) }
+      let!(:ca_role)      do
+        FactoryGirl.create(:company_role,
+                           role: CompanyRole::ROLE[:CA])
+      end
       let(:company_admin) do
-        $ca = FactoryGirl.create(:company_person, company: company)
-        $ca.company_roles << ca_role
-        $ca.save
-        $ca
+        ca = FactoryGirl.create(:company_person, company: company)
+        ca.company_roles << ca_role
+        ca.save
+        ca
       end
 
       before(:each) do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        get :new, {person_type: 'CompanyPerson', org_id: company.id}
+        get :new, person_type: 'CompanyPerson', org_id: company.id
       end
       it 'sets session key for person_type' do
         expect(session[:person_type]).to eq 'CompanyPerson'
@@ -145,61 +140,63 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       it 'renders new_company_person template' do
         expect(response).to render_template('new_company_person')
       end
-      it "returns http success" do
+      it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
     end
   end
 
   describe 'POST #create CompanyPerson' do
-
     let(:agency)        { FactoryGirl.create(:agency) }
     let(:company)       { FactoryGirl.create(:company) }
-    let!(:ca_role)      { FactoryGirl.create(:company_role,
-                            role: CompanyRole::ROLE[:CA]) }
+    let!(:ca_role)      do
+      FactoryGirl.create(:company_role,
+                         role: CompanyRole::ROLE[:CA])
+    end
     let(:company_admin) do
-      $ca = FactoryGirl.create(:company_person, company: company)
-      $ca.company_roles << ca_role
-      $ca.save
-      $ca
+      ca = FactoryGirl.create(:company_person, company: company)
+      ca.company_roles << ca_role
+      ca.save
+      ca
     end
 
     it 'sends invitation email' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in company_admin
-      expect{ post :create, user: FactoryGirl.attributes_for(:user) }.
-                    to change(all_emails, :count).by(+1)
+      expect { post :create, user: FactoryGirl.attributes_for(:user) }
+        .to change(all_emails, :count).by(+1)
     end
 
     context 'valid attributes' do
-
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:company)       { FactoryGirl.create(:company) }
-      let!(:ca_role)      { FactoryGirl.create(:company_role,
-                              role: CompanyRole::ROLE[:CA]) }
-      let(:company_admin) do
-        $ca = FactoryGirl.create(:company_person, company: company)
-        $ca.company_roles << ca_role
-        $ca.save
-        $ca
+      let!(:ca_role)      do
+        FactoryGirl.create(:company_role,
+                           role: CompanyRole::ROLE[:CA])
       end
-      let(:user_hash)     { FactoryGirl.attributes_for(:user) }
+      let(:company_admin) do
+        ca = FactoryGirl.create(:company_person, company: company)
+        ca.company_roles << ca_role
+        ca.save
+        ca
+      end
+      let(:user_hash) { FactoryGirl.attributes_for(:user) }
 
       before(:each) do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
         post :create, { user: user_hash },
-                        # following arg is session variables
-                      { person_type: 'CompanyPerson', org_id: company.id }
+             # following arg is session variables
+             person_type: 'CompanyPerson', org_id: company.id
       end
 
       it 'sets flash message' do
-        expect(flash[:notice]).
-            to eq "An invitation email has been sent to #{user_hash[:email]}."
+        expect(flash[:notice])
+          .to eq "An invitation email has been sent to #{user_hash[:email]}."
       end
       it 'redirects as specified' do
-        expect(response).
-            to render_template("devise/mailer/invitation_instructions")
+        expect(response)
+          .to render_template('devise/mailer/invitation_instructions')
       end
 
       it 'resets session hash values to nil' do
@@ -209,67 +206,91 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     end
 
     context 'reinviting a user' do
-
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:company)       { FactoryGirl.create(:company) }
-      let!(:ca_role)      { FactoryGirl.create(:company_role,
-                              role: CompanyRole::ROLE[:CA]) }
-      let(:company_admin) do
-        $ca = FactoryGirl.create(:company_person, company: company)
-        $ca.company_roles << ca_role
-        $ca.save
-        $ca
+      let!(:ca_role)      do
+        FactoryGirl.create(:company_role,
+                           role: CompanyRole::ROLE[:CA])
       end
-      let!(:user_hash)    { FactoryGirl.attributes_for(:user) }
+      let(:company_admin) do
+        ca = FactoryGirl.create(:company_person, company: company)
+        ca.company_roles << ca_role
+        ca.save
+        ca
+      end
+      let!(:user_hash) { FactoryGirl.attributes_for(:user) }
 
       it 'creates user once upon initial invite' do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        expect { 4.times {post :create, user: user_hash } }.
-                        to change(User, :count).by(+1)
+        expect { 4.times { post :create, user: user_hash } }
+          .to change(User, :count).by(+1)
       end
 
       it 'resends invitation to same user' do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        expect { 4.times {post :create, user: user_hash } }.
-                        to change(all_emails, :count).by(+4)
+        expect { 4.times { post :create, user: user_hash } }
+          .to change(all_emails, :count).by(+4)
       end
     end
 
     context 'invalid attributes' do
-
       let(:agency)        { FactoryGirl.create(:agency) }
       let(:company)       { FactoryGirl.create(:company) }
-      let!(:ca_role)      { FactoryGirl.create(:company_role,
-                              role: CompanyRole::ROLE[:CA]) }
+      let!(:ca_role)      do
+        FactoryGirl.create(:company_role,
+                           role: CompanyRole::ROLE[:CA])
+      end
       let(:company_admin) do
-        $ca = FactoryGirl.create(:company_person, company: company)
-        $ca.company_roles << ca_role
-        $ca.save
-        $ca
+        ca = FactoryGirl.create(:company_person, company: company)
+        ca.company_roles << ca_role
+        ca.save
+        ca
       end
       let(:user_hash) do
-        $hash = FactoryGirl.attributes_for(:user)
-        $hash[:email] = company_admin.email
-        $hash
+        hash = FactoryGirl.attributes_for(:user)
+        hash[:email] = company_admin.email
+        hash
       end
 
       before(:each) do
-        @request.env["devise.mapping"] = Devise.mappings[:user]
+        @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
         post :create, { user: user_hash },
-                        # following arg is session variables
-                      { person_type: 'CompanyPerson', org_id: company.id }
+             # following arg is session variables
+             person_type: 'CompanyPerson', org_id: company.id
       end
 
       it 'renders new template' do
         expect(response).to render_template('new')
       end
-      it "returns http success" do
+      it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
     end
   end
-
+  describe 'GET #update' do
+    context 'AgencyPerson' do
+      let(:agency) { FactoryGirl.create(:agency) }
+      let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+      it_behaves_like 'accepts invitation', 'case_manager'
+      it_behaves_like 'accepts invitation', 'job_developer'
+    end
+    context 'Company Person' do
+      let(:company)       { FactoryGirl.create(:company) }
+      let!(:ca_role)      do
+        FactoryGirl.create(:company_role,
+                           role: CompanyRole::ROLE[:CA])
+      end
+      let!(:company_admin) do
+        ca = FactoryGirl.create(:company_person, company: company)
+        ca.company_roles << ca_role
+        ca.save
+        ca
+      end
+      it_behaves_like 'accepts invitation', 'company_admin'
+      it_behaves_like 'accepts invitation', 'company_contact'
+    end
+  end
 end
