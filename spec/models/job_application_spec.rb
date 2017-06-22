@@ -39,8 +39,12 @@ RSpec.describe JobApplication, type: :model do
         subject.status = 2
         expect(subject.status).to eq 'not_accepted'
       end
-      it 'Status 3 should generate exception' do
-        expect { subject.status = 3 }.to raise_error(ArgumentError).with_message('\'3\' is not a valid status')
+      it 'Status 3 should be processing' do
+        subject.status = 3
+        expect(subject.status).to eq 'processing'
+      end
+      it 'Status 4 should generate exception' do
+        expect { subject.status = 4 }.to raise_error(ArgumentError).with_message('\'4\' is not a valid status')
       end
     end
   end
@@ -147,6 +151,21 @@ RSpec.describe JobApplication, type: :model do
 
     it 'updates the selected application status to be rejected' do
       expect { application1.reject }.to change { application1.status }.from('active').to('not_accepted')
+    end
+  end
+
+  describe '#processing' do
+    let(:active_job) { FactoryGirl.create(:job) }
+    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
+    let(:application1) do
+      FactoryGirl.create(:job_application,
+                         job: active_job, job_seeker: job_seeker1)
+    end
+
+    it 'updates the selected application status to be processing' do
+      expect do
+        application1.process
+      end.to change { application1.status }.from('active').to('processing')
     end
   end
 end

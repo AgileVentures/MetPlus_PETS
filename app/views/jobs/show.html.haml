@@ -56,6 +56,7 @@
     %h3 Applications for this Job
     = render partial: 'job_applications/accept_modal'
     = render partial: 'job_applications/reject_modal'
+    = render partial: 'job_applications/process_modal'
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-company-person', @job) } }
   - if pets_user && User.is_job_developer?(pets_user)
