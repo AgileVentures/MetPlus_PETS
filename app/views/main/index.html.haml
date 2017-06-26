@@ -11,7 +11,7 @@
     %br
       %h1 Welcome to MET|PLUS PETS
     %p
-      Michigan Employment & Training Plus, (MET|PLUS) is a 501(c)(3) Vocational
+      Michigan Employment &amp; Training Plus, (MET|PLUS) is a 501(c)(3) Vocational
       Training non-profit organization that strives to assist Michigan job
       seekers with invaluable training and job development that will put them
       on a career path to success.
@@ -26,8 +26,7 @@
   .col-md-5.col-md-offset-0.grey-block
     = image_tag('MetPlus_employer.png')
     %p
-    %button.btn.btn-primary.btn-lg.button-white
-      = link_to 'Register as a Job Seeker', new_job_seeker_path
+      = link_to 'Register as a Job Seeker', new_job_seeker_path, class: 'btn btn-primary btn-lg button-white'
     %br
     %br
     .h4
@@ -43,8 +42,7 @@
   .col-md-5.col-md-offset-2.grey-block
     = image_tag('MetPlus_job_seeker.png')
     %p
-    %button.btn.btn-primary.btn-lg.button-white
-      = link_to 'Register as an Employer', new_company_registration_path
+      = link_to 'Register as an Employer', new_company_registration_path, class: 'btn btn-primary btn-lg button-white'
     %br
     %br
     .h4
