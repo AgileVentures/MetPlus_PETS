@@ -159,6 +159,11 @@ Scenario: Agency and Company people actions
   And I should see "Mime"
   And I should not see "Trucker"
   
+  # agency person: no download button when no job seeker résumé
+  Then I am on the JobSeeker Show page for "tommy1@gmail.com"
+  And I wait 1 second
+  Then I should not see button "Download Resume"
+  
   # agency person: download job seeker résumé
   Then I am on the JobSeeker Show page for "mike.smith@gmail.com"
   And I wait 1 second
