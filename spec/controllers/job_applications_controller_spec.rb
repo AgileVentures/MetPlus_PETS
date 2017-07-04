@@ -232,7 +232,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           end
         end
 
-        context 'valid job application accepted' do
+        context 'valid job application started processing' do
           before(:each) do
             expect_any_instance_of(JobApplication).to receive(:process)
             request
