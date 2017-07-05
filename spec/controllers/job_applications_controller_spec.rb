@@ -204,6 +204,56 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
   end
 
+  describe 'PATCH #process_application' do
+    let(:request) { patch :process_application, id: valid_application }
+
+    context 'unauthenticated' do
+      it_behaves_like 'unauthenticated request'
+    end
+
+    context 'authenticated' do
+      describe 'authorized access' do
+        before(:each) do
+          sign_in company_admin
+        end
+
+        context 'inactive job application' do
+          before(:each) do
+            patch :process_application, id: inactive_application
+          end
+
+          it 'show a flash message of type alert' do
+            expect(flash[:alert]).to eq 'Invalid action on'\
+                ' inactive job application.'
+          end
+
+          it 'redirect to the specific job show page' do
+            expect(response).to redirect_to(job_url(inactive_application.job))
+          end
+        end
+
+        context 'valid job application started processing' do
+          before(:each) do
+            expect_any_instance_of(JobApplication).to receive(:process)
+            request
+          end
+
+          it 'show a flash message of type info' do
+            expect(flash[:info]).to eq 'Job application processing.'
+          end
+
+          it 'redirect to the specific job show page' do
+            expect(response).to redirect_to(job_url(valid_application.job))
+          end
+        end
+      end
+
+      describe 'unauthorized access' do
+        it_behaves_like 'denies access to unauthorized people'
+      end
+    end
+  end
+
   describe 'GET #list' do
     let(:job1) { FactoryGirl.create(:job) }
     let(:job2) { FactoryGirl.create(:job) }
