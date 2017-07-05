@@ -146,6 +146,8 @@ Rails.application.routes.draw do
         as: :accept_application
   patch 'job_applications/:id/reject' => 'job_applications#reject',
         as: :reject_application
+  patch 'job_applications/:id/process' => 'job_applications#process_application',
+        as: :process_application
   get 'job_applications/:id' => 'job_applications#show',
       as: :application
   get 'job_applications/:type/:entity_id' => 'job_applications#list',
