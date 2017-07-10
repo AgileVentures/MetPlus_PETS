@@ -12,14 +12,15 @@ Given(/^I activate user "([^"]*)"$/) do |email|
 end
 
 When(/^I visit profile for "(\w+)"$/) do |first_name|
-   user = User.find_by_first_name!(first_name)
-   visit  "/users/edit.#{user.id}"
+  user = User.find_by_first_name!(first_name)
+  visit "/users/edit.#{user.id}"
 end
 
-Then(/^I should verify the change of first_name "(.*?)", last_name "(.*?)" and phone "(.*?)"$/) do |first_name, last_name, phone|
-    user = User.find_by_first_name(first_name)
-    expect(user.last_name).to    eql last_name
-    expect(user.phone).to        eql phone 
+Then(/^I should verify the change of first_name "(.*?)",\s
+       last_name "(.*?)" and phone "(.*?)"$/x) do |first_name, last_name, phone|
+  user = User.find_by_first_name(first_name)
+  expect(user.last_name).to    eql last_name
+  expect(user.phone).to        eql phone
 end
 
 Then(/^I should( not)? be remembered$/) do |not_remembered|
@@ -42,6 +43,6 @@ Then(/^I should be logged out$/) do
 end
 
 Given(/^I click the recaptcha$/) do
-#  page.find(:xpath, "//div[@class='g-recaptcha']").click
+  #  page.find(:xpath, "//div[@class='g-recaptcha']").click
   stub_recaptcha_verify
 end
