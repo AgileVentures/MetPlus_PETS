@@ -325,4 +325,11 @@ module ServiceStubHelpers
         .to_raise(RuntimeError)
     end
   end
+  module RecaptchaValidator
+    def stub_recaptcha_verify
+      body_json = "{\n  \"success\": true,\n  \"challenge_ts\": \"2017-06-30T05:00:00Z\",\n  \"hostname\": \"metsplus-pcaston.c9users.io\"\n }"
+      stub_request(:post, 'https://www.google.com/recaptcha/api/siteverify')
+                   .to_return(body: body_json)
+    end
+  end
 end

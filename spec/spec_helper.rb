@@ -25,6 +25,7 @@ require 'pundit/rspec'
 
 Dir['./spec/support/**/*.rb'].each { |f| require f }
 include ServiceStubHelpers::EmailValidator
+include ServiceStubHelpers::RecaptchaValidator
 # WebMock config
 
 #  Uncomment to disable Webmock and access external services during test:

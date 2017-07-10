@@ -8,6 +8,9 @@ require 'cucumber/rails'
 require 'email_spec/cucumber'
 require 'capybara/cucumber'
 require 'capybara/poltergeist'
+require 'webmock/cucumber'
+require 'cucumber/rspec/doubles'
+require './spec/support/service_stub_helpers'
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any

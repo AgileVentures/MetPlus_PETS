@@ -1,3 +1,4 @@
+include ServiceStubHelpers::RecaptchaValidator
 Given(/^I have the following Job Seekers$/) do |table|
   # table is a table.hashes.keys # => [:email, :password]
   table.hashes.each do |seeker|
@@ -33,10 +34,14 @@ Then(/^I should( not)? be remembered$/) do |not_remembered|
     expect(person_type.expires).to be_future
   end
 end
-j
+
 Then(/^I should be logged out$/) do
   cookies = page.driver.cookies
   expect(cookies['person_type']).to be nil
   expect(cookies['user_id']).to be nil
 end
 
+Given(/^I click the recaptcha$/) do
+#  page.find(:xpath, "//div[@class='g-recaptcha']").click
+  stub_recaptcha_verify
+end
