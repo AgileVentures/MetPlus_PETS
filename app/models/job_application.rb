@@ -1,7 +1,7 @@
 class JobApplication < ActiveRecord::Base
   belongs_to :job_seeker
   belongs_to :job
-  enum status: [:active, :accepted, :not_accepted]
+  enum status: %i[active accepted not_accepted processing]
   attr_accessor :job_developer
   has_many :status_changes, as: :entity, dependent: :destroy
 
@@ -19,6 +19,10 @@ class JobApplication < ActiveRecord::Base
     super && job.status == 'active'
   end
 
+  def processing?
+    status == 'processing'
+  end
+
   def accept
     accepted!
     StatusChange.update_status_history(self, :accepted)
@@ -32,5 +36,9 @@ class JobApplication < ActiveRecord::Base
 
   def reject
     not_accepted!
+  end
+
+  def process
+    processing!
   end
 end

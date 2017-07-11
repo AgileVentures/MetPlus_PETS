@@ -8,6 +8,10 @@ class JobApplicationPolicy < ApplicationPolicy
     correct_company_person? user
   end
 
+  def process_application?
+    correct_company_person? user
+  end
+
   def show?
     correct_company_person? user
   end
