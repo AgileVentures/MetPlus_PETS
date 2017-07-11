@@ -16,8 +16,8 @@ When(/^I visit profile for "(\w+)"$/) do |first_name|
   visit "/users/edit.#{user.id}"
 end
 
-Then(/^I should verify the change of first_name "(.*?)",\s
-       last_name "(.*?)" and phone "(.*?)"$/x) do |first_name, last_name, phone|
+Then(/^I\sshould\sverify\sthe\schange\sof\sfirst_name\s"(.*?)",\s
+       last_name\s"(.*?)"\sand\sphone\s"(.*?)"$/x) do |first_name, last_name, phone|
   user = User.find_by_first_name(first_name)
   expect(user.last_name).to    eql last_name
   expect(user.phone).to        eql phone
