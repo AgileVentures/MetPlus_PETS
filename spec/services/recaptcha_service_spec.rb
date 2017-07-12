@@ -12,7 +12,7 @@ RSpec.describe RecaptchaService, type: :model do
         expect(RecaptchaService.verify(captcha_response, ip_address)).to be true
       end
       it 'is disallowed when no recaptcha' do
-         expect(RecaptchaService.verify(nil, ip_address)).to be false
+        expect(RecaptchaService.verify(nil, ip_address)).to be false
       end
     end
   end
