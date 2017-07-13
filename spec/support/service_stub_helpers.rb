@@ -6,7 +6,7 @@ module ServiceStubHelpers
 
   module Cruncher
     JSON_MATCHED_RESUMES =
-      JSON.generate('result_code' => 'SUCCESS',
+      JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'resumes' => { 'matcher1' =>
                                    [{ 'resumeId' => '2', 'stars' => 2.0 },
@@ -18,7 +18,7 @@ module ServiceStubHelpers
                                     { 'resumeId' => '6', 'stars' => 1.7 }] })
 
     JSON_MATCHED_JOBS =
-      JSON.generate('result_code' => 'SUCCESS',
+      JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'jobs' => { 'matcher1' =>
                                 [{ 'jobId' => '2', 'stars' => 3.8 },
@@ -30,13 +30,13 @@ module ServiceStubHelpers
                                  { 'jobId' => '6', 'stars' => 3.4 }] })
 
     JSON_MATCHED_RESUME_AND_JOB =
-      JSON.generate('result_code' => 'SUCCESS',
+      JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'stars' => { "NaiveBayes": 3.4,
                                  "ExpressionCruncher": 2.3 })
 
     JSON_NO_MATCHED_JOBS =
-      JSON.generate('result_code' => 'SUCCESS',
+      JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'jobs' => { 'matcher1' => [],
                                 'matcher2' => [] })
@@ -90,14 +90,14 @@ module ServiceStubHelpers
 
     def stub_cruncher_file_upload
       stub_request(:post, url_file_upload)
-        .to_return(body: '{"result_code":"SUCCESS"}', status: 200,
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_file_upload_retry_auth
       stub_request(:post, url_file_upload)
         .to_raise(RestClient::Unauthorized).then
-        .to_return(body: '{"result_code":"SUCCESS"}', status: 200,
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
@@ -123,7 +123,7 @@ module ServiceStubHelpers
 
     def stub_cruncher_file_download_notfound
       stub_request(:get, url_file_download)
-        .to_return(body: "{\"result_code\":\"RESUME_NOT_FOUND\",
+        .to_return(body: "{\"resultCode\":\"RESUME_NOT_FOUND\",
                             \"message\":\"Unable to find the user '2'\"}",
                    status: 200)
     end
@@ -146,14 +146,14 @@ module ServiceStubHelpers
 
     def stub_cruncher_job_create
       stub_request(:post, url_job_create)
-        .to_return(body: '{"result_code":"SUCCESS"}', status: 200,
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
     def stub_cruncher_job_create_retry_auth
       stub_request(:post, url_job_create)
         .to_raise(RestClient::Unauthorized).then
-        .to_return(body: '{"result_code":"SUCCESS"}', status: 200,
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
@@ -163,9 +163,9 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized)
     end
 
-    def stub_cruncher_job_create_fail(result_code)
+    def stub_cruncher_job_create_fail(resultCode)
       stub_request(:post, url_job_create)
-        .to_return(body: "{\"result_code\":\"#{result_code}\"}", status: 200,
+        .to_return(body: "{\"resultCode\":\"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type' => 'application/json' })
     end
 
@@ -176,14 +176,14 @@ module ServiceStubHelpers
 
     def stub_cruncher_job_update
       stub_request(:patch, url_job_update)
-        .to_return(body: '{"result_code":"SUCCESS"}', status: 200,
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
                    headers: { 'Content-Type' => 'application/json' })
     end
 
     def stub_cruncher_job_update_retry_auth
       stub_request(:patch, url_job_update)
         .to_raise(RestClient::Unauthorized).then
-        .to_return(body: '{"result_code":"SUCCESS"}', status: 200,
+        .to_return(body: '{"resultCode":"SUCCESS"}', status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
@@ -193,9 +193,9 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized)
     end
 
-    def stub_cruncher_job_update_fail(result_code)
+    def stub_cruncher_job_update_fail(resultCode)
       stub_request(:patch, url_job_update)
-        .to_return(body: "{\"result_code\":\"#{result_code}\"}", status: 200,
+        .to_return(body: "{\"resultCode\":\"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type' => 'application/json' })
     end
 
@@ -221,10 +221,10 @@ module ServiceStubHelpers
     def stub_cruncher_match_resume_and_job_error(type, obj_id)
       case type
       when :no_job
-        err = JSON.generate('result_code': 'JOB_NOT_FOUND',
+        err = JSON.generate('resultCode': 'JOB_NOT_FOUND',
                             'message': "No job found with id: #{obj_id}")
       when :no_resume
-        err = JSON.generate('result_code': 'RESUME_NOT_FOUND',
+        err = JSON.generate('resultCode': 'RESUME_NOT_FOUND',
                             'message': "No resume found with id: #{obj_id}")
       end
       stub_request(:get, url_match_resume_job)
@@ -250,9 +250,9 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized)
     end
 
-    def stub_cruncher_match_jobs_fail(result_code)
+    def stub_cruncher_match_jobs_fail(resultCode)
       stub_request(:get, url_match_jobs)
-        .to_return(body: "{\"result_code\": \"#{result_code}\"}", status: 200,
+        .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
@@ -281,9 +281,9 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized)
     end
 
-    def stub_cruncher_match_resumes_fail(result_code)
+    def stub_cruncher_match_resumes_fail(resultCode)
       stub_request(:get, url_match_resumes)
-        .to_return(body: "{\"result_code\": \"#{result_code}\"}", status: 200,
+        .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
   end
@@ -330,7 +330,7 @@ module ServiceStubHelpers
       body_json = "{\n  \"success\": true,
         \n  \"challenge_ts\": \"2017-07-10T05:00:00Z\",
         \n  \"hostname\": \"localhost.c9users.io\"\n }"
-      stub_request(:any, %r{'https://www.google.com/recaptcha/api/siteverify'})
+        stub_request(:any, %r{'https://www.google.com/recaptcha/api/siteverify'})
         .to_return(body: body_json)
     end
   end
