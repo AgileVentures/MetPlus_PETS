@@ -23,9 +23,9 @@ Background: adding job to database
     | Skill3     | Long haul driver with Class C license  |
 
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills         | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com | Day     | Skill1, Skill2 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com   | Day     | Skill3         | city2 |
+    | title | description | company      | creator          | shift   | skills | city  |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1 | city1 |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3 | city2 |
 
 
 @javascript
@@ -63,16 +63,16 @@ Scenario: Edit job and change associated skills
 	And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I click the "Jobs" link
   Then I click the "Job1" link
-  And I wait 1 second
   And I should see "Skill1"
-  And I should see "Skill2"
   Then I click the "Edit Job" link
   And I wait 1 second
-  And I click the second "remove job skill" link
+  And I click the first "remove job skill" link
   And I click the "Add Job Skill" link
-  And I select "Skill3" in second select list "Name:"
+  And I select "Skill3" in first select list "Name:"
+	And I click the "Add Job Skill" link
+  And I select "Skill2" in second select list "Name:"
   And  I press "Update"
 	Then I should see "Job1 has been updated successfully."
-  And I should see "Skill1"
+  And I should see "Skill2"
   And I should see "Skill3"
-  And I should not see "Skill2"
+  And I should not see "Skill1"

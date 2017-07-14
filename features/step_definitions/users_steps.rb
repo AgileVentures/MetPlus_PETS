@@ -43,6 +43,18 @@ Then(/^I should be logged out$/) do
 end
 
 Given(/^I click the recaptcha$/) do
-  #  page.find(:xpath, "//div[@class='g-recaptcha']").click
-  stub_recaptcha_verify
+
+  # Override server-side verification of recaptcha response:
+  # (the recaptcha widget is being served as a separate document within
+  #  an iframe.  There does not seem to be a way to simulate user entry
+  #  (checking a box) for the "I'm not a robot" prompt.  This is by design
+  #  since the intent is to prevent automated entry that simulates a human.
+  # Thus, 1) we won't attempt to "check the box", and 2) we will override
+  # server-side verification to just return true (== verified by Google).
+
+  class RecaptchaService
+    def self.verify(_, _)
+      true
+    end
+  end
 end

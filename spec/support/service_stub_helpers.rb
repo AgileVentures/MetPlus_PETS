@@ -330,7 +330,7 @@ module ServiceStubHelpers
       body_json = "{\n  \"success\": true,
         \n  \"challenge_ts\": \"2017-07-10T05:00:00Z\",
         \n  \"hostname\": \"localhost.c9users.io\"\n }"
-        stub_request(:any, %r{'https://www.google.com/recaptcha/api/siteverify'})
+      stub_request(:any, %r{https://www.google.com/recaptcha/api/siteverify})
         .to_return(body: body_json)
     end
   end
