@@ -25,6 +25,7 @@
     - if pets_user.is_a?(CompanyPerson)
       = render partial: 'job_applications/accept_modal'
       = render partial: 'job_applications/reject_modal'
+      = render partial: 'job_applications/process_modal'
       .pagination-div{ id: "applications-job",
                        data: { url: list_applications_path('job_seeker-company-person',
                                                             @jobseeker) } }

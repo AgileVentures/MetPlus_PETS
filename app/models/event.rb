@@ -20,6 +20,7 @@ class Event
                OTHER_JD_APPLY: 'job_applied_by_other_job_developer',
                APP_ACCEPTED:  'job_application_accepted',
                APP_REJECTED:  'job_application_rejected',
+               APP_PROCESSING: 'job_application_processing',
                JOB_POSTED:    'job_posted',
                JOB_REVOKED:   'job_revoked',
                JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
@@ -52,6 +53,8 @@ class Event
       evt_app_accepted(evt_obj)
     when :APP_REJECTED
       evt_app_rejected(evt_obj)
+    when :APP_PROCESSING
+      evt_app_processing(evt_obj)
     when :JOB_POSTED
       evt_job_posted(evt_obj)
     when :JOB_REVOKED
@@ -243,6 +246,52 @@ class Event
       NotifyEmailJob.set(wait: delay_seconds.seconds)
                     .perform_later(notify_list,
                                    EVT_TYPE[:APP_ACCEPTED],
+                                   evt_obj)
+    end
+  end
+
+  def self.evt_app_processing(evt_obj)
+    # evt_obj = job application
+    # Business rules:
+    # Notify job seeker's job developer (email and popup)
+    # Notify job seeker's case manager (email and popup)
+
+    notify_list = []
+    job_developer = evt_obj.job_seeker.job_developer
+    case_manager = evt_obj.job_seeker.case_manager
+    job_seeker = evt_obj.job_seeker
+    if job_developer
+      # if the case manager is the same as job developer for the same
+      # job_seeker use the if statement for case manager to notify the agency person
+      unless case_manager == job_developer
+        notify_list << job_developer.user.email
+        Pusher.trigger(
+          'pusher_control',
+          EVT_TYPE[:APP_PROCESSING],
+          id: evt_obj.id,
+          ap_user_id: job_developer.user.id,
+          job_title:   evt_obj.job.title,
+          js_name: job_seeker.full_name(last_name_first: false)
+        )
+      end
+    end
+
+    if case_manager
+      notify_list << case_manager.user.email
+      Pusher.trigger(
+        'pusher_control',
+        EVT_TYPE[:APP_PROCESSING],
+        id: evt_obj.id,
+        ap_user_id: case_manager.user.id,
+        job_title:   evt_obj.job.title,
+        js_name: job_seeker.full_name(last_name_first: false)
+      )
+    end
+
+    unless notify_list.empty?
+      NotifyEmailJob.set(wait: delay_seconds.seconds)
+                    .perform_later(notify_list,
+                                   EVT_TYPE[:APP_PROCESSING],
                                    evt_obj)
     end
   end

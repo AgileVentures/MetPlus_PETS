@@ -27,8 +27,8 @@ module JobApplicationsViewer
   FIELDS_IN_APPLICATION_TYPE = {
     'job_seeker-default': [:title, :description, :company, :applied_at, :status],
     'job_seeker-company-person': [:title, :applied_at, :status, :action],
-    'job-job-developer': [:name, :js_status, :applied_at],
-    'job-company-person': [:name, :js_status, :applied_at, :action]
+    'job-job-developer': [:name, :js_status, :applied_at, :status],
+    'job-company-person': [:name, :js_status, :applied_at, :status, :action]
   }.freeze
 
   def application_fields(application_type)

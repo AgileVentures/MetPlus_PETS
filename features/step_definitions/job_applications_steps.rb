@@ -1,4 +1,4 @@
-And(/^I (accept|reject) "([^"]*)" application for "([^"]*)"$/) do |action, email, job|
+And(/^I (accept|reject|process) "([^"]*)" application for "([^"]*)"$/) do |action, email, job|
   job = Job.find_by(title: job.to_s)
   job_seeker = User.find_by_email(email).actable
   @job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
@@ -30,7 +30,7 @@ And(/^I\sshould\ssee\s"([^"]*)"\sactive\sapplications\s(for|by)\s
 end
 
 And(/I\sshould\ssee\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\schanges\sto\s
-  (accepted|not_accepted)$/x) do |email, job, state|
+  (accepted|not_accepted|Processing)$/x) do |email, job, state|
   job = Job.find_by(title: job.to_s)
   job_seeker = User.find_by_email(email).actable
   app = JobApplication.find_by(job_seeker: job_seeker, job: job)
