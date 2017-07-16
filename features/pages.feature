@@ -3,7 +3,7 @@ Feature: a user clicking contact is verified by a recaptcha
   As prospective user of PETS
   I want to make contact and send a message
   
-@javascript
+@selenium_browser
 Scenario: click the contact link
   Given I am on the home page
   And I click the first "Contact" link

@@ -20,7 +20,6 @@ class PagesController < ApplicationController
 
   def post_response
     parse_form_data
-
     respond_to do |format|
       @verified = captcha_verified?(@captcha_response, @remote_ip)
       ContactMailer.message_received(@user, @message).deliver_later if @verified

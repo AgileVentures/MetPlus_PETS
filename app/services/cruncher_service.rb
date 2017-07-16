@@ -3,7 +3,7 @@ class CruncherService
   require 'rest-client'
   require 'json'
 
-  @@auth_token = nil
+  @auth_token = nil
 
   def self.service_url
     # Changed to use constant instead of class var as Rails reloads all
@@ -28,7 +28,7 @@ class CruncherService
                                'X-Auth-Token' => auth_token,
                                'Content-Type' => mime_type.first.content_type)
 
-      return JSON.parse(result)['resultCode'] == 'SUCCESS'
+      return JSON.parse(result)['result_code'] == 'SUCCESS'
 
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -88,7 +88,7 @@ class CruncherService
                                'Accept' => 'application/json',
                                'X-Auth-Token' => auth_token)
 
-      return JSON.parse(result)['resultCode'] == 'SUCCESS'
+      return JSON.parse(result)['result_code'] == 'SUCCESS'
 
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -111,7 +111,7 @@ class CruncherService
                                 'Accept' => 'application/json',
                                 'X-Auth-Token' => auth_token)
 
-      return JSON.parse(result)['resultCode'] == 'SUCCESS'
+      return JSON.parse(result)['result_code'] == 'SUCCESS'
 
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -176,7 +176,7 @@ class CruncherService
       # Set matching jobs to nil if resume couldn't be found
       matching_jobs = nil
 
-      if result_hash['resultCode'] == 'SUCCESS'
+      if result_hash['result_code'] == 'SUCCESS'
         # May or may not contain jobs matching the resume
         matching_jobs = result_hash['jobs']
       end
@@ -203,7 +203,7 @@ class CruncherService
       # Set matching resumes to nil if job couldn't be found
       matching_resumes = nil
 
-      if result_hash['resultCode'] == 'SUCCESS'
+      if result_hash['result_code'] == 'SUCCESS'
         matching_resumes = result_hash['resumes']
       end
 
@@ -219,11 +219,11 @@ class CruncherService
   end
 
   def self.auth_token
-    return @@auth_token if @@auth_token
+    return @auth_token if @auth_token
     begin
       result = RestClient.post(service_url + '/authenticate', {},
-                   'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
-                   'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD'])
+                               'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
+                               'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD'])
     rescue Exception => e
       raise 'Invalid credentials for Cruncher access' if
                     e.class == RestClient::Unauthorized
@@ -234,6 +234,6 @@ class CruncherService
   end
 
   def self.auth_token=(token)
-    @@auth_token = token
+    @auth_token = token
   end
 end
