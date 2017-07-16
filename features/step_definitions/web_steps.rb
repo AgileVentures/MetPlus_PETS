@@ -162,6 +162,7 @@ When(/^(?:I|they) fill in the fields:$/) do |table|
 end
 
 And(/^show me the page$/) do
+  save_and_open_page
 end
 
 When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
