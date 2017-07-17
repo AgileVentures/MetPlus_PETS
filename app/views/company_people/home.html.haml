@@ -46,17 +46,17 @@
         -# href attribute needed for Capybara to find the 'a' element
         %a{ href: '#',
             data: { target: '.company-people-home #all-jobs-pane',
-                    toggle: 'pill' }, href: '#' }
+                    toggle: 'pill' } }
           All #{@company.name} jobs
       %li
         %a{ href: '#',
             data: { target: '#all-on-pets-pane',
-                    toggle: 'pill' }, href: '#' }
+                    toggle: 'pill' } }
           All #{@company.name} people who are on PETS
       %li
         %a{ href: '#',
             data: { target: '#company-infomation-pane',
-                    toggle: 'pill' }, href: '#' }
+                    toggle: 'pill' } }
           Company Infomation
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
