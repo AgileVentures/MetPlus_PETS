@@ -28,7 +28,7 @@ class CruncherService
                                'X-Auth-Token' => auth_token,
                                'Content-Type' => mime_type.first.content_type)
 
-      return JSON.parse(result)['result_code'] == 'SUCCESS'
+      return JSON.parse(result)['resultCode'] == 'SUCCESS'
 
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -88,7 +88,7 @@ class CruncherService
                                'Accept' => 'application/json',
                                'X-Auth-Token' => auth_token)
 
-      return JSON.parse(result)['result_code'] == 'SUCCESS'
+      return JSON.parse(result)['resultCode'] == 'SUCCESS'
 
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -111,7 +111,7 @@ class CruncherService
                                 'Accept' => 'application/json',
                                 'X-Auth-Token' => auth_token)
 
-      return JSON.parse(result)['result_code'] == 'SUCCESS'
+      return JSON.parse(result)['resultCode'] == 'SUCCESS'
 
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
@@ -176,7 +176,7 @@ class CruncherService
       # Set matching jobs to nil if resume couldn't be found
       matching_jobs = nil
 
-      if result_hash['result_code'] == 'SUCCESS'
+      if result_hash['resultCode'] == 'SUCCESS'
         # May or may not contain jobs matching the resume
         matching_jobs = result_hash['jobs']
       end
@@ -203,7 +203,7 @@ class CruncherService
       # Set matching resumes to nil if job couldn't be found
       matching_resumes = nil
 
-      if result_hash['result_code'] == 'SUCCESS'
+      if result_hash['resultCode'] == 'SUCCESS'
         matching_resumes = result_hash['resumes']
       end
 

@@ -113,7 +113,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns cruncher success message' do
-        expect(JSON.parse(upload_result)['result_code']).to eq 'SUCCESS'
+        expect(JSON.parse(upload_result)['resultCode']).to eq 'SUCCESS'
       end
     end
 
@@ -174,7 +174,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns cruncher success message' do
-        expect(JSON.parse(job_result)['result_code']).to eq 'SUCCESS'
+        expect(JSON.parse(job_result)['resultCode']).to eq 'SUCCESS'
       end
     end
 
@@ -189,7 +189,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns cruncher success message' do
-        expect(JSON.parse(job_update_result)['result_code']).to eq 'SUCCESS'
+        expect(JSON.parse(job_update_result)['resultCode']).to eq 'SUCCESS'
       end
     end
 
@@ -204,7 +204,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns success message' do
-        expect(JSON.parse(match_jobs_result)['result_code']).to eq 'SUCCESS'
+        expect(JSON.parse(match_jobs_result)['resultCode']).to eq 'SUCCESS'
       end
     end
 
@@ -219,7 +219,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns success message in response' do
-        expect(JSON.parse(match_resumes_result)['result_code']).to eq 'SUCCESS'
+        expect(JSON.parse(match_resumes_result)['resultCode']).to eq 'SUCCESS'
       end
     end
 
@@ -234,7 +234,7 @@ RSpec.describe CruncherService, type: :request do
       end
 
       it 'returns success result code in response' do
-        expect(JSON.parse(match_resume_and_job_result)['result_code'])
+        expect(JSON.parse(match_resume_and_job_result)['resultCode'])
           .to eq 'SUCCESS'
       end
     end
