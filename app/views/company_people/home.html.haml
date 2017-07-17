@@ -8,18 +8,18 @@
           - if @company_person.is_company_admin?(@company)
             %li
               %a{ href:'tab1', data: { target: '.tasks #tab1', toggle: 'pill' } }
-                Unassigned Company Tasks
+                Unassigned Tasks
           %li.active.in
             %a{ href: '#tab2', data: { target: '.tasks #tab2', toggle: 'pill' } }
               Your Open Tasks
           - if @company_person.is_company_admin?(@company)
             %li
               %a{ href:'tab3', data: { target: '.tasks #tab3', toggle: 'pill' } }
-                All Company Open Tasks
+                All Open Tasks
           %li
             %a{ href:'tab4', data: { target: '.tasks #tab4', toggle: 'pill' } }
               - if @company_person.is_company_admin?(@company)
-                All Company Closed Tasks
+                All Closed Tasks
               - else
                 Your Closed Tasks
       .panel-body

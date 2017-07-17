@@ -14,7 +14,7 @@
             %li
               %a{ href: '#tab1',
                   data: { target: '.tasks #tab1', toggle: 'pill' } }
-                Unassigned Agency Tasks
+                Unassigned Tasks
           %li.active.in
             %a{ href: '#tab2',
                 data: { target: '.tasks #tab2', toggle: 'pill' } }
@@ -23,12 +23,12 @@
             %li
               %a{ href: '#tab3',
                   data: { target: '.tasks #tab3', toggle: 'pill' } }
-                All Agency Open Tasks
+                All Open Tasks
           %li
             %a{ href: '#tab4',
                 data: { target: '.tasks #tab4', toggle: 'pill' } }
               - if @agency_person.is_agency_admin?(@agency)
-                All Agency Closed Tasks
+                All Closed Tasks
               - if !@agency_person.is_agency_admin?(@agency)
                 Your Closed Tasks
       .panel-body
