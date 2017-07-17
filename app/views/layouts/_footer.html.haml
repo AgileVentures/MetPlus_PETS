@@ -16,7 +16,7 @@
                                            company_person_id: pets_user.id),
                                            class: "#{yield(:new_job_active)}"
         |
-        = link_to 'List company jobs',
+        = link_to 'List Company Jobs',
                   jobs_path(q: { company_id_in: [ pets_user.company_id ] })
 
       - elsif pets_user.is_a?(AgencyPerson)
