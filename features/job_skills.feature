@@ -40,15 +40,15 @@ Scenario: Create job with associated skills
 	And  I select "Day" in select list "Shift"
 	And  I check "Fulltime"
   And I click the "Add Job Skill" link
-  And I select "Skill1" in select list "Name:"
-  And I check "Required:"
-  And I select "2" in select list "Min years:"
-  And I select "10" in select list "Max years:"
+  And I select "Skill1" in select list "Name"
+  And I check "Required"
+  And I select "2" in select list "Min years"
+  And I select "10" in select list "Max years"
   Then I click the "Add Job Skill" link
-  And I select "Skill2" in second select list "Name:"
-  And I check second "Required:"
-  And I select "5" in second select list "Min years:"
-  And I select "12" in second select list "Max years:"
+  And I select "Skill2" in second select list "Name"
+  And I check second "Required"
+  And I select "5" in second select list "Min years"
+  And I select "12" in second select list "Max years"
 	And  I press "Create"
 	Then I should see "cashier has been created successfully."
   And I should be on the jobs page
@@ -70,7 +70,7 @@ Scenario: Edit job and change associated skills
   And I wait 1 second
   And I click the second "remove job skill" link
   And I click the "Add Job Skill" link
-  And I select "Skill3" in second select list "Name:"
+  And I select "Skill3" in second select list "Name"
   And  I press "Update"
 	Then I should see "Job1 has been updated successfully."
   And I should see "Skill1"
