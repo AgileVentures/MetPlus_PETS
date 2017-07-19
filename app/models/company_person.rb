@@ -9,6 +9,8 @@ class CompanyPerson < ActiveRecord::Base
   enum status: [:company_pending, :invited, :active, :inactive, :company_denied]
   has_many :status_changes, as: :entity, dependent: :destroy
 
+  has_many :jobs, dependent: :nullify
+
   validate :not_removing_sole_company_admin, on: :update
 
   def company_pending
