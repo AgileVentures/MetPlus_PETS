@@ -18,7 +18,7 @@ module PaginationUtility
     #  e.g. "company", "job".  That string must be unique across all
     #  paginated collections, since it is used as a key to store data
     #  in the session store.
-    
+
     # Since this method operates in the context of a controller action, it
     #  has access to the 'params' hash.
 
@@ -41,7 +41,8 @@ module PaginationUtility
 
       session[entity_items_selection] = items_selection
 
-      search_criteria = JSON.parse(session[entity_search_criteria])
+      search_criteria = JSON.parse(session[entity_search_criteria],
+                                   quirks_mode: true)
 
       search_params = search_criteria ?
         ActionController::Parameters.new(search_criteria) : nil

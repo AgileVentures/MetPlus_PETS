@@ -51,10 +51,10 @@ module ApplicationHelper
     render_stars(rating)
   end
 
-  def paginate(collection, params = {})
-    will_paginate collection, params.merge(renderer:
-      RemoteLinkPaginationHelper::BootstrapLinkRenderer)
-  end
+  # def paginate(collection, params = {})
+  #   will_paginate collection, params.merge(renderer:
+  #     RemoteLinkPaginationHelper::BootstrapLinkRenderer)
+  # end
 
   # Returns a string of option tags for a 'select' element.
   # The select element allows the user to select the number of items to

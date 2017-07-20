@@ -57,7 +57,7 @@ var PaginationHandler = function (url, viewSelector, successCallback, errorCallb
             self.errorCallback = PaginationFunctions.getErrorFunction(self.name);
         if(typeof self.beforeGetCallback == 'undefined')
             self.beforeGetCallback = PaginationFunctions.getBeforeGetFunction(self.name);
-        
+
         if( typeof self.beforeGetCallback == "function" )
             self.beforeGetCallback();
 
@@ -209,4 +209,14 @@ var PaginationManager = {
 
 $(document).ready(function () {
     PaginationManager.setupAll('pagination-div');
+
+    // Callbacks for alternative pagination mechanism:
+
+    // Paginate link sends AJAX request to controller, which renders new page
+    // in JS response.  These callbacks execute at that point and replaces
+    // the prior pagination page (DOM element) with the new page.
+
+    $('body').on('ajax:success', '.searched_jobs_pagination', function (e, data) {
+      $('#searched-job-list').html(data);
+    });
 });
