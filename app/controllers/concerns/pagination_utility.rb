@@ -16,7 +16,9 @@ module PaginationUtility
 
     # It is passed a string that indicates the type of paginated collection,
     #  e.g. "company", "job".  That string must be unique across all
-    #  paginated collections.
+    #  paginated collections, since it is used as a key to store data
+    #  in the session store.
+    
     # Since this method operates in the context of a controller action, it
     #  has access to the 'params' hash.
 
