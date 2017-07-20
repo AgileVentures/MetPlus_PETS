@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   include JobsViewer
   include CruncherUtility
+  include PaginationUtility
 
   before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
                                   :match_resume, :match_job_seekers,
