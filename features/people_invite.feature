@@ -37,7 +37,7 @@ Scenario: invite (and reinvite) new agency person
   And I fill in "Email" with "adam@metplus.org"
   And I fill in "First name" with "Adam"
   And I fill in "Last name" with "Powell"
-  And I click the "Send an invitation" button
+  And I click the "Send Invitation" button
   And I should see "An invitation email has been sent to adam@metplus.org."
   And I should see "Edit Agency Person: Adam Powell"
   And I click the "Cancel" link
@@ -61,7 +61,7 @@ Scenario: agency person accepts invitation in email
   And I fill in "Email" with "adam@metplus.org"
   And I fill in "First name" with "Adam"
   And I fill in "Last name" with "Powell"
-  And I click the "Send an invitation" button
+  And I click the "Send Invitation" button
   And I should see "An invitation email has been sent to adam@metplus.org."
   Then I click the "John" link
   And I log out
@@ -91,7 +91,7 @@ Scenario: invite (and reinvite) new Company person
   And I fill in "Email" with "newguy@ymail.com"
   And I fill in "First name" with "New"
   And I fill in "Last name" with "Guy"
-  And I click the "Send an invitation" button
+  And I click the "Send Invitation" button
   And I should see "An invitation email has been sent to newguy@ymail.com."
   And I should see "Edit Company Person: New Guy"
   And I click the "Cancel" link
@@ -116,7 +116,7 @@ Scenario: company person accepts invitation in email
   And I fill in "Email" with "newguy@ymail.com"
   And I fill in "First name" with "New"
   And I fill in "Last name" with "Guy"
-  And I click the "Send an invitation" button
+  And I click the "Send Invitation" button
   And I should see "An invitation email has been sent to newguy@ymail.com."
   Then I click the "John" link
   And I log out

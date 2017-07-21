@@ -57,7 +57,12 @@ class CompanyPeopleController < ApplicationController
     @company_person.destroy
     flash[:notice] =
       "Person '#{@company_person.full_name(last_name_first: false)}' deleted."
-    redirect_to home_company_person_path(@current_user.id)
+
+    if pets_user.is_a? AgencyPerson
+      redirect_to home_agency_person_path(pets_user.id)
+    else
+      redirect_to home_company_person_path(pets_user.id)
+    end
   end
 
   def home
