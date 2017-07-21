@@ -50,7 +50,7 @@ Given(/^I have( not)? checked the recaptcha$/) do |not_checked|
   # Thus, 1) we won't attempt to "check the box", and 2) we will override
   # server-side verification to just return true (== verified by Google).
 
-  if not_checked.present?
+  if not_checked
     class RecaptchaService
       def self.verify(_, _)
         false
@@ -62,5 +62,12 @@ Given(/^I have( not)? checked the recaptcha$/) do |not_checked|
         true
       end
     end
+  end
+end
+Then(/^(?:I|they) should( not)? see ("[^"]+"[^"]+"")$/) do |not_see, string|
+  if not_see
+    assert_no_text(string)
+  else
+    assert_text(string)
   end
 end
