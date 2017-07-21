@@ -3,7 +3,7 @@ class CruncherService
   require 'rest-client'
   require 'json'
 
-  @auth_token = nil
+  @@auth_token = nil
 
   def self.service_url
     # Changed to use constant instead of class var as Rails reloads all
@@ -219,7 +219,7 @@ class CruncherService
   end
 
   def self.auth_token
-    return @auth_token if @auth_token
+    return @@auth_token if @@auth_token
     begin
       result = RestClient.post(service_url + '/authenticate', {},
                                'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
@@ -234,6 +234,6 @@ class CruncherService
   end
 
   def self.auth_token=(token)
-    @auth_token = token
+    @@auth_token = token
   end
 end

@@ -41,7 +41,7 @@ Then(/^I should be logged out$/) do
   expect(cookies['user_id']).to be nil
 end
 
-Given(/^I click the recaptcha$/) do
+Given(/^I have( not)? checked the recaptcha$/) do |not_checked|
   # Override server-side verification of recaptcha response:
   # (the recaptcha widget is being served as a separate document within
   #  an iframe.  There does not seem to be a way to simulate user entry
@@ -49,9 +49,18 @@ Given(/^I click the recaptcha$/) do
   #  since the intent is to prevent automated entry that simulates a human.
   # Thus, 1) we won't attempt to "check the box", and 2) we will override
   # server-side verification to just return true (== verified by Google).
-  class RecaptchaService
-    def self.verify(_, _)
-      true
+
+  if not_checked.present?
+    class RecaptchaService
+      def self.verify(_, _)
+        false
+      end
+    end
+  else
+    class RecaptchaService
+      def self.verify(_, _)
+        true
+      end
     end
   end
 end

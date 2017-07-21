@@ -12,7 +12,7 @@ def search_text(text)
     expect(page).to have_content text
   end
 end
-Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
+Then(/^(?:I|they) should( not)? see "(.*)"$/) do |not_see, string|
   if not_see
     assert_no_text(string)
   else
