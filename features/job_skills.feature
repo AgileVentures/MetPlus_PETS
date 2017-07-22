@@ -63,6 +63,7 @@ Scenario: Edit job and change associated skills
 	And I am logged in as "carter@ymail.com" with password "qwerty123"
   And I click the "Jobs" link
   Then I click the "Job1" link
+  And I wait 1 second
   And I should see "Skill1"
   Then I click the "Edit Job" link
   And I wait 1 second
