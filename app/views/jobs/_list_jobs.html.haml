@@ -43,7 +43,7 @@
             - when :poster
               %td.col-md-3
                 = link_to(job.company_person.full_name,
-                          company_person_path(job.company_person))
+                          company_person_path(job.company_person)) if job.company_person
             - when :num_applicants
               %td.col-md-1
                 = job.number_applicants

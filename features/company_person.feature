@@ -92,6 +92,8 @@ Feature: Company Person
     Then I click the "Smith, Jane" link
     And I should see button "Edit Person"
     And I should see button "Delete Person"
+    And I click "Delete Person" button
+    And I should see "Person 'Jane Smith' deleted."
 
   Scenario: company contact cannot edit company nor invite person_type
     Given I am on the home page

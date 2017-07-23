@@ -10,7 +10,7 @@ en:
       no_invitations_remaining: "No invitations remaining"
       invitation_removed: "Your invitation was removed."
       new:
-        submit_button: "Send an invitation"
+        submit_button: "Send Invitation"
       new_company_person:
         header: "Send invitation to use PETS for company: %{org}"
       new_agency_person:
