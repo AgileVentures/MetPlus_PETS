@@ -18,7 +18,8 @@ module JobApplicationsViewer
     when 'job-company-person'
       collection = JobApplication.where(job: id)
                                  .includes(:job_seeker)
-                                 .order(:status, :id)
+
+                                 .order(status: :asc, updated_at: :desc, :id)
     end
     return collection if collection.nil?
     collection.paginate(page: params[:applications_page], per_page: per_page)
