@@ -1,25 +1,22 @@
 def wait_until
-  require "timeout"
-  #Timeout.timeout(Capybara.default_wait_time) do
+  require 'timeout'
+  # Timeout.timeout(Capybara.default_wait_time) do
   Timeout.timeout(10) do
-    sleep(0.1) until value = yield
+    sleep(0.1) until value == yield
     value
   end
 end
-def search_text text
+
+def search_text(text)
   wait_until do
-    if text.is_a? Regexp
-      expect(page).to have_content text
-    else
-      expect(page).to have_content text
-    end
+    expect(page).to have_content text
   end
 end
 Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
-  unless not_see
-    expect(page.body).to have_text string
+  if not_see
+    assert_no_text(string)
   else
-    expect(page.body).to_not have_text string
+    assert_text(string)
   end
 end
 
@@ -28,18 +25,18 @@ Then(/^I should not see the "(.*?)" link$/) do |link|
 end
 
 Then(/^(?:I|they) should( not)? see button "([^"]*)"$/) do |not_see, button|
-  unless not_see
-    expect(page).to have_button button
-  else
+  if not_see
     expect(page).to_not have_button button
+  else
+    expect(page).to have_button button
   end
 end
 
 Then(/^"([^"]*)" should( not)? be visible$/) do |string, not_see|
-  unless not_see
-    expect(has_text?(:visible, string)).to be true
-  else
+  if not_see
     expect(has_text?(:visible, string)).to be false
+  else
+    expect(has_text?(:visible, string)).to be true
   end
 end
 
@@ -47,17 +44,22 @@ And(/^I press "([^"]*)"$/) do |name|
   click_on name
 end
 
-Then(/^I should see "([^"]*)" between "([^"]*)" and "([^"]*)"$/) do |toSearch, first, last|
-  regex = /#{Regexp.quote("#{first}")}.+#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
+Then(/^I\sshould\ssee\s"([^"]*)"\s
+  between\s"([^"]*)"\sand\s"([^"]*)"$/x) do |to_search, first, last|
+  regex = /#{Regexp.quote(first.to_s)}.+#{Regexp.quote(to_search.to_s)}.
+  +#{Regexp.quote(last.to_s)}/
   search_text regex
 end
 
-And(/^I should see "([^"]*)" in the same table row as "([^"]*)"$/) do |to_search, anchor_text|
+And(/^I\sshould\ssee\s"([^"]*)"\sin\sthe\ssame\stable\srow\sas\s
+  "([^"]*)"$/x) do |to_search, anchor_text|
   expect(find('tr', text: anchor_text)).to have_content(to_search)
 end
 
-Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, last|
-  regex = /#{Regexp.quote("#{toSearch}")}.+#{Regexp.quote("#{last}")}/
+Then(/^I\sshould(\snot)?\ssee\s"([^"]*)"\s
+  before\s"([^"]*)"$/x) do |not_see, to_search, last|
+  expect(page.body).to have_text to_search
+  regex = /#{Regexp.quote(to_search.to_s)}.+#{Regexp.quote(last.to_s)}/
   if not_see
     expect(page.text).not_to match regex
   else
@@ -65,8 +67,10 @@ Then(/^I should( not)? see "([^"]*)" before "([^"]*)"$/) do |not_see, toSearch, 
   end
 end
 
-Then(/^(?:I|they) should( not)? see "([^"]*)" after "([^"]*)"$/) do |not_see, toSearch, first|
-  regex = /#{Regexp.quote("#{first}")}.+#{Regexp.quote("#{toSearch}")}/
+Then(/^(?:I|they)\sshould(\snot)?\ssee\s"([^"]*)"\s
+  after\s"([^"]*)"$/x) do |not_see, to_search, first|
+  expect(page.body).to have_text to_search
+  regex = /#{Regexp.quote(first.to_s)}.+#{Regexp.quote(to_search.to_s)}/
   if not_see
     expect(page.text).not_to match regex
   else
@@ -85,8 +89,7 @@ end
 When(/^(?:I|they) click the( \w*)? "([^"]*)" link$/) do |ordinal, link|
   # use 'ordinal' when selecting among select links all of which
   # have the same selector (e.g., same label)
-
-  if not ordinal
+  if !ordinal
     if Capybara.current_driver == :poltergeist
       find_link(link).trigger('click')
     else
@@ -121,16 +124,16 @@ When(/^(?:I|they) click the "([^"]*)" link and switch to the new window$/) do |l
   switch_to_window new_window
 end
 
-When(/^(?:I|they) click the link with url "([^"]*)"$/) do |url|
+When(/^(?:I|they) click the "([^"]+)" link with url "([^"]*)"$/) do |text, url|
   if Capybara.current_driver == :poltergeist
-    find_link('', {href: url}).trigger('click')
+    find_link(text, href: url).trigger('click')
   else
-    click_link('', {href: url})
+    click_link(text, href: url)
   end
 end
 
 When(/^(?:I|they) click(?: the)?( \w*)? "([^"]*)" button$/) do |ordinal, button|
-  if not ordinal
+  if !ordinal
     click_button button
   else
     case ordinal
@@ -154,7 +157,7 @@ end
 When(/^(?:I|they) fill in the fields:$/) do |table|
   # table is a table.hashes.keys # => [:First name, :John]
   table.raw.each do |field, value|
-    fill_in field, :with => value
+    fill_in field, with: value
   end
 end
 
@@ -171,12 +174,13 @@ When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
   end
 end
 
-When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, ordinal, lst|
+When(/^(?:I|they)\sselect\s"([^"]*)"\sin(\s\w*)?\sselect\slist\s
+  "([^"]*)"$/x) do |item, ordinal, lst|
   # use 'ordinal' when selecting among select lists all of which
   # have the same selector (e.g., same label)
   case ordinal
   when nil
-    find(:select, lst).find(:option, item).select_option
+    find(:select, lst, minimum: 1).find(:option, item).select_option
   when ' first'
     all(:select, lst)[0].find(:option, item).select_option
   when ' second'
@@ -185,6 +189,21 @@ When(/^(?:I|they) select "([^"]*)" in( \w*)? select list "([^"]*)"$/) do |item, 
     all(:select, lst)[2].find(:option, item).select_option
   else
     raise 'do not understand ordinal value'
+  end
+end
+
+Then(/^"([^"]*)"\sshould(\snot)?\sbe\san\soption\sfor\sselect\slist\s
+  "([^"]*)"$/x) do |option, negate, lst|
+  if negate
+    expect(page).not_to have_selector(:xpath,
+                                      "//label[. = '#{lst}']" \
+                                      '/following-sibling::div' \
+                                      "/select/option[. = '#{option}']")
+  else
+    expect(page).to have_selector(:xpath,
+                                  "//label[. = '#{lst}']" \
+                                  '/following-sibling::div' \
+                                  "/select/option[. = '#{option}']")
   end
 end
 
@@ -226,28 +245,38 @@ And(/^the selection "([^"]*)" should be disabled$/) do |item|
   expect(has_field?(item, disabled: true)).to be true
 end
 
-When /^I reload the page$/ do
+When(/^I reload the page$/) do
   visit current_path
 end
 
-When /^I am in (.*) browser$/ do |name|
+When(/^I am in (.*) browser$/) do |name|
   Capybara.session_name = name
 end
 
 Then(/^I( cannot)? select2 "([^"]*)" from "([^"]*)"$/) do |cannot, value, select_name|
   find("#select2-#{select_name}-container").click
-  find(".select2-search__field").set(value)
+  find('.select2-search__field').set(value)
   if cannot
-    within(".select2-results") { expect(page.find("li")).to have_text("No results found") }
+    within('.select2-results') do
+      expect(page.find('li')).to have_text('No results found')
+    end
   else
-    within(".select2-results") { find("li", text: value).click }
+    within('.select2-results') { find('li', text: value).click }
   end
 end
 
-When /^I choose resume file "([^"]*)"$/ do |filename|
+When(/^I choose resume file "([^"]*)"$/) do |filename|
   attach_file('Resume', "#{Rails.root}/spec/fixtures/files/#{filename}")
 end
 
-When /^The field '([^']+)' should have the value '([^']+)'$/ do |field, value|
+When(/^The field '([^']+)' should have the value '([^']+)'$/) do |field, value|
   expect(page).to have_field(field, with: value)
+end
+
+Then(/^I should see "([^"]+)" in the email field$/) do |value|
+  step %(The field 'Email' should have the value '#{value}')
+end
+
+Then(/^I save the page as "([^"]+)"$/) do |screen|
+  page.save_screenshot(screen.to_s, full: true)
 end
