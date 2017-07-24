@@ -12,7 +12,7 @@ Scenario: make contact and check the recaptcha
   And I fill in "Message" with "Hi Metplus"
   And I have checked the recaptcha
   And I click the "Send Message" button
-  And I wait 1 second
+  And I wait 2 seconds
   Then I should see "Your message was sent successfully!"
 
 @javascript
