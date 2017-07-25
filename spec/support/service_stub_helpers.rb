@@ -163,9 +163,9 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized)
     end
 
-    def stub_cruncher_job_create_fail(result_code)
+    def stub_cruncher_job_create_fail(resultCode)
       stub_request(:post, url_job_create)
-        .to_return(body: "{\"resultCode\":\"#{result_code}\"}", status: 200,
+        .to_return(body: "{\"resultCode\":\"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type' => 'application/json' })
     end
 
@@ -250,9 +250,9 @@ module ServiceStubHelpers
         .to_raise(RestClient::Unauthorized)
     end
 
-    def stub_cruncher_match_jobs_fail(result_code)
+    def stub_cruncher_match_jobs_fail(resultCode)
       stub_request(:get, url_match_jobs)
-        .to_return(body: "{\"resultCode\": \"#{result_code}\"}", status: 200,
+        .to_return(body: "{\"resultCode\": \"#{resultCode}\"}", status: 200,
                    headers: { 'Content-Type': 'application/json' })
     end
 
@@ -323,6 +323,15 @@ module ServiceStubHelpers
       stub_request(:get,
                    %r{^#{EmailValidateService.service_url}/validate?.*})
         .to_raise(RuntimeError)
+    end
+  end
+  module RecaptchaValidator
+    def stub_recaptcha_verify
+      body_json = "{\n  \"success\": true,
+        \n  \"challenge_ts\": \"2017-07-10T05:00:00Z\",
+        \n  \"hostname\": \"localhost.c9users.io\"\n }"
+      stub_request(:any, %r{https://www.google.com/recaptcha/api/siteverify})
+        .to_return(body: body_json)
     end
   end
 end

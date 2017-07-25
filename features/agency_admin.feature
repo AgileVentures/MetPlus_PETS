@@ -250,7 +250,7 @@ Scenario: manage job properties
   And I fill in "Name:" with "Test Job Specialty"
   And I fill in "Description:" with "Description of Test Job Specialty"
   And I click the "Add Specialty" button
-  # And I wait 1 second
+  And I wait 1 second
   Then I should see "Test Job Specialty"
   And I should see "Description of Test Job Specialty"
 
