@@ -222,8 +222,8 @@ class CruncherService
     return @@auth_token if @@auth_token
     begin
       result = RestClient.post(service_url + '/authenticate', {},
-                   'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
-                   'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD'])
+                               'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
+                               'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD'])
     rescue Exception => e
       raise 'Invalid credentials for Cruncher access' if
                     e.class == RestClient::Unauthorized
