@@ -97,6 +97,7 @@ Scenario: Company registration request in PETS
   And "aa@metplus.org" should receive an email with subject "Company registered"
   And "jane@metplus.org" should receive an email with subject "Company registered"
   Then I am in Admin's browser
+  And I wait 1 second
   And I should see "Company: Widgets, Inc. has registered in PETS."
 
   # The following steps tests the user clicking a link
