@@ -251,8 +251,8 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   resume.save!
 
   # Add job applications for this job seeker
-  Job.limit(50).each do |job|
-    JobApplication.create(job: job, job_seeker: js1)
+  Job.where.not(company: known_company).limit(50).each do |job|
+    JobApplication.create!(job: job, job_seeker: js1)
   end
 
   jobseekerstatus = JobSeekerStatus.all.to_a
