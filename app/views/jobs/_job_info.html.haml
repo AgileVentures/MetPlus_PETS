@@ -29,7 +29,9 @@
     - unless @job.years_of_experience.blank?
       %tr
         %td Years Of Experience:
-        %td #{@job.years_of_experience}#{@job.years_of_experience == 20 ? '+ Years' : ' Years'}
+        %td 
+          =@job.years_of_experience
+          #{@job.years_of_experience == 20 ? 'Or More Years' : ' Years'}
     %tr
       %td Shift:
       %td=@job.shift
