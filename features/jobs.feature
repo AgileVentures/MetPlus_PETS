@@ -126,6 +126,32 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
   Then  I should see "The form contains 2 errors"
 
 @javascript
+Scenario: Creating and Updating Job with and without years of experience selected
+  Given I am on the home page
+  And I login as "jane@ymail.com" with password "qwerty123"
+  When I click the first "Post Job" link
+  And I wait 1 second
+  And I fill in the fields:
+    | Title            | cashier|
+    | Company Job ID   | KARK12 |
+    | Description      | At least two years work experience|
+  And I select "Day" in select list "Shift"
+  And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
+  And I check "Fulltime"
+  And I select "2" in select list "Years Of Experience"
+  And I press "new-job-submit"
+  Then I should see "cashier has been created successfully."
+  Then I click the "cashier" link to job show page
+  And I should see "2 Years"
+  Then I click the "Edit Job" link
+  And I select "" in select list "Years Of Experience"
+  And I press "Update"
+  Then I should see "cashier has been updated successfully."
+  And I should not see "Years Of Experience"
+  And I click the "Hello, Jane" link
+  And I logout
+
+@javascript
 Scenario: Cancel out of job edit
   Given I am on the home page
   And I login as "jane@ymail.com" with password "qwerty123"
