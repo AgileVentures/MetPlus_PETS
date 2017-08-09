@@ -2,7 +2,7 @@
 
   .col-sm-8.col-sm-offset-2{ style: 'text-align: center;' }
     = will_paginate entities,
-                    renderer: BootstrapPagination::Rails,
+                    renderer: WillPaginate::ActionView::BootstrapLinkRenderer,
                     link_options: { 'data-remote': true,
                                     class: paginate_class }
 
