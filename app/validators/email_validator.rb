@@ -2,7 +2,6 @@ class EmailValidator < ActiveModel::EachValidator
   def validate_each(object, attribute, value)
 
     if ENV['MAILGUN_EMAIL_VALIDATION'] == 'yes'
-      debugger
 
       valid_check = EmailValidateService.validate_email(value)
 
