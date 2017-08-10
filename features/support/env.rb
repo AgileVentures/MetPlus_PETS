@@ -34,6 +34,9 @@ require './spec/support/service_stub_helpers'
 #
 ActionController::Base.allow_rescue = false
 
+# Prevent email validation via Mailgun
+ENV['MAILGUN_EMAIL_VALIDATION'] = nil
+
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
