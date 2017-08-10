@@ -31,8 +31,8 @@
   .col-sm-3.control-label
     = f.label :years_of_experience, 'Years Of Experience'
   .col-sm-6
-    = f.collection_select :years_of_experience, Job::YEARS_OF_EXPERIENCE_OPTIONS, :to_i, :to_i,
-            {include_blank: true}, class: 'form-control'
+    = f.collection_select :years_of_experience, Job::YEARS_OF_EXPERIENCE_OPTIONS,
+      :to_i, :to_i, {include_blank: true}, class: 'form-control'
 
 .form-group
   .col-sm-3.control-label
