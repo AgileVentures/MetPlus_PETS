@@ -82,10 +82,15 @@ RSpec.describe User, type: :model do
        it 'adds an error to object when validation fails' do
          stub_email_validate_invalid
 
+         # Turn on mailgun validation so the stub is effective
+         ENV['MAILGUN_EMAIL_VALIDATION'] = 'yes'
+
          user = FactoryGirl.build(:user, email: 'emailaddress@gmal.com')
          user.valid?
          expect(user.errors[:email])
            .to include('is not valid (did you mean ... myaddress@gmail.com?)')
+
+         ENV['MAILGUN_EMAIL_VALIDATION'] = nil
        end
      end
    end
