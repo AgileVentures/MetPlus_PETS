@@ -3,19 +3,26 @@
     %thead
       %tr
         %th
-          = sort_link(@query, :title)
+          = sort_link(@query, :title, {}, { class: 'searched_jobs_pagination',
+                                            remote: true })
         %th
-          = sort_link(@query, :description)
+          = sort_link(@query, :description, {}, { class: 'searched_jobs_pagination',
+                                                  remote: true })
         %th
-          = sort_link(@query, :company_name, 'Company')
+          = sort_link(@query, :company_name, 'Company', {},
+                      { class: 'searched_jobs_pagination', remote: true })
         %th
-          = sort_link(@query, :shift)
+          = sort_link(@query, :shift, {}, { class: 'searched_jobs_pagination',
+                                            remote: true })
         %th
-          = sort_link(@query, :address_state)
+          = sort_link(@query, :address_state, {}, { class: 'searched_jobs_pagination',
+                                                    remote: true })
         %th
-          = sort_link(@query, :address_city)
+          = sort_link(@query, :address_city, {}, { class: 'searched_jobs_pagination',
+                                                   remote: true })
         %th
-          = sort_link(@query, :status)
+          = sort_link(@query, :status, {}, { class: 'searched_jobs_pagination',
+                                             remote: true })
     %tbody
       - @jobs.each do |job|
         %tr
@@ -36,5 +43,9 @@
           %td
             %span.label{ class: "label-#{job.status}" }
               #{job.status.capitalize}
-  = paginate @jobs, { class: 'jobs_pagination' }
 
+  = render partial: 'shared/paginate_footer',
+           locals: { entities: @jobs,
+                     paginate_class: 'searched_jobs_pagination',
+                     items_count: @items_count,
+                     url: jobs_path }
