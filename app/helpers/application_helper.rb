@@ -51,8 +51,19 @@ module ApplicationHelper
     render_stars(rating)
   end
 
-  def paginate(collection, params = {})
-    will_paginate collection, params.merge(renderer:
-      RemoteLinkPaginationHelper::BootstrapLinkRenderer)
+  # def paginate(collection, params = {})
+  #   will_paginate collection, params.merge(renderer:
+  #     RemoteLinkPaginationHelper::BootstrapLinkRenderer)
+  # end
+
+  # Returns a string of option tags for a 'select' element.
+  # The select element allows the user to select the number of items to
+  # appear on each pagination page.
+  ITEMS_COUNT = [ ['10', 10], ['25', 25], ['50', 50], ['All', 'All'] ].freeze
+
+  def paginate_count_options(count=10)
+    # 'count' is the currently-selected items count.
+    options_for_select(ITEMS_COUNT, count)
   end
+
 end
