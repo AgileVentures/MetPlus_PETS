@@ -17,9 +17,10 @@
   - if @admin_aa || @admin_ca
     - if @company.active?
       = link_to 'Invite Person',
-                    new_user_invitation_path(person_type: 'CompanyPerson',
-                    org_id: @company.id),
-                    method: :get, class: 'btn btn-primary btn-sm pull-right'
+                new_user_invitation_path(person_type: 'CompanyPerson',
+                org_id: @company.id),
+                method: :get, class: 'btn btn-primary btn-xs pull-right'
+
 .col-sm-12
   .pagination-div{id: "people-#{@people_type}", style: 'margin-top: 10px;',
                   data: {url: list_people_company_path(@company.id, @people_type)}}
@@ -27,14 +28,15 @@
 .clearfix
 %br
 
-- if @admin_aa || @admin_ca
-  .col-sm-2.col-sm-offset-2
-    = button_to('Edit Company',
-                edit_company_path(@company),
-                method: :get, class: 'btn btn-primary')
+.col-sm-4.col-sm-offset-5
+  - if @admin_aa && @company.has_no_jobs?
+    = link_to('Delete Company', company_path(@company),
+              method: :delete,
+              data: { confirm: "Delete company #{@company.name}?" },
+              class: 'btn btn-danger btn-sm pull-right')
 
-- if @admin_aa && @company.has_no_jobs?
-  .col-sm-2.col-sm-offset-4
-    = button_to('Delete Company', company_path(@company),
-      method: :delete, data: {confirm: "Delete company #{@company.name}?"},
-                      class: 'btn btn-danger')
+.col-sm-3
+  - if @admin_aa || @admin_ca
+    = link_to('Edit Company',
+              edit_company_path(@company),
+              method: :get, class: 'btn btn-info btn-sm pull-right')
