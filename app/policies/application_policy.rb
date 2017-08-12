@@ -2,8 +2,7 @@ class ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
-    @user = nil
-    @user = user.pets_user unless user.nil?
+    @user = user&.pets_user
     @record = record
   end
 
