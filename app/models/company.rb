@@ -39,6 +39,10 @@ class Company < ActiveRecord::Base
     StatusChange.update_status_history(self, :registration_denied)
   end
 
+  def has_no_jobs?
+    !jobs.exists?
+  end
+
   ransacker :status, formatter: proc { |v| statuses[v] }
 
   def self.all_active_with_jobs
