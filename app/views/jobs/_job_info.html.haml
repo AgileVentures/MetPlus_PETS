@@ -39,6 +39,9 @@
       %td Job Details:
       %td=@job.description
     %tr
+      %td Job Type:
+      %td=@job.job_types.map(&:job_type).join(", ")
+    %tr
       %td Job Skills:
       %td
         - if @job.job_skills.empty?

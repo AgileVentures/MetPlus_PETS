@@ -131,3 +131,7 @@ $(function () {
   });
 
 });
+
+$(function() {
+  $(".job-type-multiple").select2();
+});
