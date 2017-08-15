@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   include JobsViewer
   include CruncherUtility
+  include PaginationUtility
 
   before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
                                   :match_resume, :match_job_seekers,
@@ -10,9 +11,13 @@ class JobsController < ApplicationController
                                         :match_jd_job_seekers]
 
   def index
+    # Store, or recover, search and items-per-page criteria
+    search_params, @items_count, items_per_page =
+      process_pagination_params('searched_jobs')
+
     # Make a copy of q params since we will strip out any commas separating
     # words - need to retain any commas in the form (so user is not surprised)
-    q_params = params[:q] ? params[:q].dup : params[:q]
+    q_params = search_params ? search_params.dup : search_params
 
     # Ransack returns a string with all terms entered by the user in
     # a text field.  For "any" or "all" word(s) queries, need to convert
@@ -50,11 +55,12 @@ class JobsController < ApplicationController
                else
                  { 'company_status_eq' => 'active' }
                end
-    @query = Job.ransack(params[:q]) # For form display of entered values
+    @query = Job.ransack(search_params) # For form display of entered values
+
     @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
-                .page(params[:page]).per_page(8)
+                .page(params[:page]).per_page(items_per_page)
 
     render partial: 'searched_job_list' if request.xhr?
   end

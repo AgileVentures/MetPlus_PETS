@@ -40,8 +40,8 @@
   .col-sm-5
     = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
             {prompt: true}, class: 'form-control'
-  = f.label :fulltime, class: 'control-label'
   = f.check_box :fulltime
+  = f.label :fulltime, class: 'control-label'
 .form-group
   .col-sm-3.control-label
     = f.label :description
