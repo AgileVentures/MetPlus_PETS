@@ -43,9 +43,10 @@
 
 .form-group
   .col-sm-3.control-label
-    = f.label :job_types
+    = f.label :job_type_ids, 'Job Types'
   .col-sm-5
-    = f.collection_select :job_types, JobType.all, :id, :job_type, {}, class: 'job-type-multiple', multiple: true
+    = f.collection_select :job_type_ids, JobType.all, :id, :job_type, {},
+                          class: 'job-type-multiple', multiple: true
 
 .form-group
   .col-sm-3.control-label
