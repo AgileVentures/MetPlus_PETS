@@ -26,6 +26,11 @@
     %tr
       %td Job ID:
       %td=@job.company_job_id
+    - unless @job.years_of_experience.blank?
+      %tr
+        %td Years Of Experience:
+        %td
+          #{@job.years_of_experience == 20 ? "#{@job.years_of_experience} Or More Years" : pluralize(@job.years_of_experience, 'Year')}
     %tr
       %td Shift:
       %td=@job.shift
