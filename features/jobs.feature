@@ -51,7 +51,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     | Description      | At least two years work experience|
   And I select "Day" in select list "Shift"
   And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
-  And I check "Fulltime"
   And I select "Full Time" in select list "Job Type"
   And I select "Part Time" in select list "Job Type"
   And I press "new-job-submit"
@@ -66,7 +65,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And  I select "Day" in select list "Shift"
   And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
   And I select "Contract" in select list "Job Type"
-  Then I check "Fulltime"
   And I press "Update"
   Then I should see "cab-driver has been updated successfully."
   And I should see "Full Time, Part Time, Contract"
@@ -80,7 +78,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     | Company Job ID         |  |
     | Description            |  |
   And  I select "Day" in select list "Shift"
-  And  I check "Fulltime"
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
 
@@ -90,7 +87,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     | Company Job ID         |  |
     | Description            |  |
   And  I select "Day" in select list "Shift"
-  And  I check "Fulltime"
   And  I press "new-job-submit"
   Then  I should see "The form contains 3 errors"
   And I click the "Hello, Jane" link
@@ -111,7 +107,6 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
     | Company Job ID         | KARK12 |
     | Description            | At least two years work experience|
   And  I select "Day" in select list "Shift"
-  And  I check "Fulltime"
   And I select "Full Time" in select list "Job Type"
   And I select "Part Time" in select list "Job Type"
   And  I press "new-job-submit"
@@ -133,7 +128,6 @@ Scenario: Creating and Updating Job successfully and unsuccessfully
     | Company Job ID         |  |
     | Description            |  |
   And  I select "Day" in select list "Shift"
-  And  I check "Fulltime"
   And I select "Contract" in select list "Job Type"
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
