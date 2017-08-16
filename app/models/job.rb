@@ -91,13 +91,6 @@ class Job < ActiveRecord::Base
     created_at > user.last_sign_in_at
   end
 
-  # def job_types=(job_type_ids)
-    # puts "CALLED!!!!!!!!!!!!"
-    # puts job_type_ids.inspect
-    # ids = job_type_ids.reject(&:blank?)
-    # ids.each { |i| self.job_types << JobType.find(i) }
-  # end
-
   private
 
   def save_job_to_cruncher
