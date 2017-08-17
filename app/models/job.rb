@@ -8,7 +8,7 @@ class Job < ActiveRecord::Base
 
   has_many   :job_skills, inverse_of: :job, dependent: :destroy
   has_many   :skills, through: :job_skills
-  accepts_nested_attributes_for :job_skills, allow_destroy: true
+  accepts_nested_attributes_for :job_skills, allow_destroy: true, reject_if: :all_blank
 
   has_many   :required_skills, -> { where job_skills: { required: true } },
              through: :job_skills, class_name: 'Skill', source: :skill

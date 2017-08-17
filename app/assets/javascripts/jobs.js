@@ -94,6 +94,7 @@ $(function () {
   $('#q_skills_id_in').select2();
   $('#q_company_id_in').select2();
   $('#q_status_in').select2();
+  $(".job-type-multiple").select2();
 
   JobAndResume.match();
 
@@ -130,8 +131,4 @@ $(function () {
       $('#searched-job-list').html(data);
   });
 
-});
-
-$(function() {
-  $(".job-type-multiple").select2();
 });
