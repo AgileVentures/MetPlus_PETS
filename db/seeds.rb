@@ -113,14 +113,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
   puts "Job Categories created: #{JobCategory.count}"
 
-  #-------------------------- Skills --------------------------------------
-  20.times do
-    Skill.create(name: FFaker::Skill.specialty,
-                 description: FFaker::Lorem.sentence)
-  end
-
-  puts "Skills created: #{Skill.count}"
-
   #-------------------------- Company People ------------------------------
   companies = Company.all.to_a
   addresses = Address.all.to_a
@@ -228,6 +220,9 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   end
 
   puts "Jobs created: #{Job.count}"
+
+  # Rake task to upload generic skills
+  Rake::Task['job_skills:import_generic'].invoke
 
   #-------------------------- Job Seekers ---------------------------------
   #
