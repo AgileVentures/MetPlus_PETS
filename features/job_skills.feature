@@ -38,7 +38,6 @@ Scenario: Create job with associated skills
 		| Company Job ID         | JOB3   |
 		| Description            | Must have experience with POS terminals |
 	And  I select "Day" in select list "Shift"
-	And  I check "Fulltime"
   And I click the "Add Job Skill" link
   And I select "Skill1" in select list "Name"
   And I check "Required"
