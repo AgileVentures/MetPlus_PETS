@@ -50,6 +50,15 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          development that will put them on a career
                          path to success.')
 
+# Create default Job Types
+JobType.create!({job_type: 'Full Time'})
+JobType.create!({job_type: 'Part Time'})
+JobType.create!({job_type: 'Internship'})
+JobType.create!({job_type: 'Contract'})
+JobType.create!({job_type: 'Salary'})
+JobType.create!({job_type: 'Salary Commission'})
+JobType.create!({job_type: 'Commission Only'})
+
 puts "\nSeeded Production Data"
 
 puts "\nSeeding development DB"

@@ -4,11 +4,11 @@ class Job < ActiveRecord::Base
   belongs_to :company_person
   belongs_to :address
   belongs_to :job_category
+  has_and_belongs_to_many :job_types
 
   has_many   :job_skills, inverse_of: :job, dependent: :destroy
   has_many   :skills, through: :job_skills
-  accepts_nested_attributes_for :job_skills, allow_destroy: true,
-                                             reject_if: :all_blank
+  accepts_nested_attributes_for :job_skills, allow_destroy: true, reject_if: :all_blank
 
   has_many   :required_skills, -> { where job_skills: { required: true } },
              through: :job_skills, class_name: 'Skill', source: :skill
@@ -18,6 +18,7 @@ class Job < ActiveRecord::Base
   has_many   :job_seekers, through: :job_applications
 
   SHIFT_OPTIONS = %w(Morning Day Evening).freeze
+  YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
   validates_presence_of :company_job_id
   validates_presence_of :fulltime, allow_blank: true
@@ -28,6 +29,10 @@ class Job < ActiveRecord::Base
   validates_length_of   :description, maximum: 10_000
   validates_presence_of :company_id
   validates_presence_of :company_person_id, allow_nil: true
+  validates_numericality_of :years_of_experience,
+                            allow_blank: true,
+                            greater_than_or_equal_to: 0,
+                            less_than_or_equal_to: 20
   scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
   scope :find_by_company, ->(company) { where(company: company) }
 
@@ -122,4 +127,5 @@ class Job < ActiveRecord::Base
     end
     true
   end
+
 end

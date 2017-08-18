@@ -39,6 +39,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_applications) }
     it { is_expected.to have_many(:job_seekers).through(:job_applications) }
     it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_and_belong_to_many(:job_types) }
   end
 
   describe 'Database schema' do
@@ -52,6 +53,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :company_person_id }
     it { is_expected.to have_db_column :address_id }
     it { is_expected.to have_db_column :status }
+    it { is_expected.to have_db_column :years_of_experience }
   end
 
   describe 'Validations' do
@@ -60,8 +62,13 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_presence_of :description }
     it { is_expected.to validate_length_of(:description).is_at_most(10_000) }
     it { is_expected.to validate_presence_of :company_job_id }
+    it { is_expected.to validate_numericality_of :years_of_experience }
     it { should allow_value('', nil).for(:fulltime).on(:update) }
     it { should allow_value('', nil).for(:fulltime).on(:create) }
+    it { should allow_value('', nil).for(:years_of_experience).on(:update) }
+    it { should allow_value('', nil).for(:years_of_experience).on(:create) }
+    it { should_not allow_value(21).for(:years_of_experience) }
+    it { should allow_value(15).for(:years_of_experience) }
     it { is_expected.to validate_presence_of :company_id }
     it do
       is_expected.to validate_inclusion_of(:shift)
