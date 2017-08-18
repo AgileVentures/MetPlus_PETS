@@ -39,6 +39,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_applications) }
     it { is_expected.to have_many(:job_seekers).through(:job_applications) }
     it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_and_belong_to_many(:job_types) }
   end
 
   describe 'Database schema' do

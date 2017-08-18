@@ -36,17 +36,20 @@
 
 .form-group
   .col-sm-3.control-label
-    = f.label :shift
-  .col-sm-5
-    = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
-            {prompt: true}, class: 'form-control'
-  = f.check_box :fulltime
-  = f.label :fulltime, class: 'control-label'
-.form-group
-  .col-sm-3.control-label
     = f.label :description
   .col-sm-6
     =f.text_area :description, size: "40x5", class: 'form-control'
+
+.form-group.form-inline
+  .col-sm-3.control-label
+    = f.label :job_type_ids, 'Job Types'
+  .col-sm-5
+    = f.collection_select :job_type_ids, JobType.all, :id, :job_type, {},
+                          class: 'job-type-multiple', multiple: true
+    %span &nbsp;
+    = f.label :shift
+    = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
+            {prompt: true}, class: 'form-control'
 
 .form-group
   .col-sm-3.control-label
