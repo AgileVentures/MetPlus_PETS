@@ -17,6 +17,7 @@ RSpec.describe Company, type: :model do
       is_expected.to accept_nested_attributes_for(:addresses).allow_destroy(true)
     end
     it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_many :skills }
   end
 
   describe 'Database schema' do
