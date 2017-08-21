@@ -6,11 +6,13 @@ class Skill < ActiveRecord::Base
   validates_presence_of :description
 
   has_many :job_skills, dependent: :destroy
-  
+
   has_many :jobs, through: :job_skills
+
+  belongs_to :organization, polymorphic: true
 
   def has_job?
   	jobs.any?
   end
-  
+
 end
