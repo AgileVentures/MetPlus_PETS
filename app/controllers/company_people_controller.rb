@@ -76,6 +76,9 @@ class CompanyPeopleController < ApplicationController
     @company     = pets_user.company
     @company_admins = Company.company_admins(@company)
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
+
+    @skills = @company.skills.order(:name).
+                page(params[:skills_page]).per_page(10)
   end
 
   def my_profile; end

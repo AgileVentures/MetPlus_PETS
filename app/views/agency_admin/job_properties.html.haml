@@ -36,29 +36,29 @@
         - if @skills.empty?
           %h5 There are no job skills.
         - else
-          = render partial: 'job_skills', object: @skills,
-                    locals: {data_type:  'skills',
+          = render partial: 'shared/job_skills', object: @skills,
+                    locals: { data_type:  'skills',
                               partial_id: 'skills_table',
                               show_property_path:   :skill_path,
-                              delete_property_path: :skill_path}
+                              delete_property_path: :skill_path }
           .clearfix
 
-= render partial: 'property_modal',
-          locals: {modal_id:     'add_job_category',
-                   modal_title:  'Add Job Specialty',
-                   modal_submit: 'Add Specialty'}
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'add_job_category',
+                    modal_title:  'Add Job Specialty',
+                    modal_submit: 'Add Specialty' }
 
-= render partial: 'property_modal',
-          locals: {modal_id:     'update_job_category',
-                   modal_title:  'Update Job Specialty',
-                   modal_submit: 'Update Specialty'}
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'update_job_category',
+                    modal_title:  'Update Job Specialty',
+                    modal_submit: 'Update Specialty' }
 
-= render partial: 'property_modal',
-          locals: {modal_id:     'add_skill',
-                   modal_title:  'Add Job Skill',
-                   modal_submit: 'Add Skill'}
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'add_skill',
+                    modal_title:  'Add Job Skill',
+                    modal_submit: 'Add Skill' }
 
-= render partial: 'property_modal',
-          locals: {modal_id:     'update_skill',
-                   modal_title:  'Update Job Skill',
-                   modal_submit: 'Update Skill'}
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'update_skill',
+                    modal_title:  'Update Job Skill',
+                    modal_submit: 'Update Skill' }

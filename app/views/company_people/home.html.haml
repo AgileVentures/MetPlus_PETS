@@ -58,6 +58,12 @@
             data: { target: '#company-infomation-pane',
                     toggle: 'pill' } }
           Company Infomation
+      %li
+        %a{ href: '#',
+            data: { target: '#job-skills-pane',
+                    toggle: 'pill'} }
+          Job Skills
+
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
         = link_to 'Post Job',                                                 |
@@ -92,3 +98,22 @@
                  locals: { company: @company,
                            admin_aa: @admin_aa,
                            company_admins: @company_admins }
+
+      .tab-pane.fade#job-skills-pane
+        .col-xs-12.text-right
+          %button.btn.btn-primary.table_action_button#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
+            Add job skill
+        .col-xs-12.pad-0
+        - if @skills.empty?
+          %h5 There are no job skills.
+        - else
+          = render partial: 'shared/job_skills', object: @skills,
+                    locals: { data_type:  'skills',
+                              partial_id: 'skills_table',
+                              show_property_path:   :skill_path,
+                              delete_property_path: :skill_path }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'add_skill',
+                    modal_title:  "Add Job Skill for #{@company.name}",
+                    modal_submit: 'Add Skill' }
