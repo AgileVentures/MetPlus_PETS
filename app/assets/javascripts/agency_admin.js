@@ -18,6 +18,14 @@ var AgencyData = {
     //     job_prop_plural: the pluralized version of job_property,
     //                      e.g. 'job_categories', 'skills'
 
+    // NOTE: This function is used to add job properties (job skills and categories)
+    //       to the Agency.  This is ALSO used to add job skills to a company.  In
+    //       the latter case, the company_id is accessed via a hidden field in
+    //       the modal form that is used to add and edit job properties.
+    //       All CSS id's used here to gather data from that modal form are the
+    //       same across all like uses of the form (that is, for Agency job skills,
+    //       Agency job categories and company-specific job skills).
+
     // Create the post data for ajax .....
     var name_field_id = '#add_' + job_property + '_name';
     var desc_field_id = '#add_' + job_property + '_desc';
