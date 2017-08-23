@@ -116,4 +116,11 @@
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'add_skill',
                     modal_title:  "Add Job Skill for #{@company.name}",
-                    modal_submit: 'Add Skill' }
+                    modal_submit: 'Add Skill',
+                    company_id:   @company.id }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'update_skill',
+                    modal_title:  "Update Job Skill for #{@company.name}",
+                    modal_submit: 'Update Skill',
+                    company_id:    @company.id }

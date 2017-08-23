@@ -21,9 +21,14 @@ var AgencyData = {
     // Create the post data for ajax .....
     var name_field_id = '#add_' + job_property + '_name';
     var desc_field_id = '#add_' + job_property + '_desc';
+    var company_id = null;
     var post_data = {};
     post_data[job_property + '[name]']        = $(name_field_id).val();
     post_data[job_property + '[description]'] = $(desc_field_id).val();
+    if ($('#company_id') != null) {
+      company_id = $('#company_id').val();
+      post_data[job_property + '[company_id]'] = company_id;
+    }
 
     $.ajax({type: 'POST',
             url: '/' + job_prop_plural + '/',
@@ -41,7 +46,8 @@ var AgencyData = {
                 var model_errors_id = '#add_' + job_property + '_errors';
                 AgencyData.change_job_property_success(modal_id,
                                                        model_errors_id,
-                                                       job_prop_plural);
+                                                       job_prop_plural,
+                                                       company_id);
               }
             },
             error: function (xhrObj, status, exception) {
@@ -123,9 +129,13 @@ var AgencyData = {
     // Create the PATCH data for ajax .....
     var name_field_id = '#update_' + job_property + '_name';
     var desc_field_id = '#update_' + job_property + '_desc';
+    var company_id = null;
     var patch_data = {};
     patch_data[job_property + '[name]']        = $(name_field_id).val();
     patch_data[job_property + '[description]'] = $(desc_field_id).val();
+    if ($('#company_id') != null) {
+      company_id = $('#company_id').val();
+    }
 
     $.ajax({type: 'PATCH',
             url: '/'+job_prop_plural+'/' + AgencyData[job_property + '_id'],
@@ -136,7 +146,8 @@ var AgencyData = {
               var model_errors_id = '#update_' + job_property + '_errors';
               AgencyData.change_job_property_success(modal_id,
                                                      model_errors_id,
-                                                     job_prop_plural);
+                                                     job_prop_plural,
+                                                     company_id);
             },
             error: function (xhrObj, status, exception) {
               var model_errors_id = '#update_' + job_property + '_errors';
@@ -174,6 +185,12 @@ var AgencyData = {
             url: delete_url,
             timeout: 5000,
             success: function (data, status, xhrObject) {
+
+              var company_id = null;
+              if ($('#company_id') != null) {
+                company_id = $('#company_id').val();
+              }
+
               // If this was the last property, the properties
               // table ID should not be loaded - in that case, reload page
               if (data[job_property+'_count'] === 0) {
@@ -210,8 +227,14 @@ var AgencyData = {
                 } else {
                   // If there are too few items on the page the paginate links
                   // will not be present - create appropriate url instead
-                  paginate_url = '/agency_admin/job_properties?data_type=' +
-                          job_prop_plural + '&' + job_prop_plural + '_page=1';
+                  if (company_id != null) {
+                    paginate_url = '/company_people/' + company_id + '/home' +
+                                   '?data_type=' + job_prop_plural + '&' +
+                                   job_prop_plural + '_page=1';
+                  } else {
+                    paginate_url = '/agency_admin/job_properties?data_type=' +
+                            job_prop_plural + '&' + job_prop_plural + '_page=1';
+                  }
                 }
                 ManageData.get_updated_data(job_properties_table_id,
                                           paginate_url);
@@ -225,7 +248,7 @@ var AgencyData = {
   },
 
   change_job_property_success: function (modal_id, model_errors_id,
-                                         job_prop_plural) {
+                                         job_prop_plural, company_id) {
     // This function is called when a successful change (add or update)
     // of a job property has occurred.  It updates the page view so the
     // change is visible to the user.  Then, it clears any model errors
@@ -252,14 +275,20 @@ var AgencyData = {
     var job_properties_table_id = '#' + job_prop_plural + '_table'
     var selector = job_properties_table_id + ' div.pagination li.active a'
     var paginate_link = $(selector);
+    var paginate_url;
 
     if (paginate_link.length != 0) {
-      var paginate_url = paginate_link.attr('href');
+      paginate_url = paginate_link.attr('href');
     } else {
       // If there are too few items on the page the paginate links
       // will not be present - create appropriate url instead
-      var paginate_url = '/agency_admin/job_properties?data_type=' +
-                      job_prop_plural + '&' + job_prop_plural + '_page=1';
+      if (company_id != null) {
+        paginate_url = '/company_people/' + company_id + '/home' + '?data_type=' +
+                        job_prop_plural + '&' + job_prop_plural + '_page=1';
+      } else {
+        paginate_url = '/agency_admin/job_properties?data_type=' +
+                        job_prop_plural + '&' + job_prop_plural + '_page=1';
+      }
     }
     ManageData.get_updated_data(job_properties_table_id,
                                 paginate_url);
