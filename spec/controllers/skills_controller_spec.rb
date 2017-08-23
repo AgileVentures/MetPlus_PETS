@@ -25,23 +25,25 @@ RSpec.shared_examples 'unauthorized access' do
       let(:user) { FactoryGirl.create(:job_seeker) }
     end
   end
-  context 'Company admin' do
-    it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:company_admin, company: company) }
-    end
-  end
-  context 'Company contact' do
-    it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:company_contact, company: company) }
-    end
-  end
 end
 
 RSpec.describe SkillsController, type: :controller do
+
+  let(:agency)               { FactoryGirl.create(:agency) }
+  let(:skill_params)         { FactoryGirl.attributes_for(:skill) }
+  let(:company)              { FactoryGirl.create(:company) }
+  let(:skill_params_company) { skill_params.merge(company_id: "#{company.id}") }
+  let(:skill)                { FactoryGirl.create(:skill) }
+  let(:company_skill) do
+    skill = FactoryGirl.create(:skill, name: 'company_skill')
+    skill.organization = company
+    skill.save
+    skill
+  end
+
   describe 'POST #create' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:skill_params) { FactoryGirl.attributes_for(:skill) }
-    context 'authorized access' do
+
+    context 'authorized access - agency admin' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
         sign_in aa
@@ -63,15 +65,58 @@ RSpec.describe SkillsController, type: :controller do
       end
     end
 
+    context 'authorized access - company admin' do
+      before :each do
+        ca = FactoryGirl.create(:company_admin, company: company)
+        sign_in ca
+      end
+      it 'creates new skill for valid parameters' do
+        expect { xhr :post, :create, skill: skill_params_company }
+          .to change(Skill, :count).by(+1)
+      end
+
+      it 'returns success for valid parameters' do
+        xhr :post, :create, skill: skill_params_company
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns errors and error status for invalid parameters' do
+        xhr :post, :create, skill: { name: '', description: '' }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template('shared/_error_messages')
+      end
+    end
+
+    context 'authorized access - company contact' do
+      before :each do
+        cc = FactoryGirl.create(:company_contact, company: company)
+        sign_in cc
+      end
+      it 'creates new skill for valid parameters' do
+        expect { xhr :post, :create, skill: skill_params_company }
+          .to change(Skill, :count).by(+1)
+      end
+
+      it 'returns success for valid parameters' do
+        xhr :post, :create, skill: skill_params_company
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns errors and error status for invalid parameters' do
+        xhr :post, :create, skill: { name: '', description: '' }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template('shared/_error_messages')
+      end
+    end
+
     it_behaves_like 'unauthorized access' do
       let(:request) { xhr :post, :create, skill: skill_params }
     end
   end
 
   describe 'GET #show' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:skill)  { FactoryGirl.create(:skill) }
-    context 'authorized access' do
+
+    context 'authorized access - agency admin' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
         sign_in aa
@@ -101,16 +146,74 @@ RSpec.describe SkillsController, type: :controller do
       end
     end
 
+    context 'authorized access - company admin' do
+      before :each do
+        ca = FactoryGirl.create(:company_admin, company: company)
+        sign_in ca
+      end
+      context 'skill found' do
+        before(:each) do
+          xhr :get, :show, id: company_skill
+        end
+
+        it 'renders json structure' do
+          expect(JSON.parse(response.body))
+            .to match('id' => company_skill.id,
+                      'name' => company_skill.name,
+                      'description' => company_skill.description)
+        end
+
+        it 'returns http success' do
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context 'skill NOT found' do
+        it 'returns http status not_found' do
+          xhr :get, :show, id: 0
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context 'authorized access - company contact' do
+      before :each do
+        cc = FactoryGirl.create(:company_contact, company: company)
+        sign_in cc
+      end
+      context 'skill found' do
+        before(:each) do
+          xhr :get, :show, id: company_skill
+        end
+
+        it 'renders json structure' do
+          expect(JSON.parse(response.body))
+            .to match('id' => company_skill.id,
+                      'name' => company_skill.name,
+                      'description' => company_skill.description)
+        end
+
+        it 'returns http success' do
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context 'skill NOT found' do
+        it 'returns http status not_found' do
+          xhr :get, :show, id: 0
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
     it_behaves_like 'unauthorized access' do
       let(:request) { xhr :get, :show, id: skill }
     end
   end
 
   describe 'PATCH #update' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:skill)  { FactoryGirl.create(:skill) }
-    let(:skill_params) { FactoryGirl.attributes_for(:skill) }
-    context 'authorized access' do
+
+    context 'authorized access - agency admin' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
         sign_in aa
@@ -127,6 +230,40 @@ RSpec.describe SkillsController, type: :controller do
       end
     end
 
+    context 'authorized access - company admin' do
+      before :each do
+        ca = FactoryGirl.create(:company_admin, company: company)
+        sign_in ca
+      end
+      it 'returns success for valid parameters' do
+        xhr :patch, :update, id: company_skill, skill: skill_params
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns errors and error status for invalid parameters' do
+        xhr :patch, :update, id: company_skill, skill: { name: '', description: '' }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template('shared/_error_messages')
+      end
+    end
+
+    context 'authorized access - company contact' do
+      before :each do
+        cc = FactoryGirl.create(:company_contact, company: company)
+        sign_in cc
+      end
+      it 'returns success for valid parameters' do
+        xhr :patch, :update, id: company_skill, skill: skill_params
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns errors and error status for invalid parameters' do
+        xhr :patch, :update, id: company_skill, skill: { name: '', description: '' }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template('shared/_error_messages')
+      end
+    end
+
     it_behaves_like 'unauthorized access' do
       let(:request) { xhr :patch, :update, id: skill, skill: skill_params }
     end
@@ -138,17 +275,87 @@ RSpec.describe SkillsController, type: :controller do
       stub_cruncher_job_create
     end
 
-    context 'authorized access' do
-      let(:agency) { FactoryGirl.create(:agency) }
+    context 'authorized access - agency admin' do
+
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
         sign_in aa
       end
-      let(:skill) { FactoryGirl.create(:skill) }
+
       let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill) }
 
       context 'skill found' do
         let(:request) { xhr :delete, :destroy, id: skill }
+        it 'deletes skill' do
+          expect { request }
+            .to change(Skill, :count).by(-1)
+        end
+        it 'deletes associated job_skill' do
+          expect { request }
+            .to change(JobSkill, :count).by(-1)
+        end
+        it 'returns http success' do
+          request
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context 'skill NOT found' do
+        it 'returns http status not_found' do
+          xhr :delete, :destroy, id: 0
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context 'authorized access - company admin' do
+
+      before :each do
+        ca = FactoryGirl.create(:company_admin, company: company)
+        sign_in ca
+      end
+
+      let!(:job_skill) { FactoryGirl.create(:job_skill, skill: company_skill) }
+
+      context 'skill found' do
+
+        let(:request) { xhr :delete, :destroy, id: company_skill }
+
+        it 'deletes skill' do
+          expect { request }
+            .to change(Skill, :count).by(-1)
+        end
+        it 'deletes associated job_skill' do
+          expect { request }
+            .to change(JobSkill, :count).by(-1)
+        end
+        it 'returns http success' do
+          request
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context 'skill NOT found' do
+        it 'returns http status not_found' do
+          xhr :delete, :destroy, id: 0
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context 'authorized access - company contact' do
+
+      before :each do
+        cc = FactoryGirl.create(:company_contact, company: company)
+        sign_in cc
+      end
+
+      let!(:job_skill) { FactoryGirl.create(:job_skill, skill: company_skill) }
+
+      context 'skill found' do
+
+        let(:request) { xhr :delete, :destroy, id: company_skill }
+
         it 'deletes skill' do
           expect { request }
             .to change(Skill, :count).by(-1)
