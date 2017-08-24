@@ -68,7 +68,7 @@ class JobsController < ApplicationController
   def new
     @job = Job.new
     authorize @job
-    @companies = Company.order(:name)
+    @company = Company.find(params[:company_id])
     set_company_address
   end
 
@@ -103,7 +103,7 @@ class JobsController < ApplicationController
 
   def edit
     authorize @job
-    @companies = Company.order(:name)
+    @company = @job.company
     set_company_address
   end
 

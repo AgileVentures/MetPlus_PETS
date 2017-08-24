@@ -2,10 +2,12 @@
 - provide(:new_job_active, 'active')
 
 .page-header.text-center#new-job-header
-  %h2 Create New Job
+  %h2 Create New Job for #{@company.name}
+
 = form_for @job do |f|
   .form-horizontal
-    = render partial: 'form', locals: { f: f, companies: @companies ,
+    = render partial: 'form', locals: { f: f,
+                                        company: @company ,
                                         addresses: @addresses }
     .form-group
       .col-sm-offset-3.col-sm-6
