@@ -47,6 +47,5 @@ RSpec.describe JobsHelper, type: :helper do
         .to contain_exactly(skill1, skill2, skill3,
                             cmpy_skill0, cmpy_skill1, cmpy_skill2)
     end
-
   end
 end

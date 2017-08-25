@@ -28,11 +28,10 @@ RSpec.shared_examples 'unauthorized access' do
 end
 
 RSpec.describe SkillsController, type: :controller do
-
   let(:agency)               { FactoryGirl.create(:agency) }
   let(:skill_params)         { FactoryGirl.attributes_for(:skill) }
   let(:company)              { FactoryGirl.create(:company) }
-  let(:skill_params_company) { skill_params.merge(company_id: "#{company.id}") }
+  let(:skill_params_company) { skill_params.merge(company_id: company.id.to_s) }
   let(:skill)                { FactoryGirl.create(:skill) }
   let(:company_skill) do
     skill = FactoryGirl.create(:skill, name: 'company_skill')
@@ -42,7 +41,6 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe 'POST #create' do
-
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
@@ -70,6 +68,7 @@ RSpec.describe SkillsController, type: :controller do
         ca = FactoryGirl.create(:company_admin, company: company)
         sign_in ca
       end
+
       it 'creates new skill for valid parameters' do
         expect { xhr :post, :create, skill: skill_params_company }
           .to change(Skill, :count).by(+1)
@@ -115,7 +114,6 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe 'GET #show' do
-
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
@@ -212,7 +210,6 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
@@ -276,7 +273,6 @@ RSpec.describe SkillsController, type: :controller do
     end
 
     context 'authorized access - agency admin' do
-
       before :each do
         aa = FactoryGirl.create(:agency_admin, agency: agency)
         sign_in aa
@@ -309,7 +305,6 @@ RSpec.describe SkillsController, type: :controller do
     end
 
     context 'authorized access - company admin' do
-
       before :each do
         ca = FactoryGirl.create(:company_admin, company: company)
         sign_in ca
@@ -318,7 +313,6 @@ RSpec.describe SkillsController, type: :controller do
       let!(:job_skill) { FactoryGirl.create(:job_skill, skill: company_skill) }
 
       context 'skill found' do
-
         let(:request) { xhr :delete, :destroy, id: company_skill }
 
         it 'deletes skill' do
@@ -344,7 +338,6 @@ RSpec.describe SkillsController, type: :controller do
     end
 
     context 'authorized access - company contact' do
-
       before :each do
         cc = FactoryGirl.create(:company_contact, company: company)
         sign_in cc
@@ -353,7 +346,6 @@ RSpec.describe SkillsController, type: :controller do
       let!(:job_skill) { FactoryGirl.create(:job_skill, skill: company_skill) }
 
       context 'skill found' do
-
         let(:request) { xhr :delete, :destroy, id: company_skill }
 
         it 'deletes skill' do
