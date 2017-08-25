@@ -33,7 +33,7 @@ var AgencyData = {
     var post_data = {};
     post_data[job_property + '[name]']        = $(name_field_id).val();
     post_data[job_property + '[description]'] = $(desc_field_id).val();
-    if ($('#company_id') != null) {
+    if ($('#company_id').length !== 0) {
       company_id = $('#company_id').val();
       post_data[job_property + '[company_id]'] = company_id;
     }
