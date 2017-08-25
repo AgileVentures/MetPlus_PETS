@@ -88,7 +88,7 @@ class JobsController < ApplicationController
 
       redirect_to jobs_url
     else
-      @companies = Company.order(:name)
+      @company = @job.company
       set_company_address
       render :new
     end
@@ -113,7 +113,7 @@ class JobsController < ApplicationController
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job
     else
-      @companies = Company.order(:name)
+      @company = @job.company
       set_company_address
       render :edit
     end

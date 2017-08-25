@@ -71,6 +71,7 @@
                                company_person_id: @company_person.id),        |
                                class: 'table_action_button btn btn-primary' + |
                                       ' btn-sm pull-right'                    |
+        .clearfix
 
         .pagination-div{ id: "jobs-#{@job_type}",
                          data: { url: list_jobs_path(@job_type) } }
@@ -82,6 +83,8 @@
                      org_id: pets_user.company.id),
                      method: :get,
                      class: 'table_action_button btn btn-primary btn-sm pull-right'
+                     
+          .clearfix
 
         .pagination-div{ id: "people-#{@people_type}",
                          data: { url: list_people_company_path(@company.id,
@@ -104,7 +107,7 @@
         %button.btn.btn-primary.btn-sm.table_action_button.pull-right#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
           Add job skill
         .clearfix
-        
+
         .col-xs-12.pad-0
         - if @skills.empty?
           %h5 There are no job skills.

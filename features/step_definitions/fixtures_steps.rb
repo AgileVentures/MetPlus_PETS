@@ -128,7 +128,9 @@ end
 
 Given(/^the following job skills exist:$/) do |table|
   table.hashes.each do |hash|
-    Skill.create!(hash)
+    org_name = hash.delete('organization')
+    org = Company.find_by name: org_name
+    Skill.create!(hash.merge(organization: org))
   end
 end
 
