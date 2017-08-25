@@ -43,25 +43,16 @@
   .col-sm-10.col-sm-offset-1.company-people-home
     %ul.nav.nav-pills.custom-pills
       %li.active
-        -# href attribute needed for Capybara to find the 'a' element
-        %a{ href: '#',
-            data: { target: '.company-people-home #all-jobs-pane',
-                    toggle: 'pill' } }
+        %a{ data: { toggle: 'pill'}, href: '#all-jobs-pane' }
           All #{@company.name} jobs
       %li
-        %a{ href: '#',
-            data: { target: '#all-on-pets-pane',
-                    toggle: 'pill' } }
+        %a{ data: { toggle: 'pill'}, href: '#all-on-pets-pane' }
           All #{@company.name} people who are on PETS
       %li
-        %a{ href: '#',
-            data: { target: '#company-infomation-pane',
-                    toggle: 'pill' } }
-          Company Infomation
+        %a{ data: { toggle: 'pill'}, href: '#company-infomation-pane' }
+          Company Information
       %li
-        %a{ href: '#',
-            data: { target: '#job-skills-pane',
-                    toggle: 'pill'} }
+        %a{ data: { toggle: 'pill'}, href: '#job-skills-pane' }
           Job Skills
 
     .tab-content.tab-content-margin
@@ -83,7 +74,7 @@
                      org_id: pets_user.company.id),
                      method: :get,
                      class: 'table_action_button btn btn-primary btn-sm pull-right'
-                     
+
           .clearfix
 
         .pagination-div{ id: "people-#{@people_type}",
