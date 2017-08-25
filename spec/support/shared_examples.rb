@@ -137,9 +137,9 @@ RSpec.shared_examples 'accepts invitation' do |role|
   end
   it "redirects to #{role} home page" do
     if person.is_a? AgencyPerson
-      response.should redirect_to(home_agency_person_path(person.user))
+      expect(response).to redirect_to(home_agency_person_path(person.user))
     else
-      response.should redirect_to(home_company_person_path(person.user))
+      expect(response).to redirect_to(home_company_person_path(person.user))
     end
   end
 end
