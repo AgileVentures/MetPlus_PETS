@@ -14,7 +14,7 @@ class SkillsController < ApplicationController
       render nothing: true
     else
       render partial: 'shared/error_messages',
-                      locals: { object: skill }, status: 422
+             locals: { object: skill }, status: 422
     end
   end
 

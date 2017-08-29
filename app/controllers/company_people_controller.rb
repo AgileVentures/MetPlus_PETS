@@ -70,14 +70,14 @@ class CompanyPeopleController < ApplicationController
       raise "Do not recognize data type: #{params[:data_type]}" if
         params[:data_type] != 'skills'
 
-      @skills = pets_user.company.skills.order(:name).
-                  page(params[:skills_page]).per_page(10)
+      @skills = pets_user.company.skills.order(:name)
+                  .page(params[:skills_page]).per_page(10)
 
       render partial: 'shared/job_skills', object: @skills,
-              locals: { data_type:  'skills',
-                        partial_id: 'skills_table',
-                        show_property_path:   :skill_path,
-                        delete_property_path: :skill_path }
+             locals: { data_type:  'skills',
+                       partial_id: 'skills_table',
+                       show_property_path:   :skill_path,
+                       delete_property_path: :skill_path }
     else
       @task_type      = 'mine-open'
       @company_all    = 'company-all'
@@ -90,8 +90,8 @@ class CompanyPeopleController < ApplicationController
       @company_admins = Company.company_admins(@company)
       @admin_aa, @admin_ca = determine_if_admin(pets_user)
 
-      @skills = @company.skills.order(:name).
-                  page(params[:skills_page]).per_page(10)
+      @skills = @company.skills.order(:name)
+                  .page(params[:skills_page]).per_page(10)
     end
   end
 
