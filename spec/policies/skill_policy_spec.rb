@@ -24,12 +24,12 @@ RSpec.describe SkillPolicy do
       expect(SkillPolicy).to permit(admin, skill)
     end
 
-    it 'denies access if user is company admin' do
-      expect(SkillPolicy).not_to permit(company_admin, skill)
+    it 'allows access if user is company admin' do
+      expect(SkillPolicy).to permit(company_admin, skill)
     end
 
-    it 'denies access if user is company contact' do
-      expect(SkillPolicy).not_to permit(company_contact, skill)
+    it 'allows access if user is company contact' do
+      expect(SkillPolicy).to permit(company_contact, skill)
     end
   end
 end

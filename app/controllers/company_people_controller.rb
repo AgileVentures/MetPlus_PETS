@@ -66,16 +66,33 @@ class CompanyPeopleController < ApplicationController
   end
 
   def home
-    @task_type      = 'mine-open'
-    @company_all    = 'company-all'
-    @company_new    = 'company-new'
-    @company_closed = 'company-closed'
+    if request.xhr?
+      raise "Do not recognize data type: #{params[:data_type]}" if
+        params[:data_type] != 'skills'
 
-    @job_type    = 'my-company-all'
-    @people_type = 'my-company-all'
-    @company     = pets_user.company
-    @company_admins = Company.company_admins(@company)
-    @admin_aa, @admin_ca = determine_if_admin(pets_user)
+      @skills = pets_user.company.skills.order(:name)
+                  .page(params[:skills_page]).per_page(10)
+
+      render partial: 'shared/job_skills', object: @skills,
+             locals: { data_type:  'skills',
+                       partial_id: 'skills_table',
+                       show_property_path:   :skill_path,
+                       delete_property_path: :skill_path }
+    else
+      @task_type      = 'mine-open'
+      @company_all    = 'company-all'
+      @company_new    = 'company-new'
+      @company_closed = 'company-closed'
+
+      @job_type    = 'my-company-all'
+      @people_type = 'my-company-all'
+      @company     = pets_user.company
+      @company_admins = Company.company_admins(@company)
+      @admin_aa, @admin_ca = determine_if_admin(pets_user)
+
+      @skills = @company.skills.order(:name)
+                  .page(params[:skills_page]).per_page(10)
+    end
   end
 
   def my_profile; end

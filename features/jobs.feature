@@ -92,46 +92,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I click the "Hello, Jane" link
   And I logout
 
-
-@javascript
-Scenario: Creating and Updating Job successfully and unsuccessfully
-  Given I am on the home page
-  And I login as "hr@metplus.org" with password "qwerty123"
-  When I click the "Post Job" link
-  And I wait 1 second
-  And I fill in the fields:
-    | Title                  | cashier|
-  And  I select "Widgets Inc." in select list "Company Name"
-  And  I select "13 Summer Detroit, Michigan 02054" in select list "Job Location"
-  And I fill in the fields:
-    | Company Job ID         | KARK12 |
-    | Description            | At least two years work experience|
-  And  I select "Day" in select list "Shift"
-  And I select "Full Time" in select list "Job Type"
-  And I select "Part Time" in select list "Job Type"
-  And  I press "new-job-submit"
-  Then I should see "cashier has been created successfully."
-
-  Then I click the "Jobs" link
-  And I click the "software dev" link
-  And I click the "Edit Job" link
-  And  I select "Gadgets Inc." in select list "Company Name"
-  And  I select "2 Ford Drive Detroit, Michigan 02094" in select list "Job Location"
-  And  I press "edit-job-submit"
-  Then  I should see "software dev has been updated successfully."
-
-  Then I click the "Jobs" link
-  And I click the "cashier" link
-  And I click the "Edit Job" link
-  And  I fill in the fields:
-    | Title                  | cashier|
-    | Company Job ID         |  |
-    | Description            |  |
-  And  I select "Day" in select list "Shift"
-  And I select "Contract" in select list "Job Type"
-  And  I press "edit-job-submit"
-  Then  I should see "The form contains 2 errors"
-
 @javascript
 Scenario: Cancel out of job edit
   Given I am on the home page
