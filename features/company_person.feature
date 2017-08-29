@@ -30,6 +30,12 @@ Feature: Company Person
       | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
       | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
 
+    Given the following job skills exist:
+    | name            | description             | organization |
+    | Web Research    | Hic deleniti explicabo. | Widgets Inc. |
+    | Visual Analysis | Incidunt aut magni.     | Widgets Inc. |
+
+
     Given the following company addresses exist:
       | company       | street           | city    | zipcode | state      |
       | Widgets Inc.  | 12 Main Street   | Detroit | 02034   | Michigan   |
@@ -47,6 +53,9 @@ Feature: Company Person
       | task_type          | owner                | deferred_date | status      | targets               |
       | job_application    | jane@ymail.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
+    Given the following jobs exist:
+    | title         | company_job_id  | shift  | fulltime | description | company      | creator          | skills    |
+    | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Scenario: company admin edits company info
     Given I am on the home page
@@ -247,3 +256,61 @@ Feature: Company Person
     And I wait 1 second
     And I should see notification "Work on the task is done"
     And the task 1 is not present
+
+  @javascript
+  Scenario: manage job skills for company
+    # add job skill
+    Given I am on the home page
+    And I login as "jane@ymail.com" with password "qwerty123"
+    And I wait 1 second
+    And I click the "Job Skills" link
+    And I click the "Add job skill" button
+    And I fill in "Name:" with "Test Job Skill"
+    And I fill in "Description:" with "Description of Test Job Skill"
+    And I click the "Add Skill" button
+    And I wait 1 second
+    And I click the "Job Skills" link
+    Then I should see "Test Job Skill"
+    And I should see "Description of Test Job Skill"
+
+    # cancel add job skill
+    And I click the "Add job skill" button
+    And I fill in "Name:" with "Test 2nd Job Skill"
+    And I click the "Cancel" button
+    Then I should not see "Test 2nd Job Skill"
+
+    # show job skill model validation errors
+    Then I click the "Add job skill" button
+    And I fill in "Name:" with ""
+    And I fill in "Description:" with ""
+    And I click the "Add Skill" button
+    Then I should see "Name can't be blank"
+    And I should see "Description can't be blank"
+    Then I fill in "Name:" with "Test 3rd Job Skill"
+    And I fill in "Description:" with "Description of 3rd Test Job Skill"
+    And I click the "Add Skill" button
+    And I wait 1 second
+    And I click the "Job Skills" link
+    And I wait 1 second
+    Then I should see "Test 3rd Job Skill"
+
+    # update job skill
+    And I click the "Web Research" link
+    And I wait 1 second
+    And I fill in "Description:" with ""
+    And I click the "Update Skill" button
+    And I wait 1 second
+    And I should see "Description can't be blank"
+    And I fill in "Description:" with "Analytics using web data"
+    And I click the "Update Skill" button
+    And I wait 1 second
+    And I click the "Job Skills" link
+    Then "Update Job Skill" should not be visible
+    And I should see "Analytics using web data"
+
+    # delete job skill not associated with a job
+    And I click the "Delete" link with url "/skills/2"
+    Then I should not see "Visual Analysis"
+
+    # attempt to delete job skill associated with a job
+    And I should not see the "/skills/1" link

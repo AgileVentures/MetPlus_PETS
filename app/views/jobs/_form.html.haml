@@ -7,13 +7,6 @@
   .col-sm-6
     = f.text_field :title, class: 'form-control'
 
-- unless pets_user.is_a?(CompanyPerson)
-  .form-group
-    .col-sm-3.control-label
-      = f.label  :company_id, 'Company Name'
-    .col-sm-6
-      = f.collection_select :company_id, companies, :id, :name,
-                  { prompt: true }, { class: "form-control" }
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
@@ -57,6 +50,7 @@
   .col-sm-9
     #job_skills
       = f.fields_for :job_skills do |job_skill|
-        = render 'job_skill_fields', f: job_skill
+        = render 'job_skill_fields', f: job_skill, company: company
       .links
-        = link_to_add_association 'Add Job Skill', f, :job_skills
+        = link_to_add_association 'Add Job Skill', f, :job_skills,
+            render_options: { locals: { company: company } }

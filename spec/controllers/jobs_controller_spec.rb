@@ -142,25 +142,15 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #new' do
-    let(:request) { get :new }
-    let!(:widget) { FactoryGirl.create(:company, name: 'Widget', agencies: [agency]) }
+    let(:widget) { FactoryGirl.create(:company, name: 'Widget', agencies: [agency]) }
     let!(:dyson) { FactoryGirl.create(:company, name: 'Dyson', agencies: [agency]) }
+    let(:request) { get :new, company_id: widget.id }
 
-    context 'agency admin' do
-      before(:each) do
-        warden.set_user agency_admin
-        request
-      end
-      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
-      it { expect(assigns(:addresses)).to eq([]) }
-      it_behaves_like 'return success and render', 'new'
-    end
     context 'job developer' do
       before(:each) do
         warden.set_user job_developer
         request
       end
-      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
       it { expect(assigns(:addresses)).to eq([]) }
       it_behaves_like 'return success and render', 'new'
     end
@@ -172,7 +162,6 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
         request
       end
-      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
       it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'new'
     end
@@ -187,32 +176,6 @@ RSpec.describe JobsController, type: :controller do
   describe 'POST #create' do
     let(:request) { post :create, job: valid_params }
 
-    context 'agency admin' do
-      before(:each) { warden.set_user agency_admin }
-      describe 'successful POST #create' do
-        it 'change job count & job skill count by 1' do
-          expect { post :create, job: valid_params }
-            .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
-        end
-        it 'redirects to the jobs list' do
-          request
-          expect(response).to redirect_to(action: 'index')
-          expect(flash[:notice]).to eq "#{valid_params[:title]} " \
-                                       'has been created successfully.'
-        end
-      end
-      describe 'unsuccessful POST #create' do
-        it 'does not change job & job skill count' do
-          expect { post :create, job: valid_params.merge(title: ' ') }
-            .to change(Job, :count).by(0).and change(Job, :count).by(0)
-        end
-        it 'return success and render new' do
-          post :create, job: valid_params.merge(title: ' ')
-          expect(response).to have_http_status(:success)
-          expect(response).to render_template 'new'
-        end
-      end
-    end
     context 'job developer' do
       before(:each) { warden.set_user job_developer }
       describe 'successful POST #create' do
@@ -335,7 +298,6 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user agency_admin
         request
       end
-      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
       it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end
@@ -344,7 +306,6 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_developer
         request
       end
-      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
       it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end
@@ -356,7 +317,6 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
         request
       end
-      it { expect(assigns(:companies)).to eq Company.all.order(:name) }
       it { expect(assigns(:addresses)).to eq bosh.addresses.order(:state) }
       it_behaves_like 'return success and render', 'edit'
     end

@@ -43,21 +43,18 @@
   .col-sm-10.col-sm-offset-1.company-people-home
     %ul.nav.nav-pills.custom-pills
       %li.active
-        -# href attribute needed for Capybara to find the 'a' element
-        %a{ href: '#',
-            data: { target: '.company-people-home #all-jobs-pane',
-                    toggle: 'pill' } }
+        %a{ data: { toggle: 'pill'}, href: '#all-jobs-pane' }
           All #{@company.name} jobs
       %li
-        %a{ href: '#',
-            data: { target: '#all-on-pets-pane',
-                    toggle: 'pill' } }
+        %a{ data: { toggle: 'pill'}, href: '#all-on-pets-pane' }
           All #{@company.name} people who are on PETS
       %li
-        %a{ href: '#',
-            data: { target: '#company-infomation-pane',
-                    toggle: 'pill' } }
-          Company Infomation
+        %a{ data: { toggle: 'pill'}, href: '#company-infomation-pane' }
+          Company Information
+      %li
+        %a{ data: { toggle: 'pill'}, href: '#job-skills-pane' }
+          Job Skills
+
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
         = link_to 'Post Job',                                                 |
@@ -65,6 +62,7 @@
                                company_person_id: @company_person.id),        |
                                class: 'table_action_button btn btn-primary' + |
                                       ' btn-sm pull-right'                    |
+        .clearfix
 
         .pagination-div{ id: "jobs-#{@job_type}",
                          data: { url: list_jobs_path(@job_type) } }
@@ -77,9 +75,11 @@
                      method: :get,
                      class: 'table_action_button btn btn-primary btn-sm pull-right'
 
+          .clearfix
+
         .pagination-div{ id: "people-#{@people_type}",
                          data: { url: list_people_company_path(@company.id,
-                                                                 @people_type) } }
+                                                               @people_type) } }
 
       .tab-pane.fade#company-infomation-pane
         - if @admin_ca
@@ -92,3 +92,31 @@
                  locals: { company: @company,
                            admin_aa: @admin_aa,
                            company_admins: @company_admins }
+
+      .tab-pane.fade#job-skills-pane
+        -# .col-xs-12.text-right
+        %button.btn.btn-primary.btn-sm.table_action_button.pull-right#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
+          Add job skill
+        .clearfix
+
+        .col-xs-12.pad-0
+        - if @skills.empty?
+          %h5 There are no job skills.
+        - else
+          = render partial: 'shared/job_skills', object: @skills,
+                    locals: { data_type:  'skills',
+                              partial_id: 'skills_table',
+                              show_property_path:   :skill_path,
+                              delete_property_path: :skill_path }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'add_skill',
+                    modal_title:  "Add Job Skill for #{@company.name}",
+                    modal_submit: 'Add Skill',
+                    company_id:   @company.id }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'update_skill',
+                    modal_title:  "Update Job Skill for #{@company.name}",
+                    modal_submit: 'Update Skill',
+                    company_id:    @company.id }
