@@ -3,6 +3,11 @@ class Job < ActiveRecord::Base
   belongs_to :company
   belongs_to :company_person
   belongs_to :address
+
+  attr_accessor :new_address
+  belongs_to :new_address
+  accepts_nested_attributes_for :new_address
+
   belongs_to :job_category
   has_and_belongs_to_many :job_types
 

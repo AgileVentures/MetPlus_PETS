@@ -70,6 +70,7 @@ class JobsController < ApplicationController
     authorize @job
     @company = Company.find(params[:company_id])
     set_company_address
+    @job.new_address.build
   end
 
   def create
@@ -105,6 +106,7 @@ class JobsController < ApplicationController
     authorize @job
     @company = @job.company
     set_company_address
+    @job.new_address = Address.new
   end
 
   def update

@@ -4,15 +4,43 @@
 .form-group
   .col-sm-3.control-label
     = f.label :title
-  .col-sm-6
+  .col-sm-8
     = f.text_field :title, class: 'form-control'
 
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
-  .col-sm-6#address_select
+  .col-sm-8#address_select
     = f.collection_select :address_id, addresses, :id, :full_address,
                 { prompt: true, include_blank: true }, class: 'form-control'
+
+.form-group
+  .col-sm-3.control-label
+    %b New Job Location
+  .col-sm-9
+    = f.fields_for :new_address do |address_form|
+
+      .form-group
+        .col-sm-1.control-label
+          = address_form.label :street, 'Street:',
+            class: 'job-skill-label'
+        .col-sm-4
+          = address_form.text_field :street, size: 30, class: 'form-control'
+        .col-sm-1.control-label
+          = address_form.label :city, 'City:', class: 'job-skill-label'
+        .col-sm-4
+          = address_form.text_field :city, size: 30, class: 'form-control'
+          
+      .form-group
+        .col-sm-1.control-label
+          = address_form.label :state, 'State:', class: 'job-skill-label'
+        .col-sm-4
+          = address_form.collection_select(:state, Address.states_full_name,
+                   :to_s, :to_s, {include_blank: true}, class: 'form-control')
+        .col-sm-1.control-label
+          = address_form.label :zipcode, 'Zipcode:', class: 'job-skill-label'
+        .col-sm-4
+          = address_form.text_field :zipcode, size: 10, class: 'form-control'
 
 .form-group
   .col-sm-3.control-label
@@ -30,7 +58,7 @@
 .form-group
   .col-sm-3.control-label
     = f.label :description
-  .col-sm-6
+  .col-sm-7
     =f.text_area :description, size: "40x5", class: 'form-control'
 
 .form-group.form-inline
