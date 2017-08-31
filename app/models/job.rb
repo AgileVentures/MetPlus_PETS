@@ -4,8 +4,13 @@ class Job < ActiveRecord::Base
   belongs_to :company_person
   belongs_to :address, autosave: true # force address validation in controller
                                       # upon job create and job update when
-                                      # new address is being created.
+                                      # new address is being created.  If valid,
+                                      # new address is saved when job is saved.
 
+  # Instance var "new_address" is not persisted, and is defined in order to support
+  # adding a new company address (aka job location) by the user when creating
+  # or editing a company job.  If the associated persisted address was used
+  # then the nested attributes on the job form would show attributes of that address.
   attr_accessor :new_address
   belongs_to :new_address
   accepts_nested_attributes_for :new_address

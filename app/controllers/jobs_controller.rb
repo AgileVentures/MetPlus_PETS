@@ -89,6 +89,10 @@ class JobsController < ApplicationController
     authorize @job
 
     if @job.save
+
+      # Associate new address with company
+      @job.company.addresses << @job.address if new_address_params
+      
       flash[:notice] = "#{@job.title} has been created successfully."
 
       obj = Struct.new(:job, :agency)
@@ -124,9 +128,7 @@ class JobsController < ApplicationController
     new_address_params = update_params.delete(:new_address_attributes)
     @job.build_address(new_address_params) if new_address_params
 
-    if @job.valid?
-
-      @job.update_attributes(update_params)
+    if @job.save
 
       # Associate new address with company
       @job.company.addresses << @job.address if new_address_params
