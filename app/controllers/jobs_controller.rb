@@ -70,11 +70,18 @@ class JobsController < ApplicationController
     authorize @job
     @company = Company.find(params[:company_id])
     set_company_address
-    @job.new_address.build
   end
 
   def create
-    @job = Job.new(job_params)
+    save_params = job_params
+
+    # if new_address_params is not nil then user wants to create a new
+    # job location (company address) and associate that with this job.
+    new_address_params = save_params.delete(:new_address_attributes)
+
+    @job = Job.new(save_params)
+    @job.build_address(new_address_params) if new_address_params
+
     if pets_user.is_a?(CompanyPerson)
       @job.company_id = pets_user.company.id
       @job.company_person_id = pets_user.id
@@ -106,12 +113,24 @@ class JobsController < ApplicationController
     authorize @job
     @company = @job.company
     set_company_address
-    @job.new_address = Address.new
   end
 
   def update
     authorize @job
-    if @job.update_attributes(job_params)
+    update_params = job_params
+
+    # if new_address_params is not nil then user wants to create a new
+    # job location (company address) and associate that with this job.
+    new_address_params = update_params.delete(:new_address_attributes)
+    @job.build_address(new_address_params) if new_address_params
+
+    if @job.valid?
+
+      @job.update_attributes(update_params)
+
+      # Associate new address with company
+      @job.company.addresses << @job.address if new_address_params
+
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job
     else
@@ -314,6 +333,7 @@ class JobsController < ApplicationController
       @addresses = Address.where(location_type: 'Company',
                                  location_id: @job.company).order(:state)
     end
+    @job.new_address = Address.new
   end
 
   def apply_for(job_seeker, &controller_response)
@@ -349,7 +369,12 @@ class JobsController < ApplicationController
   def job_params
     params.require(:job).permit(:description, :shift, :company_job_id,
                                 :fulltime, :company_id, :title, :address_id,
-                                :company_person_id, :years_of_experience, job_type_ids: [],
-                                job_skills_attributes: [:id, :_destroy, :skill_id, :required, :min_years, :max_years])
+                                :company_person_id, :years_of_experience,
+                                job_type_ids: [],
+                                job_skills_attributes: [:id, :_destroy,
+                                                        :skill_id, :required,
+                                                        :min_years, :max_years],
+                                new_address_attributes: [:street, :city, :state,
+                                                         :zipcode])
   end
 end

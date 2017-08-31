@@ -2,7 +2,9 @@ class Job < ActiveRecord::Base
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
-  belongs_to :address
+  belongs_to :address, autosave: true # force address validation in controller
+                                      # upon job create and job update when
+                                      # new address is being created.
 
   attr_accessor :new_address
   belongs_to :new_address
