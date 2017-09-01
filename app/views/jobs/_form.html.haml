@@ -15,32 +15,42 @@
                 { prompt: true, include_blank: true }, class: 'form-control'
 
 .form-group
-  .col-sm-3.control-label
-    %b New Job Location
-  .col-sm-9
-    = f.fields_for :new_address do |address_form|
+  .col-sm-9.col-sm-offset-3
+    #new_address_subform(style = 'display: none;')
+      = f.fields_for :new_address do |address_form|
 
-      .form-group
-        .col-sm-1.control-label
-          = address_form.label :street, 'Street:',
-            class: 'job-skill-label'
-        .col-sm-4
-          = address_form.text_field :street, size: 30, class: 'form-control'
-        .col-sm-1.control-label
-          = address_form.label :city, 'City:', class: 'job-skill-label'
-        .col-sm-4
-          = address_form.text_field :city, size: 30, class: 'form-control'
-          
-      .form-group
-        .col-sm-1.control-label
-          = address_form.label :state, 'State:', class: 'job-skill-label'
-        .col-sm-4
-          = address_form.collection_select(:state, Address.states_full_name,
-                   :to_s, :to_s, {include_blank: true}, class: 'form-control')
-        .col-sm-1.control-label
-          = address_form.label :zipcode, 'Zipcode:', class: 'job-skill-label'
-        .col-sm-4
-          = address_form.text_field :zipcode, size: 10, class: 'form-control'
+        .form-group
+          .col-sm-1.control-label
+            = address_form.label :street, 'Street:',
+              class: 'job-skill-label'
+          .col-sm-4
+            = address_form.text_field :street, size: 30,
+                                      class: 'form-control new_address_field'
+          .col-sm-1.control-label
+            = address_form.label :city, 'City:', class: 'job-skill-label'
+          .col-sm-4
+            = address_form.text_field :city, size: 30,
+                                      class: 'form-control new_address_field'
+
+        .form-group
+          .col-sm-1.control-label
+            = address_form.label :state, 'State:', class: 'job-skill-label'
+          .col-sm-4
+            = address_form.collection_select(:state, Address.states_full_name,
+                                             :to_s, :to_s, {include_blank: true},
+                                             class: 'form-control new_address_field')
+          .col-sm-1.control-label
+            = address_form.label :zipcode, 'Zipcode:', class: 'job-skill-label'
+          .col-sm-4
+            = address_form.text_field :zipcode, size: 10,
+                                      class: 'form-control new_address_field'
+
+    -# = link_to 'Create new location', job_toggle_new_address_path,
+    -#           remote: true, data: { params: 'show_fields=true' }
+
+    %a(id='toggle_address_fields' href='#new_address_subform'
+       class='btn btn-sm btn-warning')
+      Create new location
 
 .form-group
   .col-sm-3.control-label

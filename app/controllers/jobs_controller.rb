@@ -92,13 +92,13 @@ class JobsController < ApplicationController
 
       # Associate new address with company
       @job.company.addresses << @job.address if new_address_params
-      
+
       flash[:notice] = "#{@job.title} has been created successfully."
 
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_POSTED, obj.new(@job, current_agency))
 
-      redirect_to jobs_url
+      redirect_to @job
     else
       @company = @job.company
       set_company_address

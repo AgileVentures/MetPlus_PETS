@@ -128,7 +128,29 @@ $(function () {
   });
 
   $('body').on('ajax:success', '.jobs_pagination', function (e, data) {
-      $('#searched-job-list').html(data);
+    $('#searched-job-list').html(data);
+  });
+
+  $('.new_address_field').prop('disabled', true);
+
+  $('#toggle_address_fields').click(function () {
+    var toggle_id = $(this).attr('href');  // element to be toggled
+
+    // Disabled input fields will *not* be sent to the server by Rails
+
+    if ($(toggle_id).is(':visible') === true) {
+
+      $(toggle_id).hide(800);
+      $('.new_address_field').prop('disabled', true);
+      $(this).text('Create new location');
+
+    } else {
+
+      $(toggle_id).show(800);
+      $('.new_address_field').prop('disabled', false);
+      $(this).text('Cancel new location');
+
+    }
   });
 
 });

@@ -9,8 +9,7 @@ class Job < ActiveRecord::Base
 
   # Instance var "new_address" is not persisted, and is defined in order to support
   # adding a new company address (aka job location) by the user when creating
-  # or editing a company job.  If the associated persisted address was used
-  # then the nested attributes on the job form would show attributes of that address.
+  # or editing a company job.
   attr_accessor :new_address
   belongs_to :new_address
   accepts_nested_attributes_for :new_address
