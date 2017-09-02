@@ -60,11 +60,11 @@ JobType.create!({job_type: 'Salary Commission'})
 JobType.create!({job_type: 'Commission Only'})
 
 # Create default Job Shifts
-JobShift.create!({shift: 'Morning'})
-JobShift.create!({shift: 'Day'})
-JobShift.create!({shift: 'Afternoon'})
-JobShift.create!({shift: 'Midnight'})
-JobShift.create!({shift: 'Swing'})
+JobShift.create!(shift: 'Morning')
+JobShift.create!(shift: 'Day')
+JobShift.create!(shift: 'Afternoon')
+JobShift.create!(shift: 'Midnight')
+JobShift.create!(shift: 'Swing')
 
 puts "\nSeeded Production Data"
 

@@ -18,13 +18,10 @@ class Job < ActiveRecord::Base
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
-  #SHIFT_OPTIONS = %w(Morning Day Evening).freeze
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
   validates_presence_of :company_job_id
   validates_presence_of :fulltime, allow_blank: true
-  #validates_inclusion_of :shift, in: SHIFT_OPTIONS,
-  #                               message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10_000
