@@ -39,6 +39,12 @@ Given the following job_type records:
   | Part Time |
   | Contract  |
 
+Given the following job_shift records:
+  | shift  |
+  | Morning |
+  | Day |
+  | Swing  |
+
 @javascript
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
@@ -53,22 +59,23 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
   And I select "Full Time" in select list "Job Type"
   And I select "Part Time" in select list "Job Type"
+  And I select "Morning" in select list "Shift"
   And I press "new-job-submit"
   Then I should see "cashier has been created successfully."
   Then I click the "cashier" link to job show page
   And I should see "Full Time, Part Time"
+  And I should see "Morning"
   Then I click the "Edit Job" link
   And I fill in the fields:
     | Title                  | cab-driver|
     | Company Job ID         | KRT123    |
     | Description            | Atleast two years work experience|
-  And  I select "Day" in select list "Shift"
   And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
   And I select "Contract" in select list "Job Type"
   And I press "Update"
   Then I should see "cab-driver has been updated successfully."
   And I should see "Full Time, Part Time, Contract"
-  And I should verify the change of title "cab-driver", shift "Day" and jobId "KRT123"
+  And I should verify the change of title "cab-driver" and jobId "KRT123"
 
   Then I go to the Company Person 'jane@ymail.com' Home page
   And I click the "software dev" link

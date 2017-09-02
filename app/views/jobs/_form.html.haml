@@ -39,10 +39,12 @@
   .col-sm-5
     = f.collection_select :job_type_ids, JobType.all, :id, :job_type, {},
                           class: 'job-type-multiple', multiple: true
-    %span &nbsp;
-    = f.label :shift
-    = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
-            {prompt: true}, class: 'form-control'
+
+.form-group.form-inline
+  .col-sm-3.control-label
+    = f.label :job_shift_ids, 'Shift'
+  .col-sm-5
+    = f.collection_select :job_shift_ids, JobShift.all, :id, :shift, {}, class: 'job-shift-multiple', multiple: true
 
 .form-group
   .col-sm-3.control-label

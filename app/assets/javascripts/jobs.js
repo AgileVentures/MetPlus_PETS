@@ -95,6 +95,7 @@ $(function () {
   $('#q_company_id_in').select2();
   $('#q_status_in').select2();
   $(".job-type-multiple").select2();
+  $(".job-shift-multiple").select2();
 
   JobAndResume.match();
 

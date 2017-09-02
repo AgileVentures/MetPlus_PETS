@@ -47,6 +47,10 @@
       %tr
         %td Job Type:
         %td= @job.job_types.map(&:job_type).join(", ")
+    - unless @job.job_shifts.empty?
+      %tr
+        %td Job Shifts:
+        %td= @job.job_shifts.map(&:shift).join(", ")
     %tr
       %td Job Skills:
       %td
