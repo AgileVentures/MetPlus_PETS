@@ -101,7 +101,7 @@ class JobsController < ApplicationController
       redirect_to @job
     else
       @company = @job.company
-      set_company_address
+      set_company_address(new_address_params)
       render :new
     end
   end
@@ -126,9 +126,15 @@ class JobsController < ApplicationController
     # if new_address_params is not nil then user wants to create a new
     # job location (company address) and associate that with this job.
     new_address_params = update_params.delete(:new_address_attributes)
-    @job.build_address(new_address_params) if new_address_params
 
-    if @job.save
+    if new_address_params
+      @job.build_address(new_address_params)
+
+      # remove address id (from select list) if present
+      update_params.delete(:address_id)
+    end
+
+    if @job.update_attributes(update_params)
 
       # Associate new address with company
       @job.company.addresses << @job.address if new_address_params
@@ -137,7 +143,7 @@ class JobsController < ApplicationController
       redirect_to @job
     else
       @company = @job.company
-      set_company_address
+      set_company_address(new_address_params)
       render :edit
     end
   end
@@ -325,7 +331,7 @@ class JobsController < ApplicationController
     @job_seekers = pets_user.job_seekers
   end
 
-  def set_company_address
+  def set_company_address(new_address_attributes = nil)
     case params[:action]
     when 'new', 'create'
       @addresses = Address.where(location_type: 'Company',
@@ -335,7 +341,8 @@ class JobsController < ApplicationController
       @addresses = Address.where(location_type: 'Company',
                                  location_id: @job.company).order(:state)
     end
-    @job.new_address = Address.new
+    
+    @job.new_address = Address.new(new_address_attributes)
   end
 
   def apply_for(job_seeker, &controller_response)

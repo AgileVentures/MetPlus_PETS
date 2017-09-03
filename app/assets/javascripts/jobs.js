@@ -136,7 +136,7 @@ $(function () {
   $('#toggle_address_fields').click(function () {
     var toggle_id = $(this).attr('href');  // element to be toggled
 
-    // Disabled input fields will *not* be sent to the server by Rails
+    // Disabled input fields will *not* be sent to the server
 
     if ($(toggle_id).is(':visible') === true) {
 

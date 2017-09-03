@@ -16,7 +16,7 @@
 
 .form-group
   .col-sm-9.col-sm-offset-3
-    #new_address_subform(style = 'display: none;')
+    #new_address_subform{ style: ('display: none;' unless address_has_data?(@job.new_address)) }
       = f.fields_for :new_address do |address_form|
 
         .form-group
