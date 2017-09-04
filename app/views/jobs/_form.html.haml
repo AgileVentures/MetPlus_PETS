@@ -45,12 +45,9 @@
             = address_form.text_field :zipcode, size: 10,
                                       class: 'form-control new_address_field'
 
-    -# = link_to 'Create new location', job_toggle_new_address_path,
-    -#           remote: true, data: { params: 'show_fields=true' }
-
     %a(id='toggle_address_fields' href='#new_address_subform'
        class='btn btn-sm btn-warning')
-      Create new location
+      = address_has_data?(@job.new_address) ? 'Cancel new location' : 'Create new location'
 
 .form-group
   .col-sm-3.control-label

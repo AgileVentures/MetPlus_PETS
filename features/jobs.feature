@@ -55,7 +55,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I select "Part Time" in select list "Job Type"
   And I press "new-job-submit"
   Then I should see "cashier has been created successfully."
-  Then I click the "cashier" link to job show page
   And I should see "Full Time, Part Time"
   Then I click the "Edit Job" link
   And I fill in the fields:
@@ -128,7 +127,9 @@ Scenario: Create a job *and* create new job location (company address)
     | Street   | 12 Main Street |
     | City     | Detroit        |
     | Zipcode  | 02034          |
-  And I select "Michigan" in select list "State"
+  And I press "new-job-submit"
+  Then I should see "Address state can't be blank"
+  Then I select "Michigan" in select list "State"
   And I press "new-job-submit"
   Then I should see "cashier has been created successfully."
   And I should see "Full Time, Part Time"

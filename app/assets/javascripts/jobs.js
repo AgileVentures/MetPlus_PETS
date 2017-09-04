@@ -131,7 +131,11 @@ $(function () {
     $('#searched-job-list').html(data);
   });
 
-  $('.new_address_field').prop('disabled', true);
+  // $('.new_address_field').prop('disabled', true);
+
+  if ($('#new_address_subform').is(':visible') !== true) {
+    $('.new_address_field').prop('disabled', true);
+  };
 
   $('#toggle_address_fields').click(function () {
     var toggle_id = $(this).attr('href');  // element to be toggled
