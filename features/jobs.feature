@@ -133,3 +133,22 @@ Scenario: Create a job *and* create new job location (company address)
   And I press "new-job-submit"
   Then I should see "cashier has been created successfully."
   And I should see "Full Time, Part Time"
+
+@javascript
+Scenario: Edit a job *and* create new job location (company address)
+  Given I am on the home page
+  And I login as "jane@ymail.com" with password "qwerty123"
+  And I click the "software dev" link
+  And I wait 1 second
+  Then I click the "Edit Job" link
+  And I wait 1 second
+  And I click the "Create new location" link
+  And I wait 1 second
+  And I fill in the fields:
+    | Street   | 10 Summer Street |
+    | City     | Boston           |
+    | Zipcode  | 01720            |
+  Then I select "Massachusetts" in select list "State"
+  And I press "edit-job-submit"
+  Then I should see "10 Summer Street"
+  And I should see "Boston, Massachusetts 01720"

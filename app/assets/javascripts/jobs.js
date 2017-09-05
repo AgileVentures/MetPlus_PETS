@@ -134,13 +134,16 @@ $(function () {
   // $('.new_address_field').prop('disabled', true);
 
   if ($('#new_address_subform').is(':visible') !== true) {
+    // When job form is rendered, disable "new address" fields unless those
+    // fields are visible - if visible, the user is trying to create a new
+    // address and the form has been re-rendered with model errors.
     $('.new_address_field').prop('disabled', true);
   };
 
   $('#toggle_address_fields').click(function () {
     var toggle_id = $(this).attr('href');  // element to be toggled
 
-    // Disabled input fields will *not* be sent to the server
+    // Disabled input fields will not be sent to the server
 
     if ($(toggle_id).is(':visible') === true) {
 

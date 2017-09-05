@@ -4,13 +4,13 @@
 .form-group
   .col-sm-3.control-label
     = f.label :title
-  .col-sm-8
+  .col-sm-7
     = f.text_field :title, class: 'form-control'
 
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
-  .col-sm-8#address_select
+  .col-sm-7#address_select
     = f.collection_select :address_id, addresses, :id, :full_address,
                 { prompt: true, include_blank: true }, class: 'form-control'
 
@@ -47,18 +47,18 @@
 
     %a(id='toggle_address_fields' href='#new_address_subform'
        class='btn btn-sm btn-warning')
-      = address_has_data?(@job.new_address) ? 'Cancel new location' : 'Create new location'
+      = address_has_data?(@job.new_address) ? 'Cancel new location' : |
+                                              'Create new location'   |
 
 .form-group
   .col-sm-3.control-label
     = f.label :company_job_id, 'Company Job ID'
-  .col-sm-6
+  .col-sm-2
     = f.text_field :company_job_id, class: 'form-control'
 
-.form-group
   .col-sm-3.control-label
     = f.label :years_of_experience, 'Years Of Experience'
-  .col-sm-6
+  .col-sm-2
     = f.collection_select :years_of_experience, Job::YEARS_OF_EXPERIENCE_OPTIONS,
       :to_i, :to_i, {include_blank: true}, class: 'form-control'
 
@@ -70,12 +70,14 @@
 
 .form-group.form-inline
   .col-sm-3.control-label
-    = f.label :job_type_ids, 'Job Types'
-  .col-sm-5
+    = f.label :job_type_ids, 'Job Type(s)'
+  .col-sm-4
     = f.collection_select :job_type_ids, JobType.all, :id, :job_type, {},
                           class: 'job-type-multiple', multiple: true
-    %span &nbsp;
+
+  .col-sm-1.control-label
     = f.label :shift
+  .col-sm-1
     = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
             {prompt: true}, class: 'form-control'
 
