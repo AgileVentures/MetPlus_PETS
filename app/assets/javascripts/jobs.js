@@ -71,7 +71,7 @@ $(function () {
               Notification.error_notification('Ajax Error: ' + textStatus);
             },
             success: function (data) {
-              $('#address_select').html(data);
+              $('#address-select').html(data);
             }
           });
   });
@@ -128,7 +128,37 @@ $(function () {
   });
 
   $('body').on('ajax:success', '.jobs_pagination', function (e, data) {
-      $('#searched-job-list').html(data);
+    $('#searched-job-list').html(data);
+  });
+
+  // $('.new_address_field').prop('disabled', true);
+
+  if ($('#new-address-subform').is(':visible') !== true) {
+    // When job form is rendered, disable "new address" fields unless those
+    // fields are visible - if visible, the user is trying to create a new
+    // address and the form has been re-rendered with model errors.
+    $('.new_address_field').prop('disabled', true);
+  };
+
+  $('#toggle-address-fields').click(function () {
+    // toggle new address fields (visible, not visible) on job form
+    var toggleId = $('#new-address-subform');  // element to be toggled
+
+    // Disabled input fields will not be sent to the server
+
+    if ($(toggleId).is(':visible') === true) {
+
+      $(toggleId).hide(800);
+      $('.new_address_field').prop('disabled', true);
+      $(this).text('Create new location');
+
+    } else {
+
+      $(toggleId).show(800);
+      $('.new_address_field').prop('disabled', false);
+      $(this).text('Cancel new location');
+
+    }
   });
 
 });
