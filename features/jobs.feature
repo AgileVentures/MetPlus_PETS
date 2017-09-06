@@ -121,6 +121,8 @@ Scenario: Create a job *and* create new job location (company address)
   And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
   And I select "Full Time" in select list "Job Type"
   And I select "Part Time" in select list "Job Type"
+  And I should not see "Street"
+  And I should not see "City"
   And I click the "Create new location" link
   And I wait 1 second
   And I fill in the fields:
@@ -142,6 +144,8 @@ Scenario: Edit a job *and* create new job location (company address)
   And I wait 1 second
   Then I click the "Edit Job" link
   And I wait 1 second
+  And I should not see "Street"
+  And I should not see "City"
   And I click the "Create new location" link
   And I wait 1 second
   And I fill in the fields:

@@ -141,7 +141,8 @@ $(function () {
   };
 
   $('#toggle_address_fields').click(function () {
-    var toggle_id = $(this).attr('href');  // element to be toggled
+    // toggle new address fields (visible, not visible) on job form
+    var toggle_id = $('#new_address_subform');  // element to be toggled
 
     // Disabled input fields will not be sent to the server
 
