@@ -341,7 +341,6 @@ class JobsController < ApplicationController
       @addresses = Address.where(location_type: 'Company',
                                  location_id: @job.company).order(:state)
     end
-    
     @job.new_address = Address.new(new_address_attributes)
   end
 

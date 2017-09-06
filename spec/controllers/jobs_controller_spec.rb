@@ -231,9 +231,6 @@ RSpec.describe JobsController, type: :controller do
         end
       end
 
-
-
-
       describe 'unsuccessful POST #create' do
         it 'does not change job & job skill count' do
           expect { post :create, job: valid_params.merge(title: ' ') }

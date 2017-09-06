@@ -71,7 +71,7 @@ $(function () {
               Notification.error_notification('Ajax Error: ' + textStatus);
             },
             success: function (data) {
-              $('#address_select').html(data);
+              $('#address-select').html(data);
             }
           });
   });
@@ -133,28 +133,28 @@ $(function () {
 
   // $('.new_address_field').prop('disabled', true);
 
-  if ($('#new_address_subform').is(':visible') !== true) {
+  if ($('#new-address-subform').is(':visible') !== true) {
     // When job form is rendered, disable "new address" fields unless those
     // fields are visible - if visible, the user is trying to create a new
     // address and the form has been re-rendered with model errors.
     $('.new_address_field').prop('disabled', true);
   };
 
-  $('#toggle_address_fields').click(function () {
+  $('#toggle-address-fields').click(function () {
     // toggle new address fields (visible, not visible) on job form
-    var toggle_id = $('#new_address_subform');  // element to be toggled
+    var toggleId = $('#new-address-subform');  // element to be toggled
 
     // Disabled input fields will not be sent to the server
 
-    if ($(toggle_id).is(':visible') === true) {
+    if ($(toggleId).is(':visible') === true) {
 
-      $(toggle_id).hide(800);
+      $(toggleId).hide(800);
       $('.new_address_field').prop('disabled', true);
       $(this).text('Create new location');
 
     } else {
 
-      $(toggle_id).show(800);
+      $(toggleId).show(800);
       $('.new_address_field').prop('disabled', false);
       $(this).text('Cancel new location');
 

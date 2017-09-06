@@ -10,13 +10,13 @@
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
-  .col-sm-7#address_select
+  .col-sm-7#address-select
     = f.collection_select :address_id, addresses, :id, :full_address,
                 { prompt: true, include_blank: true }, class: 'form-control'
 
 .form-group
   .col-sm-9.col-sm-offset-3
-    #new_address_subform{ style: ('display: none;' unless address_has_data?(@job.new_address)) }
+    #new-address-subform{ style: address_subform_visibility(@job.new_address) }
       = f.fields_for :new_address do |address_form|
 
         .form-group
@@ -45,10 +45,9 @@
             = address_form.text_field :zipcode, size: 10,
                                       class: 'form-control new_address_field'
 
-    %a(id='toggle_address_fields' href='#new_address_subform'
-       class='btn btn-xs btn-warning')
-      = address_has_data?(@job.new_address) ? 'Cancel new location' : |
-                                              'Create new location'   |
+    %a{ id: 'toggle-address-fields', href: '#new-address-subform',
+        class: 'btn btn-xs btn-warning' }
+      = address_subform_toggle_text(@job.new_address)
 
 .form-group
   .col-sm-3.control-label
