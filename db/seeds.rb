@@ -51,13 +51,13 @@ agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
                          path to success.')
 
 # Create default Job Types
-JobType.create!({job_type: 'Full Time'})
-JobType.create!({job_type: 'Part Time'})
-JobType.create!({job_type: 'Internship'})
-JobType.create!({job_type: 'Contract'})
-JobType.create!({job_type: 'Salary'})
-JobType.create!({job_type: 'Salary Commission'})
-JobType.create!({job_type: 'Commission Only'})
+JobType.create!(job_type: 'Full Time')
+JobType.create!(job_type: 'Part Time')
+JobType.create!(job_type: 'Internship')
+JobType.create!(job_type: 'Contract')
+JobType.create!(job_type: 'Salary')
+JobType.create!(job_type: 'Salary & Commission')
+JobType.create!(job_type: 'Commission Only')
 
 # Create default Job Shifts
 JobShift.create!(shift: 'Morning')

@@ -62,7 +62,6 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I select "Morning" in select list "Shift"
   And I press "new-job-submit"
   Then I should see "cashier has been created successfully."
-  Then I click the "cashier" link to job show page
   And I should see "Full Time, Part Time"
   And I should see "Morning"
   Then I click the "Edit Job" link
@@ -114,3 +113,53 @@ Scenario: Cancel out of job edit
   And I click the "Cancel" link
   And I wait 1 second
   And I should see "Revoke"
+
+@javascript
+Scenario: Create a job *and* create new job location (company address)
+  Given I am on the home page
+  And I login as "jane@ymail.com" with password "qwerty123"
+  When I click the first "Post Job" link
+  And I wait 1 second
+  And I fill in the fields:
+    | Title            | cashier|
+    | Company Job ID   | KARK12 |
+    | Description      | At least two years work experience|
+  And I select "Day" in select list "Shift"
+  And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
+  And I select "Full Time" in select list "Job Type"
+  And I select "Part Time" in select list "Job Type"
+  And I should not see "Street"
+  And I should not see "City"
+  And I click the "Create new location" link
+  And I wait 1 second
+  And I fill in the fields:
+    | Street   | 12 Main Street |
+    | City     | Detroit        |
+    | Zipcode  | 02034          |
+  And I press "new-job-submit"
+  Then I should see "Address state can't be blank"
+  Then I select "Michigan" in select list "State"
+  And I press "new-job-submit"
+  Then I should see "cashier has been created successfully."
+  And I should see "Full Time, Part Time"
+
+@javascript
+Scenario: Edit a job *and* create new job location (company address)
+  Given I am on the home page
+  And I login as "jane@ymail.com" with password "qwerty123"
+  And I click the "software dev" link
+  And I wait 1 second
+  Then I click the "Edit Job" link
+  And I wait 1 second
+  And I should not see "Street"
+  And I should not see "City"
+  And I click the "Create new location" link
+  And I wait 1 second
+  And I fill in the fields:
+    | Street   | 10 Summer Street |
+    | City     | Boston           |
+    | Zipcode  | 01720            |
+  Then I select "Massachusetts" in select list "State"
+  And I press "edit-job-submit"
+  Then I should see "10 Summer Street"
+  And I should see "Boston, Massachusetts 01720"

@@ -2,7 +2,18 @@ class Job < ActiveRecord::Base
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
-  belongs_to :address
+
+  # force address validation in controller upon job create and job update when
+  # new address is being created.  If valid, new address is saved when job is saved.
+  belongs_to :address, autosave: true
+
+  # Instance var "new_address" is not persisted, and is defined in order to support
+  # adding a new company address (aka job location) by the user when creating
+  # or editing a company job.
+  attr_accessor :new_address
+  belongs_to :new_address
+  accepts_nested_attributes_for :new_address
+
   belongs_to :job_category
   has_and_belongs_to_many :job_types
   has_and_belongs_to_many :job_shifts
