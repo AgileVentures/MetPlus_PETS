@@ -5,13 +5,16 @@ class SkillsController < ApplicationController
   before_action :user_logged!
 
   def create
-    skill = Skill.new(skill_params)
+    params = skill_params
+    company_id = params.delete('company_id')
+    skill = Skill.new(params)
+    skill.organization = Company.find(company_id) if company_id
     authorize skill
     if skill.save
       render nothing: true
     else
       render partial: 'shared/error_messages',
-                      locals: {object: skill}, status: 422
+             locals: { object: skill }, status: 422
     end
   end
 
@@ -57,7 +60,7 @@ class SkillsController < ApplicationController
   end
 
   def skill_params
-    params.require(:skill).permit(:name, :description)
+    params.require(:skill).permit(:name, :description, :company_id)
   end
 
   private

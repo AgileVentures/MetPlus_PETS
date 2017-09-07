@@ -1,11 +1,12 @@
 - provide(:title, "Edit #{@job.title}")
 
 .page-header.text-center#edit-job-header
-  %h2 Edit Job
+  %h2 Edit Job for #{@company.name}
 
 = form_for @job do |f|
   .form-horizontal
-    = render partial: 'form', locals: { f: f, companies: @companies ,
+    = render partial: 'form', locals: { f: f,
+                                        company: @company,
                                         addresses: @addresses }
     .form-group
       .col-sm-offset-3.col-sm-6

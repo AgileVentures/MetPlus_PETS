@@ -161,6 +161,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
     end
 
+    describe 'xhr response' do
+      before(:each) do
+        sign_in company_person
+        xhr :get, :home, id: company_person, data_type: 'skills'
+      end
+
+      it 'renders shared partial for skills display' do
+        expect(response).to render_template(partial: 'shared/_job_skills')
+      end
+    end
+
     describe 'unauthorized access' do
       let(:request) { get :home, id: company_person }
 

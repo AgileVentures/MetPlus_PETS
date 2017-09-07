@@ -2,7 +2,7 @@
   %ul(class='list-inline')
     %li
       = f.label :skill_id, 'Name', class: 'job-skill-label'
-      = f.collection_select(:skill_id, Skill.order(:name), :id, :name,
+      = f.collection_select(:skill_id, skills_for_company(company), :id, :name,
                           {include_blank: true})
     %li
       = f.check_box :required
@@ -16,4 +16,5 @@
       %div
         = f.collection_select(:max_years, ['']+(0..20).to_a, :to_s, :to_s)
     %li
-      = link_to_remove_association 'remove job skill', f
+      = link_to_remove_association 'remove job skill', f,
+          render_options: { locals: { company: company } }
