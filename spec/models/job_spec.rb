@@ -71,10 +71,6 @@ RSpec.describe Job, type: :model do
     it { should_not allow_value(21).for(:years_of_experience) }
     it { should allow_value(15).for(:years_of_experience) }
     it { is_expected.to validate_presence_of :company_id }
-    it do
-      is_expected.to validate_inclusion_of(:shift)
-        .in_array(%w(Day Evening Morning))
-    end
     describe 'status' do
       it 'Status -1 should generate exception' do
         expect { subject.status = -1 }.to raise_error(ArgumentError)

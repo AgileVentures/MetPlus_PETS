@@ -44,7 +44,6 @@ Scenario: Create job with associated skills
 		| Title                  | cashier|
 		| Company Job ID         | JOB3   |
 		| Description            | Must have experience with POS terminals |
-	And  I select "Day" in select list "Shift"
   And I click the "Add Job Skill" link
 	And "CmpySkill4" should not be an option for select list "Name"
   And I select "CmpySkill1" in select list "Name"
