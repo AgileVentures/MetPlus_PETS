@@ -25,45 +25,47 @@ def create_email(name_seed)
 end
 
 # --------------------------- Seed Production Database --------------------
-@jss1 = JobSeekerStatus.first
-@jss2 = JobSeekerStatus.second
-@jss3 = JobSeekerStatus.third
+
+puts "\nSeeding Production Data\n\n"
 
 # Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
-  AgencyRole.create(role: agency_role)
+  AgencyRole.find_or_create_by!(role: agency_role)
+  puts "  Agency role: #{agency_role}"
 end
 
 # Create all company roles
 CompanyRole::ROLE.each_value do |company_role|
-  CompanyRole.create(role: company_role)
+  CompanyRole.find_or_create_by!(role: company_role)
+  puts "  Company role: #{company_role}"
+end
+
+# Create default Job Types
+%w(Full\ Time Part\ Time Internship Contract Salary
+   Salary\ &\ Commission Commission\ Only).each do |job_type|
+  JobType.find_or_create_by!(job_type: job_type)
+  puts "  Job type: #{job_type}"
 end
 
 # Create default agency
-agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
-                        phone: '111 222 3333', fax: '333 444 5555',
-                        email: 'pets@metplus.org',
-                        description: 'Michigan Employment & Training Plus, (MET|PLUS)
-                         is a 501 (c) 3, Vocational Training non-profit
-                         organization that strives to assist Michigan
-                         jobseekers with invaluable training and job
-                         development that will put them on a career
-                         path to success.')
-
-# Create default Job Types
-JobType.create!(job_type: 'Full Time')
-JobType.create!(job_type: 'Part Time')
-JobType.create!(job_type: 'Internship')
-JobType.create!(job_type: 'Contract')
-JobType.create!(job_type: 'Salary')
-JobType.create!(job_type: 'Salary & Commission')
-JobType.create!(job_type: 'Commission Only')
+agency = Agency.find_or_create_by!(name: 'MetPlus', website: 'metplus.org',
+                          phone: '111 222 3333', fax: '333 444 5555',
+                          email: 'pets@metplus.org',
+                          description: 'Michigan Employment & Training Plus,
+                          (MET|PLUS) is a 501 (c) 3, Vocational Training
+                          non-profit organization that strives to assist
+                          Michigan jobseekers with invaluable training
+                          and job development that will put them on a
+                          career path to success.')
+puts "  Default agency: MetPlus"
 
 puts "\nSeeded Production Data"
 
-puts "\nSeeding development DB"
+exit(0) if Rails.env.production?
 
 if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING'
+
+  puts "\nSeeding development/staging data\n\n"
 
   #-------------------------- Companies -----------------------------------
   50.times do |n|
@@ -234,7 +236,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   Rake::Task['job_skills:import_generic'].invoke
 
   #-------------------------- Job Seekers ---------------------------------
-  #
+
+  @jss1 = JobSeekerStatus.first
+  @jss2 = JobSeekerStatus.second
+  @jss3 = JobSeekerStatus.third
+
   # This JobSeeker is used in email previews too :-)
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                          email: 'tomseekerpets@gmail.com', password: 'qwerty123',
