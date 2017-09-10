@@ -60,11 +60,11 @@ JobType.create!(job_type: 'Salary & Commission')
 JobType.create!(job_type: 'Commission Only')
 
 # Create default Job Shifts
-JobShift.create!(shift: 'Morning')
-JobShift.create!(shift: 'Day')
-JobShift.create!(shift: 'Afternoon')
-JobShift.create!(shift: 'Midnight')
-JobShift.create!(shift: 'Swing')
+JobShift.find_or_create_by(shift: 'Morning')
+JobShift.find_or_create_by(shift: 'Day')
+JobShift.find_or_create_by(shift: 'Afternoon')
+JobShift.find_or_create_by(shift: 'Midnight')
+JobShift.find_or_create_by(shift: 'Swing')
 
 puts "\nSeeded Production Data"
 
@@ -208,7 +208,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   25.times do |n|
     Job.create(title: FFaker::Job.title,
                description: Faker::Lorem.sentence,
-               shift: %w(Day Evening Morning)[r.rand(3)],
                company_job_id: "Job_ID_#{n}",
                fulltime: [false, true][r.rand(2)],
                company_id: known_company.id,
@@ -220,13 +219,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   20.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3, false, 4)
-    shift = %w(Day Evening Morning)[r.rand(3)]
     fulltime = [false, true][r.rand(2)]
     job_id = ((1..9).to_a + ('A'..'Z').to_a).sample(8).join
     # debugger
     Job.create(title: title,
                description: description,
-               shift: shift,
                company_job_id: job_id,
                fulltime: fulltime,
                company_id: companies[n].id,

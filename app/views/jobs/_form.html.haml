@@ -70,15 +70,15 @@
 .form-group.form-inline
   .col-sm-3.control-label
     = f.label :job_type_ids, 'Job Type(s)'
-  .col-sm-4
+  .col-sm-3
     = f.collection_select :job_type_ids, JobType.all, :id, :job_type, {},
                           class: 'job-type-multiple', multiple: true
-                          
-.form-group.form-inline
-  .col-sm-3.control-label
+
+  .col-sm-1.control-label
     = f.label :job_shift_ids, 'Shift'
-  .col-sm-5
-    = f.collection_select :job_shift_ids, JobShift.all, :id, :shift, {}, class: 'job-shift-multiple', multiple: true
+  .col-sm-4
+    = f.collection_select :job_shift_ids, JobShift.all, :id, :shift, {},
+                          class: 'job-shift-multiple', multiple: true
 
 .form-group
   .col-sm-3.control-label
