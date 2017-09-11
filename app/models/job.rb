@@ -54,7 +54,8 @@ class Job < ActiveRecord::Base
 
   validates_format_of :min_salary, :max_salary, allow_blank: true,
     with: /\A\d{0,6}(\.\d{0,2})?\z/,
-    message: 'must match format NNNNNN.NN (up to 6 digits, optional decimal point, digits for cents)'
+    message: 'must match format NNNNNN.NN (up to 6 digits, optional decimal ' +
+             'point, optional digits for cents)'
 
   validate :max_salary_consistent_with_min_salary
 

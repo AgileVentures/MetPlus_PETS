@@ -114,7 +114,7 @@ RSpec.describe Job, type: :model do
       it 'is invalid if not a number' do
         job.assign_attributes(min_salary: 'abc')
         expect(job).to_not be_valid
-        expect(job.errors.full_messages).to include('Min salary must be a number')
+        expect(job.errors.full_messages).to include('Min salary is not a number')
       end
       it 'is invalid if not specified when max_salary is specified' do
         job.assign_attributes(max_salary: 1000)
@@ -128,7 +128,7 @@ RSpec.describe Job, type: :model do
       it 'is invalid if not a number' do
         job.assign_attributes(max_salary: 'abc')
         expect(job).to_not be_valid
-        expect(job.errors.full_messages).to include('Max salary must be a number')
+        expect(job.errors.full_messages).to include('Max salary is not a number')
       end
       it 'is invalid if less than min_salary' do
         job.assign_attributes(max_salary: 1000, min_salary: 2000)
@@ -160,8 +160,8 @@ RSpec.describe Job, type: :model do
         end
         it 'contains too many digits to right of decimal point' do
           job.assign_attributes(pay_period: 'Monthly', min_salary: 1000.123)
-          error_msg = 'Min salary must match format NNNNNN.NN ' +
-                      '(up to 6 digits, optional decimal point, digits for cents)'
+          error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
+                      ' optional decimal point, optional digits for cents)'
           expect(job).to_not be_valid
           expect(job.errors.full_messages)
             .to include(error_msg)
