@@ -50,7 +50,11 @@ class Job < ActiveRecord::Base
     if: Proc.new { |j| j.pay_period.present? }
 
   validates_numericality_of :min_salary, :max_salary, allow_blank: true,
-    message: 'must be a number'
+    less_than_or_equal_to: 999999.99
+
+  validates_format_of :min_salary, :max_salary, allow_blank: true,
+    with: /\A\d{0,6}(\.\d{0,2})?\z/,
+    message: 'must match format NNNNNN.NN (up to 6 digits, optional decimal point, digits for cents)'
 
   validate :max_salary_consistent_with_min_salary
 
