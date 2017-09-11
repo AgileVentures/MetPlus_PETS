@@ -42,6 +42,32 @@ class Job < ActiveRecord::Base
                             allow_blank: true,
                             greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 20
+
+  validates_presence_of :pay_period, message: 'must be specified',
+    if: Proc.new { |j| j.min_salary.present? }
+
+  validates_presence_of :min_salary, message: 'must be specified',
+    if: Proc.new { |j| j.pay_period.present? }
+
+  validates_numericality_of :min_salary, :max_salary, allow_blank: true,
+    message: 'must be a number'
+
+  validate :max_salary_consistent_with_min_salary
+
+  def max_salary_consistent_with_min_salary
+    if max_salary.present?
+
+      if min_salary.present?
+        errors.add(:max_salary, 'cannot be less than minimum salary') if
+          max_salary < min_salary
+      else
+        errors.add(:min_salary,
+                   'must be specified if maximum salary is specified')
+      end
+    end
+  end
+
+
   scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
   scope :find_by_company, ->(company) { where(company: company) }
 
