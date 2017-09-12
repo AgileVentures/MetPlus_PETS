@@ -61,23 +61,28 @@
     = f.collection_select :years_of_experience, Job::YEARS_OF_EXPERIENCE_OPTIONS,
       :to_i, :to_i, {include_blank: true}, class: 'form-control'
 
+%br
 .form-group
   .col-sm-3.control-label
     %b Salary Range
   .col-sm-1
-    = f.label :min_salary, 'Minimum:', class: 'control-label job-skill-label'
-    %br
-    = f.label :min_salary, 'Maximum:', class: 'control-label job-skill-label'
+    = f.label :min_salary, 'Minimum:', class: 'control-label'
   .col-sm-2
     = f.text_field :min_salary, class: 'form-control'
+  .col-sm-1.col-sm-offset-1
+    = f.label :max_salary, 'Maximum:', class: 'control-label'
+  .col-sm-2
     = f.text_field :max_salary, class: 'form-control'
-  .col-sm-6
+
+.form-group
+  .col-sm-6.col-sm-offset-3
     = f.collection_radio_buttons(:pay_period, ['Hourly', 'Weekly',
                                                'Monthly', 'Annually'],
                                  :itself, :itself, {},
                                  { class: 'radio-inline' }) do |b|
-      = b.label(style: ('margin-left: 10px;' unless b.text == 'Hourly')) do
+      = b.label(style: ('margin-left: 20px;' unless b.text == 'Hourly')) do
         = b.radio_button + ' ' + b.text
+%br
 
 .form-group
   .col-sm-3.control-label
