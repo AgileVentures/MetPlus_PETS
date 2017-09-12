@@ -60,11 +60,11 @@ class Job < ActiveRecord::Base
     if max_salary.present?
 
       if min_salary.present?
-        errors.add(:max_salary, 'cannot be less than min salary') if
+        errors.add(:max_salary, 'cannot be less than minimum salary') if
           max_salary < min_salary
       else
         errors.add(:min_salary,
-                   'must be specified if max salary is specified')
+                   'must be specified if maximum salary is specified')
       end
     end
   end

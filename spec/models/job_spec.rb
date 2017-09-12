@@ -106,11 +106,6 @@ RSpec.describe Job, type: :model do
     end
 
     describe 'min_salary' do
-      it 'is invalid if not specified when pay_period is specified' do
-        job.assign_attributes(pay_period: 'Monthly')
-        expect(job).to_not be_valid
-        expect(job.errors.full_messages).to include('Min salary must be specified')
-      end
       it 'is invalid if not a number' do
         job.assign_attributes(min_salary: 'abc')
         expect(job).to_not be_valid
