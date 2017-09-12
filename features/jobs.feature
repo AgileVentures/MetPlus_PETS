@@ -54,10 +54,10 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I should see "Salary Range"
   And I should see "Minimum"
   And I should see "Maximum"
-  And I should see "Salary Period"
   And I should see "Hourly"
+  And I should see "Weekly"
   And I should see "Monthly"
-  And I should see "Annual"
+  And I should see "Annually"
 
   And I fill in the fields:
     | Title            | cashier|
@@ -80,9 +80,9 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
   And I select "Contract" in select list "Job Type"
   And I fill in the fields:
-    | Minimum | 10,000 |
-    | Maximum | 20,000 |
-  And I select "Monthly" in select list "Payment Period"
+    | Minimum | 10000 |
+    | Maximum | 20000 |
+  And I choose the "Monthly" radio button
   And I press "Update"
   Then I should see "cab-driver has been updated successfully."
   And I should see "Full Time, Part Time, Contract"
@@ -102,22 +102,22 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Then I fill in the fields:
     | Company Job ID | XYZ          |
     | Description    | software dev |
-    | Minimum        | 20,000 |
-    | Maximum        | 10,000 |
+    | Minimum        | 20000 |
+    | Maximum        | 10000 |
 
   And  I press "edit-job-submit"
   Then I should see "The form contains 2 errors"
-  And I should see "Maximum salary must be greater than or equal to minimum salary"
-  And I should see "Must specify payment period for salary"
+  And I should see "Max salary cannot be less than minimum salary"
+  And I should see "Pay period must be specified"
 
   Then I fill in the fields:
-    | Maximum | 20,000 |
+    | Maximum | 20000 |
     | Minimum |        |
-  And I select "Monthly" in select list "Payment Period"
+  And I choose the "Monthly" radio button
 
   And  I press "edit-job-submit"
   Then I should see "The form contains 1 error"
-  And I should see "Minimum salary must be specified if maximum salary is set"
+  And I should see "Min salary must be specified if maximum salary is specified"
 
   When I click the "Post Job" link
   And  I fill in the fields:
