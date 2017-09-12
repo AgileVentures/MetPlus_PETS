@@ -46,9 +46,6 @@ class Job < ActiveRecord::Base
   validates_presence_of :pay_period, message: 'must be specified',
     if: Proc.new { |j| j.min_salary.present? }
 
-  validates_presence_of :min_salary, message: 'must be specified',
-    if: Proc.new { |j| j.pay_period.present? }
-
   validates_numericality_of :min_salary, :max_salary, allow_blank: true,
     less_than_or_equal_to: 999999.99
 
@@ -63,11 +60,11 @@ class Job < ActiveRecord::Base
     if max_salary.present?
 
       if min_salary.present?
-        errors.add(:max_salary, 'cannot be less than minimum salary') if
+        errors.add(:max_salary, 'cannot be less than min salary') if
           max_salary < min_salary
       else
         errors.add(:min_salary,
-                   'must be specified if maximum salary is specified')
+                   'must be specified if max salary is specified')
       end
     end
   end
