@@ -48,7 +48,6 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :title }
     it { is_expected.to have_db_column :description }
     it { is_expected.to have_db_column :company_job_id }
-    it { is_expected.to have_db_column :shift }
     it { is_expected.to have_db_column :fulltime }
     it { is_expected.to have_db_column :company_id }
     it { is_expected.to have_db_column :company_person_id }
