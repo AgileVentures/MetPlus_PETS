@@ -2,9 +2,8 @@
 
   .col-sm-8.col-sm-offset-2{ style: 'text-align: center;' }
     = will_paginate entities,
-                    renderer: WillPaginate::ActionView::BootstrapLinkRenderer,
-                    link_options: { 'data-remote': true,
-                                    class: paginate_class }
+                    renderer: RemoteLinkPaginationHelper::BootstrapLinkRenderer,
+                    class: paginate_class
 
   .col-sm-2{ style: 'text-align: right;' }
     = select_tag(:items_count, paginate_count_options(items_count),
@@ -16,5 +15,7 @@
                                          data: {toggle: 'tooltip'} }
 -#
   for background on will_paginate method args, see:
-  https://gist.github.com/jeroenr/3142686, and
-  https://github.com/bootstrap-ruby/will_paginate-bootstrap
+  https://github.com/yrgoldteeth/bootstrap-will_paginate (adds bootstrap-style
+    to pagination links),
+  https://gist.github.com/jeroenr/3142686 (how to add data-remote attribute to
+    pagination links)
