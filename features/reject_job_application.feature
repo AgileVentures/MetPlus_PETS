@@ -32,8 +32,8 @@ Feature: Reject a job application
       | june@mail.com | dave@metplus.org | JD   |
 
     Given the following jobs exist:
-      | title        | company_job_id | shift | fulltime | description | company      | creator          |
-      | hr manager   | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@ymail.com |
+      | title        | company_job_id | fulltime | description | company      | creator          |
+      | hr manager   | KRK02K         | true     | internship  | Widgets Inc. | cane@ymail.com |
 
     Given the following job applications exist:
       | job title 	 | job seeker 	 | status 			|

@@ -36,14 +36,14 @@ Background: adding jobs data to DB
     | Skill3     | Long haul driver with Class C license  |
 
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills         | city  |status   |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1, Skill2 | city1 | active  |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3         | city2 | active  |
-    | Job3  | About job3. | Feature Inc. | carter@ymail.com | Evening | Skill1, Skill3 | city3 | active  |
-    | Job4  | About job4. | Feature Inc. | carter@ymail.com | Evening |                | city4 | active  |
-    | Job5  | About job5. | Feature Inc. | carter@ymail.com | Day     | Skill2         | city3 | filled  |
-    | Job6  | About job6. | Widgets Inc. | jane@ymail.com   | Evening | Skill3         | city1 | revoked |
-    | Job7  | About job7. | Inact Inc.   | bn@ia.com        | Day     |                | city1 | revoked |
+    | title | description | company      | creator          | skills         | city  |status   |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Skill1, Skill2 | city1 | active  |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Skill3         | city2 | active  |
+    | Job3  | About job3. | Feature Inc. | carter@ymail.com | Skill1, Skill3 | city3 | active  |
+    | Job4  | About job4. | Feature Inc. | carter@ymail.com | | city4 | active  |
+    | Job5  | About job5. | Feature Inc. | carter@ymail.com | Skill2         | city3 | filled  |
+    | Job6  | About job6. | Widgets Inc. | jane@ymail.com   | Skill3         | city1 | revoked |
+    | Job7  | About job7. | Inact Inc.   | bn@ia.com        | | city1 | revoked |
 
 @javascript
 Scenario: search jobs
