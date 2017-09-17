@@ -33,7 +33,7 @@
           %td
             = job.company.name
           %td
-            = job.shift
+            = job.job_shifts.map(&:shift).join(", ")
           %td
             - if job.address
               = job.address.state

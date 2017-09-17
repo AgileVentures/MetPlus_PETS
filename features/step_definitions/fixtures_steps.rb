@@ -182,6 +182,7 @@ Given(/^the following jobs exist:$/) do |table|
     creator_email = hash.delete 'creator'
     skills = hash.delete 'skills'
     city = hash.delete 'city'
+    shifts = hash.delete 'shifts'
 
     job = Job.new(hash.merge(company_job_id: 'JOBID'))
 
@@ -200,6 +201,13 @@ Given(/^the following jobs exist:$/) do |table|
                         required: true, min_years: 1, max_years: 20)
       end
     end
+
+    unless shifts.blank?
+      shifts.split(/(?:,\s*)/).each do |shift|
+        job.job_shifts << JobShift.find_or_create_by(shift: shift)
+      end
+    end
+
   end
 end
 
