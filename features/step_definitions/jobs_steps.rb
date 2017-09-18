@@ -1,7 +1,6 @@
-Then(/^I should verify the change of title "(.*?)", shift "(.*?)" and jobId "(.*?)"$/) do |title, shift, jobId|
+Then(/^I should verify the change of title "(.*?)" and jobId "(.*?)"$/) do |title, jobId|
 	
 	@job = Job.find_by_title(title)
-	expect(@job.shift).to eql shift
 	expect(@job.company_job_id).to eql jobId
 
 end

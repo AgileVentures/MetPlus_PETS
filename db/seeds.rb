@@ -59,6 +59,13 @@ agency = Agency.find_or_create_by!(name: 'MetPlus', website: 'metplus.org',
                           career path to success.')
 puts "  Default agency: MetPlus"
 
+# Create default Job Shifts
+JobShift.find_or_create_by(shift: 'Morning')
+JobShift.find_or_create_by(shift: 'Day')
+JobShift.find_or_create_by(shift: 'Afternoon')
+JobShift.find_or_create_by(shift: 'Midnight')
+JobShift.find_or_create_by(shift: 'Swing')
+
 puts "\nSeeded Production Data"
 
 exit(0) if Rails.env.production?
@@ -203,7 +210,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   25.times do |n|
     Job.create(title: FFaker::Job.title,
                description: Faker::Lorem.sentence,
-               shift: %w(Day Evening Morning)[r.rand(3)],
                company_job_id: "Job_ID_#{n}",
                fulltime: [false, true][r.rand(2)],
                company_id: known_company.id,
@@ -215,13 +221,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   20.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3, false, 4)
-    shift = %w(Day Evening Morning)[r.rand(3)]
     fulltime = [false, true][r.rand(2)]
     job_id = ((1..9).to_a + ('A'..'Z').to_a).sample(8).join
     # debugger
     Job.create(title: title,
                description: description,
-               shift: shift,
                company_job_id: job_id,
                fulltime: fulltime,
                company_id: companies[n].id,
