@@ -39,8 +39,8 @@ Scenario: Tailor heading for the number of jobs found
   And I should not see "Click on any column title to sort."
     # Display when 1 job
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills         | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1, Skill2 | city1 |
+    | title | description | company      | creator          | skills         | city  |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Skill1, Skill2 | city1 |
   Given I am on the home page
   And I click the "Jobs" link
   And I wait 1 second
@@ -48,8 +48,8 @@ Scenario: Tailor heading for the number of jobs found
   And I should not see "Click on any column title to sort."
     # Display when 2 or more jobs
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills         | city  |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3         | city2 |
+    | title | description | company      | creator          | skills         | city  |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Skill3         | city2 |
   Given I am on the home page
   And I click the "Jobs" link
   And I wait 1 second

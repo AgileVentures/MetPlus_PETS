@@ -39,8 +39,8 @@ Background: seed data added to database and log in as agency admim
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
-  | title         | company_job_id  | shift  | fulltime | description | company      | creator          | skills    |
-  | Web dev       | KRK01K          | Evening| true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
+  | title         | company_job_id  | fulltime | description | company      | creator          | skills    |
+  | Web dev       | KRK01K          | true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Given the following jobseekers exist:
   | first_name| last_name| email            | phone       | password  | year_of_birth |job_seeker_status  |

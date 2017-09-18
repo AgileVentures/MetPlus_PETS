@@ -21,9 +21,9 @@ Background: data is added to database
   	| July       | Seeker    | july@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following jobs exist:
-    | title        | company_job_id | shift | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | Day		| true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
-    | hr associate | KRK02K         | Day   | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
+    | title        | company_job_id | fulltime | description | company      | creator        | status  |
+    | hr assistant | KRK01K         | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
+    | hr associate | KRK02K         | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
 
 	Given the following job applications exist:
 		| job title 	 | job seeker 	 | status 			|

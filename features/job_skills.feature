@@ -30,9 +30,9 @@ Background: adding job to database
 		| CmpySkill6 | Company-specific skill 6               | Gadgets Inc.|
 
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3 | city2 |
+    | title | description | company      | creator          | shifts | skills | city  |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day    | Skill1 | city1 |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day    | Skill3 | city2 |
 
 
 @javascript
@@ -44,7 +44,6 @@ Scenario: Create job with associated skills
 		| Title                  | cashier|
 		| Company Job ID         | JOB3   |
 		| Description            | Must have experience with POS terminals |
-	And  I select "Day" in select list "Shift"
   And I click the "Add Job Skill" link
 	And "CmpySkill4" should not be an option for select list "Name"
   And I select "CmpySkill1" in select list "Name"
