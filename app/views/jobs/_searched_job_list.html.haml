@@ -12,9 +12,6 @@
           = sort_link(@query, :company_name, 'Company', {},
                       { class: 'searched_jobs_pagination', remote: true })
         %th
-          = sort_link(@query, :shift, {}, { class: 'searched_jobs_pagination',
-                                            remote: true })
-        %th
           = sort_link(@query, :address_state, {}, { class: 'searched_jobs_pagination',
                                                     remote: true })
         %th
@@ -32,8 +29,6 @@
             = highlight(truncate(job.description, length: 200), @description_words)
           %td
             = job.company.name
-          %td
-            = job.job_shifts.map(&:shift).join(", ")
           %td
             - if job.address
               = job.address.state

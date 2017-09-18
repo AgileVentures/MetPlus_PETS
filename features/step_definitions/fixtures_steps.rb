@@ -195,6 +195,7 @@ Given(/^the following jobs exist:$/) do |table|
                                      location: job.company) unless city.blank?
 
     job.save!
+
     unless skills.blank?
       skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
@@ -202,12 +203,11 @@ Given(/^the following jobs exist:$/) do |table|
       end
     end
 
-    unless shifts.blank?
-      shifts.split(/(?:,\s*)/).each do |shift|
-        job.job_shifts << JobShift.find_or_create_by(shift: shift)
-      end
-    end
+    next if shifts.blank?
 
+    shifts.split(/(?:,\s*)/).each do |shift|
+      job.job_shifts << JobShift.find_or_create_by(shift: shift)
+    end
   end
 end
 
