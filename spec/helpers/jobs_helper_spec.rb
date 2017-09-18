@@ -27,6 +27,9 @@ RSpec.describe JobsHelper, type: :helper do
     end
   end
 
+  let(:job) { FactoryGirl.create(:job, min_salary: 15, max_salary: 25,
+                                 pay_period: 'Hourly') }
+
   describe '#sort_instruction' do
     it 'returns string if count > 1' do
       expect(sort_instruction(2)).to eq ' Click on any column title to sort.'
@@ -46,6 +49,22 @@ RSpec.describe JobsHelper, type: :helper do
       expect(skills_for_company(company1))
         .to contain_exactly(skill1, skill2, skill3,
                             cmpy_skill0, cmpy_skill1, cmpy_skill2)
+    end
+  end
+
+  describe '#job_salary_details' do
+    it 'returns min, max and pay period' do
+      expect(job_salary_details(job)).to eq 'Minimum Salary: $15.00, ' +
+        'Maximum Salary: $25.00, Pay Period: Hourly'
+    end
+    it 'omits max salary if missing' do
+      job.max_salary = nil
+      expect(job_salary_details(job)).to eq 'Minimum Salary: $15.00, ' +
+        'Pay Period: Hourly'
+    end
+    it 'returns not-specified if min salary not specified' do
+      job.min_salary = nil
+      expect(job_salary_details(job)).to eq '(not specified)'
     end
   end
 end

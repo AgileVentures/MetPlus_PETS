@@ -154,6 +154,10 @@ When(/^(?:I|they) click(?: the)?( \w*)? "([^"]*)" button$/) do |ordinal, button|
   end
 end
 
+When(/^(?:I|they) choose(?: the)? "([^"]*)" radio button$/) do |button|
+  choose button
+end
+
 When(/^(?:I|they) fill in the fields:$/) do |table|
   # table is a table.hashes.keys # => [:First name, :John]
   table.raw.each do |field, value|
