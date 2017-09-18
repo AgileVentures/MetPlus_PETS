@@ -40,6 +40,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_seekers).through(:job_applications) }
     it { is_expected.to have_many(:status_changes) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
+    it { is_expected.to have_and_belong_to_many(:job_shifts) }
   end
 
   describe 'Database schema' do
@@ -47,7 +48,6 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :title }
     it { is_expected.to have_db_column :description }
     it { is_expected.to have_db_column :company_job_id }
-    it { is_expected.to have_db_column :shift }
     it { is_expected.to have_db_column :fulltime }
     it { is_expected.to have_db_column :company_id }
     it { is_expected.to have_db_column :company_person_id }
@@ -70,10 +70,6 @@ RSpec.describe Job, type: :model do
     it { should_not allow_value(21).for(:years_of_experience) }
     it { should allow_value(15).for(:years_of_experience) }
     it { is_expected.to validate_presence_of :company_id }
-    it do
-      is_expected.to validate_inclusion_of(:shift)
-        .in_array(%w(Day Evening Morning))
-    end
     describe 'status' do
       it 'Status -1 should generate exception' do
         expect { subject.status = -1 }.to raise_error(ArgumentError)

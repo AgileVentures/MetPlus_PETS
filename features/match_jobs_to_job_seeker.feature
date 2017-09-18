@@ -33,10 +33,10 @@ Given the following companies exist:
  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com   | corp@ymail.com | 12-3456789 | active |
 
 Given the following jobs exist:
- | title            | company_job_id  | shift  | fulltime | description| company      |
- | ruby developer   | KRK01K          | Evening| true     | internship | Widgets Inc. |
- | c++ developer    | KRK02K          | Evening| true     | internship | Widgets Inc. |
- | erlang developer | KRK03K          | Evening| true     | internship | Widgets Inc. |
+ | title            | company_job_id  | fulltime | description| company      |
+ | ruby developer   | KRK01K          | true     | internship | Widgets Inc. |
+ | c++ developer    | KRK02K          | true     | internship | Widgets Inc. |
+ | erlang developer | KRK03K          | true     | internship | Widgets Inc. |
 
 @javascript
 Scenario: Access job seeker job matching page
