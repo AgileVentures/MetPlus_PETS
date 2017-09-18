@@ -11,4 +11,16 @@ module JobsHelper
     Skill.order(:name).
       where("organization_id = ? OR organization_id IS null", company.id)
   end
+
+  def job_salary_details(job)
+    unless (job.min_salary)
+      details = '(not specified)'
+    else
+      details = "Minimum Salary: #{number_to_currency(job.min_salary)}"
+      details += ", Maximum Salary: #{number_to_currency(job.max_salary)}" if
+                 job.max_salary
+      details += ", Pay Period: #{job.pay_period}"
+    end
+    details
+  end
 end

@@ -38,6 +38,9 @@
         %br
         Email: #{mail_to('placeholder@gmail.com')}
     %tr
+      %td Salary:
+      %td= job_salary_details(@job)
+    %tr
       %td Job Details:
       %td=@job.description
     - unless @job.job_types.empty?
