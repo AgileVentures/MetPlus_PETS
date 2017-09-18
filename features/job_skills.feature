@@ -30,9 +30,9 @@ Background: adding job to database
 		| CmpySkill6 | Company-specific skill 6               | Gadgets Inc.|
 
   Given the following jobs exist:
-    | title | description | company      | creator          | shift   | skills | city  |
-    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Day     | Skill1 | city1 |
-    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Day     | Skill3 | city2 |
+    | title | description | company      | creator          | skills | city  |
+    | Job1  | About job1. | Widgets Inc. | jane@ymail.com   | Skill1 | city1 |
+    | Job2  | About job2. | Widgets Inc. | carter@ymail.com | Skill3 | city2 |
 
 
 @javascript
