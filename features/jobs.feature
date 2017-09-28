@@ -51,6 +51,14 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And I login as "jane@ymail.com" with password "qwerty123"
   When I click the first "Post Job" link
   And I wait 1 second
+  And I should see "Salary Range"
+  And I should see "Minimum"
+  And I should see "Maximum"
+  And I should see "Hourly"
+  And I should see "Weekly"
+  And I should see "Monthly"
+  And I should see "Annually"
+
   And I fill in the fields:
     | Title            | cashier|
     | Company Job ID   | KARK12 |
@@ -71,6 +79,10 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     | Description            | Atleast two years work experience|
   And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
   And I select "Contract" in select list "Job Type"
+  And I fill in the fields:
+    | Minimum | 10000 |
+    | Maximum | 20000 |
+  And I choose the "Monthly" radio button
   And I press "Update"
   Then I should see "cab-driver has been updated successfully."
   And I should see "Full Time, Part Time, Contract"
@@ -86,6 +98,26 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   And  I select "Day" in select list "Shift"
   And  I press "edit-job-submit"
   Then  I should see "The form contains 2 errors"
+
+  Then I fill in the fields:
+    | Company Job ID | XYZ          |
+    | Description    | software dev |
+    | Minimum        | 20000 |
+    | Maximum        | 10000 |
+
+  And  I press "edit-job-submit"
+  Then I should see "The form contains 2 errors"
+  And I should see "Max salary cannot be less than minimum salary"
+  And I should see "Pay period must be specified"
+
+  Then I fill in the fields:
+    | Maximum | 20000 |
+    | Minimum |        |
+  And I choose the "Monthly" radio button
+
+  And  I press "edit-job-submit"
+  Then I should see "The form contains 1 error"
+  And I should see "Min salary must be specified if maximum salary is specified"
 
   When I click the "Post Job" link
   And  I fill in the fields:
