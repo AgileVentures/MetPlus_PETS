@@ -384,6 +384,7 @@ class JobsController < ApplicationController
                                                         :skill_id, :required,
                                                         :min_years, :max_years],
                                 new_address_attributes: [:street, :city, :state,
-                                                         :zipcode])
+                                                         :zipcode],
+                                licenses_attributes: [:id, :_destroy])
   end
 end
