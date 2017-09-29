@@ -29,6 +29,9 @@ class Job < ActiveRecord::Base
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
+  has_and_belongs_to_many :licenses
+  accepts_nested_attributes_for :licenses, allow_destroy: true, reject_if: :all_blank
+
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
   validates_presence_of :company_job_id

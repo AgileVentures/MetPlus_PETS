@@ -1,0 +1,9 @@
+.nested-fields
+  %ul(class='list-inline')
+    %li
+      = f.label :license_id, 'License', class: 'job-license-label'
+      = f.collection_select(:id, License.order(:abbr), :id,
+                            :license_description,
+                            {include_blank: true})
+    %li
+      = link_to_remove_association 'remove license', f

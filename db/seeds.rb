@@ -66,6 +66,24 @@ JobShift.find_or_create_by(shift: 'Afternoon')
 JobShift.find_or_create_by(shift: 'Midnight')
 JobShift.find_or_create_by(shift: 'Swing')
 
+puts '  Job Shifts created'
+
+# Create default Licenses for jobseeker qualification
+[
+  ['LLMSW', 'LIMITED LICENSE MASTER SOCIAL WORKER'],
+  ['LLMSW', 'LIMITED LICENSE MASTER SOCIAL WORKER'],
+  ['LMSW', 'LICENSE MASTER SOCIAL WORKER'],
+  ['LLPC', 'LIMITED LICENSE PROFESSIONAL COUNSELOR'],
+  ['LPC', 'LICENSED PROFESSIONAL COUNSELOR'],
+  ['LLBSW', 'LIMITED LICENSE BACHELOR SOCIAL WORKER'],
+  ['LBSW', 'LICENSED BACHELOR SOCIAL WORKER'],
+  ['FASSW', 'FULL APPROVED SCHOOL SOCIAL WORKER'],
+  ['CADC', 'CERTIFIED ALCOHOL DRUG COUNSELOR'],
+  ['CAADC', 'CERTIFIED ADVANCED ALCOHOL DRUG COUNSELOR']
+].each { |l| License.find_or_create_by(abbr: l[0], title: l[1]) }
+
+puts '  License types created'
+
 puts "\nSeeded Production Data"
 
 exit(0) if Rails.env.production?

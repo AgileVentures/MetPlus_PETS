@@ -103,13 +103,25 @@
     = f.collection_select :job_shift_ids, JobShift.all, :id, :shift, {},
                           class: 'job-shift-multiple', multiple: true
 
+- style = 'border-width: 2px; border-color: green; padding: 10px;'
+
 .form-group
   .col-sm-3.control-label
     %b Job Skills
-  .col-sm-9
-    #job_skills
+  .col-sm-7
+    #job_skills.table.table-bordered{ style: style}
       = f.fields_for :job_skills do |job_skill|
         = render 'job_skill_fields', f: job_skill, company: company
       .links
         = link_to_add_association 'Add Job Skill', f, :job_skills,
             render_options: { locals: { company: company } }
+
+.form-group
+  .col-sm-3.control-label
+    %b Licenses
+  .col-sm-7
+    #licenses.table.table-bordered{ style: style}
+      = f.fields_for :licenses do |license|
+        = render 'license_fields', f: license
+      .links
+        = link_to_add_association 'Add License', f, :licenses

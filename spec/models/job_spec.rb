@@ -41,6 +41,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:status_changes) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
     it { is_expected.to have_and_belong_to_many(:job_shifts) }
+    it { is_expected.to have_and_belong_to_many(:licenses) }
+    it { is_expected.to accept_nested_attributes_for(:licenses).allow_destroy(true) }
   end
 
   describe 'Database schema' do
@@ -93,36 +95,50 @@ RSpec.describe Job, type: :model do
       end
     end
 
-    describe 'salary fields' do
+    describe 'pay_period' do
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_job_create
       end
 
-      describe 'pay_period' do
-        it 'is invalid if not specified when min_salary is specified' do
-          job.assign_attributes(min_salary: 1000)
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages).to include('Pay period must be specified')
-        end
-        it 'is valid if specified when min_salary is specified' do
-          job.assign_attributes(min_salary: 1000, pay_period: 'Monthly')
-          expect(job).to be_valid
-        end
+      it 'is invalid if not specified when min_salary is specified' do
+        job.assign_attributes(min_salary: 1000)
+        expect(job).to_not be_valid
+        expect(job.errors.full_messages).to include('Pay period must be specified')
+      end
+      it 'is valid if specified when min_salary is specified' do
+        job.assign_attributes(min_salary: 1000, pay_period: 'Monthly')
+        expect(job).to be_valid
       end
 
-      describe 'min_salary' do
-        it 'is invalid if not a number' do
-          job.assign_attributes(min_salary: 'abc')
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages).to include('Min salary is not a number')
-        end
-        it 'is invalid if not specified when max_salary is specified' do
-          job.assign_attributes(max_salary: 1000)
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include('Min salary must be specified if maximum salary is specified')
-        end
+    describe 'min_salary' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
+
+      it 'is invalid if not a number' do
+        job.assign_attributes(min_salary: 'abc')
+        expect(job).to_not be_valid
+        expect(job.errors.full_messages).to include('Min salary is not a number')
+      end
+      it 'is invalid if not specified when max_salary is specified' do
+        job.assign_attributes(max_salary: 1000)
+        expect(job).to_not be_valid
+        expect(job.errors.full_messages)
+          .to include('Min salary must be specified if maximum salary is specified')
+      end
+
+    describe 'max_salary' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+      end
+
+      it 'is invalid if not a number' do
+        job.assign_attributes(max_salary: 'abc')
+        expect(job).to_not be_valid
+        expect(job.errors.full_messages).to include('Max salary is not a number')
       end
 
       describe 'max_salary' do
@@ -145,7 +161,7 @@ RSpec.describe Job, type: :model do
         stub_cruncher_authenticate
         stub_cruncher_job_create
       end
-      
+
       it 'is valid if formatted correctly' do
         job.assign_attributes(pay_period: 'Monthly',
                               min_salary: 1000, max_salary: 2000.23)
