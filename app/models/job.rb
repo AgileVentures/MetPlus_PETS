@@ -29,8 +29,11 @@ class Job < ActiveRecord::Base
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
-  has_and_belongs_to_many :licenses
-  accepts_nested_attributes_for :licenses, allow_destroy: true, reject_if: :all_blank
+  has_many :job_licenses, inverse_of: :job, dependent: :destroy
+  has_many :licenses, through: :job_licenses
+  # ^^ Using has_many, through insteaf of HABTM becuase then latter does not
+  #    work well with accepts_nested_attributes_for
+  accepts_nested_attributes_for :job_licenses, allow_destroy: true, reject_if: :all_blank
 
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
