@@ -1,5 +1,6 @@
 class License < ActiveRecord::Base
-  has_and_belongs_to_many :jobs
+  has_many :job_licenses, dependent: :destroy
+  has_many :jobs, through: :job_licenses
 
   def license_description
     "#{abbr} (#{title})"

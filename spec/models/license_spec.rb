@@ -10,7 +10,8 @@ RSpec.describe License, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_and_belong_to_many(:jobs) }
+    it { is_expected.to have_many(:job_licenses).dependent(:destroy) }
+    it { is_expected.to have_many(:jobs).through(:job_licenses) }
   end
 
   describe '#license_description' do
