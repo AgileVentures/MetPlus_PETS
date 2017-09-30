@@ -41,8 +41,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:status_changes) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
     it { is_expected.to have_and_belong_to_many(:job_shifts) }
-    it { is_expected.to have_and_belong_to_many(:licenses) }
-    it { is_expected.to accept_nested_attributes_for(:licenses).allow_destroy(true) }
+    it { is_expected.to have_many(:job_licenses) }
+    it { is_expected.to have_many(:licenses).through(:job_licenses) }
+    it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
   end
 
   describe 'Database schema' do
