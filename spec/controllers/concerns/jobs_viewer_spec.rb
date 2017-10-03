@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 class TestConcernJobsViewerClass < ApplicationController
   include JobsViewer
@@ -18,6 +19,8 @@ RSpec.describe TestConcernJobsViewerClass do
 
   describe '#display_jobs' do
     before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_job_create
       warden.set_user cmpy_person1
     end
 
