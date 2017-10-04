@@ -70,6 +70,7 @@ class JobsController < ApplicationController
     authorize @job
     @company = Company.find(params[:company_id])
     set_company_address
+    set_all_licenses
   end
 
   def create
@@ -102,6 +103,7 @@ class JobsController < ApplicationController
     else
       @company = @job.company
       set_company_address(new_address_params)
+      set_all_licenses
       render :new
     end
   end
@@ -117,6 +119,7 @@ class JobsController < ApplicationController
     authorize @job
     @company = @job.company
     set_company_address
+    set_all_licenses
   end
 
   def update
@@ -144,6 +147,7 @@ class JobsController < ApplicationController
     else
       @company = @job.company
       set_company_address(new_address_params)
+      set_all_licenses
       render :edit
     end
   end
@@ -374,6 +378,10 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
   end
 
+  def set_all_licenses
+    @all_licenses = License.order(:abbr)
+  end
+
   def job_params
     params.require(:job).permit(:description, :company_job_id,
                                 :fulltime, :company_id, :title, :address_id,
@@ -384,6 +392,7 @@ class JobsController < ApplicationController
                                                         :skill_id, :required,
                                                         :min_years, :max_years],
                                 new_address_attributes: [:street, :city, :state,
-                                                         :zipcode])
+                                                         :zipcode],
+                                job_licenses_attributes: [:id, :license_id, :_destroy])
   end
 end

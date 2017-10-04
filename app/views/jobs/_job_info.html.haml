@@ -22,7 +22,7 @@
 
     %tr
       %td Full time:
-      %td=@job.fulltime ? "Yes" : "No"
+      %td=@job.fulltime ? 'Yes' : 'No'
     %tr
       %td Job ID:
       %td=@job.company_job_id
@@ -46,18 +46,24 @@
     - unless @job.job_types.empty?
       %tr
         %td Job Type:
-        %td= @job.job_types.map(&:job_type).join(", ")
+        %td= @job.job_types.map(&:job_type).join(', ')
     - unless @job.job_shifts.empty?
       %tr
         %td Job Shifts:
-        %td= @job.job_shifts.map(&:shift).join(", ")
+        %td= @job.job_shifts.map(&:shift).join(', ')
+
+    - unless @job.job_licenses.empty?
+      %tr
+        %td Licenses Required:
+        %td= @job.licenses.map(&:license_description).join(', ')
+
     %tr
       %td Job Skills:
       %td
         - if @job.job_skills.empty?
           %i None
         - else
-          %div(style='overflow: auto; height: 200px;')
+          %div{ style: 'overflow: auto; min-height: 150px;' }
             %table.table.table-hover{style: 'padding-left: 0px; padding-right: 0px;'}
               %thead
                 %tr
