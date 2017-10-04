@@ -1,10 +1,16 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 class TestTasksConcernClass < ApplicationController
   include Tasks
 end
 
 RSpec.describe TestTasksConcernClass do
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
+
   let!(:agency)       { FactoryGirl.create(:agency) }
   let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
