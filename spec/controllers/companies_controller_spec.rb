@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.shared_examples 'unauthorized all' do
   let(:company) { FactoryGirl.create(:company) }
@@ -87,6 +88,8 @@ RSpec.describe CompaniesController, type: :controller do
   describe 'DELETE #destroy' do
     context 'company with jobs' do
       before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
         sign_in admin
         delete :destroy, id: company_with_jobs
       end
