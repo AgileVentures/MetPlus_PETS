@@ -1,8 +1,7 @@
 .nested-fields
   %ul(class='list-inline')
     %li
-      = f.label :license_id, 'License', class: 'job-license-label'
-      = f.collection_select(:license_id, License.order(:abbr), :id,
+      = f.collection_select(:license_id, all_licenses, :id,
                             :license_description,
                             {include_blank: true})
     %li

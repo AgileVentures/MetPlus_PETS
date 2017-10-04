@@ -123,6 +123,7 @@
   .col-sm-7
     #licenses{ style: style }
       = f.fields_for :job_licenses do |job_license|
-        = render 'job_license_fields', f: job_license
+        = render 'job_license_fields', f: job_license, all_licenses: all_licenses
       .links
-        = link_to_add_association 'Add License', f, :job_licenses
+        = link_to_add_association 'Add License', f, :job_licenses,
+            render_options: { locals: { all_licenses: all_licenses } }

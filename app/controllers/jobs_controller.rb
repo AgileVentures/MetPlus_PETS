@@ -70,6 +70,7 @@ class JobsController < ApplicationController
     authorize @job
     @company = Company.find(params[:company_id])
     set_company_address
+    set_all_licenses
   end
 
   def create
@@ -117,6 +118,7 @@ class JobsController < ApplicationController
     authorize @job
     @company = @job.company
     set_company_address
+    set_all_licenses
   end
 
   def update
@@ -372,6 +374,10 @@ class JobsController < ApplicationController
 
   def find_job
     @job = Job.find(params[:id])
+  end
+
+  def set_all_licenses
+    @all_licenses = License.order(:abbr)
   end
 
   def job_params
