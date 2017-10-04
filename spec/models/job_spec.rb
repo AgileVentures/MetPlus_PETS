@@ -41,6 +41,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:status_changes) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
     it { is_expected.to have_and_belong_to_many(:job_shifts) }
+    it { is_expected.to have_many(:job_licenses) }
+    it { is_expected.to have_many(:licenses).through(:job_licenses) }
+    it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
   end
 
   describe 'Database schema' do
@@ -99,7 +102,7 @@ RSpec.describe Job, type: :model do
         stub_cruncher_job_create
       end
 
-      describe 'pay_period' do
+      context 'pay_period' do
         it 'is invalid if not specified when min_salary is specified' do
           job.assign_attributes(min_salary: 1000)
           expect(job).to_not be_valid
@@ -111,7 +114,7 @@ RSpec.describe Job, type: :model do
         end
       end
 
-      describe 'min_salary' do
+      context 'min_salary' do
         it 'is invalid if not a number' do
           job.assign_attributes(min_salary: 'abc')
           expect(job).to_not be_valid
@@ -125,53 +128,56 @@ RSpec.describe Job, type: :model do
         end
       end
 
-      describe 'max_salary' do
+      context 'max_salary' do
         it 'is invalid if not a number' do
           job.assign_attributes(max_salary: 'abc')
           expect(job).to_not be_valid
           expect(job.errors.full_messages).to include('Max salary is not a number')
         end
-        it 'is invalid if less than min_salary' do
-          job.assign_attributes(max_salary: 1000, min_salary: 2000)
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include('Max salary cannot be less than minimum salary')
-        end
-      end
-    end
 
-    describe 'format of salary fields' do
-      before(:each) do
-        stub_cruncher_authenticate
-        stub_cruncher_job_create
-      end
-      
-      it 'is valid if formatted correctly' do
-        job.assign_attributes(pay_period: 'Monthly',
-                              min_salary: 1000, max_salary: 2000.23)
-        expect(job).to be_valid
+        describe 'max_salary' do
+          it 'is invalid if not a number' do
+            job.assign_attributes(max_salary: 'abc')
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages).to include('Max salary is not a number')
+          end
+          it 'is invalid if less than min_salary' do
+            job.assign_attributes(max_salary: 1000, min_salary: 2000)
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include('Max salary cannot be less than minimum salary')
+          end
+        end
       end
 
-      context 'is invalid if format or length incorrect' do
-        it 'is too large a number' do
-          job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000)
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include('Min salary must be less than or equal to 999999.99')
+      context 'format of salary fields' do
+        it 'is valid if formatted correctly' do
+          job.assign_attributes(pay_period: 'Monthly',
+                                min_salary: 1000, max_salary: 2000.23)
+          expect(job).to be_valid
         end
-        it 'contains char other than digit or decimal point' do
-          job.assign_attributes(pay_period: 'Monthly', min_salary: '$1000000')
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include('Min salary is not a number')
-        end
-        it 'contains too many digits to right of decimal point' do
-          job.assign_attributes(pay_period: 'Monthly', min_salary: 1000.123)
-          error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
-                      ' optional decimal point, optional digits for cents)'
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include(error_msg)
+
+        context 'is invalid if format or length incorrect' do
+          it 'is too large a number' do
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000)
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include('Min salary must be less than or equal to 999999.99')
+          end
+          it 'contains char other than digit or decimal point' do
+            job.assign_attributes(pay_period: 'Monthly', min_salary: '$1000000')
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include('Min salary is not a number')
+          end
+          it 'contains too many digits to right of decimal point' do
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000.123)
+            error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
+                        ' optional decimal point, optional digits for cents)'
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include(error_msg)
+          end
         end
       end
     end
