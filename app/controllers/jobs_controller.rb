@@ -103,6 +103,7 @@ class JobsController < ApplicationController
     else
       @company = @job.company
       set_company_address(new_address_params)
+      set_all_licenses
       render :new
     end
   end
@@ -146,6 +147,7 @@ class JobsController < ApplicationController
     else
       @company = @job.company
       set_company_address(new_address_params)
+      set_all_licenses
       render :edit
     end
   end
