@@ -1,15 +1,6 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
-# Specs in this file have access to a helper object that includes
-# the JobsHelper. For example:
-#
-# describe JobsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe JobsHelper, type: :helper do
   let!(:skill1) { FactoryGirl.create(:skill) }
   let!(:skill2) { FactoryGirl.create(:skill, name: 'skill2') }
@@ -29,6 +20,11 @@ RSpec.describe JobsHelper, type: :helper do
 
   let(:job) { FactoryGirl.create(:job, min_salary: 15, max_salary: 25,
                                  pay_period: 'Hourly') }
+
+  before(:each) do
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
 
   describe '#sort_instruction' do
     it 'returns string if count > 1' do
