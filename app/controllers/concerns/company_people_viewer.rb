@@ -1,15 +1,19 @@
 module CompanyPeopleViewer
   extend ActiveSupport::Concern
 
-  def display_company_people people_type, company = nil, per_page = 10
+  def display_company_people(people_type, company = nil, per_page = 10,
+                             page_name = nil, order_by = nil)
+
+    page_name ||= params[:people_page]
+
     case people_type
     when 'my-company-all'
-      return CompanyPerson.joins(:user).order('users.last_name').
-              paginate(page: params[:people_page], per_page: per_page).
+      return CompanyPerson.joins(:user).order(order_by).
+              paginate(page: page_name, per_page: per_page).
               all_company_people(pets_user.company)
     when 'company-all'
-      return CompanyPerson.joins(:user).order('users.last_name').
-              paginate(page: params[:people_page], per_page: per_page).
+      return CompanyPerson.joins(:user).order(order_by).
+              paginate(page: page_name, per_page: per_page).
               all_company_people(company)
     end
   end

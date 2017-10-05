@@ -1,41 +1,51 @@
-%table.table.table-hover
-  %thead
-    %tr
-      - company_people_fields(people_type).each do |field|
-        - case field
-          - when :full_name
-            %th.strong Name
-          - when :email
-            %th.strong Email
-          - when :phone
-            %th.strong Phone
-          - when :roles
-            %th.strong Role
-          - when :status
-            %th.strong Status
-  %tbody
-    - people.each do |person|
+#cmpy-people-list
+  %table.table.table-hover
+    %thead
       %tr
-      - company_people_fields(people_type).each do |field|
-        - case field
-          - when :full_name
-            %td.col-md-4
-              = link_to person.full_name, company_person_path(person.id)
-          - when :email
-            %td.col-md-2
-              = person.email
-          - when :phone
-            %td.col-md-3
-              = person.phone
-          - when :roles
-            %td.col-md-2
-              = person.company_roles.pluck(:role).join(', ')
-          - when :status
-            %td.col-md-2
-              = person.status
-.row.text-center
-  = will_paginate people, param_name: 'people_page',
-          :params => {:controller => 'companies',
-                      :action => 'list_people',
-                      :id => company.id,
-                      :people_type => people_type}
+        - company_people_fields(people_type).each do |field|
+          - case field
+            - when :full_name
+              %th.strong
+                = sort_link(query, :user_last_name, {},
+                           { class: 'cmpy_people_pagination', remote: true })
+            - when :email
+              %th.strong Email
+            - when :phone
+              %th.strong Phone
+            - when :roles
+              %th.strong Role
+            - when :status
+              %th.strong Status
+    %tbody
+      - people.each do |person|
+        %tr
+        - company_people_fields(people_type).each do |field|
+          - case field
+            - when :full_name
+              %td.col-md-4
+                = link_to person.full_name, company_person_path(person.id)
+            - when :email
+              %td.col-md-2
+                = person.email
+            - when :phone
+              %td.col-md-3
+                = person.phone
+            - when :roles
+              %td.col-md-2
+                = person.company_roles.pluck(:role).join(', ')
+            - when :status
+              %td.col-md-2
+                = person.status
+
+  = render partial: 'shared/paginate_footer',
+             locals: { entities: people,
+                       paginate_class: 'cmpy_people_pagination',
+                       items_count: items_count,
+                       url: list_people_company_path(company.id, people_type) }
+
+-# .row.text-center
+-#   = will_paginate people, param_name: 'people_page',
+-#           :params => {:controller => 'companies',
+-#                       :action => 'list_people',
+-#                       :id => company.id,
+-#                       :people_type => people_type}

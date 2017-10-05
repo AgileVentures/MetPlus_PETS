@@ -1,6 +1,8 @@
 # Company controller
 class CompaniesController < ApplicationController
   include CompanyPeopleViewer
+  include PaginationUtility
+
   before_action :lookup_company
 
   before_action :user_logged!
@@ -52,15 +54,25 @@ class CompaniesController < ApplicationController
     raise 'Unsupported request' unless request.xhr?
     self.action_description = 'view the people'
     authorize @company
-    @people_type = params[:people_type] || 'my-company-all'
 
-    @people = []
-    @people = display_company_people @people_type, @company
+    people_type = params[:people_type] || 'my-company-all'
+
+    search_params, items_count, items_per_page = process_pagination_params('cmpy_people')
+
+    people = display_company_people(people_type, @company, items_per_page,
+                                    params[:page])
+
+    # Add Ransack params to people query (here, just sorting, no search)
+    query = people.ransack(search_params)
+
+    people = query.result.page(params[:page])
 
     render partial: 'company_people/list_people',
-           locals: { people: @people,
-                     people_type: @people_type,
-                     company: @company }
+           locals: { people: people,
+                     people_type: people_type,
+                     company: @company,
+                     items_count: items_count,
+                     query: query }
   end
 
   private
