@@ -44,6 +44,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_licenses) }
     it { is_expected.to have_many(:licenses).through(:job_licenses) }
     it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
+    it { is_expected.to have_many(:job_questions).dependent(:destroy) }
+    it { is_expected.to have_many(:questions).through(:job_questions) }
+    it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 
   describe 'Database schema' do
@@ -57,6 +60,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :address_id }
     it { is_expected.to have_db_column :status }
     it { is_expected.to have_db_column :years_of_experience }
+    it { is_expected.to have_db_column :max_salary }
+    it { is_expected.to have_db_column :min_salary }
+    it { is_expected.to have_db_column :pay_period }
   end
 
   describe 'Validations' do

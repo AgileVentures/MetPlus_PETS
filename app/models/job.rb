@@ -35,6 +35,10 @@ class Job < ActiveRecord::Base
   #    work well with "accepts_nested_attributes_for"
   accepts_nested_attributes_for :job_licenses, allow_destroy: true, reject_if: :all_blank
 
+  has_many :job_questions, inverse_of: :job, dependent: :destroy
+  has_many :questions, through: :job_questions
+  accepts_nested_attributes_for :job_questions, allow_destroy: true, reject_if: :all_blank
+
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
   validates_presence_of :company_job_id
