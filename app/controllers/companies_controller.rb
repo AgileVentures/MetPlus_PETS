@@ -59,13 +59,12 @@ class CompaniesController < ApplicationController
 
     search_params, items_count, items_per_page = process_pagination_params('cmpy_people')
 
-    people = display_company_people(people_type, @company, items_per_page,
-                                    params[:page])
+    people = display_company_people(people_type, @company)
 
     # Add Ransack params to people query (here, just sorting, no search)
     query = people.ransack(search_params)
 
-    people = query.result.page(params[:page])
+    people = query.result.page(params[:page]).per_page(items_per_page)
 
     render partial: 'company_people/list_people',
            locals: { people: people,

@@ -9,13 +9,19 @@
                 = sort_link(query, :user_last_name, {},
                            { class: 'cmpy_people_pagination', remote: true })
             - when :email
-              %th.strong Email
+              %th.strong
+                = sort_link(query, :user_email, {},
+                           { class: 'cmpy_people_pagination', remote: true })
             - when :phone
-              %th.strong Phone
+              %th.strong
+                = sort_link(query, :user_phone, {},
+                           { class: 'cmpy_people_pagination', remote: true })
             - when :roles
               %th.strong Role
             - when :status
-              %th.strong Status
+              %th.strong
+                = sort_link(query, :status, {},
+                           { class: 'cmpy_people_pagination', remote: true })
     %tbody
       - people.each do |person|
         %tr
