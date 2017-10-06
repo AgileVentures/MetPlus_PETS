@@ -11,7 +11,6 @@ class CompaniesController < ApplicationController
     self.action_description = 'show the company'
     authorize @company
     @company_admins = Company.company_admins(@company)
-    @people_type    = 'company-all'
     @admin_aa, @admin_ca = determine_if_admin(pets_user)
   end
 
@@ -55,12 +54,10 @@ class CompaniesController < ApplicationController
     self.action_description = 'view the people'
     authorize @company
 
-    people_type = params[:people_type] || 'my-company-all'
-
     search_params, items_count, items_per_page = process_pagination_params('cmpy_people')
 
     # @people instance var not used in view but retained here for test convenience
-    @people = display_company_people(people_type, @company)
+    @people = display_company_people(@company)
 
     # Add Ransack params to people query (here, just sorting, no search)
     query = @people.ransack(search_params)
@@ -69,7 +66,7 @@ class CompaniesController < ApplicationController
 
     render partial: 'company_people/list_people',
            locals: { people: @people,
-                     people_type: people_type,
+                     people_type: 'company-all',
                      company: @company,
                      items_count: items_count,
                      query: query }

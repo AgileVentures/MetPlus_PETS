@@ -78,8 +78,7 @@
           .clearfix
 
         .pagination-div{ id: "people-#{@people_type}",
-                         data: { url: list_people_company_path(@company.id,
-                                                               @people_type) } }
+                         data: { url: list_people_company_path(@company.id) } }
 
       .tab-pane.fade#company-infomation-pane
         - if @admin_ca

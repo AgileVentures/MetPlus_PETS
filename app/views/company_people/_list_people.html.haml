@@ -47,11 +47,4 @@
              locals: { entities: people,
                        paginate_class: 'cmpy_people_pagination',
                        items_count: items_count,
-                       url: list_people_company_path(company.id, people_type) }
-
--# .row.text-center
--#   = will_paginate people, param_name: 'people_page',
--#           :params => {:controller => 'companies',
--#                       :action => 'list_people',
--#                       :id => company.id,
--#                       :people_type => people_type}
+                       url: list_people_company_path(company.id) }

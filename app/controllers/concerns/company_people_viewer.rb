@@ -1,7 +1,7 @@
 module CompanyPeopleViewer
   extend ActiveSupport::Concern
 
-  def display_company_people(people_type, company)    
+  def display_company_people(company)    
     CompanyPerson.joins(:user).all_company_people(company)
   end
 
