@@ -71,6 +71,7 @@ class JobsController < ApplicationController
     @company = Company.find(params[:company_id])
     set_company_address
     set_all_licenses
+    set_all_questions
   end
 
   def create
@@ -104,6 +105,7 @@ class JobsController < ApplicationController
       @company = @job.company
       set_company_address(new_address_params)
       set_all_licenses
+      set_all_questions
       render :new
     end
   end
@@ -120,6 +122,7 @@ class JobsController < ApplicationController
     @company = @job.company
     set_company_address
     set_all_licenses
+    set_all_questions
   end
 
   def update
@@ -148,6 +151,7 @@ class JobsController < ApplicationController
       @company = @job.company
       set_company_address(new_address_params)
       set_all_licenses
+      set_all_questions
       render :edit
     end
   end
@@ -380,6 +384,10 @@ class JobsController < ApplicationController
 
   def set_all_licenses
     @all_licenses = License.order(:abbr)
+  end
+
+  def set_all_questions
+    @all_questions = Question.order(:question_text)
   end
 
   def job_params
