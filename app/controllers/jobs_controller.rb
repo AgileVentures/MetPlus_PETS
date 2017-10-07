@@ -401,6 +401,7 @@ class JobsController < ApplicationController
                                                         :min_years, :max_years],
                                 new_address_attributes: [:street, :city, :state,
                                                          :zipcode],
-                                job_licenses_attributes: [:id, :license_id, :_destroy])
+                                job_licenses_attributes: [:id, :license_id, :_destroy],
+                                job_questions_attributes: [:id, :question_id, :_destroy])
   end
 end
