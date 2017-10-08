@@ -7,6 +7,7 @@ class JobApplication < ActiveRecord::Base
 
   has_many :application_questions, inverse_of: :job_application, dependent: :destroy
   has_many :questions, through: :application_questions
+  accepts_nested_attributes_for :application_questions, reject_if: :all_blank
 
   validates_uniqueness_of :job_seeker_id, scope: :job_id
 

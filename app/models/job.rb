@@ -37,7 +37,8 @@ class Job < ActiveRecord::Base
 
   has_many :job_questions, inverse_of: :job, dependent: :destroy
   has_many :questions, through: :job_questions
-  accepts_nested_attributes_for :job_questions, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :job_questions, allow_destroy: true,
+                                reject_if: :all_blank
 
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
@@ -98,9 +99,16 @@ class Job < ActiveRecord::Base
     job_applications.size
   end
 
-  def apply(job_seeker)
+  def apply(job_seeker, questions_answers)
     job_application = job_applications.build(job_seeker_id: job_seeker.id)
+
     if job_application.save!
+
+      questions_answers&.each do |k, v|
+        job_application.application_questions
+          .create(question_id: k, answer: (v == 'true'))
+      end
+
       # Send mail to the company with the attached resume
       CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
                       .perform_later(Event::EVT_TYPE[:JS_APPLY],

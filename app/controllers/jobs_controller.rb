@@ -200,7 +200,7 @@ class JobsController < ApplicationController
     authorize @job_seeker
 
     if @job_seeker.consent && @job_seeker.job_developer == pets_user
-      apply_for(@job_seeker) do |job_app, job, job_seeker|
+      apply_for(@job_seeker, params[:questions]) do |job_app, job, job_seeker|
         Event.create(:JD_APPLY, job_app)
         flash[:info] = "Job is successfully applied for #{job_seeker.full_name}"
         redirect_to(job_path(job)) && return
@@ -208,7 +208,7 @@ class JobsController < ApplicationController
     end
 
     if pets_user == @job_seeker
-      apply_for(@job_seeker) do |job_app, _job, _job_seeker|
+      apply_for(@job_seeker, params[:questions]) do |job_app, _job, _job_seeker|
         Event.create(:JS_APPLY, job_app)
         render(:apply) && return
       end
@@ -352,8 +352,8 @@ class JobsController < ApplicationController
     @job.new_address = Address.new(new_address_attributes)
   end
 
-  def apply_for(job_seeker, &controller_response)
-    @job.apply(job_seeker, &controller_response)
+  def apply_for(job_seeker, questions_answers, &controller_response)
+    @job.apply(job_seeker, questions_answers, &controller_response)
   # ActiveRecord::RecordInvalid is raised when validation at model level fails
   # ActiveRecord::RecordNotUnique is raised when unique index constraint
   # on the database is violated
