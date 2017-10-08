@@ -102,12 +102,13 @@ class Job < ActiveRecord::Base
   def apply(job_seeker, questions_answers)
     job_application = job_applications.build(job_seeker_id: job_seeker.id)
 
-    if job_application.save!
+    # If job has questions to be answered by applicant:
+    questions_answers&.each do |k, v|
+      job_application.application_questions
+        .build(question_id: k, answer: (v == 'true'))
+    end
 
-      questions_answers&.each do |k, v|
-        job_application.application_questions
-          .create(question_id: k, answer: (v == 'true'))
-      end
+    if job_application.save!
 
       # Send mail to the company with the attached resume
       CompanyMailerJob.set(wait: Event.delay_seconds.seconds)

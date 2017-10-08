@@ -30,13 +30,23 @@ class CompanyMailerPreview < ActionMailer::Preview
     stub_cruncher_file_download('./spec/fixtures/files/Janitor-Resume.doc')
 
     job_application = nil
-    JobApplication.all.each do |ja|
+    JobApplication.includes(:job_seeker, :application_questions, :job).each do |ja|
       next if ja.job_seeker.resumes.empty?
       job_application = ja
       break
     end
 
     raise 'Cannot find application with resume' unless job_application
+
+    job_application.application_questions = []
+
+    job_application.application_questions <<
+      [ ApplicationQuestion.create(job_application: job_application,
+                                   question: Question.find(1),
+                                   answer: true),
+        ApplicationQuestion.create(job_application: job_application,
+                                   question: Question.find(2),
+                                   answer: false) ]
 
     CompanyMailer.application_received(job_application.job.company,
                                        job_application,
