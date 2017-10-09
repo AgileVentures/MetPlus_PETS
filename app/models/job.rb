@@ -99,7 +99,7 @@ class Job < ActiveRecord::Base
     job_applications.size
   end
 
-  def apply(job_seeker, questions_answers)
+  def apply(job_seeker, questions_answers = nil)
     job_application = job_applications.build(job_seeker_id: job_seeker.id)
 
     # If job has questions to be answered by applicant:
