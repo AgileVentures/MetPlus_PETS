@@ -81,7 +81,7 @@ And(/^I find "([^"]*)" from my job seekers list and proceed with the application
   step %{I press "Proceed"}
 end
 
-Then(/^click the "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
+Then(/^I apply to "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
   step %{I want to apply to "#{job_title}" for "#{job_seeker}"}
   step %{I find "#{job_seeker}" from my job seekers list and proceed with the application}
   step %{I wait 1 seconds}
