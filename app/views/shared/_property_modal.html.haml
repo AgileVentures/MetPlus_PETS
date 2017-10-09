@@ -16,6 +16,8 @@
           %label(for="#{modal_id}_desc" class='control-label')
             Description:
           %textarea(class='form-control' id="#{modal_id}_desc")
+        - if defined?(company_id)
+          = hidden_field_tag('company_id', company_id)
       .modal-footer
         %button(type='button' class='btn btn-default'
                                  data-dismiss='modal') Cancel

@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   end
 
   protect_from_forgery with: :exception
+
   def redirect_back_or_default(default = root_path)
     redirect_to (request.referer.present? ? :back : default)
   end
@@ -16,7 +17,6 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :store_current_location, :unless => :devise_controller?
-
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ApplicationController::AuthorizationException, with: :user_not_authenticated
@@ -46,9 +46,10 @@ class ApplicationController < ActionController::Base
     end
 
     def pets_user
-       return nil if current_user.nil?
-       current_user.try(:actable).nil? ? current_user : current_user.actable
+      return nil unless current_user
+      current_user.actable || current_user
     end
+
     def store_current_location
       store_location_for(:user, request.url)
     end
@@ -61,7 +62,7 @@ class ApplicationController < ActionController::Base
     end
 
     def user_logged!
-      raise ApplicationController::AuthorizationException, "must be logged in" unless pets_user
+      raise ApplicationController::AuthorizationException, 'must be logged in' unless pets_user
     end
 
     def record_not_found(e)
@@ -88,6 +89,7 @@ class ApplicationController < ActionController::Base
         redirect_to(request.referrer || root_path)
       end
     end
+
     def current_agency
       if pets_user.is_a? AgencyPerson
         return pets_user.agency

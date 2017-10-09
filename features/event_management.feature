@@ -31,7 +31,7 @@ Background: seed data
   | Sam       | Seeker   | sammy1@gmail.com | 222-333-4444| qwerty123 | 1990          |Unemployed Seeking |
   | Tom       | Terrific | tommy1@gmail.com | 333-444-5555| qwerty123 | 1990          |Unemployed Seeking |
 
-@javascript
+@selenium
 Scenario: Job Seeker registers in PETS
   When I am in Admin's browser
   Given I am on the home page
@@ -97,6 +97,7 @@ Scenario: Company registration request in PETS
   And "aa@metplus.org" should receive an email with subject "Company registered"
   And "jane@metplus.org" should receive an email with subject "Company registered"
   Then I am in Admin's browser
+  And I wait 1 second
   And I should see "Company: Widgets, Inc. has registered in PETS."
 
   # The following steps tests the user clicking a link

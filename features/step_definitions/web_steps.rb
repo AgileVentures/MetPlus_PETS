@@ -154,6 +154,10 @@ When(/^(?:I|they) click(?: the)?( \w*)? "([^"]*)" button$/) do |ordinal, button|
   end
 end
 
+When(/^(?:I|they) choose(?: the)? "([^"]*)" radio button$/) do |button|
+  choose button
+end
+
 When(/^(?:I|they) fill in the fields:$/) do |table|
   # table is a table.hashes.keys # => [:First name, :John]
   table.raw.each do |field, value|
@@ -162,6 +166,7 @@ When(/^(?:I|they) fill in the fields:$/) do |table|
 end
 
 And(/^show me the page$/) do
+  save_and_open_page
 end
 
 When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|

@@ -57,20 +57,42 @@ class CompanyPeopleController < ApplicationController
     @company_person.destroy
     flash[:notice] =
       "Person '#{@company_person.full_name(last_name_first: false)}' deleted."
-    redirect_to home_company_person_path(@current_user.id)
+
+    if pets_user.is_a? AgencyPerson
+      redirect_to home_agency_person_path(pets_user.id)
+    else
+      redirect_to home_company_person_path(pets_user.id)
+    end
   end
 
   def home
-    @task_type      = 'mine-open'
-    @company_all    = 'company-all'
-    @company_new    = 'company-new'
-    @company_closed = 'company-closed'
+    if request.xhr?
+      raise "Do not recognize data type: #{params[:data_type]}" if
+        params[:data_type] != 'skills'
 
-    @job_type    = 'my-company-all'
-    @people_type = 'my-company-all'
-    @company     = pets_user.company
-    @company_admins = Company.company_admins(@company)
-    @admin_aa, @admin_ca = determine_if_admin(pets_user)
+      @skills = pets_user.company.skills.order(:name)
+                  .page(params[:skills_page]).per_page(10)
+
+      render partial: 'shared/job_skills', object: @skills,
+             locals: { data_type:  'skills',
+                       partial_id: 'skills_table',
+                       show_property_path:   :skill_path,
+                       delete_property_path: :skill_path }
+    else
+      @task_type      = 'mine-open'
+      @company_all    = 'company-all'
+      @company_new    = 'company-new'
+      @company_closed = 'company-closed'
+
+      @job_type    = 'my-company-all'
+      @people_type = 'my-company-all'
+      @company     = pets_user.company
+      @company_admins = Company.company_admins(@company)
+      @admin_aa, @admin_ca = determine_if_admin(pets_user)
+
+      @skills = @company.skills.order(:name)
+                  .page(params[:skills_page]).per_page(10)
+    end
   end
 
   def my_profile; end

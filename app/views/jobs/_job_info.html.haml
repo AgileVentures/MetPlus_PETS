@@ -22,13 +22,15 @@
 
     %tr
       %td Full time:
-      %td=@job.fulltime ? "Yes" : "No"
+      %td=@job.fulltime ? 'Yes' : 'No'
     %tr
       %td Job ID:
       %td=@job.company_job_id
-    %tr
-      %td Shift:
-      %td=@job.shift
+    - unless @job.years_of_experience.blank?
+      %tr
+        %td Years Of Experience:
+        %td
+          #{@job.years_of_experience == 20 ? "#{@job.years_of_experience} Or More Years" : pluralize(@job.years_of_experience, 'Year')}
     %tr
       %td Contact information:
       %td
@@ -36,15 +38,31 @@
         %br
         Email: #{mail_to('placeholder@gmail.com')}
     %tr
+      %td Salary:
+      %td= job_salary_details(@job)
+    %tr
       %td Job Details:
       %td=@job.description
+    - unless @job.job_types.empty?
+      %tr
+        %td Job Type:
+        %td= @job.job_types.map(&:job_type).join(', ')
+    - unless @job.job_shifts.empty?
+      %tr
+        %td Job Shifts:
+        %td= @job.job_shifts.map(&:shift).join(', ')
+
+    - unless @job.job_licenses.empty?
+      %tr
+        %td Licenses Required:
+        %td= @job.licenses.map(&:license_description).join(', ')
     %tr
       %td Job Skills:
       %td
         - if @job.job_skills.empty?
           %i None
         - else
-          %div(style='overflow: auto; height: 200px;')
+          %div{ style: 'overflow: auto; min-height: 150px;' }
             %table.table.table-hover{style: 'padding-left: 0px; padding-right: 0px;'}
               %thead
                 %tr

@@ -1,0 +1,21 @@
+.row.center-aligned-container
+
+  .col-sm-8.col-sm-offset-2{ style: 'text-align: center;' }
+    = will_paginate entities,
+                    renderer: RemoteLinkPaginationHelper::BootstrapLinkRenderer,
+                    class: paginate_class
+
+  .col-sm-2{ style: 'text-align: right;' }
+    = select_tag(:items_count, paginate_count_options(items_count),
+                 data: { remote: true,
+                         url: url },
+                 class: paginate_class )
+
+    %span.glyphicon.glyphicon-info-sign{ title: 'Select number of items per page',
+                                         data: {toggle: 'tooltip'} }
+-#
+  for background on will_paginate method args, see:
+  https://github.com/yrgoldteeth/bootstrap-will_paginate (adds bootstrap-style
+    to pagination links),
+  https://gist.github.com/jeroenr/3142686 (how to add data-remote attribute to
+    pagination links)

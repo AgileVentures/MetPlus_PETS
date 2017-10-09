@@ -14,15 +14,16 @@ $dark-grey: #696969;
   font-weight: normal;
 }
 
+.job-license-label {
+  font-style: normal;
+  font-weight: normal;
+}
+
 .modal-content#job-delete-modal-id {
   background-color: $light-blue;
 }
 
 .col-sm-offset-3.col-sm-6#edit-job-links-id {
-  margin-bottom: 50px;
-}
-
-.col-sm-offset-3.col-sm-6#new-job-links-id {
   margin-bottom: 50px;
 }
 

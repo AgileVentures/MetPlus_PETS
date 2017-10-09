@@ -18,7 +18,7 @@ RSpec.describe Users::SessionsController, type: :controller do
     it 'sets cookies to expire in 1 year' do
       # stub out the #cookies method
       stub_cookie_jar = HashWithIndifferentAccess.new
-      controller.stub(:cookies) { stub_cookie_jar }
+      allow(controller).to receive(:cookies).and_return(stub_cookie_jar)
       post :create,
            user: { email: user.email, password: user.password,
                    remember_me: '1',

@@ -11,6 +11,7 @@ RSpec.describe Skill, type: :model do
   describe 'Associations' do
     it { is_expected.to have_many(:job_skills).dependent(:destroy) }
     it { is_expected.to have_many(:jobs).through(:job_skills) }
+    it { is_expected.to belong_to(:organization) }
   end
 
   describe 'Validations' do
@@ -30,6 +31,8 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to have_db_column :name }
     it { is_expected.to have_db_column :description }
     it { is_expected.to have_db_column :jobs_count }
+    it { is_expected.to have_db_column :organization_id }
+    it { is_expected.to have_db_column :organization_type }
   end
 
   describe 'has_job?' do

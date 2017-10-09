@@ -1,14 +1,19 @@
 require 'rails_helper'
+include ServiceStubHelpers::EmailValidator
 
 RSpec.describe Users::ConfirmationsController, type: :controller do
   describe 'get confirmation_token' do
+    before(:each) do
+      @request.env['devise.mapping'] = Devise.mappings[:user]
+      allow(Pusher).to receive(:trigger)
+      stub_email_validate_valid
+    end
+
     let!(:agency) { FactoryGirl.create(:agency) }
     let!(:aa_person) { FactoryGirl.create(:agency_admin, agency: agency) }
     let!(:cm_person) { FactoryGirl.create(:case_manager, agency: agency) }
     let!(:jd_person) { FactoryGirl.create(:job_developer, agency: agency) }
-    before(:each) do
-      @request.env['devise.mapping'] = Devise.mappings[:user]
-    end
+
     it 'rejects invalid tag' do
       get :show, confirmation_token: 'HzDZWwMxswSAs_aQSYwd'
       expect(response).to render_template('users/confirmations/new')

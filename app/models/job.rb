@@ -2,13 +2,25 @@ class Job < ActiveRecord::Base
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
-  belongs_to :address
+
+  # force address validation in controller upon job create and job update when
+  # new address is being created.  If valid, new address is saved when job is saved.
+  belongs_to :address, autosave: true
+
+  # Instance var "new_address" is not persisted, and is defined in order to support
+  # adding a new company address (aka job location) by the user when creating
+  # or editing a company job.
+  attr_accessor :new_address
+  belongs_to :new_address
+  accepts_nested_attributes_for :new_address
+
   belongs_to :job_category
+  has_and_belongs_to_many :job_types
+  has_and_belongs_to_many :job_shifts
 
   has_many   :job_skills, inverse_of: :job, dependent: :destroy
   has_many   :skills, through: :job_skills
-  accepts_nested_attributes_for :job_skills, allow_destroy: true,
-                                             reject_if: :all_blank
+  accepts_nested_attributes_for :job_skills, allow_destroy: true, reject_if: :all_blank
 
   has_many   :required_skills, -> { where job_skills: { required: true } },
              through: :job_skills, class_name: 'Skill', source: :skill
@@ -17,17 +29,53 @@ class Job < ActiveRecord::Base
   has_many   :job_applications
   has_many   :job_seekers, through: :job_applications
 
-  SHIFT_OPTIONS = %w(Morning Day Evening).freeze
+  has_many :job_licenses, inverse_of: :job, dependent: :destroy
+  has_many :licenses, through: :job_licenses
+  # ^^ Using "has_many, through" instead of HABTM becuase the latter does not
+  #    work well with "accepts_nested_attributes_for"
+  accepts_nested_attributes_for :job_licenses, allow_destroy: true, reject_if: :all_blank
+
+  YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
   validates_presence_of :company_job_id
   validates_presence_of :fulltime, allow_blank: true
-  validates_inclusion_of :shift, in: SHIFT_OPTIONS,
-                                 message: "must be one of: #{SHIFT_OPTIONS.join(', ')}"
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10_000
   validates_presence_of :company_id
   validates_presence_of :company_person_id, allow_nil: true
+  validates_numericality_of :years_of_experience,
+                            allow_blank: true,
+                            greater_than_or_equal_to: 0,
+                            less_than_or_equal_to: 20
+
+  validates_presence_of :pay_period, message: 'must be specified',
+    if: Proc.new { |j| j.min_salary.present? }
+
+  validates_numericality_of :min_salary, :max_salary, allow_blank: true,
+    less_than_or_equal_to: 999999.99
+
+  validates_format_of :min_salary, :max_salary, allow_blank: true,
+    with: /\A\d{0,6}(\.\d{0,2})?\z/,
+    message: 'must match format NNNNNN.NN (up to 6 digits, optional decimal ' +
+             'point, optional digits for cents)'
+
+  validate :max_salary_consistent_with_min_salary
+
+  def max_salary_consistent_with_min_salary
+    if max_salary.present?
+
+      if min_salary.present?
+        errors.add(:max_salary, 'cannot be less than minimum salary') if
+          max_salary < min_salary
+      else
+        errors.add(:min_salary,
+                   'must be specified if maximum salary is specified')
+      end
+    end
+  end
+
+
   scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
   scope :find_by_company, ->(company) { where(company: company) }
 
@@ -122,4 +170,5 @@ class Job < ActiveRecord::Base
     end
     true
   end
+
 end

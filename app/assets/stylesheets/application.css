@@ -25,6 +25,15 @@
    margin-bottom: 10px;
  }
 
+ /* style for row (div) using flex model, with contained elements
+* aligned horizontally by center.
+* https://www.w3schools.com/css/css3_flexbox.asp
+*/
+.center-aligned-container {
+  display: flex;
+  align-items: center;
+}
+
  /* Styling for PANEL WARNING is based on:
  * http://bootsnipp.com/snippets/featured/panels-with-nav-tabs
  */
@@ -88,7 +97,6 @@
    to the table. See agency admin home view for example. */
 .table_action_button {
   margin-bottom: 10px;
-  margin-top: -30px;
 }
 
 .margin-top {

@@ -16,6 +16,10 @@ class CompaniesController < ApplicationController
   def destroy
     self.action_description = 'destroy the company'
     authorize @company
+    if @company.jobs.exists?
+      redirect_to(@company, alert: 'Company cannot be deleted') && return
+    end
+
     @company.destroy
     flash[:notice] = "Company '#{@company.name}' deleted."
     redirect_to root_path

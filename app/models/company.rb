@@ -13,6 +13,8 @@ class Company < ActiveRecord::Base
   enum status: [:pending_registration, :active, :inactive, :registration_denied]
   has_many :status_changes, as: :entity, dependent: :destroy
 
+  has_many :skills, as: :organization
+
   validates :ein, ein_number: true
   validates_uniqueness_of :ein, case_sensitive: false,
                                 message: 'has already been registered'
@@ -37,6 +39,10 @@ class Company < ActiveRecord::Base
   def registration_denied
     registration_denied!
     StatusChange.update_status_history(self, :registration_denied)
+  end
+
+  def has_no_jobs?
+    !jobs.exists?
   end
 
   ransacker :status, formatter: proc { |v| statuses[v] }

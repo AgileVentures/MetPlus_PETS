@@ -139,8 +139,10 @@ Scenario: Job Developer actions
   And I click the "Job Seekers without a JD" link
   And I wait 1 second
   Then I click the "Worker, John" link
+  And I wait 1 second
   And I should see "Assign Myself"
   And I click the "Assign Myself" button
+  And I wait 2 seconds
   Then I should see "Jane Developer"
 
 @javascript

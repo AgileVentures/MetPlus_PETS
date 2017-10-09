@@ -25,36 +25,72 @@ def create_email(name_seed)
 end
 
 # --------------------------- Seed Production Database --------------------
-@jss1 = JobSeekerStatus.first
-@jss2 = JobSeekerStatus.second
-@jss3 = JobSeekerStatus.third
+
+puts "\nSeeding Production Data\n\n"
 
 # Create all agency roles
 AgencyRole::ROLE.each_value do |agency_role|
-  AgencyRole.create(role: agency_role)
+  AgencyRole.find_or_create_by!(role: agency_role)
+  puts "  Agency role: #{agency_role}"
 end
 
 # Create all company roles
 CompanyRole::ROLE.each_value do |company_role|
-  CompanyRole.create(role: company_role)
+  CompanyRole.find_or_create_by!(role: company_role)
+  puts "  Company role: #{company_role}"
+end
+
+# Create default Job Types
+%w(Full\ Time Part\ Time Internship Contract Salary
+   Salary\ &\ Commission Commission\ Only).each do |job_type|
+  JobType.find_or_create_by!(job_type: job_type)
+  puts "  Job type: #{job_type}"
 end
 
 # Create default agency
-agency = Agency.create!(name: 'MetPlus', website: 'metplus.org',
-                        phone: '111 222 3333', fax: '333 444 5555',
-                        email: 'pets@metplus.org',
-                        description: 'Michigan Employment & Training Plus, (MET|PLUS)
-                         is a 501 (c) 3, Vocational Training non-profit
-                         organization that strives to assist Michigan
-                         jobseekers with invaluable training and job
-                         development that will put them on a career
-                         path to success.')
+agency = Agency.find_or_create_by!(name: 'MetPlus', website: 'metplus.org',
+                          phone: '111 222 3333', fax: '333 444 5555',
+                          email: 'pets@metplus.org',
+                          description: 'Michigan Employment & Training Plus,
+                          (MET|PLUS) is a 501 (c) 3, Vocational Training
+                          non-profit organization that strives to assist
+                          Michigan jobseekers with invaluable training
+                          and job development that will put them on a
+                          career path to success.')
+puts "  Default agency: MetPlus"
+
+# Create default Job Shifts
+JobShift.find_or_create_by(shift: 'Morning')
+JobShift.find_or_create_by(shift: 'Day')
+JobShift.find_or_create_by(shift: 'Afternoon')
+JobShift.find_or_create_by(shift: 'Midnight')
+JobShift.find_or_create_by(shift: 'Swing')
+
+puts '  Job Shifts created'
+
+# Create default Licenses for jobseeker qualification
+[
+  ['LLMSW', 'LIMITED LICENSE MASTER SOCIAL WORKER'],
+  ['LLMSW', 'LIMITED LICENSE MASTER SOCIAL WORKER'],
+  ['LMSW', 'LICENSED MASTER SOCIAL WORKER'],
+  ['LLPC', 'LIMITED LICENSE PROFESSIONAL COUNSELOR'],
+  ['LPC', 'LICENSED PROFESSIONAL COUNSELOR'],
+  ['LLBSW', 'LIMITED LICENSE BACHELOR SOCIAL WORKER'],
+  ['LBSW', 'LICENSED BACHELOR SOCIAL WORKER'],
+  ['FASSW', 'FULL APPROVED SCHOOL SOCIAL WORKER'],
+  ['CADC', 'CERTIFIED ALCOHOL DRUG COUNSELOR'],
+  ['CAADC', 'CERTIFIED ADVANCED ALCOHOL DRUG COUNSELOR']
+].each { |l| License.find_or_create_by(abbr: l[0], title: l[1]) }
+
+puts '  License types created'
 
 puts "\nSeeded Production Data"
 
-puts "\nSeeding development DB"
+exit(0) if Rails.env.production?
 
 if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING'
+
+  puts "\nSeeding development/staging data\n\n"
 
   #-------------------------- Companies -----------------------------------
   50.times do |n|
@@ -112,14 +148,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   end
 
   puts "Job Categories created: #{JobCategory.count}"
-
-  #-------------------------- Skills --------------------------------------
-  20.times do
-    Skill.create(name: FFaker::Skill.specialty,
-                 description: FFaker::Lorem.sentence)
-  end
-
-  puts "Skills created: #{Skill.count}"
 
   #-------------------------- Company People ------------------------------
   companies = Company.all.to_a
@@ -200,7 +228,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   25.times do |n|
     Job.create(title: FFaker::Job.title,
                description: Faker::Lorem.sentence,
-               shift: %w(Day Evening Morning)[r.rand(3)],
                company_job_id: "Job_ID_#{n}",
                fulltime: [false, true][r.rand(2)],
                company_id: known_company.id,
@@ -212,13 +239,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   20.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3, false, 4)
-    shift = %w(Day Evening Morning)[r.rand(3)]
     fulltime = [false, true][r.rand(2)]
     job_id = ((1..9).to_a + ('A'..'Z').to_a).sample(8).join
     # debugger
     Job.create(title: title,
                description: description,
-               shift: shift,
                company_job_id: job_id,
                fulltime: fulltime,
                company_id: companies[n].id,
@@ -229,8 +254,15 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
   puts "Jobs created: #{Job.count}"
 
+  # Rake task to upload generic skills
+  Rake::Task['job_skills:import_generic'].invoke
+
   #-------------------------- Job Seekers ---------------------------------
-  #
+
+  @jss1 = JobSeekerStatus.first
+  @jss2 = JobSeekerStatus.second
+  @jss3 = JobSeekerStatus.third
+
   # This JobSeeker is used in email previews too :-)
   js1 = JobSeeker.create(first_name: 'Tom', last_name: 'Seeker',
                          email: 'tomseekerpets@gmail.com', password: 'qwerty123',
@@ -251,8 +283,8 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   resume.save!
 
   # Add job applications for this job seeker
-  Job.limit(50).each do |job|
-    JobApplication.create(job: job, job_seeker: js1)
+  Job.where.not(company: known_company).limit(50).each do |job|
+    JobApplication.create!(job: job, job_seeker: js1)
   end
 
   jobseekerstatus = JobSeekerStatus.all.to_a

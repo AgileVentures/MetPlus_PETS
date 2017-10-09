@@ -16,16 +16,15 @@
                                            company_person_id: pets_user.id),
                                            class: "#{yield(:new_job_active)}"
         |
+        = link_to 'List Company Jobs',
+                  jobs_path(q: { company_id_in: [ pets_user.company_id ] })
+
       - elsif pets_user.is_a?(AgencyPerson)
         = link_to 'Home', home_company_person_path(pets_user)
         |
         = link_to 'About', about_path
         |
         = link_to 'Contact', contact_path
-        - if pets_user.is_job_developer?(pets_user.agency)
-          |
-          = link_to 'Post Job', new_job_path,
-          class: "#{yield(:new_job_active)}"
       - elsif pets_user.is_a?(JobSeeker)
         = link_to 'Home', home_job_seeker_path(pets_user)
         |

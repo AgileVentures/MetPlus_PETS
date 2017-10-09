@@ -24,12 +24,12 @@ Background: seed data added to database
     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
-    | title   | shift  | fulltime | description | company      | creator          |
-    | SW dev  | Evening| true     | develop SW  | Widgets Inc. | carter@ymail.com |
-    | Trucker | Day    | true     | drive truck | Widgets Inc. | carter@ymail.com |
-    | Doctor  | Day    | true     | heal sick   | Widgets Inc. | carter@ymail.com |
-    | Clerk   | Day    | true     | service     | Widgets Inc. | carter@ymail.com |
-    | Mime    | Day    | true     | freeze      | Widgets Inc. | carter@ymail.com |
+    | title   | fulltime | description | company      | creator          |
+    | SW dev  | true     | develop SW  | Widgets Inc. | carter@ymail.com |
+    | Trucker | true     | drive truck | Widgets Inc. | carter@ymail.com |
+    | Doctor  | true     | heal sick   | Widgets Inc. | carter@ymail.com |
+    | Clerk   | true     | service     | Widgets Inc. | carter@ymail.com |
+    | Mime    | true     | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
 
@@ -64,24 +64,15 @@ Scenario: JS Registration and model(s) validation
   Then I select "Employed Not Looking" in select list "Status"
 
   # Validate email address
-  And I fill in "Email" with "test@gmal.com"
+  And I fill in "Email" with "test.com"
   Then I click the "Create Job seeker" button
-  And I should see "Email is not valid (did you mean ... test@gmail.com?"
-  And I fill in "Email" with "test@gmail.com"
+  Then I should see "Email is not formatted properly"
+  And I fill in "Email" with "test@gmail"
   Then I click the "Create Job seeker" button
-  Then I should see "Email is not a valid address"
-  And I fill in "Email" with "tester@gmail.com"
+  Then I should see "Email is not formatted properly"
+  And I fill in "Email" with "tester@.com"
   Then I click the "Create Job seeker" button
-  And I should not see "Email is not a valid address"
-  And I fill in "Email" with "test_addr@gmail.com"
-  Then I click the "Create Job seeker" button
-  And I should see "Email is not a valid address"
-  And I fill in "Email" with "test.addr@gmail.com"
-  Then I click the "Create Job seeker" button
-  And I should not see "Email is not a valid address"
-  And I fill in "Email" with "test@yaho.com"
-  Then I click the "Create Job seeker" button
-  And I should see "Email is not valid (did you mean ... test@yahoo.com?"
+  And I should see "Email is not formatted properly"
   And I fill in "Email" with "test.addr@yahoo.com"
 
   # invalid résumé file type
@@ -158,12 +149,12 @@ Scenario: Agency and Company people actions
   And I should see "Doctor"
   And I should see "Mime"
   And I should not see "Trucker"
-  
+
   # agency person: no download button when no job seeker résumé
   Then I am on the JobSeeker Show page for "tommy1@gmail.com"
   And I wait 1 second
   Then I should not see button "Download Resume"
-  
+
   # agency person: download job seeker résumé
   Then I am on the JobSeeker Show page for "mike.smith@gmail.com"
   And I wait 1 second

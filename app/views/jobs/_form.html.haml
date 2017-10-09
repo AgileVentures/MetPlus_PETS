@@ -4,49 +4,125 @@
 .form-group
   .col-sm-3.control-label
     = f.label :title
-  .col-sm-6
+  .col-sm-7
     = f.text_field :title, class: 'form-control'
 
-- unless pets_user.is_a?(CompanyPerson)
-  .form-group
-    .col-sm-3.control-label
-      = f.label  :company_id, 'Company Name'
-    .col-sm-6
-      = f.collection_select :company_id, companies, :id, :name,
-                  { prompt: true }, { class: "form-control" }
 .form-group
   .col-sm-3.control-label
     = f.label  :address_id, 'Job Location'
-  .col-sm-6#address_select
+  .col-sm-7#address-select
     = f.collection_select :address_id, addresses, :id, :full_address,
                 { prompt: true, include_blank: true }, class: 'form-control'
 
 .form-group
-  .col-sm-3.control-label
-    = f.label :company_job_id, 'Company Job ID'
-  .col-sm-6
-    = f.text_field :company_job_id, class: 'form-control'
+  .col-sm-9.col-sm-offset-3
+    #new-address-subform{ style: address_subform_visibility(@job.new_address) }
+      = f.fields_for :new_address do |address_form|
+
+        .form-group
+          .col-sm-1.control-label
+            = address_form.label :street, 'Street:',
+              class: 'job-skill-label'
+          .col-sm-4
+            = address_form.text_field :street, size: 30,
+                                      class: 'form-control new_address_field'
+          .col-sm-1.control-label
+            = address_form.label :city, 'City:', class: 'job-skill-label'
+          .col-sm-4
+            = address_form.text_field :city, size: 30,
+                                      class: 'form-control new_address_field'
+
+        .form-group
+          .col-sm-1.control-label
+            = address_form.label :state, 'State:', class: 'job-skill-label'
+          .col-sm-4
+            = address_form.collection_select(:state, Address.states_full_name,
+                                             :to_s, :to_s, {include_blank: true},
+                                             class: 'form-control new_address_field')
+          .col-sm-1.control-label
+            = address_form.label :zipcode, 'Zipcode:', class: 'job-skill-label'
+          .col-sm-4
+            = address_form.text_field :zipcode, size: 10,
+                                      class: 'form-control new_address_field'
+
+    %a{ id: 'toggle-address-fields', href: '#new-address-subform',
+        class: 'btn btn-xs btn-warning' }
+      = address_subform_toggle_text(@job.new_address)
 
 .form-group
   .col-sm-3.control-label
-    = f.label :shift
-  .col-sm-5
-    = f.collection_select :shift, Job::SHIFT_OPTIONS, :to_s, :to_s,
-            {prompt: true}, class: 'form-control'
-  = f.label :fulltime, class: 'control-label'
-  = f.check_box :fulltime
+    = f.label :company_job_id, 'Company Job ID'
+  .col-sm-2
+    = f.text_field :company_job_id, class: 'form-control'
+
+  .col-sm-3.control-label
+    = f.label :years_of_experience, 'Years Of Experience'
+  .col-sm-2
+    = f.collection_select :years_of_experience, Job::YEARS_OF_EXPERIENCE_OPTIONS,
+      :to_i, :to_i, {include_blank: true}, class: 'form-control'
+
+%br
+.form-group
+  .col-sm-3.control-label
+    %b Salary Range
+  .col-sm-1
+    = f.label :min_salary, 'Minimum:', class: 'control-label'
+  .col-sm-2
+    = f.text_field :min_salary, class: 'form-control'
+  .col-sm-1.col-sm-offset-1
+    = f.label :max_salary, 'Maximum:', class: 'control-label'
+  .col-sm-2
+    = f.text_field :max_salary, class: 'form-control'
+
+.form-group
+  .col-sm-6.col-sm-offset-3
+    = f.collection_radio_buttons(:pay_period, ['Hourly', 'Weekly',
+                                               'Monthly', 'Annually'],
+                                 :itself, :itself, {},
+                                 { class: 'radio-inline' }) do |b|
+      = b.label(style: ('margin-left: 20px;' unless b.text == 'Hourly')) do
+        = b.radio_button + ' ' + b.text
+%br
+
 .form-group
   .col-sm-3.control-label
     = f.label :description
-  .col-sm-6
+  .col-sm-7
     =f.text_area :description, size: "40x5", class: 'form-control'
+
+.form-group.form-inline
+  .col-sm-3.control-label
+    = f.label :job_type_ids, 'Job Type(s)'
+  .col-sm-3
+    = f.collection_select :job_type_ids, JobType.all, :id, :job_type, {},
+                          class: 'job-type-multiple', multiple: true
+
+  .col-sm-1.control-label
+    = f.label :job_shift_ids, 'Shift'
+  .col-sm-4
+    = f.collection_select :job_shift_ids, JobShift.all, :id, :shift, {},
+                          class: 'job-shift-multiple', multiple: true
+
+- style = 'border: 2px solid lightsteelblue; padding: 10px; border-radius: 5px;'
 
 .form-group
   .col-sm-3.control-label
     %b Job Skills
-  .col-sm-9
-    #job_skills
+  .col-sm-7
+    #job_skills{ style: style }
       = f.fields_for :job_skills do |job_skill|
-        = render 'job_skill_fields', f: job_skill
+        = render 'job_skill_fields', f: job_skill, company: company
       .links
-        = link_to_add_association 'Add Job Skill', f, :job_skills
+        = link_to_add_association 'Add Job Skill', f, :job_skills,
+            render_options: { locals: { company: company } }
+
+.form-group
+  .col-sm-3.control-label
+    %b Licenses
+  .col-sm-7
+    #licenses{ style: style }
+      = f.fields_for :job_licenses do |job_license|
+        = render 'job_license_fields', f: job_license, all_licenses: all_licenses
+      .links
+        = link_to_add_association 'Add License', f, :job_licenses,
+            render_options: { locals: { all_licenses: all_licenses } }

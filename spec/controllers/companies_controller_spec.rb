@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ServiceStubHelpers::Cruncher
 
 RSpec.shared_examples 'unauthorized all' do
   let(:company) { FactoryGirl.create(:company) }
@@ -43,6 +44,9 @@ RSpec.describe CompaniesController, type: :controller do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:admin) { FactoryGirl.create(:agency_admin, agency: agency) }
   let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+  let(:company_with_jobs) do
+    FactoryGirl.create(:company, agencies: [agency], jobs: [FactoryGirl.create(:job)])
+  end
   let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
   let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
   let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
@@ -82,25 +86,44 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before(:each) do
-      sign_in admin
-      delete :destroy, id: company
+    context 'company with jobs' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
+        sign_in admin
+        delete :destroy, id: company_with_jobs
+      end
+
+      it 'does not delete the company' do
+        expect(assigns(:company).destroyed?).to eq(false)
+      end
+
+      it 'shows the alert' do
+        expect(flash[:alert]).to eq('Company cannot be deleted')
+      end
+
+      it 'redirects to the company page' do
+        expect(response).to redirect_to company_with_jobs
+      end
     end
 
-    it 'deletes the company' do
-      expect(assigns(:company).destroyed?).to eq(true)
-    end
+    context 'company with no jobs' do
+      before(:each) do
+        sign_in admin
+        delete :destroy, id: company
+      end
 
-    it 'shows the flash notice message' do
-      expect(flash[:notice]).to eq("Company '#{company.name}' deleted.")
-    end
+      it 'deletes the company' do
+        expect(assigns(:company).destroyed?).to eq(true)
+      end
 
-    it 'redirects to root path' do
-      expect(response).to redirect_to root_path
-    end
+      it 'shows the flash notice message' do
+        expect(flash[:notice]).to eq("Company '#{company.name}' deleted.")
+      end
 
-    it 'returns http success' do
-      expect(response).to have_http_status(:redirect)
+      it 'redirects to root path' do
+        expect(response).to redirect_to root_path
+      end
     end
   end
 

@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   include JobsViewer
   include CruncherUtility
+  include PaginationUtility
 
   before_action :find_job, only: [:show, :edit, :update, :destroy, :revoke,
                                   :match_resume, :match_job_seekers,
@@ -10,9 +11,13 @@ class JobsController < ApplicationController
                                         :match_jd_job_seekers]
 
   def index
+    # Store, or recover, search and items-per-page criteria
+    search_params, @items_count, items_per_page =
+      process_pagination_params('searched_jobs')
+
     # Make a copy of q params since we will strip out any commas separating
     # words - need to retain any commas in the form (so user is not surprised)
-    q_params = params[:q] ? params[:q].dup : params[:q]
+    q_params = search_params ? search_params.dup : search_params
 
     # Ransack returns a string with all terms entered by the user in
     # a text field.  For "any" or "all" word(s) queries, need to convert
@@ -50,11 +55,12 @@ class JobsController < ApplicationController
                else
                  { 'company_status_eq' => 'active' }
                end
-    @query = Job.ransack(params[:q]) # For form display of entered values
+    @query = Job.ransack(search_params) # For form display of entered values
+
     @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
-                .page(params[:page]).per_page(8)
+                .page(params[:page]).per_page(items_per_page)
 
     render partial: 'searched_job_list' if request.xhr?
   end
@@ -62,12 +68,21 @@ class JobsController < ApplicationController
   def new
     @job = Job.new
     authorize @job
-    @companies = Company.order(:name)
+    @company = Company.find(params[:company_id])
     set_company_address
+    set_all_licenses
   end
 
   def create
-    @job = Job.new(job_params)
+    save_params = job_params
+
+    # if new_address_params is not nil then user wants to create a new
+    # job location (company address) and associate that with this job.
+    new_address_params = save_params.delete(:new_address_attributes)
+
+    @job = Job.new(save_params)
+    @job.build_address(new_address_params) if new_address_params
+
     if pets_user.is_a?(CompanyPerson)
       @job.company_id = pets_user.company.id
       @job.company_person_id = pets_user.id
@@ -75,15 +90,20 @@ class JobsController < ApplicationController
     authorize @job
 
     if @job.save
+
+      # Associate new address with company
+      @job.company.addresses << @job.address if new_address_params
+
       flash[:notice] = "#{@job.title} has been created successfully."
 
       obj = Struct.new(:job, :agency)
       Event.create(:JOB_POSTED, obj.new(@job, current_agency))
 
-      redirect_to jobs_url
+      redirect_to @job
     else
-      @companies = Company.order(:name)
-      set_company_address
+      @company = @job.company
+      set_company_address(new_address_params)
+      set_all_licenses
       render :new
     end
   end
@@ -97,18 +117,37 @@ class JobsController < ApplicationController
 
   def edit
     authorize @job
-    @companies = Company.order(:name)
+    @company = @job.company
     set_company_address
+    set_all_licenses
   end
 
   def update
     authorize @job
-    if @job.update_attributes(job_params)
+    update_params = job_params
+
+    # if new_address_params is not nil then user wants to create a new
+    # job location (company address) and associate that with this job.
+    new_address_params = update_params.delete(:new_address_attributes)
+
+    if new_address_params
+      @job.build_address(new_address_params)
+
+      # remove address id (from select list) if present
+      update_params.delete(:address_id)
+    end
+
+    if @job.update_attributes(update_params)
+
+      # Associate new address with company
+      @job.company.addresses << @job.address if new_address_params
+
       flash[:info] = "#{@job.title} has been updated successfully."
       redirect_to @job
     else
-      @companies = Company.order(:name)
-      set_company_address
+      @company = @job.company
+      set_company_address(new_address_params)
+      set_all_licenses
       render :edit
     end
   end
@@ -296,7 +335,7 @@ class JobsController < ApplicationController
     @job_seekers = pets_user.job_seekers
   end
 
-  def set_company_address
+  def set_company_address(new_address_attributes = nil)
     case params[:action]
     when 'new', 'create'
       @addresses = Address.where(location_type: 'Company',
@@ -306,6 +345,7 @@ class JobsController < ApplicationController
       @addresses = Address.where(location_type: 'Company',
                                  location_id: @job.company).order(:state)
     end
+    @job.new_address = Address.new(new_address_attributes)
   end
 
   def apply_for(job_seeker, &controller_response)
@@ -338,12 +378,21 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
   end
 
+  def set_all_licenses
+    @all_licenses = License.order(:abbr)
+  end
+
   def job_params
-    params.require(:job).permit(:description, :shift, :company_job_id,
+    params.require(:job).permit(:description, :company_job_id,
                                 :fulltime, :company_id, :title, :address_id,
-                                :company_person_id,
-                                job_skills_attributes: [:id, :_destroy, :skill_id,
-                                                        :required, :min_years,
-                                                        :max_years])
+                                :company_person_id, :years_of_experience,
+                                :pay_period, :max_salary, :min_salary,
+                                job_type_ids: [], job_shift_ids: [],
+                                job_skills_attributes: [:id, :_destroy,
+                                                        :skill_id, :required,
+                                                        :min_years, :max_years],
+                                new_address_attributes: [:street, :city, :state,
+                                                         :zipcode],
+                                job_licenses_attributes: [:id, :license_id, :_destroy])
   end
 end

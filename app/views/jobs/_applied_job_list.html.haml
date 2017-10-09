@@ -25,7 +25,7 @@
               %th.strong Action
     %tbody
       - job_applications.each do |job_application|
-        %tr{ id: "applications-#{job_application.id}" }
+        %tr{ id: "applications-#{job_application.id}", class: "application-#{job_application.status}" }
           - application_fields(application_type).each do |field|
             - case field
               - when :title
@@ -85,4 +85,3 @@
                                     params: { controller: 'job_applications',
                                               action: 'list',
                                               type: application_type }
-
