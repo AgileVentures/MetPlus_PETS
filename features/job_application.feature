@@ -77,7 +77,7 @@ Given the following job applications exist:
     Then I press "Close"
     Then I click the "Click Here To Apply Online" link
     And I wait for 1 second
-    And I should see "Application process"
+    And I should see "Job Application"
     Then I click the "Apply Now" link
     And I wait 4 seconds
     And I should see "Congratulations, you were able to apply with success"

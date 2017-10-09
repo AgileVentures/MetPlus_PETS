@@ -1,5 +1,5 @@
 Then(/^I should verify the change of title "(.*?)" and jobId "(.*?)"$/) do |title, jobId|
-	
+
 	@job = Job.find_by_title(title)
 	expect(@job.company_job_id).to eql jobId
 
@@ -66,8 +66,8 @@ Then(/^I apply to "([^"]*)" from Jobs link(?: again)?$/) do |job_title|
   step %{I click the "#{job_title}" link}
   step %{I click the "Click Here To Apply Online" link}
   step %{I wait for 1 second}
-  step %{I should see "Application process"}
-  step %{I click the "Apply Now" link}
+  step %{I should see "Job Application"}
+  step %{I click the "Apply Now" button}
 end
 
 Then(/^I want to apply to "([^"]*)" for "(?:[^"]*)"$/) do |job_title|
@@ -81,7 +81,7 @@ And(/^I find "([^"]*)" from my job seekers list and proceed with the application
   step %{I press "Proceed"}
 end
 
-Then(/^I apply to "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
+Then(/^click the "([^"]*)" for my job seeker: "([^"]*)"$/) do |job_title, job_seeker|
   step %{I want to apply to "#{job_title}" for "#{job_seeker}"}
   step %{I find "#{job_seeker}" from my job seekers list and proceed with the application}
   step %{I wait 1 seconds}
