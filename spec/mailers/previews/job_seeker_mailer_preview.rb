@@ -26,7 +26,6 @@ class JobSeekerMailerPreview < ActionMailer::Preview
     job = Job.create(title: 'Sr Software Engineer',
                      company: Company.first,
                      company_job_id: 'ABC',
-                     shift: Job::SHIFT_OPTIONS[0],
                      description: 'description of test job')
 
     job.apply(job_seeker)
