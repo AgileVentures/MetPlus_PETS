@@ -73,12 +73,12 @@ Given the following job applications exist:
     And I wait for 5 second
     Then I click the "Click Here To Apply Online" link
     And I wait for 1 second
-    And I should see "Application process"
+    And I should see "Job Application"
     Then I press "Close"
     Then I click the "Click Here To Apply Online" link
     And I wait for 1 second
-    And I should see "Application process"
-    Then I click the "Apply Now" link
+    And I should see "Job Application"
+    Then I click the "Apply Now" button
     And I wait 4 seconds
     And I should see "Congratulations, you were able to apply with success"
 
@@ -107,7 +107,7 @@ Given the following job applications exist:
     Then I am in Company Admin's browser
     And I am on the Company Person 'carter@ymail.com' Home page
     And I wait 1 second
-    And I click the "Unassigned Company Tasks" link
+    And I click the "Unassigned Tasks" link
     And I should see "Review job application"
     And I should see "Job: software developer"
 

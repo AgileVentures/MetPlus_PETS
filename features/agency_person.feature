@@ -151,16 +151,16 @@ Scenario: Agency Admin actions
   Given I am on the home page
   And I login as "aa@metplus.org" with password "qwerty123"
   And I should be on the Agency Person 'aa@metplus.org' Home page
-  And I should see "Unassigned Agency Tasks"
+  And I should see "Unassigned Tasks"
   And I should see "Your Open Tasks"
-  And I should see "All Agency Open Tasks"
+  And I should see "All Open Tasks"
   And I should see "Closed Tasks"
   And the tasks 5,6 are present
   And the tasks 1,2,3,4,7 are hidden
-  And I click the "Unassigned Agency Tasks" link
+  And I click the "Unassigned Tasks" link
   And the tasks 1,2 are present
   And the tasks 3,4,7 are hidden
-  And I click the "All Agency Open Tasks" link
+  And I click the "All Open Tasks" link
   And the tasks 3,4,5,6 are present
   And the tasks 1,2,7 are hidden
   And I click the "Closed Tasks" link
@@ -168,7 +168,7 @@ Scenario: Agency Admin actions
   And the tasks 1,2,3,4 are hidden
 
   # assign task
-  And I click the "Unassigned Agency Tasks" link
+  And I click the "Unassigned Tasks" link
   Then I press the assign button of the task 2
   And I should see "Select the user to assign the task to:"
   And I select2 "Jones, Jane" from "task_assign_select"
@@ -176,7 +176,7 @@ Scenario: Agency Admin actions
   And I should see notification "Task assigned"
   And I wait 2 seconds
   And the task 2 is not present
-  And I click the "All Agency Open Tasks" link
+  And I click the "All Open Tasks" link
   And the task 2 is present
 
 @javascript

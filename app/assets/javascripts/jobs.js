@@ -132,8 +132,6 @@ $(function () {
     $('#searched-job-list').html(data);
   });
 
-  // $('.new_address_field').prop('disabled', true);
-
   if ($('#new-address-subform').is(':visible') !== true) {
     // When job form is rendered, disable "new address" fields unless those
     // fields are visible - if visible, the user is trying to create a new
@@ -160,6 +158,16 @@ $(function () {
       $(this).text('Cancel new location');
 
     }
+  });
+
+  // Job questions radio boxes in job apply modal ("Yes", "No")
+  $('.job-question-rb').click(function () {
+    // Get total number of radio boxes - if 1/2 are checked all questions answered
+
+    if ($('.job-question-rb').length/2 ===
+        $('.job-question-rb').filter(':checked').length) {
+          $('#modal-apply-id').prop('disabled', false);
+        }
   });
 
 });

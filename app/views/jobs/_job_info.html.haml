@@ -56,6 +56,15 @@
       %tr
         %td Licenses Required:
         %td= @job.licenses.map(&:license_description).join(', ')
+
+    - unless @job.job_questions.empty?
+      %tr
+        %td Applicant Questions:
+        %td
+          - @job.questions.map(&:question_text).each do |q|
+            = q
+            %br
+
     %tr
       %td Job Skills:
       %td

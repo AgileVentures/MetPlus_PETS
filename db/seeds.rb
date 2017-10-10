@@ -84,6 +84,14 @@ puts '  Job Shifts created'
 
 puts '  License types created'
 
+# Create default job questions
+[ 'Are you authorized to work in the US?',
+  'Are you willing to have a background check performed?',
+  'Are you willing to take a drug test?'
+].each { |q| Question.find_or_create_by(question_text: q) }
+
+puts '  Job questions created'
+
 puts "\nSeeded Production Data"
 
 exit(0) if Rails.env.production?
