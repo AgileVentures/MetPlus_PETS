@@ -41,6 +41,12 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:status_changes) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
     it { is_expected.to have_and_belong_to_many(:job_shifts) }
+    it { is_expected.to have_many(:job_licenses) }
+    it { is_expected.to have_many(:licenses).through(:job_licenses) }
+    it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
+    it { is_expected.to have_many(:job_questions).dependent(:destroy) }
+    it { is_expected.to have_many(:questions).through(:job_questions) }
+    it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 
   describe 'Database schema' do
@@ -54,6 +60,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :address_id }
     it { is_expected.to have_db_column :status }
     it { is_expected.to have_db_column :years_of_experience }
+    it { is_expected.to have_db_column :max_salary }
+    it { is_expected.to have_db_column :min_salary }
+    it { is_expected.to have_db_column :pay_period }
   end
 
   describe 'Validations' do
@@ -93,82 +102,99 @@ RSpec.describe Job, type: :model do
       end
     end
 
-    describe 'pay_period' do
-      it 'is invalid if not specified when min_salary is specified' do
-        job.assign_attributes(min_salary: 1000)
-        expect(job).to_not be_valid
-        expect(job.errors.full_messages).to include('Pay period must be specified')
-      end
-      it 'is valid if specified when min_salary is specified' do
-        job.assign_attributes(min_salary: 1000, pay_period: 'Monthly')
-        expect(job).to be_valid
-      end
-    end
-
-    describe 'min_salary' do
-      it 'is invalid if not a number' do
-        job.assign_attributes(min_salary: 'abc')
-        expect(job).to_not be_valid
-        expect(job.errors.full_messages).to include('Min salary is not a number')
-      end
-      it 'is invalid if not specified when max_salary is specified' do
-        job.assign_attributes(max_salary: 1000)
-        expect(job).to_not be_valid
-        expect(job.errors.full_messages)
-          .to include('Min salary must be specified if maximum salary is specified')
-      end
-    end
-
-    describe 'max_salary' do
-      it 'is invalid if not a number' do
-        job.assign_attributes(max_salary: 'abc')
-        expect(job).to_not be_valid
-        expect(job.errors.full_messages).to include('Max salary is not a number')
-      end
-      it 'is invalid if less than min_salary' do
-        job.assign_attributes(max_salary: 1000, min_salary: 2000)
-        expect(job).to_not be_valid
-        expect(job.errors.full_messages)
-          .to include('Max salary cannot be less than minimum salary')
-      end
-    end
-
-    describe 'format of salary fields' do
-      it 'is valid if formatted correctly' do
-        job.assign_attributes(pay_period: 'Monthly',
-                              min_salary: 1000, max_salary: 2000.23)
-        expect(job).to be_valid
+    describe 'salary fields' do
+      before(:each) do
+        stub_cruncher_authenticate
+        stub_cruncher_job_create
       end
 
-      context 'is invalid if format or length incorrect' do
-        it 'is too large a number' do
-          job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000)
+      context 'pay_period' do
+        it 'is invalid if not specified when min_salary is specified' do
+          job.assign_attributes(min_salary: 1000)
           expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include('Min salary must be less than or equal to 999999.99')
+          expect(job.errors.full_messages).to include('Pay period must be specified')
         end
-        it 'contains char other than digit or decimal point' do
-          job.assign_attributes(pay_period: 'Monthly', min_salary: '$1000000')
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include('Min salary is not a number')
-        end
-        it 'contains too many digits to right of decimal point' do
-          job.assign_attributes(pay_period: 'Monthly', min_salary: 1000.123)
-          error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
-                      ' optional decimal point, optional digits for cents)'
-          expect(job).to_not be_valid
-          expect(job.errors.full_messages)
-            .to include(error_msg)
+        it 'is valid if specified when min_salary is specified' do
+          job.assign_attributes(min_salary: 1000, pay_period: 'Monthly')
+          expect(job).to be_valid
         end
       end
-    end
-  end
 
-  describe 'Class methods' do
+      context 'min_salary' do
+        it 'is invalid if not a number' do
+          job.assign_attributes(min_salary: 'abc')
+          expect(job).to_not be_valid
+          expect(job.errors.full_messages).to include('Min salary is not a number')
+        end
+        it 'is invalid if not specified when max_salary is specified' do
+          job.assign_attributes(max_salary: 1000)
+          expect(job).to_not be_valid
+          expect(job.errors.full_messages)
+            .to include('Min salary must be specified if maximum salary is specified')
+        end
+      end
+
+      context 'max_salary' do
+        it 'is invalid if not a number' do
+          job.assign_attributes(max_salary: 'abc')
+          expect(job).to_not be_valid
+          expect(job.errors.full_messages).to include('Max salary is not a number')
+        end
+
+        describe 'max_salary' do
+          it 'is invalid if not a number' do
+            job.assign_attributes(max_salary: 'abc')
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages).to include('Max salary is not a number')
+          end
+          it 'is invalid if less than min_salary' do
+            job.assign_attributes(max_salary: 1000, min_salary: 2000)
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include('Max salary cannot be less than minimum salary')
+          end
+        end
+      end
+
+      context 'format of salary fields' do
+        it 'is valid if formatted correctly' do
+          job.assign_attributes(pay_period: 'Monthly',
+                                min_salary: 1000, max_salary: 2000.23)
+          expect(job).to be_valid
+        end
+
+        context 'is invalid if format or length incorrect' do
+          it 'is too large a number' do
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000)
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include('Min salary must be less than or equal to 999999.99')
+          end
+          it 'contains char other than digit or decimal point' do
+            job.assign_attributes(pay_period: 'Monthly', min_salary: '$1000000')
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include('Min salary is not a number')
+          end
+          it 'contains too many digits to right of decimal point' do
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000.123)
+            error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
+                        ' optional decimal point, optional digits for cents)'
+            expect(job).to_not be_valid
+            expect(job.errors.full_messages)
+              .to include(error_msg)
+          end
+        end
+      end
+    end
   end
 
   describe 'Instance methods' do
+    let!(:question1) { FactoryGirl.create(:question) }
+    let!(:question2) { FactoryGirl.create(:question,
+                                          question_text: 'This is question two.') }
+    let(:question_answers) { {"1"=>"true", "2"=>"false"} }
+
     describe '#apply' do
       before(:each) do
         stub_cruncher_authenticate
@@ -178,20 +204,20 @@ RSpec.describe Job, type: :model do
 
       it 'success - first application' do
         num_applications = job.number_applicants
-        job.apply job_seeker
+        job.apply(job_seeker, nil)
         job.reload
         expect(job.job_seekers).to eq [job_seeker]
         expect(job.number_applicants).to be(num_applications + 1)
       end
       it 'raise error - second application with same job seeker' do
-        job.apply job_seeker
-        expect { job.apply job_seeker }.to raise_error(ActiveRecord::RecordInvalid)
+        job.apply(job_seeker, nil)
+        expect { job.apply(job_seeker, nil) }.to raise_error(ActiveRecord::RecordInvalid)
           .with_message('Validation failed: Job seeker has already been taken')
       end
       it 'two applications, different job seekers' do
         num_applications = job.number_applicants
-        first_appl = job.apply job_seeker
-        second_appl = job.apply job_seeker2
+        first_appl = job.apply(job_seeker, nil)
+        second_appl = job.apply(job_seeker2, nil)
         job.reload
         expect(job.job_seekers).to eq [job_seeker, job_seeker2]
         expect(job.number_applicants).to be(num_applications + 2)
@@ -199,6 +225,12 @@ RSpec.describe Job, type: :model do
           .to eq first_appl
         expect(job.last_application_by_job_seeker(job_seeker2))
           .to eq second_appl
+      end
+      it 'application with answers to job questions' do
+        application = job.apply(job_seeker, question_answers)
+        expect(application.application_questions.count).to eq 2
+        expect(application.application_questions.first.answer).to be true
+        expect(application.application_questions.second.answer).to be false
       end
     end
   end

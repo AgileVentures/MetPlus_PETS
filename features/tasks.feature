@@ -49,13 +49,13 @@ Feature: Have a task system in the site
     And I login as "aa@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
     And the tasks 5,6 are present  # "Your Open Tasks"
-    And I click the "Unassigned Agency Tasks" link
+    And I click the "Unassigned Tasks" link
     And the tasks 1,2,8 are present
-    And I click the "All Agency Open Tasks" link
+    And I click the "All Open Tasks" link
     And the tasks 3,4,5,6 are present
-    And I click the "All Agency Closed Tasks" link
+    And I click the "All Closed Tasks" link
     And the task 7 is present
-    And I click the "Unassigned Agency Tasks" link
+    And I click the "Unassigned Tasks" link
     And I should see "Job Seeker has no assigned Case Manager"
     Then I press the assign button of the task 2
     And I select2 "Jones, Jane" from "task_assign_select"
@@ -63,13 +63,13 @@ Feature: Have a task system in the site
     And I wait 1 second
     And I should see notification "Task assigned"
     And the task 2 is not present
-    And I click the "All Agency Open Tasks" link
+    And I click the "All Open Tasks" link
     And the task 2 is present
     And I press the done button of the task 6
     And I wait 1 second
     And I should see notification "Work on the task is done"
     And the task 6 is not present
-    And I click the "All Agency Closed Tasks" link
+    And I click the "All Closed Tasks" link
     And the task 6 is present
 
   @javascript
@@ -77,7 +77,7 @@ Feature: Have a task system in the site
     Given I am on the home page
     And I login as "aa@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
-    And I click the "Unassigned Agency Tasks" link
+    And I click the "Unassigned Tasks" link
     And I should see "Widgets Inc."
     And I click the "Widgets Inc." link
     And I wait 1 second
@@ -88,7 +88,7 @@ Feature: Have a task system in the site
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
     Then I should see "Signed in successfully."
-    And I click the "Unassigned Company Tasks" link
+    And I click the "Unassigned Tasks" link
     And the task 9 is present
     Then I press the assign button of the task 9
     And I should see "Select the user to assign the task to:"
@@ -100,11 +100,11 @@ Feature: Have a task system in the site
     Then I click the "Your Open Tasks" link
     And the task 10 is present
     Then I press the wip button of the task 10
-    Then I click the "All Company Open Tasks" link
+    Then I click the "All Open Tasks" link
     And the tasks 9,10 are present
     Then I click the "Your Open Tasks" link
     And I press the done button of the task 10
     And I wait 1 second
     And the task 10 is not present
-    Then I click the "All Company Closed Tasks" link
+    Then I click the "All Closed Tasks" link
     And the task 10 is present

@@ -24,6 +24,9 @@ RSpec.describe JobsController, type: :controller do
   let(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_utah) }
   let(:bosh_person) { FactoryGirl.create(:company_contact, company: bosh) }
   let(:skill) { FactoryGirl.create(:skill) }
+  let!(:license)  { FactoryGirl.create(:license) }
+  let!(:question) { FactoryGirl.create(:question) }
+
   let!(:valid_params) do
     { title: 'Ruby on Rails', fulltime: true, description: 'passionate',
       company_id: bosh.id, address_id: bosh_mich.id, shift: 'Evening',
@@ -34,10 +37,20 @@ RSpec.describe JobsController, type: :controller do
                                         max_years: 5,
                                         _destroy: false } } }
   end
+
   let(:new_address_params) do
     { new_address_attributes: { street: 'new street', city: 'new city',
                                 state: 'Michigan', zipcode: '12345' } }
   end
+
+  let(:new_license_params) do
+    { job_licenses_attributes: { '0' => { license_id: 1, _destroy: false } } }
+  end
+
+  let(:new_question_params) do
+    { job_questions_attributes: { '0' => { question_id: 1, _destroy: false } } }
+  end
+
   let(:job_seeker) do
     js = FactoryGirl.create(:job_seeker)
     FactoryGirl.create(:resume, job_seeker: js)
@@ -228,6 +241,20 @@ RSpec.describe JobsController, type: :controller do
         it 'changes Address count by 1' do
           expect { post :create, job: valid_params.merge(new_address_params) }
             .to change(Address, :count).by(1)
+        end
+      end
+
+      describe 'create job with new license' do
+        it 'changes JobLicense count by 1' do
+          expect { post :create, job: valid_params.merge(new_license_params) }
+            .to change(JobLicense, :count).by(1)
+        end
+      end
+
+      describe 'create job with new question' do
+        it 'changes JobQuestion count by 1' do
+          expect { post :create, job: valid_params.merge(new_question_params) }
+            .to change(JobQuestion, :count).by(1)
         end
       end
 
@@ -435,6 +462,23 @@ RSpec.describe JobsController, type: :controller do
           end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(-1)
         end
+
+        describe 'updates job with new license' do
+          it 'changes JobLicense count by 1' do
+            expect { patch :update, id: job_wo_skill.id,
+                     job: valid_params.merge(new_license_params) }
+              .to change(JobLicense, :count).by(1)
+          end
+        end
+
+        describe 'updates job with new question' do
+          it 'changes JobQuestion count by 1' do
+            expect { patch :update, id: job_wo_skill.id,
+                     job: valid_params.merge(new_question_params) }
+              .to change(JobQuestion, :count).by(1)
+          end
+        end
+
         it 'redirects to show, show flash' do
           request
           expect(response).to redirect_to(action: 'show')

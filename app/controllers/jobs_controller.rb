@@ -70,6 +70,8 @@ class JobsController < ApplicationController
     authorize @job
     @company = Company.find(params[:company_id])
     set_company_address
+    set_all_licenses
+    set_all_questions
   end
 
   def create
@@ -102,6 +104,8 @@ class JobsController < ApplicationController
     else
       @company = @job.company
       set_company_address(new_address_params)
+      set_all_licenses
+      set_all_questions
       render :new
     end
   end
@@ -117,6 +121,8 @@ class JobsController < ApplicationController
     authorize @job
     @company = @job.company
     set_company_address
+    set_all_licenses
+    set_all_questions
   end
 
   def update
@@ -144,6 +150,8 @@ class JobsController < ApplicationController
     else
       @company = @job.company
       set_company_address(new_address_params)
+      set_all_licenses
+      set_all_questions
       render :edit
     end
   end
@@ -202,7 +210,7 @@ class JobsController < ApplicationController
     authorize @job_seeker
 
     if @job_seeker.consent && @job_seeker.job_developer == pets_user
-      apply_for(@job_seeker) do |job_app, job, job_seeker|
+      apply_for(@job_seeker, params[:questions]) do |job_app, job, job_seeker|
         Event.create(:JD_APPLY, job_app)
         flash[:info] = "Job is successfully applied for #{job_seeker.full_name}"
         redirect_to(job_path(job)) && return
@@ -210,7 +218,7 @@ class JobsController < ApplicationController
     end
 
     if pets_user == @job_seeker
-      apply_for(@job_seeker) do |job_app, _job, _job_seeker|
+      apply_for(@job_seeker, params[:questions]) do |job_app, _job, _job_seeker|
         Event.create(:JS_APPLY, job_app)
         render(:apply) && return
       end
@@ -354,8 +362,8 @@ class JobsController < ApplicationController
     @job.new_address = Address.new(new_address_attributes)
   end
 
-  def apply_for(job_seeker, &controller_response)
-    @job.apply(job_seeker, &controller_response)
+  def apply_for(job_seeker, questions_answers, &controller_response)
+    @job.apply(job_seeker, questions_answers, &controller_response)
   # ActiveRecord::RecordInvalid is raised when validation at model level fails
   # ActiveRecord::RecordNotUnique is raised when unique index constraint
   # on the database is violated
@@ -384,6 +392,14 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
   end
 
+  def set_all_licenses
+    @all_licenses = License.order(:abbr)
+  end
+
+  def set_all_questions
+    @all_questions = Question.order(:question_text)
+  end
+
   def job_params
     params.require(:job).permit(:description, :company_job_id,
                                 :fulltime, :company_id, :title, :address_id,
@@ -394,6 +410,8 @@ class JobsController < ApplicationController
                                                         :skill_id, :required,
                                                         :min_years, :max_years],
                                 new_address_attributes: [:street, :city, :state,
-                                                         :zipcode])
+                                                         :zipcode],
+                                job_licenses_attributes: [:id, :license_id, :_destroy],
+                                job_questions_attributes: [:id, :question_id, :_destroy])
   end
 end
