@@ -1,0 +1,31 @@
+en:
+  devise:
+    failure:
+      invited: "Tienes una invitación pendiente, acéptala y termina de crear tu cuenta."
+    invitations:
+      send_instructions: "Se ha enviado una invitación al correo electrónico %{email}."
+      invitation_token_invalid: "El token de la invitación no es válido!"
+      updated: "Tú contraseña fué asignada satisfactoriamente. Ahora has iniciado sesión."
+      updated_not_active: "Tú contraseña fué asignada satisfactoriamente."
+      no_invitations_remaining: "No hay invitaciones restantes"
+      invitation_removed: "Tú invitación ha sido eliminada."
+      new:
+        submit_button: "Enviar invitación"
+      new_company_person:
+        header: "Envia una invitación para usar PETS por la empresa: %{org}"
+      new_agency_person:
+        header: "Envia una invitación para usar PETS por la agencia: %{org}"
+      edit:
+        header: "Asigna tu contraseña"
+        submit_button: "Guardar contraseña"
+    mailer:
+      invitation_instructions:
+        subject: "Instrucciones de la invitación"
+        hello: "Hola %{first_name}"
+        admin_invited_you: "%{org} te ha invitado a confirmar tu cuenta en PETS, y lo puedes hacer a través."
+        why_join_agency: >
+          PETS te ayudará a administrar tus actividades y coordinarte con tus compañeros en %{org}.
+        why_join_company: >
+          PETS te permite publicar empleos y administrar candidatos a nombre de %{org}.
+        accept: "Aceptar invitación"
+        ignore: "Si no quieres aceptar la invitación, por favor ignora este email.<br />Tú cuenta no será creada hasta que ingreses al enlace de arriba y asignes tu contraseña."
