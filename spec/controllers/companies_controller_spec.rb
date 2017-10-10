@@ -135,8 +135,7 @@ RSpec.describe CompaniesController, type: :controller do
 
     before(:each) do
       sign_in cp1
-      xhr :get, :list_people, id: company,
-                              people_type: 'my-company-all'
+      xhr :get, :list_people, id: company
     end
     it 'assigns @people to collection of all company people' do
       expect(assigns(:people)).to include cp1, cp2, cp3, cp4
@@ -277,26 +276,22 @@ RSpec.describe CompaniesController, type: :controller do
     context '#list-people' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        xhr :get, :list_people, id: company,
-                                people_type: 'company-all'
+        xhr :get, :list_people, id: company
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes company admin' do
         allow(controller).to receive(:current_user).and_return(company_admin)
-        xhr :get, :list_people, id: company,
-                                people_type: 'my-company-all'
+        xhr :get, :list_people, id: company
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes company contact' do
         allow(controller).to receive(:current_user).and_return(company_contact)
-        xhr :get, :list_people, id: company,
-                                people_type: 'my-company-all'
+        xhr :get, :list_people, id: company
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'denies access to job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
-        xhr :get, :list_people, id: company,
-                                people_type: 'my-company-all'
+        xhr :get, :list_people, id: company
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -304,8 +299,7 @@ RSpec.describe CompaniesController, type: :controller do
       end
       it 'denies access to case manager' do
         allow(controller).to receive(:current_user).and_return(cm)
-        xhr :get, :list_people, id: company,
-                                people_type: 'my-company-all'
+        xhr :get, :list_people, id: company
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -313,8 +307,7 @@ RSpec.describe CompaniesController, type: :controller do
       end
       it 'denies access to job seeker' do
         allow(controller).to receive(:current_user).and_return(js)
-        xhr :get, :list_people, id: company,
-                                people_type: 'my-company-all'
+        xhr :get, :list_people, id: company
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
