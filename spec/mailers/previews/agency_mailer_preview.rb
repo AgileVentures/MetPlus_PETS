@@ -53,7 +53,6 @@ class AgencyMailerPreview < ActionMailer::Preview
     job = Job.create(title: 'Software Engineer',
                   company: Company.first,
                   company_job_id: 'XYZ',
-                  shift: Job::SHIFT_OPTIONS[0],
                   description: 'description of test job')
     job_developer = User.find_by_email('chet@metplus.org').actable
 
