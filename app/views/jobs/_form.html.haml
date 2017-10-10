@@ -126,3 +126,14 @@
       .links
         = link_to_add_association 'Add License', f, :job_licenses,
             render_options: { locals: { all_licenses: all_licenses } }
+
+.form-group
+  .col-sm-3.control-label
+    %b Questions
+  .col-sm-7
+    #questions{ style: style }
+      = f.fields_for :job_questions do |job_question|
+        = render 'job_question_fields', f: job_question, all_questions: all_questions
+      .links
+        = link_to_add_association 'Add Question', f, :job_questions,
+            render_options: { locals: { all_questions: all_questions } }
