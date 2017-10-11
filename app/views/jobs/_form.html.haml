@@ -129,6 +129,12 @@
 
 .form-group
   .col-sm-3.control-label
+    = f.label :language_proficiency
+  .col-sm-7
+    =f.text_area :language_proficiency, size: "40x5", class: 'form-control'
+
+.form-group
+  .col-sm-3.control-label
     %b Questions
   .col-sm-7
     #questions{ style: style }
