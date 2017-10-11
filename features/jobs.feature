@@ -45,6 +45,13 @@ Feature: Manage Jobs
       | Day     |
       | Swing   |
 
+    Given the following license records:
+      | abbr  | title                                  |
+      | LLMSW | LIMITED LICENSE MASTER SOCIAL WORKER   |
+      | LMSW  | LICENSED MASTER SOCIAL WORKER          |
+      | LLPC  | LIMITED LICENSE PROFESSIONAL COUNSELOR |
+
+
   @javascript
   Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     Given I am on the home page
@@ -68,8 +75,11 @@ Feature: Manage Jobs
     And I select "Full Time" in select list "Job Type"
     And I select "Part Time" in select list "Job Type"
     And I select "Morning" in select list "Shift"
+    Then I select a licence
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
+    And the job should have 1 license
+    Then show me the page
     And I should see "Full Time, Part Time"
     And I should see "Morning"
     Then I click the "Edit Job" link
@@ -165,7 +175,7 @@ Feature: Manage Jobs
     And I click the "Create new location" link
     And I wait 1 second
     And I fill in the fields:
-      | Street   | 12 Main Street |
+     | Street   | 12 Main Street |
       | City     | Detroit        |
       | Zipcode  | 02034          |
     And I press "new-job-submit"

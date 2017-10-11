@@ -1,5 +1,5 @@
 Then(/^I should verify the change of title "(.*?)" and jobId "(.*?)"$/) do |title, jobId|
-	
+
 	@job = Job.find_by_title(title)
 	expect(@job.company_job_id).to eql jobId
 
@@ -100,4 +100,15 @@ end
 
 And(/^I accept the confirm dialog/) do
   accept_confirm
+end
+
+Then(/^I select a licence$/) do
+  step %{I click the "Add License" link}
+  within(:css, "div#licenses") do
+    first(".select-license").find(:xpath, 'option[2]').select_option
+  end
+end
+
+Then(/^the job should have (.*?) license$/) do |count|
+  expect(Job.last.licenses.count.to_s).to eq count
 end
