@@ -80,8 +80,7 @@ class Job < ActiveRecord::Base
     end
   end
 
-
-  scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
+  scope :new_jobs, ->(given_time) { where('jobs.created_at > ?', given_time) }
   scope :find_by_company, ->(company) { where(company: company) }
 
   enum status: [:active, :filled, :revoked]
