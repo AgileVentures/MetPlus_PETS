@@ -1,7 +1,7 @@
-#jobs-list
-  - if jobs.empty?
-    %i There are no jobs available
-  - else
+- if jobs.empty?
+  %i There are no jobs available
+- else
+  #jobs-list
     %table.table.table-hover
       %thead
         %tr
@@ -9,14 +9,20 @@
             - case field
               - when :title
                 %th.strong
-                  = sort_link(query, :title, {}, class: 'jobs-pagination',
-                      remote: true)
+                  = sort_link(query, :title, { default_order: :desc },
+                    class: 'jobs-pagination', remote: true)
               - when :status
-                %th.strong Status
+                %th.strong
+                  = sort_link(query, :status, {},
+                    class: 'jobs-pagination', remote: true)
               - when :updated_at
-                %th.strong Last Update
+                %th.strong
+                  = sort_link(query, :updated_at, 'Last update', {},
+                    class: 'jobs-pagination', remote: true)
               - when :poster
-                %th.strong Poster
+                %th.strong
+                  = sort_link(query, :company_person_user_last_name, 'Poster', {},
+                    class: 'jobs-pagination', remote: true)
               - when :num_applicants
                 %th.strong Applications
               - when :company
@@ -27,8 +33,8 @@
                 %th.strong Description
               - when :posted
                 %th.strong
-                  = sort_link(query, :created_at, 'Posted', {}, class: 'jobs-pagination',
-                      remote: true, default_order: :desc)
+                  = sort_link(query, :created_at, 'Posted', {},
+                    class: 'jobs-pagination', remote: true, default_order: :desc)
       %tbody
         - jobs.each do |job|
           %tr{ class: ( "recent-jobs" if job.recent_for? pets_user ) }
@@ -62,12 +68,11 @@
                   = truncate(job.description, length: 200)
               - when :posted
                 %td
-                  #{time_ago_in_words job.created_at} ago
+                  #{time_ago_in_words(job.created_at)} ago
 
     = render 'shared/paginate_footer',
         entities: jobs,
         paginate_class: 'jobs-pagination',
         items_count: items_count,
         url: list_jobs_path(job_type: job_type)
-
 %br

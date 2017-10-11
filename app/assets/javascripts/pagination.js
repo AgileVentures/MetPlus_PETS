@@ -224,7 +224,7 @@ $(document).ready(function () {
       $('#cmpy-people-list').html(data);
     });
 
-     $('body').on('ajax:success', '.jobs-pagination', function (e, data) {
+    $('body').on('ajax:success', '.jobs-pagination', function (e, data) {
       $('#jobs-list').html(data);
     });
 });
