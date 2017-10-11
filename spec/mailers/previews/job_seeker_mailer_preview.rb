@@ -23,10 +23,13 @@ class JobSeekerMailerPreview < ActionMailer::Preview
 
   def job_revoked
     job_seeker = User.find_by_email('tomseekerpets@gmail.com').actable
+
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+
     job = Job.create(title: 'Sr Software Engineer',
                      company: Company.first,
                      company_job_id: 'ABC',
-                     shift: Job::SHIFT_OPTIONS[0],
                      description: 'description of test job')
 
     job.apply(job_seeker)

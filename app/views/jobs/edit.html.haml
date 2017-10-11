@@ -8,7 +8,8 @@
     = render partial: 'form', locals: { f: f,
                                         company: @company,
                                         addresses: @addresses,
-                                        all_licenses: @all_licenses }
+                                        all_licenses: @all_licenses,
+                                        all_questions: @all_questions }
     .form-group
       .col-sm-offset-3.col-sm-7
         = f.submit "Update", class: "btn btn-primary btn-block", id: "edit-job-submit"

@@ -219,4 +219,12 @@ $(document).ready(function () {
     $('body').on('ajax:success', '.searched_jobs_pagination', function (e, data) {
       $('#searched-job-list').html(data);
     });
+
+    $('body').on('ajax:success', '.cmpy_people_pagination', function (e, data) {
+      $('#cmpy-people-list').html(data);
+    });
+
+    $('body').on('ajax:success', '.jobs-pagination', function (e, data) {
+      $('#jobs-list').html(data);
+    });
 });

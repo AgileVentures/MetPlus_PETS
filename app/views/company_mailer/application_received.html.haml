@@ -8,3 +8,23 @@
 
 %p
   Please find the resume of the applicant attached with this email.
+
+- questions = @job_application.application_questions
+
+- if questions.any?
+
+  The applicant answered the following questions associated with this job:
+  %br
+  %br
+  %table.table
+    %thead
+      %tr
+        %th{ style: 'text-align: left;' }
+          %strong Question
+        %th
+          %strong Answer
+    %tbody
+      - questions.each do |q|
+        %tr
+          %td= q.question.question_text
+          %td= q.answer

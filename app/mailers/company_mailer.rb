@@ -18,8 +18,9 @@ class CompanyMailer < ApplicationMailer
   end
 
   def application_received(company, job_application, resume_id)
-    @job = job_application.job
-    @job_seeker = job_application.job_seeker
+    @job_application = job_application
+    @job = @job_application.job
+    @job_seeker = @job_application.job_seeker
 
     # Download the resume from Cruncher
     resume_temp_file = ResumeCruncher.download_resume(resume_id)
