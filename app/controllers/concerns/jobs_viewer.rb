@@ -16,11 +16,11 @@ module JobsViewer
   end
 
   FIELDS_IN_JOB_TYPE = {
-    'my-company-all': [:title, :status, :poster, :num_applicants, :updated_at],
-    'recent-jobs': [:title, :company, :description, :posted]
+    'my-company-all' => [:title, :status, :poster, :num_applicants, :updated_at],
+    'recent-jobs' => [:title, :company, :description, :posted]
   }.freeze
 
   def job_fields(job_type)
-    FIELDS_IN_JOB_TYPE[job_type.to_sym] || []
+    FIELDS_IN_JOB_TYPE[job_type] || []
   end
 end
