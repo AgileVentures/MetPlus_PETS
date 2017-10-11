@@ -4,10 +4,10 @@
 %table{class: "table table-bordered"}
   %tbody
     %tr
-      %td Job title:
+      %td Job Title:
       %td#job-title=@job.title
     %tr
-      %td Job status:
+      %td Job Status:
       %td#job-status=@job.status
     %tr
       %td Location:
@@ -21,7 +21,7 @@
         %td No address for this job
 
     %tr
-      %td Full time:
+      %td Full Time:
       %td=@job.fulltime ? 'Yes' : 'No'
     %tr
       %td Job ID:
@@ -42,7 +42,14 @@
       %td= job_salary_details(@job)
     %tr
       %td Job Details:
-      %td=@job.description
+      %td= @job.description
+    - unless @job.education.nil? && @job.education_info.nil?
+      %tr
+        %td Education Requirements:
+        %td
+          = @job.education&.level
+          = ", #{@job.education_info}" unless @job&.education_info.empty?
+
     - unless @job.job_types.empty?
       %tr
         %td Job Type:
