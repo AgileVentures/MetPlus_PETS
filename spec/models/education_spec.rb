@@ -10,6 +10,7 @@ RSpec.describe Education, type: :model do
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :level }
+    it { is_expected.to have_db_column :rank }
   end
 
   describe 'Associations' do

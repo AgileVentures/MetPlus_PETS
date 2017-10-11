@@ -72,6 +72,7 @@ class JobsController < ApplicationController
     set_company_address
     set_all_licenses
     set_all_questions
+    set_all_education_levels
   end
 
   def create
@@ -106,6 +107,7 @@ class JobsController < ApplicationController
       set_company_address(new_address_params)
       set_all_licenses
       set_all_questions
+      set_all_education_levels
       render :new
     end
   end
@@ -123,6 +125,7 @@ class JobsController < ApplicationController
     set_company_address
     set_all_licenses
     set_all_questions
+    set_all_education_levels
   end
 
   def update
@@ -152,6 +155,7 @@ class JobsController < ApplicationController
       set_company_address(new_address_params)
       set_all_licenses
       set_all_questions
+      set_all_education_levels
       render :edit
     end
   end
@@ -400,11 +404,16 @@ class JobsController < ApplicationController
     @all_questions = Question.order(:question_text)
   end
 
+  def set_all_education_levels
+    @all_education_levels = Education.order(:rank)
+  end
+
   def job_params
     params.require(:job).permit(:description, :company_job_id, :language_proficiency,
                                 :fulltime, :company_id, :title, :address_id,
                                 :company_person_id, :years_of_experience,
                                 :pay_period, :max_salary, :min_salary,
+                                :education_info, :education_id,
                                 job_type_ids: [], job_shift_ids: [],
                                 job_skills_attributes: [:id, :_destroy,
                                                         :skill_id, :required,

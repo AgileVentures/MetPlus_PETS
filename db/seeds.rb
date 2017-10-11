@@ -93,13 +93,14 @@ puts '  License types created'
 puts '  Job questions created'
 
 # Create default education levels
-[ 'High School',
-  'Associates (2 year) Degree',
-  'Bachelors (4 year) Degree',
-  'Masters Degree',
-  'PhD',
-  'Other'
-].each { |e| Education.find_or_create_by(level: e) }
+[
+  ['High School', 1],
+  ['Associates Degree', 2],
+  ['Bachelors Degree', 3],
+  ['Masters Degree', 4],
+  ['PhD', 5],
+  ['Other', 6]
+].each { |e| Education.find_or_create_by(level: e[0], rank: e[1]) }
 
 puts '  Education levels created'
 
