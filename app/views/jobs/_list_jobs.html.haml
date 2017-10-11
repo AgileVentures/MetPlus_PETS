@@ -1,63 +1,75 @@
 - if jobs.empty?
   %i There are no jobs available
 - else
-  %table.table.table-hover
-    %thead
-      %tr
-        - job_fields(job_type).each do |field|
-          - case field
-            - when :title
-              %th.strong Title
-            - when :status
-              %th Status
-            - when :updated_at
-              %th.strong Last update
-            - when :poster
-              %th.strong Poster
-            - when :num_applicants
-              %th.strong Applications
-            - when :company
-              %th.strong Company
-            - when :description
-              %th.strong Description
-            - when :posted
-              %th.strong Posted
-    %tbody
-      - jobs.each do |job|
-        %tr{ class: ( "recent-jobs" if job.recent_for? pets_user ) }
-        - job_fields(job_type).each do |field|
-          - case field
-            - when :title
-              %td.col-md-4
-                = link_to(job.title, job_path(job))
-            - when :status
-              %td.col-md-2
-                = job.status.capitalize
-                &nbsp;
-                %span.glyphicon.glyphicon-time{ 'aria-hidden': true }
-                %span.text-muted.small
-                  = job.status_change_time(job.status).strftime('%d %b, %Y')
-            - when :updated_at
-              %td.col-md-2
-                = job.updated_at.strftime('%d %b, %Y')
-            - when :poster
-              %td.col-md-3
-                = link_to(job.company_person.full_name,
-                          company_person_path(job.company_person)) if job.company_person
-            - when :num_applicants
-              %td.col-md-1
-                = job.number_applicants
-            - when :company
-              %td
-                = job.company.name
-            - when :description
-              %td
-                = truncate(job.description, length: 200)
-            - when :posted
-              %td
-                #{time_ago_in_words(job.created_at, )} ago
-  .row.text-center
-    = will_paginate jobs, param_name: 'jobs_page',
-                          params: { controller: 'jobs', action: 'list',
-                          job_type: job_type }
+  #jobs-list
+    %table.table.table-hover
+      %thead
+        %tr
+          - job_fields(job_type).each do |field|
+            - case field
+              - when :title
+                %th.strong
+                  = sort_link(query, :title, { default_order: :desc },
+                    class: 'jobs-pagination', remote: true)
+              - when :status
+                %th.strong
+                  = sort_link(query, :status, {},
+                    class: 'jobs-pagination', remote: true)
+              - when :updated_at
+                %th.strong
+                  = sort_link(query, :updated_at, 'Last update', {},
+                    class: 'jobs-pagination', remote: true)
+              - when :poster
+                %th.strong
+                  = sort_link(query, :company_person_user_last_name, 'Poster', {},
+                    class: 'jobs-pagination', remote: true)
+              - when :num_applicants
+                %th.strong Applications
+              - when :company
+                %th.strong Company
+              - when :description
+                %th.strong Description
+              - when :posted
+                %th.strong Posted
+      %tbody
+        - jobs.each do |job|
+          %tr{ class: ( "recent-jobs" if job.recent_for? pets_user ) }
+          - job_fields(job_type).each do |field|
+            - case field
+              - when :title
+                %td.col-md-4
+                  = link_to(job.title, job_path(job))
+              - when :status
+                %td.col-md-2
+                  = job.status.capitalize
+                  &nbsp;
+                  %span.glyphicon.glyphicon-time{ 'aria-hidden': true }
+                  %span.text-muted.small
+                    = job.status_change_time(job.status).strftime('%d %b, %Y')
+              - when :updated_at
+                %td.col-md-2
+                  = job.updated_at.strftime('%d %b, %Y')
+              - when :poster
+                %td.col-md-3
+                  = link_to(job.company_person.full_name,
+                            company_person_path(job.company_person)) if job.company_person
+              - when :num_applicants
+                %td.col-md-1
+                  = job.number_applicants
+              - when :company
+                %td
+                  = job.company.name
+              - when :description
+                %td
+                  = truncate(job.description, length: 200)
+              - when :posted
+                %td
+                  #{time_ago_in_words(job.created_at)} ago
+
+    = render 'shared/paginate_footer',
+        entities: jobs,
+        paginate_class: 'jobs-pagination',
+        items_count: items_count,
+        url: list_jobs_path,
+        job_type: job_type
 %br

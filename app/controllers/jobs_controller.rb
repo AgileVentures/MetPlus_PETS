@@ -165,9 +165,19 @@ class JobsController < ApplicationController
 
   def list
     raise 'Unsupported request' unless request.xhr?
-    @jobs = []
-    @jobs = display_jobs params[:job_type]
-    render partial: 'list_jobs', locals: { jobs: @jobs, job_type: params[:job_type] }
+
+    entity = params[:job_type] == 'recent-jobs' ? 'recent_jobs' : 'company_jobs'
+    search_params, items_count, items_per_page = process_pagination_params(entity)
+
+    jobs = display_jobs(params[:job_type])
+    query = jobs.ransack(search_params)
+    jobs = query.result.paginate(page: params[:page], per_page: items_per_page)
+
+    render partial: 'list_jobs',
+           locals: { jobs: jobs,
+                     job_type: params[:job_type],
+                     query: query,
+                     items_count: items_count }
   end
 
   def update_addresses
