@@ -92,6 +92,17 @@ puts '  License types created'
 
 puts '  Job questions created'
 
+# Create default education levels
+[ 'High School',
+  'Associates (2 year) Degree',
+  'Bachelors (4 year) Degree',
+  'Masters Degree',
+  'PhD',
+  'Other'
+].each { |e| Education.find_or_create_by(level: e) }
+
+puts '  Education levels created'
+
 puts "\nSeeded Production Data"
 
 exit(0) if Rails.env.production?
