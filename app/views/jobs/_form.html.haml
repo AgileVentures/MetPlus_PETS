@@ -126,7 +126,7 @@
   .col-sm-3.control-label
     %b Job Skills
   .col-sm-7
-    #job_skills.form-group-div
+    .form-group-div#job_skills
       = f.fields_for :job_skills do |job_skill|
         = render 'job_skill_fields', f: job_skill, company: company
       .links
@@ -137,7 +137,7 @@
   .col-sm-3.control-label
     %b Licenses
   .col-sm-7
-    #licenses.form-group-div
+    .form-group-div#licenses
       = f.fields_for :job_licenses do |job_license|
         = render 'job_license_fields', f: job_license, all_licenses: all_licenses
       .links
@@ -154,7 +154,7 @@
   .col-sm-3.control-label
     %b Questions
   .col-sm-7
-    #questions.form-group-div
+    .form-group-div#questions
       = f.fields_for :job_questions do |job_question|
         = render 'job_question_fields', f: job_question, all_questions: all_questions
       .links

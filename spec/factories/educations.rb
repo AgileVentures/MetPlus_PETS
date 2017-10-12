@@ -3,5 +3,4 @@ FactoryGirl.define do
     level 'High School'
     rank 1
   end
-
 end
