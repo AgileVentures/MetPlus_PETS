@@ -1,7 +1,7 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
-RSpec.shared_examples 'unauthorized all' do
+RSpec.shared_examples 'unauthorized company people' do
   let(:company) { FactoryGirl.create(:company) }
 
   context 'company admin' do
@@ -269,7 +269,7 @@ RSpec.describe CompaniesController, type: :controller do
         let(:request) { delete :destroy, id: company }
       end
 
-      it_behaves_like 'unauthorized all' do
+      it_behaves_like 'unauthorized company people' do
         let(:request) { delete :destroy, id: company }
       end
     end
