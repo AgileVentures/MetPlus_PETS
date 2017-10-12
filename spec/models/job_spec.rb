@@ -63,6 +63,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :max_salary }
     it { is_expected.to have_db_column :min_salary }
     it { is_expected.to have_db_column :pay_period }
+    it { is_expected.to have_db_column :language_proficiency }
   end
 
   describe 'Validations' do
