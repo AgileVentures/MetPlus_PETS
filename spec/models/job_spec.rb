@@ -64,12 +64,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :max_salary }
     it { is_expected.to have_db_column :min_salary }
     it { is_expected.to have_db_column :pay_period }
-<<<<<<< HEAD
-    it { is_expected.to have_db_column :language_proficiency }
-=======
     it { is_expected.to have_db_column :education_id }
     it { is_expected.to have_db_column :education_info }
->>>>>>> added migrations and adjusted models
   end
 
   describe 'Validations' do
