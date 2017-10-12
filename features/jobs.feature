@@ -77,7 +77,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     | Title                  | cab-driver|
     | Company Job ID         | KRT123    |
     | Description            | Atleast two years work experience|
-    | Language proficiency   | Must speak fluent english |
+    | Language Proficiency   | Must speak fluent english |
   And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
   And I select "Contract" in select list "Job Type"
   And I fill in the fields:
