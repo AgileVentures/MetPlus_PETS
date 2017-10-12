@@ -175,10 +175,11 @@ class JobsController < ApplicationController
 
     jobs = display_jobs(params[:job_type])
     query = jobs.ransack(search_params)
-    jobs = query.result.paginate(page: params[:page], per_page: items_per_page)
+    @jobs = query.result.paginate(page: params[:page], per_page: items_per_page)
+    # ^ instance var not used directly in view but added for testing convenience
 
     render partial: 'list_jobs',
-           locals: { jobs: jobs,
+           locals: { jobs: @jobs,
                      job_type: params[:job_type],
                      query: query,
                      items_count: items_count }
