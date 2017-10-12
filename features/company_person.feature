@@ -54,8 +54,8 @@ Feature: Company Person
       | job_application    | jane@ymail.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
     Given the following jobs exist:
-    | title         | company_job_id  | fulltime | description | company      | creator          | skills    |
-    | Web dev       | KRK01K          | true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
+    | title         | company_job_id  | description | company      | creator          | skills    |
+    | Web dev       | KRK01K          | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Scenario: company admin edits company info
     Given I am on the home page

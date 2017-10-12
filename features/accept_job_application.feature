@@ -32,9 +32,9 @@ Background: data is added to database
     | june@ymail.com | dave@metplus.org | JD   |
 
   Given the following jobs exist:
-    | title        | company_job_id | fulltime | description | company      | creator          |
-    | hr manager   | KRK02K         | true     | internship  | Widgets Inc. | cane@ymail.com |
-    | hr assistant | KRK01K       | true     | internship  | Widgets Inc. | cane@ymail.com |
+    | title        | company_job_id | description | company      | creator          |
+    | hr manager   | KRK02K         | internship  | Widgets Inc. | cane@ymail.com |
+    | hr assistant | KRK01K         | internship  | Widgets Inc. | cane@ymail.com |
 
   Given the following job applications exist:
     | job title      | job seeker    | status       |
@@ -52,7 +52,7 @@ Background: data is added to database
     Then I accept "jane@ymail.com" application for "hr manager"
     And I should see an "accept" confirmation
     Then I click the "Accept" confirmation
-    And I wait 1 second 
+    And I wait 1 second
     And I should see "jane@ymail.com" application is listed first
     And I should see "jane@ymail.com" application for "hr manager" changes to accepted
     And other applications for "hr manager" change to not accepted

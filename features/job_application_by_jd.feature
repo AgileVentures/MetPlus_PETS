@@ -22,8 +22,8 @@ Background: data is added to database
   | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
-  | title               | company_job_id  | fulltime | description                 | company      | creator        |
-  | software developer  | KRK01K          | true     | internship position with pay| Widgets Inc. | carter@ymail.com |
+  | title               | company_job_id  | description                 | company      | creator        |
+  | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com |
 
   Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |

@@ -23,10 +23,10 @@ Feature: Company Person Jobs View
       | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
-      | title        | company_job_id  | fulltime | description| company      | creator          |
-      | software dev | KRK01K          | true     | internship | Widgets Inc. | carter@ymail.com |
-      | Cook         | KRK11K          | true     | internship | Feature Inc. | ca@feature.com   |
-      | Doctor       | AAEE1K          | true     | internship | Feature Inc. | ca@feature.com   |
+      | title        | company_job_id  | description| company      | creator          |
+      | software dev | KRK01K          | internship | Widgets Inc. | carter@ymail.com |
+      | Cook         | KRK11K          | internship | Feature Inc. | ca@feature.com   |
+      | Doctor       | AAEE1K          | internship | Feature Inc. | ca@feature.com   |
 
   @javascript
   Scenario: verify job listing in home page

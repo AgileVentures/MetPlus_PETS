@@ -41,9 +41,9 @@ Feature: Match a Job to a Job Seeker's Résumé
      | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
-     | title            | company_job_id| fulltime | description| company      | creator        |
-     | ruby developer   | KRK01         | true     | internship | Widgets Inc. | carter@ymail.com |
-     | java developer   | KRK02         | true     | internship | Widgets Inc. | carter@ymail.com |
+     | title            | company_job_id| description| company      | creator        |
+     | ruby developer   | KRK01         | internship | Widgets Inc. | carter@ymail.com |
+     | java developer   | KRK02         | internship | Widgets Inc. | carter@ymail.com |
 
     Given the following job applications exist:
      | job title      | job seeker            |
