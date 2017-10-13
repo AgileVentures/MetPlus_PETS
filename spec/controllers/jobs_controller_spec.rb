@@ -576,6 +576,15 @@ RSpec.describe JobsController, type: :controller do
         request_first_page
         expect(response).to render_template('jobs/_list_jobs')
       end
+      it 'first_page: jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        request_first_page
+        assigns(:jobs).each {}
+        expect(assigns(:jobs).all.size).to be 10
+        expect(assigns(:jobs).first.title).to eq 'Awesome job 00'
+        expect(assigns(:jobs).last.title).to eq 'Awesome job 09'
+      end
       it 'first_page: should not set flash' do
         request_first_page
         should_not set_flash
@@ -587,6 +596,14 @@ RSpec.describe JobsController, type: :controller do
       it "last_page: renders 'jobs/_list_jobs' template" do
         request_last_page
         expect(response).to render_template('jobs/_list_jobs')
+      end
+      it 'last_page: check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        request_last_page
+        assigns(:jobs).each {}
+        expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
+        expect(assigns(:jobs).size).to eq 1
       end
       it 'last_page: should not set flash' do
         request_last_page
@@ -602,6 +619,14 @@ RSpec.describe JobsController, type: :controller do
 
       it { expect(response).to have_http_status(:ok) }
       it {  expect(response).to render_template('jobs/_list_jobs') }
+      it 'check jobs' do
+        # Next line added to ensure the query is done and that the
+        # paginate is also called
+        assigns(:jobs).each {}
+        expect(assigns(:jobs).all.size).to be 4
+        expect(assigns(:jobs).first.title).to eq 'Awesome new job 0'
+        expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'
+      end
       it { should_not set_flash }
     end
 
@@ -619,7 +644,10 @@ RSpec.describe JobsController, type: :controller do
         expect(response).to render_template('jobs/_list_jobs')
       end
 
+      it 'recent_jobs: check_jobs' do
+        expect(assigns(:jobs).first.title).to eq 'Awesome new job 3'
       end
+    end
   end
 
   describe 'GET #update_addresses' do
