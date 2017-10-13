@@ -284,3 +284,7 @@ end
 Then(/^I save the page as "([^"]+)"$/) do |screen|
   page.save_screenshot(screen.to_s, full: true)
 end
+
+When(/^(?:I|they) select radio button "([^"]*)"$/) do |label_text|
+  find(:xpath, "//label[contains(.,'#{label_text}')]/input[@type='radio']").click
+end
