@@ -51,11 +51,11 @@ Feature: Manage Jobs
       | LMSW  | LICENSED MASTER SOCIAL WORKER          |
       | LLPC  | LIMITED LICENSE PROFESSIONAL COUNSELOR |
 
-
-  @javascript
-  Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
+
+  @javascript
+  Scenario: Visit the create page
     When I click the first "Post Job" link
     And I wait 1 second
     And I should see "Salary Range"
@@ -66,6 +66,28 @@ Feature: Manage Jobs
     And I should see "Monthly"
     And I should see "Annually"
 
+  @javascript
+  Scenario: Creating Job Successfully
+    When I click the first "Post Job" link
+    And I wait 1 second
+    And I fill in the fields:
+      | Title          | cashier                            |
+      | Company Job ID | KARK12                             |
+      | Description    | At least two years work experience |
+    And I select "Day" in select list "Shift"
+    And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
+    And I select "Full Time" in select list "Job Type"
+    And I select "Part Time" in select list "Job Type"
+    And I select "Morning" in select list "Shift"
+    Then I select a licence
+    And I press "new-job-submit"
+    Then I should see "cashier has been created successfully."
+
+
+  @javascript
+  Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
+    When I click the first "Post Job" link
+    And I wait 1 second
     And I fill in the fields:
       | Title          | cashier                            |
       | Company Job ID | KARK12                             |
@@ -79,7 +101,6 @@ Feature: Manage Jobs
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
     And the job should have 1 license
-    Then show me the page
     And I should see "Full Time, Part Time"
     And I should see "Morning"
     Then I click the "Edit Job" link
@@ -142,8 +163,6 @@ Feature: Manage Jobs
 
   @javascript
   Scenario: Cancel out of job edit
-    Given I am on the home page
-    And I login as "jane@ymail.com" with password "qwerty123"
     Then I should be on the Company Person 'jane@ymail.com' Home page
     And I click the "software dev" link
     And I wait 1 second
@@ -158,8 +177,6 @@ Feature: Manage Jobs
 
   @javascript
   Scenario: Create a job *and* create new job location (company address)
-    Given I am on the home page
-    And I login as "jane@ymail.com" with password "qwerty123"
     When I click the first "Post Job" link
     And I wait 1 second
     And I fill in the fields:
@@ -187,8 +204,6 @@ Feature: Manage Jobs
 
   @javascript
   Scenario: Edit a job *and* create new job location (company address)
-    Given I am on the home page
-    And I login as "jane@ymail.com" with password "qwerty123"
     And I click the "software dev" link
     And I wait 1 second
     Then I click the "Edit Job" link
