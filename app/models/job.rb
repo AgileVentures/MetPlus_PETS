@@ -2,6 +2,7 @@ class Job < ActiveRecord::Base
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
+  belongs_to :education
 
   # force address validation in controller upon job create and job update when
   # new address is being created.  If valid, new address is saved when job is saved.
@@ -34,6 +35,11 @@ class Job < ActiveRecord::Base
   # ^^ Using "has_many, through" instead of HABTM becuase the latter does not
   #    work well with "accepts_nested_attributes_for"
   accepts_nested_attributes_for :job_licenses, allow_destroy: true, reject_if: :all_blank
+
+  has_many :job_questions, inverse_of: :job, dependent: :destroy
+  has_many :questions, through: :job_questions
+  accepts_nested_attributes_for :job_questions, allow_destroy: true,
+                                reject_if: :all_blank
 
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
@@ -75,8 +81,7 @@ class Job < ActiveRecord::Base
     end
   end
 
-
-  scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
+  scope :new_jobs, ->(given_time) { where('jobs.created_at > ?', given_time) }
   scope :find_by_company, ->(company) { where(company: company) }
 
   enum status: [:active, :filled, :revoked]
@@ -94,9 +99,17 @@ class Job < ActiveRecord::Base
     job_applications.size
   end
 
-  def apply(job_seeker)
+  def apply(job_seeker, questions_answers = nil)
     job_application = job_applications.build(job_seeker_id: job_seeker.id)
+
+    # If job has questions to be answered by applicant:
+    questions_answers&.each do |k, v|
+      job_application.application_questions
+        .build(question_id: k, answer: (v == 'true'))
+    end
+
     if job_application.save!
+
       # Send mail to the company with the attached resume
       CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
                       .perform_later(Event::EVT_TYPE[:JS_APPLY],

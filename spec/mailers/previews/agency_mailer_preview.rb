@@ -50,10 +50,10 @@ class AgencyMailerPreview < ActionMailer::Preview
   end
 
   def job_posted
+    stub_cruncher_calls
     job = Job.create(title: 'Software Engineer',
                   company: Company.first,
                   company_job_id: 'XYZ',
-                  shift: Job::SHIFT_OPTIONS[0],
                   description: 'description of test job')
     job_developer = User.find_by_email('chet@metplus.org').actable
 
@@ -61,14 +61,18 @@ class AgencyMailerPreview < ActionMailer::Preview
   end
 
   def job_revoked
+    stub_cruncher_calls
     job = Job.create(title: 'Software Engineer',
                   company: Company.first,
                   company_job_id: 'XYZ',
-                  shift: Job::SHIFT_OPTIONS[0],
                   description: 'description of test job')
     job_developer = User.find_by_email('chet@metplus.org').actable
 
     AgencyMailer.job_revoked(job_developer.email, job)
   end
 
+  def stub_cruncher_calls
+    stub_cruncher_authenticate
+    stub_cruncher_job_create
+  end
 end

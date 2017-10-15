@@ -7,6 +7,11 @@ RSpec.describe JobApplication, type: :model do
     stub_cruncher_job_create
   end
 
+  describe 'Fixtures' do
+    it 'should have a valid factory' do
+      expect(FactoryGirl.build(:job_application)).to be_valid
+    end
+  end
   describe 'Database schema' do
     it { is_expected.to have_db_column :job_seeker_id }
     it { is_expected.to have_db_column :job_id }
@@ -16,6 +21,8 @@ RSpec.describe JobApplication, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :job_seeker }
     it { is_expected.to belong_to :job }
+    it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_many(:application_questions).dependent(:destroy) }
   end
   describe 'Validations' do
     it { is_expected.to validate_uniqueness_of(:job_seeker_id).scoped_to(:job_id) }

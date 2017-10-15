@@ -73,7 +73,7 @@ Rails.application.routes.draw do
 
   resources :companies, only: [:show, :edit, :update, :destroy] do
     member do
-      get 'list_people/:people_type' => 'companies#list_people', as: :list_people
+      get 'list_people' => 'companies#list_people', as: :list_people
     end
   end
 

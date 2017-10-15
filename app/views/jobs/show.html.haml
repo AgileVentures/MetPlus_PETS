@@ -25,7 +25,7 @@
 
   .clearfix
 
-  = render partial: 'job_info'
+  = render partial: 'job_info', locals: { job: @job }
 
   #apply_job
   - if pets_user && @job.active?

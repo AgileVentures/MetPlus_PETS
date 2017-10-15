@@ -20,6 +20,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to belong_to :company_person }
     it { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
+    it { is_expected.to belong_to :education }
     it { is_expected.to have_many(:job_skills).dependent(:destroy) }
     it do
       is_expected.to accept_nested_attributes_for(:job_skills)
@@ -44,6 +45,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_licenses) }
     it { is_expected.to have_many(:licenses).through(:job_licenses) }
     it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
+    it { is_expected.to have_many(:job_questions).dependent(:destroy) }
+    it { is_expected.to have_many(:questions).through(:job_questions) }
+    it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 
   describe 'Database schema' do
@@ -57,6 +61,11 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :address_id }
     it { is_expected.to have_db_column :status }
     it { is_expected.to have_db_column :years_of_experience }
+    it { is_expected.to have_db_column :max_salary }
+    it { is_expected.to have_db_column :min_salary }
+    it { is_expected.to have_db_column :pay_period }
+    it { is_expected.to have_db_column :education_id }
+    it { is_expected.to have_db_column :education_info }
   end
 
   describe 'Validations' do
@@ -183,10 +192,12 @@ RSpec.describe Job, type: :model do
     end
   end
 
-  describe 'Class methods' do
-  end
-
   describe 'Instance methods' do
+    let!(:question1) { FactoryGirl.create(:question) }
+    let!(:question2) { FactoryGirl.create(:question,
+                                          question_text: 'This is question two.') }
+    let(:question_answers) { {"1"=>"true", "2"=>"false"} }
+
     describe '#apply' do
       before(:each) do
         stub_cruncher_authenticate
@@ -196,20 +207,20 @@ RSpec.describe Job, type: :model do
 
       it 'success - first application' do
         num_applications = job.number_applicants
-        job.apply job_seeker
+        job.apply(job_seeker, nil)
         job.reload
         expect(job.job_seekers).to eq [job_seeker]
         expect(job.number_applicants).to be(num_applications + 1)
       end
       it 'raise error - second application with same job seeker' do
-        job.apply job_seeker
-        expect { job.apply job_seeker }.to raise_error(ActiveRecord::RecordInvalid)
+        job.apply(job_seeker, nil)
+        expect { job.apply(job_seeker, nil) }.to raise_error(ActiveRecord::RecordInvalid)
           .with_message('Validation failed: Job seeker has already been taken')
       end
       it 'two applications, different job seekers' do
         num_applications = job.number_applicants
-        first_appl = job.apply job_seeker
-        second_appl = job.apply job_seeker2
+        first_appl = job.apply(job_seeker, nil)
+        second_appl = job.apply(job_seeker2, nil)
         job.reload
         expect(job.job_seekers).to eq [job_seeker, job_seeker2]
         expect(job.number_applicants).to be(num_applications + 2)
@@ -217,6 +228,12 @@ RSpec.describe Job, type: :model do
           .to eq first_appl
         expect(job.last_application_by_job_seeker(job_seeker2))
           .to eq second_appl
+      end
+      it 'application with answers to job questions' do
+        application = job.apply(job_seeker, question_answers)
+        expect(application.application_questions.count).to eq 2
+        expect(application.application_questions.first.answer).to be true
+        expect(application.application_questions.second.answer).to be false
       end
     end
   end

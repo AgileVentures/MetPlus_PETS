@@ -9,6 +9,11 @@ RSpec.describe License, type: :model do
     end
   end
 
+  describe 'Database schema' do
+    it { is_expected.to have_db_column :abbr }
+    it { is_expected.to have_db_column :title }
+  end
+
   describe 'Associations' do
     it { is_expected.to have_many(:job_licenses).dependent(:destroy) }
     it { is_expected.to have_many(:jobs).through(:job_licenses) }
