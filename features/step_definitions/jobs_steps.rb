@@ -104,7 +104,7 @@ end
 
 Then(/^I select (a|another) licenses?$/) do |prefix|
   step %{I click the "Add License" link}
-  within(:css, "div#licenses") do
+  within(:css, 'div#licenses') do
     first('.select-license').find(:xpath, 'option[2]').select_option
   end
   if prefix == 'another'
