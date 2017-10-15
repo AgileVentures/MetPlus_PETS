@@ -22,8 +22,9 @@ Feature: Manage Jobs
       | Widgets Inc. | CC   | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
-      | title        | company_job_id | fulltime | description | company      | creator        |
-      | software dev | KRK01K         | true     | internship  | Widgets Inc. | jane@ymail.com |
+      | title        | company_job_id | fulltime | description         | company      | creator        |
+      | software dev | KRK01K         | true     | internship          | Widgets Inc. | jane@ymail.com |
+      | editor       | T01KS          | true     | This will be edited | Widgets Inc. | jane@ymail.com |
 
     Given the following company addresses exist:
       | company      | street       | city    | state    | zipcode |
@@ -52,20 +53,20 @@ Feature: Manage Jobs
       | LLPC  | LIMITED LICENSE PROFESSIONAL COUNSELOR |
 
 
-Given the following education records:
-  | level             | rank |
-  | High School       |   1  |
-  | Associates Degree |   2  |
-  | Bachelors Degree  |   3  |
-  | Masters Degree    |   4  |
-  | PhD               |   5  |
-  | Other             |   6  |
+    Given the following education records:
+      | level             | rank |
+      | High School       |   1  |
+      | Associates Degree |   2  |
+      | Bachelors Degree  |   3  |
+      | Masters Degree    |   4  |
+      | PhD               |   5  |
+      | Other             |   6  |
 
     Given I am on the home page
     And I login as "jane@ymail.com" with password "qwerty123"
 
   @javascript
-  Scenario: Visit the create page
+  Scenario: Visit the job create page
     When I click the first "Post Job" link
     And I wait 1 second
     And I should see "Salary Range"
@@ -89,30 +90,16 @@ Given the following education records:
     And I select "Full Time" in select list "Job Type"
     And I select "Part Time" in select list "Job Type"
     And I select "Morning" in select list "Shift"
-    Then I select a licence
+    Then I select a license
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
+    And the job "cashier" should have 1 license
 
 
   @javascript
-  Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
-    When I click the first "Post Job" link
+  Scenario: Updating a job successfully
+    When I click the "editor" link
     And I wait 1 second
-    And I fill in the fields:
-      | Title          | cashier                            |
-      | Company Job ID | KARK12                             |
-      | Description    | At least two years work experience |
-    And I select "Day" in select list "Shift"
-    And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
-    And I select "Full Time" in select list "Job Type"
-    And I select "Part Time" in select list "Job Type"
-    And I select "Morning" in select list "Shift"
-    Then I select a licence
-    And I press "new-job-submit"
-    Then I should see "cashier has been created successfully."
-    And the job should have 1 license
-    And I should see "Full Time, Part Time"
-    And I should see "Morning"
     Then I click the "Edit Job" link
     And I fill in the fields:
       | Title                | cab-driver                        |
@@ -121,16 +108,18 @@ Given the following education records:
       | Language Proficiency | Must speak fluent english         |
     And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
     And I select "Contract" in select list "Job Type"
+    And I select "Part Time" in select list "Job Type"
     And I fill in the fields:
       | Minimum | 10000 |
       | Maximum | 20000 |
     And I choose the "Monthly" radio button
+    Then I select a license
     And I press "Update"
     Then I should see "cab-driver has been updated successfully."
-    And I should see "Full Time, Part Time, Contract"
-    And I should verify the change of title "cab-driver" and jobId "KRT123"
-
+    And the job "cab-driver" should have 1 license
+    And I should see "Part Time, Contract"
     And I should see "Must speak fluent english"
+    And I should verify the change of title "cab-driver" and jobId "KRT123"
 
     Then I click the "Edit Job" link
     And I select radio button "Associates Degree"
@@ -139,6 +128,17 @@ Given the following education records:
     Then I should see "cab-driver has been updated successfully."
     And I should see "Associates Degree"
     And I should see "also need XYZ training"
+
+    Then I click the "Edit Job" link
+    And I select another license
+    And I press "Update"
+    And the job "cab-driver" should have 2 licenses
+
+    Then I click the "Edit Job" link
+    Then I wait for 1 second
+    And I click the first "remove license" link
+    And I press "Update"
+    And the job "cab-driver" should have 1 license
 
     Then I go to the Company Person 'jane@ymail.com' Home page
     And I click the "software dev" link
@@ -213,7 +213,7 @@ Given the following education records:
     And I click the "Create new location" link
     And I wait 1 second
     And I fill in the fields:
-     | Street   | 12 Main Street |
+      | Street   | 12 Main Street |
       | City     | Detroit        |
       | Zipcode  | 02034          |
     And I press "new-job-submit"
@@ -221,7 +221,7 @@ Given the following education records:
     Then I select "Michigan" in select list "State"
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
-    And I should see "Full Time, Part Time"
+    And I should see "Part Time, Full Time"
 
   @javascript
   Scenario: Edit a job *and* create new job location (company address)

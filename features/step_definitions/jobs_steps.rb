@@ -102,13 +102,19 @@ And(/^I accept the confirm dialog/) do
   accept_confirm
 end
 
-Then(/^I select a licence$/) do
+Then(/^I select( a | another )licenses?$/)  do |prefix|
   step %{I click the "Add License" link}
   within(:css, "div#licenses") do
     first(".select-license").find(:xpath, 'option[2]').select_option
   end
+  if prefix.strip == "another"
+    step %{I click the "Add License" link}
+    within(:css, "div#licenses") do
+      all(".select-license")[1].find(:xpath, 'option[3]').select_option
+    end
+  end
 end
 
-Then(/^the job should have (.*?) license$/) do |count|
-  expect(Job.last.licenses.count.to_s).to eq count
+Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
+  expect(Job.find_by_title(title).licenses.count.to_s).to eq count
 end
