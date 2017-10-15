@@ -33,7 +33,7 @@ Then(/^I should( not)? see "Revoked" next to "([^"]*)"$/) do |negate, job_title|
 end
 
 Then(/^I should see the job status is "([^"]*)"$/) do |status|
-  within('#job-status') { expect(page).to have_content("#{status}") }
+  within('#job-status') { expect(page).to have_content status.to_s }
 end
 
 Then(/^I should see a "([^"]*)" confirmation$/) do |action|
@@ -53,7 +53,7 @@ end
 
 Then(/^I click the Revoke confirmation for "([^"]*)"$/) do |job_title|
   @job ||= Job.find_by(title: job_title)
-  find("#confirm_revoke").click
+  find('#confirm_revoke').click
 end
 
 Then(/^I click the "([^"]*)" link to job show page$/) do |job_title|
@@ -102,15 +102,15 @@ And(/^I accept the confirm dialog/) do
   accept_confirm
 end
 
-Then(/^I select( a | another )licenses?$/)  do |prefix|
+Then(/^I select (a|another) licenses?$/)  do |prefix|
   step %{I click the "Add License" link}
   within(:css, "div#licenses") do
-    first(".select-license").find(:xpath, 'option[2]').select_option
+    first('.select-license').find(:xpath, 'option[2]').select_option
   end
-  if prefix.strip == "another"
+  if prefix == 'another'
     step %{I click the "Add License" link}
-    within(:css, "div#licenses") do
-      all(".select-license")[1].find(:xpath, 'option[3]').select_option
+    within(:css, 'div#licenses') do
+      all('.select-license')[1].find(:xpath, 'option[3]').select_option
     end
   end
 end
