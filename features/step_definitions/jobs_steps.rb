@@ -102,7 +102,7 @@ And(/^I accept the confirm dialog/) do
   accept_confirm
 end
 
-Then(/^I select (a|another) licenses?$/)  do |prefix|
+Then(/^I select (a|another) licenses?$/) do |prefix|
   step %{I click the "Add License" link}
   within(:css, "div#licenses") do
     first('.select-license').find(:xpath, 'option[2]').select_option
