@@ -221,7 +221,8 @@ Feature: Manage Jobs
     Then I select "Michigan" in select list "State"
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
-    And I should see "Part Time, Full Time"
+    And I should see "Full Time"
+    And I should see "Part Time"
 
   @javascript
   Scenario: Edit a job *and* create new job location (company address)
