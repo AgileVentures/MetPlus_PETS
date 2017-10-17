@@ -94,6 +94,7 @@ Feature: Manage Jobs
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
     And the job "cashier" should have 1 license
+    And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
 
 
   @javascript
@@ -133,12 +134,15 @@ Feature: Manage Jobs
     And I select another license
     And I press "Update"
     And the job "cab-driver" should have 2 licenses
+    And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
+    And I should see "LLPC (LIMITED LICENSE PROFESSIONAL COUNSELOR)"
 
     Then I click the "Edit Job" link
     Then I wait for 1 second
     And I click the first "remove license" link
     And I press "Update"
     And the job "cab-driver" should have 1 license
+    And I should see "LLPC (LIMITED LICENSE PROFESSIONAL COUNSELOR)"
 
     Then I go to the Company Person 'jane@ymail.com' Home page
     And I click the "software dev" link
