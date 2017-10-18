@@ -45,6 +45,15 @@ Given the following job_shift records:
   | Day |
   | Swing  |
 
+Given the following education records:
+  | level             | rank |
+  | High School       |   1  |
+  | Associates Degree |   2  |
+  | Bachelors Degree  |   3  |
+  | Masters Degree    |   4  |
+  | PhD               |   5  |
+  | Other             |   6  |
+
 @javascript
 Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Given I am on the home page
@@ -77,6 +86,7 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
     | Title                  | cab-driver|
     | Company Job ID         | KRT123    |
     | Description            | Atleast two years work experience|
+    | Language Proficiency   | Must speak fluent english |
   And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
   And I select "Contract" in select list "Job Type"
   And I fill in the fields:
@@ -87,6 +97,15 @@ Scenario: Creating, Updating, and Deleting Job successfully and unsuccessfully
   Then I should see "cab-driver has been updated successfully."
   And I should see "Full Time, Part Time, Contract"
   And I should verify the change of title "cab-driver" and jobId "KRT123"
+  And I should see "Must speak fluent english"
+
+  Then I click the "Edit Job" link
+  And I select radio button "Associates Degree"
+  And I fill in "Additional Information:" with "also need XYZ training"
+  And I press "Update"
+  Then I should see "cab-driver has been updated successfully."
+  And I should see "Associates Degree"
+  And I should see "also need XYZ training"
 
   Then I go to the Company Person 'jane@ymail.com' Home page
   And I click the "software dev" link

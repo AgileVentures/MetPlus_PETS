@@ -84,6 +84,26 @@ puts '  Job Shifts created'
 
 puts '  License types created'
 
+# Create default job questions
+[ 'Are you authorized to work in the US?',
+  'Are you willing to have a background check performed?',
+  'Are you willing to take a drug test?'
+].each { |q| Question.find_or_create_by(question_text: q) }
+
+puts '  Job questions created'
+
+# Create default education levels
+[
+  ['High School', 1],
+  ['Associates Degree', 2],
+  ['Bachelors Degree', 3],
+  ['Masters Degree', 4],
+  ['PhD', 5],
+  ['Other', 6]
+].each { |e| Education.find_or_create_by(level: e[0], rank: e[1]) }
+
+puts '  Education levels created'
+
 puts "\nSeeded Production Data"
 
 exit(0) if Rails.env.production?

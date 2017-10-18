@@ -1,0 +1,8 @@
+.nested-fields
+  %ul(class='list-inline')
+    %li
+      = f.collection_select(:question_id, all_questions, :id,
+                            :question_text,
+                            {include_blank: true})
+    %li
+      = link_to_remove_association 'remove question', f

@@ -72,7 +72,7 @@ Background: data is added to database
     And I should see "Job Seeker: John Seeker has applied to this job"
     And I am on the Company Person 'carter@ymail.com' Home page
     And I wait 1 second
-    And I click the "Unassigned Company Tasks" link
+    And I click the "Unassigned Tasks" link
     And I should see "Review job application"
     And I should see "Job: software developer"
     Then "carter@ymail.com" should receive an email with subject "Job seeker applied"

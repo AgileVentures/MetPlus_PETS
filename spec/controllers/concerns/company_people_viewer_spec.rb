@@ -13,7 +13,7 @@ RSpec.describe TestConcernCompanyPeopleClass do
 
   describe '#display_company_people' do
     it 'returns all company people for a specified company' do
-      expect(subject.display_company_people('company-all', company))
+      expect(subject.display_company_people(company))
         .to match_array [cmpy_person1, cmpy_person2, cmpy_person3]
     end
 
