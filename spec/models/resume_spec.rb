@@ -81,6 +81,7 @@ RSpec.describe Resume, type: :model do
     end
 
     it 'fails with invalid model and invalid file type' do
+      file = fixture_file_upload('files/Test File.zzz')
       resume = Resume.new(file: file,
                           file_name: 'nil',
                           job_seeker_id: job_seeker.id)
