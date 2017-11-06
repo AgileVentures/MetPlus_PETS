@@ -109,6 +109,10 @@ Rails.application.routes.draw do
   resources :skills, only: [:create, :show, :update, :destroy]
   # --------------------------------------------------------------------------
 
+  # ----------------------- Licenses -------------------------------------------
+  resources :licenses, only: [:create, :show, :update, :destroy]
+  # --------------------------------------------------------------------------
+
   # ----------------------- Tasks --------------------------------------------
   resources :tasks, only: [:index] do
     patch 'assign', on: :member, as: :assign
