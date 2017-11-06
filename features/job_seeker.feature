@@ -24,12 +24,12 @@ Background: seed data added to database
     | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
-    | title   | fulltime | description | company      | creator          |
-    | SW dev  | true     | develop SW  | Widgets Inc. | carter@ymail.com |
-    | Trucker | true     | drive truck | Widgets Inc. | carter@ymail.com |
-    | Doctor  | true     | heal sick   | Widgets Inc. | carter@ymail.com |
-    | Clerk   | true     | service     | Widgets Inc. | carter@ymail.com |
-    | Mime    | true     | freeze      | Widgets Inc. | carter@ymail.com |
+    | title   | description | company      | creator          |
+    | SW dev  | develop SW  | Widgets Inc. | carter@ymail.com |
+    | Trucker | drive truck | Widgets Inc. | carter@ymail.com |
+    | Doctor  | heal sick   | Widgets Inc. | carter@ymail.com |
+    | Clerk   | service     | Widgets Inc. | carter@ymail.com |
+    | Mime    | freeze      | Widgets Inc. | carter@ymail.com |
 
   Given the following job applications exist:
 

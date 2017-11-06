@@ -22,9 +22,9 @@ Feature: Manage Jobs
       | Widgets Inc. | CC   | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
     Given the following jobs exist:
-      | title        | company_job_id | fulltime | description         | company      | creator        |
-      | software dev | KRK01K         | true     | internship          | Widgets Inc. | jane@ymail.com |
-      | editor       | T01KS          | true     | This will be edited | Widgets Inc. | jane@ymail.com |
+      | title        | company_job_id | description         | company      | creator        |
+      | software dev | KRK01K         | internship          | Widgets Inc. | jane@ymail.com |
+      | editor       | T01KS          | This will be edited | Widgets Inc. | jane@ymail.com |
 
     Given the following company addresses exist:
       | company      | street       | city    | state    | zipcode |

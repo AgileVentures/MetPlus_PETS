@@ -1,35 +1,35 @@
 Feature: View job application status
 
-	As a job seeker person
-	I want to view my job application status
+  As a job seeker person
+  I want to view my job application status
 
 Background: data is added to database
 
-	Given the default settings are present
+  Given the default settings are present
 
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
   Given the following company people exist:
-  	| company      | role  | first_name | last_name | email            | password  | phone        |
-  	| Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
+    | company      | role  | first_name | last_name | email            | password  | phone        |
+    | Widgets Inc. | CA    | Cane       | Daniel    | cane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobseekers exist:
-  	| first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
-  	| John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
-  	| July       | Seeker    | july@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+    | first_name | last_name | email         | phone        | password  | password_confirmation | year_of_birth | job_seeker_status  |
+    | John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
+    | July       | Seeker    | july@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following jobs exist:
-    | title        | company_job_id | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
-    | hr associate | KRK02K         | true     | internship  | Widgets Inc. | cane@ymail.com | filled  |
+    | title        | company_job_id | description | company      | creator        | status  |
+    | hr assistant | KRK01K         | internship  | Widgets Inc. | cane@ymail.com | filled  |
+    | hr associate | KRK02K         | internship  | Widgets Inc. | cane@ymail.com | filled  |
 
-	Given the following job applications exist:
-		| job title 	 | job seeker 	 | status 			|
-		| hr assistant | july@mail.com | accepted 		|
-		| hr associate | july@mail.com | not_accepted |
-		| hr associate | john@mail.com | accepted     |
+  Given the following job applications exist:
+    | job title    | job seeker    | status       |
+    | hr assistant | july@mail.com | accepted     |
+    | hr associate | july@mail.com | not_accepted |
+    | hr associate | john@mail.com | accepted     |
 
   @javascript
   Scenario: Successful and unsuccessful application for job seeker

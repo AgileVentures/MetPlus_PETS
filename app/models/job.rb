@@ -44,7 +44,6 @@ class Job < ActiveRecord::Base
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
   validates_presence_of :company_job_id
-  validates_presence_of :fulltime, allow_blank: true
   validates_length_of   :title, maximum: 100
   validates_presence_of :description
   validates_length_of   :description, maximum: 10_000
