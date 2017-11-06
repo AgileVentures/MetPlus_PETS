@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.shared_examples 'unauthorized all' do
+RSpec.shared_examples 'unauthorized non-agency-admin people' do
   let(:agency) { FactoryGirl.create(:agency) }
   let(:company) { FactoryGirl.create(:company) }
   context 'Not logged in' do
@@ -59,7 +59,7 @@ RSpec.describe JobCategoriesController, type: :controller do
         expect(response).to render_template('shared/_error_messages')
       end
     end
-    it_behaves_like 'unauthorized all' do
+    it_behaves_like 'unauthorized non-agency-admin people' do
       let(:request) { xhr :post, :create, job_category: jobcat_params }
     end
   end
@@ -97,7 +97,7 @@ RSpec.describe JobCategoriesController, type: :controller do
       end
     end
 
-    it_behaves_like 'unauthorized all' do
+    it_behaves_like 'unauthorized non-agency-admin people' do
       let(:request) { xhr :get, :show, id: category }
     end
   end
@@ -127,7 +127,7 @@ RSpec.describe JobCategoriesController, type: :controller do
         expect(response).to render_template('shared/_error_messages')
       end
     end
-    it_behaves_like 'unauthorized all' do
+    it_behaves_like 'unauthorized non-agency-admin people' do
       let(:request) do
         xhr :patch, :update, id: category, job_category: jobcat_params
       end
@@ -161,7 +161,7 @@ RSpec.describe JobCategoriesController, type: :controller do
         end
       end
     end
-    it_behaves_like 'unauthorized all' do
+    it_behaves_like 'unauthorized non-agency-admin people' do
       let(:request) { xhr :delete, :destroy, id: category }
     end
   end

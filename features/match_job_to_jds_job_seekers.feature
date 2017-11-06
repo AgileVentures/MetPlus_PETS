@@ -40,8 +40,8 @@ Background: seed data added to database and log in as job developer
     | Hammer Inc.  | CA    | Tom        | Hammer    | ca@hammer.com    | qwerty123 | 555-222-4445 |
 
   Given the following jobs exist:
-    | title            | company_job_id  | fulltime | description                 |  company      | creator        |
-    | ruby developer   | KRK01K          | true     | internship position with pay| Hammer Inc. | ca@hammer.com |
+    | title            | company_job_id  | description                 |  company      | creator        |
+    | ruby developer   | KRK01K          | internship position with pay| Hammer Inc. | ca@hammer.com |
 
   @javascript
   Scenario: Valid selection of job seekers
