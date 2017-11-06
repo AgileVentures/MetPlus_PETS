@@ -2,6 +2,7 @@ class Job < ActiveRecord::Base
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
+  belongs_to :education
 
   # force address validation in controller upon job create and job update when
   # new address is being created.  If valid, new address is saved when job is saved.
@@ -79,8 +80,7 @@ class Job < ActiveRecord::Base
     end
   end
 
-
-  scope :new_jobs, ->(given_time) { where('created_at > ?', given_time) }
+  scope :new_jobs, ->(given_time) { where('jobs.created_at > ?', given_time) }
   scope :find_by_company, ->(company) { where(company: company) }
 
   enum status: [:active, :filled, :revoked]

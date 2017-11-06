@@ -103,4 +103,53 @@ RSpec.describe Resume, type: :model do
       expect(resume.destroyed?).to be true
     end
   end
+
+  describe '#save!' do
+    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_file_upload
+    end
+
+    it 'saves the record with valid attributes and file type' do
+      file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: job_seeker.id)
+      expect(resume.save!).to be true
+      expect(Resume.count).to eq 1
+    end
+
+    it 'raises an exception with invalid job_seeker_id' do
+      file = fixture_file_upload('files/Admin-Assistant-Resume.pdf')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: nil)
+      expect { resume.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Job seeker can't be blank")
+      expect(Resume.count).to eq 0
+    end
+
+    it 'raises an exception with invalid file type' do
+      file = fixture_file_upload('files/Test File.zzz')
+      resume = Resume.new(file: file,
+                          file_name: 'Test File.zzz',
+                          job_seeker_id: job_seeker.id)
+      expect { resume.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: File name unsupported file type')
+      expect(Resume.count).to eq 0
+    end
+
+    it 'raises an exception when the external cruncher raises an exception' do
+      stub_cruncher_file_upload_error
+      file = fixture_file_upload('files/Test File.zzz')
+      resume = Resume.new(file: file,
+                          file_name: 'Admin-Assistant-Resume.pdf',
+                          job_seeker_id: job_seeker.id)
+      expect { resume.save! }
+        .to raise_error(RuntimeError, 'Resume could not be uploaded')
+      expect(resume.destroyed?).to be true
+    end
+  end
 end

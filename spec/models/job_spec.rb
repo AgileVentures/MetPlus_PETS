@@ -20,6 +20,7 @@ RSpec.describe Job, type: :model do
     it { is_expected.to belong_to :company_person }
     it { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
+    it { is_expected.to belong_to :education }
     it { is_expected.to have_many(:job_skills).dependent(:destroy) }
     it do
       is_expected.to accept_nested_attributes_for(:job_skills)
@@ -62,6 +63,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :max_salary }
     it { is_expected.to have_db_column :min_salary }
     it { is_expected.to have_db_column :pay_period }
+    it { is_expected.to have_db_column :education_id }
+    it { is_expected.to have_db_column :education_info }
   end
 
   describe 'Validations' do

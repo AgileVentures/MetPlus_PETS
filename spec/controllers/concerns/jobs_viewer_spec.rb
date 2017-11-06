@@ -31,7 +31,7 @@ RSpec.describe TestConcernJobsViewerClass do
 
     it 'returns all fields for jobs for a specified company' do
       expect(subject.job_fields('my-company-all'))
-        .to match_array job_fields['my-company-all'.to_sym]
+        .to match_array job_fields['my-company-all']
     end
 
     it 'returns all recent jobs' do
@@ -41,7 +41,7 @@ RSpec.describe TestConcernJobsViewerClass do
 
     it 'returns all fields for recent jobs' do
       expect(subject.job_fields('recent-jobs'))
-        .to match_array job_fields['recent-jobs'.to_sym]
+        .to match_array job_fields['recent-jobs']
     end
   end
 end

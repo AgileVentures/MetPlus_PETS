@@ -1,33 +1,33 @@
 %div{class: "panel panel-default", id: "show-panel-id"}
   %div{class: "panel-heading", id: "panel-heading-show-id" }
-    %h4=@job.company.name
+    %h4=job.company.name
 %table{class: "table table-bordered"}
   %tbody
     %tr
-      %td Job title:
-      %td#job-title=@job.title
+      %td Job Title:
+      %td#job-title=job.title
     %tr
-      %td Job status:
-      %td#job-status=@job.status
+      %td Job Status:
+      %td#job-status=job.status
     %tr
       %td Location:
-      - if @job.address
+      - if job.address
         %td
-          =@job.address.street
+          =job.address.street
           %br
-          #{@job.address.city}, #{@job.address.state}
-          =@job.address.zipcode
+          #{job.address.city}, #{job.address.state}
+          =job.address.zipcode
       - else
         %td No address for this job
 
     %tr
       %td Job ID:
-      %td=@job.company_job_id
-    - unless @job.years_of_experience.blank?
+      %td=job.company_job_id
+    - unless job.years_of_experience.blank?
       %tr
         %td Years Of Experience:
         %td
-          #{@job.years_of_experience == 20 ? "#{@job.years_of_experience} Or More Years" : pluralize(@job.years_of_experience, 'Year')}
+          #{job.years_of_experience == 20 ? "#{job.years_of_experience} Or More Years" : pluralize(job.years_of_experience, 'Year')}
     %tr
       %td Contact information:
       %td
@@ -36,36 +36,48 @@
         Email: #{mail_to('placeholder@gmail.com')}
     %tr
       %td Salary:
-      %td= job_salary_details(@job)
+      %td= job_salary_details(job)
     %tr
       %td Job Details:
-      %td=@job.description
-    - unless @job.job_types.empty?
+      %td= job.description
+    - unless job.education.nil? && job.education_info.nil?
+      %tr
+        %td Education Requirements:
+        %td
+          = job.education&.level
+          = ", #{job.education_info}" unless job&.education_info.empty?
+
+    - unless job.job_types.empty?
       %tr
         %td Job Type:
-        %td= @job.job_types.map(&:job_type).join(', ')
-    - unless @job.job_shifts.empty?
+        %td= job.job_types.map(&:job_type).join(', ')
+    - unless job.job_shifts.empty?
       %tr
         %td Job Shifts:
-        %td= @job.job_shifts.map(&:shift).join(', ')
+        %td= job.job_shifts.map(&:shift).join(', ')
 
-    - unless @job.job_licenses.empty?
+    - unless job.job_licenses.empty?
       %tr
         %td Licenses Required:
-        %td= @job.licenses.map(&:license_description).join(', ')
+        %td= job.licenses.map(&:license_description).join(', ')
 
-    - unless @job.job_questions.empty?
+    - unless job.job_questions.empty?
       %tr
         %td Applicant Questions:
         %td
-          - @job.questions.map(&:question_text).each do |q|
+          - job.questions.map(&:question_text).each do |q|
             = q
             %br
+
+    - unless @job.language_proficiency.nil?
+      %tr
+        %td Language Proficiency:
+        %td= @job.language_proficiency
 
     %tr
       %td Job Skills:
       %td
-        - if @job.job_skills.empty?
+        - if job.job_skills.empty?
           %i None
         - else
           %div{ style: 'overflow: auto; min-height: 150px;' }
@@ -81,7 +93,7 @@
                   %th
                     %b Max Years
               %tbody
-                - @job.job_skills.includes(:skill).each do |job_skill|
+                - job.job_skills.includes(:skill).each do |job_skill|
                   %tr
                     %td
                       = job_skill.skill.name
