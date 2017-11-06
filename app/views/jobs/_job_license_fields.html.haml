@@ -3,6 +3,7 @@
     %li
       = f.collection_select(:license_id, all_licenses, :id,
                             :license_description,
-                            {include_blank: true})
+                            {include_blank: true},
+                            class: 'select-license')
     %li
       = link_to_remove_association 'remove license', f

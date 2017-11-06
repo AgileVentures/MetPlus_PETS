@@ -550,7 +550,7 @@ RSpec.describe JobsController, type: :controller do
     let!(:dyson_person) { FactoryGirl.create(:company_person, company: dyson) }
     let(:request_first_page) { xhr :get, :list, job_type: 'my-company-all' }
     let(:request_last_page) do
-      xhr :get, :list, job_type: 'my-company-all', jobs_page: 4
+      xhr :get, :list, job_type: 'my-company-all', page: 4
     end
     let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs'}
     before(:each) do

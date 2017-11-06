@@ -70,6 +70,12 @@
   padding: 5px;
 }
 
+.form-group-div {
+  border: 2px solid lightsteelblue;
+  padding: 10px;
+  border-radius: 5px;
+}
+
 .col-md-8.col-lg-8{
    padding-left:  0;
 }

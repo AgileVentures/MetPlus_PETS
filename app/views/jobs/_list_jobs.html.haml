@@ -26,11 +26,15 @@
               - when :num_applicants
                 %th.strong Applications
               - when :company
-                %th.strong Company
+                %th.strong
+                  = sort_link(query, :company_name, 'Company', {},
+                    class: 'jobs-pagination', remote: true)
               - when :description
                 %th.strong Description
               - when :posted
-                %th.strong Posted
+                %th.strong
+                  = sort_link(query, :created_at, 'Posted', {},
+                    class: 'jobs-pagination', remote: true, default_order: :desc)
       %tbody
         - jobs.each do |job|
           %tr{ class: ( "recent-jobs" if job.recent_for? pets_user ) }
@@ -70,6 +74,5 @@
         entities: jobs,
         paginate_class: 'jobs-pagination',
         items_count: items_count,
-        url: list_jobs_path,
-        job_type: job_type
+        url: list_jobs_path(job_type: job_type)
 %br
