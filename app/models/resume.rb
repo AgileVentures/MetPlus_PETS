@@ -42,4 +42,14 @@ class Resume < ActiveRecord::Base
     end
     false
   end
+
+  def save!
+    super
+    begin
+      return true if ResumeCruncher.upload_resume(file, file_name, id)
+    rescue
+      destroy
+      raise 'Resume could not be uploaded'
+    end
+  end
 end

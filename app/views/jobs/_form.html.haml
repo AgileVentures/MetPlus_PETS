@@ -107,9 +107,26 @@
 
 .form-group
   .col-sm-3.control-label
+    %b Education Level
+  .col-sm-7
+    .form-group-div
+      = f.collection_radio_buttons(:education_id, all_education_levels,
+                                   :id, :level, {},
+                                   { class: 'radio-inline' }) do |b|
+        = b.label(style: 'margin-left: 10px;') do
+          = b.radio_button + ' ' + b.text
+      %br
+      %br
+      = f.label :education_info, 'Additional Information:',
+                style: 'margin-left: 10px;'
+      &nbsp;
+      = f.text_field :education_info, size: 40
+
+.form-group
+  .col-sm-3.control-label
     %b Job Skills
   .col-sm-7
-    #job_skills{ style: style }
+    .form-group-div#job_skills
       = f.fields_for :job_skills do |job_skill|
         = render 'job_skill_fields', f: job_skill, company: company
       .links
@@ -120,7 +137,7 @@
   .col-sm-3.control-label
     %b Licenses
   .col-sm-7
-    #licenses{ style: style }
+    .form-group-div#licenses
       = f.fields_for :job_licenses do |job_license|
         = render 'job_license_fields', f: job_license, all_licenses: all_licenses
       .links
@@ -129,9 +146,15 @@
 
 .form-group
   .col-sm-3.control-label
+    = f.label :language_proficiency, "Language Proficiency"
+  .col-sm-7
+    =f.text_field :language_proficiency, size: "40x5", class: 'form-control'
+
+.form-group
+  .col-sm-3.control-label
     %b Questions
   .col-sm-7
-    #questions{ style: style }
+    .form-group-div#questions
       = f.fields_for :job_questions do |job_question|
         = render 'job_question_fields', f: job_question, all_questions: all_questions
       .links
