@@ -1,6 +1,11 @@
 class License < ActiveRecord::Base
-  has_many :job_licenses, dependent: :destroy
-  has_many :jobs, through: :job_licenses
+  has_many :job_licenses, inverse_of: :license
+  has_many :jobs, through: :job_licenses, dependent: :destroy
+
+  validates_presence_of   :abbr
+  validates_uniqueness_of :abbr, case_sensitive: false
+
+  validates_presence_of :title
 
   def license_description
     "#{abbr} (#{title})"
