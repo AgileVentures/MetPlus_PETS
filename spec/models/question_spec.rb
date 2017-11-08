@@ -14,10 +14,11 @@ RSpec.describe Question, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_many(:job_questions).dependent(:destroy) }
-    it { is_expected.to have_many(:jobs).through(:job_questions) }
+    it { is_expected.to have_many(:job_questions) }
+    it { is_expected.to have_many(:jobs).through(:job_questions).dependent(:destroy) }
 
-    it { is_expected.to have_many(:application_questions).dependent(:destroy) }
-    it { is_expected.to have_many(:job_applications).through(:application_questions) }
+    it { is_expected.to have_many(:application_questions) }
+    it { is_expected.to have_many(:job_applications)
+      .through(:application_questions).dependent(:destroy) }
   end
 end
