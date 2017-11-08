@@ -10,4 +10,8 @@ class License < ActiveRecord::Base
   def license_description
     "#{abbr} (#{title})"
   end
+
+  def has_job?
+  	jobs.any?
+  end
 end
