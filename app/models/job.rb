@@ -19,8 +19,8 @@ class Job < ActiveRecord::Base
   has_and_belongs_to_many :job_types
   has_and_belongs_to_many :job_shifts
 
-  has_many   :job_skills, inverse_of: :job, dependent: :destroy
-  has_many   :skills, through: :job_skills
+  has_many   :job_skills, inverse_of: :job
+  has_many   :skills, through: :job_skills, dependent: :destroy
   accepts_nested_attributes_for :job_skills, allow_destroy: true, reject_if: :all_blank
 
   has_many   :required_skills, -> { where job_skills: { required: true } },
@@ -28,16 +28,16 @@ class Job < ActiveRecord::Base
   has_many   :nice_to_have_skills, -> { where job_skills: { required: false } },
              through: :job_skills, class_name: 'Skill', source: :skill
   has_many   :job_applications
-  has_many   :job_seekers, through: :job_applications
+  has_many   :job_seekers, through: :job_applications, dependent: :destroy
 
-  has_many :job_licenses, inverse_of: :job, dependent: :destroy
-  has_many :licenses, through: :job_licenses
+  has_many :job_licenses, inverse_of: :job
+  has_many :licenses, through: :job_licenses, dependent: :destroy
   # ^^ Using "has_many, through" instead of HABTM becuase the latter does not
   #    work well with "accepts_nested_attributes_for"
   accepts_nested_attributes_for :job_licenses, allow_destroy: true, reject_if: :all_blank
 
-  has_many :job_questions, inverse_of: :job, dependent: :destroy
-  has_many :questions, through: :job_questions
+  has_many :job_questions, inverse_of: :job
+  has_many :questions, through: :job_questions, dependent: :destroy
   accepts_nested_attributes_for :job_questions, allow_destroy: true,
                                 reject_if: :all_blank
 

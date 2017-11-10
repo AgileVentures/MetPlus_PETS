@@ -4,8 +4,8 @@ class AgencyPerson < ActiveRecord::Base
 
   belongs_to :agency
   belongs_to :branch
-  has_many   :agency_relations, dependent: :destroy
-  has_many   :job_seekers, through: :agency_relations
+  has_many   :agency_relations
+  has_many   :job_seekers, through: :agency_relations, dependent: :destroy
   has_and_belongs_to_many :agency_roles, autosave: false
   has_and_belongs_to_many :job_categories, join_table: 'job_specialities'
 

@@ -1,191 +1,177 @@
-<div class='content container'>
-    <div class='row'>
-      <h3>PETS Administration - Job Properties</h3>
-      <div class='row'>
-          <div class='col-sm-3'>
-            <h4>Job Skills</h4>
+  <div class='row'>
+    <div class='col-sm-10 col-sm-offset-1 agency-admin-container'>
+      <ul class='nav nav-pills'>
+        <li class='active'>
+          <a data-toggle='pill' href='#job-specialties-pane'>Job Specialties</a>
+        </li>
+        <li>
+          <a data-toggle='pill' href='#job-skills-pane'>Job Skills</a>
+        </li>
+        <li>
+          <a data-toggle='pill' href='#licenses-pane'>Licenses</a>
+        </li>
+      </ul>
+      <div class='tab-content tab-content-margin'>
+        <div class='tab-pane fade' id='job-skills-pane'>
+          <div class='col-xs-12 text-right'>
+            <button class='btn btn-primary btn-sm table_action_button' data-target='#add_skill' data-toggle='modal' id='add-job-skill-modal-btn'>
+              Add job skill
+            </button>
           </div>
-          <div class='col-sm-9'>
-            <div id='skills_table'>
-              <table class='table table-hover'>
-                <thead>
-                  <tr>
-                    <td>
-                      <strong>Name</strong>
-                    </td>
-                    <td>
-                      <strong>Description</strong>
-                    </td>
-                    <td>
-                      <strong>Delete</strong>
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <a href="/skills/4/edit">Area Development</a>
-                    </td>
-                    <td>
-                      Est esse numquam rem cumque.
-                    </td>
-                    <td>
-                      <a rel="nofollow" data-method="delete" href="/skills/4"><span class='glyphicon glyphicon-remove'></span>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class='col-xs-12 pad-0'></div>
+          <div id='skills_table'>
+            <table class='table table-hover'>
+              <thead>
+                <tr>
+                  <th>
+                    <strong>Name</strong>
+                  </th>
+                  <th>
+                    <strong>Description</strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/skills/1">Communication</a>
+                  </td>
+                  <td>
+                    Ability to speak clearly and with confidence
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/skills/1"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/skills/5">Keen To Learn</a>
+                  </td>
+                  <td>
+                    Show desire to learn
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/skills/5"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/skills/3">Prioritise Workload</a>
+                  </td>
+                  <td>
+                    Able to prioritise workload effectively
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/skills/3"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/skills/4">Problem Solving</a>
+                  </td>
+                  <td>
+                    Can tackle big problems and solve these effectively
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/skills/4"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/skills/2">Teamwork</a>
+                  </td>
+                  <td>
+                    Getting on with people of all types
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/skills/2"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </div>
           <div class='clearfix'></div>
-          <div class='col-sm-3 col-sm-offset-3'>
-            <a class='text-danger' href='#skills_table' id='toggle_skills'>
-              Hide Job Skills
-            </a>
-          </div>
-          <div class='col-sm-3 col-sm-offset-3 table_action_button'>
-            <button class='btn btn-primary btn-sm pull-right' data-target='#add_skill' data-toggle='modal'>Add Job Skill</button>
-          </div>
-        </div>
-
-    <div class='modal fade' id='add_job_category'>
-      <div class='modal-dialog' role='document'>
-        <div class='modal-content'>
-          <div class='modal-header'>
-            <button class='close' data-dismiss='modal' type='button'>
-              <span aria-hidden='true'>&times;</span>
-            </button>
-            <h4 class='modal-title'>
-              Add Job Category
-            </h4>
-          </div>
-          <div class='modal-body'>
-            <div id='add_job_category_errors'></div>
-            <div class='form-group'>
-              <label class='control-label' for='add_job_category_name'>
-                Name:
-              </label>
-              <textarea class='form-control' id='add_job_category_name'></textarea>
-            </div>
-            <div class='form-group'>
-              <label class='control-label' for='add_job_category_desc'>
-                Description:
-              </label>
-              <textarea class='form-control' id='add_job_category_desc'></textarea>
-            </div>
-          </div>
-          <div class='modal-footer'>
-            <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-            <button class='btn btn-primary' id='add_job_category_button' type='button'>
-              Add Category
-            </button>
-          </div>
         </div>
       </div>
     </div>
-    <div class='modal fade' id='update_job_category'>
-      <div class='modal-dialog' role='document'>
-        <div class='modal-content'>
-          <div class='modal-header'>
-            <button class='close' data-dismiss='modal' type='button'>
-              <span aria-hidden='true'>&times;</span>
-            </button>
-            <h4 class='modal-title'>
-              Update Job Category
-            </h4>
+  </div>
+  <div class='modal fade' id='add_skill'>
+    <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+          <h4 class='modal-title'>
+            Add Job Skill
+          </h4>
+        </div>
+        <div class='modal-body'>
+          <div id='add_skill_errors'></div>
+          <div class='form-group'>
+            <label class='control-label' for='add_skill_attr1'>
+              Name:
+            </label>
+            <textarea class='form-control' id='add_skill_attr1'></textarea>
           </div>
-          <div class='modal-body'>
-            <div id='update_job_category_errors'></div>
-            <div class='form-group'>
-              <label class='control-label' for='update_job_category_name'>
-                Name:
-              </label>
-              <textarea class='form-control' id='update_job_category_name'></textarea>
-            </div>
-            <div class='form-group'>
-              <label class='control-label' for='update_job_category_desc'>
-                Description:
-              </label>
-              <textarea class='form-control' id='update_job_category_desc'></textarea>
-            </div>
+          <div class='form-group'>
+            <label class='control-label' for='add_skill_attr2'>
+              Description:
+            </label>
+            <textarea class='form-control' id='add_skill_attr2'></textarea>
           </div>
-          <div class='modal-footer'>
-            <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-            <button class='btn btn-primary' id='update_job_category_button' type='button'>
-              Update Category
-            </button>
-          </div>
+        </div>
+        <div class='modal-footer'>
+          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+          <button class='btn btn-primary' id='add_skill_button' type='button'>
+            Add Skill
+          </button>
         </div>
       </div>
     </div>
-    <div class='modal fade' id='add_skill'>
-      <div class='modal-dialog' role='document'>
-        <div class='modal-content'>
-          <div class='modal-header'>
-            <button class='close' data-dismiss='modal' type='button'>
-              <span aria-hidden='true'>&times;</span>
-            </button>
-            <h4 class='modal-title'>
-              Add Job Skill
-            </h4>
+  </div>
+  <div class='modal fade' id='update_skill'>
+    <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+          <h4 class='modal-title'>
+            Update Job Skill
+          </h4>
+        </div>
+        <div class='modal-body'>
+          <div id='update_skill_errors'></div>
+          <div class='form-group'>
+            <label class='control-label' for='update_skill_attr1'>
+              Name:
+            </label>
+            <textarea class='form-control' id='update_skill_attr1'></textarea>
           </div>
-          <div class='modal-body'>
-            <div id='add_skill_errors'></div>
-            <div class='form-group'>
-              <label class='control-label' for='add_skill_name'>
-                Name:
-              </label>
-              <textarea class='form-control' id='add_skill_name'></textarea>
-            </div>
-            <div class='form-group'>
-              <label class='control-label' for='add_skill_desc'>
-                Description:
-              </label>
-              <textarea class='form-control' id='add_skill_desc'></textarea>
-            </div>
-          </div>
-          <div class='modal-footer'>
-            <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-            <button class='btn btn-primary' id='add_skill_button' type='button'>
-              Add Skill
-            </button>
+          <div class='form-group'>
+            <label class='control-label' for='update_skill_attr2'>
+              Description:
+            </label>
+            <textarea class='form-control' id='update_skill_attr2'></textarea>
           </div>
         </div>
-      </div>
-    </div>
-    <div class='modal fade' id='update_skill'>
-      <div class='modal-dialog' role='document'>
-        <div class='modal-content'>
-          <div class='modal-header'>
-            <button class='close' data-dismiss='modal' type='button'>
-              <span aria-hidden='true'>&times;</span>
-            </button>
-            <h4 class='modal-title'>
-              Update Job Skill
-            </h4>
-          </div>
-          <div class='modal-body'>
-            <div id='update_skill_errors'></div>
-            <div class='form-group'>
-              <label class='control-label' for='update_skill_name'>
-                Name:
-              </label>
-              <textarea class='form-control' id='update_skill_name'></textarea>
-            </div>
-            <div class='form-group'>
-              <label class='control-label' for='update_skill_desc'>
-                Description:
-              </label>
-              <textarea class='form-control' id='update_skill_desc'></textarea>
-            </div>
-          </div>
-          <div class='modal-footer'>
-            <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-            <button class='btn btn-primary' id='update_skill_button' type='button'>
-              Update Skill
-            </button>
-          </div>
+        <div class='modal-footer'>
+          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+          <button class='btn btn-primary' id='update_skill_button' type='button'>
+            Update Skill
+          </button>
         </div>
       </div>
     </div>

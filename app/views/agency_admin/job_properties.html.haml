@@ -11,6 +11,8 @@
         %a{ data: { toggle: 'pill'}, href: '#job-specialties-pane' }Job Specialties
       %li
         %a{ data: { toggle: 'pill'}, href: '#job-skills-pane' }Job Skills
+      %li
+        %a{ data: { toggle: 'pill'}, href: '#licenses-pane' }Licenses
 
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#job-specialties-pane
@@ -43,22 +45,59 @@
                               delete_property_path: :skill_path }
           .clearfix
 
+      .tab-pane.fade#licenses-pane
+        .col-xs-12.text-right
+          %button.btn.btn-primary.btn-sm.table_action_button#add-license-modal-btn{ data: { toggle: 'modal', target: '#add_license' } }
+            Add license
+        .col-xs-12.pad-0
+        - if @licenses.empty?
+          %h5 There are no licenses defined.
+        - else
+          = render partial: 'shared/licenses', object: @licenses,
+                    locals: { data_type:  'licenses',
+                              partial_id: 'licenses_table',
+                              show_property_path:   :license_path,
+                              delete_property_path: :license_path }
+          .clearfix
+
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'add_job_category',
                     modal_title:  'Add Job Specialty',
-                    modal_submit: 'Add Specialty' }
+                    modal_submit: 'Add Specialty',
+                    attr1_label:   'Name:',
+                    attr2_label:   'Description:' }
 
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'update_job_category',
                     modal_title:  'Update Job Specialty',
-                    modal_submit: 'Update Specialty' }
+                    modal_submit: 'Update Specialty',
+                    attr1_label:   'Name:',
+                    attr2_label:   'Description:' }
 
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'add_skill',
                     modal_title:  'Add Job Skill',
-                    modal_submit: 'Add Skill' }
+                    modal_submit: 'Add Skill',
+                    attr1_label:   'Name:',
+                    attr2_label:   'Description:' }
 
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'update_skill',
                     modal_title:  'Update Job Skill',
-                    modal_submit: 'Update Skill' }
+                    modal_submit: 'Update Skill',
+                    attr1_label:   'Name:',
+                    attr2_label:   'Description:' }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'add_license',
+                    modal_title:  'Add License',
+                    modal_submit: 'Add License',
+                    attr1_label:   'Abbreviation:',
+                    attr2_label:   'Title:' }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'update_license',
+                    modal_title:  'Update License',
+                    modal_submit: 'Update License',
+                    attr1_label:   'Abbreviation:',
+                    attr2_label:   'Title:' }
