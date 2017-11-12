@@ -15,8 +15,21 @@ RSpec.describe License, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_many(:job_licenses).dependent(:destroy) }
-    it { is_expected.to have_many(:jobs).through(:job_licenses) }
+    it { is_expected.to have_many(:job_licenses) }
+    it { is_expected.to have_many(:jobs).through(:job_licenses).dependent(:destroy) }
+  end
+
+  describe 'Abbr' do
+    it { is_expected.to validate_presence_of(:abbr) }
+    it 'validates uniqueness of abbreviation' do
+      license.save
+      license2 = FactoryGirl.build(:license, abbr: license.abbr.downcase)
+      expect(license2).to_not be_valid
+      expect(license2.errors.full_messages).to include 'Abbr has already been taken'
+    end
+  end
+  describe 'Title' do
+    it { is_expected.to validate_presence_of :title }
   end
 
   describe '#license_description' do

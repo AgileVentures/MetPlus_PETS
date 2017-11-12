@@ -21,7 +21,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
     it { is_expected.to belong_to :education }
-    it { is_expected.to have_many(:job_skills).dependent(:destroy) }
+    it { is_expected.to have_many(:job_skills) }
+    it { is_expected.to have_many(:skills).dependent(:destroy) }
     it do
       is_expected.to accept_nested_attributes_for(:job_skills)
         .allow_destroy(true)
@@ -45,8 +46,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_licenses) }
     it { is_expected.to have_many(:licenses).through(:job_licenses) }
     it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
-    it { is_expected.to have_many(:job_questions).dependent(:destroy) }
-    it { is_expected.to have_many(:questions).through(:job_questions) }
+    it { is_expected.to have_many(:job_questions) }
+    it { is_expected.to have_many(:questions).through(:job_questions).dependent(:destroy) }
     it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 

@@ -5,8 +5,8 @@ class JobApplication < ActiveRecord::Base
   attr_accessor :job_developer
   has_many :status_changes, as: :entity, dependent: :destroy
 
-  has_many :application_questions, inverse_of: :job_application, dependent: :destroy
-  has_many :questions, through: :application_questions
+  has_many :application_questions, inverse_of: :job_application
+  has_many :questions, through: :application_questions, dependent: :destroy
   accepts_nested_attributes_for :application_questions, reject_if: :all_blank
 
   validates_uniqueness_of :job_seeker_id, scope: :job_id

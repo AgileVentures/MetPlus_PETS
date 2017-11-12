@@ -181,6 +181,7 @@ Given(/^the following jobs exist:$/) do |table|
     company_name  = hash.delete 'company'
     creator_email = hash.delete 'creator'
     skills = hash.delete 'skills'
+    licenses = hash.delete 'licenses'
     city = hash.delete 'city'
     shifts = hash.delete 'shifts'
 
@@ -200,6 +201,12 @@ Given(/^the following jobs exist:$/) do |table|
       skills.split(/(?:,\s*)/).each do |skill|
         JobSkill.create(job: job, skill: Skill.find_by_name(skill),
                         required: true, min_years: 1, max_years: 20)
+      end
+    end
+
+    unless licenses.blank?
+      licenses.split(/(?:,\s*)/).each do |license|
+        JobLicense.create(job: job, license: License.find_by_abbr(license))
       end
     end
 

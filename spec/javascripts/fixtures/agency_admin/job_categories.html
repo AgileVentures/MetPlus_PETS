@@ -1,121 +1,243 @@
-<div class='content container'>
+<div class='row'>
   <div class='row'>
-  <h3>PETS Administration - Job Properties</h3>
-  <div class='row'>
-    <div class='col-sm-3'>
-      <h4>Job Categories</h4>
-    </div>
-    <div class='col-sm-9'>
-      <div id='job_categories_table'>
-        <table class='table table-hover'>
-          <thead>
-            <tr>
-              <td>
-                <strong>Name</strong>
-              </td>
-              <td>
-                <strong>Description</strong>
-              </td>
-              <td>
-                <strong>Delete</strong>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <a href="/job_categories/201/edit">Test Category</a>
-              </td>
-              <td>
-                Test Category Description
-              </td>
-              <td>
-                <a rel="nofollow" data-method="delete" href="/job_categories/201"><span class='glyphicon glyphicon-remove'></span>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+    <ul class='nav nav-pills'>
+      <li class='active'>
+        <a data-toggle='pill' href='#job-specialties-pane'>Job Specialties</a>
+      </li>
+      <li>
+        <a data-toggle='pill' href='#job-skills-pane'>Job Skills</a>
+      </li>
+      <li>
+        <a data-toggle='pill' href='#licenses-pane'>Licenses</a>
+      </li>
+    </ul>
+    <div class='tab-content tab-content-margin'>
+      <div class='tab-pane fade in active' id='job-specialties-pane'>
+        <div class='col-xs-12 text-right'>
+          <button class='btn btn-primary btn-sm table_action_button' data-target='#add_job_category' data-toggle='modal' id='add-job-specialty-modal-btn'>
+            Add job specialty
+          </button>
+        </div>
+        <div class='col-xs-12 pad-0'></div>
+        <div id='job_categories_table'>
+          <table class='table table-hover'>
+            <thead>
+              <tr>
+                <th>
+                  <strong>Name</strong>
+                </th>
+                <th>
+                  <strong>Description</strong>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/16">Chief Quality Producer_15</a>
+                </td>
+                <td>
+                  Non voluptatibus nobis quae non modi voluptas autem aut.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/16"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/10">Chief Web Coordinator_9</a>
+                </td>
+                <td>
+                  Dolorem aut et voluptatem sit dolores.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/10"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/17">Corporate Intranet Engineer_16</a>
+                </td>
+                <td>
+                  Dolor mollitia sit est dolor.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/17"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/19">Corporate Marketing Supervisor_18</a>
+                </td>
+                <td>
+                  Molestias laudantium expedita fuga rerum.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/19"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/2">Direct Communications Coordinator_1</a>
+                </td>
+                <td>
+                  Enim quo odit rerum nihil quae.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/2"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/8">Direct Metrics Architect_7</a>
+                </td>
+                <td>
+                  Et sed quis ipsam molestias in quasi facilis perferendis.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/8"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/3">Dynamic Web Representative_2</a>
+                </td>
+                <td>
+                  Et non quia qui voluptate quasi ea officia magnam.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/3"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/11">Future Intranet Facilitator_10</a>
+                </td>
+                <td>
+                  Blanditiis molestias recusandae vel suscipit voluptas cum sunt.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/11"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/7">Future Program Orchestrator_6</a>
+                </td>
+                <td>
+                  Aliquid omnis sit sed magnam aut porro et.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/7"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a rel="nofollow" data-method="edit" href="/job_categories/5">Global Communications Officer_4</a>
+                </td>
+                <td>
+                  Adipisci sit et doloremque modi et perspiciatis.
+                </td>
+                <td>
+                  <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/job_categories/5"><span class='glyphicon glyphicon-trash'></span>
+                  &nbsp;Delete
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination"><ul class="pagination"><li class="prev previous_page disabled"><a href="#">&#8592; Previous</a></li> <li class="active"><a rel="start" href="/agency_admin/job_properties?data_type=job_categories&amp;job_categories_page=1">1</a></li> <li><a rel="next" href="/agency_admin/job_properties?data_type=job_categories&amp;job_categories_page=2">2</a></li> <li><a href="/agency_admin/job_properties?data_type=job_categories&amp;job_categories_page=3">3</a></li> <li class="next next_page "><a rel="next" href="/agency_admin/job_properties?data_type=job_categories&amp;job_categories_page=2">Next &#8594;</a></li></ul></div>
+        </div>
+        <div class='clearfix'></div>
       </div>
     </div>
-    <div class='clearfix'></div>
-    <div class='col-sm-3 col-sm-offset-3'>
-      <a class='text-danger' href='#job_categories_table' id='toggle_job_categories'>
-        Hide Job Categories
-      </a>
-    </div>
-    <div class='col-sm-3 col-sm-offset-3 table_action_button'>
-      <button class='btn btn-primary btn-sm pull-right' data-target='#add_job_category' data-toggle='modal'>Add Job Category</button>
-    </div>
   </div>
-  <div class='modal fade' id='add_job_category'>
-    <div class='modal-dialog' role='document'>
-      <div class='modal-content'>
-        <div class='modal-header'>
-          <button class='close' data-dismiss='modal' type='button'>
-            <span aria-hidden='true'>&times;</span>
-          </button>
-          <h4 class='modal-title'>
-            Add Job Category
-          </h4>
+</div>
+<div class='modal fade' id='add_job_category'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button class='close' data-dismiss='modal' type='button'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+        <h4 class='modal-title'>
+          Add Job Specialty
+        </h4>
+      </div>
+      <div class='modal-body'>
+        <div id='add_job_category_errors'></div>
+        <div class='form-group'>
+          <label class='control-label' for='add_job_category_attr1'>
+            Name:
+          </label>
+          <textarea class='form-control' id='add_job_category_attr1'></textarea>
         </div>
-        <div class='modal-body'>
-          <div id='add_job_category_errors'></div>
-          <div class='form-group'>
-            <label class='control-label' for='add_job_category_name'>
-              Name:
-            </label>
-            <textarea class='form-control' id='add_job_category_name'></textarea>
-          </div>
-          <div class='form-group'>
-            <label class='control-label' for='add_job_category_desc'>
-              Description:
-            </label>
-            <textarea class='form-control' id='add_job_category_desc'></textarea>
-          </div>
+        <div class='form-group'>
+          <label class='control-label' for='add_job_category_attr2'>
+            Description:
+          </label>
+          <textarea class='form-control' id='add_job_category_attr2'></textarea>
         </div>
-        <div class='modal-footer'>
-          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-          <button class='btn btn-primary' id='add_job_category_button' type='button'>
-            Add Category
-          </button>
-        </div>
+      </div>
+      <div class='modal-footer'>
+        <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+        <button class='btn btn-primary' id='add_job_category_button' type='button'>
+          Add Specialty
+        </button>
       </div>
     </div>
   </div>
-  <div class='modal fade' id='update_job_category'>
-    <div class='modal-dialog' role='document'>
-      <div class='modal-content'>
-        <div class='modal-header'>
-          <button class='close' data-dismiss='modal' type='button'>
-            <span aria-hidden='true'>&times;</span>
-          </button>
-          <h4 class='modal-title'>
-            Update Job Category
-          </h4>
+</div>
+<div class='modal fade' id='update_job_category'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button class='close' data-dismiss='modal' type='button'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+        <h4 class='modal-title'>
+          Update Job Specialty
+        </h4>
+      </div>
+      <div class='modal-body'>
+        <div id='update_job_category_errors'></div>
+        <div class='form-group'>
+          <label class='control-label' for='update_job_category_attr1'>
+            Name:
+          </label>
+          <textarea class='form-control' id='update_job_category_attr1'></textarea>
         </div>
-        <div class='modal-body'>
-          <div id='update_job_category_errors'></div>
-          <div class='form-group'>
-            <label class='control-label' for='update_job_category_name'>
-              Name:
-            </label>
-            <textarea class='form-control' id='update_job_category_name'></textarea>
-          </div>
-          <div class='form-group'>
-            <label class='control-label' for='update_job_category_desc'>
-              Description:
-            </label>
-            <textarea class='form-control' id='update_job_category_desc'></textarea>
-          </div>
+        <div class='form-group'>
+          <label class='control-label' for='update_job_category_attr2'>
+            Description:
+          </label>
+          <textarea class='form-control' id='update_job_category_attr2'></textarea>
         </div>
-        <div class='modal-footer'>
-          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
-          <button class='btn btn-primary' id='update_job_category_button' type='button'>
-            Update Category
-          </button>
-        </div>
+      </div>
+      <div class='modal-footer'>
+        <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+        <button class='btn btn-primary' id='update_job_category_button' type='button'>
+          Update Specialty
+        </button>
       </div>
     </div>
   </div>
+</div>
