@@ -12,6 +12,6 @@ class License < ActiveRecord::Base
   end
 
   def has_job?
-  	jobs.any?
+  	jobs.exists?
   end
 end
