@@ -60,7 +60,7 @@ class LicensesController < ApplicationController
   end
 
   private
-  
+
   def confirm_xhr
     raise 'Not an XHR request' unless request.xhr?
   end

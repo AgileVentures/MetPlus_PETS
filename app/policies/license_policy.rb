@@ -1,14 +1,14 @@
 class LicensePolicy < ApplicationPolicy
   def create?
-    User.is_agency_admin? user
+    User.is_agency_admin?(user) || User.is_company_person?(user)
   end
   def show?
-    User.is_agency_admin? user
+    create?
   end
   def update?
-    User.is_agency_admin? user
+    create?
   end
   def destroy?
-    User.is_agency_admin? user
+    create?
   end
 end

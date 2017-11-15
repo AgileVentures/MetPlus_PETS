@@ -38,7 +38,9 @@ class SkillsController < ApplicationController
     rescue
       render nothing: true, status: 404
     else
-      if skill.update(skill_params)
+      update_params = skill_params
+      update_params.delete('company_id')
+      if skill.update(update_params)
         render nothing: true
       else
         render partial: 'shared/error_messages',

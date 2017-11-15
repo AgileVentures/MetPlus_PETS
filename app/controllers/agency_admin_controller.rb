@@ -47,7 +47,7 @@ class AgencyAdminController < ApplicationController
                          show_property_path:   :job_category_path,
                          delete_property_path: :job_category_path }
       when 'skills'
-        @skills = Skill.order(:name).
+        @skills = Skill.includes(:jobs).order(:name).
                     page(params[:skills_page]).per_page(10)
 
         render partial: 'shared/job_skills', object: @skills,
@@ -56,7 +56,7 @@ class AgencyAdminController < ApplicationController
                          show_property_path:   :skill_path,
                          delete_property_path: :skill_path }
       when 'licenses'
-        @licenses = License.order(:abbr).
+        @licenses = License.includes(:jobs).order(:abbr).
                     page(params[:licenses_page]).per_page(10)
 
         render partial: 'shared/licenses', object: @licenses,
@@ -71,10 +71,10 @@ class AgencyAdminController < ApplicationController
       @job_categories = JobCategory.order(:name).
                   page(params[:job_categories_page]).per_page(10)
 
-      @skills = Skill.order(:name).
+      @skills = Skill.includes(:jobs).order(:name).
                   page(params[:skills_page]).per_page(10)
 
-      @licenses = License.order(:abbr).
+      @licenses = License.includes(:jobs).order(:abbr).
                   page(params[:licenses_page]).per_page(10)
     end
   end
