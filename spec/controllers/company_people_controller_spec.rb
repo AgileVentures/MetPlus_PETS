@@ -153,7 +153,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         expect(assigns(:job_type)).to eq 'my-company-all'
         expect(assigns(:people_type)).to eq 'my-company-all'
       end
-      it 'renders edit_profile template' do
+      it 'renders home template' do
         expect(response).to render_template 'home'
       end
       it 'returns http success' do
@@ -161,7 +161,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
     end
 
-    describe 'xhr response' do
+    describe 'xhr response - skills' do
       before(:each) do
         sign_in company_person
         xhr :get, :home, id: company_person, data_type: 'skills'
@@ -169,6 +169,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
       it 'renders shared partial for skills display' do
         expect(response).to render_template(partial: 'shared/_job_skills')
+      end
+    end
+
+    describe 'xhr response - licenses' do
+      before(:each) do
+        sign_in company_person
+        xhr :get, :home, id: company_person, data_type: 'licenses'
+      end
+
+      it 'renders shared partial for licenses display' do
+        expect(response).to render_template(partial: 'shared/_licenses')
       end
     end
 

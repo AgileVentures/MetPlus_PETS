@@ -38,13 +38,19 @@ var AgencyData = {
     //       Agency job categories and company-specific job skills).
 
     // Create the post data for ajax .....
-    var attr1_field_id = '#add_' + job_property + '_attr1';
-    var attr2_field_id = '#add_' + job_property + '_attr2';
+    var id_prefix = '#add_' + job_property;
+    var attr1_field_id = id_prefix + '_attr1';
+    var attr2_field_id = id_prefix + '_attr2';
+
     var company_id = null;
+    var user_type = $('#user_type').val();
+
     var post_data = {};
+
     post_data[job_property + '[' + attr1 + ']'] = $(attr1_field_id).val();
     post_data[job_property + '[' + attr2 + ']'] = $(attr2_field_id).val();
-    if ($('#company_id').length !== 0) {
+
+    if (user_type == 'company_person') {
       company_id = $('#company_id').val();
       post_data[job_property + '[company_id]'] = company_id;
     }
@@ -66,7 +72,7 @@ var AgencyData = {
                 AgencyData.change_job_property_success(modal_id,
                                                        model_errors_id,
                                                        job_prop_plural,
-                                                       company_id);
+                                                       company_id, user_type);
               }
             },
             error: function (xhrObj, status, exception) {
@@ -168,14 +174,21 @@ var AgencyData = {
     //     attr2: the name of the second attribute displayed in the modal
 
     // Create the PATCH data for ajax .....
-    var attr1_field_id = '#update_' + job_property + '_attr1';
-    var attr2_field_id = '#update_' + job_property + '_attr2';
+    var id_prefix = '#update_' + job_property;
+    var attr1_field_id = id_prefix + '_attr1';
+    var attr2_field_id = id_prefix + '_attr2';
+
     var company_id = null;
+    var user_type = $('#user_type').val();
+
     var patch_data = {};
+
     patch_data[job_property + '[' + attr1 + ']'] = $(attr1_field_id).val();
     patch_data[job_property + '[' + attr2 + ']'] = $(attr2_field_id).val();
-    if ($('#company_id') != null) {
+
+    if (user_type == 'company_person') {
       company_id = $('#company_id').val();
+      patch_data[job_property + '[company_id]'] = company_id;
     }
 
     $.ajax({type: 'PATCH',
@@ -188,7 +201,7 @@ var AgencyData = {
               AgencyData.change_job_property_success(modal_id,
                                                      model_errors_id,
                                                      job_prop_plural,
-                                                     company_id);
+                                                     company_id, user_type);
             },
             error: function (xhrObj, status, exception) {
               var model_errors_id = '#update_' + job_property + '_errors';
@@ -296,7 +309,8 @@ var AgencyData = {
   },
 
   change_job_property_success: function (modal_id, model_errors_id,
-                                         job_prop_plural, company_id) {
+                                         job_prop_plural, company_id,
+                                         user_type) {
     // This function is called when a successful change (add or update)
     // of a job property has occurred.  It updates the page view so the
     // change is visible to the user.  Then, it clears any model errors
@@ -307,7 +321,8 @@ var AgencyData = {
     //                      for adding or updating the job property.  This must
     //                      include the '#' for jquery css selection,
     //                      e.g. '#add_job_category', '#update_job_category',
-    //                           '#add_skill', '#update_skill'
+    //                           '#add_skill', '#update_skill',
+    //                           '#add_license', '#update_license'
     //     model_errors_id: the id of the div that is used to display
     //                      model errors on the modal form.  This must
     //                      include the '#' for jquery css selection,
@@ -318,7 +333,7 @@ var AgencyData = {
     //                           '#add_license_errors',
     //                           '#update_license_errors'
     //     job_prop_plural: the pluralized version of job_property,
-    //                      e.g. 'job_categories', 'skills', licenses
+    //                      e.g. 'job_categories', 'skills', 'licenses'
 
     // Find the current (active) pagination anchor and force a reload of the page
     // section in case the new or updated category shows up in that section.
@@ -332,7 +347,7 @@ var AgencyData = {
     } else {
       // If there are too few items on the page the paginate links
       // will not be present - create appropriate url instead
-      if (company_id != null) {
+      if (user_type == 'company_person') {
         paginate_url = '/company_people/' + company_id + '/home' + '?data_type=' +
                         job_prop_plural + '&' + job_prop_plural + '_page=1';
       } else {
