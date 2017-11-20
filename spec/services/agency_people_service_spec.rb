@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'byebug'
 
 RSpec.describe AgencyPeopleService, type: :model do
   let!(:agency)       { FactoryGirl.create(:agency) }
@@ -8,7 +7,7 @@ RSpec.describe AgencyPeopleService, type: :model do
   let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
   let(:service)       { AgencyPeopleService.new }
 
-  describe 'assign_to_job_seeker' do
+  describe '#assign_to_job_seeker' do
     before(:each) do
       allow(Event).to receive(:create)
     end
@@ -27,6 +26,17 @@ RSpec.describe AgencyPeopleService, type: :model do
             JobSeeker.find(job_seeker.id)
               .agency_relations.first.agency_person
           ).to eq job_developer
+        end
+
+        it 'creates event JD_SELF_ASSIGN_JS' do
+          expect(Event).to have_received(:create).
+            with(
+              :JD_SELF_ASSIGN_JS,
+              have_attributes(
+                :job_seeker => job_seeker,
+                :agency_person => job_developer
+              ) 
+            )       
         end
       end
       
@@ -55,6 +65,17 @@ RSpec.describe AgencyPeopleService, type: :model do
               .agency_relations.first.agency_person
           ).to eq case_manager
         end
+        
+        it 'creates event CM_SELF_ASSIGN_JS' do
+          expect(Event).to have_received(:create).
+            with(
+              :CM_SELF_ASSIGN_JS,
+              have_attributes(
+                :job_seeker => job_seeker,
+                :agency_person => case_manager
+              ) 
+            )       
+        end
       end
 
       context 'when agency person is not a case manager' do
@@ -74,6 +95,15 @@ RSpec.describe AgencyPeopleService, type: :model do
             :AA,
             case_manager
           )}.to raise_error(AgencyPeopleService::InvalidRole)
+      end
+
+      it 'does not create an event' do
+        expect{service.assign_to_job_seeker(
+          job_seeker, 
+          :AA,
+          case_manager
+        )}
+        expect(Event).not_to have_received(:create)      
       end
     end
   end
