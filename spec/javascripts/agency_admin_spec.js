@@ -13,8 +13,8 @@ describe('Job Categories', function () {
     });
     it('retrieves data fields from modal', function () {
       // Populate data fields in modal
-      $('#add_job_category_name').val('New Category');
-      $('#add_job_category_desc').val('New Category Description');
+      $('#add_job_category_attr1').val('New Category');
+      $('#add_job_category_attr2').val('New Category Description');
 
       var user_data = {'job_category[name]': 'New Category',
                        'job_category[description]': 'New Category Description'};
@@ -45,12 +45,12 @@ describe('Job Categories', function () {
   describe('Edit job category', function () {
     beforeEach(function () {
       $('#job_categories_table').on('click',
-                    "a[href^='/job_categories/'][href$='edit']",
+                    "a[href^='/job_categories/'][data-method='edit']",
                                   AgencyData.edit_job_category);
     });
     it('retrieves job_category attributes via ajax', function () {
       spyOn($, 'ajax');
-      $("a[href^='/job_categories/'][href$='edit']").trigger('click');
+      $("a[href^='/job_categories/'][data-method='edit']").trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
   });
@@ -65,8 +65,8 @@ describe('Job Categories', function () {
     });
     it('retrieves data fields from modal', function () {
       // Populate data fields in modal
-      $('#update_job_category_name').val('Updated Category');
-      $('#update_job_category_desc').val('Updated Category Description');
+      $('#update_job_category_attr1').val('Updated Category');
+      $('#update_job_category_attr2').val('Updated Category Description');
 
       var user_data = {'job_category[name]': 'Updated Category',
                        'job_category[description]': 'Updated Category Description'};
@@ -110,7 +110,7 @@ describe('Job Categories', function () {
       $("a[data-method='delete']").trigger('click');
       expect($.ajax).toHaveBeenCalled();
       expect($.ajax.calls.mostRecent().args[0]['url']).
-                           toEqual('/job_categories/201');
+                           toEqual('/job_categories/5');
     });
     it('ajax success: calls function to update page', function () {
       spyOn(ManageData, 'get_updated_data');
@@ -137,8 +137,8 @@ describe('Skills', function () {
     });
     it('retrieves data fields from modal', function () {
       // Populate data fields in modal
-      $('#add_skill_name').val('New Skill');
-      $('#add_skill_desc').val('New Skill Description');
+      $('#add_skill_attr1').val('New Skill');
+      $('#add_skill_attr2').val('New Skill Description');
 
       var user_data = {'skill[name]': 'New Skill',
                        'skill[description]': 'New Skill Description'};
@@ -169,12 +169,12 @@ describe('Skills', function () {
   describe('Edit skill', function () {
     beforeEach(function () {
       $('#skills_table').on('click',
-                    "a[href^='/skills/'][href$='edit']",
+                    "a[href^='/skills/'][data-method='edit']",
                                   AgencyData.edit_skill);
     });
     it('retrieves skill attributes via ajax', function () {
       spyOn($, 'ajax');
-      $("a[href^='/skills/'][href$='edit']").trigger('click');
+      $("a[href^='/skills/'][data-method='edit']").trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
   });
@@ -189,8 +189,8 @@ describe('Skills', function () {
     });
     it('retrieves data fields from modal', function () {
       // Populate data fields in modal
-      $('#update_skill_name').val('Updated Skill');
-      $('#update_skill_desc').val('Updated Skill Description');
+      $('#update_skill_attr1').val('Updated Skill');
+      $('#update_skill_attr2').val('Updated Skill Description');
 
       var user_data = {'skill[name]': 'Updated Skill',
                        'skill[description]': 'Updated Skill Description'};
@@ -234,7 +234,7 @@ describe('Skills', function () {
       $("a[data-method='delete']").trigger('click');
       expect($.ajax).toHaveBeenCalled();
       expect($.ajax.calls.mostRecent().args[0]['url']).
-                           toEqual('/skills/4');
+                           toEqual('/skills/2');
     });
     it('ajax success: calls function to update page', function () {
       spyOn(ManageData, 'get_updated_data');

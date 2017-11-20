@@ -29,10 +29,10 @@ Background: data is added to database
     | John       | Seeker    | john@mail.com | 345-890-7890 | qwerty123 | qwerty123             | 1990          | Unemployed Seeking |
 
   Given the following jobs exist:
-    | title        | company_job_id | fulltime | description | company      | creator        | status  |
-    | hr assistant | KRK01K         | true     | internship  | Widgets Inc. | carter@ymail.com | revoked |
-    | hr manager   | KRK02K         | true     | internship  | Widgets Inc. | carter@ymail.com | active  |
-    | hr associate | KRK03K         | true     | internship  | Widgets Inc. | carter@ymail.com | active  |
+    | title        | company_job_id | description | company      | creator        | status  |
+    | hr assistant | KRK01K         | internship  | Widgets Inc. | carter@ymail.com | revoked |
+    | hr manager   | KRK02K         | internship  | Widgets Inc. | carter@ymail.com | active  |
+    | hr associate | KRK03K         | internship  | Widgets Inc. | carter@ymail.com | active  |
 
   @javascript
   Scenario: company person revoke a job

@@ -21,7 +21,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to belong_to :address }
     it { is_expected.to belong_to :job_category }
     it { is_expected.to belong_to :education }
-    it { is_expected.to have_many(:job_skills).dependent(:destroy) }
+    it { is_expected.to have_many(:job_skills) }
+    it { is_expected.to have_many(:skills).dependent(:destroy) }
     it do
       is_expected.to accept_nested_attributes_for(:job_skills)
         .allow_destroy(true)
@@ -45,8 +46,8 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:job_licenses) }
     it { is_expected.to have_many(:licenses).through(:job_licenses) }
     it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
-    it { is_expected.to have_many(:job_questions).dependent(:destroy) }
-    it { is_expected.to have_many(:questions).through(:job_questions) }
+    it { is_expected.to have_many(:job_questions) }
+    it { is_expected.to have_many(:questions).through(:job_questions).dependent(:destroy) }
     it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 
@@ -55,7 +56,6 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_db_column :title }
     it { is_expected.to have_db_column :description }
     it { is_expected.to have_db_column :company_job_id }
-    it { is_expected.to have_db_column :fulltime }
     it { is_expected.to have_db_column :company_id }
     it { is_expected.to have_db_column :company_person_id }
     it { is_expected.to have_db_column :address_id }
@@ -75,8 +75,6 @@ RSpec.describe Job, type: :model do
     it { is_expected.to validate_length_of(:description).is_at_most(10_000) }
     it { is_expected.to validate_presence_of :company_job_id }
     it { is_expected.to validate_numericality_of :years_of_experience }
-    it { should allow_value('', nil).for(:fulltime).on(:update) }
-    it { should allow_value('', nil).for(:fulltime).on(:create) }
     it { should allow_value('', nil).for(:years_of_experience).on(:update) }
     it { should allow_value('', nil).for(:years_of_experience).on(:create) }
     it { should_not allow_value(21).for(:years_of_experience) }

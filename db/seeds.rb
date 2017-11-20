@@ -249,7 +249,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
     Job.create(title: FFaker::Job.title,
                description: Faker::Lorem.sentence,
                company_job_id: "Job_ID_#{n}",
-               fulltime: [false, true][r.rand(2)],
                company_id: known_company.id,
                company_person_id: known_company_person.id,
                address_id: known_company.addresses[r.rand(15)].id)
@@ -259,13 +258,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   20.times do |n|
     title = FFaker::Job.title
     description = Faker::Lorem.paragraph(3, false, 4)
-    fulltime = [false, true][r.rand(2)]
     job_id = ((1..9).to_a + ('A'..'Z').to_a).sample(8).join
     # debugger
     Job.create(title: title,
                description: description,
                company_job_id: job_id,
-               fulltime: fulltime,
                company_id: companies[n].id,
                company_person_id: companypeople[n].id,
                job_category_id: jobcategories[n].id,

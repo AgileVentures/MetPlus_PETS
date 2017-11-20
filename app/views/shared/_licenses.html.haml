@@ -1,0 +1,25 @@
+%div(id="#{partial_id}")
+  %table.table.table-hover
+    %thead
+      %tr
+        %th
+          %strong Abbreviation
+        %th
+          %strong Title
+    %tbody
+      - licenses.each do |license|
+        %tr
+          %td
+            = link_to "#{license.abbr}", send(show_property_path, license), method: :edit
+          %td
+            = license.title
+          %td
+            - if license.has_job?
+              %span (in use)
+            - else
+              = link_to send(delete_property_path, license), method: :delete, class: 'btn btn-danger' do
+                %span.glyphicon.glyphicon-trash
+                &nbsp;Delete
+
+  = will_paginate licenses, param_name: "#{data_type}_page",
+                     params: {data_type: data_type}

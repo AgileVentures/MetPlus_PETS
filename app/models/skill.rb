@@ -5,9 +5,8 @@ class Skill < ActiveRecord::Base
 
   validates_presence_of :description
 
-  has_many :job_skills, dependent: :destroy
-
-  has_many :jobs, through: :job_skills
+  has_many :job_skills
+  has_many :jobs, through: :job_skills, dependent: :destroy
 
   belongs_to :organization, polymorphic: true
 

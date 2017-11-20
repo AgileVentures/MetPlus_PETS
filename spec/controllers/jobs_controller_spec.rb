@@ -28,7 +28,7 @@ RSpec.describe JobsController, type: :controller do
   let!(:question) { FactoryGirl.create(:question) }
 
   let!(:valid_params) do
-    { title: 'Ruby on Rails', fulltime: true, description: 'passionate',
+    { title: 'Ruby on Rails', description: 'passionate',
       company_id: bosh.id, address_id: bosh_mich.id, shift: 'Evening',
       company_job_id: 'WERRR123',
       job_skills_attributes: { '0' => { skill_id: skill.id,

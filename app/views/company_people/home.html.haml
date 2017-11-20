@@ -54,6 +54,9 @@
       %li
         %a{ data: { toggle: 'pill'}, href: '#job-skills-pane' }
           Job Skills
+      %li
+        %a{ data: { toggle: 'pill'}, href: '#licenses-pane' }
+          Licenses
 
     .tab-content.tab-content-margin
       .tab-pane.fade.in.active#all-jobs-pane
@@ -93,7 +96,6 @@
                            company_admins: @company_admins }
 
       .tab-pane.fade#job-skills-pane
-        -# .col-xs-12.text-right
         %button.btn.btn-primary.btn-sm.table_action_button.pull-right#add-job-skill-modal-btn{ data: { toggle: 'modal', target: '#add_skill' } }
           Add job skill
         .clearfix
@@ -108,14 +110,53 @@
                               show_property_path:   :skill_path,
                               delete_property_path: :skill_path }
 
+      .tab-pane.fade#licenses-pane
+        %button.btn.btn-primary.btn-sm.table_action_button.pull-right#add-license-modal-btn{ data: { toggle: 'modal', target: '#add_license' } }
+          Add License
+        .clearfix
+
+        .col-xs-12.pad-0
+        - if @licenses.empty?
+          %h5 There are no licenses defined.
+        - else
+          = render partial: 'shared/licenses', object: @licenses,
+                    locals: { data_type:  'licenses',
+                              partial_id: 'licenses_table',
+                              show_property_path:   :license_path,
+                              delete_property_path: :license_path }
+
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'add_skill',
                     modal_title:  "Add Job Skill for #{@company.name}",
                     modal_submit: 'Add Skill',
-                    company_id:   @company.id }
+                    company_id:   @company.id,
+                    attr1_label:  'Name:',
+                    attr2_label:  'Description:',
+                    user_type:    'company_person' }
 
 = render partial: 'shared/property_modal',
           locals: { modal_id:     'update_skill',
                     modal_title:  "Update Job Skill for #{@company.name}",
                     modal_submit: 'Update Skill',
-                    company_id:    @company.id }
+                    company_id:    @company.id,
+                    attr1_label:  'Name:',
+                    attr2_label:  'Description:',
+                    user_type:    'company_person' }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'add_license',
+                    modal_title:  'Add License',
+                    modal_submit: 'Add License',
+                    company_id:    @company.id,
+                    attr1_label:   'Abbreviation:',
+                    attr2_label:   'Title:',
+                    user_type:    'company_person' }
+
+= render partial: 'shared/property_modal',
+          locals: { modal_id:     'update_license',
+                    modal_title:  'Update License',
+                    modal_submit: 'Update License',
+                    company_id:    @company.id,
+                    attr1_label:   'Abbreviation:',
+                    attr2_label:   'Title:',
+                    user_type:    'company_person' }

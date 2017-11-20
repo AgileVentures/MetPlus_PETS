@@ -9,15 +9,19 @@
       .modal-body
         %div{id: "#{modal_id}_errors"}
         .form-group
-          %label(for="#{modal_id}_name" class='control-label')
-            Name:
-          %textarea(class='form-control' id="#{modal_id}_name")
+          %label(for="#{modal_id}_attr1" class='control-label')
+            = attr1_label
+          %textarea(class='form-control' id="#{modal_id}_attr1")
         .form-group
-          %label(for="#{modal_id}_desc" class='control-label')
-            Description:
-          %textarea(class='form-control' id="#{modal_id}_desc")
+          %label(for="#{modal_id}_attr2" class='control-label')
+            = attr2_label
+          %textarea(class='form-control' id="#{modal_id}_attr2")
+
         - if defined?(company_id)
           = hidden_field_tag('company_id', company_id)
+        - if defined?(user_type)
+          = hidden_field_tag('user_type', user_type)
+          
       .modal-footer
         %button(type='button' class='btn btn-default'
                                  data-dismiss='modal') Cancel

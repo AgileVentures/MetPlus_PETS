@@ -29,6 +29,12 @@ Background: seed data added to database and log in as agency admim
   | Web Research              | Hic deleniti explicabo inventore delectus veritatis mollitia. |
   | Visual Analysis           | Incidunt aut magni perferendis atque qui dolor.               |
 
+  Given the following license records:
+    | abbr  | title                                  |
+    | LLMSW | LIMITED LICENSE MASTER SOCIAL WORKER   |
+    | LMSW  | LICENSED MASTER SOCIAL WORKER          |
+    | LLPC  | LIMITED LICENSE PROFESSIONAL COUNSELOR |
+
   Given the following companies exist:
     | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
     | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
@@ -39,8 +45,8 @@ Background: seed data added to database and log in as agency admim
     | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
   Given the following jobs exist:
-  | title         | company_job_id  | fulltime | description | company      | creator          | skills    |
-  | Web dev       | KRK01K          | true     | internship  | Widgets Inc. | jane@ymail.com | Web Research |
+  | title         | company_job_id  | description | company      | creator        | skills       | licenses |
+  | Web dev       | KRK01K          | internship  | Widgets Inc. | jane@ymail.com | Web Research | LLMSW    |
 
   Given the following jobseekers exist:
   | first_name| last_name| email            | phone       | password  | year_of_birth |job_seeker_status  |
@@ -340,4 +346,51 @@ Scenario: manage job properties
   Then I should not see "Visual Analysis"
 
   # attempt to delete job skill associated with a job
+  And I should not see the "/skills/1" link
+
+  # add license
+  And I click the "Licenses" link
+  And I click the "Add license" button
+  And I fill in "Abbreviation:" with "TEST"
+  And I fill in "Title:" with "Some Standard License"
+  And I click the "Add License" button
+  Then I should see "TEST"
+  And I should see "Some Standard License"
+
+  # cancel add license
+  And I click the "Add license" button
+  And I fill in "Abbreviation:" with "TEST2"
+  And I click the "Cancel" button
+  Then I should not see "TEST2"
+
+  # show license model validation errors
+  Then I click the "Add license" button
+  And I fill in "Abbreviation:" with ""
+  And I fill in "Title:" with ""
+  And I click the "Add License" button
+  Then I should see "Abbr can't be blank"
+  And I should see "Title can't be blank"
+  Then I fill in "Abbreviation:" with "TEST3"
+  And I fill in "Title:" with "Description of 3rd Test License"
+  And I click the "Add License" button
+  Then I should see "TEST3"
+
+  # update license
+  And I click the "LLPC" link
+  And I wait 1 second
+  And I fill in "Abbreviation:" with ""
+  And I click the "Update License" button
+  And I wait 1 second
+  And I should see "Abbr can't be blank"
+  And I fill in "Abbreviation:" with "ABC"
+  And I click the "Update License" button
+  And I wait 1 second
+  Then "Update License" should not be visible
+  And I should see "ABC"
+
+  # delete license not associated with a job
+  And I click the "Delete" link with url "/licenses/2"
+  Then I should not see "LICENSED MASTER SOCIAL WORKER"
+
+  # attempt to delete license associated with a job
   And I should not see the "/skills/1" link

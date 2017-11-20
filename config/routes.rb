@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     member do
       get :home
       get :edit_profile, to: 'agency_people#edit_profile'
-      get :my_profile, to: :my_profile
+      get :my_profile
       patch :update_profile, to: 'agency_people#update_profile'
       patch 'assign_job_seeker/:job_seeker_id/:agency_role',
             to: 'agency_people#assign_job_seeker',
@@ -107,6 +107,10 @@ Rails.application.routes.draw do
 
   # ----------------------- Skills -------------------------------------------
   resources :skills, only: [:create, :show, :update, :destroy]
+  # --------------------------------------------------------------------------
+
+  # ----------------------- Licenses -------------------------------------------
+  resources :licenses, only: [:create, :show, :update, :destroy]
   # --------------------------------------------------------------------------
 
   # ----------------------- Tasks --------------------------------------------
