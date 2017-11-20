@@ -1,6 +1,11 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
+class TestTaskHelper
+  include TaskManager::BusinessLogic 
+  include TaskManager::TaskManager
+end
+
 RSpec.describe Task, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
@@ -436,6 +441,43 @@ RSpec.describe Task, type: :model do
       end
       it 'company contact user' do
         expect(Task.find_by_owner_user_closed @company_contact).to eq [@task_cc_closed]
+      end
+    end
+  end
+  describe 'Find all tasks by target' do
+    before(:each) do
+        @adam = FactoryGirl.create(:job_seeker)
+        @jane = FactoryGirl.create(:job_seeker)
+        @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
+        @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+        @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+        @agency = FactoryGirl.create(:agency)
+  
+        @job_developer = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@jd_role])
+  
+        @case_manager = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@cm_role])
+  
+        @agency_admin = FactoryGirl.create(:agency_person, :agency => @agency, :agency_roles => [@aa_role])
+    end
+    context 'where the target is a job seeker' do
+      before(:each) do
+        TestTaskHelper.new_js_registration_task @jane, @agency
+        TestTaskHelper.new_js_registration_task @adam, @agency
+      end
+      
+      it 'returns tasks' do
+        all_tasks = Task.find_by_target_job_seeker_open @jane
+        expect(all_tasks.length).to be 2
+        expect(all_tasks.first.target).to eq @jane
+        expect(all_tasks.second.target).to eq @jane
+      end
+
+      context 'when a specific task type is selected' do
+        it 'return all need_job_developer' do
+          all_tasks = Task.find_by_type_and_target_job_seeker_open 'need_job_developer', @jane
+          expect(all_tasks.length).to be 1
+          expect(all_tasks.first.target).to eq @jane
+        end
       end
     end
   end

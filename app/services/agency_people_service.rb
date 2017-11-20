@@ -25,6 +25,10 @@ class AgencyPeopleService
     raise NotAJobDeveloper, '' unless job_developer.is_job_developer? job_developer.agency
     job_seeker.assign_job_developer job_developer, job_developer.agency
     Event.create(:JD_SELF_ASSIGN_JS, obj.new(job_seeker, job_developer))
+    Task.find_by_type_and_target_job_seeker_open('need_job_developer', job_seeker).each do |task|
+      task.force_close
+      task.save!
+    end
   end
 
   def assign_case_manager_to_job_seeker(job_seeker, case_manager)

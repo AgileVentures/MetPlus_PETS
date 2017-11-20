@@ -47,7 +47,7 @@ RSpec.describe AgencyPeopleService, type: :model do
 
         it 'completes need_job_developer Task' do
           expect(Task.agency_tasks(job_developer).length).to be 1
-          expect(Task.agency_tasks(job_developer).first.status).to be TaskManager::TaskManager::STATUS[:DONE]
+          expect(Task.agency_tasks(job_developer).first.status).to eq TaskManager::TaskManager::STATUS[:DONE]
         end
       end
       

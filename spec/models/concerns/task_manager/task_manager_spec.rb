@@ -139,5 +139,13 @@ RSpec.describe TaskManager::TaskManager do
         expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:NEW])
       end
     end
+    describe '#force_close' do
+      subject {TaskTester.create_task({user: @job_developer}, 'simple', @job)}
+      it('Check status change') do
+        subject.assign @job_developer
+        subject.force_close
+        expect(subject.status).to eq(TaskManager::TaskManager::STATUS[:DONE])
+      end
+    end
   end
 end
