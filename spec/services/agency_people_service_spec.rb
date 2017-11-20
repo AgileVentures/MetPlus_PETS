@@ -1,5 +1,10 @@
 require 'rails_helper'
 
+class TestTaskHelper
+  include TaskManager::BusinessLogic 
+  include TaskManager::TaskManager
+end
+
 RSpec.describe AgencyPeopleService, type: :model do
   let!(:agency)       { FactoryGirl.create(:agency) }
   let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
@@ -15,6 +20,7 @@ RSpec.describe AgencyPeopleService, type: :model do
     context 'when assign a job developer' do
       context 'on success' do
         before(:each) do
+          TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
           service.assign_to_job_seeker(
             job_seeker, 
             :JD, 
@@ -37,6 +43,11 @@ RSpec.describe AgencyPeopleService, type: :model do
                 :agency_person => job_developer
               ) 
             )       
+        end
+
+        it 'completes need_job_developer Task' do
+          expect(Task.agency_tasks(job_developer).length).to be 1
+          expect(Task.agency_tasks(job_developer).first.status).to be TaskManager::TaskManager::STATUS[:DONE]
         end
       end
       
