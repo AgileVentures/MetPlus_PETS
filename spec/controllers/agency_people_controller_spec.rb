@@ -256,6 +256,17 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe 'PATCH #assign_job_seeker' do
+    let!(:agency_people_service_mock) {instance_double('AgencyPeopleService')}
+    
+    before(:each) do
+      allow(AgencyPeopleService)
+        .to receive(:new).and_return(agency_people_service_mock)
+      allow(agency_people_service_mock).
+        to receive(:assign_to_job_seeker)
+        
+      allow(subject).to receive(:authorize)        
+    end
+
     context 'assign job developer to job seeker' do
       before do |example|
         allow(Pusher).to receive(:trigger)
@@ -265,45 +276,36 @@ RSpec.describe AgencyPeopleController, type: :controller do
                                           job_seeker_id: adam.id,
                                           agency_role: 'JD'
         end
+
       end
 
-      it 'assigns agency_person instance var' do
-        expect(assigns(:agency_person)).to eq jd_person
+      context 'when is able to assign' do
+        it 'authorizes the job developer' do
+          expect(subject).to have_received(:authorize).with(jd_person)
+        end
+
+        it 'call service to assign the JD' do
+          expect(agency_people_service_mock).
+            to have_received(:assign_to_job_seeker).
+            with(adam, :JD, jd_person)
+        end
+  
+        it 'renders partial' do
+          expect(response).to render_template(partial: '_assigned_agency_person')
+        end
       end
 
-      it 'assigns job_seeker instance var' do
-        expect(assigns(:job_seeker)).to eq adam
-      end
-
-      it 'returns error if unknown agency_role specified', :skip_before do
-        xhr :patch, :assign_job_seeker, id: jd_person.id,
-                                        job_seeker_id: adam.id,
-                                        agency_role: 'XYZ'
-        expect(response).to have_http_status(:bad_request)
-      end
-
-      it 'returns error if attempt to assign JD role to CM', :skip_before do
-        xhr :patch, :assign_job_seeker, id: cm_person.id,
-                                        job_seeker_id: adam.id,
-                                        agency_role: 'JD'
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it 'increases agency_role count', :skip_before do
-        expect do
-          xhr :patch, :assign_job_seeker, id: jd_person.id,
+      context 'when the agency person is not a JD' do
+        it 'returns error', :skip_before do
+          allow(agency_people_service_mock).
+            to receive(:assign_to_job_seeker).
+            and_raise(AgencyPeopleService::NotAJobDeveloper)
+          xhr :patch, :assign_job_seeker, id: cm_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'JD'
+                                          
+          expect(response).to have_http_status(:forbidden)
         end
-          .to change(AgencyRelation, :count).by(+1)
-      end
-
-      it 'assigns job developer to job seeker' do
-        expect(assigns(:job_seeker).job_developer).to eq jd_person
-      end
-
-      it 'renders partial' do
-        expect(response).to render_template(partial: '_assigned_agency_person')
       end
     end
 
@@ -318,43 +320,45 @@ RSpec.describe AgencyPeopleController, type: :controller do
         end
       end
 
-      it 'assigns agency_person instance var' do
-        expect(assigns(:agency_person)).to eq cm_person
-      end
+      context 'when is able to assign' do
+        it 'authorizes de case manager' do
+          expect(subject).to have_received(:authorize).with(cm_person)
+        end
 
-      it 'assigns job_seeker instance var' do
-        expect(assigns(:job_seeker)).to eq adam
-      end
+        it 'call service to assign the JD' do
+          expect(agency_people_service_mock).
+            to have_received(:assign_to_job_seeker).
+            with(adam, :CM, cm_person)
+        end
 
-      it 'returns error if unknown agency_role specified', :skip_before do
-        xhr :patch, :assign_job_seeker, id: cm_person.id,
-                                        job_seeker_id: adam.id,
-                                        agency_role: 'XYZ'
-        expect(response).to have_http_status(:bad_request)
+        it 'renders partial' do
+          expect(response).to render_template(partial: '_assigned_agency_person')
+        end
       end
-
-      it 'returns error if attempt to assign CM role to JD', :skip_before do
-        xhr :patch, :assign_job_seeker, id: jd_person.id,
-                                        job_seeker_id: adam.id,
-                                        agency_role: 'CM'
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it 'increases agency_role count', :skip_before do
-        expect do
-          xhr :patch, :assign_job_seeker, id: cm_person.id,
+      context 'when the agency person is not a CM' do
+        it 'returns error', :skip_before do
+          allow(agency_people_service_mock).to receive(:assign_to_job_seeker).and_raise(AgencyPeopleService::NotACaseManager)
+          xhr :patch, :assign_job_seeker, id: jd_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'CM'
+          expect(response).to have_http_status(:forbidden)
         end
-          .to change(AgencyRelation, :count).by(+1)
       end
+    end
 
-      it 'assigns case manager to job seeker' do
-        expect(assigns(:job_seeker).case_manager).to eq cm_person
-      end
+    context 'assign unknown agency role' do
+      it 'returns error' do
+        allow(Pusher).to receive(:trigger)
+        allow(agency_people_service_mock).
+          to receive(:assign_to_job_seeker).
+          and_raise(AgencyPeopleService::InvalidRole)
 
-      it 'renders partial' do
-        expect(response).to render_template(partial: '_assigned_agency_person')
+        sign_in aa_person
+        xhr :patch, :assign_job_seeker, id: cm_person.id,
+          job_seeker_id: adam.id,
+          agency_role: 'AA'
+        
+        expect(response).to have_http_status(:bad_request)      
       end
     end
   end

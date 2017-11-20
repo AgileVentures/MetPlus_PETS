@@ -105,35 +105,23 @@ class AgencyPeopleController < ApplicationController
     self.action_description = 'assign a job seeker'
     authorize @agency_person
 
-    @job_seeker = JobSeeker.find(params[:job_seeker_id])
-
-    obj = Struct.new(:job_seeker, :agency_person)
-
     role_key = params[:agency_role].to_sym
 
-    # confirm that agency person has this role and assign person to job seeker
-    case role_key
-    when :JD
+    @job_seeker = JobSeeker.find(params[:job_seeker_id])
+    
+    begin
+      AgencyPeopleService.new.assign_to_job_seeker(
+        @job_seeker, 
+        role_key, 
+        @agency_person
+      )
+    rescue AgencyPeopleService::NotAJobDeveloper
       return render(json: { message: 'Agency Person is not a job developer' },
-                    status: 403) unless
-                    @agency_person.is_job_developer? @agency_person.agency
-
-      @job_seeker.assign_job_developer(@agency_person, @agency_person.agency)
-
-      # Notify job seeker of job developer assignment
-      Event.create(:JD_SELF_ASSIGN_JS, obj.new(@job_seeker, @agency_person))
-
-    when :CM
+      status: 403)
+    rescue AgencyPeopleService::NotACaseManager
       return render(json: { message: 'Agency Person is not a case manager' },
-                    status: 403) unless
-                    @agency_person.is_case_manager? @agency_person.agency
-
-      @job_seeker.assign_case_manager(@agency_person, @agency_person.agency)
-
-      # Notify job seeker of case manager assignment
-      Event.create(:CM_SELF_ASSIGN_JS, obj.new(@job_seeker, @agency_person))
-
-    else
+      status: 403)
+    rescue AgencyPeopleService::InvalidRole
       return render(json: { message: 'Unknown agency role specified' },
                     status: 400)
     end
