@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 class TestTaskHelper
   include TaskManager::BusinessLogic
   include TaskManager::TaskManager
@@ -105,6 +106,9 @@ RSpec.describe JobSeekers::AssignAgencyPerson do
 
     context 'when assign a case manager' do
       context 'on success' do
+        before(:each) do
+          TestTaskHelper.new_js_unassigned_cm_task(job_seeker, agency)
+        end
         context 'when is self assigned' do
           before(:each) do
             service.call(
@@ -130,6 +134,12 @@ RSpec.describe JobSeekers::AssignAgencyPerson do
                   agency_person: case_manager
                 )
               )
+          end
+
+          it 'completes need_case_manager Task' do
+            expect(Task.agency_tasks(case_manager).length).to be 1
+            expect(Task.agency_tasks(case_manager).first.status)
+              .to eq TaskManager::TaskManager::STATUS[:DONE]
           end
         end
         context 'when is assigned by agency admin' do
@@ -158,6 +168,12 @@ RSpec.describe JobSeekers::AssignAgencyPerson do
                   agency_person: case_manager
                 )
               )
+          end
+
+          it 'completes need_case_manager Task' do
+            expect(Task.agency_tasks(case_manager).length).to be 1
+            expect(Task.agency_tasks(case_manager).first.status)
+              .to eq TaskManager::TaskManager::STATUS[:DONE]
           end
         end
       end
