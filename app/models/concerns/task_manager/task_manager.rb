@@ -40,10 +40,10 @@ module TaskManager
       end
 
       ## Method used to schedule a future event, this functionality is not yet defined
-      def schedule_eventevent_type(task, role_to_notify); end
+      def schedule_event(event_type,task, role_to_notify); end
 
       ## Method used to unschedule one event, this functionality is not yet defined
-      def unschedule_eventevent_type(task, role_to_notify); end
+      def unschedule_event(event_type, task, role_to_notify); end
 
       private
 
