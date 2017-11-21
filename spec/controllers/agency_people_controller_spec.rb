@@ -256,15 +256,15 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe 'PATCH #assign_job_seeker' do
-    let!(:agency_people_service_mock) {instance_double('AgencyPeopleService')}
-    
+    let!(:agency_people_service_mock) { instance_double('AgencyPeopleService') }
+
     before(:each) do
       allow(AgencyPeopleService)
         .to receive(:new).and_return(agency_people_service_mock)
-      allow(agency_people_service_mock).
-        to receive(:assign_to_job_seeker)
-        
-      allow(subject).to receive(:authorize)        
+      allow(agency_people_service_mock)
+        .to receive(:assign_to_job_seeker)
+
+      allow(subject).to receive(:authorize)
     end
 
     context 'assign job developer to job seeker' do
@@ -276,7 +276,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
                                           job_seeker_id: adam.id,
                                           agency_role: 'JD'
         end
-
       end
 
       context 'when is able to assign' do
@@ -285,11 +284,11 @@ RSpec.describe AgencyPeopleController, type: :controller do
         end
 
         it 'call service to assign the JD' do
-          expect(agency_people_service_mock).
-            to have_received(:assign_to_job_seeker).
-            with(adam, :JD, jd_person)
+          expect(agency_people_service_mock)
+            .to have_received(:assign_to_job_seeker)
+            .with(adam, :JD, jd_person)
         end
-  
+
         it 'renders partial' do
           expect(response).to render_template(partial: '_assigned_agency_person')
         end
@@ -297,13 +296,13 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       context 'when the agency person is not a JD' do
         it 'returns error', :skip_before do
-          allow(agency_people_service_mock).
-            to receive(:assign_to_job_seeker).
-            and_raise(AgencyPeopleService::NotAJobDeveloper)
+          allow(agency_people_service_mock)
+            .to receive(:assign_to_job_seeker)
+            .and_raise(AgencyPeopleService::NotAJobDeveloper)
           xhr :patch, :assign_job_seeker, id: cm_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'JD'
-                                          
+
           expect(response).to have_http_status(:forbidden)
         end
       end
@@ -326,9 +325,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
         end
 
         it 'call service to assign the JD' do
-          expect(agency_people_service_mock).
-            to have_received(:assign_to_job_seeker).
-            with(adam, :CM, cm_person)
+          expect(agency_people_service_mock)
+            .to have_received(:assign_to_job_seeker)
+            .with(adam, :CM, cm_person)
         end
 
         it 'renders partial' do
@@ -337,7 +336,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
       context 'when the agency person is not a CM' do
         it 'returns error', :skip_before do
-          allow(agency_people_service_mock).to receive(:assign_to_job_seeker).and_raise(AgencyPeopleService::NotACaseManager)
+          allow(agency_people_service_mock)
+            .to receive(:assign_to_job_seeker)
+            .and_raise(AgencyPeopleService::NotACaseManager)
           xhr :patch, :assign_job_seeker, id: jd_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'CM'
@@ -349,16 +350,16 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign unknown agency role' do
       it 'returns error' do
         allow(Pusher).to receive(:trigger)
-        allow(agency_people_service_mock).
-          to receive(:assign_to_job_seeker).
-          and_raise(AgencyPeopleService::InvalidRole)
+        allow(agency_people_service_mock)
+          .to receive(:assign_to_job_seeker)
+          .and_raise(AgencyPeopleService::InvalidRole)
 
         sign_in aa_person
         xhr :patch, :assign_job_seeker, id: cm_person.id,
-          job_seeker_id: adam.id,
-          agency_role: 'AA'
-        
-        expect(response).to have_http_status(:bad_request)      
+                                        job_seeker_id: adam.id,
+                                        agency_role: 'AA'
+
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end
@@ -429,10 +430,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
                 FactoryGirl.attributes_for(:agency_person,
                                            password: '',
                                            password_confirmation: '')
-                  .merge(FactoryGirl.attributes_for(:user,
-                                                    first_name: 'John',
-                                                    last_name: 'Smith',
-                                                    phone: '780-890-8976')),
+                           .merge(FactoryGirl.attributes_for(:user,
+                                                             first_name: 'John',
+                                                             last_name: 'Smith',
+                                                             phone: '780-890-8976')),
               id: aa_person
         aa_person.reload
       end
