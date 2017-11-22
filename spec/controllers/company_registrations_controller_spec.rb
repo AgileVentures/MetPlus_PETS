@@ -350,16 +350,18 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
 
     context 'authorized access' do
+      let(:company_registration_mock) { double(Companies::CompanyRegistration) }
       before(:each) do
         3.times do
           FactoryGirl.create(:agency_person, agency: agency)
         end
         sign_in agency_admin
-        post :create, company: registration_params
-      end
+        allow(Companies::CompanyRegistration)
+          .to receive(:new).and_return(company_registration_mock)
+        allow(company_registration_mock)
+          .to receive(:approve_company)
 
-      it 'sends registration-approved and account-confirm emails' do
-        expect { request }.to change(all_emails, :count).by(+2)
+        post :create, company: registration_params
       end
 
       context 'after approval' do
@@ -367,6 +369,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           request
         end
 
+        it 'call the registration service' do
+          expect(company_registration_mock).to have_received(:approve_company)
+            .with(Company.last)
+        end
         it 'sets flash message' do
           expect(flash[:notice])
             .to eq 'Company contact has been notified of registration approval.'

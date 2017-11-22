@@ -91,21 +91,7 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def approve
-    # Approve the company's registration request.
-    # There should be only one CompanyPerson associated with the company
-    # this is the 'company contact' included in the registration request.
-    @company.active
-    @company.save
-
-    company_person = @company.company_people[0]
-    company_person.active
-    company_person.approved = true
-    company_person.save
-
-    Event.create(:COMP_APPROVED, @company)
-
-    # Send account confirmation email (Devise)
-    company_person.user.send_confirmation_instructions
+    Companies::CompanyRegistration.new.approve_company(@company)
 
     flash[:notice] =
       'Company contact has been notified of registration approval.'
