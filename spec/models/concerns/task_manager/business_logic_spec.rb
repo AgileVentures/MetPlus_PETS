@@ -123,6 +123,9 @@ RSpec.describe TaskManager::BusinessLogic do
       FactoryGirl.create(:job, company: company,
                                company_person: company_admin)
     end
+    let(:job_application) do
+       FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    end
 
     describe '#new_review_job_application_task' do
       before(:each) do
@@ -130,9 +133,9 @@ RSpec.describe TaskManager::BusinessLogic do
         stub_cruncher_job_create
       end
 
-      subject { TaskTester.new_review_job_application_task job, company }
+      subject { TaskTester.new_review_job_application_task job_application, company }
       it('owner is company admin') { expect(subject.task_owner).to eq([company_admin]) }
-      it('target application') { expect(subject.target).to eq(job) }
+      it('target application') { expect(subject.target).to eq(job_application) }
       it('check type') { expect(subject.task_type.to_sym).to eq(:job_application) }
       it 'has assignable list of everyone in the company' do
         expect(subject.assignable_list)
@@ -150,6 +153,9 @@ RSpec.describe TaskManager::BusinessLogic do
     let!(:jd3)          { FactoryGirl.create(:job_developer, agency: agency) }
     let(:company)       { FactoryGirl.create(:company) }
     let(:job)           { FactoryGirl.create(:job, company: company) }
+    let(:job_application) do
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    end
 
     describe '#new_company_interest_task' do
       before(:each) do
@@ -158,14 +164,16 @@ RSpec.describe TaskManager::BusinessLogic do
       end
 
       subject do
-        TaskTester.new_company_interest_task(job_seeker, company, job, agency)
+        TaskTester.new_company_interest_task(job_seeker, company, job_application, agency)
       end
 
       it('owner is agency admin') do
         expect(subject.task_owner).to eq([agency_admin])
       end
       it('target person')  { expect(subject.person).to eq(job_seeker) }
-      it('target job')     { expect(subject.job).to eq(job) }
+      it('target job_application') do
+         expect(subject.job_application).to eq(job_application)
+      end
       it('target company') { expect(subject.company).to eq(company) }
 
       it('check type') { expect(subject.task_type.to_sym).to eq(:company_interest) }

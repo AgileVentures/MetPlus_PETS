@@ -93,12 +93,19 @@ RSpec.describe TaskManager::TaskManager do
         company_roles: [@ca_role]
       )
       @job = FactoryGirl.create(:job)
+      @job_application = FactoryGirl.create(
+        :job_application, 
+        job: @job, 
+        job_seeker: @job_seeker
+      )
     end
     describe '#create_task' do
       describe 'Task to specific JD with job as target' do
-        subject { TaskTester.create_task({ user: @job_developer2 }, 'simple', @job) }
+        subject do
+          TaskTester.create_task({ user: @job_developer2 }, 'simple', @job_application)
+        end
         it('check owner') { expect(subject.task_owner).to eq @job_developer2 }
-        it('check target') { expect(subject.target).to eq @job }
+        it('check target') { expect(subject.target).to eq @job_application }
       end
       describe 'Task to all JD with JS as target' do
         subject do
@@ -130,23 +137,25 @@ RSpec.describe TaskManager::TaskManager do
         it('check target') { expect(subject.target).to eq @job_seeker }
         it('check company') { expect(subject.company).to eq @company }
       end
-      describe 'Task to all CA with JS and Job as target' do
+      describe 'Task to all CA with JS and Job Application as target' do
         subject do
           TaskTester.create_task(
-            { company: { company: @company, role: :CA } },
+            {:company => {company: @company, role: :CA}}, 
             'simple',
             @job_seeker,
-            @job
+            @job_application
           )
         end
-        it('check owner') { expect(subject.task_owner).to eq [@company_admin1] }
-        it('check target') { expect(subject.target).to eq @job_seeker }
-        it('check job') { expect(subject.job).to eq @job }
+        it('check owner'){expect(subject.task_owner).to eq [@company_admin1]}
+        it('check target'){expect(subject.target).to eq @job_seeker}
+        it('check job_application') do
+          expect(subject.job_application).to eq @job_application
+        end
       end
       describe 'Task to all CC with JS, Company and Job as target' do
-        subject do
+        subject do 
           TaskTester.create_task(
-            { company: { company: @company, role: :CC } },
+            {:company => {company: @company, role: :CC}},
             'simple',
             @job_seeker,
             @job,

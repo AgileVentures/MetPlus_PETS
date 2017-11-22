@@ -13,14 +13,23 @@ module TaskManager
       ## (In the format needed by the task), the type and more arguments
       def create_task(audience, task_type, *args)
         person = nil
-        job = nil
+        job_application = nil
         company = nil
+        job = nil
         args.each do |arg|
           person = arg if arg.is_a? User
+          job_application = arg if arg.is_a? JobApplication
           job = arg if arg.is_a? Job
           company = arg if arg.is_a? Company
         end
-        task = send("new_#{task_type}".to_sym, audience, person, job, company)
+        task = send(
+          "new_#{task_type}".to_sym,
+          audience,
+          person,
+          job_application,
+          company,
+          job
+        )
 
         schedule_event :taskCreated, task, :AA unless args.include? 'no_events'
         task
@@ -48,16 +57,20 @@ module TaskManager
       private
 
       ## Method that will create the task itself
-      def new_task(task_type,
-                   owner,
-                   target_person = nil,
-                   target_job = nil,
-                   target_company = nil)
+      def new_task(
+        task_type,
+        owner,
+        target_person = nil,
+        target_job_application = nil,
+        target_company = nil,
+        target_job = nil
+      )
         task = Task.new
         task.task_owner = owner
         task.person = target_person
-        task.job = target_job
+        task.job_application = target_job_application
         task.company = target_company
+        task.job = target_job
         task.task_type = task_type
         task.status = STATUS[:NEW]
         task.save

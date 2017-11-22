@@ -10,6 +10,7 @@ class Task < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :company
+  belongs_to :job_application
   belongs_to :job
 
   validates_with TaskOwnerValidator
@@ -131,24 +132,33 @@ class Task < ActiveRecord::Base
   def target
     return person unless person.nil?
     return company unless company.nil?
+    return job_application unless job_application.nil?
     return job unless job.nil?
     nil
   end
 
   def target=(target)
     case target
-    when User, AgencyPerson, CompanyPerson, JobSeeker
-      self.person = target.pets_user.user
-      self.company = nil
-      self.job = nil
-    when Job
-      self.person = nil
-      self.company = nil
-      self.job = target
-    when Company
-      self.person = nil
-      self.company = target
-      self.job = nil
+      when User, AgencyPerson, CompanyPerson, JobSeeker
+        self.person = target.pets_user.user
+        self.company = nil
+        self.job_application = nil
+        self.job = nil
+      when JobApplication
+        self.person = nil
+        self.company = nil
+        self.job_application = target
+        self.job = nil
+      when Company
+        self.person = nil
+        self.company = target
+        self.job_application = nil
+        self.job = nil
+      when Job
+        self.person = nil
+        self.company = nil
+        self.job_application = nil
+        self.job = target
     end
   end
 
