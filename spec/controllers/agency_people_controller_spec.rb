@@ -104,8 +104,13 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    let!(:assign_agency_person_mock) { instance_double('AssignAgencyPersonToJobSeeker') }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     before(:each) do
+      allow(AssignAgencyPersonToJobSeeker)
+        .to receive(:new).and_return(assign_agency_person_mock)
+      allow(assign_agency_person_mock)
+        .to receive(:call)
       allow(Event).to receive(:create)
     end
 
@@ -164,6 +169,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
         person_hash[:as_jd_job_seeker_ids] = [job_seeker.id]
         person_hash[:as_cm_job_seeker_ids] = []
         sign_in aa_person
+
+        allow(assign_agency_person_mock)
+          .to receive(:call)
+          .and_raise(AssignAgencyPersonToJobSeeker::NotAJobDeveloper)
         patch :update, id: aa_person, agency_person: person_hash
       end
 
@@ -187,6 +196,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
         person_hash[:as_jd_job_seeker_ids] = []
         person_hash[:as_cm_job_seeker_ids] = [job_seeker.id]
         sign_in aa_person
+
+        allow(assign_agency_person_mock)
+          .to receive(:call)
+          .and_raise(AssignAgencyPersonToJobSeeker::NotACaseManager)
         patch :update, id: aa_person, agency_person: person_hash
       end
 
@@ -218,10 +231,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
         sign_in aa_person
       end
 
-      it 'assigns job seekers to the job developer' do
-        patch :update, id: jd_person, agency_person: person_hash
-        expect(assigns(:agency_person).as_jd_job_seeker_ids)
-          .to contain_exactly(job_seeker.id, adam.id)
+      it 'calls interactor to assign the JD' do
+        expect(assign_agency_person_mock)
+          .to have_received(:call).twice
       end
     end
 
@@ -235,14 +247,13 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
 
       before(:each) do
-        allow(Pusher).to receive(:trigger)
         sign_in aa_person
+        patch :update, id: cm_person, agency_person: person_hash
       end
 
-      it 'assigns job seekers to the case manager' do
-        patch :update, id: cm_person, agency_person: person_hash
-        expect(assigns(:agency_person).as_cm_job_seeker_ids)
-          .to contain_exactly(job_seeker.id, adam.id)
+      it 'calls interactor to assign the Case Manager' do
+        expect(assign_agency_person_mock)
+          .to have_received(:call).twice
       end
     end
   end
@@ -251,10 +262,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
     let!(:assign_agency_person_mock) { instance_double('AssignAgencyPersonToJobSeeker') }
 
     before(:each) do
-      allow(AgencyPeopleService)
+      allow(AssignAgencyPersonToJobSeeker)
         .to receive(:new).and_return(assign_agency_person_mock)
       allow(assign_agency_person_mock)
-        .to receive(:assign_to_job_seeker)
+        .to receive(:call)
 
       allow(subject).to receive(:authorize)
     end
@@ -275,9 +286,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
           expect(subject).to have_received(:authorize).with(jd_person)
         end
 
-        it 'call service to assign the JD' do
+        it 'calls interactor to assign the JD' do
           expect(assign_agency_person_mock)
-            .to have_received(:assign_to_job_seeker)
+            .to have_received(:call)
             .with(adam, :JD, jd_person)
         end
 
@@ -289,8 +300,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
       context 'when the agency person is not a JD' do
         it 'returns error', :skip_before do
           allow(assign_agency_person_mock)
-            .to receive(:assign_to_job_seeker)
-            .and_raise(AgencyPeopleService::NotAJobDeveloper)
+            .to receive(:call)
+            .and_raise(AssignAgencyPersonToJobSeeker::NotAJobDeveloper)
           xhr :patch, :assign_job_seeker, id: cm_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'JD'
@@ -312,13 +323,13 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
 
       context 'when is able to assign' do
-        it 'authorizes de case manager' do
+        it 'authorizes the case manager' do
           expect(subject).to have_received(:authorize).with(cm_person)
         end
 
-        it 'call service to assign the JD' do
+        it 'calls interactor to assign the JD' do
           expect(assign_agency_person_mock)
-            .to have_received(:assign_to_job_seeker)
+            .to have_received(:call)
             .with(adam, :CM, cm_person)
         end
 
@@ -329,8 +340,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
       context 'when the agency person is not a CM' do
         it 'returns error', :skip_before do
           allow(assign_agency_person_mock)
-            .to receive(:assign_to_job_seeker)
-            .and_raise(AgencyPeopleService::NotACaseManager)
+            .to receive(:call)
+            .and_raise(AssignAgencyPersonToJobSeeker::NotACaseManager)
           xhr :patch, :assign_job_seeker, id: jd_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'CM'
@@ -343,8 +354,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'returns error' do
         allow(Pusher).to receive(:trigger)
         allow(assign_agency_person_mock)
-          .to receive(:assign_to_job_seeker)
-          .and_raise(AgencyPeopleService::InvalidRole)
+          .to receive(:call)
+          .and_raise(AssignAgencyPersonToJobSeeker::InvalidRole)
 
         sign_in aa_person
         xhr :patch, :assign_job_seeker, id: cm_person.id,
