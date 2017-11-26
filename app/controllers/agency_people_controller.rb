@@ -46,44 +46,33 @@ class AgencyPeopleController < ApplicationController
     jd_job_seeker_ids = model_params.delete(:as_jd_job_seeker_ids)
     cm_job_seeker_ids = model_params.delete(:as_cm_job_seeker_ids)
 
-    # Find newly-assigned job seekers for notifying the agency person (as JD)
-    new_jd_job_seeker_ids = new_job_seeker_ids(@agency_person,
-                                               jd_job_seeker_ids, :JD)
-
-    # Find newly-assigned job seekers for notifying the agency person (as CM)
-    new_cm_job_seeker_ids = new_job_seeker_ids(@agency_person,
-                                               cm_job_seeker_ids, :CM)
-
     @agency_person.assign_attributes(model_params)
 
     @agency_person.agency_relations.delete_all
 
-    # Build agency_relations to associate job_seekers to person as Job Developer
-    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:JD]).id
-    jd_job_seeker_ids.each do |js_id|
-      @agency_person.agency_relations <<
-          AgencyRelation.new(agency_role_id: role_id,
-                             job_seeker_id: js_id) unless js_id.empty?
-    end
-
-    # Build agency_relations to associate job_seekers to person as Case Manager
-    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:CM]).id
-    cm_job_seeker_ids.each do |js_id|
-      @agency_person.agency_relations <<
-          AgencyRelation.new(agency_role_id: role_id,
-                             job_seeker_id: js_id) unless js_id.empty?
-    end
-
     if @agency_person.save
-      # notify agency person, and job seekers, of new JS assignments
-      notify_ap_new_js_assignments @agency_person,
-                                   new_jd_job_seeker_ids, :JD
+      assign_agency_person_to_job_seeker = AssignAgencyPersonToJobSeeker.new
+      begin
+        assign_agency_person_to_job_seeker.call(
+          JobSeeker.where(id: jd_job_seeker_ids),
+          :JD,
+          @agency_person
+        )
+        assign_agency_person_to_job_seeker.call(
+          JobSeeker.where(id: cm_job_seeker_ids),
+          :CM,
+          @agency_person
+        )
 
-      notify_ap_new_js_assignments @agency_person,
-                                   new_cm_job_seeker_ids, :CM
-
-      flash[:notice] = 'Agency person was successfully updated.'
-      redirect_to agency_person_path(@agency_person)
+        flash[:notice] = 'Agency person was successfully updated.'
+        redirect_to agency_person_path(@agency_person)
+      rescue AssignAgencyPersonToJobSeeker::NotAJobDeveloper
+        @agency_person.errors[:person] << 'cannot be assigned as Job Developer unless person has that role.'
+        render :edit
+      rescue AssignAgencyPersonToJobSeeker::NotACaseManager
+        @agency_person.errors[:person] << 'cannot be assigned as Case Manager unless person has that role.'
+        render :edit
+      end
     else
       unless @agency_person.errors[:agency_admin].empty?
 
@@ -108,22 +97,28 @@ class AgencyPeopleController < ApplicationController
     role_key = params[:agency_role].to_sym
 
     @job_seeker = JobSeeker.find(params[:job_seeker_id])
-    
+
     begin
-      AgencyPeopleService.new.assign_to_job_seeker(
-        @job_seeker, 
-        role_key, 
+      AssignAgencyPersonToJobSeeker.new.call(
+        @job_seeker,
+        role_key,
         @agency_person
       )
-    rescue AgencyPeopleService::NotAJobDeveloper
-      return render(json: { message: 'Agency Person is not a job developer' },
-      status: 403)
-    rescue AgencyPeopleService::NotACaseManager
-      return render(json: { message: 'Agency Person is not a case manager' },
-      status: 403)
-    rescue AgencyPeopleService::InvalidRole
-      return render(json: { message: 'Unknown agency role specified' },
-                    status: 400)
+    rescue AssignAgencyPersonToJobSeeker::NotAJobDeveloper
+      return render(
+        json: { message: 'Agency Person is not a job developer' },
+        status: 403
+      )
+    rescue AssignAgencyPersonToJobSeeker::NotACaseManager
+      return render(
+        json: { message: 'Agency Person is not a case manager' },
+        status: 403
+      )
+    rescue AssignAgencyPersonToJobSeeker::InvalidRole
+      return render(
+        json: { message: 'Unknown agency role specified' },
+        status: 400
+      )
     end
 
     if request.xhr?

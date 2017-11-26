@@ -105,6 +105,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
   describe 'PATCH #update' do
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    before(:each) do
+      allow(Event).to receive(:create)
+    end
 
     context 'valid attributes' do
       before(:each) do
@@ -158,7 +161,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign as job developer fails when not in that role' do
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
-        person_hash[:agency_role_ids] = []
         person_hash[:as_jd_job_seeker_ids] = [job_seeker.id]
         person_hash[:as_cm_job_seeker_ids] = []
         sign_in aa_person
@@ -182,7 +184,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign as case manager fails when not in that role' do
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
-        person_hash[:agency_role_ids] = []
         person_hash[:as_jd_job_seeker_ids] = []
         person_hash[:as_cm_job_seeker_ids] = [job_seeker.id]
         sign_in aa_person
@@ -222,11 +223,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(assigns(:agency_person).as_jd_job_seeker_ids)
           .to contain_exactly(job_seeker.id, adam.id)
       end
-
-      it 'sends notification emails to job seekers and to JD for each job seeker' do
-        expect { patch :update, id: jd_person, agency_person: person_hash }
-          .to change(all_emails, :count).by(+4)
-      end
     end
 
     context 'assign job seekers to case manager' do
@@ -248,20 +244,16 @@ RSpec.describe AgencyPeopleController, type: :controller do
         expect(assigns(:agency_person).as_cm_job_seeker_ids)
           .to contain_exactly(job_seeker.id, adam.id)
       end
-      it 'sends notification emails to job seekers and to CM for each job seeker' do
-        expect { patch :update, id: cm_person, agency_person: person_hash }
-          .to change(all_emails, :count).by(+4)
-      end
     end
   end
 
   describe 'PATCH #assign_job_seeker' do
-    let!(:agency_people_service_mock) { instance_double('AgencyPeopleService') }
+    let!(:assign_agency_person_mock) { instance_double('AssignAgencyPersonToJobSeeker') }
 
     before(:each) do
       allow(AgencyPeopleService)
-        .to receive(:new).and_return(agency_people_service_mock)
-      allow(agency_people_service_mock)
+        .to receive(:new).and_return(assign_agency_person_mock)
+      allow(assign_agency_person_mock)
         .to receive(:assign_to_job_seeker)
 
       allow(subject).to receive(:authorize)
@@ -284,7 +276,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         end
 
         it 'call service to assign the JD' do
-          expect(agency_people_service_mock)
+          expect(assign_agency_person_mock)
             .to have_received(:assign_to_job_seeker)
             .with(adam, :JD, jd_person)
         end
@@ -296,7 +288,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       context 'when the agency person is not a JD' do
         it 'returns error', :skip_before do
-          allow(agency_people_service_mock)
+          allow(assign_agency_person_mock)
             .to receive(:assign_to_job_seeker)
             .and_raise(AgencyPeopleService::NotAJobDeveloper)
           xhr :patch, :assign_job_seeker, id: cm_person.id,
@@ -325,7 +317,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         end
 
         it 'call service to assign the JD' do
-          expect(agency_people_service_mock)
+          expect(assign_agency_person_mock)
             .to have_received(:assign_to_job_seeker)
             .with(adam, :CM, cm_person)
         end
@@ -336,7 +328,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
       context 'when the agency person is not a CM' do
         it 'returns error', :skip_before do
-          allow(agency_people_service_mock)
+          allow(assign_agency_person_mock)
             .to receive(:assign_to_job_seeker)
             .and_raise(AgencyPeopleService::NotACaseManager)
           xhr :patch, :assign_job_seeker, id: jd_person.id,
@@ -350,7 +342,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
     context 'assign unknown agency role' do
       it 'returns error' do
         allow(Pusher).to receive(:trigger)
-        allow(agency_people_service_mock)
+        allow(assign_agency_person_mock)
           .to receive(:assign_to_job_seeker)
           .and_raise(AgencyPeopleService::InvalidRole)
 

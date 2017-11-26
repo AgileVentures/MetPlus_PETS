@@ -40,7 +40,7 @@ module TaskManager
       end
 
       ## Method used to schedule a future event, this functionality is not yet defined
-      def schedule_event(event_type,task, role_to_notify); end
+      def schedule_event(event_type, task, role_to_notify); end
 
       ## Method used to unschedule one event, this functionality is not yet defined
       def unschedule_event(event_type, task, role_to_notify); end
@@ -65,7 +65,7 @@ module TaskManager
       end
     end
 
-    ## The functions inside this module will not be used they are here just 
+    ## The functions inside this module will not be used they are here just
     ## for information
     module InstanceMethods
       private
@@ -87,13 +87,17 @@ module TaskManager
 
     ## Change the status of the task to Work In Progress
     def work_in_progress
-      raise ArgumentError, 'Task need to be in assigned state' if status != STATUS[:ASSIGNED]
+      if status != STATUS[:ASSIGNED]
+        raise ArgumentError, 'Task need to be in assigned state'
+      end
       send("wip_#{task_type}".to_sym, self)
     end
 
     ## Change the status of the task to Complete
     def complete
-      raise ArgumentError, 'Task need to be in work in progress state' if status != STATUS[:WIP]
+      if status != STATUS[:WIP]
+        raise ArgumentError, 'Task need to be in work in progress state'
+      end
       send("done_#{task_type}".to_sym, self)
     end
 
