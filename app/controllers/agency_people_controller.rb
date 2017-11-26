@@ -301,41 +301,4 @@ class AgencyPeopleController < ApplicationController
                                           as_jd_job_seeker_ids: [],
                                           as_cm_job_seeker_ids: [])
   end
-
-  def new_job_seeker_ids agency_person, job_seeker_ids, role_key
-    # job_seeker_ids comes in from params.  Find and return the ids of
-    # job seekers who are represented in params but not yet associated
-    # with the agency person in the indicated role
-
-    unless job_seeker_ids.empty?
-      new_job_seeker_ids = job_seeker_ids.map { |id| id.to_i }
-      new_job_seeker_ids.delete(0)
-      case role_key
-      when :JD
-        current_js_ids = agency_person.as_jd_job_seeker_ids
-      when :CM
-        current_js_ids = agency_person.as_cm_job_seeker_ids
-      end
-      new_job_seeker_ids.keep_if do |js_id|
-        not current_js_ids.include? js_id
-      end
-    end
-    new_job_seeker_ids
-  end
-
-  def notify_ap_new_js_assignments(agency_person, job_seeker_ids, role_key)
-    if job_seeker_ids
-      job_seeker_ids.each do |js_id|
-        obj = Struct.new(:job_seeker, :agency_person)
-        case role_key
-        when :JD
-          Event.create(:JD_ASSIGNED_JS, obj.new(JobSeeker.find(js_id),
-                                                @agency_person))
-        when :CM
-          Event.create(:CM_ASSIGNED_JS, obj.new(JobSeeker.find(js_id),
-                                                @agency_person))
-        end
-      end
-    end
-  end
 end
