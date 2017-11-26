@@ -56,12 +56,14 @@ class AgencyPeopleController < ApplicationController
         assign_agency_person_to_job_seeker.call(
           JobSeeker.where(id: jd_job_seeker_ids),
           :JD,
-          @agency_person
+          @agency_person,
+          false
         )
         assign_agency_person_to_job_seeker.call(
           JobSeeker.where(id: cm_job_seeker_ids),
           :CM,
-          @agency_person
+          @agency_person,
+          false
         )
 
         flash[:notice] = 'Agency person was successfully updated.'

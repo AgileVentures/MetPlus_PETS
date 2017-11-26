@@ -18,73 +18,149 @@ RSpec.describe AssignAgencyPersonToJobSeeker do
 
     context 'when assign a job developer' do
       context 'on success' do
-        context 'when a single job seeker is provided' do
-          before(:each) do
-            TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
-            service.call(
-              job_seeker,
-              :JD,
-              job_developer
-            )
-          end
-
-          it 'assigns job developer to job seeker' do
-            expect(
-              JobSeeker.find(job_seeker.id)
-                .agency_relations.first.agency_person
-            ).to eq job_developer
-          end
-
-          it 'creates event JD_SELF_ASSIGN_JS' do
-            expect(Event).to have_received(:create)
-              .with(
-                :JD_SELF_ASSIGN_JS,
-                have_attributes(
-                  job_seeker: job_seeker,
-                  agency_person: job_developer
-                )
+        context 'when is self assigned' do
+          context 'when a single job seeker is provided' do
+            before(:each) do
+              TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
+              service.call(
+                job_seeker,
+                :JD,
+                job_developer
               )
+            end
+
+            it 'assigns job developer to job seeker' do
+              expect(
+                JobSeeker.find(job_seeker.id)
+                  .agency_relations.first.agency_person
+              ).to eq job_developer
+            end
+
+            it 'creates event JD_SELF_ASSIGN_JS' do
+              expect(Event).to have_received(:create)
+                .with(
+                  :JD_SELF_ASSIGN_JS,
+                  have_attributes(
+                    job_seeker: job_seeker,
+                    agency_person: job_developer
+                  )
+                )
+            end
+
+            it 'completes need_job_developer Task' do
+              expect(Task.agency_tasks(job_developer).length).to be 1
+              expect(Task.agency_tasks(job_developer).first.status)
+                .to eq TaskManager::TaskManager::STATUS[:DONE]
+            end
           end
 
-          it 'completes need_job_developer Task' do
-            expect(Task.agency_tasks(job_developer).length).to be 1
-            expect(Task.agency_tasks(job_developer).first.status)
-              .to eq TaskManager::TaskManager::STATUS[:DONE]
+          context 'when a list of job seekers is provided' do
+            before(:each) do
+              TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
+              service.call(
+                [job_seeker],
+                :JD,
+                job_developer
+              )
+            end
+
+            it 'assigns job developer to job seeker' do
+              expect(
+                JobSeeker.find(job_seeker.id)
+                  .agency_relations.first.agency_person
+              ).to eq job_developer
+            end
+    
+            it 'creates event JD_SELF_ASSIGN_JS' do
+              expect(Event).to have_received(:create)
+                .with(
+                  :JD_SELF_ASSIGN_JS,
+                  have_attributes(
+                    job_seeker: job_seeker,
+                    agency_person: job_developer
+                  )
+                )
+            end
+    
+            it 'completes need_job_developer Task' do
+              expect(Task.agency_tasks(job_developer).length).to be 1
+              expect(Task.agency_tasks(job_developer).first.status)
+                .to eq TaskManager::TaskManager::STATUS[:DONE]
+            end
           end
         end
 
-        context 'when a list of job seekers is provided' do
-          before(:each) do
-            TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
-            service.call(
-              [job_seeker],
-              :JD,
-              job_developer
-            )
+        context 'when is assigned by agency admin' do
+          context 'when a single job seeker is provided' do
+            before(:each) do
+              TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
+              service.call(
+                job_seeker,
+                :JD,
+                job_developer,
+                false
+              )
+            end
+
+            it 'assigns job developer to job seeker' do
+              expect(
+                JobSeeker.find(job_seeker.id)
+                  .agency_relations.first.agency_person
+              ).to eq job_developer
+            end
+
+            it 'creates event JD_ASSIGNED_JS' do
+              expect(Event).to have_received(:create)
+                .with(
+                  :JD_ASSIGNED_JS,
+                  have_attributes(
+                    job_seeker: job_seeker,
+                    agency_person: job_developer
+                  )
+                )
+            end
+
+            it 'completes need_job_developer Task' do
+              expect(Task.agency_tasks(job_developer).length).to be 1
+              expect(Task.agency_tasks(job_developer).first.status)
+                .to eq TaskManager::TaskManager::STATUS[:DONE]
+            end
           end
 
-          it 'assigns job developer to job seeker' do
-            expect(
-              JobSeeker.find(job_seeker.id)
-                .agency_relations.first.agency_person
-            ).to eq job_developer
-          end
-  
-          it 'creates event JD_SELF_ASSIGN_JS' do
-            expect(Event).to have_received(:create)
-              .with(
-                :JD_SELF_ASSIGN_JS,
-                have_attributes(
-                  job_seeker: job_seeker,
-                  agency_person: job_developer
-                )
+          context 'when a list of job seekers is provided' do
+            before(:each) do
+              TestTaskHelper.new_js_unassigned_jd_task(job_seeker, agency)
+              service.call(
+                [job_seeker],
+                :JD,
+                job_developer,
+                false
               )
-          end
-  
-          it 'completes need_job_developer Task' do
-            expect(Task.agency_tasks(job_developer).length).to be 1
-            expect(Task.agency_tasks(job_developer).first.status)
-              .to eq TaskManager::TaskManager::STATUS[:DONE]
+            end
+
+            it 'assigns job developer to job seeker' do
+              expect(
+                JobSeeker.find(job_seeker.id)
+                  .agency_relations.first.agency_person
+              ).to eq job_developer
+            end
+    
+            it 'creates event JD_ASSIGNED_JS' do
+              expect(Event).to have_received(:create)
+                .with(
+                  :JD_ASSIGNED_JS,
+                  have_attributes(
+                    job_seeker: job_seeker,
+                    agency_person: job_developer
+                  )
+                )
+            end
+    
+            it 'completes need_job_developer Task' do
+              expect(Task.agency_tasks(job_developer).length).to be 1
+              expect(Task.agency_tasks(job_developer).first.status)
+                .to eq TaskManager::TaskManager::STATUS[:DONE]
+            end
           end
         end
       end
@@ -104,30 +180,60 @@ RSpec.describe AssignAgencyPersonToJobSeeker do
 
     context 'when assign a case manager' do
       context 'on success' do
-        before(:each) do
-          service.call(
-            job_seeker,
-            :CM,
-            case_manager
-          )
-        end
-
-        it 'assigns case manager to job seeker' do
-          expect(
-            JobSeeker.find(job_seeker.id)
-              .agency_relations.first.agency_person
-          ).to eq case_manager
-        end
-
-        it 'creates event CM_SELF_ASSIGN_JS' do
-          expect(Event).to have_received(:create)
-            .with(
-              :CM_SELF_ASSIGN_JS,
-              have_attributes(
-                job_seeker: job_seeker,
-                agency_person: case_manager
-              )
+        context 'when is self assigned' do
+          before(:each) do
+            service.call(
+              job_seeker,
+              :CM,
+              case_manager
             )
+          end
+
+          it 'assigns case manager to job seeker' do
+            expect(
+              JobSeeker.find(job_seeker.id)
+                .agency_relations.first.agency_person
+            ).to eq case_manager
+          end
+
+          it 'creates event CM_SELF_ASSIGN_JS' do
+            expect(Event).to have_received(:create)
+              .with(
+                :CM_SELF_ASSIGN_JS,
+                have_attributes(
+                  job_seeker: job_seeker,
+                  agency_person: case_manager
+                )
+              )
+          end
+        end
+        context'when is assigned by agency admin' do
+          before(:each) do
+            service.call(
+              job_seeker,
+              :CM,
+              case_manager,
+              false
+            )
+          end
+
+          it 'assigns case manager to job seeker' do
+            expect(
+              JobSeeker.find(job_seeker.id)
+                .agency_relations.first.agency_person
+            ).to eq case_manager
+          end
+
+          it 'creates event CM_ASSIGNED_JS' do
+            expect(Event).to have_received(:create)
+              .with(
+                :CM_ASSIGNED_JS,
+                have_attributes(
+                  job_seeker: job_seeker,
+                  agency_person: case_manager
+                )
+              )
+          end
         end
       end
 
