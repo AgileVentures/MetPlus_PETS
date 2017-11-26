@@ -229,6 +229,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       before(:each) do
         allow(Pusher).to receive(:trigger)
         sign_in aa_person
+        patch :update, id: jd_person, agency_person: person_hash
       end
 
       it 'calls interactor to assign the JD' do

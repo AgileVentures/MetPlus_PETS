@@ -20,7 +20,7 @@
           %td
             = task.description
           %td{:id => "task-#{task.id}-status"}
-            - if task.status == Task::STATUS[:NEW]
+            - if task.status == Task::STATUS[:NEW] || task.task_owner.respond_to?('each')
               = task.status
             - else
               = "#{task.status}("
