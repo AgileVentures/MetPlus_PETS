@@ -51,27 +51,25 @@ class AgencyPeopleController < ApplicationController
     @agency_person.agency_relations.delete_all
 
     if @agency_person.save
-      assign_agency_person_to_job_seeker = AssignAgencyPersonToJobSeeker.new
+      assign_new_job_seekers = AgencyPeople::AssignNewJobSeekers.new
       begin
-        assign_agency_person_to_job_seeker.call(
+        assign_new_job_seekers.call(
           JobSeeker.where(id: jd_job_seeker_ids),
           :JD,
-          @agency_person,
-          false
+          @agency_person
         )
-        assign_agency_person_to_job_seeker.call(
+        assign_new_job_seekers.call(
           JobSeeker.where(id: cm_job_seeker_ids),
           :CM,
-          @agency_person,
-          false
+          @agency_person
         )
 
         flash[:notice] = 'Agency person was successfully updated.'
         redirect_to agency_person_path(@agency_person)
-      rescue AssignAgencyPersonToJobSeeker::NotAJobDeveloper
+      rescue JobSeekers::AssignAgencyPerson::NotAJobDeveloper
         @agency_person.errors[:person] << 'cannot be assigned as Job Developer unless person has that role.'
         render :edit
-      rescue AssignAgencyPersonToJobSeeker::NotACaseManager
+      rescue JobSeekers::AssignAgencyPerson::NotACaseManager
         @agency_person.errors[:person] << 'cannot be assigned as Case Manager unless person has that role.'
         render :edit
       end
@@ -101,22 +99,22 @@ class AgencyPeopleController < ApplicationController
     @job_seeker = JobSeeker.find(params[:job_seeker_id])
 
     begin
-      AssignAgencyPersonToJobSeeker.new.call(
+      JobSeekers::AssignAgencyPerson.new.call(
         @job_seeker,
         role_key,
         @agency_person
       )
-    rescue AssignAgencyPersonToJobSeeker::NotAJobDeveloper
+    rescue JobSeekers::AssignAgencyPerson::NotAJobDeveloper
       return render(
         json: { message: 'Agency Person is not a job developer' },
         status: 403
       )
-    rescue AssignAgencyPersonToJobSeeker::NotACaseManager
+    rescue JobSeekers::AssignAgencyPerson::NotACaseManager
       return render(
         json: { message: 'Agency Person is not a case manager' },
         status: 403
       )
-    rescue AssignAgencyPersonToJobSeeker::InvalidRole
+    rescue JobSeekers::AssignAgencyPerson::InvalidRole
       return render(
         json: { message: 'Unknown agency role specified' },
         status: 400

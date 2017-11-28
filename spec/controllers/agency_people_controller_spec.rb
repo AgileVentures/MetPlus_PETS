@@ -104,10 +104,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let!(:assign_agency_person_mock) { instance_double('AssignAgencyPersonToJobSeeker') }
+    let!(:assign_agency_person_mock) { instance_double('AgencyPeople::AssignNewJobSeekers') }
     let(:job_seeker) { FactoryGirl.create(:job_seeker) }
     before(:each) do
-      allow(AssignAgencyPersonToJobSeeker)
+      allow(AgencyPeople::AssignNewJobSeekers)
         .to receive(:new).and_return(assign_agency_person_mock)
       allow(assign_agency_person_mock)
         .to receive(:call)
@@ -172,7 +172,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
         allow(assign_agency_person_mock)
           .to receive(:call)
-          .and_raise(AssignAgencyPersonToJobSeeker::NotAJobDeveloper)
+          .and_raise(JobSeekers::AssignAgencyPerson::NotAJobDeveloper)
         patch :update, id: aa_person, agency_person: person_hash
       end
 
@@ -199,7 +199,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
         allow(assign_agency_person_mock)
           .to receive(:call)
-          .and_raise(AssignAgencyPersonToJobSeeker::NotACaseManager)
+          .and_raise(JobSeekers::AssignAgencyPerson::NotACaseManager)
         patch :update, id: aa_person, agency_person: person_hash
       end
 
@@ -260,10 +260,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe 'PATCH #assign_job_seeker' do
-    let!(:assign_agency_person_mock) { instance_double('AssignAgencyPersonToJobSeeker') }
+    let!(:assign_agency_person_mock) { instance_double('JobSeekers::AssignAgencyPerson') }
 
     before(:each) do
-      allow(AssignAgencyPersonToJobSeeker)
+      allow(JobSeekers::AssignAgencyPerson)
         .to receive(:new).and_return(assign_agency_person_mock)
       allow(assign_agency_person_mock)
         .to receive(:call)
@@ -302,7 +302,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         it 'returns error', :skip_before do
           allow(assign_agency_person_mock)
             .to receive(:call)
-            .and_raise(AssignAgencyPersonToJobSeeker::NotAJobDeveloper)
+            .and_raise(JobSeekers::AssignAgencyPerson::NotAJobDeveloper)
           xhr :patch, :assign_job_seeker, id: cm_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'JD'
@@ -342,7 +342,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         it 'returns error', :skip_before do
           allow(assign_agency_person_mock)
             .to receive(:call)
-            .and_raise(AssignAgencyPersonToJobSeeker::NotACaseManager)
+            .and_raise(JobSeekers::AssignAgencyPerson::NotACaseManager)
           xhr :patch, :assign_job_seeker, id: jd_person.id,
                                           job_seeker_id: adam.id,
                                           agency_role: 'CM'
@@ -356,7 +356,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         allow(Pusher).to receive(:trigger)
         allow(assign_agency_person_mock)
           .to receive(:call)
-          .and_raise(AssignAgencyPersonToJobSeeker::InvalidRole)
+          .and_raise(JobSeekers::AssignAgencyPerson::InvalidRole)
 
         sign_in aa_person
         xhr :patch, :assign_job_seeker, id: cm_person.id,
