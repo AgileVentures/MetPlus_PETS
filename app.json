@@ -1,0 +1,11 @@
+{
+  "name": "metplus-pets-production",
+  "description": "MetPlus production",
+  "keywords": [
+  ],
+  "scripts": {
+    "dokku": {
+      "postdeploy": "bundle exec rake db:migrate"
+    }
+  }
+}
