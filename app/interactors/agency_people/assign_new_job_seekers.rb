@@ -6,7 +6,7 @@ module AgencyPeople
 
     def call(all_job_seekers, role, agency_person)
       assign_new_job_seekers(all_job_seekers, role, agency_person)
-      
+
       remove_job_seekers(all_job_seekers, role, agency_person)
     end
 
@@ -14,10 +14,10 @@ module AgencyPeople
 
     def current_job_seekers(agency_person, role)
       case role
-        when :JD
-          AgencyPerson.find(agency_person.id).job_seekers_as_job_developer
-        when :CM
-          AgencyPerson.find(agency_person.id).job_seekers_as_case_manager
+      when :JD
+        AgencyPerson.find(agency_person.id).job_seekers_as_job_developer
+      when :CM
+        AgencyPerson.find(agency_person.id).job_seekers_as_case_manager
       end
     end
 
@@ -34,7 +34,7 @@ module AgencyPeople
       current_job_seekers = current_job_seekers(agency_person, role)
 
       all_job_seekers.each do |job_seeker|
-        if !current_job_seekers.include?(job_seeker)
+        unless current_job_seekers.include?(job_seeker)
           @assign_agency_person.call(job_seeker, role, agency_person, false)
         end
       end

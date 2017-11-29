@@ -23,7 +23,9 @@ module JobSeekers
     def assign_job_developer_to_job_seeker(job_seeker, job_developer, is_self_assign)
       obj = Struct.new(:job_seeker, :agency_person)
 
-      raise NotAJobDeveloper, '' unless job_developer.is_job_developer? job_developer.agency
+      unless job_developer.is_job_developer? job_developer.agency
+        raise NotAJobDeveloper, ''
+      end
       job_seeker.assign_job_developer job_developer, job_developer.agency
       if is_self_assign
         Event.create(:JD_SELF_ASSIGN_JS, obj.new(job_seeker, job_developer))
@@ -31,7 +33,7 @@ module JobSeekers
         Event.create(:JD_ASSIGNED_JS, obj.new(job_seeker, job_developer))
       end
       Task.find_by_type_and_target_job_seeker_open('need_job_developer', job_seeker)
-                .each do |task|
+          .each do |task|
         task.force_close
         task.save!
       end

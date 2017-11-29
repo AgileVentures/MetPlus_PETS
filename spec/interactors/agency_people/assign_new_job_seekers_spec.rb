@@ -11,7 +11,7 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
     let(:sam)           { FactoryGirl.create(:job_seeker, first_name: 'Sam') }
     let(:interactor)    { AgencyPeople::AssignNewJobSeekers.new }
     let!(:assign_agency_person_mock) { instance_double('JobSeekers::AssignAgencyPerson') }
-    
+
     before(:each) do
       allow(JobSeekers::AssignAgencyPerson)
         .to receive(:new).and_return(assign_agency_person_mock)
@@ -26,10 +26,10 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
           adam.assign_job_developer(job_developer, agency)
           tom.assign_job_developer(job_developer, agency)
           julie.assign_job_developer(job_developer, agency)
-          
+
           interactor.call([sam, adam, tom, julie], :JD, job_developer)
         end
-              
+
         it 'does not invoke JobSeekers::AssignAgencyPerson' do
           expect(assign_agency_person_mock).not_to have_received(:call)
         end
@@ -40,10 +40,10 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
           sam.assign_job_developer(job_developer, agency)
           adam.assign_job_developer(job_developer, agency)
           tom.assign_job_developer(job_developer, agency)
-          
+
           interactor.call([sam, adam, tom, julie, jane], :JD, job_developer)
         end
-              
+
         it 'does invoke JobSeekers::AssignAgencyPerson' do
           expect(assign_agency_person_mock).to have_received(:call).twice
         end
@@ -54,10 +54,10 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
           sam.assign_job_developer(job_developer, agency)
           adam.assign_job_developer(job_developer, agency)
           tom.assign_job_developer(job_developer, agency)
-          
+
           interactor.call([sam], :JD, job_developer)
         end
-        
+
         it 'only sam is left' do
           expect(AgencyPerson.find(job_developer.id)
                             .agency_relations.count).to eql(1)
@@ -78,10 +78,10 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
           adam.assign_case_manager(case_manager, agency)
           tom.assign_case_manager(case_manager, agency)
           julie.assign_case_manager(case_manager, agency)
-          
+
           interactor.call([sam, adam, tom, julie], :CM, case_manager)
         end
-              
+
         it 'does not invoke JobSeekers::AssignAgencyPerson' do
           expect(assign_agency_person_mock).not_to have_received(:call)
         end
@@ -92,10 +92,10 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
           sam.assign_case_manager(case_manager, agency)
           adam.assign_case_manager(case_manager, agency)
           tom.assign_case_manager(case_manager, agency)
-          
+
           interactor.call([sam, adam, tom, julie, jane], :CM, case_manager)
         end
-              
+
         it 'does invoke JobSeekers::AssignAgencyPerson' do
           expect(assign_agency_person_mock).to have_received(:call).twice
         end
@@ -106,10 +106,10 @@ RSpec.describe AgencyPeople::AssignNewJobSeekers do
           sam.assign_case_manager(case_manager, agency)
           adam.assign_case_manager(case_manager, agency)
           tom.assign_case_manager(case_manager, agency)
-          
+
           interactor.call([sam], :CM, case_manager)
         end
-        
+
         it 'only sam is left' do
           expect(AgencyPerson.find(case_manager.id)
                             .agency_relations.count).to eql(1)

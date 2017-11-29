@@ -132,7 +132,7 @@ RSpec.describe JobSeekers::AssignAgencyPerson do
               )
           end
         end
-        context'when is assigned by agency admin' do
+        context 'when is assigned by agency admin' do
           before(:each) do
             service.call(
               job_seeker,
