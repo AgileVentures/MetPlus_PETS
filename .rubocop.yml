@@ -19,3 +19,7 @@ Style/Documentation:
 
 Metrics/LineLength:
   Max: 90
+Metrics/BlockLength:
+  Enabled: true
+  Exclude: 
+    - spec/**/*
