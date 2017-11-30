@@ -294,7 +294,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
   end
 
   # Add resume to this job seeker
-  resume = Resume.new(file: file,
+  resume = Resume.new(file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
                       file_name: 'Admin-Assistant-Resume.pdf',
                       job_seeker_id: js1.id)
   resume.save!
@@ -330,9 +330,8 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
     Task.new_review_job_application_task job, known_company
 
     # Add resume to some job seekers
-    file = File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf')
     next unless job_seeker.id <= 15
-    resume = Resume.create(file: file,
+    resume = Resume.create(file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
                            file_name: 'Admin-Assistant-Resume.pdf',
                            job_seeker_id: job_seeker.id)
   end

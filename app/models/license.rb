@@ -5,6 +5,8 @@ class License < ActiveRecord::Base
   validates_presence_of   :abbr
   validates_uniqueness_of :abbr, case_sensitive: false
 
+  after_validation { abbr&.upcase! }
+
   validates_presence_of :title
 
   def license_description

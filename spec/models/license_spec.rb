@@ -27,6 +27,13 @@ RSpec.describe License, type: :model do
       expect(license2).to_not be_valid
       expect(license2.errors.full_messages).to include 'Abbr has already been taken'
     end
+
+    it 'converts all characters to upper case' do
+      license.abbr.downcase!
+      license.save
+      expect(license.abbr).to_not eq license.abbr.downcase
+      expect(license.abbr).to eq license.abbr.upcase
+    end
   end
   describe 'Title' do
     it { is_expected.to validate_presence_of :title }
