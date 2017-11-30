@@ -46,44 +46,33 @@ class AgencyPeopleController < ApplicationController
     jd_job_seeker_ids = model_params.delete(:as_jd_job_seeker_ids)
     cm_job_seeker_ids = model_params.delete(:as_cm_job_seeker_ids)
 
-    # Find newly-assigned job seekers for notifying the agency person (as JD)
-    new_jd_job_seeker_ids = new_job_seeker_ids(@agency_person,
-                                               jd_job_seeker_ids, :JD)
-
-    # Find newly-assigned job seekers for notifying the agency person (as CM)
-    new_cm_job_seeker_ids = new_job_seeker_ids(@agency_person,
-                                               cm_job_seeker_ids, :CM)
-
     @agency_person.assign_attributes(model_params)
 
     @agency_person.agency_relations.delete_all
 
-    # Build agency_relations to associate job_seekers to person as Job Developer
-    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:JD]).id
-    jd_job_seeker_ids.each do |js_id|
-      @agency_person.agency_relations <<
-          AgencyRelation.new(agency_role_id: role_id,
-                             job_seeker_id: js_id) unless js_id.empty?
-    end
-
-    # Build agency_relations to associate job_seekers to person as Case Manager
-    role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:CM]).id
-    cm_job_seeker_ids.each do |js_id|
-      @agency_person.agency_relations <<
-          AgencyRelation.new(agency_role_id: role_id,
-                             job_seeker_id: js_id) unless js_id.empty?
-    end
-
     if @agency_person.save
-      # notify agency person, and job seekers, of new JS assignments
-      notify_ap_new_js_assignments @agency_person,
-                                   new_jd_job_seeker_ids, :JD
+      assign_new_job_seekers = AgencyPeople::AssignNewJobSeekers.new
+      begin
+        assign_new_job_seekers.call(
+          JobSeeker.where(id: jd_job_seeker_ids),
+          :JD,
+          @agency_person
+        )
+        assign_new_job_seekers.call(
+          JobSeeker.where(id: cm_job_seeker_ids),
+          :CM,
+          @agency_person
+        )
 
-      notify_ap_new_js_assignments @agency_person,
-                                   new_cm_job_seeker_ids, :CM
-
-      flash[:notice] = 'Agency person was successfully updated.'
-      redirect_to agency_person_path(@agency_person)
+        flash[:notice] = 'Agency person was successfully updated.'
+        redirect_to agency_person_path(@agency_person)
+      rescue JobSeekers::AssignAgencyPerson::NotAJobDeveloper
+        @agency_person.errors[:person] << 'cannot be assigned as Job Developer unless person has that role.'
+        render :edit
+      rescue JobSeekers::AssignAgencyPerson::NotACaseManager
+        @agency_person.errors[:person] << 'cannot be assigned as Case Manager unless person has that role.'
+        render :edit
+      end
     else
       unless @agency_person.errors[:agency_admin].empty?
 
@@ -105,37 +94,31 @@ class AgencyPeopleController < ApplicationController
     self.action_description = 'assign a job seeker'
     authorize @agency_person
 
-    @job_seeker = JobSeeker.find(params[:job_seeker_id])
-
-    obj = Struct.new(:job_seeker, :agency_person)
-
     role_key = params[:agency_role].to_sym
 
-    # confirm that agency person has this role and assign person to job seeker
-    case role_key
-    when :JD
-      return render(json: { message: 'Agency Person is not a job developer' },
-                    status: 403) unless
-                    @agency_person.is_job_developer? @agency_person.agency
+    @job_seeker = JobSeeker.find(params[:job_seeker_id])
 
-      @job_seeker.assign_job_developer(@agency_person, @agency_person.agency)
-
-      # Notify job seeker of job developer assignment
-      Event.create(:JD_SELF_ASSIGN_JS, obj.new(@job_seeker, @agency_person))
-
-    when :CM
-      return render(json: { message: 'Agency Person is not a case manager' },
-                    status: 403) unless
-                    @agency_person.is_case_manager? @agency_person.agency
-
-      @job_seeker.assign_case_manager(@agency_person, @agency_person.agency)
-
-      # Notify job seeker of case manager assignment
-      Event.create(:CM_SELF_ASSIGN_JS, obj.new(@job_seeker, @agency_person))
-
-    else
-      return render(json: { message: 'Unknown agency role specified' },
-                    status: 400)
+    begin
+      JobSeekers::AssignAgencyPerson.new.call(
+        @job_seeker,
+        role_key,
+        @agency_person
+      )
+    rescue JobSeekers::AssignAgencyPerson::NotAJobDeveloper
+      return render(
+        json: { message: 'Agency Person is not a job developer' },
+        status: 403
+      )
+    rescue JobSeekers::AssignAgencyPerson::NotACaseManager
+      return render(
+        json: { message: 'Agency Person is not a case manager' },
+        status: 403
+      )
+    rescue JobSeekers::AssignAgencyPerson::InvalidRole
+      return render(
+        json: { message: 'Unknown agency role specified' },
+        status: 400
+      )
     end
 
     if request.xhr?
@@ -315,42 +298,5 @@ class AgencyPeopleController < ApplicationController
                                           job_category_ids: [],
                                           as_jd_job_seeker_ids: [],
                                           as_cm_job_seeker_ids: [])
-  end
-
-  def new_job_seeker_ids agency_person, job_seeker_ids, role_key
-    # job_seeker_ids comes in from params.  Find and return the ids of
-    # job seekers who are represented in params but not yet associated
-    # with the agency person in the indicated role
-
-    unless job_seeker_ids.empty?
-      new_job_seeker_ids = job_seeker_ids.map { |id| id.to_i }
-      new_job_seeker_ids.delete(0)
-      case role_key
-      when :JD
-        current_js_ids = agency_person.as_jd_job_seeker_ids
-      when :CM
-        current_js_ids = agency_person.as_cm_job_seeker_ids
-      end
-      new_job_seeker_ids.keep_if do |js_id|
-        not current_js_ids.include? js_id
-      end
-    end
-    new_job_seeker_ids
-  end
-
-  def notify_ap_new_js_assignments(agency_person, job_seeker_ids, role_key)
-    if job_seeker_ids
-      job_seeker_ids.each do |js_id|
-        obj = Struct.new(:job_seeker, :agency_person)
-        case role_key
-        when :JD
-          Event.create(:JD_ASSIGNED_JS, obj.new(JobSeeker.find(js_id),
-                                                @agency_person))
-        when :CM
-          Event.create(:CM_ASSIGNED_JS, obj.new(JobSeeker.find(js_id),
-                                                @agency_person))
-        end
-      end
-    end
   end
 end
