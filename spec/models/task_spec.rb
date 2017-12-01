@@ -24,11 +24,11 @@ RSpec.describe Task, type: :model do
     it { is_expected.to have_db_column :owner_company_id }
     it { is_expected.to have_db_column :owner_company_role }
 
-    it { is_expected.to have_db_column :deferred_date}
-    it { is_expected.to have_db_column :user_id}
-    it { is_expected.to have_db_column :job_application_id}
-    it { is_expected.to have_db_column :job_id}
-    it { is_expected.to have_db_column :company_id}
+    it { is_expected.to have_db_column :deferred_date }
+    it { is_expected.to have_db_column :user_id }
+    it { is_expected.to have_db_column :job_application_id }
+    it { is_expected.to have_db_column :job_id }
+    it { is_expected.to have_db_column :company_id }
   end
   describe 'Validators' do
     before :each do

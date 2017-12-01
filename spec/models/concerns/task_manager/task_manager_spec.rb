@@ -94,8 +94,8 @@ RSpec.describe TaskManager::TaskManager do
       )
       @job = FactoryGirl.create(:job)
       @job_application = FactoryGirl.create(
-        :job_application, 
-        job: @job, 
+        :job_application,
+        job: @job,
         job_seeker: @job_seeker
       )
     end
@@ -140,22 +140,22 @@ RSpec.describe TaskManager::TaskManager do
       describe 'Task to all CA with JS and Job Application as target' do
         subject do
           TaskTester.create_task(
-            {:company => {company: @company, role: :CA}}, 
+            { company: { company: @company, role: :CA } },
             'simple',
             @job_seeker,
             @job_application
           )
         end
-        it('check owner'){expect(subject.task_owner).to eq [@company_admin1]}
-        it('check target'){expect(subject.target).to eq @job_seeker}
+        it('check owner') { expect(subject.task_owner).to eq [@company_admin1] }
+        it('check target') { expect(subject.target).to eq @job_seeker }
         it('check job_application') do
           expect(subject.job_application).to eq @job_application
         end
       end
       describe 'Task to all CC with JS, Company and Job as target' do
-        subject do 
+        subject do
           TaskTester.create_task(
-            {:company => {company: @company, role: :CC}},
+            { company: { company: @company, role: :CC } },
             'simple',
             @job_seeker,
             @job,

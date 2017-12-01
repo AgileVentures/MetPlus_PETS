@@ -124,7 +124,7 @@ RSpec.describe TaskManager::BusinessLogic do
                                company_person: company_admin)
     end
     let(:job_application) do
-       FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
     end
 
     describe '#new_review_job_application_task' do
@@ -170,9 +170,9 @@ RSpec.describe TaskManager::BusinessLogic do
       it('owner is agency admin') do
         expect(subject.task_owner).to eq([agency_admin])
       end
-      it('target person')  { expect(subject.person).to eq(job_seeker) }
+      it('target person') { expect(subject.person).to eq(job_seeker) }
       it('target job_application') do
-         expect(subject.job_application).to eq(job_application)
+        expect(subject.job_application).to eq(job_application)
       end
       it('target company') { expect(subject.company).to eq(company) }
 
