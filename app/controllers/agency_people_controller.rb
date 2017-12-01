@@ -48,8 +48,6 @@ class AgencyPeopleController < ApplicationController
 
     @agency_person.assign_attributes(model_params)
 
-    @agency_person.agency_relations.delete_all
-
     if @agency_person.save
       assign_new_job_seekers = AgencyPeople::AssignNewJobSeekers.new
       begin

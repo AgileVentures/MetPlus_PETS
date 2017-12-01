@@ -9,6 +9,7 @@ module JobSeekers
       else
         raise InvalidRole, ''
       end
+      close_assign_tasks(job_seeker, role)
     end
 
     class NotAJobDeveloper < StandardError
@@ -32,11 +33,6 @@ module JobSeekers
       else
         Event.create(:JD_ASSIGNED_JS, obj.new(job_seeker, job_developer))
       end
-      Task.find_by_type_and_target_job_seeker_open('need_job_developer', job_seeker)
-          .each do |task|
-        task.force_close
-        task.save!
-      end
     end
 
     def assign_case_manager_to_job_seeker(job_seeker, case_manager, is_self_assign)
@@ -48,6 +44,16 @@ module JobSeekers
         Event.create(:CM_SELF_ASSIGN_JS, obj.new(job_seeker, case_manager))
       else
         Event.create(:CM_ASSIGNED_JS, obj.new(job_seeker, case_manager))
+      end
+    end
+
+    def close_assign_tasks(job_seeker, role)
+      task_name = 'need_job_developer' if role == :JD
+      task_name = 'need_case_manager' if role == :CM
+
+      Task.find_by_type_and_target_job_seeker_open(task_name, job_seeker).each do |task|
+        task.force_close
+        task.save!
       end
     end
   end
