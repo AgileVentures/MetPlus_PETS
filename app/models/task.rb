@@ -28,7 +28,7 @@ class Task < ActiveRecord::Base
   scope :agency_person_tasks, lambda { |agency_person|
     where('(owner_agency_id=? and owner_agency_role in (?))',
           agency_person.agency.id,
-          agency_person.agency_roles.pluck(:role).collect do |role|
+          agency_person.agency_roles.pluck(:role).map do |role|
             AgencyRole::ROLE.key(role)
           end)
   }
@@ -36,17 +36,17 @@ class Task < ActiveRecord::Base
     where('owner_user_id=? or (owner_company_id=? and owner_company_role in (?))',
           company_person.user.id,
           company_person.company.id,
-          company_person.company_roles.pluck(:role).collect do |role|
+          company_person.company_roles.pluck(:role).map do |role|
             CompanyRole::ROLE.key(role)
           end)
   }
   scope :agency_tasks, lambda { |user|
     where('(owner_agency_id = ? or owner_user_id in (?))',
-          user.agency.id, user.agency.agency_people.map { |a| a.acting_as.id }.collect)
+          user.agency.id, user.agency.agency_people.map { |a| a.acting_as.id }.map)
   }
   scope :company_tasks, lambda { |user|
     where('(owner_company_id = ? or owner_user_id in (?))',
-          user.company.id, user.company.company_people.map { |a| a.acting_as.id }.collect)
+          user.company.id, user.company.company_people.map { |a| a.acting_as.id }.map)
   }
 
   scope :job_seeker_target, ->(user) { where('user_id = ?', user.pets_user.user.id) }
