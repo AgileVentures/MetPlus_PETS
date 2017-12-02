@@ -41,6 +41,7 @@ class Task < ActiveRecord::Base
   }
 
   scope :job_seeker_target, ->(user) { where('user_id = ?', user.pets_user.user.id) }
+  scope :company_target, ->(company) { where('company_id = ?', company.id) }
   scope :open_tasks_of_type, ->(task_type) { open_tasks.where('task_type = ?', task_type) }
 
   def task_owner
@@ -121,6 +122,10 @@ class Task < ActiveRecord::Base
 
   def self.find_by_type_and_target_job_seeker_open(task_type, job_seeker)
     open_tasks_of_type(task_type).job_seeker_target job_seeker
+  end
+
+  def self.find_by_type_and_target_company_open(task_type, company)
+    open_tasks_of_type(task_type).company_target company
   end
 
   def target

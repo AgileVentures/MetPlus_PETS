@@ -13,6 +13,18 @@ module Companies
       Event.create(:COMP_APPROVED, company)
 
       company_admin.user.send_confirmation_instructions
+
+      close_tasks(company)
+    end
+
+    private
+
+    def close_tasks(company)
+      Task.find_by_type_and_target_company_open('company_registration', company)
+          .each do |task|
+        task.force_close
+        task.save!
+      end
     end
   end
 end
