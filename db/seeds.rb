@@ -289,8 +289,10 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
   # Have this JS apply to every other known_company jobs
   Job.where(company: known_company).each do |job|
-    JobApplication.create(job: job, job_seeker: js1) unless job.id.even?
-    Task.new_review_job_application_task job, known_company
+    if(job.id.even?)
+      job_application = JobApplication.create(job: job, job_seeker: js1)
+      Task.new_review_job_application_task job_application, known_company
+    end
   end
 
   # Add resume to this job seeker
@@ -326,8 +328,8 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
     # Add job application for known_company
     job = Job.where(company: known_company)[r.rand(25)]
-    JobApplication.create(job: job, job_seeker: job_seeker)
-    Task.new_review_job_application_task job, known_company
+    job_application = JobApplication.create(job: job, job_seeker: job_seeker)
+    Task.new_review_job_application_task job_application, known_company
 
     # Add resume to some job seekers
     next unless job_seeker.id <= 15
