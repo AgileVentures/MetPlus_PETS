@@ -1,6 +1,6 @@
 module Companies
-  class CompanyRegistration
-    def approve_company(company)
+  class ApproveCompanyRegistration
+    def call(company)
       company.active
       company.save!
 

@@ -5,8 +5,8 @@ class TestTaskHelper
   include TaskManager::TaskManager
 end
 
-RSpec.describe Companies::CompanyRegistration do
-  describe '#approve_company' do
+RSpec.describe Companies::ApproveCompanyRegistration do
+  describe '#call' do
     let!(:agency) { FactoryGirl.create(:agency) }
     let!(:company) do
       FactoryGirl.create(:company, id: 100, status: 'pending_registration')
@@ -20,7 +20,7 @@ RSpec.describe Companies::CompanyRegistration do
         TestTaskHelper.new_review_company_registration_task(company, agency)
         allow(Event).to receive(:create)
         allow(company.company_people[0].user).to receive(:send_confirmation_instructions)
-        subject.approve_company(company)
+        subject.call(company)
       end
 
       it 'changes the state of the company to "approved"' do
