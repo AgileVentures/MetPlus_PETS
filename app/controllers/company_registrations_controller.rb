@@ -91,21 +91,7 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def approve
-    # Approve the company's registration request.
-    # There should be only one CompanyPerson associated with the company
-    # this is the 'company contact' included in the registration request.
-    @company.active
-    @company.save
-
-    company_person = @company.company_people[0]
-    company_person.active
-    company_person.approved = true
-    company_person.save
-
-    Event.create(:COMP_APPROVED, @company)
-
-    # Send account confirmation email (Devise)
-    company_person.user.send_confirmation_instructions
+    Companies::ApproveCompanyRegistration.new.call(@company)
 
     flash[:notice] =
       'Company contact has been notified of registration approval.'
@@ -113,17 +99,12 @@ class CompanyRegistrationsController < ApplicationController
   end
 
   def deny
-    # Deny the company's registration request.
-    @company.registration_denied
-    @company.company_people[0].company_denied
-    @company.save
+    Companies::DenyCompanyRegistration.new.call(@company, params[:email_text])
 
-    render partial: 'companies/company_status',
-           locals: { company: @company, admin_aa: true } if request.xhr?
-
-    # Anonymous class to contain company and reason for denial
-    obj = Struct.new(:company, :reason)
-    Event.create(:COMP_DENIED, obj.new(@company, params[:email_text]))
+    if request.xhr?
+      render partial: 'companies/company_status',
+            locals: { company: @company, admin_aa: true }
+    end
   end
 
   private
