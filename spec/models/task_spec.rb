@@ -26,6 +26,7 @@ RSpec.describe Task, type: :model do
 
     it { is_expected.to have_db_column :deferred_date }
     it { is_expected.to have_db_column :user_id }
+    it { is_expected.to have_db_column :job_application_id }
     it { is_expected.to have_db_column :job_id }
     it { is_expected.to have_db_column :company_id }
   end
@@ -222,7 +223,7 @@ RSpec.describe Task, type: :model do
         company_roles: [@ca_role]
       )
 
-      @job = FactoryGirl.create(:job)
+      @job_applicatin = FactoryGirl.create(:job_application)
 
       @task = FactoryGirl.build(:task)
     end
@@ -260,6 +261,10 @@ RSpec.describe Task, type: :model do
       @task.target = @company_contact
       expect(@task.target).to eq @company_contact
       expect(@task.person).to eq @company_contact
+    end
+    it 'job application' do
+      @task.target = @job_application
+      expect(@task.target).to eq @job_application
     end
     it 'job' do
       @task.target = @job

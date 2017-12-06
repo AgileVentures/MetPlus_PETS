@@ -21,3 +21,24 @@ See the whole wiki: <a href="https://github.com/AgileVentures/MetPlus_PETS/wiki"
  - Code Climate [![Code Climate](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/gpa.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS)
  - Test Coverage [![Test Coverage](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/coverage.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/coverage)
  - Waffle [![Stories in Progress](https://badge.waffle.io/AgileVentures/MetPlus_tracker.png?label=in%20progress&title=In%20Progress)](http://waffle.io/AgileVentures/MetPlus_tracker)
+
+ 
+# Deployment with Dokku
+
+1. Create the Postgres Database
+`ssh dokku@agileventures.azure postgres:create metplus-pets-production`
+
+1. Create the Application
+`ssh dokku@agileventures.azure apps:create metplus-pets-production`
+
+1. Link Mongo Database with Application
+`ssh dokku@agileventures.azure postgres:link metplus-pets-production metplus-pets-production`
+
+1. Configure application
+`ssh dokku@agileventures.azure config:set `
+
+1. Create remote to push application to
+`git remote add production dokku@agileventures.azure:metplus-pets-production`
+
+1. Deploy to production
+`git push production master`
