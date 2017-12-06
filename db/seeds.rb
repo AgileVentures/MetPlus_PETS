@@ -3,8 +3,7 @@ require 'ffaker'
 # Prevent email validation
 class EmailValidator
   # replace method which performs validation using mailgun validator
-  def validate_each(_,_,_)
-  end
+  def validate_each(_, _, _); end
 end
 
 def create_address(location = nil)
@@ -13,8 +12,10 @@ def create_address(location = nil)
   state = Faker::Address.state
   zipcode = Faker::Address.zip_code
 
-  return Address.create(street: street, city: city, zipcode: zipcode,
-                        state: state) if location.nil?
+  if location.nil?
+    return Address.create(street: street, city: city, zipcode: zipcode,
+                          state: state)
+  end
   Address.create(street: street, city: city, zipcode: zipcode, state: state,
                  location: location)
 end
@@ -41,23 +42,23 @@ CompanyRole::ROLE.each_value do |company_role|
 end
 
 # Create default Job Types
-%w(Full\ Time Part\ Time Internship Contract Salary
-   Salary\ &\ Commission Commission\ Only).each do |job_type|
+%w[Full\ Time Part\ Time Internship Contract Salary
+   Salary\ &\ Commission Commission\ Only].each do |job_type|
   JobType.find_or_create_by!(job_type: job_type)
   puts "  Job type: #{job_type}"
 end
 
 # Create default agency
 agency = Agency.find_or_create_by!(name: 'MetPlus', website: 'metplus.org',
-                          phone: '111 222 3333', fax: '333 444 5555',
-                          email: 'pets@metplus.org',
-                          description: 'Michigan Employment & Training Plus,
+                                   phone: '111 222 3333', fax: '333 444 5555',
+                                   email: 'pets@metplus.org',
+                                   description: 'Michigan Employment & Training Plus,
                           (MET|PLUS) is a 501 (c) 3, Vocational Training
                           non-profit organization that strives to assist
                           Michigan jobseekers with invaluable training
                           and job development that will put them on a
                           career path to success.')
-puts "  Default agency: MetPlus"
+puts '  Default agency: MetPlus'
 
 # Create default Job Shifts
 JobShift.find_or_create_by(shift: 'Morning')
@@ -85,10 +86,11 @@ puts '  Job Shifts created'
 puts '  License types created'
 
 # Create default job questions
-[ 'Are you authorized to work in the US?',
-  'Are you willing to have a background check performed?',
-  'Are you willing to take a drug test?'
-].each { |q| Question.find_or_create_by(question_text: q) }
+['Are you authorized to work in the US?',
+ 'Are you willing to have a background check performed?',
+ 'Are you willing to take a drug test?'].each do |q|
+   Question.find_or_create_by(question_text: q)
+ end
 
 puts '  Job questions created'
 
@@ -127,11 +129,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                       website: website,
                       name: name)
     cmp.agencies << agency
-    if n < 40
-      cmp.status = 'active'
-    else
-      cmp.status = 'pending_registration'
-    end
+    cmp.status = if n < 40
+                   'active'
+                 else
+                   'pending_registration'
+                 end
     cmp.save!
 
     if n < 10
@@ -178,7 +180,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
     first_name = Faker::Name.first_name
     last_name = Faker::Name.last_name
     email = create_email("#{first_name}#{last_name}")
-    confirmed_at = DateTime.now
+    confirmed_at = Time.now
     # debugger
     cp = CompanyPerson.new(title: title, email: email, password: password,
                            first_name: first_name,
@@ -197,7 +199,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                                            password: 'qwerty123',
                                            first_name: 'Steve',
                                            last_name: 'Jobs',
-                                           confirmed_at: DateTime.now,
+                                           confirmed_at: Time.now,
                                            company_id: known_company.id,
                                            address_id: Address.find(1).id,
                                            status: 'active')
@@ -210,7 +212,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                                             password: 'qwerty123',
                                             first_name: 'Mya',
                                             last_name: 'Cash',
-                                            confirmed_at: DateTime.now,
+                                            confirmed_at: Time.now,
                                             company_id: known_company.id,
                                             address_id: Address.find(1).id,
                                             status: 'active')
@@ -227,7 +229,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                            first_name: FFaker::Name.first_name,
                            last_name: FFaker::Name.last_name,
                            phone: FFaker::PhoneNumber.short_phone_number,
-                           confirmed_at: DateTime.now,
+                           confirmed_at: Time.now,
                            company_id: known_company.id,
                            address_id: addresses[n].id,
                            status: 'active')
@@ -289,7 +291,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
   # Have this JS apply to every other known_company jobs
   Job.where(company: known_company).each do |job|
-    if(job.id.even?)
+    if job.id.even?
       job_application = JobApplication.create(job: job, job_seeker: js1)
       Task.new_review_job_application_task job_application, known_company
     end
@@ -323,7 +325,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
                                   year_of_birth: year_of_birth,
                                   job_seeker_status: job_seeker_status,
                                   phone: phone,
-                                  confirmed_at: DateTime.now,
+                                  confirmed_at: Time.now,
                                   address: create_address)
 
     # Add job application for known_company
@@ -333,9 +335,11 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
     # Add resume to some job seekers
     next unless job_seeker.id <= 15
-    resume = Resume.create(file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
-                           file_name: 'Admin-Assistant-Resume.pdf',
-                           job_seeker_id: job_seeker.id)
+    resume = Resume.create(
+      file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
+      file_name: 'Admin-Assistant-Resume.pdf',
+      job_seeker_id: job_seeker.id
+    )
   end
 
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
