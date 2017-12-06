@@ -40,7 +40,7 @@ Feature: Have a task system in the site
       | need_job_developer | aa@metplus.org       | 2016-03-10    | DONE        | john.worker@gmail.com |
       | company_registration | MetPlus,AA         | 2016-03-10    | NEW         | Widgets Inc.          |
       | job_application    | Widgets Inc.,CA      | 2016-03-10    | NEW         | john-seeker@gmail.com |
-      | job_application    | carter@ymail.com       | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+      | job_application    | carter@ymail.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
 
 
   @javascript

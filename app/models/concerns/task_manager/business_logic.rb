@@ -87,9 +87,9 @@ module TaskManager
                     :company_registration, company)
       end
 
-      def new_review_job_application_task(job, company)
+      def new_review_job_application_task(job_application, company)
         create_task({ company: { company: company, role: :CA } },
-                    :job_application, job)
+                    :job_application, job_application)
       end
 
       def new_company_interest_task(job_seeker, company, job, agency)

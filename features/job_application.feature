@@ -109,7 +109,7 @@ Given the following job applications exist:
     And I wait 1 second
     And I click the "Unassigned Tasks" link
     And I should see "Review job application"
-    And I should see "Job: software developer"
+    And I should see "Seeker, John has applied to: software developer"
 
   Scenario: Job seeker cannot re-apply to the same job
     Given I am on the home page

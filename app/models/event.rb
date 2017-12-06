@@ -152,7 +152,7 @@ class Event
                                    evt_obj)
     end
 
-    Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
+    Task.new_review_job_application_task(evt_obj, evt_obj.job.company)
   end
 
   def self.evt_jd_apply(evt_obj) # evt_obj = job_app
@@ -201,7 +201,7 @@ class Event
                                    evt_obj)
     end
 
-    Task.new_review_job_application_task(evt_obj.job, evt_obj.job.company)
+    Task.new_review_job_application_task(evt_obj, evt_obj.job.company)
   end
 
   def self.evt_app_accepted(evt_obj)
