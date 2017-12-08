@@ -32,9 +32,9 @@ class JobApplicationsController < ApplicationController
   def process_application
     begin
       JobApplications::Processing.new.call(@job_application)
-      flash[:info] = 'Job application processing.'      
+      flash[:info] = 'Job application processing.'
     rescue JobApplications::JobNotActive
-      flash[:alert] = 'Invalid action on inactive job application.'      
+      flash[:alert] = 'Invalid action on inactive job application.'
     end
     redirect_to job_url(@job_application.job)
   end
