@@ -239,7 +239,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           it 'interator to have been called' do
             expect(application_process_mock)
               .to have_received(:call)
-              .with(inactive_application)
+              .with(inactive_application, company_admin.user)
           end
         end
 
@@ -260,7 +260,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           it 'interator to have been called' do
             expect(application_process_mock)
               .to have_received(:call)
-              .with(valid_application)
+              .with(valid_application, company_admin.user)
           end
         end
       end
