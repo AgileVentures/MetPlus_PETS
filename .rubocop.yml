@@ -10,7 +10,7 @@ Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Style/DotPosition:
+Layout/DotPosition:
   Description: 'Checks the position of the dot in multi-line method call'
   EnforcedStyle: leading
 
