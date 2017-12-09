@@ -39,27 +39,35 @@ RSpec.describe AgencyPerson, type: :model do
     end
     it 'invalidates assignment as job developer if does not have that role' do
       agency_person = FactoryBot.build(:case_manager)
-      agency_person.agency_relations << FactoryBot.create(:agency_relation,
-                                                          agency_person: agency_person,
-                                                          job_seeker: FactoryBot.create(:job_seeker),
-                                                          agency_role: AgencyRole.create(role: AgencyRole::ROLE[:JD]))
+      relation = FactoryBot.create(:agency_relation,
+                                   agency_person: agency_person,
+                                   job_seeker: FactoryBot.create(:job_seeker),
+                                   agency_role: AgencyRole.create(
+                                     role: AgencyRole::ROLE[:JD]
+                                   ))
+
+      agency_person.agency_relations << relation
       agency_person.valid?
       expect(agency_person.errors[:person])
         .to include('cannot be assigned as Job Developer unless person has that role.')
     end
     it 'invalidates assignment as case manager if does not have that role' do
       agency_person = FactoryBot.build(:job_developer)
-      agency_person.agency_relations << FactoryBot.create(:agency_relation,
-                                                          agency_person: agency_person,
-                                                          job_seeker: FactoryBot.create(:job_seeker),
-                                                          agency_role: AgencyRole.create(role: AgencyRole::ROLE[:CM]))
+      relation = FactoryBot.create(:agency_relation,
+                                   agency_person: agency_person,
+                                   job_seeker: FactoryBot.create(:job_seeker),
+                                   agency_role: AgencyRole.create(
+                                     role: AgencyRole::ROLE[:CM]
+                                   ))
+      agency_person.agency_relations << relation
       agency_person.valid?
       expect(agency_person.errors[:person])
         .to include('cannot be assigned as Case Manager unless person has that role.')
     end
     describe 'status' do
       it 'Status -1 should generate exception' do
-        expect { subject.status = -1 }.to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
+        expect { subject.status = -1 }
+          .to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
       end
       it 'Status 0 should be invited' do
         subject.status = 0
@@ -74,7 +82,8 @@ RSpec.describe AgencyPerson, type: :model do
         expect(subject.status).to eq 'inactive'
       end
       it 'Status 3 should generate exception' do
-        expect { subject.status = 3 }.to raise_error(ArgumentError).with_message('\'3\' is not a valid status')
+        expect { subject.status = 3 }.to raise_error(ArgumentError)
+          .with_message('\'3\' is not a valid status')
       end
     end
   end
@@ -105,25 +114,25 @@ RSpec.describe AgencyPerson, type: :model do
   describe 'Agency Admin checks' do
     let(:agency) { FactoryBot.create(:agency) }
     let!(:aa_person) do
-      $person = FactoryBot.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:AA])
-      $person.save
-      $person
+      person = FactoryBot.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryBot.create(:agency_role,
+                                               role: AgencyRole::ROLE[:AA])
+      person.save
+      person
     end
     let(:aa_person2) do
-      $person = FactoryBot.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:AA])
-      $person.save
-      $person
+      person = FactoryBot.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryBot.create(:agency_role,
+                                               role: AgencyRole::ROLE[:AA])
+      person.save
+      person
     end
     let(:jd_person) do
-      $person = FactoryBot.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:JD])
-      $person.save
-      $person
+      person = FactoryBot.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryBot.create(:agency_role,
+                                               role: AgencyRole::ROLE[:JD])
+      person.save
+      person
     end
 
     it 'confirms sole agency admin' do

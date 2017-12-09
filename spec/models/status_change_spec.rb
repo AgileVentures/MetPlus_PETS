@@ -75,8 +75,8 @@ RSpec.describe StatusChange, type: :model do
     it 'returns an array of times for multiple occurences of status' do
       t1 = StatusChange.update_status_history(entity1, :hello)
                        .last.created_at
-      t2 = StatusChange.update_status_history(entity1, :goodbye)
-                       .last.created_at
+      StatusChange.update_status_history(entity1, :goodbye)
+                  .last.created_at
       t3 = StatusChange.update_status_history(entity1, :hello)
                        .last.created_at
 

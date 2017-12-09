@@ -30,7 +30,8 @@ RSpec.describe AgenciesController, type: :controller do
         expect(response).to have_http_status 302
       end
       it 'sets flash message' do
-        expect(flash[:alert]).to eq "You are not authorized to edit #{agency.name} agency."
+        expect(flash[:alert])
+          .to eq "You are not authorized to edit #{agency.name} agency."
       end
     end
   end
@@ -60,8 +61,11 @@ RSpec.describe AgenciesController, type: :controller do
 
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryBot.attributes_for(:agency,
-                                                         phone: '', website: 'nodomain'), id: agency
+        patch :update, agency: FactoryBot.attributes_for(
+          :agency,
+          phone: '',
+          website: 'nodomain'
+        ), id: agency
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')

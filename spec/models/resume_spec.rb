@@ -127,7 +127,10 @@ RSpec.describe Resume, type: :model do
                           file_name: 'Admin-Assistant-Resume.pdf',
                           job_seeker_id: nil)
       expect { resume.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Job seeker can't be blank")
+        .to raise_error(
+          ActiveRecord::RecordInvalid,
+          "Validation failed: Job seeker can't be blank"
+        )
       expect(Resume.count).to eq 0
     end
 
@@ -137,7 +140,10 @@ RSpec.describe Resume, type: :model do
                           file_name: 'Test File.zzz',
                           job_seeker_id: job_seeker.id)
       expect { resume.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: File name unsupported file type')
+        .to raise_error(
+          ActiveRecord::RecordInvalid,
+          'Validation failed: File name unsupported file type'
+        )
       expect(Resume.count).to eq 0
     end
 

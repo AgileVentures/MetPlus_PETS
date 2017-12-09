@@ -51,7 +51,8 @@ RSpec.describe Address, type: :model do
 
   describe 'Instance methods' do
     it 'should be in the correct format' do
-      expect(FactoryBot.create(:address).full_address).to eq('3940 Main Street Detroit, Michigan 92105')
+      expect(FactoryBot.create(:address).full_address)
+        .to eq('3940 Main Street Detroit, Michigan 92105')
     end
   end
 end

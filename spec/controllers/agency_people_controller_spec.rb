@@ -104,7 +104,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let!(:assign_agency_person_mock) { instance_double('AgencyPeople::AssignNewJobSeekers') }
+    let!(:assign_agency_person_mock) do
+      instance_double('AgencyPeople::AssignNewJobSeekers')
+    end
     let(:job_seeker) { FactoryBot.create(:job_seeker) }
     before(:each) do
       allow(AgencyPeople::AssignNewJobSeekers)

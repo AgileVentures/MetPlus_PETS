@@ -10,10 +10,10 @@ RSpec.describe CompanyMailer, type: :mailer do
                         company: company)
     end
     let!(:agency) do
-      $agency = FactoryBot.build(:agency)
-      $agency.companies << company
-      $agency.save
-      $agency
+      agency = FactoryBot.build(:agency)
+      agency.companies << company
+      agency.save
+      agency
     end
 
     context 'registration received' do

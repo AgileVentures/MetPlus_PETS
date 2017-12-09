@@ -234,7 +234,8 @@ RSpec.describe CompanyPeopleController, type: :controller do
         end
 
         it 'sets flash message' do
-          expect(flash[:warning]).to eq 'Please check your inbox to update your email address.'
+          expect(flash[:warning])
+            .to eq 'Please check your inbox to update your email address.'
         end
         it 'returns redirect status' do
           expect(response).to have_http_status(:redirect)

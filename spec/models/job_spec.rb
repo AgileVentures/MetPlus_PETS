@@ -47,7 +47,9 @@ RSpec.describe Job, type: :model do
     it { is_expected.to have_many(:licenses).through(:job_licenses) }
     it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
     it { is_expected.to have_many(:job_questions) }
-    it { is_expected.to have_many(:questions).through(:job_questions).dependent(:destroy) }
+    it do
+      is_expected.to have_many(:questions).through(:job_questions).dependent(:destroy)
+    end
     it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 

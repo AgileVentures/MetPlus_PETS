@@ -37,12 +37,14 @@ RSpec.describe Agency, type: :model do
       subject { FactoryBot.build(:agency) }
       it {
         should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-                               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)
+                               ' 123 123 1234', '(234 1234 1234',
+                               '786) 1243 3578').for(:phone)
       }
       it {
         should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
                            '1 231 231 2345', '12312312345', '1231231234',
-                           '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)
+                           '1-910-123-9158 x2851', '1-872-928-5886',
+                           '833-638-6551 x16825').for(:phone)
       }
     end
 
@@ -50,12 +52,14 @@ RSpec.describe Agency, type: :model do
       subject { FactoryBot.build(:agency) }
       it {
         should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-                               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)
+                               ' 123 123 1234', '(234 1234 1234',
+                               '786) 1243 3578').for(:fax)
       }
       it {
         should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
                            '1 231 231 2345', '12312312345', '1231231234',
-                           '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:fax)
+                           '1-910-123-9158 x2851', '1-872-928-5886',
+                           '833-638-6551 x16825').for(:fax)
       }
     end
 
@@ -105,25 +109,25 @@ RSpec.describe Agency, type: :model do
     let(:agency) { FactoryBot.create(:agency) }
     let(:js_person) { FactoryBot.create(:job_seeker) }
     let!(:aa_person1) do
-      $person = FactoryBot.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:AA])
-      $person.save
-      $person
+      person = FactoryBot.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryBot.create(:agency_role,
+                                               role: AgencyRole::ROLE[:AA])
+      person.save
+      person
     end
     let!(:aa_person2) do
-      $person = FactoryBot.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:AA])
-      $person.save
-      $person
+      person = FactoryBot.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryBot.create(:agency_role,
+                                               role: AgencyRole::ROLE[:AA])
+      person.save
+      person
     end
     let(:jd_person) do
-      $person = FactoryBot.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:JD])
-      $person.save
-      $person
+      person = FactoryBot.build(:agency_person, agency: agency)
+      person.agency_roles << FactoryBot.create(:agency_role,
+                                               role: AgencyRole::ROLE[:JD])
+      person.save
+      person
     end
 
     it 'identifies agency admins' do

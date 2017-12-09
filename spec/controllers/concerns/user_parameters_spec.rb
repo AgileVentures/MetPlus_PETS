@@ -27,18 +27,24 @@ RSpec.describe UserParameters do
                                                                        last_name: 'Smith')
     end
     it 'empty password empty confirmation' do
-      expect(TestClass.handle_user_form_parameters(empty_password)).to eq(first_name: 'John',
-                                                                          last_name: 'Smith')
+      expect(TestClass.handle_user_form_parameters(empty_password)).to eq(
+        first_name: 'John',
+        last_name: 'Smith'
+      )
     end
     it 'empty password not empty confirmation' do
-      expect(TestClass.handle_user_form_parameters(only_password_confirmation)).to eq(first_name: 'John',
-                                                                                      last_name: 'Smith')
+      expect(TestClass.handle_user_form_parameters(only_password_confirmation)).to eq(
+        first_name: 'John',
+        last_name: 'Smith'
+      )
     end
     it 'password present' do
-      expect(TestClass.handle_user_form_parameters(with_password)).to eq(first_name: 'John',
-                                                                         last_name: 'Smith',
-                                                                         password: 'bammm',
-                                                                         password_confirmation: '')
+      expect(TestClass.handle_user_form_parameters(with_password)).to eq(
+        first_name: 'John',
+        last_name: 'Smith',
+        password: 'bammm',
+        password_confirmation: ''
+      )
     end
   end
 end

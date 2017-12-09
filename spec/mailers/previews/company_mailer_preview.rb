@@ -4,7 +4,8 @@ require './spec/support/service_stub_helpers'
 include ServiceStubHelpers::Cruncher
 # Preview all emails at http://localhost:3000/rails/mailers/company_mailer
 class CompanyMailerPreview < ActionMailer::Preview
-  # Preview this email at http://localhost:3000/rails/mailers/company_mailer/pending_approval
+  # Preview this email
+  # at http://localhost:3000/rails/mailers/company_mailer/pending_approval
   def pending_approval
     company        = Company.first
     company_person = CompanyPerson.first
@@ -20,8 +21,10 @@ class CompanyMailerPreview < ActionMailer::Preview
   def registration_denied
     company        = Company.first
     company_person = CompanyPerson.first
-    CompanyMailer.registration_denied(company, company_person,
-                                      reason: "Your EIN is not valid and we think you're a scam operation.")
+    CompanyMailer.registration_denied(
+      company, company_person,
+      reason: "Your EIN is not valid and we think you're a scam operation."
+    )
   end
 
   def application_received

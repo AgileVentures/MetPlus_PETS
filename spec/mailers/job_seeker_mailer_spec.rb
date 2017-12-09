@@ -16,7 +16,9 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     end
     it 'renders the body' do
       expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
-      expect(mail).to have_body_text("has been assigned to you as your #{agency.name} Job Developer.")
+      expect(mail).to have_body_text(
+        "has been assigned to you as your #{agency.name} Job Developer."
+      )
     end
   end
 
@@ -34,16 +36,20 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     end
     it 'renders the body' do
       expect(mail).to have_body_text(case_manager.full_name(last_name_first: false))
-      expect(mail).to have_body_text("has been assigned to you as your #{agency.name} Case Manager.")
+      expect(mail).to have_body_text(
+        "has been assigned to you as your #{agency.name} Case Manager."
+      )
     end
   end
 
   describe 'Job applied by job developer' do
     let(:agency)        { FactoryBot.create(:agency) }
     let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
-    let(:job_seeker)     { FactoryBot.create(:job_seeker) }
-    let(:job)            { FactoryBot.create(:job) }
-    let(:mail) { JobSeekerMailer.job_applied_by_job_developer(job_seeker, job_developer, job) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
+    let(:job)           { FactoryBot.create(:job) }
+    let(:mail) do
+      JobSeekerMailer.job_applied_by_job_developer(job_seeker, job_developer, job)
+    end
 
     before do
       stub_cruncher_authenticate
@@ -57,7 +63,9 @@ RSpec.describe JobSeekerMailer, type: :mailer do
     end
     it 'renders the body' do
       expect(mail).to have_body_text(job_developer.full_name(last_name_first: false))
-      expect(mail).to have_body_text('has submitted an application on your behalf to the job:')
+      expect(mail).to have_body_text(
+        'has submitted an application on your behalf to the job:'
+      )
     end
     it 'includes link to show job' do
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
@@ -84,7 +92,9 @@ RSpec.describe JobSeekerMailer, type: :mailer do
       expect(mail.from).to eq([ENV['NOTIFICATION_EMAIL']])
     end
     it 'renders the body' do
-      expect(mail).to have_body_text(/This is to let you know that a job that you had applied to has been removed and thus is no longer active/)
+      expect(mail).to have_body_text(/This is to let you know that a job that you had /)
+      expect(mail).to have_body_text(/applied to has been removed and/)
+      expect(mail).to have_body_text(/thus is no longer active/)
       expect(mail).to have_body_text(/#{job_url(id: 1)}/)
     end
     it 'includes link to show job' do

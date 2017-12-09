@@ -46,8 +46,9 @@ RSpec.describe Company, type: :model do
         is_expected.to validate_presence_of(:ein).with_message('is missing')
       end
       it do
-        is_expected.to validate_uniqueness_of(:ein).case_insensitive
-                                                   .with_message('has already been registered')
+        is_expected.to validate_uniqueness_of(:ein)
+          .case_insensitive
+          .with_message('has already been registered')
       end
     end
 

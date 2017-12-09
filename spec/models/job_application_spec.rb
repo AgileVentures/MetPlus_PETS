@@ -29,11 +29,19 @@ RSpec.describe JobApplication, type: :model do
     it { is_expected.to validate_uniqueness_of(:job_seeker_id).scoped_to(:job_id) }
     let(:job_seeker) { FactoryBot.create(:job_seeker) }
     let(:job) { FactoryBot.create(:job, company: FactoryBot.create(:company)) }
-    subject { FactoryBot.build(:job_application, job: job, job_seeker: job_seeker, status: :active) }
+    subject do
+      FactoryBot.build(
+        :job_application,
+        job: job,
+        job_seeker: job_seeker,
+        status: :active
+      )
+    end
 
     describe 'status' do
       it 'Status -1 should generate exception' do
-        expect { subject.status = -1 }.to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
+        expect { subject.status = -1 }
+          .to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
       end
       it 'Status 0 should be active' do
         subject.status = 0
@@ -52,7 +60,8 @@ RSpec.describe JobApplication, type: :model do
         expect(subject.status).to eq 'processing'
       end
       it 'Status 4 should generate exception' do
-        expect { subject.status = 4 }.to raise_error(ArgumentError).with_message('\'4\' is not a valid status')
+        expect { subject.status = 4 }
+          .to raise_error(ArgumentError).with_message('\'4\' is not a valid status')
       end
     end
   end
@@ -106,7 +115,8 @@ RSpec.describe JobApplication, type: :model do
     end
 
     it 'updates the selected application status to be accepted' do
-      expect { application1.accept }.to change { application1.status }.from('active').to('accepted')
+      expect { application1.accept }.to change { application1.status }
+        .from('active').to('accepted')
     end
     it 'updates unselected application status to be not accepted' do
       expect { application1.accept }.to change {
@@ -116,7 +126,8 @@ RSpec.describe JobApplication, type: :model do
         .from('active').to('not_accepted')
     end
     it 'updates the selected job status to be filled' do
-      expect { application1.accept }.to change { application1.job.status }.from('active').to('filled')
+      expect { application1.accept }.to change { application1.job.status }
+        .from('active').to('filled')
     end
   end
 
@@ -158,7 +169,8 @@ RSpec.describe JobApplication, type: :model do
     end
 
     it 'updates the selected application status to be rejected' do
-      expect { application1.reject }.to change { application1.status }.from('active').to('not_accepted')
+      expect { application1.reject }.to change { application1.status }
+        .from('active').to('not_accepted')
     end
   end
 

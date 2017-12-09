@@ -322,9 +322,11 @@ RSpec.describe JobSeekersController, type: :controller do
                   phone: '780-890-8976',
                   resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')
                 ).merge(job_seeker_status_id: js_status.id)
-                                      .merge(address_attributes: FactoryBot.attributes_for(
-                                        :address, zipcode: '12346'
-                                      ))
+                                      .merge(
+                                        address_attributes: FactoryBot.attributes_for(
+                                          :address, zipcode: '12346'
+                                        )
+                                      )
           owner.reload
         end
         it 'sets the valid attributes' do

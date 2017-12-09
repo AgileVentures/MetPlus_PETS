@@ -18,7 +18,8 @@ describe CompanyPerson, type: :model do
   describe 'Validations' do
     describe 'status' do
       it 'Status -1 should generate exception' do
-        expect { subject.status = -1 }.to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
+        expect { subject.status = -1 }.to
+        raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
       end
       it 'Status 0 should be company_pending' do
         subject.status = 0
@@ -41,7 +42,8 @@ describe CompanyPerson, type: :model do
         expect(subject.status).to eq 'company_denied'
       end
       it 'Status 5 should generate error' do
-        expect { subject.status = 5 }.to raise_error(ArgumentError).with_message('\'5\' is not a valid status')
+        expect { subject.status = 5 }
+          .to raise_error(ArgumentError).with_message('\'5\' is not a valid status')
       end
     end
 
@@ -53,7 +55,8 @@ describe CompanyPerson, type: :model do
         ca.company_roles.delete(ca_role)
         ca.valid?
         expect(ca).to_not be_valid
-        expect(ca.errors.full_messages).to include 'Company admin cannot be unset for sole company admin.'
+        expect(ca.errors.full_messages)
+          .to include 'Company admin cannot be unset for sole company admin.'
       end
     end
   end
@@ -74,12 +77,14 @@ describe CompanyPerson, type: :model do
     it { is_expected.to validate_presence_of :last_name }
     it {
       should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-                             ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)
+                             ' 123 123 1234', '(234 1234 1234',
+                             '786) 1243 3578').for(:phone)
     }
     it {
       should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
                          '1 231 231 2345', '12312312345', '1231231234',
-                         '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)
+                         '1-910-123-9158 x2851', '1-872-928-5886',
+                         '833-638-6551 x16825').for(:phone)
     }
   end
 
