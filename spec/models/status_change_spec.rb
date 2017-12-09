@@ -14,7 +14,7 @@ end
 RSpec.describe StatusChange, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:status_change)).to be_valid
+      expect(FactoryBot.build(:status_change)).to be_valid
     end
   end
 

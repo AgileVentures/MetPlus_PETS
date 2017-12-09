@@ -12,88 +12,88 @@ RSpec.describe TaskManager::TaskManager do
 
   describe 'Class methods' do
     before :each do
-      @job_seeker = FactoryGirl.create(:job_seeker)
-      @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
-      @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
-      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      @agency = FactoryGirl.create(:agency)
+      @job_seeker = FactoryBot.create(:job_seeker)
+      @jd_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])
+      @cm_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM])
+      @aa_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency = FactoryBot.create(:agency)
 
-      @job_developer = FactoryGirl.create(
+      @job_developer = FactoryBot.create(
         :agency_person,
         agency_roles: [@jd_role]
       )
-      @job_developer1 = FactoryGirl.create(
-        :agency_person,
-        agency: @agency,
-        agency_roles: [@jd_role]
-      )
-      @job_developer2 = FactoryGirl.create(
+      @job_developer1 = FactoryBot.create(
         :agency_person,
         agency: @agency,
         agency_roles: [@jd_role]
       )
+      @job_developer2 = FactoryBot.create(
+        :agency_person,
+        agency: @agency,
+        agency_roles: [@jd_role]
+      )
 
-      @case_manager = FactoryGirl.create(
+      @case_manager = FactoryBot.create(
         :agency_person,
         agency_roles: [@cm_role]
       )
-      @case_manager1 = FactoryGirl.create(
+      @case_manager1 = FactoryBot.create(
         :agency_person,
         agency: @agency,
         agency_roles: [@cm_role]
       )
-      @case_manager2 = FactoryGirl.create(
+      @case_manager2 = FactoryBot.create(
         :agency_person,
         agency: @agency,
         agency_roles: [@cm_role]
       )
 
-      @agency_admin = FactoryGirl.create(:agency_person, agency_roles: [@aa_role])
-      @agency_admin1 = FactoryGirl.create(
+      @agency_admin = FactoryBot.create(:agency_person, agency_roles: [@aa_role])
+      @agency_admin1 = FactoryBot.create(
         :agency_person,
         agency: @agency,
         agency_roles: [@aa_role]
       )
 
-      @cm_and_jd = FactoryGirl.create(
+      @cm_and_jd = FactoryBot.create(
         :agency_person,
         agency: @agency,
         agency_roles: [@cm_role, @jd_role]
       )
 
-      @cc_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
-      @ca_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+      @cc_role = FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CC])
+      @ca_role = FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])
 
-      @company = FactoryGirl.create(:company)
-      @company1 = FactoryGirl.create(:company)
-      @company_contact = FactoryGirl.create(
+      @company = FactoryBot.create(:company)
+      @company1 = FactoryBot.create(:company)
+      @company_contact = FactoryBot.create(
         :company_person,
         company: @company1,
         company_roles: [@cc_role]
       )
-      @company_contact1 = FactoryGirl.create(
+      @company_contact1 = FactoryBot.create(
         :company_person,
         company: @company,
         company_roles: [@cc_role]
       )
-      @company_contact2 = FactoryGirl.create(
+      @company_contact2 = FactoryBot.create(
         :company_person,
         company: @company,
         company_roles: [@cc_role]
       )
 
-      @company_admin = FactoryGirl.create(
+      @company_admin = FactoryBot.create(
         :company_person,
         company: @company1,
         company_roles: [@ca_role]
       )
-      @company_admin1 = FactoryGirl.create(
+      @company_admin1 = FactoryBot.create(
         :company_person,
         company: @company,
         company_roles: [@ca_role]
       )
-      @job = FactoryGirl.create(:job)
-      @job_application = FactoryGirl.create(
+      @job = FactoryBot.create(:job)
+      @job_application = FactoryBot.create(
         :job_application,
         job: @job,
         job_seeker: @job_seeker
@@ -174,15 +174,15 @@ RSpec.describe TaskManager::TaskManager do
   end
   describe 'Instance methods' do
     before :each do
-      @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
-      @agency = FactoryGirl.create(:agency)
+      @jd_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])
+      @agency = FactoryBot.create(:agency)
 
-      @job_developer = FactoryGirl.create(
+      @job_developer = FactoryBot.create(
         :agency_person,
         agency: @agency,
         agency_roles: [@jd_role]
       )
-      @job = FactoryGirl.create(:job)
+      @job = FactoryBot.create(:job)
     end
     describe '#assign' do
       subject { TaskTester.create_task({ user: @job_developer }, 'simple', @job) }

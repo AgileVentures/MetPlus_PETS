@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :company_person do
     company
     address
@@ -15,9 +15,9 @@ FactoryGirl.define do
     status 'active'
     company_roles do
       [CompanyRole.find_by_role(CompanyRole::ROLE[:CC]) ||
-        FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC]),
+        FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CC]),
        CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) ||
-         FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]
+         FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])]
     end
   end
 
@@ -30,9 +30,9 @@ FactoryGirl.define do
     approved false
     company_roles do
       [CompanyRole.find_by_role(CompanyRole::ROLE[:CC]) ||
-        FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC]),
+        FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CC]),
        CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) ||
-         FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]
+         FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])]
     end
   end
 
@@ -44,7 +44,7 @@ FactoryGirl.define do
     status 'active'
     company_roles do
       [CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) ||
-        FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]
+        FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])]
     end
   end
 
@@ -56,7 +56,7 @@ FactoryGirl.define do
     status 'active'
     company_roles do
       [CompanyRole.find_by_role(CompanyRole::ROLE[:CC]) ||
-        FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])]
+        FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CC])]
     end
   end
 end

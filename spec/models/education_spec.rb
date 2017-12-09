@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Education, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:education)).to be_valid
+      expect(FactoryBot.build(:education)).to be_valid
     end
   end
 

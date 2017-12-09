@@ -11,16 +11,16 @@ RSpec.describe TestTasksConcernClass do
     stub_cruncher_job_create
   end
 
-  let!(:agency)       { FactoryGirl.create(:agency) }
-  let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:company)       { FactoryGirl.create(:company, agencies: [agency]) }
-  let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:cmpy_person)   { FactoryGirl.create(:company_contact, company: company) }
-  let(:job_seeker1)   { FactoryGirl.create(:job_seeker) }
-  let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
-  let(:job_seeker3)   { FactoryGirl.create(:job_seeker) }
-  let(:job)           { FactoryGirl.create(:job, company: company) }
+  let!(:agency)       { FactoryBot.create(:agency) }
+  let(:agency_admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:company)       { FactoryBot.create(:company, agencies: [agency]) }
+  let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+  let(:cmpy_person)   { FactoryBot.create(:company_contact, company: company) }
+  let(:job_seeker1)   { FactoryBot.create(:job_seeker) }
+  let(:job_seeker2)   { FactoryBot.create(:job_seeker) }
+  let(:job_seeker3)   { FactoryBot.create(:job_seeker) }
+  let(:job)           { FactoryBot.create(:job, company: company) }
 
   let!(:task_js_unassigned1) { Task.new_js_unassigned_jd_task(job_seeker1, agency) }
   let!(:task_js_unassigned2) { Task.new_js_unassigned_jd_task(job_seeker2, agency) }

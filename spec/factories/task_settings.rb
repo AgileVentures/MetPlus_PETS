@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :task_setting do
     short_name "MyString"
 description "MyString"

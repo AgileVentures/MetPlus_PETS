@@ -13,7 +13,7 @@ Then(/^I should see a popup with the following job information$/) do
 end
 
 Given(/^the Widgets, Inc\. company name with address exist in the record$/) do
-  FactoryGirl.create(:company)
+  FactoryBot.create(:company)
 end
 
 Then(/^I (?:visit the |return to )jobs page$/) do

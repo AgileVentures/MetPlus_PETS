@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AgencyPerson, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:agency_person)).to be_valid
+      expect(FactoryBot.build(:agency_person)).to be_valid
     end
   end
 
@@ -27,7 +27,7 @@ RSpec.describe AgencyPerson, type: :model do
   describe 'Validations' do
     it { is_expected.to validate_presence_of :agency_id }
     it 'invalidates removing admin role for sole agency admin' do
-      person = FactoryGirl.create(:agency_person)
+      person = FactoryBot.create(:agency_person)
       role = AgencyRole.create(role: AgencyRole::ROLE[:AA])
       person.agency_roles << role
       expect(person).to be_valid
@@ -36,20 +36,20 @@ RSpec.describe AgencyPerson, type: :model do
       expect(person).to_not be_valid
     end
     it 'invalidates assignment as job developer if does not have that role' do
-      agency_person = FactoryGirl.build(:case_manager)
-      agency_person.agency_relations << FactoryGirl.create(:agency_relation,
+      agency_person = FactoryBot.build(:case_manager)
+      agency_person.agency_relations << FactoryBot.create(:agency_relation,
                             agency_person: agency_person,
-                            job_seeker: FactoryGirl.create(:job_seeker),
+                            job_seeker: FactoryBot.create(:job_seeker),
                             agency_role: AgencyRole.create(role: AgencyRole::ROLE[:JD]))
       agency_person.valid?
       expect(agency_person.errors[:person]).
         to include('cannot be assigned as Job Developer unless person has that role.')
     end
     it 'invalidates assignment as case manager if does not have that role' do
-      agency_person = FactoryGirl.build(:job_developer)
-      agency_person.agency_relations << FactoryGirl.create(:agency_relation,
+      agency_person = FactoryBot.build(:job_developer)
+      agency_person.agency_relations << FactoryBot.create(:agency_relation,
                             agency_person: agency_person,
-                            job_seeker: FactoryGirl.create(:job_seeker),
+                            job_seeker: FactoryBot.create(:job_seeker),
                             agency_role: AgencyRole.create(role: AgencyRole::ROLE[:CM]))
       agency_person.valid?
       expect(agency_person.errors[:person]).
@@ -101,24 +101,24 @@ RSpec.describe AgencyPerson, type: :model do
   end
 
   describe 'Agency Admin checks' do
-    let(:agency) { FactoryGirl.create(:agency) }
+    let(:agency) { FactoryBot.create(:agency) }
     let!(:aa_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
+      $person = FactoryBot.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryBot.create(:agency_role,
                                       role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let(:aa_person2)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
+      $person = FactoryBot.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryBot.create(:agency_role,
                                       role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let(:jd_person)   do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
+      $person = FactoryBot.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryBot.create(:agency_role,
                                       role: AgencyRole::ROLE[:JD])
       $person.save
       $person
@@ -136,11 +136,11 @@ RSpec.describe AgencyPerson, type: :model do
 
   end
   describe 'Identity check with' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:agency1) {FactoryGirl.create(:agency)}
+    let(:agency) {FactoryBot.create(:agency)}
+    let(:agency1) {FactoryBot.create(:agency)}
     describe '#is_job_developer?' do
-      let(:person) {FactoryGirl.create(:job_developer, :agency => agency)}
-      let(:person_other_agency) {FactoryGirl.create(:job_developer, :agency => agency1)}
+      let(:person) {FactoryBot.create(:job_developer, :agency => agency)}
+      let(:person_other_agency) {FactoryBot.create(:job_developer, :agency => agency1)}
       it 'correct' do
         expect(person.is_job_developer?(agency)).to be true
       end
@@ -149,8 +149,8 @@ RSpec.describe AgencyPerson, type: :model do
       end
     end
     describe '#is_case_manager?' do
-      let(:person) {FactoryGirl.create(:case_manager, :agency => agency)}
-      let(:person_other_agency) {FactoryGirl.create(:case_manager, :agency => agency1)}
+      let(:person) {FactoryBot.create(:case_manager, :agency => agency)}
+      let(:person_other_agency) {FactoryBot.create(:case_manager, :agency => agency1)}
       it 'correct' do
         expect(person.is_case_manager?(agency)).to be true
       end
@@ -159,8 +159,8 @@ RSpec.describe AgencyPerson, type: :model do
       end
     end
     describe '#is_agency_admin?' do
-      let(:person) {FactoryGirl.create(:agency_admin, :agency => agency)}
-      let(:person_other_agency) {FactoryGirl.create(:agency_admin, :agency => agency1)}
+      let(:person) {FactoryBot.create(:agency_admin, :agency => agency)}
+      let(:person_other_agency) {FactoryBot.create(:agency_admin, :agency => agency1)}
       it 'correct' do
         expect(person.is_agency_admin?(agency)).to be true
       end
@@ -172,13 +172,13 @@ RSpec.describe AgencyPerson, type: :model do
 
   context 'job_seeker / agency_person relationships' do
 
-    let(:agency)           { FactoryGirl.create(:agency) }
-    let(:cm_person)        {FactoryGirl.create(:case_manager, agency: agency)}
-    let(:jd_person)        {FactoryGirl.create(:job_developer, agency: agency)}
-    let(:jd_and_cm_person) {FactoryGirl.create(:jd_cm, agency: agency)}
+    let(:agency)           { FactoryBot.create(:agency) }
+    let(:cm_person)        {FactoryBot.create(:case_manager, agency: agency)}
+    let(:jd_person)        {FactoryBot.create(:job_developer, agency: agency)}
+    let(:jd_and_cm_person) {FactoryBot.create(:jd_cm, agency: agency)}
 
     10.times do |n|
-      let("js#{n+1}".to_sym) {FactoryGirl.create(:job_seeker)}
+      let("js#{n+1}".to_sym) {FactoryBot.create(:job_seeker)}
     end
 
     before(:each) do

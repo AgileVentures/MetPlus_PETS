@@ -1,8 +1,8 @@
 require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
-RSpec.shared_examples 'unauthorized access' do
-  let(:agency)  { FactoryGirl.create(:agency) }
+RSpec.shared_examples 'LicensesController unauthorized access' do
+  let(:agency)  { FactoryBot.create(:agency) }
 
   context 'Not logged in' do
     it_behaves_like 'unauthenticated XHR request'
@@ -10,27 +10,27 @@ RSpec.shared_examples 'unauthorized access' do
 
   context 'Case Manager' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+      let(:user) { FactoryBot.create(:case_manager, agency: agency) }
     end
   end
 
   context 'Job Developer' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
+      let(:user) { FactoryBot.create(:job_developer, agency: agency) }
     end
   end
   context 'Job Seeker' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:job_seeker) }
+      let(:user) { FactoryBot.create(:job_seeker) }
     end
   end
 end
 
 RSpec.describe LicensesController, type: :controller do
-  let(:agency)          { FactoryGirl.create(:agency) }
-  let(:agency_admin)    { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:license_params)  { FactoryGirl.attributes_for(:license) }
-  let(:license)         { FactoryGirl.create(:license) }
+  let(:agency)          { FactoryBot.create(:agency) }
+  let(:agency_admin)    { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:license_params)  { FactoryBot.attributes_for(:license) }
+  let(:license)         { FactoryBot.create(:license) }
 
   describe 'POST #create' do
     context 'authorized access - agency admin' do
@@ -54,7 +54,7 @@ RSpec.describe LicensesController, type: :controller do
       end
     end
 
-    it_behaves_like 'unauthorized access' do
+    it_behaves_like 'LicensesController unauthorized access' do
       let(:request) { xhr :post, :create, license: license_params }
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe LicensesController, type: :controller do
       end
     end
 
-    it_behaves_like 'unauthorized access' do
+    it_behaves_like 'LicensesController unauthorized access' do
       let(:request) { xhr :get, :show, id: license }
     end
   end
@@ -114,7 +114,7 @@ RSpec.describe LicensesController, type: :controller do
       end
     end
 
-    it_behaves_like 'unauthorized access' do
+    it_behaves_like 'LicensesController unauthorized access' do
       let(:request) { xhr :patch, :update, id: license, license: license_params }
     end
   end
@@ -131,7 +131,7 @@ RSpec.describe LicensesController, type: :controller do
         sign_in agency_admin
       end
 
-      let!(:job_license) { FactoryGirl.create(:job_license, license: license) }
+      let!(:job_license) { FactoryBot.create(:job_license, license: license) }
 
       context 'license found' do
 
@@ -157,7 +157,7 @@ RSpec.describe LicensesController, type: :controller do
       end
     end
 
-    it_behaves_like 'unauthorized access' do
+    it_behaves_like 'LicensesController unauthorized access' do
       let(:request) { xhr :delete, :destroy, id: 0 }
     end
   end

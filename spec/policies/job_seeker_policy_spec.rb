@@ -3,22 +3,22 @@ include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekerPolicy do
   let(:visitor) { nil }
-  let(:agency)  { FactoryGirl.create(:agency) }
-  let(:js1)     { FactoryGirl.create(:job_seeker) }
-  let(:js2)     { FactoryGirl.create(:job_seeker) }
-  let(:jd1)     { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:jd2)     { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:cm1)     { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:cm2)     { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:admin)   { FactoryGirl.create(:agency_admin, agency: agency) }
-  let!(:cc)     { FactoryGirl.create(:company_contact, company: comp) }
-  let(:cc2)     { FactoryGirl.create(:company_contact) }
-  let(:comp)    { FactoryGirl.create(:company) }
-  let(:job)     { FactoryGirl.create(:job, company: comp) }
-  let!(:ca)     { FactoryGirl.create(:company_admin, company: comp) }
-  let(:comp2)   { FactoryGirl.create(:company) }
-  let(:job2)    { FactoryGirl.create(:job, company: comp2) }
-  let(:ca2)     { FactoryGirl.create(:company_admin, company: comp2) }
+  let(:agency)  { FactoryBot.create(:agency) }
+  let(:js1)     { FactoryBot.create(:job_seeker) }
+  let(:js2)     { FactoryBot.create(:job_seeker) }
+  let(:jd1)     { FactoryBot.create(:job_developer, agency: agency) }
+  let(:jd2)     { FactoryBot.create(:job_developer, agency: agency) }
+  let(:cm1)     { FactoryBot.create(:case_manager, agency: agency) }
+  let(:cm2)     { FactoryBot.create(:case_manager, agency: agency) }
+  let(:admin)   { FactoryBot.create(:agency_admin, agency: agency) }
+  let!(:cc)     { FactoryBot.create(:company_contact, company: comp) }
+  let(:cc2)     { FactoryBot.create(:company_contact) }
+  let(:comp)    { FactoryBot.create(:company) }
+  let(:job)     { FactoryBot.create(:job, company: comp) }
+  let!(:ca)     { FactoryBot.create(:company_admin, company: comp) }
+  let(:comp2)   { FactoryBot.create(:company) }
+  let(:job2)    { FactoryBot.create(:job, company: comp2) }
+  let(:ca2)     { FactoryBot.create(:company_admin, company: comp2) }
 
   permissions :update?, :edit? do
     it 'only allows access if user is the account owner' do
@@ -168,7 +168,7 @@ RSpec.describe JobSeekerPolicy do
     end
 
     before do
-      FactoryGirl.create(:job_application, job: job, job_seeker: js1)
+      FactoryBot.create(:job_application, job: job, job_seeker: js1)
     end
 
     it 'allows access if user is a company admin/contact or agency person' do

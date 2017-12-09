@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AgencyRelation, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.create(:agency_relation)).to be_valid
+      expect(FactoryBot.create(:agency_relation)).to be_valid
     end
   end
 
@@ -27,9 +27,9 @@ RSpec.describe AgencyRelation, type: :model do
   end
 
   describe 'AgencyPerson <> JobSeeker relation' do
-    let(:person)     { FactoryGirl.create(:agency_person) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:role)       { FactoryGirl.create(:agency_role) }
+    let(:person)     { FactoryBot.create(:agency_person) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let(:role)       { FactoryBot.create(:agency_role) }
 
     it 'is valid with all required fields' do
       expect(AgencyRelation.new(agency_person: person,

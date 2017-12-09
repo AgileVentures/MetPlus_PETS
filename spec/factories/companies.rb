@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   sequence(:ein) do |n|
     n = n.next
@@ -14,7 +14,7 @@ FactoryGirl.define do
     job_email   'jobs@ymail.com'
     website 'http://www.widgets-r-us.com'
     status  'active'
-    agencies { [FactoryGirl.create(:agency)] }
+    agencies { [FactoryBot.create(:agency)] }
   end
 
 end

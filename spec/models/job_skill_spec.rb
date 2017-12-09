@@ -8,7 +8,7 @@ RSpec.describe JobSkill, type: :model do
       stub_cruncher_authenticate
       stub_cruncher_job_create
 
-      expect(FactoryGirl.create(:job_skill)).to be_valid
+      expect(FactoryBot.create(:job_skill)).to be_valid
     end
   end
 
@@ -32,9 +32,9 @@ RSpec.describe JobSkill, type: :model do
       stub_cruncher_job_create
     end
 
-    let(:job)   { FactoryGirl.create(:job) }
-    let(:skill) { FactoryGirl.create(:skill) }
-    subject { FactoryGirl.build(:job_skill, job: job, skill: skill) }
+    let(:job)   { FactoryBot.create(:job) }
+    let(:skill) { FactoryBot.create(:skill) }
+    subject { FactoryBot.build(:job_skill, job: job, skill: skill) }
     it { is_expected.to validate_presence_of :job }
     it { is_expected.to validate_presence_of :skill }
     it { is_expected.to validate_uniqueness_of(:skill_id).scoped_to(:job_id) }
@@ -57,8 +57,8 @@ RSpec.describe JobSkill, type: :model do
     end
     
     it 'is valid with all required fields' do
-      job = FactoryGirl.create(:job)
-      skill = FactoryGirl.create(:skill)
+      job = FactoryBot.create(:job)
+      skill = FactoryBot.create(:skill)
       expect(JobSkill.new(job: job, skill: skill,
             min_years: 0, max_years: 10)).to be_valid
     end

@@ -3,14 +3,14 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe CompanyMailerJob, type: :job do
-  let!(:company)        { FactoryGirl.create(:company) }
-  let(:company_person)  { FactoryGirl.create(:company_person,
+  let!(:company)        { FactoryBot.create(:company) }
+  let(:company_person)  { FactoryBot.create(:company_person,
                                     company: company)}
-  let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
-  let(:job_application) { FactoryGirl.create(:job_application,
+  let!(:job_seeker) { FactoryBot.create(:job_seeker) }
+  let(:job_application) { FactoryBot.create(:job_application,
                                     job_seeker: job_seeker,
-                                    job: FactoryGirl.create(:job)) }
-  let(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+                                    job: FactoryBot.create(:job)) }
+  let(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
 
   before(:each) do
     Delayed::Worker.delay_jobs = true

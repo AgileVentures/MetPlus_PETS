@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AgencyRole, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:agency_role)).to be_valid
+      expect(FactoryBot.build(:agency_role)).to be_valid
     end
   end
 

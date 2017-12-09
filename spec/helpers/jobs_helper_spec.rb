@@ -2,23 +2,23 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobsHelper, type: :helper do
-  let!(:skill1) { FactoryGirl.create(:skill) }
-  let!(:skill2) { FactoryGirl.create(:skill, name: 'skill2') }
-  let!(:skill3) { FactoryGirl.create(:skill, name: 'skill3') }
+  let!(:skill1) { FactoryBot.create(:skill) }
+  let!(:skill2) { FactoryBot.create(:skill, name: 'skill2') }
+  let!(:skill3) { FactoryBot.create(:skill, name: 'skill3') }
 
-  let(:company1) { FactoryGirl.create(:company) }
-  let(:company2) { FactoryGirl.create(:company, name: 'Company 2') }
+  let(:company1) { FactoryBot.create(:company) }
+  let(:company2) { FactoryBot.create(:company, name: 'Company 2') }
 
   3.times do |n|
     let("cmpy_skill#{n}".to_sym) do
-      skill = FactoryGirl.create(:skill, name: "cmpy_skill#{n}")
+      skill = FactoryBot.create(:skill, name: "cmpy_skill#{n}")
       skill.organization = company1
       skill.save
       skill
     end
   end
 
-  let(:job) { FactoryGirl.create(:job, min_salary: 15, max_salary: 25,
+  let(:job) { FactoryBot.create(:job, min_salary: 15, max_salary: 25,
                                  pay_period: 'Hourly') }
 
   before(:each) do

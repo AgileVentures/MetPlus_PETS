@@ -3,28 +3,28 @@ require 'agency_mailer'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe Event, type: :model do
-  let!(:agency)        { FactoryGirl.create(:agency) }
-  let(:agency_admin)   { FactoryGirl.create(:agency_admin) }
-  let!(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
-  let!(:job_developer1) { FactoryGirl.create(:job_developer, agency: agency) }
-  let!(:case_manager)   { FactoryGirl.create(:case_manager, agency: agency) }
+  let!(:agency)        { FactoryBot.create(:agency) }
+  let(:agency_admin)   { FactoryBot.create(:agency_admin) }
+  let!(:job_developer)  { FactoryBot.create(:job_developer, agency: agency) }
+  let!(:job_developer1) { FactoryBot.create(:job_developer, agency: agency) }
+  let!(:case_manager)   { FactoryBot.create(:case_manager, agency: agency) }
   let!(:job_seeker) do
-    js = FactoryGirl.create(:job_seeker)
+    js = FactoryBot.create(:job_seeker)
     js.assign_job_developer(job_developer, agency)
     js.assign_case_manager(case_manager, agency)
     js
   end
 
-  let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-  let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+  let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
+  let(:company) { FactoryBot.create(:company, agencies: [agency]) }
   let!(:company_person) do
-    FactoryGirl.create(:company_person, company: company)
+    FactoryBot.create(:company_person, company: company)
   end
   let(:job) do
-    FactoryGirl.create(:job, company: company, company_person: company_person)
+    FactoryBot.create(:job, company: company, company_person: company_person)
   end
   let(:job_wo_cp) do
-    FactoryGirl.create(:job, company: company, company_person: nil)
+    FactoryBot.create(:job, company: company, company_person: nil)
   end
 
   let(:evt_obj_class) { Struct.new(:job_seeker, :agency_person) }
@@ -58,7 +58,7 @@ RSpec.describe Event, type: :model do
     stub_cruncher_file_download(testfile_resume)
 
     3.times do
-      FactoryGirl.create(:agency_person, agency: agency)
+      FactoryBot.create(:agency_person, agency: agency)
     end
   end
 
@@ -293,7 +293,7 @@ RSpec.describe Event, type: :model do
         # add job_developer a case managers role
         cm_role = AgencyRole::ROLE[:CM]
         job_developer.agency_roles << AgencyRole.find_by_role(cm_role) ||
-          FactoryGirl.create(:agency_role, role: cm_role)
+          FactoryBot.create(:agency_role, role: cm_role)
       end
       it 'sends two emails if jd and cm is not for the same js' do
         expect { Event.create(:APP_ACCEPTED, application) }
@@ -356,7 +356,7 @@ RSpec.describe Event, type: :model do
         case_manager_role = AgencyRole::ROLE[:CM]
         jd_agency_roles = job_developer.agency_roles
         jd_agency_roles << AgencyRole.find_by_role(case_manager_role) ||
-          FactoryGirl.create(:agency_role, role: case_manager_role)
+          FactoryBot.create(:agency_role, role: case_manager_role)
       end
 
       it 'sends two emails if jd and cm is not for the same js' do

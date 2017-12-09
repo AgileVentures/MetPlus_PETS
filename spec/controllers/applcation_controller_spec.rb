@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationController, type: :controller do
-  let!(:agency_admin) { FactoryGirl.create(:agency_admin) }
-  let!(:company_admin) { FactoryGirl.create(:company_admin) }
-  let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
+  let!(:agency_admin) { FactoryBot.create(:agency_admin) }
+  let!(:company_admin) { FactoryBot.create(:company_admin) }
+  let!(:job_seeker) { FactoryBot.create(:job_seeker) }
 
   describe 'after_sign_in_path_for(resource) method' do
     it 'redirects to the job seeker home path' do

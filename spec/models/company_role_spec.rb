@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CompanyRole, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:company_role)).to be_valid
+      expect(FactoryBot.build(:company_role)).to be_valid
     end
   end
   
@@ -34,8 +34,8 @@ describe CompanyRole, type: :model do
     end
   end
   
-	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
-	FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+	FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CC])
+	FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])
 
 	describe CompanyRole.select(:role).map(&:role) do 
 		it {should include(CompanyRole::ROLE[:CC], CompanyRole::ROLE[:CA])}

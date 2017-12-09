@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Branch, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:branch)).to be_valid
+      expect(FactoryBot.build(:branch)).to be_valid
     end
   end
 
@@ -24,18 +24,18 @@ RSpec.describe Branch, type: :model do
     it { is_expected.to validate_presence_of :code }
     it { is_expected.to validate_length_of(:code).is_at_most(8) }
     context 'uniqueness of code within agency' do
-      subject { FactoryGirl.build(:branch) }
+      subject { FactoryBot.build(:branch) }
       it { is_expected.to validate_uniqueness_of(:code).scoped_to(:agency_id) }
     end
   end
 
   describe 'Branch' do
     it 'is valid with all required fields' do
-      expect(Branch.new(code: '123', agency: FactoryGirl.create(:agency)))
+      expect(Branch.new(code: '123', agency: FactoryBot.create(:agency)))
         .to be_valid
     end
     context 'is invalid' do
-      let(:branch)  { FactoryGirl.build(:branch, code: nil, agency: nil) }
+      let(:branch)  { FactoryBot.build(:branch, code: nil, agency: nil) }
 
       it 'without a code or agency' do
         branch.valid?
@@ -51,7 +51,7 @@ RSpec.describe Branch, type: :model do
           .to include('is too long (maximum is 8 characters)')
       end
       it 'with a non-unique code' do
-        FactoryGirl.create(:branch, code: '999', agency_id: 1)
+        FactoryBot.create(:branch, code: '999', agency_id: 1)
         branch.code = '999'
         branch.agency_id = 1
         branch.valid?
@@ -62,9 +62,9 @@ RSpec.describe Branch, type: :model do
   end
 
   describe 'When branch is destroyed' do
-    let(:person1) { FactoryGirl.create(:agency_person) }
+    let(:person1) { FactoryBot.create(:agency_person) }
     let(:branch)  { person1.branch }
-    let(:person2) { FactoryGirl.create(:agency_person, branch: branch) }
+    let(:person2) { FactoryBot.create(:agency_person, branch: branch) }
 
     it 'associated address is destroyed' do
       address = branch.address

@@ -21,7 +21,7 @@ RSpec.describe JobCategory, type: :model do
    end
 
    describe 'Validations' do
-     subject {FactoryGirl.build(:job_category)}
+     subject {FactoryBot.build(:job_category)}
 
      describe 'Name' do
        it { is_expected.to validate_presence_of(:name) }

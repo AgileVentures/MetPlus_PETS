@@ -4,11 +4,11 @@ include ServiceStubHelpers::Cruncher
 
 RSpec.describe CompanyMailer, type: :mailer do
   describe "registration cycle" do
-    let(:company)         { FactoryGirl.create(:company) }
-    let(:company_person)  { FactoryGirl.create(:company_person,
+    let(:company)         { FactoryBot.create(:company) }
+    let(:company_person)  { FactoryBot.create(:company_person,
                                       company: company)}
     let!(:agency) do
-      $agency = FactoryGirl.build(:agency)
+      $agency = FactoryBot.build(:agency)
       $agency.companies << company
       $agency.save
       $agency
@@ -45,12 +45,12 @@ RSpec.describe CompanyMailer, type: :mailer do
 
   describe 'Job application process' do
 
-    let(:company) { FactoryGirl.create(:company) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let(:job) { FactoryGirl.create(:job) }
+    let(:company) { FactoryBot.create(:company) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let(:job) { FactoryBot.create(:job) }
     let(:job_application) {
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
         job_seeker: job_seeker,
         job: job
     )}

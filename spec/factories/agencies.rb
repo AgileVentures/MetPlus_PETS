@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :agency do
     name "My Agency"
     website "myagency.com"

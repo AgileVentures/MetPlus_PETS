@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Agency, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:agency)).to be_valid
+      expect(FactoryBot.build(:agency)).to be_valid
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Agency, type: :model do
     end
 
     describe 'phone' do
-       subject {FactoryGirl.build(:agency)}
+       subject {FactoryBot.build(:agency)}
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
@@ -43,7 +43,7 @@ RSpec.describe Agency, type: :model do
      end
 
      describe 'fax' do
-       subject {FactoryGirl.build(:agency)}
+       subject {FactoryBot.build(:agency)}
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
@@ -52,7 +52,7 @@ RSpec.describe Agency, type: :model do
      end
 
      describe 'Email' do
-       subject {FactoryGirl.build(:agency)}
+       subject {FactoryBot.build(:agency)}
        it do
          stub_email_validate_error
          should_not allow_value('asd', 'john@company').for(:email)
@@ -62,7 +62,7 @@ RSpec.describe Agency, type: :model do
 
 
      describe 'Website' do
-       subject {FactoryGirl.build(:agency)}
+       subject {FactoryBot.build(:agency)}
        it { should_not allow_value('asd', 'ftp://company.com', 'http:',
                  'http://','https',  'https:', 'https://',
                  'http://place.com###Bammm').for(:website)}
@@ -91,25 +91,25 @@ RSpec.describe Agency, type: :model do
   end
 
   describe 'Agency management' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:js_person) { FactoryGirl.create(:job_seeker) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:js_person) { FactoryBot.create(:job_seeker) }
     let!(:aa_person1) do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
+      $person = FactoryBot.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryBot.create(:agency_role,
                                       role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let!(:aa_person2) do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
+      $person = FactoryBot.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryBot.create(:agency_role,
                                       role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let(:jd_person) do
-      $person = FactoryGirl.build(:agency_person, agency: agency)
-      $person.agency_roles << FactoryGirl.create(:agency_role,
+      $person = FactoryBot.build(:agency_person, agency: agency)
+      $person.agency_roles << FactoryBot.create(:agency_role,
                                       role: AgencyRole::ROLE[:JD])
       $person.save
       $person
@@ -132,10 +132,10 @@ RSpec.describe Agency, type: :model do
 
   describe 'Class methods' do
 
-    let(:agency)   { FactoryGirl.create(:agency) }
-    let!(:person1) { FactoryGirl.create(:agency_person, agency: agency) }
-    let!(:person2) { FactoryGirl.create(:agency_person, agency: agency) }
-    let!(:person3) { FactoryGirl.create(:agency_person, agency: agency) }
+    let(:agency)   { FactoryBot.create(:agency) }
+    let!(:person1) { FactoryBot.create(:agency_person, agency: agency) }
+    let!(:person2) { FactoryBot.create(:agency_person, agency: agency) }
+    let!(:person3) { FactoryBot.create(:agency_person, agency: agency) }
 
     it 'returns all emails for people in the agency' do
       expect(Agency.all_agency_people_emails).

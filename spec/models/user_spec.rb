@@ -5,7 +5,7 @@ RSpec.describe User, type: :model do
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.create(:user)).to be_valid
+      expect(FactoryBot.create(:user)).to be_valid
       end
   end
 
@@ -40,18 +40,18 @@ RSpec.describe User, type: :model do
    describe 'check model restrictions' do
 
      describe 'FirstName check' do
-       subject {FactoryGirl.build(:user)}
+       subject {FactoryBot.build(:user)}
        it { is_expected.to validate_presence_of :first_name }
 
      end
 
      describe 'LastName check' do
-       subject {FactoryGirl.build(:user)}
+       subject {FactoryBot.build(:user)}
        it { is_expected.to validate_presence_of :last_name }
      end
 
      describe 'Phone number format check' do
-       subject {FactoryGirl.build(:user)}
+       subject {FactoryBot.build(:user)}
        it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
                ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
        it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
@@ -60,7 +60,7 @@ RSpec.describe User, type: :model do
      end
 
      describe 'Email validation' do
-       let(:user) { FactoryGirl.create(:user) }
+       let(:user) { FactoryBot.create(:user) }
 
        it 'valid email address' do
          user.email = 'thisone@yahoo.com'
@@ -85,7 +85,7 @@ RSpec.describe User, type: :model do
          # Turn on mailgun validation so the stub is effective
          ENV['MAILGUN_EMAIL_VALIDATION'] = 'yes'
 
-         user = FactoryGirl.build(:user, email: 'emailaddress@gmal.com')
+         user = FactoryBot.build(:user, email: 'emailaddress@gmal.com')
          user.valid?
          expect(user.errors[:email])
            .to include('is not valid (did you mean ... myaddress@gmail.com?)')
@@ -97,24 +97,24 @@ RSpec.describe User, type: :model do
 
    describe 'roles determination' do
      before :each do
-       @job_seeker = FactoryGirl.create(:job_seeker)
-       @jd_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD])
-       @cm_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
-       @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
+       @job_seeker = FactoryBot.create(:job_seeker)
+       @jd_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])
+       @cm_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM])
+       @aa_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])
 
-       @job_developer = FactoryGirl.build(:agency_person)
+       @job_developer = FactoryBot.build(:agency_person)
        @job_developer.agency_roles << @jd_role
        @job_developer.save
 
-       @case_manager = FactoryGirl.create(:agency_person)
+       @case_manager = FactoryBot.create(:agency_person)
        @case_manager.agency_roles << @cm_role
        @case_manager.save
 
-       @agency_admin = FactoryGirl.create(:agency_person)
+       @agency_admin = FactoryBot.create(:agency_person)
        @agency_admin.agency_roles << @aa_role
        @agency_admin.save
 
-       @cm_and_jd = FactoryGirl.create(:agency_person)
+       @cm_and_jd = FactoryBot.create(:agency_person)
        @cm_and_jd.agency_roles << [@cm_role, @jd_role]
        @cm_and_jd.save
      end
@@ -150,14 +150,14 @@ RSpec.describe User, type: :model do
 
    describe 'company roles determination' do
      before :each do
-      @ec_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC])
-      @ea_role = FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+      @ec_role = FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CC])
+      @ea_role = FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])
 
-      @company_contact = FactoryGirl.build(:company_person)
+      @company_contact = FactoryBot.build(:company_person)
       @company_contact.company_roles << @ec_role
       @company_contact.save
 
-      @company_admin = FactoryGirl.build(:company_person)
+      @company_admin = FactoryBot.build(:company_person)
       @company_admin.company_roles << @ea_role
       @company_admin.save
     end
@@ -172,7 +172,7 @@ RSpec.describe User, type: :model do
   end
   describe '#full_name' do
     it 'returns full name of user' do
-      agency_person = FactoryGirl.build(:agency_person)
+      agency_person = FactoryBot.build(:agency_person)
       expect(agency_person.full_name).
           to eq "#{agency_person.last_name}, #{agency_person.first_name}"
       expect(agency_person.full_name(last_name_first: false)).
@@ -181,7 +181,7 @@ RSpec.describe User, type: :model do
   end
   describe '#pets_user' do
     it 'job seeker' do
-      job_seeker = FactoryGirl.create(:job_seeker)
+      job_seeker = FactoryBot.create(:job_seeker)
       user = User.find_by_id job_seeker.user.id
       expect(user).to be_a User
       expect(user).not_to be_a JobSeeker
@@ -189,7 +189,7 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a JobSeeker
     end
     it 'job developer' do
-      job_developer = FactoryGirl.create(:job_developer)
+      job_developer = FactoryBot.create(:job_developer)
       user = User.find_by_id job_developer.user.id
       expect(user).to be_a User
       expect(user).not_to be_a AgencyPerson
@@ -197,7 +197,7 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a AgencyPerson
     end
     it 'case manager' do
-      case_manager = FactoryGirl.create(:case_manager)
+      case_manager = FactoryBot.create(:case_manager)
       user = User.find_by_id case_manager.user.id
       expect(user).to be_a User
       expect(user).not_to be_a AgencyPerson
@@ -205,7 +205,7 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a AgencyPerson
     end
     it 'agency admin' do
-      agency_admin = FactoryGirl.create(:agency_admin)
+      agency_admin = FactoryBot.create(:agency_admin)
       user = User.find_by_id agency_admin.user.id
       expect(user).to be_a User
       expect(user).not_to be_a AgencyPerson
@@ -213,7 +213,7 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a AgencyPerson
     end
     it 'company admin' do
-      company_admin = FactoryGirl.create(:company_admin)
+      company_admin = FactoryBot.create(:company_admin)
       user = User.find_by_id company_admin.user.id
       expect(user).to be_a User
       expect(user).not_to be_a CompanyPerson
@@ -221,7 +221,7 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a CompanyPerson
     end
     it 'company contact' do
-      company_contact = FactoryGirl.create(:company_contact)
+      company_contact = FactoryBot.create(:company_contact)
       user = User.find_by_id company_contact.user.id
       expect(user).to be_a User
       expect(user).not_to be_a CompanyPerson
@@ -230,48 +230,48 @@ RSpec.describe User, type: :model do
     end
   end
   describe '#is_job_developer?' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:job_developer, :agency => agency)}
+    let(:agency) {FactoryBot.create(:agency)}
+    let(:person) {FactoryBot.create(:job_developer, :agency => agency)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_job_developer?(agency)).to be false
     end
   end
   describe '#is_case_manager?' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:case_manager, :agency => agency)}
+    let(:agency) {FactoryBot.create(:agency)}
+    let(:person) {FactoryBot.create(:case_manager, :agency => agency)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_case_manager?(agency)).to be false
     end
   end
   describe '#is_agency_admin?' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:agency_admin, :agency => agency)}
+    let(:agency) {FactoryBot.create(:agency)}
+    let(:person) {FactoryBot.create(:agency_admin, :agency => agency)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_agency_admin?(agency)).to be false
     end
   end
   describe '#is_job_seeker?' do
-    let(:agency) {FactoryGirl.create(:agency)}
-    let(:person) {FactoryGirl.create(:job_seeker)}
+    let(:agency) {FactoryBot.create(:agency)}
+    let(:person) {FactoryBot.create(:job_seeker)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_job_seeker?).to be false
     end
   end
   describe '#is_company_contact?' do
-    let(:company) {FactoryGirl.create(:company)}
-    let(:person) {FactoryGirl.create(:company_contact, :company => company)}
+    let(:company) {FactoryBot.create(:company)}
+    let(:person) {FactoryBot.create(:company_contact, :company => company)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_company_contact?(company)).to be false
     end
   end
   describe '#is_company_admin?' do
-    let(:company) {FactoryGirl.create(:company)}
-    let(:person) {FactoryGirl.create(:company_admin, :company => company)}
+    let(:company) {FactoryBot.create(:company)}
+    let(:person) {FactoryBot.create(:company_admin, :company => company)}
     let(:user) {User.find_by_id person.user.id}
     it 'false' do
       expect(user.is_company_admin?(company)).to be false

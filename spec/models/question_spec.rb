@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
-  let(:question) { FactoryGirl.build(:question) }
+  let(:question) { FactoryBot.build(:question) }
 
   describe 'Fixtures' do
     it 'should have a valid factory' do

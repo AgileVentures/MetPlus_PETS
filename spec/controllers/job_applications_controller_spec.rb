@@ -34,33 +34,33 @@ RSpec.shared_examples 'denies access to unauthorized people' do
 end
 
 RSpec.describe JobApplicationsController, type: :controller do
-  let(:company)       { FactoryGirl.create(:company) }
-  let(:job)           { FactoryGirl.create(:job, company: company) }
-  let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
-  let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
-  let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+  let(:company)       { FactoryBot.create(:company) }
+  let(:job)           { FactoryBot.create(:job, company: company) }
+  let(:job_seeker)    { FactoryBot.create(:job_seeker) }
+  let(:job_seeker2)   { FactoryBot.create(:job_seeker) }
+  let!(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+  let(:company_contact) { FactoryBot.create(:company_contact, company: company) }
   let(:inactive_application) do
-    FactoryGirl.create(:job_application,
+    FactoryBot.create(:job_application,
                        job: job, job_seeker: job_seeker2,
                        status: 'accepted')
   end
   let(:valid_application) do
-    FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
   end
-  let(:agency)       { FactoryGirl.create(:agency) }
-  let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:company2)     { FactoryGirl.create(:company) }
+  let(:agency)       { FactoryBot.create(:agency) }
+  let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:company2)     { FactoryBot.create(:company) }
   let(:company_admin2) do
-    FactoryGirl.create(:company_admin,
+    FactoryBot.create(:company_admin,
                        company: company2)
   end
   let(:company_contact2) do
-    FactoryGirl.create(:company_contact,
+    FactoryBot.create(:company_contact,
                        company: company2)
   end
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:case_manager)  { FactoryBot.create(:case_manager, agency: agency) }
 
   before(:each) do
     stub_cruncher_authenticate
@@ -255,21 +255,21 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'GET #list' do
-    let(:job1) { FactoryGirl.create(:job) }
-    let(:job2) { FactoryGirl.create(:job) }
-    let(:job3) { FactoryGirl.create(:job) }
+    let(:job1) { FactoryBot.create(:job) }
+    let(:job2) { FactoryBot.create(:job) }
+    let(:job3) { FactoryBot.create(:job) }
     let(:app1) do
-      FactoryGirl.create(:job_application, job: job1, job_seeker: job_seeker)
+      FactoryBot.create(:job_application, job: job1, job_seeker: job_seeker)
     end
     let(:app2) do
-      FactoryGirl.create(:job_application, job: job2, job_seeker: job_seeker)
+      FactoryBot.create(:job_application, job: job2, job_seeker: job_seeker)
     end
     let(:app3) do
-      FactoryGirl.create(:job_application, job: job3, job_seeker: job_seeker)
+      FactoryBot.create(:job_application, job: job3, job_seeker: job_seeker)
     end
     let(:app4) do
-      FactoryGirl.create(:job_application,
-                         job: job3, job_seeker: FactoryGirl.create(:job_seeker))
+      FactoryBot.create(:job_application,
+                         job: job3, job_seeker: FactoryBot.create(:job_seeker))
     end
 
     before(:each) do

@@ -2,16 +2,16 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe Job, type: :model do
-  let(:job) { FactoryGirl.create(:job) }
-  let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
-  let!(:job_seeker_resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-  let!(:job_seeker2) { FactoryGirl.create(:job_seeker) }
-  let!(:job_seeker2_resume) { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
+  let(:job) { FactoryBot.create(:job) }
+  let!(:job_seeker) { FactoryBot.create(:job_seeker) }
+  let!(:job_seeker_resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
+  let!(:job_seeker2) { FactoryBot.create(:job_seeker) }
+  let!(:job_seeker2_resume) { FactoryBot.create(:resume, job_seeker: job_seeker2) }
   let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:job)).to be_valid
+      expect(FactoryBot.build(:job)).to be_valid
     end
   end
 
@@ -191,8 +191,8 @@ RSpec.describe Job, type: :model do
   end
 
   describe 'Instance methods' do
-    let!(:question1) { FactoryGirl.create(:question) }
-    let!(:question2) { FactoryGirl.create(:question,
+    let!(:question1) { FactoryBot.create(:question) }
+    let!(:question2) { FactoryBot.create(:question,
                                           question_text: 'This is question two.') }
     let(:question_answers) { {"1"=>"true", "2"=>"false"} }
 
@@ -243,7 +243,7 @@ RSpec.describe Job, type: :model do
     it 'succeeds with all parameters' do
       stub_cruncher_job_create
 
-      job = FactoryGirl.build(:job)
+      job = FactoryBot.build(:job)
 
       expect(job.save).to be true
       expect(Job.count).to eq 1
@@ -252,7 +252,7 @@ RSpec.describe Job, type: :model do
     it 'fails with invalid model parameters' do
       stub_cruncher_job_create
 
-      job = FactoryGirl.build(:job, title: nil)
+      job = FactoryBot.build(:job, title: nil)
 
       expect(job.save).to be false
       expect(job.errors.full_messages).to include("Title can't be blank")
@@ -263,7 +263,7 @@ RSpec.describe Job, type: :model do
       stub_cruncher_job_create_fail('JOB_ID_EXISTS')
       stub_cruncher_job_update_fail('JOB_NOT_FOUND')
 
-      job = FactoryGirl.build(:job)
+      job = FactoryBot.build(:job)
 
       expect(job.save).to be false
       expect(Job.count).to eq 0
@@ -275,7 +275,7 @@ RSpec.describe Job, type: :model do
       stub_cruncher_authenticate_error
       CruncherService.auth_token = nil # reset class var auth_token
 
-      job = FactoryGirl.build(:job)
+      job = FactoryBot.build(:job)
 
       expect(job.save).to be false
       expect(Job.count).to eq 0
@@ -391,7 +391,7 @@ RSpec.describe Job, type: :model do
       end
 
       it 'adds a status change record for a new application' do
-        expect { FactoryGirl.create(:job) }
+        expect { FactoryBot.create(:job) }
           .to change(StatusChange, :count).by 1
       end
 

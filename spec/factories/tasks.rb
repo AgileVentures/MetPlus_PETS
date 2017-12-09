@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :task do
     task_type "new_task"
     association :owner, factory: :job_seeker, strategy: :build

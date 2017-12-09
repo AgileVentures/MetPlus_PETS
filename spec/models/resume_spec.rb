@@ -4,7 +4,7 @@ include ServiceStubHelpers::Cruncher
 RSpec.describe Resume, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:resume)).to be_valid
+      expect(FactoryBot.build(:resume)).to be_valid
     end
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Resume, type: :model do
 
       file = fixture_file_upload('files/Janitor-Resume.doc')
       resume = Resume.new(file_name: 'testfile.doc',
-                          job_seeker_id: FactoryGirl.create(:job_seeker).id,
+                          job_seeker_id: FactoryBot.create(:job_seeker).id,
                           file: file)
 
       expect(resume).to be_valid
@@ -30,10 +30,10 @@ RSpec.describe Resume, type: :model do
       file = fixture_file_upload('files/Janitor-Resume.doc')
 
       resume = Resume.new(file_name: 'testfile.doc',
-                          job_seeker_id: FactoryGirl.create(:job_seeker).id)
+                          job_seeker_id: FactoryBot.create(:job_seeker).id)
       expect(resume).not_to be_valid
       resume = Resume.new(file_name: nil,
-                          job_seeker_id: FactoryGirl.create(:job_seeker).id,
+                          job_seeker_id: FactoryBot.create(:job_seeker).id,
                           file: file)
       expect(resume).not_to be_valid
       resume = Resume.new(file_name: 'testfile.doc',
@@ -44,7 +44,7 @@ RSpec.describe Resume, type: :model do
   end
 
   context 'saving model instance and resume file' do
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
 
     before(:each) do
       stub_cruncher_authenticate
@@ -105,7 +105,7 @@ RSpec.describe Resume, type: :model do
   end
 
   describe '#save!' do
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
 
     before(:each) do
       stub_cruncher_authenticate

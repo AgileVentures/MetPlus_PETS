@@ -2,18 +2,18 @@ require 'rails_helper'
 include JobSeekersViewer
 
 RSpec.describe AgencyPeopleController, type: :controller do
-  let!(:agency)    { FactoryGirl.create(:agency) }
-  let!(:aa_person) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let!(:cm_person) { FactoryGirl.create(:case_manager, agency: agency) }
-  let!(:jd_person) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:adam)       { FactoryGirl.create(:job_seeker, first_name: 'Adam') }
-  let(:bob)        { FactoryGirl.create(:job_seeker, first_name: 'Bob') }
-  let(:charles)    { FactoryGirl.create(:job_seeker, first_name: 'Charles') }
-  let(:dave)       { FactoryGirl.create(:job_seeker, first_name: 'Dave') }
+  let!(:agency)    { FactoryBot.create(:agency) }
+  let!(:aa_person) { FactoryBot.create(:agency_admin, agency: agency) }
+  let!(:cm_person) { FactoryBot.create(:case_manager, agency: agency) }
+  let!(:jd_person) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:adam)       { FactoryBot.create(:job_seeker, first_name: 'Adam') }
+  let(:bob)        { FactoryBot.create(:job_seeker, first_name: 'Bob') }
+  let(:charles)    { FactoryBot.create(:job_seeker, first_name: 'Charles') }
+  let(:dave)       { FactoryBot.create(:job_seeker, first_name: 'Dave') }
 
-  let(:aa_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
-  let(:jd_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:JD]) }
-  let(:cm_role) { FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM]) }
+  let(:aa_role) { FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
+  let(:jd_role) { FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD]) }
+  let(:cm_role) { FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM]) }
 
   describe 'GET #home' do
     before(:each) do
@@ -105,7 +105,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
   describe 'PATCH #update' do
     let!(:assign_agency_person_mock) { instance_double('AgencyPeople::AssignNewJobSeekers') }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
     before(:each) do
       allow(AgencyPeople::AssignNewJobSeekers)
         .to receive(:new).and_return(assign_agency_person_mock)
@@ -431,10 +431,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
         sign_in aa_person
         patch :update_profile,
               agency_person:
-                FactoryGirl.attributes_for(:agency_person,
+                FactoryBot.attributes_for(:agency_person,
                                            password: '',
                                            password_confirmation: '')
-                           .merge(FactoryGirl.attributes_for(:user,
+                           .merge(FactoryBot.attributes_for(:user,
                                                              first_name: 'John',
                                                              last_name: 'Smith',
                                                              phone: '780-890-8976')),
@@ -514,22 +514,22 @@ RSpec.describe AgencyPeopleController, type: :controller do
   describe 'GET #my_js_as_jd' do
     context 'job developer cum case manager with job seekers' do
       before :each do
-        @jd_cm = FactoryGirl.create(:jd_cm, agency: agency)
-        @job_developer = FactoryGirl.create(:job_developer, agency: agency)
+        @jd_cm = FactoryBot.create(:jd_cm, agency: agency)
+        @job_developer = FactoryBot.create(:job_developer, agency: agency)
 
-        @user1 = FactoryGirl.create(:user, first_name: 'John', last_name: 'Joe')
-        @js1 = FactoryGirl.create(:job_seeker, user: @user1)
+        @user1 = FactoryBot.create(:user, first_name: 'John', last_name: 'Joe')
+        @js1 = FactoryBot.create(:job_seeker, user: @user1)
         @js1.assign_job_developer(@jd_cm, agency)
 
-        @user2 = FactoryGirl.create(:user, first_name: 'Jack', last_name: 'Doe')
-        @js2 = FactoryGirl.create(:job_seeker, user: @user2)
+        @user2 = FactoryBot.create(:user, first_name: 'Jack', last_name: 'Doe')
+        @js2 = FactoryBot.create(:job_seeker, user: @user2)
         @js2.assign_job_developer(@jd_cm, agency)
 
-        @user3 = FactoryGirl.create(:user, first_name: 'Adam', last_name: 'Doe')
-        @js3 = FactoryGirl.create(:job_seeker, user: @user3)
+        @user3 = FactoryBot.create(:user, first_name: 'Adam', last_name: 'Doe')
+        @js3 = FactoryBot.create(:job_seeker, user: @user3)
         @js3.assign_job_developer(@jd_cm, agency)
 
-        @js4 = FactoryGirl.create(:job_seeker)
+        @js4 = FactoryBot.create(:job_seeker)
         @js4.assign_job_developer(@job_developer, agency)
         @js4.assign_case_manager(@jd_cm, agency)
 
@@ -543,7 +543,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       it 'returns his job seekers in alphabetical order' do
         [@js1, @js2, @js3].each do |js|
-          FactoryGirl.create(:resume, job_seeker: js)
+          FactoryBot.create(:resume, job_seeker: js)
         end
 
         xhr :get, :my_js_as_jd, id: @jd_cm.id, format: :json
@@ -558,7 +558,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       it 'returns his job seekers with consent' do
         [@js1, @js2, @js3].each do |js|
-          FactoryGirl.create(:resume, job_seeker: js)
+          FactoryBot.create(:resume, job_seeker: js)
         end
 
         @js1.update_attribute(:consent, false)
@@ -572,7 +572,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
 
       it 'disables application for his job seekers without resume' do
-        FactoryGirl.create(:resume, job_seeker: @js1)
+        FactoryBot.create(:resume, job_seeker: @js1)
         xhr :get, :my_js_as_jd, id: @jd_cm.id, format: :json
         expect(JSON.parse(response.body))
           .to eq('results' =>
@@ -586,9 +586,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
     context 'job developer without job seeker' do
       before :each do
-        @job_developer1 = FactoryGirl.create(:job_developer, agency: agency)
-        @js1 = FactoryGirl.create(:job_seeker)
-        @js2 = FactoryGirl.create(:job_seeker)
+        @job_developer1 = FactoryBot.create(:job_developer, agency: agency)
+        @js1 = FactoryBot.create(:job_seeker)
+        @js2 = FactoryBot.create(:job_seeker)
         sign_in @job_developer1
         xhr :get, :my_js_as_jd, id: @job_developer1.id, format: :json
       end

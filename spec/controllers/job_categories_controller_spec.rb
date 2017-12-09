@@ -1,46 +1,46 @@
 require 'rails_helper'
 
 RSpec.shared_examples 'unauthorized non-agency-admin people' do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:company) { FactoryGirl.create(:company) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:company) { FactoryBot.create(:company) }
   context 'Not logged in' do
     it_behaves_like 'unauthenticated XHR request'
   end
   context 'Case Manager' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+      let(:user) { FactoryBot.create(:case_manager, agency: agency) }
     end
   end
   context 'Job Developer' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
+      let(:user) { FactoryBot.create(:job_developer, agency: agency) }
     end
   end
   context 'Job Seeker' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:job_seeker) }
+      let(:user) { FactoryBot.create(:job_seeker) }
     end
   end
   context 'Company admin' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:company_admin, company: company) }
+      let(:user) { FactoryBot.create(:company_admin, company: company) }
     end
   end
   context 'Company contact' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:company_contact, company: company) }
+      let(:user) { FactoryBot.create(:company_contact, company: company) }
     end
   end
 end
 
 RSpec.describe JobCategoriesController, type: :controller do
   describe 'POST #create' do
-    let(:jobcat_params) { FactoryGirl.attributes_for(:job_category) }
-    let(:agency) { FactoryGirl.create(:agency) }
+    let(:jobcat_params) { FactoryBot.attributes_for(:job_category) }
+    let(:agency) { FactoryBot.create(:agency) }
 
     context 'authorized access' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
       it 'creates new job category for valid parameters' do
@@ -65,12 +65,12 @@ RSpec.describe JobCategoriesController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:category) { FactoryGirl.create(:job_category) }
-    let(:agency) { FactoryGirl.create(:agency) }
+    let(:category) { FactoryBot.create(:job_category) }
+    let(:agency) { FactoryBot.create(:agency) }
 
     context 'authorized access' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
       context 'job category found' do
@@ -103,13 +103,13 @@ RSpec.describe JobCategoriesController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:category) { FactoryGirl.create(:job_category) }
-    let(:jobcat_params) { FactoryGirl.attributes_for(:job_category) }
-    let(:agency) { FactoryGirl.create(:agency) }
+    let(:category) { FactoryBot.create(:job_category) }
+    let(:jobcat_params) { FactoryBot.attributes_for(:job_category) }
+    let(:agency) { FactoryBot.create(:agency) }
 
     context 'authorized access' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
 
@@ -135,12 +135,12 @@ RSpec.describe JobCategoriesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:category) { FactoryGirl.create(:job_category) }
-    let(:agency) { FactoryGirl.create(:agency) }
+    let!(:category) { FactoryBot.create(:job_category) }
+    let(:agency) { FactoryBot.create(:agency) }
 
     context 'authorized access' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
       context 'job category found' do

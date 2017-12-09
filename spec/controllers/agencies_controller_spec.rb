@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe AgenciesController, type: :controller do
 
-  let!(:agency)       { FactoryGirl.create(:agency) }
-  let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
+  let!(:agency)       { FactoryBot.create(:agency) }
+  let(:agency_admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
 
   describe "GET #edit" do
     context 'success' do
@@ -40,7 +40,7 @@ RSpec.describe AgenciesController, type: :controller do
     context 'valid attributes' do
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency),
+        patch :update, agency: FactoryBot.attributes_for(:agency),
                      id: agency
       end
       it 'assigns @agency for updating' do
@@ -61,7 +61,7 @@ RSpec.describe AgenciesController, type: :controller do
 
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency,
+        patch :update, agency: FactoryBot.attributes_for(:agency,
                         phone: '', website: 'nodomain'), id: agency
       end
       it 'renders edit template' do
@@ -95,12 +95,12 @@ RSpec.describe AgenciesController, type: :controller do
       it 'authorizes agency_admin' do
         expect(subject).to_not receive(:user_not_authorized)
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency),
+        patch :update, agency: FactoryBot.attributes_for(:agency),
                      id: agency
       end
       it 'does not authorize non-admin user' do
         sign_in job_developer
-        patch :update, agency: FactoryGirl.attributes_for(:agency),
+        patch :update, agency: FactoryBot.attributes_for(:agency),
                      id: agency
         expect(flash[:alert]).
           to eq "You are not authorized to edit #{agency.name} agency."

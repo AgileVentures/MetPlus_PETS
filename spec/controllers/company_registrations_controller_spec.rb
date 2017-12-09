@@ -96,25 +96,25 @@ RSpec.shared_examples 'unauthorized XHR requests' do
 end
 
 RSpec.describe CompanyRegistrationsController, type: :controller do
-  let!(:agency)          { FactoryGirl.create(:agency) }
-  let!(:agency_admin)    { FactoryGirl.create(:agency_admin, agency: agency) }
+  let!(:agency)          { FactoryBot.create(:agency) }
+  let!(:agency_admin)    { FactoryBot.create(:agency_admin, agency: agency) }
 
-  let(:metplus)          { FactoryGirl.create(:agency, name: 'Metplus') }
-  let(:metplus_admin)    { FactoryGirl.create(:agency_admin, agency: metplus) }
+  let(:metplus)          { FactoryBot.create(:agency, name: 'Metplus') }
+  let(:metplus_admin)    { FactoryBot.create(:agency_admin, agency: metplus) }
 
-  let!(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+  let!(:company) { FactoryBot.create(:company, agencies: [agency]) }
   let(:comp_bayer) do
-    FactoryGirl.create(:company,
+    FactoryBot.create(:company,
                        name: 'Bayer-Raynor',
                        agencies: [metplus])
   end
-  let!(:company_admin) { FactoryGirl.create(:first_company_admin, company: company) }
-  let(:bayer_admin) { FactoryGirl.create(:company_admin, company: comp_bayer) }
+  let!(:company_admin) { FactoryBot.create(:first_company_admin, company: company) }
+  let(:bayer_admin) { FactoryBot.create(:company_admin, company: comp_bayer) }
 
-  let(:jd) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:cm) { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:cc) { FactoryGirl.create(:company_contact) }
-  let(:js) { FactoryGirl.create(:job_seeker) }
+  let(:jd) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:cm) { FactoryBot.create(:case_manager, agency: agency) }
+  let(:cc) { FactoryBot.create(:company_contact) }
+  let(:js) { FactoryBot.create(:job_seeker) }
 
   before(:each) do
     allow(Pusher).to receive(:trigger) # stub and spy on 'Pusher'
@@ -198,10 +198,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
 
   describe 'DELETE registration also deletes associated objects' do
-    let(:address1) { FactoryGirl.create(:address) }
-    let(:address2) { FactoryGirl.create(:address, city: 'Detroit') }
+    let(:address1) { FactoryBot.create(:address) }
+    let(:address2) { FactoryBot.create(:address, city: 'Detroit') }
     let!(:test_company) do
-      comp = FactoryGirl.build(:company, agencies: [agency])
+      comp = FactoryBot.build(:company, agencies: [agency])
       comp.company_people << company_admin
       comp.addresses << address1 << address2
       comp.save
@@ -228,17 +228,17 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let!(:agency) { FactoryGirl.create(:agency) }
+    let!(:agency) { FactoryBot.create(:agency) }
     let!(:registration_params) do
-      params = FactoryGirl.attributes_for(:company)
-      params[:company_people_attributes] = [FactoryGirl.attributes_for(:user)]
+      params = FactoryBot.attributes_for(:company)
+      params[:company_people_attributes] = [FactoryBot.attributes_for(:user)]
       params[:addresses_attributes] =
-        [FactoryGirl.attributes_for(:address),
-         FactoryGirl.attributes_for(:address)]
+        [FactoryBot.attributes_for(:address),
+         FactoryBot.attributes_for(:address)]
       params
     end
     let!(:company_role) do
-      FactoryGirl.create(:company_role,
+      FactoryBot.create(:company_role,
                          role: CompanyRole::ROLE[:CA])
     end
 
@@ -246,7 +246,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       # need to create agency people to receive 'company registered'
       # event email (see models/Event.rb)
       3.times do
-        FactoryGirl.create(:agency_person, agency: agency)
+        FactoryBot.create(:agency_person, agency: agency)
       end
     end
 
@@ -334,15 +334,15 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
   describe 'PATCH #approve' do
     let!(:registration_params) do
-      params = FactoryGirl.attributes_for(:company)
-      params[:company_people_attributes] = [FactoryGirl.attributes_for(:user)]
-      params[:addresses_attributes] = [FactoryGirl.attributes_for(:address)]
+      params = FactoryBot.attributes_for(:company)
+      params[:company_people_attributes] = [FactoryBot.attributes_for(:user)]
+      params[:addresses_attributes] = [FactoryBot.attributes_for(:address)]
       params
     end
 
     # controller :create action requires a 'CA' role to be present in the DB
     let!(:company_role) do
-      FactoryGirl.create(:company_role,
+      FactoryBot.create(:company_role,
                          role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
@@ -353,7 +353,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       let(:use_case_mock) { double(Companies::ApproveCompanyRegistration) }
       before(:each) do
         3.times do
-          FactoryGirl.create(:agency_person, agency: agency)
+          FactoryBot.create(:agency_person, agency: agency)
         end
         sign_in agency_admin
         allow(Companies::ApproveCompanyRegistration)
@@ -392,9 +392,9 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
   describe 'PATCH #deny' do
     let!(:registration_params) do
-      params = FactoryGirl.attributes_for(:company)
-      params[:company_people_attributes] = [FactoryGirl.attributes_for(:user)]
-      params[:addresses_attributes] = [FactoryGirl.attributes_for(:address)]
+      params = FactoryBot.attributes_for(:company)
+      params[:company_people_attributes] = [FactoryBot.attributes_for(:user)]
+      params[:addresses_attributes] = [FactoryBot.attributes_for(:address)]
       params
     end
 
@@ -402,7 +402,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     # controller :create action requires a 'CA' role to be present in the DB
     let!(:company_role) do
-      FactoryGirl.create(:company_role,
+      FactoryBot.create(:company_role,
                          role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
@@ -412,7 +412,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     context 'authorized access' do
       before(:each) do
         3.times do
-          FactoryGirl.create(:agency_person, agency: agency)
+          FactoryBot.create(:agency_person, agency: agency)
         end
 
         allow(Companies::DenyCompanyRegistration)
@@ -446,28 +446,28 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
   describe 'PATCH #update' do
     let!(:registration_params) do
-      params = FactoryGirl.attributes_for(:company, name: 'Bayer')
+      params = FactoryBot.attributes_for(:company, name: 'Bayer')
       params[:company_people_attributes] =
         { '0' =>
-            FactoryGirl.attributes_for(:user,
+            FactoryBot.attributes_for(:user,
                                        password: 'testing1234',
                                        password_confirmation: 'testing1234') }
       params[:addresses_attributes] =
-        { '0' => FactoryGirl.attributes_for(:address),
-          '1' => FactoryGirl.attributes_for(:address) }
+        { '0' => FactoryBot.attributes_for(:address),
+          '1' => FactoryBot.attributes_for(:address) }
       params
     end
     let!(:prior_name) { registration_params[:name] }
     let!(:company_role) do
-      FactoryGirl.create(:company_role,
+      FactoryBot.create(:company_role,
                          role: CompanyRole::ROLE[:CA])
     end
     let(:previous_parameters) do
       company = Company.find_by_name(prior_name)
-      params = FactoryGirl.attributes_for(:company,
+      params = FactoryBot.attributes_for(:company,
                                           name: 'Sprockets Corporation')
       params[:company_people_attributes] =
-        { '0' => FactoryGirl.attributes_for(:user,
+        { '0' => FactoryBot.attributes_for(:user,
                                             first_name: 'Fred',
                                             last_name: 'Flintstone',
                                             password: '',
@@ -475,7 +475,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       params[:company_people_attributes]['0'][:id] =
         company.company_people[0].id
       params[:addresses_attributes] =
-        { '0' => FactoryGirl.attributes_for(:address,
+        { '0' => FactoryBot.attributes_for(:address,
                                             city: 'Boston') }
       params[:addresses_attributes]['0'][:id] =
         company.addresses[0].id
@@ -491,7 +491,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     context 'authorized access' do
       before(:each) do
         3.times do
-          FactoryGirl.create(:agency_person, agency: agency)
+          FactoryBot.create(:agency_person, agency: agency)
         end
         post :create, company: registration_params
         sign_in agency_admin
@@ -502,12 +502,12 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         company = Company.find_by_name(prior_name)
 
         registration_params =
-          FactoryGirl.attributes_for(:company,
+          FactoryBot.attributes_for(:company,
                                      name: 'Sprockets Corporation',
                                      job_email: 'jobs@sprockets.org')
 
         registration_params[:company_people_attributes] =
-          { '0' => FactoryGirl.attributes_for(:user,
+          { '0' => FactoryBot.attributes_for(:user,
                                               first_name: 'Fred',
                                               last_name: 'Flintstone') }
 
@@ -515,7 +515,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           company.company_people[0].id
 
         registration_params[:addresses_attributes] =
-          { '0' => FactoryGirl.attributes_for(:address,
+          { '0' => FactoryBot.attributes_for(:address,
                                               city: 'Boston') }
         registration_params[:addresses_attributes]['0'][:id] =
           company.addresses[0].id
@@ -544,7 +544,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         registration_params[:addresses_attributes]['1']['id'] =
           company.addresses.second.id
         registration_params[:company_people_attributes] =
-          { '0' => FactoryGirl.attributes_for(:user,
+          { '0' => FactoryBot.attributes_for(:user,
                                               first_name: 'Fred',
                                               last_name: 'Flintstone') }
         request
@@ -557,10 +557,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         company = Company.find_by_name(prior_name)
 
         registration_params =
-          FactoryGirl.attributes_for(:company,
+          FactoryBot.attributes_for(:company,
                                      name: 'Sprockets Corporation')
         registration_params[:company_people_attributes] =
-          { '0' => FactoryGirl.attributes_for(:user,
+          { '0' => FactoryBot.attributes_for(:user,
                                               first_name: 'Fred',
                                               last_name: 'Flintstone',
                                               password: '',
@@ -569,7 +569,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           company.company_people[0].id
 
         registration_params[:addresses_attributes] =
-          { '0' => FactoryGirl.attributes_for(:address,
+          { '0' => FactoryBot.attributes_for(:address,
                                               city: 'Boston') }
         registration_params[:addresses_attributes]['0'][:id] =
           company.addresses[0].id

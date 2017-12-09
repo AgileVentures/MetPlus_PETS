@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CompanyPerson, type: :model do
 
   it 'should have a valid factory' do
-    expect(FactoryGirl.build(:company_person)).to be_valid
+    expect(FactoryBot.build(:company_person)).to be_valid
   end
 
   it{ is_expected.to have_and_belong_to_many :company_roles }
@@ -47,7 +47,7 @@ describe CompanyPerson, type: :model do
     end
 
     describe 'not_removing_sole_company_admin' do
-      let(:ca) { FactoryGirl.create(:company_admin) }
+      let(:ca) { FactoryBot.create(:company_admin) }
 
       it 'invalidates attempted removal' do
         ca_role = ca.company_roles[0]
@@ -91,10 +91,10 @@ describe CompanyPerson, type: :model do
   end
 
   describe '#is_company_contact?' do
-    let(:company) {FactoryGirl.create(:company)}
-    let(:company1) {FactoryGirl.create(:company)}
-    let(:person) {FactoryGirl.create(:company_contact, :company => company)}
-    let(:person_other_company) {FactoryGirl.create(:company_contact, :company => company1)}
+    let(:company) {FactoryBot.create(:company)}
+    let(:company1) {FactoryBot.create(:company)}
+    let(:person) {FactoryBot.create(:company_contact, :company => company)}
+    let(:person_other_company) {FactoryBot.create(:company_contact, :company => company1)}
     it 'correct' do
       expect(person.is_company_contact?(company)).to be true
     end
@@ -104,10 +104,10 @@ describe CompanyPerson, type: :model do
   end
 
   describe '#is_company_admin?' do
-    let(:company) {FactoryGirl.create(:company)}
-    let(:company1) {FactoryGirl.create(:company)}
-    let(:person) {FactoryGirl.create(:company_admin, :company => company)}
-    let(:person_other_company) {FactoryGirl.create(:company_admin, :company => company1)}
+    let(:company) {FactoryBot.create(:company)}
+    let(:company1) {FactoryBot.create(:company)}
+    let(:person) {FactoryBot.create(:company_admin, :company => company)}
+    let(:person_other_company) {FactoryBot.create(:company_admin, :company => company1)}
     it 'correct' do
       expect(person.is_company_admin?(company)).to be true
     end
@@ -117,12 +117,12 @@ describe CompanyPerson, type: :model do
   end
 
   describe 'scope all_company_people' do
-    let(:company) { FactoryGirl.create(:company) }
+    let(:company) { FactoryBot.create(:company) }
 
-    let!(:cp1) { FactoryGirl.create(:company_admin,   company: company) }
-    let!(:cp2) { FactoryGirl.create(:company_contact, company: company) }
-    let!(:cp3) { FactoryGirl.create(:company_contact, company: company) }
-    let!(:cp4) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:cp1) { FactoryBot.create(:company_admin,   company: company) }
+    let!(:cp2) { FactoryBot.create(:company_contact, company: company) }
+    let!(:cp3) { FactoryBot.create(:company_contact, company: company) }
+    let!(:cp4) { FactoryBot.create(:company_contact, company: company) }
 
     it 'returns all company people' do
       expect(CompanyPerson.all_company_people(company)).

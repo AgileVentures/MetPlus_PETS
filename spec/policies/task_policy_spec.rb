@@ -2,23 +2,23 @@ require 'rails_helper'
 
 RSpec.describe TaskPolicy do
 
-  let(:agency) {FactoryGirl.create(:agency)}
-  let(:agency1) {FactoryGirl.create(:agency)}
-  let(:company) {FactoryGirl.create(:company)}
-  let(:company1) {FactoryGirl.create(:company)}
-  let(:job_developer) {FactoryGirl.create(:job_developer, :agency => agency)}
-  let(:job_seeker) {FactoryGirl.create(:job_seeker)}
-  let(:job_developer1) {FactoryGirl.create(:job_developer, :agency => agency)}
-  let(:case_manager) {FactoryGirl.create(:case_manager, :agency => agency)}
-  let(:agency_admin) {FactoryGirl.create(:agency_admin, :agency => agency)}
-  let(:agency1_admin) {FactoryGirl.create(:agency_admin, :agency => agency1)}
+  let(:agency) {FactoryBot.create(:agency)}
+  let(:agency1) {FactoryBot.create(:agency)}
+  let(:company) {FactoryBot.create(:company)}
+  let(:company1) {FactoryBot.create(:company)}
+  let(:job_developer) {FactoryBot.create(:job_developer, :agency => agency)}
+  let(:job_seeker) {FactoryBot.create(:job_seeker)}
+  let(:job_developer1) {FactoryBot.create(:job_developer, :agency => agency)}
+  let(:case_manager) {FactoryBot.create(:case_manager, :agency => agency)}
+  let(:agency_admin) {FactoryBot.create(:agency_admin, :agency => agency)}
+  let(:agency1_admin) {FactoryBot.create(:agency_admin, :agency => agency1)}
 
-  let(:company_admin) {FactoryGirl.create(:company_admin, :company => company)}
-  let(:company1_admin) {FactoryGirl.create(:company_admin, :company => company1)}
-  let(:company_contact) {FactoryGirl.create(:company_contact, :company => company)}
-  let(:task) {FactoryGirl.create(:task, :owner => job_developer)}
-  let(:task_job_developers) {FactoryGirl.create(:task, :owner => nil, :owner_agency_role => :JD, :owner_agency => agency)}
-  let(:task_company_contact) {FactoryGirl.create(:task, :owner => nil, :owner_company_role => :CC, :owner_company => company)}
+  let(:company_admin) {FactoryBot.create(:company_admin, :company => company)}
+  let(:company1_admin) {FactoryBot.create(:company_admin, :company => company1)}
+  let(:company_contact) {FactoryBot.create(:company_contact, :company => company)}
+  let(:task) {FactoryBot.create(:task, :owner => job_developer)}
+  let(:task_job_developers) {FactoryBot.create(:task, :owner => nil, :owner_agency_role => :JD, :owner_agency => agency)}
+  let(:task_company_contact) {FactoryBot.create(:task, :owner => nil, :owner_company_role => :CC, :owner_company => company)}
 
 
   permissions :in_progress? do

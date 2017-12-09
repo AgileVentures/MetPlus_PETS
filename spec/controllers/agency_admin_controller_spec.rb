@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe AgencyAdminController, type: :controller do
-  let(:agency)        { FactoryGirl.create(:agency) }
-  let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+  let(:agency)        { FactoryBot.create(:agency) }
+  let!(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:case_manager)  { FactoryBot.create(:case_manager, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:job_seeker)    { FactoryBot.create(:job_seeker) }
   let(:job_categories) do
     cats = []
-    cats << FactoryGirl.create(:job_category, name: 'CAT1') <<
-      FactoryGirl.create(:job_category, name: 'CAT2') <<
-      FactoryGirl.create(:job_category, name: 'CAT3')
+    cats << FactoryBot.create(:job_category, name: 'CAT1') <<
+      FactoryBot.create(:job_category, name: 'CAT2') <<
+      FactoryBot.create(:job_category, name: 'CAT3')
     cats
   end
 
@@ -75,8 +75,8 @@ RSpec.describe AgencyAdminController, type: :controller do
   describe 'XHR GET #home' do
     before(:each) do
       25.times do |_n|
-        FactoryGirl.create(:agency_person, agency: agency)
-        cmp = FactoryGirl.build(:company)
+        FactoryBot.create(:agency_person, agency: agency)
+        cmp = FactoryBot.build(:company)
         cmp.agencies << agency
         cmp.save
       end
@@ -107,7 +107,7 @@ RSpec.describe AgencyAdminController, type: :controller do
   describe 'XHR GET #job_properties' do
     before(:each) do
       25.times do |n|
-        FactoryGirl.create(:job_category, name: "CAT#{n}")
+        FactoryBot.create(:job_category, name: "CAT#{n}")
       end
       sign_in agency_admin
       get :job_properties

@@ -3,11 +3,11 @@ include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekerEmailJob, type: :job do
 
-  let(:agency)        { FactoryGirl.create(:agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
-  let(:job)           { FactoryGirl.create(:job) }
+  let(:agency)        { FactoryBot.create(:agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:case_manager)  { FactoryBot.create(:case_manager, agency: agency) }
+  let(:job_seeker)    { FactoryBot.create(:job_seeker) }
+  let(:job)           { FactoryBot.create(:job) }
 
   before(:each) do
     Delayed::Worker.delay_jobs = true

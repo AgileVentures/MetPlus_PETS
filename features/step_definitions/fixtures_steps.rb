@@ -1,6 +1,6 @@
 Given(/^the following (.+) records:$/) do |factory, table|
   table.hashes.each do |hash|
-    FactoryGirl.create(factory, hash)
+    FactoryBot.create(factory, hash)
   end
 end
 
@@ -115,7 +115,7 @@ Given(/^the following jobseeker(?:s?) exist:$/) do |table|
     job_seeker_status = JobSeekerStatus.find_by_short_description(seeker_status)
     jobseeker = JobSeeker.new(hash)
     jobseeker.job_seeker_status = job_seeker_status
-    jobseeker.address = FactoryGirl.create(:address)
+    jobseeker.address = FactoryBot.create(:address)
     jobseeker.save!
   end
 end
@@ -143,7 +143,7 @@ Given(/^the following tasks exist:$/) do |table|
     hash['status'] = Task::STATUS[hash['status'].to_sym]
     hash['deferred_date'] = Date.parse(hash.delete 'deferred_date')
 
-    task = FactoryGirl.build(:task, hash)
+    task = FactoryBot.build(:task, hash)
 
     if owner =~ /,/
       agency = Agency.find_by_name(owner.split(/,/)[0])
@@ -169,7 +169,7 @@ end
 Given(/^the following resumes exist:$/) do |table|
   table.hashes.each do |hash|
     job_seeker = JobSeeker.find_by(email: hash[:job_seeker])
-    resume = FactoryGirl.create(:resume,
+    resume = FactoryBot.create(:resume,
                                 file_name: hash[:file_name],
                                 job_seeker: job_seeker)
   end
@@ -191,7 +191,7 @@ Given(/^the following jobs exist:$/) do |table|
     job.company_person = User.find_by_email(creator_email).pets_user if
       creator_email
 
-    job.address = FactoryGirl.create(:address,
+    job.address = FactoryBot.create(:address,
                                      city: city,
                                      location: job.company) unless city.blank?
 
@@ -230,7 +230,7 @@ Given(/^the following job applications exist:$/) do |table|
     unless hash[:status]
       JobApplication.create!(job: job, job_seeker: job_seeker)
     else
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
+      FactoryBot.create(:job_application, job: job, job_seeker: job_seeker,
                          status: hash[:status])
     end
   end
@@ -246,7 +246,7 @@ Given(/^the default settings are present$/) do
     { :short_description => 'Employed Not Looking',
       :description => 'A jobseeker with a job and not looking for a job for now.'}
   ].each do |values|
-    FactoryGirl.create(:job_seeker_status, values)
+    FactoryBot.create(:job_seeker_status, values)
   end
   step "the following agency roles exist:", table(%{
     | role  |

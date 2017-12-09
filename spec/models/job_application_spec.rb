@@ -9,7 +9,7 @@ RSpec.describe JobApplication, type: :model do
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:job_application)).to be_valid
+      expect(FactoryBot.build(:job_application)).to be_valid
     end
   end
   describe 'Database schema' do
@@ -27,9 +27,9 @@ RSpec.describe JobApplication, type: :model do
   end
   describe 'Validations' do
     it { is_expected.to validate_uniqueness_of(:job_seeker_id).scoped_to(:job_id) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:job) { FactoryGirl.create(:job, company: FactoryGirl.create(:company)) }
-    subject { FactoryGirl.build(:job_application, job: job, job_seeker: job_seeker, status: :active) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let(:job) { FactoryBot.create(:job, company: FactoryBot.create(:company)) }
+    subject { FactoryBot.build(:job_application, job: job, job_seeker: job_seeker, status: :active) }
 
     describe 'status' do
       it 'Status -1 should generate exception' do
@@ -58,19 +58,19 @@ RSpec.describe JobApplication, type: :model do
   end
 
   describe '#active?' do
-    let(:active_job) { FactoryGirl.create(:job) }
-    let(:inactive_job) { FactoryGirl.create(:job, status: :filled) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:active_job) { FactoryBot.create(:job) }
+    let(:inactive_job) { FactoryBot.create(:job, status: :filled) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
     let(:valid_application) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker)
     end
     let(:invalid_application1) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: inactive_job, job_seeker: job_seeker)
     end
     let(:invalid_application2) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker,
                          status: 'accepted')
     end
@@ -93,15 +93,15 @@ RSpec.describe JobApplication, type: :model do
   end
 
   describe '#accept' do
-    let(:active_job) { FactoryGirl.create(:job) }
-    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let(:active_job) { FactoryBot.create(:job) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
     let(:application1) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker1)
     end
     let(:application2) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker2)
     end
 
@@ -121,9 +121,9 @@ RSpec.describe JobApplication, type: :model do
   end
 
   describe 'tracking status change history' do
-    let(:job)  { FactoryGirl.create(:job) }
-    let(:js) { FactoryGirl.create(:job_seeker) }
-    let!(:ja1) { FactoryGirl.create(:job_application, job: job) }
+    let(:job)  { FactoryBot.create(:job) }
+    let(:js) { FactoryBot.create(:job_seeker) }
+    let!(:ja1) { FactoryBot.create(:job_application, job: job) }
 
     before(:each) do
       sleep(1)
@@ -131,7 +131,7 @@ RSpec.describe JobApplication, type: :model do
     end
 
     it 'adds a status change record for a new application' do
-      expect { FactoryGirl.create(:job_application, job: job, job_seeker: js) }
+      expect { FactoryBot.create(:job_application, job: job, job_seeker: js) }
         .to change(StatusChange, :count).by 1
     end
 
@@ -145,15 +145,15 @@ RSpec.describe JobApplication, type: :model do
   end
 
   describe '#reject' do
-    let(:active_job) { FactoryGirl.create(:job) }
-    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
+    let(:active_job) { FactoryBot.create(:job) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
     let(:application1) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker1)
     end
     let(:application2) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker2)
     end
 
@@ -163,10 +163,10 @@ RSpec.describe JobApplication, type: :model do
   end
 
   describe '#processing' do
-    let(:active_job) { FactoryGirl.create(:job) }
-    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
+    let(:active_job) { FactoryBot.create(:job) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
     let(:application1) do
-      FactoryGirl.create(:job_application,
+      FactoryBot.create(:job_application,
                          job: active_job, job_seeker: job_seeker1)
     end
 

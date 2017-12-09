@@ -3,9 +3,9 @@ include ServiceStubHelpers::Cruncher
 
 RSpec.describe JobSeekerMailer, type: :mailer do
   describe 'Job developer assigned to job seeker' do
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
 
     let(:mail) { JobSeekerMailer.job_developer_assigned(job_seeker, job_developer) }
 
@@ -21,9 +21,9 @@ RSpec.describe JobSeekerMailer, type: :mailer do
   end
 
   describe 'Case manager assigned to job seeker' do
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
-    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let(:case_manager)  { FactoryBot.create(:case_manager, agency: agency) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
 
     let(:mail) { JobSeekerMailer.case_manager_assigned(job_seeker, case_manager) }
 
@@ -39,10 +39,10 @@ RSpec.describe JobSeekerMailer, type: :mailer do
   end
 
   describe 'Job applied by job developer' do
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
-    let(:job)            { FactoryGirl.create(:job) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:job_seeker)     { FactoryBot.create(:job_seeker) }
+    let(:job)            { FactoryBot.create(:job) }
     let(:mail) { JobSeekerMailer.job_applied_by_job_developer(job_seeker, job_developer, job) }
 
     before do
@@ -65,9 +65,9 @@ RSpec.describe JobSeekerMailer, type: :mailer do
   end
 
   describe 'Job revoked' do
-    let(:job) { FactoryGirl.create(:job) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let!(:resume)      { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let(:job) { FactoryBot.create(:job) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let!(:resume)      { FactoryBot.create(:resume, job_seeker: job_seeker) }
 
     let(:mail) do
       allow(Pusher).to receive(:trigger)

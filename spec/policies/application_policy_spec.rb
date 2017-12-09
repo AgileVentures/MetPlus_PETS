@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ApplicationPolicy do
   subject { described_class }
-  let(:js) { FactoryGirl.create(:job_seeker) }
+  let(:js) { FactoryBot.create(:job_seeker) }
   [[:index?, :not], [:create?, :not], [:new?, :not], [:update?, :not],
    [:edit?, :not], [:destroy?, :not], [:allow?]].each do |method, not_allow|
     permissions method do

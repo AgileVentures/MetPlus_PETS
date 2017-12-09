@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe AgencyPolicy do
 
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:jd)     { FactoryBot.create(:job_developer, agency: agency) }
+  let(:admin)  { FactoryBot.create(:agency_admin, agency: agency) }
 
   permissions :update?, :edit? do
 
