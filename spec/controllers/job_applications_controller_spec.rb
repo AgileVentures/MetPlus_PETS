@@ -42,8 +42,8 @@ RSpec.describe JobApplicationsController, type: :controller do
   let(:company_contact) { FactoryBot.create(:company_contact, company: company) }
   let(:inactive_application) do
     FactoryBot.create(:job_application,
-                       job: job, job_seeker: job_seeker2,
-                       status: 'accepted')
+                      job: job, job_seeker: job_seeker2,
+                      status: 'accepted')
   end
   let(:valid_application) do
     FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
@@ -53,11 +53,11 @@ RSpec.describe JobApplicationsController, type: :controller do
   let(:company2)     { FactoryBot.create(:company) }
   let(:company_admin2) do
     FactoryBot.create(:company_admin,
-                       company: company2)
+                      company: company2)
   end
   let(:company_contact2) do
     FactoryBot.create(:company_contact,
-                       company: company2)
+                      company: company2)
   end
   let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
   let(:case_manager)  { FactoryBot.create(:case_manager, agency: agency) }
@@ -269,7 +269,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
     let(:app4) do
       FactoryBot.create(:job_application,
-                         job: job3, job_seeker: FactoryBot.create(:job_seeker))
+                        job: job3, job_seeker: FactoryBot.create(:job_seeker))
     end
 
     before(:each) do

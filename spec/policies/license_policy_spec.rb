@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe LicensePolicy do
-
   let(:agency)  { FactoryBot.create(:agency) }
   let(:jd)      { FactoryBot.create(:job_developer, agency: agency) }
   let(:cm)      { FactoryBot.create(:case_manager, agency: agency) }

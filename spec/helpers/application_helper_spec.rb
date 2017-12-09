@@ -15,7 +15,7 @@ RSpec.describe ApplicationHelper, type: :helper do
   let(:job)             { FactoryBot.create(:job, company: company) }
   let(:job_app)         do
     FactoryBot.build(:job_application, job: job,
-                                        job_seeker: job_seeker, status: :active)
+                                       job_seeker: job_seeker, status: :active)
   end
 
   context 'flash_to_css method' do

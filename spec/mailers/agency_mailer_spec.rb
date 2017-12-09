@@ -57,7 +57,7 @@ RSpec.describe AgencyMailer, type: :mailer do
     let(:company_person) { FactoryBot.create(:company_person, company: company) }
     let(:job)            do
       FactoryBot.create(:job, company: company,
-                               company_person: company_person)
+                              company_person: company_person)
     end
     let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
     let(:application) do

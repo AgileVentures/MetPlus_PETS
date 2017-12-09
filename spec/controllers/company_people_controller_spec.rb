@@ -7,7 +7,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   let(:company)        { FactoryBot.create(:company, agencies: [agency]) }
   let!(:comp_bayer) do
     FactoryBot.create(:company, name: 'Bayer-Raynor',
-                                 agencies: [another_agency])
+                                agencies: [another_agency])
   end
   let(:company_person) { FactoryBot.create(:company_person, company: company) }
   let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
@@ -247,19 +247,19 @@ RSpec.describe CompanyPeopleController, type: :controller do
         before(:each) do
           @company_person =
             FactoryBot.create(:company_admin,
-                               password: 'testing.....',
-                               password_confirmation: 'testing.....')
+                              password: 'testing.....',
+                              password_confirmation: 'testing.....')
           @password = @company_person.encrypted_password
           sign_in @company_person
           patch :update_profile,
                 company_person:
                   FactoryBot.attributes_for(:company_person,
-                                             first_name: 'John',
-                                             last_name: 'Smith',
-                                             phone: '780-890-8976',
-                                             title: 'Line Manager',
-                                             password: '',
-                                             password_confirmation: ''),
+                                            first_name: 'John',
+                                            last_name: 'Smith',
+                                            phone: '780-890-8976',
+                                            title: 'Line Manager',
+                                            password: '',
+                                            password_confirmation: ''),
                 id: @company_person
           @company_person.reload
         end

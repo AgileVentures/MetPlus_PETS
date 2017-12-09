@@ -6,5 +6,4 @@ FactoryBot.define do
     job_seeker
     file { File.new("#{Rails.root}/spec/fixtures/files/Janitor-Resume.doc") }
   end
-
 end

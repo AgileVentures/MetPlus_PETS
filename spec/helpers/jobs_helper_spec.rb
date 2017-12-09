@@ -18,8 +18,10 @@ RSpec.describe JobsHelper, type: :helper do
     end
   end
 
-  let(:job) { FactoryBot.create(:job, min_salary: 15, max_salary: 25,
-                                 pay_period: 'Hourly') }
+  let(:job) do
+    FactoryBot.create(:job, min_salary: 15, max_salary: 25,
+                            pay_period: 'Hourly')
+  end
 
   before(:each) do
     stub_cruncher_authenticate
@@ -50,13 +52,13 @@ RSpec.describe JobsHelper, type: :helper do
 
   describe '#job_salary_details' do
     it 'returns min, max and pay period' do
-      expect(job_salary_details(job)).to eq 'Minimum Salary: $15.00, ' +
-        'Maximum Salary: $25.00, Pay Period: Hourly'
+      expect(job_salary_details(job)).to eq 'Minimum Salary: $15.00, ' \
+                                            'Maximum Salary: $25.00, Pay Period: Hourly'
     end
     it 'omits max salary if missing' do
       job.max_salary = nil
-      expect(job_salary_details(job)).to eq 'Minimum Salary: $15.00, ' +
-        'Pay Period: Hourly'
+      expect(job_salary_details(job)).to eq 'Minimum Salary: $15.00, ' \
+                                            'Pay Period: Hourly'
     end
     it 'returns not-specified if min salary not specified' do
       job.min_salary = nil

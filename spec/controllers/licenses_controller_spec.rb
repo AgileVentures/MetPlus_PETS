@@ -2,7 +2,7 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.shared_examples 'LicensesController unauthorized access' do
-  let(:agency)  { FactoryBot.create(:agency) }
+  let(:agency) { FactoryBot.create(:agency) }
 
   context 'Not logged in' do
     it_behaves_like 'unauthenticated XHR request'
@@ -61,13 +61,11 @@ RSpec.describe LicensesController, type: :controller do
 
   describe 'GET #show' do
     context 'authorized access - agency admin' do
-
       before :each do
         sign_in agency_admin
       end
 
       context 'license found' do
-
         before(:each) do
           xhr :get, :show, id: license
         end
@@ -126,7 +124,6 @@ RSpec.describe LicensesController, type: :controller do
     end
 
     context 'authorized access - agency admin' do
-
       before :each do
         sign_in agency_admin
       end
@@ -134,7 +131,6 @@ RSpec.describe LicensesController, type: :controller do
       let!(:job_license) { FactoryBot.create(:job_license, license: license) }
 
       context 'license found' do
-
         let(:request) { xhr :delete, :destroy, id: license }
 
         it 'deletes license' do

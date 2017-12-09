@@ -1,15 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe JobCategoryPolicy do
-
   let(:agency) { FactoryBot.create(:agency) }
   let(:company) { FactoryBot.create(:company) }
   let(:jd)     { FactoryBot.create(:job_developer, agency: agency) }
   let(:cm)     { FactoryBot.create(:case_manager, agency: agency) }
   let(:admin)  { FactoryBot.create(:agency_admin, agency: agency) }
-  let(:company_admin) {FactoryBot.create(:company_admin, company: company)}
-  let(:company_contact) {FactoryBot.create(:company_contact, company: company)}
-  let(:job_category) {FactoryBot.create(:job_category)}
+  let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+  let(:company_contact) { FactoryBot.create(:company_contact, company: company) }
+  let(:job_category) { FactoryBot.create(:job_category) }
 
   permissions :create?, :show?, :update?, :destroy? do
     it 'denies access if user is case manager' do

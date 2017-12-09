@@ -29,10 +29,10 @@ module Helpers
     let(:status) { FactoryBot.create(:job_seeker_status) }
     let(:valid_attribute) do
       FactoryBot.attributes_for(:job_seeker)
-                 .merge(FactoryBot.attributes_for(:user))
-                 .merge(job_seeker_status_id: status.id)
-                 .merge(address_attributes: FactoryBot.attributes_for(:address,
-                                                                       zipcode: '12346'))
+                .merge(FactoryBot.attributes_for(:user))
+                .merge(job_seeker_status_id: status.id)
+                .merge(address_attributes: FactoryBot.attributes_for(:address,
+                                                                     zipcode: '12346'))
     end
     case role
     when 'owner'
@@ -165,10 +165,10 @@ RSpec.describe JobSeekersController, type: :controller do
         js_status = FactoryBot.create(:job_seeker_status)
         ActionMailer::Base.deliveries.clear
         @js_hash = FactoryBot.attributes_for(:job_seeker)
-                              .merge(FactoryBot.attributes_for(:user))
-                              .merge(job_seeker_status_id: js_status.id)
+                             .merge(FactoryBot.attributes_for(:user))
+                             .merge(job_seeker_status_id: js_status.id)
         @js_hash[:address_attributes] = FactoryBot.attributes_for(:address,
-                                                                   zipcode: '54321')
+                                                                  zipcode: '54321')
         post :create, job_seeker: @js_hash
       end
       it 'check address' do
@@ -208,7 +208,7 @@ RSpec.describe JobSeekersController, type: :controller do
           :job_seeker,
           resume: fixture_file_upload('files/Janitor-Resume.doc')
         ).merge(FactoryBot.attributes_for(:user))
-                              .merge(job_seeker_status_id: js_status.id)
+                             .merge(job_seeker_status_id: js_status.id)
       end
 
       it 'saves job seeker' do
@@ -307,9 +307,9 @@ RSpec.describe JobSeekersController, type: :controller do
       context 'valid attributes without password change' do
         before(:each) do
           FactoryBot.create(:resume,
-                             file_name: 'Janitor-Resume.doc',
-                             file: fixture_file_upload('files/Janitor-Resume.doc'),
-                             job_seeker: owner)
+                            file_name: 'Janitor-Resume.doc',
+                            file: fixture_file_upload('files/Janitor-Resume.doc'),
+                            job_seeker: owner)
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(
@@ -322,9 +322,9 @@ RSpec.describe JobSeekersController, type: :controller do
                   phone: '780-890-8976',
                   resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')
                 ).merge(job_seeker_status_id: js_status.id)
-                  .merge(address_attributes: FactoryBot.attributes_for(
-                    :address, zipcode: '12346'
-                  ))
+                                      .merge(address_attributes: FactoryBot.attributes_for(
+                                        :address, zipcode: '12346'
+                                      ))
           owner.reload
         end
         it 'sets the valid attributes' do
@@ -353,9 +353,9 @@ RSpec.describe JobSeekersController, type: :controller do
         render_views
         before(:each) do
           FactoryBot.create(:resume,
-                             file_name: 'Janitor-Resume.doc',
-                             file: fixture_file_upload('files/Janitor-Resume.doc'),
-                             job_seeker: owner)
+                            file_name: 'Janitor-Resume.doc',
+                            file: fixture_file_upload('files/Janitor-Resume.doc'),
+                            job_seeker: owner)
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(
@@ -381,8 +381,8 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       year_of_birth: '198',
-                                                       resume: '')
+                                                      year_of_birth: '198',
+                                                      resume: '')
         end
         it 'renders edit template' do
           expect(response).to render_template('edit')
@@ -408,7 +408,7 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       phone: '111-111-1111')
+                                                      phone: '111-111-1111')
           owner.reload
           expect(owner.phone).to eq('111-111-1111')
         end
@@ -425,9 +425,9 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       year_of_birth: '1988',
-                                                       password: '123345',
-                                                       password_confirmation: '123345')
+                                                      year_of_birth: '1988',
+                                                      password: '123345',
+                                                      password_confirmation: '123345')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -440,7 +440,7 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       phone: '123')
+                                                      phone: '123')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -467,7 +467,7 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       phone: '111-111-1111')
+                                                      phone: '111-111-1111')
           owner.reload
           expect(owner.phone).to eq('111-111-1111')
         end
@@ -484,9 +484,9 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       year_of_birth: '1988',
-                                                       password: '123345',
-                                                       password_confirmation: '123345')
+                                                      year_of_birth: '1988',
+                                                      password: '123345',
+                                                      password_confirmation: '123345')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -499,7 +499,7 @@ RSpec.describe JobSeekersController, type: :controller do
           patch :update,
                 id: owner,
                 job_seeker: FactoryBot.attributes_for(:job_seeker,
-                                                       phone: '123')
+                                                      phone: '123')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -524,9 +524,9 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     let(:resume) do
       FactoryBot.create(:resume,
-                         file_name: 'Janitor-Resume.doc',
-                         file: fixture_file_upload('files/Janitor-Resume.doc'),
-                         job_seeker: owner)
+                        file_name: 'Janitor-Resume.doc',
+                        file: fixture_file_upload('files/Janitor-Resume.doc'),
+                        job_seeker: owner)
     end
     let(:request) { get :edit, id: owner }
     context 'visitor' do
@@ -758,8 +758,8 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           stub_cruncher_no_match_jobs
           FactoryBot.create(:resume,
-                             file_name: 'resume.pdf',
-                             job_seeker: jobseeker)
+                            file_name: 'resume.pdf',
+                            job_seeker: jobseeker)
           get :list_match_jobs, id: jobseeker
         end
         it 'no flash message set' do
@@ -791,8 +791,8 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           stub_cruncher_match_jobs
           FactoryBot.create(:resume,
-                             file_name: 'resume.pdf',
-                             job_seeker: jobseeker)
+                            file_name: 'resume.pdf',
+                            job_seeker: jobseeker)
           get :list_match_jobs, id: jobseeker
         end
         it 'no flash message set' do
@@ -833,8 +833,8 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     let(:invalid_application) do
       FactoryBot.create(:job_application,
-                         job: job, job_seeker: job_seeker2,
-                         status: 'accepted')
+                        job: job, job_seeker: job_seeker2,
+                        status: 'accepted')
     end
     let(:agency) { FactoryBot.create(:agency) }
     let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }

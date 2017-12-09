@@ -57,11 +57,11 @@ describe JobSeeker, type: :model do
   describe '#with_ap_in_role' do
     let!(:jd_role) do
       FactoryBot.create(:agency_role,
-                         role: AgencyRole::ROLE[:JD])
+                        role: AgencyRole::ROLE[:JD])
     end
     let!(:cm_role) do
       FactoryBot.create(:agency_role,
-                         role: AgencyRole::ROLE[:CM])
+                        role: AgencyRole::ROLE[:CM])
     end
 
     let(:job_seeker1) { FactoryBot.create(:job_seeker) }
@@ -74,18 +74,18 @@ describe JobSeeker, type: :model do
 
     before(:each) do
       FactoryBot.create(:agency_relation, job_seeker: job_seeker1,
-                                           agency_person: job_developer,
-                                           agency_role: jd_role)
+                                          agency_person: job_developer,
+                                          agency_role: jd_role)
       FactoryBot.create(:agency_relation, job_seeker: job_seeker2,
-                                           agency_person: job_developer,
-                                           agency_role: jd_role)
+                                          agency_person: job_developer,
+                                          agency_role: jd_role)
 
       FactoryBot.create(:agency_relation, job_seeker: job_seeker3,
-                                           agency_person: case_manager,
-                                           agency_role: cm_role)
+                                          agency_person: case_manager,
+                                          agency_role: cm_role)
       FactoryBot.create(:agency_relation, job_seeker: job_seeker4,
-                                           agency_person: case_manager,
-                                           agency_role: cm_role)
+                                          agency_person: case_manager,
+                                          agency_role: cm_role)
     end
 
     it 'returns IDs of job seekers assigned to this job developer' do
@@ -121,16 +121,16 @@ describe JobSeeker, type: :model do
 
     let!(:cm_person) do
       FactoryBot.create(:case_manager,
-                         first_name: 'John',
-                         last_name: 'Manager',
-                         agency: agency)
+                        first_name: 'John',
+                        last_name: 'Manager',
+                        agency: agency)
     end
     let!(:cm_person2) { FactoryBot.create(:case_manager, agency: agency) }
     let!(:jd_person)  do
       FactoryBot.create(:job_developer,
-                         first_name: 'John',
-                         last_name: 'Developer',
-                         agency: agency)
+                        first_name: 'John',
+                        last_name: 'Developer',
+                        agency: agency)
     end
     let!(:aa_person) { FactoryBot.create(:agency_admin, agency: agency) }
 

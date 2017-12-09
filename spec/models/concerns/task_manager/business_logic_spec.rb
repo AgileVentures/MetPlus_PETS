@@ -13,7 +13,7 @@ RSpec.describe TaskManager::BusinessLogic do
       @agency = FactoryBot.create(:agency)
 
       @agency_admin = FactoryBot.create(:agency_person, agency: @agency,
-                                                         agency_roles: [@aa_role])
+                                                        agency_roles: [@aa_role])
       @case_mgr1 = FactoryBot.create(:case_manager, agency: @agency)
       @case_mgr2 = FactoryBot.create(:case_manager, agency: @agency)
     end
@@ -34,7 +34,7 @@ RSpec.describe TaskManager::BusinessLogic do
       @agency = FactoryBot.create(:agency)
 
       @agency_admin = FactoryBot.create(:agency_person, agency: @agency,
-                                                         agency_roles: [@aa_role])
+                                                        agency_roles: [@aa_role])
       @job_dev1  = FactoryBot.create(:job_developer, agency: @agency)
       @job_dev2  = FactoryBot.create(:job_developer, agency: @agency)
     end
@@ -55,7 +55,7 @@ RSpec.describe TaskManager::BusinessLogic do
       @agency = FactoryBot.create(:agency)
 
       @agency_admin = FactoryBot.create(:agency_person, agency: @agency,
-                                                         agency_roles: [@aa_role])
+                                                        agency_roles: [@aa_role])
       @case_mgr1 = FactoryBot.create(:case_manager, agency: @agency)
       @case_mgr2 = FactoryBot.create(:case_manager, agency: @agency)
       @job_dev1  = FactoryBot.create(:job_developer, agency: @agency)
@@ -121,7 +121,7 @@ RSpec.describe TaskManager::BusinessLogic do
     let(:company_cc2)    { FactoryBot.create(:company_contact, company: company) }
     let(:job)            do
       FactoryBot.create(:job, company: company,
-                               company_person: company_admin)
+                              company_person: company_admin)
     end
     let(:job_application) do
       FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)

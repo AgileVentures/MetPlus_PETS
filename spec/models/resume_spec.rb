@@ -99,7 +99,7 @@ RSpec.describe Resume, type: :model do
         resume.save
       end .to raise_error(RuntimeError)
       expect(resume.errors.full_messages)
-        .to contain_exactly("File could not be uploaded - see system admin")
+        .to contain_exactly('File could not be uploaded - see system admin')
       expect(resume.destroyed?).to be true
     end
   end

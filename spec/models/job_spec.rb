@@ -83,7 +83,7 @@ RSpec.describe Job, type: :model do
     describe 'status' do
       it 'Status -1 should generate exception' do
         expect { subject.status = -1 }.to raise_error(ArgumentError)
-                              .with_message('\'-1\' is not a valid status')
+          .with_message('\'-1\' is not a valid status')
       end
       it 'Status 0 should be active' do
         subject.status = 0
@@ -99,7 +99,7 @@ RSpec.describe Job, type: :model do
       end
       it 'Status 3 should generate exception' do
         expect { subject.status = 3 }.to raise_error(ArgumentError)
-                              .with_message('\'3\' is not a valid status')
+          .with_message('\'3\' is not a valid status')
       end
     end
 
@@ -166,7 +166,7 @@ RSpec.describe Job, type: :model do
 
         context 'is invalid if format or length incorrect' do
           it 'is too large a number' do
-            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000)
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1_000_000)
             expect(job).to_not be_valid
             expect(job.errors.full_messages)
               .to include('Min salary must be less than or equal to 999999.99')
@@ -178,8 +178,8 @@ RSpec.describe Job, type: :model do
               .to include('Min salary is not a number')
           end
           it 'contains too many digits to right of decimal point' do
-            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000.123)
-            error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1_000_000.123)
+            error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' \
                         ' optional decimal point, optional digits for cents)'
             expect(job).to_not be_valid
             expect(job.errors.full_messages)
@@ -192,9 +192,11 @@ RSpec.describe Job, type: :model do
 
   describe 'Instance methods' do
     let!(:question1) { FactoryBot.create(:question) }
-    let!(:question2) { FactoryBot.create(:question,
-                                          question_text: 'This is question two.') }
-    let(:question_answers) { {"1"=>"true", "2"=>"false"} }
+    let!(:question2) do
+      FactoryBot.create(:question,
+                        question_text: 'This is question two.')
+    end
+    let(:question_answers) { { '1' => 'true', '2' => 'false' } }
 
     describe '#apply' do
       before(:each) do

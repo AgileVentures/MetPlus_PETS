@@ -3,5 +3,4 @@ FactoryBot.define do
     name 'Software Development - RoR'
     description 'Ruby on Rails development expertise'
   end
-
 end

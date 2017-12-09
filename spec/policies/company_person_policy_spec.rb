@@ -6,8 +6,10 @@ RSpec.describe CompanyPersonPolicy do
   let(:agency) { FactoryBot.create(:agency, name: 'Metplus') }
   let(:another_agency) { FactoryBot.create(:agency) }
   let(:company) { FactoryBot.create(:company, agencies: [agency]) }
-  let!(:company_bayer) { FactoryBot.create(:company, name: 'Bayer-Raynor',
-                            agencies: [another_agency]) }
+  let!(:company_bayer) do
+    FactoryBot.create(:company, name: 'Bayer-Raynor',
+                                agencies: [another_agency])
+  end
 
   let(:cp) { FactoryBot.create(:company_person, company: company) }
   let(:ca) { FactoryBot.create(:company_admin, company: company) }
@@ -112,5 +114,4 @@ RSpec.describe CompanyPersonPolicy do
       expect(subject).to permit(cp, cp)
     end
   end
-
 end

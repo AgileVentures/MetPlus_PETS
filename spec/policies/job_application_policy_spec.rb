@@ -7,11 +7,11 @@ RSpec.describe JobApplicationPolicy do
   let(:company_admin2) { FactoryBot.create(:company_admin, company: company2) }
   let(:company_contact) do
     FactoryBot.create(:company_contact,
-                       company: company)
+                      company: company)
   end
   let(:company_contact2) do
     FactoryBot.create(:company_contact,
-                       company: company2)
+                      company: company2)
   end
 
   before(:each) do
@@ -23,7 +23,7 @@ RSpec.describe JobApplicationPolicy do
   let(:job) { FactoryBot.create(:job, company: company) }
   let(:job_application) do
     FactoryBot.create(:job_application, job: job,
-                                         job_seeker: job_seeker)
+                                        job_seeker: job_seeker)
   end
   let(:agency) { FactoryBot.create(:agency) }
   let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }

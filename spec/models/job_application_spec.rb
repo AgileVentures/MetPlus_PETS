@@ -63,16 +63,16 @@ RSpec.describe JobApplication, type: :model do
     let(:job_seeker) { FactoryBot.create(:job_seeker) }
     let(:valid_application) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker)
+                        job: active_job, job_seeker: job_seeker)
     end
     let(:invalid_application1) do
       FactoryBot.create(:job_application,
-                         job: inactive_job, job_seeker: job_seeker)
+                        job: inactive_job, job_seeker: job_seeker)
     end
     let(:invalid_application2) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker,
-                         status: 'accepted')
+                        job: active_job, job_seeker: job_seeker,
+                        status: 'accepted')
     end
 
     context 'with active job and active application status' do
@@ -98,11 +98,11 @@ RSpec.describe JobApplication, type: :model do
     let(:job_seeker2) { FactoryBot.create(:job_seeker) }
     let(:application1) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker1)
+                        job: active_job, job_seeker: job_seeker1)
     end
     let(:application2) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker2)
+                        job: active_job, job_seeker: job_seeker2)
     end
 
     it 'updates the selected application status to be accepted' do
@@ -150,11 +150,11 @@ RSpec.describe JobApplication, type: :model do
     let(:job_seeker2) { FactoryBot.create(:job_seeker) }
     let(:application1) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker1)
+                        job: active_job, job_seeker: job_seeker1)
     end
     let(:application2) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker2)
+                        job: active_job, job_seeker: job_seeker2)
     end
 
     it 'updates the selected application status to be rejected' do
@@ -167,7 +167,7 @@ RSpec.describe JobApplication, type: :model do
     let(:job_seeker1) { FactoryBot.create(:job_seeker) }
     let(:application1) do
       FactoryBot.create(:job_application,
-                         job: active_job, job_seeker: job_seeker1)
+                        job: active_job, job_seeker: job_seeker1)
     end
 
     it 'updates the selected application status to be processing' do

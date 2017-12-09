@@ -13,8 +13,8 @@ describe CompanyRegistrationPolicy do
   let(:company_registration) { CompanyRegistration.new(company) }
   let(:company_bayer) do
     FactoryBot.create(:company,
-                       name: 'Bayer-Raynor',
-                       agencies: [agency_metplus])
+                      name: 'Bayer-Raynor',
+                      agencies: [agency_metplus])
   end
   let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
   let(:bayer_admin)   { FactoryBot.create(:company_admin, company: company_bayer) }

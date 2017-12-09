@@ -41,12 +41,12 @@ class CompanyMailerPreview < ActionMailer::Preview
     job_application.application_questions = []
 
     job_application.application_questions <<
-      [ ApplicationQuestion.create(job_application: job_application,
-                                   question: Question.find(1),
-                                   answer: true),
-        ApplicationQuestion.create(job_application: job_application,
-                                   question: Question.find(2),
-                                   answer: false) ]
+      [ApplicationQuestion.create(job_application: job_application,
+                                  question: Question.find(1),
+                                  answer: true),
+       ApplicationQuestion.create(job_application: job_application,
+                                  question: Question.find(2),
+                                  answer: false)]
 
     CompanyMailer.application_received(job_application.job.company,
                                        job_application,

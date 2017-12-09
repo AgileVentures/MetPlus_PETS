@@ -12,8 +12,8 @@ RSpec.describe TestConcernJobsViewerClass do
   let(:job2) { FactoryBot.create(:job, title: 'Software Tester', company: company) }
   let(:job3) do
     FactoryBot.create(:job, title: 'Business Analyst',
-                             company: company,
-                             created_at: Date.new(2010, 1, 1))
+                            company: company,
+                            created_at: Date.new(2010, 1, 1))
   end
   let(:job_fields) { TestConcernJobsViewerClass::FIELDS_IN_JOB_TYPE }
 

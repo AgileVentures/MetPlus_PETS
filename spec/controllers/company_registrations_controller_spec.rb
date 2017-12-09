@@ -105,8 +105,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   let!(:company) { FactoryBot.create(:company, agencies: [agency]) }
   let(:comp_bayer) do
     FactoryBot.create(:company,
-                       name: 'Bayer-Raynor',
-                       agencies: [metplus])
+                      name: 'Bayer-Raynor',
+                      agencies: [metplus])
   end
   let!(:company_admin) { FactoryBot.create(:first_company_admin, company: company) }
   let(:bayer_admin) { FactoryBot.create(:company_admin, company: comp_bayer) }
@@ -239,7 +239,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
     let!(:company_role) do
       FactoryBot.create(:company_role,
-                         role: CompanyRole::ROLE[:CA])
+                        role: CompanyRole::ROLE[:CA])
     end
 
     before(:each) do
@@ -343,7 +343,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     # controller :create action requires a 'CA' role to be present in the DB
     let!(:company_role) do
       FactoryBot.create(:company_role,
-                         role: CompanyRole::ROLE[:CA])
+                        role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
       patch :approve, id: Company.last
@@ -403,7 +403,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     # controller :create action requires a 'CA' role to be present in the DB
     let!(:company_role) do
       FactoryBot.create(:company_role,
-                         role: CompanyRole::ROLE[:CA])
+                        role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
       xhr :patch, :deny, id: Company.last, email_text: 'reason of denial'
@@ -450,8 +450,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       params[:company_people_attributes] =
         { '0' =>
             FactoryBot.attributes_for(:user,
-                                       password: 'testing1234',
-                                       password_confirmation: 'testing1234') }
+                                      password: 'testing1234',
+                                      password_confirmation: 'testing1234') }
       params[:addresses_attributes] =
         { '0' => FactoryBot.attributes_for(:address),
           '1' => FactoryBot.attributes_for(:address) }
@@ -460,23 +460,23 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let!(:prior_name) { registration_params[:name] }
     let!(:company_role) do
       FactoryBot.create(:company_role,
-                         role: CompanyRole::ROLE[:CA])
+                        role: CompanyRole::ROLE[:CA])
     end
     let(:previous_parameters) do
       company = Company.find_by_name(prior_name)
       params = FactoryBot.attributes_for(:company,
-                                          name: 'Sprockets Corporation')
+                                         name: 'Sprockets Corporation')
       params[:company_people_attributes] =
         { '0' => FactoryBot.attributes_for(:user,
-                                            first_name: 'Fred',
-                                            last_name: 'Flintstone',
-                                            password: '',
-                                            password_confirmation: '') }
+                                           first_name: 'Fred',
+                                           last_name: 'Flintstone',
+                                           password: '',
+                                           password_confirmation: '') }
       params[:company_people_attributes]['0'][:id] =
         company.company_people[0].id
       params[:addresses_attributes] =
         { '0' => FactoryBot.attributes_for(:address,
-                                            city: 'Boston') }
+                                           city: 'Boston') }
       params[:addresses_attributes]['0'][:id] =
         company.addresses[0].id
       params
@@ -503,20 +503,20 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
         registration_params =
           FactoryBot.attributes_for(:company,
-                                     name: 'Sprockets Corporation',
-                                     job_email: 'jobs@sprockets.org')
+                                    name: 'Sprockets Corporation',
+                                    job_email: 'jobs@sprockets.org')
 
         registration_params[:company_people_attributes] =
           { '0' => FactoryBot.attributes_for(:user,
-                                              first_name: 'Fred',
-                                              last_name: 'Flintstone') }
+                                             first_name: 'Fred',
+                                             last_name: 'Flintstone') }
 
         registration_params[:company_people_attributes]['0'][:id] =
           company.company_people[0].id
 
         registration_params[:addresses_attributes] =
           { '0' => FactoryBot.attributes_for(:address,
-                                              city: 'Boston') }
+                                             city: 'Boston') }
         registration_params[:addresses_attributes]['0'][:id] =
           company.addresses[0].id
         expect do
@@ -545,8 +545,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           company.addresses.second.id
         registration_params[:company_people_attributes] =
           { '0' => FactoryBot.attributes_for(:user,
-                                              first_name: 'Fred',
-                                              last_name: 'Flintstone') }
+                                             first_name: 'Fred',
+                                             last_name: 'Flintstone') }
         request
         company.reload
         expect(company.addresses.count).to eq 1
@@ -558,19 +558,19 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
         registration_params =
           FactoryBot.attributes_for(:company,
-                                     name: 'Sprockets Corporation')
+                                    name: 'Sprockets Corporation')
         registration_params[:company_people_attributes] =
           { '0' => FactoryBot.attributes_for(:user,
-                                              first_name: 'Fred',
-                                              last_name: 'Flintstone',
-                                              password: '',
-                                              password_confirmation: '') }
+                                             first_name: 'Fred',
+                                             last_name: 'Flintstone',
+                                             password: '',
+                                             password_confirmation: '') }
         registration_params[:company_people_attributes]['0'][:id] =
           company.company_people[0].id
 
         registration_params[:addresses_attributes] =
           { '0' => FactoryBot.attributes_for(:address,
-                                              city: 'Boston') }
+                                             city: 'Boston') }
         registration_params[:addresses_attributes]['0'][:id] =
           company.addresses[0].id
 

@@ -4,5 +4,4 @@ FactoryBot.define do
     status_change_from 1
     entity nil
   end
-
 end

@@ -3,5 +3,4 @@ FactoryBot.define do
     job nil
     question nil
   end
-
 end

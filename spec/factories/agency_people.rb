@@ -11,7 +11,7 @@ FactoryBot.define do
     branch
     user
     status 'active'
-    agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:AA]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])]}
+    agency_roles { [AgencyRole.find_by_role(AgencyRole::ROLE[:AA]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])] }
   end
 
   factory :job_developer, class: AgencyPerson do
@@ -19,7 +19,7 @@ FactoryBot.define do
     branch
     user
     status 'active'
-    agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])]}
+    agency_roles { [AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])] }
   end
 
   factory :case_manager, class: AgencyPerson do
@@ -27,7 +27,7 @@ FactoryBot.define do
     branch
     user
     status 'active'
-    agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM])]}
+    agency_roles { [AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM])] }
   end
 
   factory :jd_cm, class: AgencyPerson do
@@ -35,7 +35,9 @@ FactoryBot.define do
     branch
     user
     status 'active'
-    agency_roles {[AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM]),
-                   AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])]}
+    agency_roles do
+      [AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM]),
+       AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) || FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:JD])]
+    end
   end
 end

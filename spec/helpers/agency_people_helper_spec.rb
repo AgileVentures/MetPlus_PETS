@@ -16,21 +16,21 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
     let!(:aa_person) do
       person = FactoryBot.build(:agency_person, agency: agency)
       person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:AA])
+                                               role: AgencyRole::ROLE[:AA])
       person.save
       person
     end
     let(:aa_person2) do
       person = FactoryBot.build(:agency_person, agency: agency)
       person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:AA])
+                                               role: AgencyRole::ROLE[:AA])
       person.save
       person
     end
     let(:jd_person) do
       person = FactoryBot.build(:agency_person, agency: agency)
       person.agency_roles << FactoryBot.create(:agency_role,
-                                                role: AgencyRole::ROLE[:JD])
+                                               role: AgencyRole::ROLE[:JD])
       person.save
       person
     end
@@ -75,23 +75,23 @@ RSpec.describe AgencyPeopleHelper, type: :helper do
     end
     let!(:adam) do
       FactoryBot.create(:job_seeker,
-                         first_name: 'Adam',
-                         last_name: 'Smith')
+                        first_name: 'Adam',
+                        last_name: 'Smith')
     end
     let!(:bob) do
       FactoryBot.create(:job_seeker,
-                         first_name: 'Bob',
-                         last_name: 'Smith')
+                        first_name: 'Bob',
+                        last_name: 'Smith')
     end
     let!(:charles) do
       FactoryBot.create(:job_seeker,
-                         first_name: 'Charles',
-                         last_name: 'Smith')
+                        first_name: 'Charles',
+                        last_name: 'Smith')
     end
     let!(:dave) do
       FactoryBot.create(:job_seeker,
-                         first_name: 'Dave',
-                         last_name: 'Smith')
+                        first_name: 'Dave',
+                        last_name: 'Smith')
     end
     before(:each) do
       cm_person.agency_relations << AgencyRelation.new(agency_role: cm_role,

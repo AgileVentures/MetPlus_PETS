@@ -33,11 +33,11 @@ RSpec.describe AgencyRelation, type: :model do
 
     it 'is valid with all required fields' do
       expect(AgencyRelation.new(agency_person: person,
-                agency_role: role,
-                job_seeker: job_seeker)).to be_valid
+                                agency_role: role,
+                                job_seeker: job_seeker)).to be_valid
     end
     it 'is invalid without an agency_person, role or job_seeker' do
-      relation = AgencyRelation.new()
+      relation = AgencyRelation.new
       relation.valid?
       expect(relation.errors[:agency_person]).to include("can't be blank")
       expect(relation.errors[:agency_role]).to include("can't be blank")

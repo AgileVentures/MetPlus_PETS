@@ -8,5 +8,4 @@ FactoryBot.define do
     address
     code
   end
-
 end

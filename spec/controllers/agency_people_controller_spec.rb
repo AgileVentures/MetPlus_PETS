@@ -432,12 +432,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
         patch :update_profile,
               agency_person:
                 FactoryBot.attributes_for(:agency_person,
-                                           password: '',
-                                           password_confirmation: '')
-                           .merge(FactoryBot.attributes_for(:user,
-                                                             first_name: 'John',
-                                                             last_name: 'Smith',
-                                                             phone: '780-890-8976')),
+                                          password: '',
+                                          password_confirmation: '')
+                          .merge(FactoryBot.attributes_for(:user,
+                                                           first_name: 'John',
+                                                           last_name: 'Smith',
+                                                           phone: '780-890-8976')),
               id: aa_person
         aa_person.reload
       end

@@ -117,7 +117,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
         FactoryBot.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
         ca = FactoryBot.create(:company_person, company: company)
@@ -151,7 +151,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     let(:company)       { FactoryBot.create(:company) }
     let!(:ca_role)      do
       FactoryBot.create(:company_role,
-                         role: CompanyRole::ROLE[:CA])
+                        role: CompanyRole::ROLE[:CA])
     end
     let(:company_admin) do
       ca = FactoryBot.create(:company_person, company: company)
@@ -172,7 +172,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
         FactoryBot.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
         ca = FactoryBot.create(:company_person, company: company)
@@ -210,7 +210,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
         FactoryBot.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
         ca = FactoryBot.create(:company_person, company: company)
@@ -240,7 +240,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
         FactoryBot.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
         ca = FactoryBot.create(:company_person, company: company)
@@ -281,7 +281,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
         FactoryBot.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+                          role: CompanyRole::ROLE[:CA])
       end
       let!(:company_admin) do
         ca = FactoryBot.create(:company_person, company: company)

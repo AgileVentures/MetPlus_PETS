@@ -17,7 +17,7 @@ RSpec.shared_examples 'unauthorized company people' do
   end
 end
 
-RSpec.shared_examples'unauthorized agency people and jobseeker' do
+RSpec.shared_examples 'unauthorized agency people and jobseeker' do
   let(:agency) { FactoryBot.create(:agency) }
   let(:company) { FactoryBot.create(:company) }
 

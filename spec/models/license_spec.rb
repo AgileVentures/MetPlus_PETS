@@ -41,8 +41,8 @@ RSpec.describe License, type: :model do
 
   describe '#license_description' do
     it 'returns abbreviation and title' do
-      expect(license.license_description).
-        to match /^#{Regexp.quote(license.abbr)}.*#{Regexp.quote(license.title)}/
+      expect(license.license_description)
+        .to match /^#{Regexp.quote(license.abbr)}.*#{Regexp.quote(license.title)}/
     end
   end
 end

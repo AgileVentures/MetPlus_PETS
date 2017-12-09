@@ -4,5 +4,4 @@ FactoryBot.define do
     job_seeker
     agency_role
   end
-
 end

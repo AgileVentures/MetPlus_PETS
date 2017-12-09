@@ -72,18 +72,18 @@ RSpec.describe JobsController, type: :controller do
     context 'search by title and description' do
       let(:job1) do
         FactoryBot.create(:job, title: 'Customer Manager',
-                                 description: 'Provide resposive customer service')
+                                description: 'Provide resposive customer service')
       end
       let(:job2) { FactoryBot.create(:job) }
       let!(:job_skill1) do
         FactoryBot.create(:job_skill,
-                           job: job1,
-                           skill: FactoryBot.create(:skill, name: 'New Skill 1'))
+                          job: job1,
+                          skill: FactoryBot.create(:skill, name: 'New Skill 1'))
       end
       let!(:job_skill2) do
         FactoryBot.create(:job_skill,
-                           job: job2,
-                           skill: FactoryBot.create(:skill, name: 'New Skill 2'))
+                          job: job2,
+                          skill: FactoryBot.create(:skill, name: 'New Skill 2'))
       end
       before(:each) do
         get :index,
@@ -91,9 +91,9 @@ RSpec.describe JobsController, type: :controller do
                  'description_cont_any': 'responsive service' }
       end
       it_behaves_like 'return success and render', 'index'
-      it { expect(assigns(:title_words)).to match %w(customer manager) }
+      it { expect(assigns(:title_words)).to match %w[customer manager] }
       it 'assigns description words for view' do
-        expect(assigns(:description_words)).to match %w(responsive service)
+        expect(assigns(:description_words)).to match %w[responsive service]
       end
       it { expect(assigns(:jobs)[0]).to eq job1 }
     end
@@ -101,50 +101,50 @@ RSpec.describe JobsController, type: :controller do
       let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
       let!(:joba) do
         FactoryBot.create(:job,
-                           company: FactoryBot.create(:company, name: 'Active inc',
-                                                                 status:  'active',
-                                                                 agencies: [agency]))
+                          company: FactoryBot.create(:company, name: 'Active inc',
+                                                               status:  'active',
+                                                               agencies: [agency]))
       end
       let!(:job_skilla) do
         FactoryBot.create(:job_skill,
-                           job: joba,
-                           skill: skill_s)
+                          job: joba,
+                          skill: skill_s)
       end
       let!(:jobp) do
         FactoryBot.create(:job,
-                           company: FactoryBot.create(:company,
-                                                       name: 'Pending inc',
-                                                       status:  'pending_registration',
-                                                       agencies: [agency]))
+                          company: FactoryBot.create(:company,
+                                                     name: 'Pending inc',
+                                                     status:  'pending_registration',
+                                                     agencies: [agency]))
       end
       let!(:job_skillp) do
         FactoryBot.create(:job_skill,
-                           job: jobp,
-                           skill: skill_s)
+                          job: jobp,
+                          skill: skill_s)
       end
       let!(:jobi) do
         FactoryBot.create(:job,
-                           company: FactoryBot.create(:company,
-                                                       name: 'Inact inc',
-                                                       status:  'inactive',
-                                                       agencies: [agency]))
+                          company: FactoryBot.create(:company,
+                                                     name: 'Inact inc',
+                                                     status:  'inactive',
+                                                     agencies: [agency]))
       end
       let!(:job_skilli) do
         FactoryBot.create(:job_skill,
-                           job: jobi,
-                           skill: skill_s)
+                          job: jobi,
+                          skill: skill_s)
       end
       let!(:jobd) do
         FactoryBot.create(:job,
-                           company: FactoryBot.create(:company,
-                                                       name: 'Denied inc',
-                                                       status: 'registration_denied',
-                                                       agencies: [agency]))
+                          company: FactoryBot.create(:company,
+                                                     name: 'Denied inc',
+                                                     status: 'registration_denied',
+                                                     agencies: [agency]))
       end
       let!(:job_skilld) do
         FactoryBot.create(:job_skill,
-                           job: jobd,
-                           skill: skill_s)
+                          job: jobd,
+                          skill: skill_s)
       end
       it 'Only active company jobs are listed in the initial display' do
         get :index
@@ -465,16 +465,20 @@ RSpec.describe JobsController, type: :controller do
 
         describe 'updates job with new license' do
           it 'changes JobLicense count by 1' do
-            expect { patch :update, id: job_wo_skill.id,
-                     job: valid_params.merge(new_license_params) }
+            expect do
+              patch :update, id: job_wo_skill.id,
+                             job: valid_params.merge(new_license_params)
+            end
               .to change(JobLicense, :count).by(1)
           end
         end
 
         describe 'updates job with new question' do
           it 'changes JobQuestion count by 1' do
-            expect { patch :update, id: job_wo_skill.id,
-                     job: valid_params.merge(new_question_params) }
+            expect do
+              patch :update, id: job_wo_skill.id,
+                             job: valid_params.merge(new_question_params)
+            end
               .to change(JobQuestion, :count).by(1)
           end
         end
@@ -552,16 +556,16 @@ RSpec.describe JobsController, type: :controller do
     let(:request_last_page) do
       xhr :get, :list, job_type: 'my-company-all', page: 4
     end
-    let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs'}
+    let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs' }
     before(:each) do
       31.times.each do |i|
         title = i < 10 ? "Awesome job 0#{i}" : "Awesome job #{i}"
         FactoryBot.create(:job, title: title, company: bosh,
-                                 company_person: bosh_person)
+                                company_person: bosh_person)
       end
       4.times.each do |i|
         FactoryBot.create(:job, title: "Awesome new job #{i}", company: dyson,
-                                 company_person: dyson_person)
+                                company_person: dyson_person)
       end
     end
 
@@ -972,9 +976,9 @@ RSpec.describe JobsController, type: :controller do
           warden.set_user job_developer
           stub_cruncher_match_resume_and_job
           allow(controller).to receive(:get_matches).with(job_seeker_ids)
-            .and_return(results)
+                                                    .and_return(results)
           allow(described_class).to receive(:sort_by_score).with(results)
-            .and_return(sorted_results)
+                                                           .and_return(sorted_results)
         end
 
         it 'calls sort_by_score' do

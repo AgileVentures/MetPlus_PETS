@@ -37,7 +37,7 @@ RSpec.describe Address, type: :model do
 
   describe 'Class methods' do
     it 'should contain Alabama, AL state in array' do
-      expect(Address.us_states).to include(['Alabama', 'AL'])
+      expect(Address.us_states).to include(%w[Alabama AL])
     end
 
     it 'should output alabama' do

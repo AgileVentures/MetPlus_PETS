@@ -3,5 +3,4 @@ FactoryBot.define do
     job
     license
   end
-
 end

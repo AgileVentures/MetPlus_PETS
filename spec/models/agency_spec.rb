@@ -34,45 +34,56 @@ RSpec.describe Agency, type: :model do
     end
 
     describe 'phone' do
-       subject {FactoryBot.build(:agency)}
-       it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)}
-       it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234',
-               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)}
-     end
+      subject { FactoryBot.build(:agency) }
+      it {
+        should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
+                               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:phone)
+      }
+      it {
+        should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
+                           '1 231 231 2345', '12312312345', '1231231234',
+                           '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:phone)
+      }
+    end
 
-     describe 'fax' do
-       subject {FactoryBot.build(:agency)}
-       it { should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)}
-       it { should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-               '1 231 231 2345', '12312312345',  '1231231234',
-               '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:fax)}
-     end
+    describe 'fax' do
+      subject { FactoryBot.build(:agency) }
+      it {
+        should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
+                               ' 123 123 1234', '(234 1234 1234', '786) 1243 3578').for(:fax)
+      }
+      it {
+        should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
+                           '1 231 231 2345', '12312312345', '1231231234',
+                           '1-910-123-9158 x2851', '1-872-928-5886', '833-638-6551 x16825').for(:fax)
+      }
+    end
 
-     describe 'Email' do
-       subject {FactoryBot.build(:agency)}
-       it do
-         stub_email_validate_error
-         should_not allow_value('asd', 'john@company').for(:email)
-       end
-       it { should allow_value('johndoe@company.com').for(:email)}
-     end
+    describe 'Email' do
+      subject { FactoryBot.build(:agency) }
+      it do
+        stub_email_validate_error
+        should_not allow_value('asd', 'john@company').for(:email)
+      end
+      it { should allow_value('johndoe@company.com').for(:email) }
+    end
 
+    describe 'Website' do
+      subject { FactoryBot.build(:agency) }
+      it {
+        should_not allow_value('asd', 'ftp://company.com', 'http:',
+                               'http://', 'https', 'https:', 'https://',
+                               'http://place.com###Bammm').for(:website)
+      }
 
-     describe 'Website' do
-       subject {FactoryBot.build(:agency)}
-       it { should_not allow_value('asd', 'ftp://company.com', 'http:',
-                 'http://','https',  'https:', 'https://',
-                 'http://place.com###Bammm').for(:website)}
-
-       it { should allow_value('http://company.com',
-                               'https://company.com',
-                               'http://w.company.com/info',
-                               'https://comp.com:10/test/1/wasd',
-                               'http://company.com/').for(:website)}
-     end
+      it {
+        should allow_value('http://company.com',
+                           'https://company.com',
+                           'http://w.company.com/info',
+                           'https://comp.com:10/test/1/wasd',
+                           'http://company.com/').for(:website)
+      }
+    end
   end
 
   describe 'Agency model' do
@@ -81,7 +92,7 @@ RSpec.describe Agency, type: :model do
                         phone: '000-123-4567', email: 'agency@mail.com')).to be_valid
     end
     it 'is invalid without a name, website, phone or email' do
-      agency = Agency.new()
+      agency = Agency.new
       agency.valid?
       expect(agency.errors[:name]).to include("can't be blank")
       expect(agency.errors[:website]).to include("can't be blank")
@@ -96,21 +107,21 @@ RSpec.describe Agency, type: :model do
     let!(:aa_person1) do
       $person = FactoryBot.build(:agency_person, agency: agency)
       $person.agency_roles << FactoryBot.create(:agency_role,
-                                      role: AgencyRole::ROLE[:AA])
+                                                role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let!(:aa_person2) do
       $person = FactoryBot.build(:agency_person, agency: agency)
       $person.agency_roles << FactoryBot.create(:agency_role,
-                                      role: AgencyRole::ROLE[:AA])
+                                                role: AgencyRole::ROLE[:AA])
       $person.save
       $person
     end
     let(:jd_person) do
       $person = FactoryBot.build(:agency_person, agency: agency)
       $person.agency_roles << FactoryBot.create(:agency_role,
-                                      role: AgencyRole::ROLE[:JD])
+                                                role: AgencyRole::ROLE[:JD])
       $person.save
       $person
     end
@@ -131,15 +142,14 @@ RSpec.describe Agency, type: :model do
   end
 
   describe 'Class methods' do
-
     let(:agency)   { FactoryBot.create(:agency) }
     let!(:person1) { FactoryBot.create(:agency_person, agency: agency) }
     let!(:person2) { FactoryBot.create(:agency_person, agency: agency) }
     let!(:person3) { FactoryBot.create(:agency_person, agency: agency) }
 
     it 'returns all emails for people in the agency' do
-      expect(Agency.all_agency_people_emails).
-        to contain_exactly(person1.email, person2.email, person3.email)
+      expect(Agency.all_agency_people_emails)
+        .to contain_exactly(person1.email, person2.email, person3.email)
     end
   end
 end

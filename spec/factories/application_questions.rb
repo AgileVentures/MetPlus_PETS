@@ -4,5 +4,4 @@ FactoryBot.define do
     question
     answer false
   end
-
 end

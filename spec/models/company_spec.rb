@@ -47,7 +47,7 @@ RSpec.describe Company, type: :model do
       end
       it do
         is_expected.to validate_uniqueness_of(:ein).case_insensitive
-          .with_message('has already been registered')
+                                                   .with_message('has already been registered')
       end
     end
 
@@ -166,7 +166,7 @@ RSpec.describe Company, type: :model do
     let!(:company5) { FactoryBot.create(:company, name: 'Acme, Inc.') }
     let!(:company6) do
       FactoryBot.create(:company, name: 'InActive, Inc.',
-                                   status: 'inactive')
+                                  status: 'inactive')
     end
 
     let(:cmpy1_person) { FactoryBot.create(:company_contact, company: company1) }
@@ -177,33 +177,33 @@ RSpec.describe Company, type: :model do
 
     let!(:job1) do
       FactoryBot.create(:job, company: company1,
-                               company_person: cmpy1_person)
+                              company_person: cmpy1_person)
     end
     let!(:job2) do
       FactoryBot.create(:job, company: company1,
-                               company_person: cmpy1_person)
+                              company_person: cmpy1_person)
     end
     let!(:job3) do
       FactoryBot.create(:job, company: company2,
-                               company_person: cmpy2_person)
+                              company_person: cmpy2_person)
     end
     let!(:job4) do
       FactoryBot.create(:job, company: company2,
-                               company_person: cmpy2_person)
+                              company_person: cmpy2_person)
     end
     let!(:job5) do
       FactoryBot.create(:job, company: company4,
-                               company_person: cmpy4_person,
-                               status: :filled)
+                              company_person: cmpy4_person,
+                              status: :filled)
     end
     let!(:job6) do
       FactoryBot.create(:job, company: company5,
-                               company_person: cmpy5_person,
-                               status: :revoked)
+                              company_person: cmpy5_person,
+                              status: :revoked)
     end
     let!(:job7) do
       FactoryBot.create(:job, company: company6,
-                               company_person: cmpy6_person)
+                              company_person: cmpy6_person)
     end
 
     let!(:cmpy1_admin1) { FactoryBot.create(:company_admin, company: company1) }
