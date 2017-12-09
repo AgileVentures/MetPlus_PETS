@@ -178,7 +178,7 @@ RSpec.describe Job, type: :model do
               .to include('Min salary is not a number')
           end
           it 'contains too many digits to right of decimal point' do
-            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000.123)
+            job.assign_attributes(pay_period: 'Monthly', min_salary: 1000000.123)
             error_msg = 'Min salary must match format NNNNNN.NN (up to 6 digits,' +
                         ' optional decimal point, optional digits for cents)'
             expect(job).to_not be_valid
