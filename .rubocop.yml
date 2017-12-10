@@ -23,11 +23,14 @@ Metrics/BlockLength:
   Enabled: true
   Exclude: 
     - spec/**/*
+    - features/step_definitions/*
 Metrics/ModuleLength:
   Enabled: true
   Exclude: 
     - spec/**/*
+    - features/step_definitions/*
 Metrics/MethodLength:
   Enabled: true
   Exclude: 
     - spec/**/*
+    - features/step_definitions/*    
