@@ -18,8 +18,8 @@ describe CompanyPerson, type: :model do
   describe 'Validations' do
     describe 'status' do
       it 'Status -1 should generate exception' do
-        expect { subject.status = -1 }.to
-        raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
+        expect { subject.status = -1 }
+          .to raise_error(ArgumentError).with_message('\'-1\' is not a valid status')
       end
       it 'Status 0 should be company_pending' do
         subject.status = 0
