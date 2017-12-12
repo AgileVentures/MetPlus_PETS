@@ -1,3 +1,4 @@
+require_relative '../job_applications'
 module JobApplications
   class Processing
     def call(job_application, company_person)
@@ -21,8 +22,5 @@ module JobApplications
         task.assign(company_person) if task.status == Task::STATUS[:NEW]
       end
     end
-  end
-
-  class JobNotActive < StandardError
   end
 end
