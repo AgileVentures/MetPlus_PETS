@@ -4,8 +4,23 @@ module JobApplications
     def call(job_application)
       raise JobNotActive, '' if !job_application.active? && !job_application.processing?
       job_application.accept
+      
+      send_notification(job_application)
+      close_all_tasks(job_application)
+    end
+
+    private
+
+    def send_notification(job_application)
       job_developer = job_application.job_seeker.job_developer
       Event.create(:APP_ACCEPTED, job_application) if job_developer
+    end
+
+    def close_all_tasks(job_application)
+      JobApplication.for_job(job_application.job).each do |_job_application|
+        task = Task.job_application_target(_job_application)
+        task.first.force_close() if task.count == 1
+      end
     end
   end
 end
