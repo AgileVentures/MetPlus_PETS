@@ -350,21 +350,28 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     end
 
     context 'authorized access' do
+      let(:use_case_mock) { double(Companies::ApproveCompanyRegistration) }
       before(:each) do
         3.times do
           FactoryGirl.create(:agency_person, agency: agency)
         end
         sign_in agency_admin
-        post :create, company: registration_params
-      end
+        allow(Companies::ApproveCompanyRegistration)
+          .to receive(:new).and_return(use_case_mock)
+        allow(use_case_mock)
+          .to receive(:call)
 
-      it 'sends registration-approved and account-confirm emails' do
-        expect { request }.to change(all_emails, :count).by(+2)
+        post :create, company: registration_params
       end
 
       context 'after approval' do
         before(:each) do
           request
+        end
+
+        it 'call the registration use case' do
+          expect(use_case_mock).to have_received(:call)
+            .with(Company.last)
         end
 
         it 'sets flash message' do
@@ -391,13 +398,15 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       params
     end
 
+    let(:use_case_mock) { double(Companies::DenyCompanyRegistration) }
+
     # controller :create action requires a 'CA' role to be present in the DB
     let!(:company_role) do
       FactoryGirl.create(:company_role,
                          role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
-      xhr :patch, :deny, id: Company.last
+      xhr :patch, :deny, id: Company.last, email_text: 'reason of denial'
     end
 
     context 'authorized access' do
@@ -405,16 +414,23 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         3.times do
           FactoryGirl.create(:agency_person, agency: agency)
         end
+
+        allow(Companies::DenyCompanyRegistration)
+          .to receive(:new).and_return(use_case_mock)
+        allow(use_case_mock)
+          .to receive(:call)
         post :create, company: registration_params
         sign_in agency_admin
       end
 
-      it 'sends registration-denied email' do
-        expect { request }.to change(all_emails, :count).by(+1)
-      end
       context 'after denial' do
         before(:each) do
           request
+        end
+
+        it 'call the registration use case' do
+          expect(use_case_mock).to have_received(:call)
+            .with(Company.last, 'reason of denial')
         end
 
         it 'returns success status' do

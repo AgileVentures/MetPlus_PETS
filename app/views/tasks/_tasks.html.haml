@@ -31,10 +31,13 @@
               %p
                 User:
                 =link_to( task.person.full_name, show_person_path(task.person))
-            - if not task.job.nil?
+            - if not task.job_application.nil?
               %p
-                Job:
-                = link_to(task.job.title, job_path(task.job))
+                = link_to(task.job_application.job_seeker.full_name, job_seeker_path(task.job_application.job_seeker))
+                has
+                = link_to("applied", application_path(task.job_application))
+                to:
+                = link_to(task.job_application.job.title, job_path(task.job_application.job))
             - if not task.company.nil?
               %p
                 Company:
