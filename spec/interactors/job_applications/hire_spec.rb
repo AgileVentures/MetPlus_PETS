@@ -45,13 +45,13 @@ RSpec.describe JobApplications::Hire do
       let!(:joe_application) do
         joe = FactoryGirl.create(:job_seeker, first_name: 'Joe')
         job_application = FactoryGirl.create(:job_application, job_seeker: joe, job: job)
-        TestTaskHelper.new_review_job_application_task(job_application, company)      
+        TestTaskHelper.new_review_job_application_task(job_application, company)
         job_application
       end
-      
+
       it 'changes state of job application to accepted' do
-        subject.call(jane_application)        
-        
+        subject.call(jane_application)
+
         all_job_applications = JobApplication.all
         expect(all_job_applications.count).to be(2)
         jane_application = all_job_applications.select do |application|
@@ -79,7 +79,7 @@ RSpec.describe JobApplications::Hire do
             .to receive(:job_developer).and_return(job_developer)
           subject.call(jane_application)
         end
-        
+
         it 'creates a application accepted notification' do
           expect(Event).to have_received(:create).with(:APP_ACCEPTED, jane_application)
         end
@@ -91,7 +91,7 @@ RSpec.describe JobApplications::Hire do
             .to receive(:job_developer).and_return(nil)
           subject.call(jane_application)
         end
-        
+
         it 'does not create any notification' do
           expect(Event).not_to have_received(:create)
         end

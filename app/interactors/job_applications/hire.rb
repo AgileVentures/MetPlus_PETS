@@ -4,7 +4,7 @@ module JobApplications
     def call(job_application)
       raise JobNotActive, '' if !job_application.active? && !job_application.processing?
       job_application.accept
-      
+
       send_notification(job_application)
       close_all_tasks(job_application)
     end
@@ -17,9 +17,9 @@ module JobApplications
     end
 
     def close_all_tasks(job_application)
-      JobApplication.for_job(job_application.job).each do |_job_application|
-        task = Task.job_application_target(_job_application)
-        task.first.force_close() if task.count == 1
+      JobApplication.for_job(job_application.job).each do |current_job_application|
+        task = Task.job_application_target(current_job_application)
+        task.first.force_close if task.count == 1
       end
     end
   end

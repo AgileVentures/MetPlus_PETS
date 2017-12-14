@@ -1,3 +1,4 @@
+require_relative '../job_applications'
 module JobApplications
   class Reject
     def call(job_application, reason)
@@ -5,9 +6,9 @@ module JobApplications
       job_application.reason_for_rejection = reason
       job_application.save
       job_application.reject
-      
+
       send_notification(job_application)
-      
+
       close_task(job_application)
     end
 
@@ -20,7 +21,7 @@ module JobApplications
 
     def close_task(job_application)
       task = Task.job_application_target(job_application)
-      task.first.force_close() if task.count == 1
+      task.first.force_close if task.count == 1
     end
   end
 end
