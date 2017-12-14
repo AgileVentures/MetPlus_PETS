@@ -7,20 +7,18 @@ class JobApplicationsController < ApplicationController
   def accept
     begin
       JobApplications::Hire.new.call(@job_application)
-      flash[:info] = 'Job application accepted.'      
+      flash[:info] = 'Job application accepted.'
     rescue JobApplications::JobNotActive
-      flash[:alert] = 'Invalid action on inactive job application.'      
+      flash[:alert] = 'Invalid action on inactive job application.'
     end
     redirect_to job_url(@job_application.job)
   end
 
   def reject
-    begin
-      JobApplications::Reject.new.call(@job_application, params[:reason_for_rejection])
-      reject_success_response(request)
-    rescue JobApplications::JobNotActive
-      reject_fail_response(request)
-    end
+    JobApplications::Reject.new.call(@job_application, params[:reason_for_rejection])
+    reject_success_response(request)
+  rescue JobApplications::JobNotActive
+    reject_fail_response(request)
   end
 
   def process_application

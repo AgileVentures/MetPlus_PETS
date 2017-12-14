@@ -4,7 +4,7 @@ FactoryGirl.define do
     job
     status :active
   end
-  
+
   factory :not_accepted_job_application, class: JobApplication do
     job_seeker nil
     job
