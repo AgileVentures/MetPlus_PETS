@@ -66,6 +66,18 @@ RSpec.describe JobApplications::Reject do
         expect(joe_application.status).to eq('active')
       end
 
+      it 'closes job application task for specific application' do
+        subject.call(jane_application, 'not ready for job')
+
+        Task.all.each do |task|
+          if task.job_application == jane_application
+            expect(task.status).to eq(TestTaskHelper::STATUS[:DONE])
+          else
+            expect(task.status).to eq(TestTaskHelper::STATUS[:NEW])
+          end
+        end
+      end
+
       context 'when the job seeker as a job developer associated' do
         let(:job_developer) { FactoryGirl.build(:job_developer) }
         before(:each) do
