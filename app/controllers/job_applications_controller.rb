@@ -15,14 +15,10 @@ class JobApplicationsController < ApplicationController
   end
 
   def reject
-    if @job_application.active? || @job_application.processing?
-      @job_application.reason_for_rejection = params[:reason_for_rejection]
-      @job_application.save
-      @job_application.reject
-      @job_dev = @job_application.job_seeker.job_developer
-      Event.create(:APP_REJECTED, @job_application) if @job_dev
+    begin
+      JobApplications::Reject.new.call(@job_application, params[:reason_for_rejection])
       reject_success_response(request)
-    else
+    rescue JobApplications::JobNotActive
       reject_fail_response(request)
     end
   end
