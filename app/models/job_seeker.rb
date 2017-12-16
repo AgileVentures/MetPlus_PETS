@@ -1,5 +1,5 @@
 class JobSeeker < ActiveRecord::Base
-  acts_as :user
+  belongs_to :user
   has_many :resumes, dependent: :destroy
 
   has_one :address, as: :location, dependent: :destroy
@@ -120,5 +120,21 @@ class JobSeeker < ActiveRecord::Base
       return ap_relation if ap_relation
     end
     nil # return nil if no agency person found for that role
+  end
+
+  def method_missing(name, *args, &block)
+    begin
+      super
+    rescue NoMethodError
+      user.send(name, *args, &block)
+    end 
+  end
+
+  def self.method_missing(name, *args, &block)
+    begin
+      super
+    rescue NoMethodError
+      User.send(name, *args, &block)
+    end
   end
 end

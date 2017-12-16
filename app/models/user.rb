@@ -10,12 +10,16 @@ class User < ActiveRecord::Base
    validates   :phone, :phone => true
    validates   :email, :email => true
 
+   has_one :job_seeker
+   has_one :agency_person
+   has_one :company_person
+
    def self.is_job_seeker?(user)
-     user.actable_type == 'JobSeeker'
+     user.job_seeker != nil
    end
 
    def self.is_job_developer?(user)
-      return false unless user.actable_type == "AgencyPerson"
+      return false unless user.agency_person != nil
       user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:JD]
    end
 
@@ -61,7 +65,9 @@ class User < ActiveRecord::Base
   end
 
   def pets_user
-    self.try(:actable).nil? ? self : self.actable
+    return job_seeker if job_seeker != nil
+    return agency_person if agency_person != nil
+    return company_person if company_person != nil
   end
 
   def is_job_seeker?
