@@ -2,7 +2,7 @@ require_relative '../job_applications'
 module JobApplications
   class Hire
     def call(job_application)
-      raise JobNotActive, '' if !job_application.active? && !job_application.processing?
+      raise JobNotActive, '' unless job_application.active? || job_application.processing?
       job_application.accept
 
       send_notification(job_application)
