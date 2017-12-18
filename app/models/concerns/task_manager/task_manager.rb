@@ -97,6 +97,10 @@ module TaskManager
       raise ArgumentError, 'Task need to be in created state' if status != STATUS[:NEW]
       send("assign_#{task_type}".to_sym, self, person.pets_user)
     end
+    
+    def force_assign(person)
+      send("assign_#{task_type}".to_sym, self, person.pets_user)
+    end
 
     ## Change the status of the task to Work In Progress
     def work_in_progress
