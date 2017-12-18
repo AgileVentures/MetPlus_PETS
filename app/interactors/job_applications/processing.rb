@@ -18,7 +18,7 @@ module JobApplications
       if tasks.count == 1
         task = tasks.first
         task.force_assign(company_person) if task.status == Task::STATUS[:ASSIGNED]
-        task.assign(company_person) if task.status == Task::STATUS[:NEW]          
+        task.assign(company_person) if task.status == Task::STATUS[:NEW]
       end
     end
   end
