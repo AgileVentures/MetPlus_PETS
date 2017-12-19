@@ -14,8 +14,6 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column :last_name }
     it { is_expected.to have_db_column :email }
     it { is_expected.to have_db_column :phone }
-    it { is_expected.to have_db_column :actable_id }
-    it { is_expected.to have_db_column :actable_type }
 
     it { is_expected.to have_db_column :encrypted_password }
     it { is_expected.to have_db_column :reset_password_token }
@@ -36,15 +34,15 @@ RSpec.describe User, type: :model do
   end
 
   describe 'check model restrictions' do
-    describe 'FirstName check' do
-      subject { FactoryBot.build(:user) }
-      it { is_expected.to validate_presence_of :first_name }
-    end
-
-    describe 'LastName check' do
-      subject { FactoryBot.build(:user) }
-      it { is_expected.to validate_presence_of :last_name }
-    end
+    it { should validate_presence_of(:email) }
+    it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email) }
+    it { is_expected.to validate_presence_of :first_name }
+    it { is_expected.to validate_presence_of :last_name }
+    it {
+      should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
+                              ' 123 123 1234', '(234 1234 1234',
+                              '786) 1243 3578').for(:phone)
+    }
 
     describe 'Phone number format check' do
       subject { FactoryBot.build(:user) }

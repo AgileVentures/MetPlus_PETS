@@ -1,5 +1,7 @@
 class CompanyPerson < ActiveRecord::Base
-  acts_as :user
+  include ActAsUser
+  
+  belongs_to :user
   belongs_to :company
   belongs_to :address
   has_and_belongs_to_many :company_roles,

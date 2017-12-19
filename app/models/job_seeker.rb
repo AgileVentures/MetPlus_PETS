@@ -1,4 +1,6 @@
 class JobSeeker < ActiveRecord::Base
+  include ActAsUser
+
   belongs_to :user
   has_many :resumes, dependent: :destroy
 
@@ -67,13 +69,13 @@ class JobSeeker < ActiveRecord::Base
 
   def self.job_seekers_without_job_developer
     where.not(id: AgencyRelation.in_role_of(:JD).pluck(:job_seeker_id))
-         .includes(:job_seeker_status, :job_applications)
+         .includes(:job_seeker_status, :job_applications, :user)
          .order('users.last_name')
   end
 
   def self.job_seekers_without_case_manager
     where.not(id: AgencyRelation.in_role_of(:CM).pluck(:job_seeker_id))
-         .includes(:job_seeker_status, :job_applications)
+         .includes(:job_seeker_status, :job_applications, :user)
          .order('users.last_name')
   end
 
@@ -120,21 +122,5 @@ class JobSeeker < ActiveRecord::Base
       return ap_relation if ap_relation
     end
     nil # return nil if no agency person found for that role
-  end
-
-  def method_missing(name, *args, &block)
-    begin
-      super
-    rescue NoMethodError
-      user.send(name, *args, &block)
-    end 
-  end
-
-  def self.method_missing(name, *args, &block)
-    begin
-      super
-    rescue NoMethodError
-      User.send(name, *args, &block)
-    end
   end
 end

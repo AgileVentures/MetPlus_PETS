@@ -125,16 +125,6 @@ RSpec.describe AgencyPerson, type: :model do
       agency.valid?
       expect(agency.errors[:agency_id]).to include("can't be blank")
     end
-    context '#acting_as?' do
-      it 'returns true for supermodel class and name' do
-        expect(AgencyPerson.acting_as?(:user)).to be true
-        expect(AgencyPerson.acting_as?(User)).to  be true
-      end
-      it 'returns false for anything other than supermodel' do
-        expect(AgencyPerson.acting_as?(:model)).to be false
-        expect(AgencyPerson.acting_as?(String)).to be false
-      end
-    end
   end
 
   describe 'Agency Admin checks' do

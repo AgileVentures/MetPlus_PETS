@@ -45,8 +45,6 @@ gem 'pusher'
 
 gem 'js_cookie_rails'
 
-gem 'active_record-acts_as'
-
 gem 'delayed_job_active_record'
 
 gem 'json'

@@ -78,6 +78,7 @@ describe JobSeeker, type: :model do
       stub_cruncher_authenticate
       stub_cruncher_job_create
       stub_cruncher_file_download test_file
+      stub_cruncher_file_upload
     end
 
     it '#latest_application' do
@@ -138,17 +139,6 @@ describe JobSeeker, type: :model do
     end
   end
 
-  context '#acting_as?' do
-    it 'returns true for supermodel class and name' do
-      expect(JobSeeker.acting_as?(:user)).to be true
-      expect(JobSeeker.acting_as?(User)).to  be true
-    end
-
-    it 'returns false for anything other than supermodel' do
-      expect(JobSeeker.acting_as?(:model)).to be false
-      expect(JobSeeker.acting_as?(String)).to be false
-    end
-  end
   describe '#is_job_seeker?' do
     let(:person) { FactoryBot.create(:job_seeker) }
     it 'true' do

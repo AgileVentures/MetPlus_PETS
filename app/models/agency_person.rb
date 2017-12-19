@@ -1,6 +1,8 @@
 class AgencyPerson < ActiveRecord::Base
-  acts_as :user
 
+  include ActAsUser
+
+  belongs_to :user
 
   belongs_to :agency
   belongs_to :branch

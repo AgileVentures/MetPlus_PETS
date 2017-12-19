@@ -90,36 +90,6 @@ describe CompanyPerson, type: :model do
     end
   end
 
-  describe 'check model restrictions' do
-    it { should validate_presence_of(:email) }
-    it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email) }
-    it { is_expected.to validate_presence_of :first_name }
-    it { is_expected.to validate_presence_of :last_name }
-    it {
-      should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-                             ' 123 123 1234', '(234 1234 1234',
-                             '786) 1243 3578').for(:phone)
-    }
-    it {
-      should allow_value('+1 123 123 1234', '123 123 1234', '(123) 123 1234',
-                         '1 231 231 2345', '12312312345', '1231231234',
-                         '1-910-123-9158 x2851', '1-872-928-5886',
-                         '833-638-6551 x16825').for(:phone)
-    }
-  end
-
-  context '#acting_as?' do
-    it 'returns true for supermodel class and name' do
-      expect(CompanyPerson.acting_as?(:user)).to be true
-      expect(CompanyPerson.acting_as?(User)).to  be true
-    end
-
-    it 'returns false for anything other than supermodel' do
-      expect(CompanyPerson.acting_as?(:model)).to be false
-      expect(CompanyPerson.acting_as?(String)).to be false
-    end
-  end
-
   describe '#is_company_contact?' do
     let(:company) { FactoryBot.create(:company) }
     let(:company1) { FactoryBot.create(:company) }
