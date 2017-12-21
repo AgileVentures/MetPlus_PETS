@@ -9,9 +9,9 @@ RSpec.describe Users::SessionsController, type: :controller do
     it 'logs in without remember me' do
       post :create,
            user: { email: user.email, password: user.password,
-                   person_type: user.actable_type }
+                   person_type: user.user_type }
       expect(cookies[:user_id]).to eq user.id
-      expect(cookies[:person_type]).to eq user.actable_type
+      expect(cookies[:person_type]).to eq user.user_type
     end
   end
   describe 'POST #create /users/sessions with remember me' do
@@ -22,13 +22,13 @@ RSpec.describe Users::SessionsController, type: :controller do
       post :create,
            user: { email: user.email, password: user.password,
                    remember_me: '1',
-                   person_type: user.actable_type }
+                   person_type: user.user_type }
       user_id_cookie = stub_cookie_jar[:user_id]
       expect(user_id_cookie[:value]).to eq user.id
       expect(user_id_cookie[:expires])
         .to be_within(5.seconds).of 1.year.from_now
       person_type_cookie = stub_cookie_jar[:person_type]
-      expect(person_type_cookie[:value]).to eq user.actable_type
+      expect(person_type_cookie[:value]).to eq user.user_type
       expect(person_type_cookie[:expires])
         .to be_within(5.seconds).of 1.year.from_now
     end

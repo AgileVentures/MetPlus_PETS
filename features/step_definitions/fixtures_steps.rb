@@ -54,8 +54,8 @@ end
 
 Given(/^the following agency relations exist:$/) do |table|
   table.hashes.each do |hash|
-    job_seeker    = User.find_by_email(hash['job_seeker']).actable
-    agency_person = User.find_by_email(hash['agency_person']).actable
+    job_seeker    = User.find_by_email(hash['job_seeker']).pets_user
+    agency_person = User.find_by_email(hash['agency_person']).pets_user
     if hash['role'] == 'JD'
       job_seeker.assign_job_developer agency_person, agency_person.agency
     else
@@ -107,7 +107,6 @@ end
 Given(/^the following jobseeker(?:s?) exist:$/) do |table|
   table.hashes.each do |hash|
     hash.delete 'jobseeker'
-    hash['actable_type'] = 'JobSeeker'
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
     seeker_status = hash.delete 'job_seeker_status'
@@ -224,7 +223,7 @@ end
 Given(/^the following job applications exist:$/) do |table|
   table.hashes.each do |hash|
     job = Job.find_by_title(hash['job title'])
-    job_seeker = User.find_by_email(hash['job seeker']).actable
+    job_seeker = User.find_by_email(hash['job seeker']).pets_user
 
     if hash[:status]
       FactoryBot.create(:job_application, job: job, job_seeker: job_seeker,

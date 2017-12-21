@@ -21,7 +21,7 @@ class PeopleInvitationsController < Devise::InvitationsController
   def invite_resource(&block)
     user = resource_class.invite!(invite_params, current_inviter, &block)
     if user.errors.empty?
-      if (person = user.actable)
+      if (person = user.pets_user)
         # If a person is already associated with this user, this means that
         # another invitation is being sent to that previously-invited person.
         redirect_path = (person.class == AgencyPerson ?
@@ -56,7 +56,7 @@ class PeopleInvitationsController < Devise::InvitationsController
   # should return an instance of resource class (User)
   def accept_resource
     user = resource_class.accept_invitation!(update_resource_params)
-    case (person = user.actable)
+    case (person = user.pets_user)
     when AgencyPerson
       person.active
       person.save

@@ -5,25 +5,34 @@ module ActAsUser
   end
 
   def method_missing(name, *args, &block)
-    @user = User.new if @user.nil?    
+    self.user = User.new if self.user.nil?    
     begin
       super
     rescue NoMethodError
-      @user.send(name, *args, &block)
+      self.user.send(name, *args, &block)
     end 
   end
 
   def assign_attributes(new_attributes)
-    @user = User.new if @user.nil?
+    self.user = User.new if self.user.nil?
     model_attributes = new_attributes.select do |key, value|
       has_attribute? key
     end
     user_model_attributes = new_attributes.select do |key, value|
-      @user.has_attribute? key
+      self.user.has_attribute? key
     end
     super(model_attributes)
-    @user = User.new if user.nil?
-    @user.assign_attributes(user_model_attributes)
+    self.user = User.new if self.user.nil?
+    self.user.assign_attributes(user_model_attributes)
+  end
+
+  def is_a?(clazz)
+    return true if clazz == User
+    super(clazz)
+  end
+
+  def user_type
+    self.class.name
   end
   
   module ClassMethods

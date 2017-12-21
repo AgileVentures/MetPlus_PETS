@@ -54,7 +54,7 @@ class AgencyMailerPreview < ActionMailer::Preview
                      company: Company.first,
                      company_job_id: 'XYZ',
                      description: 'description of test job')
-    job_developer = User.find_by_email('chet@metplus.org').actable
+    job_developer = User.find_by_email('chet@metplus.org').pets_user
 
     AgencyMailer.job_posted(job_developer.email, job)
   end
@@ -65,7 +65,7 @@ class AgencyMailerPreview < ActionMailer::Preview
                      company: Company.first,
                      company_job_id: 'XYZ',
                      description: 'description of test job')
-    job_developer = User.find_by_email('chet@metplus.org').actable
+    job_developer = User.find_by_email('chet@metplus.org').pets_user
 
     AgencyMailer.job_revoked(job_developer.email, job)
   end

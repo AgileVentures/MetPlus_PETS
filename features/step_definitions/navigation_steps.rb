@@ -73,9 +73,9 @@ Then(/^I should be on the (.+) page$/) do |page_name|
 end
 
 Given(/I am on the JobSeeker Show page for "([^"]*)"$/) do |email|
-  visit job_seeker_path(User.find_by_email(email).actable_id)
+  visit job_seeker_path(User.find_by_email(email).pets_user.id)
 end
 
 Then(/^I press the Job Match button for '(.+)'$/) do |email|
-  find("#match-job-#{User.find_by_email(email).actable_id}").click
+  find("#match-job-#{User.find_by_email(email).pets_user.id}").click
 end

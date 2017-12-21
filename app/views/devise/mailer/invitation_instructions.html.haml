@@ -1,7 +1,7 @@
 %p= t("devise.mailer.invitation_instructions.hello", first_name: @resource.first_name)
 
 %p
-  - if (inviter = @resource.invited_by.actable).class == AgencyPerson
+  - if (inviter = @resource.invited_by.pets_user).class == AgencyPerson
     = t("devise.mailer.invitation_instructions.admin_invited_you", org: inviter.agency.name)
     %br/
     %br/

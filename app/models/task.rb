@@ -42,11 +42,11 @@ class Task < ActiveRecord::Base
   }
   scope :agency_tasks, lambda { |user|
     where('(owner_agency_id = ? or owner_user_id in (?))',
-          user.agency.id, user.agency.agency_people.map { |a| a.acting_as.id }.map)
+          user.agency.id, user.agency.agency_people.map { |a| a.user.id }.map)
   }
   scope :company_tasks, lambda { |user|
     where('(owner_company_id = ? or owner_user_id in (?))',
-          user.company.id, user.company.company_people.map { |a| a.acting_as.id }.map)
+          user.company.id, user.company.company_people.map { |a| a.user.id }.map)
   }
 
   scope :job_seeker_target, ->(user) { where('user_id = ?', user.pets_user.user.id) }

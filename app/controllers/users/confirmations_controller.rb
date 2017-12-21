@@ -13,8 +13,8 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # GET /resource/confirmation?confirmation_token=abcdef
   def show
     super do |user|
-      if user.errors.empty? && user.actable_type == 'JobSeeker'
-        person = user.actable
+      if user.errors.empty? && user.pets_user.is_job_seeker?
+        person = user.pets_user
         Event.create(:JS_REGISTER, person)
       else
         # Override normal handling if the user's email address has already been

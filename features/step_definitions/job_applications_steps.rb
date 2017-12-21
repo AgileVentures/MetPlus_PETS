@@ -1,6 +1,6 @@
 And(/^I (accept|reject|process) "([^"]*)" application for "([^"]*)"$/) do |action, email, job|
   job = Job.find_by(title: job.to_s)
-  job_seeker = User.find_by_email(email).actable
+  job_seeker = User.find_by_email(email).pets_user
   @job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
   find("#applications-#{@job_app.id} ##{action}_link").click
 end
@@ -23,7 +23,7 @@ And(/^I\sshould\ssee\s"([^"]*)"\sactive\sapplications\s(for|by)\s
     job = Job.find_by(title: source.to_s)
     app_ids = JobApplication.select(:id).where(status: 'active', job: job)
   else
-    job_seeker = User.find_by_email(source).actable
+    job_seeker = User.find_by_email(source).pets_user
     app_ids = JobApplication.select(:id).where(status: 'active', job_seeker: job_seeker)
   end
   expect(app_ids.count).to eq count.to_i
@@ -32,7 +32,7 @@ end
 And(/I\sshould\ssee\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\schanges\sto\s
   (accepted|not_accepted|Processing)$/x) do |email, job, state|
   job = Job.find_by(title: job.to_s)
-  job_seeker = User.find_by_email(email).actable
+  job_seeker = User.find_by_email(email).pets_user
   app = JobApplication.find_by(job_seeker: job_seeker, job: job)
   within("#applications-#{app.id}") { expect(page).to have_content(state) }
 end
@@ -58,7 +58,7 @@ Then(/^I should( not)? see(?: an)? "([^"]*)" link$/) do |not_see, action|
 end
 
 And(/^I should see "([^"]*)" application is listed (first|last)$/) do |email, position|
-  job_seeker = User.find_by_email(email).actable
+  job_seeker = User.find_by_email(email).pets_user
   within(".pagination-div > table > tbody > tr:#{position}-child") do
     expect(page).to have_content(job_seeker.first_name.to_s)
   end
@@ -71,7 +71,7 @@ end
 
 And(/^I\sshould\ssee\smy\s"([^"]*)"\sapplication\sfor\s"([^"]*)"\swas\s
   "([^"]*)"$/x) do |email, job_title, status|
-  job_seeker = User.find_by_email(email).actable
+  job_seeker = User.find_by_email(email).pets_user
   job = Job.find_by(title: job_title.to_s)
   job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
   expect(page.find("#applications-#{job_app.id}")).to have_content(status.to_s)
@@ -82,7 +82,7 @@ And(/^I should see "(?:[^"]*)" show status "([^"]*)"$/) do |status|
 end
 
 And(/^I return to my "([^"]*)" home page$/) do |email|
-  job_seeker = User.find_by_email(email).actable
+  job_seeker = User.find_by_email(email).pets_user
   role = job_seeker.class.to_s.underscore
   visit "/#{role}s/#{job_seeker.id}/home"
 end

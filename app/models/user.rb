@@ -70,6 +70,12 @@ class User < ActiveRecord::Base
     return company_person if company_person != nil
   end
 
+  def user_type
+    return job_seeker.class.name if job_seeker != nil
+    return agency_person.class.name if agency_person != nil
+    return company_person.class.name if company_person != nil
+  end
+
   def is_job_seeker?
     false
   end
@@ -103,9 +109,9 @@ class User < ActiveRecord::Base
   end
 
   def inactive_message
-    if !approved? && actable.try(:company_pending?)
+    if !approved? && pets_user.try(:company_pending?)
       :signed_up_but_not_approved
-    elsif !approved? && actable.try(:company_denied?)
+    elsif !approved? && pets_user.try(:company_denied?)
       :not_approved
     else
       super

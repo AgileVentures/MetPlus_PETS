@@ -29,8 +29,7 @@ RSpec.describe AgencyAdminController, type: :controller do
 
     context 'non agency person attempts access' do
       it 'prevents non agency access' do
-        sign_in agency_admin
-        agency_admin.update_attribute(:actable_type, nil)
+        warden.set_user job_seeker
         get :home
         expect(flash[:notice])
           .to eq 'Current agency cannot be determined'

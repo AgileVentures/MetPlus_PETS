@@ -14,11 +14,11 @@ class Users::SessionsController < Devise::SessionsController
       if current_user.respond_to?(:remember_me) && current_user.remember_me
         cookies[:user_id]     = { value: current_user.id,
                                 expires: 1.year.from_now }
-        cookies[:person_type] = { value: current_user.actable_type,
+        cookies[:person_type] = { value: current_user.user_type,
                                 expires: 1.year.from_now }
       else
         cookies[:user_id]     = current_user.id
-        cookies[:person_type] = current_user.actable_type
+        cookies[:person_type] = current_user.user_type
       end
     end
   end

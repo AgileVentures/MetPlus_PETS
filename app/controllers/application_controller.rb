@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
 
     def pets_user
       return nil unless current_user
-      current_user.actable || current_user
+      current_user.pets_user || current_user
     end
 
     def store_current_location
