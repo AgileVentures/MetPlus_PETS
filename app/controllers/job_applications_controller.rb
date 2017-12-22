@@ -5,28 +5,20 @@ class JobApplicationsController < ApplicationController
   before_action :find_application, except: :list
 
   def accept
-    if @job_application.active? || @job_application.processing?
-      @job_application.accept
-      @job_dev = @job_application.job_seeker.job_developer
-      Event.create(:APP_ACCEPTED, @job_application) if @job_dev
+    begin
+      JobApplications::Hire.new.call(@job_application)
       flash[:info] = 'Job application accepted.'
-    else
+    rescue JobApplications::JobNotActive
       flash[:alert] = 'Invalid action on inactive job application.'
     end
     redirect_to job_url(@job_application.job)
   end
 
   def reject
-    if @job_application.active? || @job_application.processing?
-      @job_application.reason_for_rejection = params[:reason_for_rejection]
-      @job_application.save
-      @job_application.reject
-      @job_dev = @job_application.job_seeker.job_developer
-      Event.create(:APP_REJECTED, @job_application) if @job_dev
-      reject_success_response(request)
-    else
-      reject_fail_response(request)
-    end
+    JobApplications::Reject.new.call(@job_application, params[:reason_for_rejection])
+    reject_success_response(request)
+  rescue JobApplications::JobNotActive
+    reject_fail_response(request)
   end
 
   def process_application

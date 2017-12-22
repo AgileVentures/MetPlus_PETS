@@ -10,6 +10,7 @@ class JobApplication < ActiveRecord::Base
   accepts_nested_attributes_for :application_questions, reject_if: :all_blank
 
   validates_uniqueness_of :job_seeker_id, scope: :job_id
+  scope :for_job, ->(job) { joins(:job).where('job_id=?', job.id) }
 
   after_create do
     StatusChange.update_status_history(self, :active)
