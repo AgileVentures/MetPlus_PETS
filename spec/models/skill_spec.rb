@@ -4,7 +4,7 @@ include ServiceStubHelpers::Cruncher
 RSpec.describe Skill, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.create(:skill)).to be_valid
+      expect(FactoryBot.create(:skill)).to be_valid
     end
   end
 
@@ -15,7 +15,7 @@ RSpec.describe Skill, type: :model do
   end
 
   describe 'Validations' do
-    subject { FactoryGirl.build(:skill) }
+    subject { FactoryBot.build(:skill) }
 
     describe 'Name' do
       it { is_expected.to validate_presence_of(:name) }
@@ -41,15 +41,15 @@ RSpec.describe Skill, type: :model do
       stub_cruncher_job_create
     end
 
-    let(:skill) { FactoryGirl.create(:skill) }
-    let(:job)   { FactoryGirl.create(:job) }
+    let(:skill) { FactoryBot.create(:skill) }
+    let(:job)   { FactoryBot.create(:job) }
 
     it 'returns false without a job' do
       expect(skill.has_job?).to be false
     end
 
     it 'returns true with a job' do
-      FactoryGirl.create(:job_skill, job: job, skill: skill)
+      FactoryBot.create(:job_skill, job: job, skill: skill)
       expect(skill.has_job?).to be true
     end
   end
@@ -61,9 +61,9 @@ RSpec.describe Skill, type: :model do
     end
 
     it 'increments jobs_count when a new row is created in job_skill table' do
-      waiter = FactoryGirl.create(:job)
-      phone_operator = FactoryGirl.create(:job)
-      speak_english = FactoryGirl.create(:skill)
+      waiter = FactoryBot.create(:job)
+      phone_operator = FactoryBot.create(:job)
+      speak_english = FactoryBot.create(:skill)
       JobSkill.create(job: waiter, skill: speak_english, min_years: 0, max_years: 10)
       JobSkill.create(job: phone_operator, skill: speak_english, min_years: 0,
                       max_years: 10)

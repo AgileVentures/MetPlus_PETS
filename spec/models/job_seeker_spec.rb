@@ -5,7 +5,7 @@ include ServiceStubHelpers::Cruncher
 describe JobSeeker, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.create(:job_seeker)).to be_valid
+      expect(FactoryBot.create(:job_seeker)).to be_valid
     end
   end
   describe 'Database schema' do
@@ -28,10 +28,10 @@ describe JobSeeker, type: :model do
   end
 
   describe 'job applications' do
-    let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let(:job1)        { FactoryGirl.create(:job) }
-    let(:job2)        { FactoryGirl.create(:job) }
+    let!(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let!(:resume)     { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let(:job1)        { FactoryBot.create(:job) }
+    let(:job2)        { FactoryBot.create(:job) }
     let(:test_file)   { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
     before(:each) do
@@ -56,36 +56,36 @@ describe JobSeeker, type: :model do
 
   describe '#with_ap_in_role' do
     let!(:jd_role) do
-      FactoryGirl.create(:agency_role,
-                         role: AgencyRole::ROLE[:JD])
+      FactoryBot.create(:agency_role,
+                        role: AgencyRole::ROLE[:JD])
     end
     let!(:cm_role) do
-      FactoryGirl.create(:agency_role,
-                         role: AgencyRole::ROLE[:CM])
+      FactoryBot.create(:agency_role,
+                        role: AgencyRole::ROLE[:CM])
     end
 
-    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker3) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker4) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker3) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker4) { FactoryBot.create(:job_seeker) }
 
-    let(:job_developer) { FactoryGirl.create(:job_developer) }
-    let(:case_manager)  { FactoryGirl.create(:case_manager) }
+    let(:job_developer) { FactoryBot.create(:job_developer) }
+    let(:case_manager)  { FactoryBot.create(:case_manager) }
 
     before(:each) do
-      FactoryGirl.create(:agency_relation, job_seeker: job_seeker1,
-                                           agency_person: job_developer,
-                                           agency_role: jd_role)
-      FactoryGirl.create(:agency_relation, job_seeker: job_seeker2,
-                                           agency_person: job_developer,
-                                           agency_role: jd_role)
+      FactoryBot.create(:agency_relation, job_seeker: job_seeker1,
+                                          agency_person: job_developer,
+                                          agency_role: jd_role)
+      FactoryBot.create(:agency_relation, job_seeker: job_seeker2,
+                                          agency_person: job_developer,
+                                          agency_role: jd_role)
 
-      FactoryGirl.create(:agency_relation, job_seeker: job_seeker3,
-                                           agency_person: case_manager,
-                                           agency_role: cm_role)
-      FactoryGirl.create(:agency_relation, job_seeker: job_seeker4,
-                                           agency_person: case_manager,
-                                           agency_role: cm_role)
+      FactoryBot.create(:agency_relation, job_seeker: job_seeker3,
+                                          agency_person: case_manager,
+                                          agency_role: cm_role)
+      FactoryBot.create(:agency_relation, job_seeker: job_seeker4,
+                                          agency_person: case_manager,
+                                          agency_role: cm_role)
     end
 
     it 'returns IDs of job seekers assigned to this job developer' do
@@ -110,37 +110,37 @@ describe JobSeeker, type: :model do
     end
   end
   describe '#is_job_seeker?' do
-    let(:person) { FactoryGirl.create(:job_seeker) }
+    let(:person) { FactoryBot.create(:job_seeker) }
     it 'true' do
       expect(person.is_job_seeker?).to be true
     end
   end
 
   context 'job_seeker / agency_person relationships' do
-    let(:agency) { FactoryGirl.create(:agency) }
+    let(:agency) { FactoryBot.create(:agency) }
 
     let!(:cm_person) do
-      FactoryGirl.create(:case_manager,
-                         first_name: 'John',
-                         last_name: 'Manager',
-                         agency: agency)
+      FactoryBot.create(:case_manager,
+                        first_name: 'John',
+                        last_name: 'Manager',
+                        agency: agency)
     end
-    let!(:cm_person2) { FactoryGirl.create(:case_manager, agency: agency) }
+    let!(:cm_person2) { FactoryBot.create(:case_manager, agency: agency) }
     let!(:jd_person)  do
-      FactoryGirl.create(:job_developer,
-                         first_name: 'John',
-                         last_name: 'Developer',
-                         agency: agency)
+      FactoryBot.create(:job_developer,
+                        first_name: 'John',
+                        last_name: 'Developer',
+                        agency: agency)
     end
-    let!(:aa_person) { FactoryGirl.create(:agency_admin, agency: agency) }
+    let!(:aa_person) { FactoryBot.create(:agency_admin, agency: agency) }
 
-    let!(:adam)    { FactoryGirl.create(:job_seeker, first_name: 'Adam') }
-    let!(:bob)     { FactoryGirl.create(:job_seeker, first_name: 'Bob') }
-    let!(:charles) { FactoryGirl.create(:job_seeker, first_name: 'Charles') }
-    let!(:dave)    { FactoryGirl.create(:job_seeker, first_name: 'Dave') }
+    let!(:adam)    { FactoryBot.create(:job_seeker, first_name: 'Adam') }
+    let!(:bob)     { FactoryBot.create(:job_seeker, first_name: 'Bob') }
+    let!(:charles) { FactoryBot.create(:job_seeker, first_name: 'Charles') }
+    let!(:dave)    { FactoryBot.create(:job_seeker, first_name: 'Dave') }
 
-    FactoryGirl.create(:agency_role)
-    FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:CM])
+    FactoryBot.create(:agency_role)
+    FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:CM])
 
     before(:each) do
       adam.assign_case_manager(cm_person, agency)

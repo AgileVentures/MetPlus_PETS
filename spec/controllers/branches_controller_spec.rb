@@ -1,31 +1,31 @@
 require 'rails_helper'
 
 RSpec.shared_examples 'unauthorizes all' do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:company) { FactoryGirl.create(:company) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:company) { FactoryBot.create(:company) }
 
   context 'Case Manager' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+      let(:user) { FactoryBot.create(:case_manager, agency: agency) }
     end
   end
 
   context 'Job Developer' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
+      let(:user) { FactoryBot.create(:job_developer, agency: agency) }
     end
   end
 
   context 'Company Admin' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:company_admin, company: company) }
+      let(:user) { FactoryBot.create(:company_admin, company: company) }
     end
   end
 end
 
 RSpec.shared_examples 'unauthorized all non-agency people' do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:company) { FactoryGirl.create(:company) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:company) { FactoryBot.create(:company) }
 
   context 'Not logged in' do
     it_behaves_like 'unauthenticated request'
@@ -33,33 +33,33 @@ RSpec.shared_examples 'unauthorized all non-agency people' do
 
   context 'Job Seeker' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:job_seeker) }
+      let(:user) { FactoryBot.create(:job_seeker) }
     end
   end
 
   context 'Company admin' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:company_admin, company: company) }
+      let(:user) { FactoryBot.create(:company_admin, company: company) }
     end
   end
 
   context 'Company contact' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:company_contact, company: company) }
+      let(:user) { FactoryBot.create(:company_contact, company: company) }
     end
   end
 end
 
 RSpec.describe BranchesController, type: :controller do
-  let(:agency)  { FactoryGirl.create(:agency) }
-  let(:branch)  { FactoryGirl.create(:branch, agency: agency) }
-  let(:jd)      { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:cm)      { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:admin)   { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:company) { FactoryGirl.create(:company) }
-  let(:ca)      { FactoryGirl.create(:company_admin, company: company) }
-  let(:cc)      { FactoryGirl.create(:company_contact, company: company) }
-  let(:js)      { FactoryGirl.create(:job_seeker) }
+  let(:agency)  { FactoryBot.create(:agency) }
+  let(:branch)  { FactoryBot.create(:branch, agency: agency) }
+  let(:jd)      { FactoryBot.create(:job_developer, agency: agency) }
+  let(:cm)      { FactoryBot.create(:case_manager, agency: agency) }
+  let(:admin)   { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:company) { FactoryBot.create(:company) }
+  let(:ca)      { FactoryBot.create(:company_admin, company: company) }
+  let(:cc)      { FactoryBot.create(:company_contact, company: company) }
+  let(:js)      { FactoryBot.create(:job_seeker) }
   describe 'GET #show' do
     before(:each) do
       sign_in admin
@@ -76,16 +76,16 @@ RSpec.describe BranchesController, type: :controller do
     end
   end
   describe 'POST #create' do
-    let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
+    let(:branch1)  { FactoryBot.create(:branch, agency: agency) }
     let(:branch2)  do
-      FactoryGirl.build(:branch, agency: agency, code: branch1.code)
+      FactoryBot.build(:branch, agency: agency, code: branch1.code)
     end
     context 'valid attributes' do
       before(:each) do
         sign_in admin
         post :create,
              agency_id: agency,
-             branch: FactoryGirl.attributes_for(:branch)
+             branch: FactoryBot.attributes_for(:branch)
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
@@ -106,9 +106,9 @@ RSpec.describe BranchesController, type: :controller do
         sign_in admin
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
-        branch_hash = FactoryGirl.attributes_for(:branch, code: branch1.code)
+        branch_hash = FactoryBot.attributes_for(:branch, code: branch1.code)
         branch_hash[:address_attributes] =
-          FactoryGirl.attributes_for(:address, zipcode: '123456')
+          FactoryBot.attributes_for(:address, zipcode: '123456')
         post :create, agency_id: agency, branch: branch_hash
       end
       it 'assigns @agency for branch association' do
@@ -154,12 +154,12 @@ RSpec.describe BranchesController, type: :controller do
     end
   end
   describe 'PATCH #update' do
-    let(:branch1)  { FactoryGirl.create(:branch, agency: agency) }
-    let(:branch2)  { FactoryGirl.create(:branch, agency: agency) }
+    let(:branch1)  { FactoryBot.create(:branch, agency: agency) }
+    let(:branch2)  { FactoryBot.create(:branch, agency: agency) }
     context 'valid attributes' do
       before(:each) do
         sign_in admin
-        patch :update, branch: FactoryGirl.attributes_for(:branch),
+        patch :update, branch: FactoryBot.attributes_for(:branch),
                        id: branch1.id
       end
       it 'assigns @branch for updating' do
@@ -182,9 +182,9 @@ RSpec.describe BranchesController, type: :controller do
         branch2.assign_attributes(code: branch1.code)
         branch2.address.assign_attributes(zipcode: '123456')
         branch2.valid?
-        branch_hash = FactoryGirl.attributes_for(:branch, code: branch1.code)
+        branch_hash = FactoryBot.attributes_for(:branch, code: branch1.code)
         branch_hash[:address_attributes] =
-          FactoryGirl.attributes_for(:address, zipcode: '123456')
+          FactoryBot.attributes_for(:address, zipcode: '123456')
 
         patch :update, branch: branch_hash, id: branch2.id
       end
@@ -232,7 +232,7 @@ RSpec.describe BranchesController, type: :controller do
         allow(controller).to receive(:current_user).and_return(admin)
         post :create,
              agency_id: agency,
-             branch: FactoryGirl.attributes_for(:branch)
+             branch: FactoryBot.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
 
@@ -244,13 +244,13 @@ RSpec.describe BranchesController, type: :controller do
       let(:request) do
         post :create,
              agency_id: agency,
-             branch: FactoryGirl.attributes_for(:branch)
+             branch: FactoryBot.attributes_for(:branch)
       end
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
         patch :update,
               id: branch.id,
-              branch: FactoryGirl.attributes_for(:branch)
+              branch: FactoryBot.attributes_for(:branch)
         expect(subject).to_not receive(:user_not_authorized)
       end
 

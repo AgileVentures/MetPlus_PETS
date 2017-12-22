@@ -4,13 +4,13 @@ RSpec.describe TasksController, type: :controller do
   describe 'PATCH #assign' do
     describe 'successful' do
       before :each do
-        agency = FactoryGirl.create(:agency)
-        FactoryGirl.create(:agency_admin, agency: agency)
-        @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-        @jd2 = FactoryGirl.create(:job_developer, agency: agency)
-        @jd3 = FactoryGirl.create(:job_developer, agency: agency)
-        @jd4 = FactoryGirl.create(:job_developer, agency: agency)
-        js = FactoryGirl.create(:job_seeker)
+        agency = FactoryBot.create(:agency)
+        FactoryBot.create(:agency_admin, agency: agency)
+        @jd1 = FactoryBot.create(:job_developer, agency: agency)
+        @jd2 = FactoryBot.create(:job_developer, agency: agency)
+        @jd3 = FactoryBot.create(:job_developer, agency: agency)
+        @jd4 = FactoryBot.create(:job_developer, agency: agency)
+        js = FactoryBot.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         sign_in @jd1
       end
@@ -23,8 +23,8 @@ RSpec.describe TasksController, type: :controller do
 
     describe 'errors' do
       before :each do
-        agency = FactoryGirl.create(:agency)
-        @jd1 = FactoryGirl.create(:job_developer, agency: agency)
+        agency = FactoryBot.create(:agency)
+        @jd1 = FactoryBot.create(:job_developer, agency: agency)
         sign_in @jd1
       end
 
@@ -57,9 +57,9 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'Cannot find user' do
         before :each do
-          agency = FactoryGirl.create(:agency)
-          aa = FactoryGirl.create(:agency_admin, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          aa = FactoryBot.create(:agency_admin, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
           sign_in aa
         end
@@ -79,9 +79,9 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'Cannot assign task to user' do
         before :each do
-          agency = FactoryGirl.create(:agency)
-          aa = FactoryGirl.create(:agency_admin, agency: agency)
-          @js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          aa = FactoryBot.create(:agency_admin, agency: agency)
+          @js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task @js, agency
           sign_in aa
         end
@@ -106,8 +106,8 @@ RSpec.describe TasksController, type: :controller do
           xhr :patch, :assign, { id: @task.id, to: @js.id }, format: :json
         end
         before :each do
-          agency = FactoryGirl.create(:agency)
-          @js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          @js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task @js, agency
         end
 
@@ -119,10 +119,10 @@ RSpec.describe TasksController, type: :controller do
   describe 'PATCH #in_progress' do
     describe 'successful' do
       before :each do
-        agency = FactoryGirl.create(:agency)
-        FactoryGirl.create(:agency_admin, agency: agency)
-        @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-        js = FactoryGirl.create(:job_seeker)
+        agency = FactoryBot.create(:agency)
+        FactoryBot.create(:agency_admin, agency: agency)
+        @jd1 = FactoryBot.create(:job_developer, agency: agency)
+        js = FactoryBot.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
         sign_in @jd1
@@ -141,8 +141,8 @@ RSpec.describe TasksController, type: :controller do
 
     describe 'errors' do
       before :each do
-        agency = FactoryGirl.create(:agency)
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        agency = FactoryBot.create(:agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
 
@@ -169,10 +169,10 @@ RSpec.describe TasksController, type: :controller do
         end
 
         before :each do
-          agency = FactoryGirl.create(:agency)
-          @aa = FactoryGirl.create(:agency_admin, agency: agency)
-          @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          @aa = FactoryBot.create(:agency_admin, agency: agency)
+          @jd1 = FactoryBot.create(:job_developer, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
           @task.assign @jd1
         end
@@ -187,10 +187,10 @@ RSpec.describe TasksController, type: :controller do
           xhr :patch, :in_progress, { id: @task.id }, format: :json
         end
         before :each do
-          agency = FactoryGirl.create(:agency)
-          FactoryGirl.create(:agency_admin, agency: agency)
-          @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          FactoryBot.create(:agency_admin, agency: agency)
+          @jd1 = FactoryBot.create(:job_developer, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
           @task.assign @jd1
         end
@@ -203,10 +203,10 @@ RSpec.describe TasksController, type: :controller do
   describe 'PATCH #done' do
     describe 'successful' do
       before :each do
-        agency = FactoryGirl.create(:agency)
-        FactoryGirl.create(:agency_admin, agency: agency)
-        @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-        js = FactoryGirl.create(:job_seeker)
+        agency = FactoryBot.create(:agency)
+        FactoryBot.create(:agency_admin, agency: agency)
+        @jd1 = FactoryBot.create(:job_developer, agency: agency)
+        js = FactoryBot.create(:job_seeker)
         @task = Task.new_js_unassigned_jd_task js, agency
         @task.assign @jd1
         @task.work_in_progress
@@ -226,8 +226,8 @@ RSpec.describe TasksController, type: :controller do
 
     describe 'errors' do
       before :each do
-        agency = FactoryGirl.create(:agency)
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        agency = FactoryBot.create(:agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
 
@@ -251,11 +251,11 @@ RSpec.describe TasksController, type: :controller do
       describe 'not the task owner' do
         let(:request) { xhr :patch, :done, { id: @task.id }, format: :json }
         before :each do
-          agency = FactoryGirl.create(:agency)
-          FactoryGirl.create(:agency_admin, agency: agency)
-          @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-          @jd2 = FactoryGirl.create(:job_developer, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          FactoryBot.create(:agency_admin, agency: agency)
+          @jd1 = FactoryBot.create(:job_developer, agency: agency)
+          @jd2 = FactoryBot.create(:job_developer, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
           @task.assign @jd1
         end
@@ -268,9 +268,9 @@ RSpec.describe TasksController, type: :controller do
       describe 'not logged in' do
         let(:request) { xhr :patch, :done, { id: @task.id }, format: :json }
         before :each do
-          agency = FactoryGirl.create(:agency)
-          @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          agency = FactoryBot.create(:agency)
+          @jd1 = FactoryBot.create(:job_developer, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
           @task.assign @jd1
         end
@@ -291,27 +291,27 @@ RSpec.describe TasksController, type: :controller do
 
       context 'job seeker' do
         it_behaves_like 'unauthorized XHR request' do
-          let(:user) { FactoryGirl.create(:job_seeker) }
+          let(:user) { FactoryBot.create(:job_seeker) }
         end
       end
     end
   end
 
   describe 'GET #list_owners' do
-    let!(:agency) { FactoryGirl.create(:agency) }
+    let!(:agency) { FactoryBot.create(:agency) }
     describe 'authorized access' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
 
       describe 'retrieve information' do
         before :each do
-          @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-          @jd2 = FactoryGirl.create(:job_developer, agency: agency)
-          @jd3 = FactoryGirl.create(:job_developer, agency: agency)
-          @jd4 = FactoryGirl.create(:job_developer, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          @jd1 = FactoryBot.create(:job_developer, agency: agency)
+          @jd2 = FactoryBot.create(:job_developer, agency: agency)
+          @jd3 = FactoryBot.create(:job_developer, agency: agency)
+          @jd4 = FactoryBot.create(:job_developer, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_jd_task js, agency
         end
 
@@ -349,8 +349,8 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'no assignable found' do
         before :each do
-          @jd1 = FactoryGirl.create(:job_developer, agency: agency)
-          js = FactoryGirl.create(:job_seeker)
+          @jd1 = FactoryBot.create(:job_developer, agency: agency)
+          js = FactoryBot.create(:job_seeker)
           @task = Task.new_js_unassigned_cm_task js, agency
         end
 
@@ -368,13 +368,13 @@ RSpec.describe TasksController, type: :controller do
     end
 
     describe 'Unauthorized access' do
-      let(:company) { FactoryGirl.create(:company) }
+      let(:company) { FactoryBot.create(:company) }
       let(:company_contact) do
-        FactoryGirl.create(:company_contact, company: company)
+        FactoryBot.create(:company_contact, company: company)
       end
-      let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-      let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
-      let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+      let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+      let(:case_manager) { FactoryBot.create(:case_manager, agency: agency) }
+      let(:job_seeker) { FactoryBot.create(:job_seeker) }
       let(:request) { xhr :get, :list_owners, { id: @task.id }, format: :json }
       before :each do
         @task = Task.new_js_unassigned_jd_task job_seeker, agency

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ApplicationQuestion, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:application_question)).to be_valid
+      expect(FactoryBot.build(:application_question)).to be_valid
     end
   end
   describe 'Database schema' do

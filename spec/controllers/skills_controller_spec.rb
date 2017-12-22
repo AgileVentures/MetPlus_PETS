@@ -2,8 +2,8 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.shared_examples 'unauthorized access' do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:company) { FactoryGirl.create(:company) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:company) { FactoryBot.create(:company) }
 
   context 'Not logged in' do
     it_behaves_like 'unauthenticated XHR request'
@@ -11,30 +11,30 @@ RSpec.shared_examples 'unauthorized access' do
 
   context 'Case Manager' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+      let(:user) { FactoryBot.create(:case_manager, agency: agency) }
     end
   end
 
   context 'Job Developer' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
+      let(:user) { FactoryBot.create(:job_developer, agency: agency) }
     end
   end
   context 'Job Seeker' do
     it_behaves_like 'unauthorized XHR request' do
-      let(:user) { FactoryGirl.create(:job_seeker) }
+      let(:user) { FactoryBot.create(:job_seeker) }
     end
   end
 end
 
 RSpec.describe SkillsController, type: :controller do
-  let(:agency)               { FactoryGirl.create(:agency) }
-  let(:skill_params)         { FactoryGirl.attributes_for(:skill) }
-  let(:company)              { FactoryGirl.create(:company) }
+  let(:agency)               { FactoryBot.create(:agency) }
+  let(:skill_params)         { FactoryBot.attributes_for(:skill) }
+  let(:company)              { FactoryBot.create(:company) }
   let(:skill_params_company) { skill_params.merge(company_id: company.id.to_s) }
-  let(:skill)                { FactoryGirl.create(:skill) }
+  let(:skill)                { FactoryBot.create(:skill) }
   let(:company_skill) do
-    skill = FactoryGirl.create(:skill, name: 'company_skill')
+    skill = FactoryBot.create(:skill, name: 'company_skill')
     skill.organization = company
     skill.save
     skill
@@ -43,7 +43,7 @@ RSpec.describe SkillsController, type: :controller do
   describe 'POST #create' do
     context 'authorized access - agency admin' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
       it 'creates new skill for valid parameters' do
@@ -65,7 +65,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company admin' do
       before :each do
-        ca = FactoryGirl.create(:company_admin, company: company)
+        ca = FactoryBot.create(:company_admin, company: company)
         sign_in ca
       end
 
@@ -88,7 +88,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company contact' do
       before :each do
-        cc = FactoryGirl.create(:company_contact, company: company)
+        cc = FactoryBot.create(:company_contact, company: company)
         sign_in cc
       end
       it 'creates new skill for valid parameters' do
@@ -116,7 +116,7 @@ RSpec.describe SkillsController, type: :controller do
   describe 'GET #show' do
     context 'authorized access - agency admin' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
       context 'skill found' do
@@ -146,7 +146,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company admin' do
       before :each do
-        ca = FactoryGirl.create(:company_admin, company: company)
+        ca = FactoryBot.create(:company_admin, company: company)
         sign_in ca
       end
       context 'skill found' do
@@ -176,7 +176,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company contact' do
       before :each do
-        cc = FactoryGirl.create(:company_contact, company: company)
+        cc = FactoryBot.create(:company_contact, company: company)
         sign_in cc
       end
       context 'skill found' do
@@ -212,7 +212,7 @@ RSpec.describe SkillsController, type: :controller do
   describe 'PATCH #update' do
     context 'authorized access - agency admin' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
       it 'returns success for valid parameters' do
@@ -229,7 +229,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company admin' do
       before :each do
-        ca = FactoryGirl.create(:company_admin, company: company)
+        ca = FactoryBot.create(:company_admin, company: company)
         sign_in ca
       end
       it 'returns success for valid parameters' do
@@ -246,7 +246,7 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company contact' do
       before :each do
-        cc = FactoryGirl.create(:company_contact, company: company)
+        cc = FactoryBot.create(:company_contact, company: company)
         sign_in cc
       end
       it 'returns success for valid parameters' do
@@ -274,11 +274,11 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - agency admin' do
       before :each do
-        aa = FactoryGirl.create(:agency_admin, agency: agency)
+        aa = FactoryBot.create(:agency_admin, agency: agency)
         sign_in aa
       end
 
-      let!(:job_skill) { FactoryGirl.create(:job_skill, skill: skill) }
+      let!(:job_skill) { FactoryBot.create(:job_skill, skill: skill) }
 
       context 'skill found' do
         let(:request) { xhr :delete, :destroy, id: skill }
@@ -306,11 +306,11 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company admin' do
       before :each do
-        ca = FactoryGirl.create(:company_admin, company: company)
+        ca = FactoryBot.create(:company_admin, company: company)
         sign_in ca
       end
 
-      let!(:job_skill) { FactoryGirl.create(:job_skill, skill: company_skill) }
+      let!(:job_skill) { FactoryBot.create(:job_skill, skill: company_skill) }
 
       context 'skill found' do
         let(:request) { xhr :delete, :destroy, id: company_skill }
@@ -339,11 +339,11 @@ RSpec.describe SkillsController, type: :controller do
 
     context 'authorized access - company contact' do
       before :each do
-        cc = FactoryGirl.create(:company_contact, company: company)
+        cc = FactoryBot.create(:company_contact, company: company)
         sign_in cc
       end
 
-      let!(:job_skill) { FactoryGirl.create(:job_skill, skill: company_skill) }
+      let!(:job_skill) { FactoryBot.create(:job_skill, skill: company_skill) }
 
       context 'skill found' do
         let(:request) { xhr :delete, :destroy, id: company_skill }
@@ -376,7 +376,7 @@ RSpec.describe SkillsController, type: :controller do
   end
 
   describe 'Call action outside of XHR request' do
-    let!(:skill)  { FactoryGirl.create(:skill) }
+    let!(:skill)  { FactoryBot.create(:skill) }
 
     it 'raises an exception' do
       expect { get :show, id: skill }.to raise_error(RuntimeError)

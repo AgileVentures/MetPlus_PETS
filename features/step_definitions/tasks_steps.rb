@@ -1,5 +1,5 @@
 Then(/^I press the (.+) button of the task (\d+)$/) do |button, task|
-  step %{I click the "#{button}-#{task}" link}
+  step %(I click the "#{button}-#{task}" link)
 end
 
 Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are)( not)? present/) do |tasks, _, not_see|
@@ -8,7 +8,7 @@ Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are)( not)? present/) do |tasks, _, n
     begin
       find("#task-#{task_id}")
       error = true if not_see
-    rescue Exception => e
+    rescue StandardError
       raise "Task with id #{task_id} could not be found" unless not_see
     end
     raise "Task with id #{task_id} is present when it shouldn't be" if error
@@ -18,8 +18,8 @@ end
 Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are) hidden/) do |tasks, _|
   tasks.split(/,/).each do |task_id|
     begin
-      find("#task-#{task_id}", visible:false)
-    rescue Exception => e
+      find("#task-#{task_id}", visible: false)
+    rescue StandardError
       raise "Hidden task with id #{task_id} could not be found" unless not_see
     end
   end

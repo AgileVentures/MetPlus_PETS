@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe License, type: :model do
-  let(:license) { FactoryGirl.build(:license) }
+  let(:license) { FactoryBot.build(:license) }
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
@@ -23,7 +23,7 @@ RSpec.describe License, type: :model do
     it { is_expected.to validate_presence_of(:abbr) }
     it 'validates uniqueness of abbreviation' do
       license.save
-      license2 = FactoryGirl.build(:license, abbr: license.abbr.downcase)
+      license2 = FactoryBot.build(:license, abbr: license.abbr.downcase)
       expect(license2).to_not be_valid
       expect(license2.errors.full_messages).to include 'Abbr has already been taken'
     end
@@ -41,8 +41,8 @@ RSpec.describe License, type: :model do
 
   describe '#license_description' do
     it 'returns abbreviation and title' do
-      expect(license.license_description).
-        to match /^#{Regexp.quote(license.abbr)}.*#{Regexp.quote(license.title)}/
+      expect(license.license_description)
+        .to match(/^#{Regexp.quote(license.abbr)}.*#{Regexp.quote(license.title)}/)
     end
   end
 end

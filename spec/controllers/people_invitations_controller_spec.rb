@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe PeopleInvitationsController, type: :controller do
   describe 'GET #new AgencyPerson' do
     context 'valid attributes' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:agency_admin)  { FactoryBot.create(:agency_person, agency: agency) }
 
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
@@ -27,20 +27,20 @@ RSpec.describe PeopleInvitationsController, type: :controller do
   end
 
   describe 'POST #create AgencyPerson' do
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let(:agency_admin)  { FactoryBot.create(:agency_admin, agency: agency) }
 
     it 'sends invitation email' do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in agency_admin
-      expect { post :create, user: FactoryGirl.attributes_for(:user) }
+      expect { post :create, user: FactoryBot.attributes_for(:user) }
         .to change(all_emails, :count).by(+1)
     end
 
     context 'valid attributes' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-      let(:user_hash)     { FactoryGirl.attributes_for(:user) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:agency_admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+      let(:user_hash)     { FactoryBot.attributes_for(:user) }
 
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
@@ -66,9 +66,9 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     end
 
     context 'reinviting a user' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
-      let!(:user_hash)    { FactoryGirl.attributes_for(:user) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:agency_admin)  { FactoryBot.create(:agency_person, agency: agency) }
+      let!(:user_hash)    { FactoryBot.attributes_for(:user) }
 
       it 'creates user once upon initial invite' do
         @request.env['devise.mapping'] = Devise.mappings[:user]
@@ -86,10 +86,10 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     end
 
     context 'invalid attributes' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:agency_admin)  { FactoryGirl.create(:agency_person, agency: agency) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:agency_admin)  { FactoryBot.create(:agency_person, agency: agency) }
       let(:user_hash) do
-        hash = FactoryGirl.attributes_for(:user)
+        hash = FactoryBot.attributes_for(:user)
         hash[:email] = agency_admin.email
         hash
       end
@@ -113,14 +113,14 @@ RSpec.describe PeopleInvitationsController, type: :controller do
 
   describe 'GET #new CompanyPerson' do
     context 'valid attributes' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
-        FactoryGirl.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+        FactoryBot.create(:company_role,
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
-        ca = FactoryGirl.create(:company_person, company: company)
+        ca = FactoryBot.create(:company_person, company: company)
         ca.company_roles << ca_role
         ca.save
         ca
@@ -147,14 +147,14 @@ RSpec.describe PeopleInvitationsController, type: :controller do
   end
 
   describe 'POST #create CompanyPerson' do
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:company)       { FactoryGirl.create(:company) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let(:company)       { FactoryBot.create(:company) }
     let!(:ca_role)      do
-      FactoryGirl.create(:company_role,
-                         role: CompanyRole::ROLE[:CA])
+      FactoryBot.create(:company_role,
+                        role: CompanyRole::ROLE[:CA])
     end
     let(:company_admin) do
-      ca = FactoryGirl.create(:company_person, company: company)
+      ca = FactoryBot.create(:company_person, company: company)
       ca.company_roles << ca_role
       ca.save
       ca
@@ -163,24 +163,24 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     it 'sends invitation email' do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in company_admin
-      expect { post :create, user: FactoryGirl.attributes_for(:user) }
+      expect { post :create, user: FactoryBot.attributes_for(:user) }
         .to change(all_emails, :count).by(+1)
     end
 
     context 'valid attributes' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
-        FactoryGirl.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+        FactoryBot.create(:company_role,
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
-        ca = FactoryGirl.create(:company_person, company: company)
+        ca = FactoryBot.create(:company_person, company: company)
         ca.company_roles << ca_role
         ca.save
         ca
       end
-      let(:user_hash) { FactoryGirl.attributes_for(:user) }
+      let(:user_hash) { FactoryBot.attributes_for(:user) }
 
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
@@ -206,19 +206,19 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     end
 
     context 'reinviting a user' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
-        FactoryGirl.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+        FactoryBot.create(:company_role,
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
-        ca = FactoryGirl.create(:company_person, company: company)
+        ca = FactoryBot.create(:company_person, company: company)
         ca.company_roles << ca_role
         ca.save
         ca
       end
-      let!(:user_hash) { FactoryGirl.attributes_for(:user) }
+      let!(:user_hash) { FactoryBot.attributes_for(:user) }
 
       it 'creates user once upon initial invite' do
         @request.env['devise.mapping'] = Devise.mappings[:user]
@@ -236,20 +236,20 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     end
 
     context 'invalid attributes' do
-      let(:agency)        { FactoryGirl.create(:agency) }
-      let(:company)       { FactoryGirl.create(:company) }
+      let(:agency)        { FactoryBot.create(:agency) }
+      let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
-        FactoryGirl.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+        FactoryBot.create(:company_role,
+                          role: CompanyRole::ROLE[:CA])
       end
       let(:company_admin) do
-        ca = FactoryGirl.create(:company_person, company: company)
+        ca = FactoryBot.create(:company_person, company: company)
         ca.company_roles << ca_role
         ca.save
         ca
       end
       let(:user_hash) do
-        hash = FactoryGirl.attributes_for(:user)
+        hash = FactoryBot.attributes_for(:user)
         hash[:email] = company_admin.email
         hash
       end
@@ -272,19 +272,19 @@ RSpec.describe PeopleInvitationsController, type: :controller do
   end
   describe 'GET #update' do
     context 'AgencyPerson' do
-      let(:agency) { FactoryGirl.create(:agency) }
-      let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
+      let(:agency) { FactoryBot.create(:agency) }
+      let!(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
       it_behaves_like 'accepts invitation', 'case_manager'
       it_behaves_like 'accepts invitation', 'job_developer'
     end
     context 'Company Person' do
-      let(:company)       { FactoryGirl.create(:company) }
+      let(:company)       { FactoryBot.create(:company) }
       let!(:ca_role)      do
-        FactoryGirl.create(:company_role,
-                           role: CompanyRole::ROLE[:CA])
+        FactoryBot.create(:company_role,
+                          role: CompanyRole::ROLE[:CA])
       end
       let!(:company_admin) do
-        ca = FactoryGirl.create(:company_person, company: company)
+        ca = FactoryBot.create(:company_person, company: company)
         ca.company_roles << ca_role
         ca.save
         ca

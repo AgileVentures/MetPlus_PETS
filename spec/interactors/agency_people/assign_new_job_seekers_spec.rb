@@ -1,14 +1,14 @@
 require 'rails_helper'
 RSpec.describe AgencyPeople::AssignNewJobSeekers do
   describe '#call' do
-    let!(:agency)       { FactoryGirl.create(:agency) }
-    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:case_manager)  { FactoryGirl.create(:case_manager, agency: agency) }
-    let(:adam)          { FactoryGirl.create(:job_seeker, first_name: 'Adam') }
-    let(:jane)          { FactoryGirl.create(:job_seeker, first_name: 'Jane') }
-    let(:tom)           { FactoryGirl.create(:job_seeker, first_name: 'Tom') }
-    let(:julie)         { FactoryGirl.create(:job_seeker, first_name: 'Julie') }
-    let(:sam)           { FactoryGirl.create(:job_seeker, first_name: 'Sam') }
+    let!(:agency)       { FactoryBot.create(:agency) }
+    let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:case_manager)  { FactoryBot.create(:case_manager, agency: agency) }
+    let(:adam)          { FactoryBot.create(:job_seeker, first_name: 'Adam') }
+    let(:jane)          { FactoryBot.create(:job_seeker, first_name: 'Jane') }
+    let(:tom)           { FactoryBot.create(:job_seeker, first_name: 'Tom') }
+    let(:julie)         { FactoryBot.create(:job_seeker, first_name: 'Julie') }
+    let(:sam)           { FactoryBot.create(:job_seeker, first_name: 'Sam') }
     let(:interactor)    { AgencyPeople::AssignNewJobSeekers.new }
     let!(:assign_agency_person_mock) { instance_double('JobSeekers::AssignAgencyPerson') }
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AddressesHelper, type: :helper do
-  let(:address_with_data) { FactoryGirl.create(:address) }
+  let(:address_with_data) { FactoryBot.create(:address) }
   let(:address_no_data)   { Address.new }
 
   context '#address_has_data?' do

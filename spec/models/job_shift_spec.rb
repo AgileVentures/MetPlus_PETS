@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe JobShift, type: :model do
-  let(:job_shift) { FactoryGirl.create(:job_shift) }
+  let(:job_shift) { FactoryBot.create(:job_shift) }
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:job_shift)).to be_valid
+      expect(FactoryBot.build(:job_shift)).to be_valid
     end
   end
 

@@ -1,10 +1,9 @@
 include ActionDispatch::TestProcess
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :resume do
     file_name 'Janitor-Resume.doc'
     job_seeker
     file { File.new("#{Rails.root}/spec/fixtures/files/Janitor-Resume.doc") }
   end
-
 end

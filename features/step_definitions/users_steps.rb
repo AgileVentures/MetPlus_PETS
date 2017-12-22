@@ -1,7 +1,7 @@
 Given(/^I have the following Job Seekers$/) do |table|
   # table is a table.hashes.keys # => [:email, :password]
   table.hashes.each do |seeker|
-    FactoryGirl.create(:job_seeker, seeker)
+    FactoryBot.create(:job_seeker, seeker)
   end
 end
 

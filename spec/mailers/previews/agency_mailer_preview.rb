@@ -1,6 +1,5 @@
 # Preview all emails at http://localhost:3000/rails/mailers/agency_mailer
 class AgencyMailerPreview < ActionMailer::Preview
-
   def job_seeker_registered
     job_seeker    = JobSeeker.first
     agency_person = AgencyPerson.first
@@ -52,9 +51,9 @@ class AgencyMailerPreview < ActionMailer::Preview
   def job_posted
     stub_cruncher_calls
     job = Job.create(title: 'Software Engineer',
-                  company: Company.first,
-                  company_job_id: 'XYZ',
-                  description: 'description of test job')
+                     company: Company.first,
+                     company_job_id: 'XYZ',
+                     description: 'description of test job')
     job_developer = User.find_by_email('chet@metplus.org').actable
 
     AgencyMailer.job_posted(job_developer.email, job)
@@ -63,9 +62,9 @@ class AgencyMailerPreview < ActionMailer::Preview
   def job_revoked
     stub_cruncher_calls
     job = Job.create(title: 'Software Engineer',
-                  company: Company.first,
-                  company_job_id: 'XYZ',
-                  description: 'description of test job')
+                     company: Company.first,
+                     company_job_id: 'XYZ',
+                     description: 'description of test job')
     job_developer = User.find_by_email('chet@metplus.org').actable
 
     AgencyMailer.job_revoked(job_developer.email, job)

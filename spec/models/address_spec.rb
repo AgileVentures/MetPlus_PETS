@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Address, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.create(:address)).to be_valid
+      expect(FactoryBot.create(:address)).to be_valid
     end
   end
 
@@ -26,18 +26,18 @@ RSpec.describe Address, type: :model do
     it { is_expected.to validate_presence_of :city }
     it { is_expected.to validate_presence_of :state }
     it 'validates correct zip code format' do
-      expect(FactoryGirl.build(:address, zipcode: '33445')).to be_valid
-      expect(FactoryGirl.build(:address, zipcode: '55555-4444')).to be_valid
-      expect(FactoryGirl.build(:address, zipcode: '666666')).to_not be_valid
-      expect(FactoryGirl.build(:address, zipcode: '12345-22')).to_not be_valid
-      expect(FactoryGirl.build(:address, zipcode: '123456789')).to_not be_valid
-      expect(FactoryGirl.build(:address, zipcode: 'abcde')).to_not be_valid
+      expect(FactoryBot.build(:address, zipcode: '33445')).to be_valid
+      expect(FactoryBot.build(:address, zipcode: '55555-4444')).to be_valid
+      expect(FactoryBot.build(:address, zipcode: '666666')).to_not be_valid
+      expect(FactoryBot.build(:address, zipcode: '12345-22')).to_not be_valid
+      expect(FactoryBot.build(:address, zipcode: '123456789')).to_not be_valid
+      expect(FactoryBot.build(:address, zipcode: 'abcde')).to_not be_valid
     end
   end
 
   describe 'Class methods' do
     it 'should contain Alabama, AL state in array' do
-      expect(Address.us_states).to include(['Alabama', 'AL'])
+      expect(Address.us_states).to include(%w[Alabama AL])
     end
 
     it 'should output alabama' do
@@ -51,7 +51,8 @@ RSpec.describe Address, type: :model do
 
   describe 'Instance methods' do
     it 'should be in the correct format' do
-      expect(FactoryGirl.create(:address).full_address).to eq('3940 Main Street Detroit, Michigan 92105')
+      expect(FactoryBot.create(:address).full_address)
+        .to eq('3940 Main Street Detroit, Michigan 92105')
     end
   end
 end

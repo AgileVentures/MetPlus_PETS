@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe JobType, type: :model do
-  let(:job_type) { FactoryGirl.create(:job_type) }
+  let(:job_type) { FactoryBot.create(:job_type) }
 
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:job_type)).to be_valid
+      expect(FactoryBot.build(:job_type)).to be_valid
     end
   end
 

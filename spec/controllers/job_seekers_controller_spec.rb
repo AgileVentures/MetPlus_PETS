@@ -3,11 +3,11 @@ include ServiceStubHelpers::Cruncher
 
 module Helpers
   def assign_role(role)
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:company) { FactoryBot.create(:company, agencies: [agency]) }
     case role
     when 'job_seeker'
-      let(:person) { FactoryGirl.create(:job_seeker) }
+      let(:person) { FactoryBot.create(:job_seeker) }
     when 'owner'
       let(:person) { owner }
     when 'owner_job_developer'
@@ -15,30 +15,30 @@ module Helpers
     when 'owner_case_manager'
       let(:person) { owner_case_manager }
     when 'company_person', 'company_admin', 'company_contact'
-      let(:person) { FactoryGirl.send(:create, role.to_sym, company: company) }
+      let(:person) { FactoryBot.send(:create, role.to_sym, company: company) }
     when 'agency_person', 'job_developer', 'case_manager', 'agency_admin'
-      let(:person) { FactoryGirl.send(:create, role.to_sym, agency: agency) }
+      let(:person) { FactoryBot.send(:create, role.to_sym, agency: agency) }
     else
       let(:person) { nil }
     end
   end
 
   def assign_role_action(role, action)
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
-    let(:status) { FactoryGirl.create(:job_seeker_status) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:company) { FactoryBot.create(:company, agencies: [agency]) }
+    let(:status) { FactoryBot.create(:job_seeker_status) }
     let(:valid_attribute) do
-      FactoryGirl.attributes_for(:job_seeker)
-                 .merge(FactoryGirl.attributes_for(:user))
-                 .merge(job_seeker_status_id: status.id)
-                 .merge(address_attributes: FactoryGirl.attributes_for(:address,
-                                                                       zipcode: '12346'))
+      FactoryBot.attributes_for(:job_seeker)
+                .merge(FactoryBot.attributes_for(:user))
+                .merge(job_seeker_status_id: status.id)
+                .merge(address_attributes: FactoryBot.attributes_for(:address,
+                                                                     zipcode: '12346'))
     end
     case role
     when 'owner'
       let(:person) { owner }
     when 'agency_person', 'job_developer', 'case_manager', 'agency_admin'
-      let(:person) { FactoryGirl.send(:create, role.to_sym, agency: agency) }
+      let(:person) { FactoryBot.send(:create, role.to_sym, agency: agency) }
     else
       let(:person) { nil }
     end
@@ -145,7 +145,7 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:request) { post :create, job_seeker: FactoryGirl.attributes_for(:job_seeker) }
+    let(:request) { post :create, job_seeker: FactoryBot.attributes_for(:job_seeker) }
     context 'visitor' do
       it_behaves_like 'authorized to create / destroy job seeker', 'visitor', 'create'
     end
@@ -162,13 +162,13 @@ RSpec.describe JobSeekersController, type: :controller do
 
     context 'valid attributes' do
       before(:each) do
-        js_status = FactoryGirl.create(:job_seeker_status)
+        js_status = FactoryBot.create(:job_seeker_status)
         ActionMailer::Base.deliveries.clear
-        @js_hash = FactoryGirl.attributes_for(:job_seeker)
-                              .merge(FactoryGirl.attributes_for(:user))
-                              .merge(job_seeker_status_id: js_status.id)
-        @js_hash[:address_attributes] = FactoryGirl.attributes_for(:address,
-                                                                   zipcode: '54321')
+        @js_hash = FactoryBot.attributes_for(:job_seeker)
+                             .merge(FactoryBot.attributes_for(:user))
+                             .merge(job_seeker_status_id: js_status.id)
+        @js_hash[:address_attributes] = FactoryBot.attributes_for(:address,
+                                                                  zipcode: '54321')
         post :create, job_seeker: @js_hash
       end
       it 'check address' do
@@ -203,12 +203,12 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_file_upload
 
         ActionMailer::Base.deliveries.clear
-        js_status = FactoryGirl.create(:job_seeker_status)
-        @js_hash = FactoryGirl.attributes_for(
+        js_status = FactoryBot.create(:job_seeker_status)
+        @js_hash = FactoryBot.attributes_for(
           :job_seeker,
           resume: fixture_file_upload('files/Janitor-Resume.doc')
-        ).merge(FactoryGirl.attributes_for(:user))
-                              .merge(job_seeker_status_id: js_status.id)
+        ).merge(FactoryBot.attributes_for(:user))
+                             .merge(job_seeker_status_id: js_status.id)
       end
 
       it 'saves job seeker' do
@@ -223,22 +223,22 @@ RSpec.describe JobSeekersController, type: :controller do
 
     context 'invalid attributes' do
       before(:each) do
-        @jobseeker = FactoryGirl.create(:job_seeker)
-        @user = FactoryGirl.create(:user)
-        @jobseekerstatus = FactoryGirl.create(:job_seeker_status)
+        @jobseeker = FactoryBot.create(:job_seeker)
+        @user = FactoryBot.create(:user)
+        @jobseekerstatus = FactoryBot.create(:job_seeker_status)
         @jobseeker.assign_attributes(year_of_birth: '198')
         @user.assign_attributes(first_name: 'John', last_name: 'Smith',
                                 phone: '890-789-9087')
         @jobseekerstatus.assign_attributes(description: 'MyText')
         @jobseeker.valid?
-        js1_hash = FactoryGirl.attributes_for(
+        js1_hash = FactoryBot.attributes_for(
           :job_seeker, year_of_birth: '198',
                        resume: fixture_file_upload('files/Janitor-Resume.doc')
-        ).merge(FactoryGirl.attributes_for(
+        ).merge(FactoryBot.attributes_for(
                   :user, first_name: 'John', last_name: 'Smith', phone: '890-789-9087'
-        )).merge(FactoryGirl.attributes_for(
+        )).merge(FactoryBot.attributes_for(
                    :job_seeker_status, description: 'MyText'
-        )).merge(FactoryGirl.attributes_for(
+        )).merge(FactoryBot.attributes_for(
                    :address, zipcode: '12345131231231231231236'
         ))
         post :create, job_seeker: js1_hash
@@ -253,11 +253,11 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:owner_job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:owner_case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:owner_job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:owner_case_manager) { FactoryBot.create(:case_manager, agency: agency) }
     let(:owner) do
-      js = FactoryGirl.create(:job_seeker, phone: '123-456-7890')
+      js = FactoryBot.create(:job_seeker, phone: '123-456-7890')
       js.assign_job_developer(owner_job_developer, agency)
       js.assign_case_manager(owner_case_manager, agency)
       js
@@ -278,7 +278,7 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     context 'owner' do
-      let(:js_status) { FactoryGirl.create(:job_seeker_status) }
+      let(:js_status) { FactoryBot.create(:job_seeker_status) }
       let(:password) { owner.encrypted_password }
       before(:each) do
         stub_cruncher_authenticate
@@ -286,7 +286,7 @@ RSpec.describe JobSeekersController, type: :controller do
         sign_in owner
       end
       it 'updates email address' do
-        patch :update, id: owner, job_seeker: FactoryGirl
+        patch :update, id: owner, job_seeker: FactoryBot
           .attributes_for(:job_seeker, email: 'test@test.com')
         expect(flash[:warning])
           .to eq 'Please check your inbox to update your email address'
@@ -296,7 +296,7 @@ RSpec.describe JobSeekersController, type: :controller do
           expect do
             patch :update,
                   id: owner,
-                  job_seeker: FactoryGirl.attributes_for(
+                  job_seeker: FactoryBot.attributes_for(
                     :job_seeker,
                     resume: fixture_file_upload('files/Janitor-Resume.doc')
                   )
@@ -306,13 +306,13 @@ RSpec.describe JobSeekersController, type: :controller do
       end
       context 'valid attributes without password change' do
         before(:each) do
-          FactoryGirl.create(:resume,
-                             file_name: 'Janitor-Resume.doc',
-                             file: fixture_file_upload('files/Janitor-Resume.doc'),
-                             job_seeker: owner)
+          FactoryBot.create(:resume,
+                            file_name: 'Janitor-Resume.doc',
+                            file: fixture_file_upload('files/Janitor-Resume.doc'),
+                            job_seeker: owner)
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(
+                job_seeker: FactoryBot.attributes_for(
                   :job_seeker,
                   year_of_birth: '1980',
                   first_name: 'John',
@@ -322,9 +322,11 @@ RSpec.describe JobSeekersController, type: :controller do
                   phone: '780-890-8976',
                   resume: fixture_file_upload('files/Admin-Assistant-Resume.pdf')
                 ).merge(job_seeker_status_id: js_status.id)
-                  .merge(address_attributes: FactoryGirl.attributes_for(
-                    :address, zipcode: '12346'
-                  ))
+                                      .merge(
+                                        address_attributes: FactoryBot.attributes_for(
+                                          :address, zipcode: '12346'
+                                        )
+                                      )
           owner.reload
         end
         it 'sets the valid attributes' do
@@ -352,13 +354,13 @@ RSpec.describe JobSeekersController, type: :controller do
       context 'unsuccessful résumé upload' do
         render_views
         before(:each) do
-          FactoryGirl.create(:resume,
-                             file_name: 'Janitor-Resume.doc',
-                             file: fixture_file_upload('files/Janitor-Resume.doc'),
-                             job_seeker: owner)
+          FactoryBot.create(:resume,
+                            file_name: 'Janitor-Resume.doc',
+                            file: fixture_file_upload('files/Janitor-Resume.doc'),
+                            job_seeker: owner)
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(
+                job_seeker: FactoryBot.attributes_for(
                   :job_seeker,
                   resume: fixture_file_upload('files/Example Excel File.xls')
                 )
@@ -380,9 +382,9 @@ RSpec.describe JobSeekersController, type: :controller do
           owner.valid?
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       year_of_birth: '198',
-                                                       resume: '')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      year_of_birth: '198',
+                                                      resume: '')
         end
         it 'renders edit template' do
           expect(response).to render_template('edit')
@@ -401,21 +403,21 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'locates the requested @jobseeker' do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker)
+                job_seeker: FactoryBot.attributes_for(:job_seeker)
           expect(assigns(:jobseeker)).to eq(owner)
         end
         it "changes @jobseeker's attribute" do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       phone: '111-111-1111')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      phone: '111-111-1111')
           owner.reload
           expect(owner.phone).to eq('111-111-1111')
         end
         it 'sets flash message and redirects to job seeker show page' do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker)
+                job_seeker: FactoryBot.attributes_for(:job_seeker)
           expect(flash[:notice]).to eq 'Jobseeker was updated successfully.'
           expect(response).to redirect_to owner
         end
@@ -424,10 +426,10 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       year_of_birth: '1988',
-                                                       password: '123345',
-                                                       password_confirmation: '123345')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      year_of_birth: '1988',
+                                                      password: '123345',
+                                                      password_confirmation: '123345')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -439,8 +441,8 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       phone: '123')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      phone: '123')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -460,21 +462,21 @@ RSpec.describe JobSeekersController, type: :controller do
         it 'locates the requested @jobseeker' do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker)
+                job_seeker: FactoryBot.attributes_for(:job_seeker)
           expect(assigns(:jobseeker)).to eq(owner)
         end
         it "changes @jobseeker's attribute" do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       phone: '111-111-1111')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      phone: '111-111-1111')
           owner.reload
           expect(owner.phone).to eq('111-111-1111')
         end
         it 'sets flash message and redirects to job seeker show page' do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker)
+                job_seeker: FactoryBot.attributes_for(:job_seeker)
           expect(flash[:notice]).to eq 'Jobseeker was updated successfully.'
           expect(response).to redirect_to owner
         end
@@ -483,10 +485,10 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       year_of_birth: '1988',
-                                                       password: '123345',
-                                                       password_confirmation: '123345')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      year_of_birth: '1988',
+                                                      password: '123345',
+                                                      password_confirmation: '123345')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -498,8 +500,8 @@ RSpec.describe JobSeekersController, type: :controller do
         before(:each) do
           patch :update,
                 id: owner,
-                job_seeker: FactoryGirl.attributes_for(:job_seeker,
-                                                       phone: '123')
+                job_seeker: FactoryBot.attributes_for(:job_seeker,
+                                                      phone: '123')
           owner.reload
         end
         it "does not change job seeker's attribute" do
@@ -513,20 +515,20 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe 'GET #edit' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:owner_job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:owner_case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:owner_job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:owner_case_manager) { FactoryBot.create(:case_manager, agency: agency) }
     let(:owner) do
-      js = FactoryGirl.create(:job_seeker)
+      js = FactoryBot.create(:job_seeker)
       js.assign_job_developer(owner_job_developer, agency)
       js.assign_case_manager(owner_case_manager, agency)
       js
     end
     let(:resume) do
-      FactoryGirl.create(:resume,
-                         file_name: 'Janitor-Resume.doc',
-                         file: fixture_file_upload('files/Janitor-Resume.doc'),
-                         job_seeker: owner)
+      FactoryBot.create(:resume,
+                        file_name: 'Janitor-Resume.doc',
+                        file: fixture_file_upload('files/Janitor-Resume.doc'),
+                        job_seeker: owner)
     end
     let(:request) { get :edit, id: owner }
     context 'visitor' do
@@ -570,7 +572,7 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe 'GET #home' do
-    let(:owner) { FactoryGirl.create(:job_seeker) }
+    let(:owner) { FactoryBot.create(:job_seeker) }
     let(:request) { get :home, id: owner }
     context 'visitor' do
       it_behaves_like 'unauthorized to js controller', 'visitor'
@@ -604,9 +606,9 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_authenticate
         stub_cruncher_job_create
 
-        @newjob = FactoryGirl.create(:job)
+        @newjob = FactoryBot.create(:job)
         @newjob.assign_attributes(created_at: Time.now)
-        @oldjob = FactoryGirl.create(:job)
+        @oldjob = FactoryBot.create(:job)
         @oldjob.update_attributes(created_at: Time.now - 2.weeks)
         owner.assign_attributes(last_sign_in_at: (Time.now - 1.week))
         expect(Job.new_jobs(owner.last_sign_in_at)).to include(@newjob)
@@ -633,14 +635,14 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     it 'renders the index template' do
-      sign_in FactoryGirl.create(:agency_admin)
+      sign_in FactoryBot.create(:agency_admin)
       request
       expect(response.body).to render_template 'index'
     end
   end
 
   describe 'GET #show' do
-    let(:owner) { FactoryGirl.create(:job_seeker) }
+    let(:owner) { FactoryBot.create(:job_seeker) }
     let(:request) { get :show, id: owner }
     context 'visitor' do
       it_behaves_like 'unauthorized to js controller', 'visitor'
@@ -671,11 +673,11 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe 'GET #preview_info' do
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:owner_job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:owner_case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:owner_job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:owner_case_manager) { FactoryBot.create(:case_manager, agency: agency) }
     let(:owner) do
-      js = FactoryGirl.create(:job_seeker)
+      js = FactoryBot.create(:job_seeker)
       js.assign_job_developer(owner_job_developer, agency)
       js.assign_case_manager(owner_case_manager, agency)
       js
@@ -709,7 +711,7 @@ RSpec.describe JobSeekersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:owner) { FactoryGirl.create(:job_seeker) }
+    let(:owner) { FactoryBot.create(:job_seeker) }
     let(:request) { delete :destroy, id: owner }
     context 'visitor' do
       it_behaves_like 'unauthorized to js controller', 'visitor'
@@ -732,8 +734,8 @@ RSpec.describe JobSeekersController, type: :controller do
     end
   end
   describe 'GET #list_match_jobs' do
-    let(:jobseeker) { FactoryGirl.create(:job_seeker) }
-    let(:company) { FactoryGirl.create(:company) }
+    let(:jobseeker) { FactoryBot.create(:job_seeker) }
+    let(:company) { FactoryBot.create(:company) }
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
@@ -757,9 +759,9 @@ RSpec.describe JobSeekersController, type: :controller do
       context 'no matches' do
         before(:each) do
           stub_cruncher_no_match_jobs
-          FactoryGirl.create(:resume,
-                             file_name: 'resume.pdf',
-                             job_seeker: jobseeker)
+          FactoryBot.create(:resume,
+                            file_name: 'resume.pdf',
+                            job_seeker: jobseeker)
           get :list_match_jobs, id: jobseeker
         end
         it 'no flash message set' do
@@ -774,25 +776,25 @@ RSpec.describe JobSeekersController, type: :controller do
       end
       context 'Multiple matches' do
         let!(:job2) do
-          FactoryGirl.create(:job, id: 2, title: 'Job 2', company: company)
+          FactoryBot.create(:job, id: 2, title: 'Job 2', company: company)
         end
         let!(:job3) do
-          FactoryGirl.create(:job, id: 3, title: 'Job 3', company: company)
+          FactoryBot.create(:job, id: 3, title: 'Job 3', company: company)
         end
         let!(:job6) do
-          FactoryGirl.create(:job, id: 6, title: 'Job 6', company: company)
+          FactoryBot.create(:job, id: 6, title: 'Job 6', company: company)
         end
         let!(:job8) do
-          FactoryGirl.create(:job, id: 8, title: 'Job 8', company: company)
+          FactoryBot.create(:job, id: 8, title: 'Job 8', company: company)
         end
         let!(:job9) do
-          FactoryGirl.create(:job, id: 9, title: 'Job 9', company: company)
+          FactoryBot.create(:job, id: 9, title: 'Job 9', company: company)
         end
         before(:each) do
           stub_cruncher_match_jobs
-          FactoryGirl.create(:resume,
-                             file_name: 'resume.pdf',
-                             job_seeker: jobseeker)
+          FactoryBot.create(:resume,
+                            file_name: 'resume.pdf',
+                            job_seeker: jobseeker)
           get :list_match_jobs, id: jobseeker
         end
         it 'no flash message set' do
@@ -816,32 +818,32 @@ RSpec.describe JobSeekersController, type: :controller do
       sign_in company_admin
     end
 
-    let(:company)       { FactoryGirl.create(:company) }
-    let(:company2)      { FactoryGirl.create(:company) }
-    let(:job)           { FactoryGirl.create(:job, company: company) }
-    let(:job2)          { FactoryGirl.create(:job, company: company2) }
-    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker2)   { FactoryGirl.create(:job_seeker) }
-    let!(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-    let!(:company_admin2) { FactoryGirl.create(:company_admin, company: company2) }
-    let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
+    let(:company)       { FactoryBot.create(:company) }
+    let(:company2)      { FactoryBot.create(:company) }
+    let(:job)           { FactoryBot.create(:job, company: company) }
+    let(:job2)          { FactoryBot.create(:job, company: company2) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2)   { FactoryBot.create(:job_seeker) }
+    let!(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+    let!(:company_admin2) { FactoryBot.create(:company_admin, company: company2) }
+    let(:company_contact) { FactoryBot.create(:company_contact, company: company) }
     let!(:valid_application) do
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+      FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
     end
     let!(:valid_application2) do
-      FactoryGirl.create(:job_application, job: job2, job_seeker: job_seeker2)
+      FactoryBot.create(:job_application, job: job2, job_seeker: job_seeker2)
     end
     let(:invalid_application) do
-      FactoryGirl.create(:job_application,
-                         job: job, job_seeker: job_seeker2,
-                         status: 'accepted')
+      FactoryBot.create(:job_application,
+                        job: job, job_seeker: job_seeker2,
+                        status: 'accepted')
     end
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
-    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let!(:resume2) { FactoryGirl.create(:resume, job_seeker: job_seeker2) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+    let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:case_manager) { FactoryBot.create(:case_manager, agency: agency) }
+    let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let!(:resume2) { FactoryBot.create(:resume, job_seeker: job_seeker2) }
 
     context 'Successful download' do
       it 'does not raise exception' do

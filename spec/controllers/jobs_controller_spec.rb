@@ -15,17 +15,17 @@ RSpec::Matchers.define :evt_obj do |*attributes|
 end
 
 RSpec.describe JobsController, type: :controller do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let!(:bosh) { FactoryGirl.create(:company, name: 'Bosh', agencies: [agency]) }
-  let!(:bosh_utah) { FactoryGirl.create(:address, state: 'Utah', location: bosh) }
-  let!(:bosh_mich) { FactoryGirl.create(:address, location: bosh) }
-  let(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_utah) }
-  let(:bosh_person) { FactoryGirl.create(:company_contact, company: bosh) }
-  let(:skill) { FactoryGirl.create(:skill) }
-  let!(:license)  { FactoryGirl.create(:license) }
-  let!(:question) { FactoryGirl.create(:question) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let!(:bosh) { FactoryBot.create(:company, name: 'Bosh', agencies: [agency]) }
+  let!(:bosh_utah) { FactoryBot.create(:address, state: 'Utah', location: bosh) }
+  let!(:bosh_mich) { FactoryBot.create(:address, location: bosh) }
+  let(:bosh_job) { FactoryBot.create(:job, company: bosh, address: bosh_utah) }
+  let(:bosh_person) { FactoryBot.create(:company_contact, company: bosh) }
+  let(:skill) { FactoryBot.create(:skill) }
+  let!(:license)  { FactoryBot.create(:license) }
+  let!(:question) { FactoryBot.create(:question) }
 
   let!(:valid_params) do
     { title: 'Ruby on Rails', description: 'passionate',
@@ -52,8 +52,8 @@ RSpec.describe JobsController, type: :controller do
   end
 
   let(:job_seeker) do
-    js = FactoryGirl.create(:job_seeker)
-    FactoryGirl.create(:resume, job_seeker: js)
+    js = FactoryBot.create(:job_seeker)
+    FactoryBot.create(:resume, job_seeker: js)
     bosh_job.apply js
     js
   end
@@ -71,19 +71,19 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #index' do
     context 'search by title and description' do
       let(:job1) do
-        FactoryGirl.create(:job, title: 'Customer Manager',
-                                 description: 'Provide resposive customer service')
+        FactoryBot.create(:job, title: 'Customer Manager',
+                                description: 'Provide resposive customer service')
       end
-      let(:job2) { FactoryGirl.create(:job) }
+      let(:job2) { FactoryBot.create(:job) }
       let!(:job_skill1) do
-        FactoryGirl.create(:job_skill,
-                           job: job1,
-                           skill: FactoryGirl.create(:skill, name: 'New Skill 1'))
+        FactoryBot.create(:job_skill,
+                          job: job1,
+                          skill: FactoryBot.create(:skill, name: 'New Skill 1'))
       end
       let!(:job_skill2) do
-        FactoryGirl.create(:job_skill,
-                           job: job2,
-                           skill: FactoryGirl.create(:skill, name: 'New Skill 2'))
+        FactoryBot.create(:job_skill,
+                          job: job2,
+                          skill: FactoryBot.create(:skill, name: 'New Skill 2'))
       end
       before(:each) do
         get :index,
@@ -91,60 +91,60 @@ RSpec.describe JobsController, type: :controller do
                  'description_cont_any': 'responsive service' }
       end
       it_behaves_like 'return success and render', 'index'
-      it { expect(assigns(:title_words)).to match %w(customer manager) }
+      it { expect(assigns(:title_words)).to match %w[customer manager] }
       it 'assigns description words for view' do
-        expect(assigns(:description_words)).to match %w(responsive service)
+        expect(assigns(:description_words)).to match %w[responsive service]
       end
       it { expect(assigns(:jobs)[0]).to eq job1 }
     end
     context 'only active company jobs are returned' do
-      let!(:skill_s) { FactoryGirl.create(:skill, name: 'Search Skill') }
+      let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
       let!(:joba) do
-        FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company, name: 'Active inc',
-                                                                 status:  'active',
-                                                                 agencies: [agency]))
+        FactoryBot.create(:job,
+                          company: FactoryBot.create(:company, name: 'Active inc',
+                                                               status:  'active',
+                                                               agencies: [agency]))
       end
       let!(:job_skilla) do
-        FactoryGirl.create(:job_skill,
-                           job: joba,
-                           skill: skill_s)
+        FactoryBot.create(:job_skill,
+                          job: joba,
+                          skill: skill_s)
       end
       let!(:jobp) do
-        FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company,
-                                                       name: 'Pending inc',
-                                                       status:  'pending_registration',
-                                                       agencies: [agency]))
+        FactoryBot.create(:job,
+                          company: FactoryBot.create(:company,
+                                                     name: 'Pending inc',
+                                                     status:  'pending_registration',
+                                                     agencies: [agency]))
       end
       let!(:job_skillp) do
-        FactoryGirl.create(:job_skill,
-                           job: jobp,
-                           skill: skill_s)
+        FactoryBot.create(:job_skill,
+                          job: jobp,
+                          skill: skill_s)
       end
       let!(:jobi) do
-        FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company,
-                                                       name: 'Inact inc',
-                                                       status:  'inactive',
-                                                       agencies: [agency]))
+        FactoryBot.create(:job,
+                          company: FactoryBot.create(:company,
+                                                     name: 'Inact inc',
+                                                     status:  'inactive',
+                                                     agencies: [agency]))
       end
       let!(:job_skilli) do
-        FactoryGirl.create(:job_skill,
-                           job: jobi,
-                           skill: skill_s)
+        FactoryBot.create(:job_skill,
+                          job: jobi,
+                          skill: skill_s)
       end
       let!(:jobd) do
-        FactoryGirl.create(:job,
-                           company: FactoryGirl.create(:company,
-                                                       name: 'Denied inc',
-                                                       status: 'registration_denied',
-                                                       agencies: [agency]))
+        FactoryBot.create(:job,
+                          company: FactoryBot.create(:company,
+                                                     name: 'Denied inc',
+                                                     status: 'registration_denied',
+                                                     agencies: [agency]))
       end
       let!(:job_skilld) do
-        FactoryGirl.create(:job_skill,
-                           job: jobd,
-                           skill: skill_s)
+        FactoryBot.create(:job_skill,
+                          job: jobd,
+                          skill: skill_s)
       end
       it 'Only active company jobs are listed in the initial display' do
         get :index
@@ -159,8 +159,8 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #new' do
-    let(:widget) { FactoryGirl.create(:company, name: 'Widget', agencies: [agency]) }
-    let!(:dyson) { FactoryGirl.create(:company, name: 'Dyson', agencies: [agency]) }
+    let(:widget) { FactoryBot.create(:company, name: 'Widget', agencies: [agency]) }
+    let!(:dyson) { FactoryBot.create(:company, name: 'Dyson', agencies: [agency]) }
     let(:request) { get :new, company_id: widget.id }
 
     context 'job developer' do
@@ -280,7 +280,7 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #show' do
     let(:request) { get :show, id: bosh_job }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
 
     context 'agency admin' do
       before(:each) do
@@ -372,9 +372,9 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'PATCH #update' do
     let(:request) { patch :update, id: job_wo_skill, job: valid_params }
-    let!(:job_wo_skill) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
-    let!(:job_w_skill) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job_w_skill, skill: skill) }
+    let!(:job_wo_skill) { FactoryBot.create(:job, company: bosh, address: bosh_mich) }
+    let!(:job_w_skill) { FactoryBot.create(:job, company: bosh, address: bosh_mich) }
+    let!(:job_skill) { FactoryBot.create(:job_skill, job: job_w_skill, skill: skill) }
 
     context 'agency admin' do
       before(:each) { warden.set_user agency_admin }
@@ -465,16 +465,20 @@ RSpec.describe JobsController, type: :controller do
 
         describe 'updates job with new license' do
           it 'changes JobLicense count by 1' do
-            expect { patch :update, id: job_wo_skill.id,
-                     job: valid_params.merge(new_license_params) }
+            expect do
+              patch :update, id: job_wo_skill.id,
+                             job: valid_params.merge(new_license_params)
+            end
               .to change(JobLicense, :count).by(1)
           end
         end
 
         describe 'updates job with new question' do
           it 'changes JobQuestion count by 1' do
-            expect { patch :update, id: job_wo_skill.id,
-                     job: valid_params.merge(new_question_params) }
+            expect do
+              patch :update, id: job_wo_skill.id,
+                             job: valid_params.merge(new_question_params)
+            end
               .to change(JobQuestion, :count).by(1)
           end
         end
@@ -510,8 +514,8 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'DESTROY #delete' do
-    let!(:job_w_skill) { FactoryGirl.create(:job, company: bosh) }
-    let!(:job_skill) { FactoryGirl.create(:job_skill, job: job_w_skill, skill: skill) }
+    let!(:job_w_skill) { FactoryBot.create(:job, company: bosh) }
+    let!(:job_skill) { FactoryBot.create(:job_skill, job: job_w_skill, skill: skill) }
     let(:request) { delete :destroy, id: job_w_skill }
 
     context 'agency admin' do
@@ -546,22 +550,22 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #list' do
-    let!(:dyson) { FactoryGirl.create(:company, name: 'Dyson', agencies: [agency]) }
-    let!(:dyson_person) { FactoryGirl.create(:company_person, company: dyson) }
+    let!(:dyson) { FactoryBot.create(:company, name: 'Dyson', agencies: [agency]) }
+    let!(:dyson_person) { FactoryBot.create(:company_person, company: dyson) }
     let(:request_first_page) { xhr :get, :list, job_type: 'my-company-all' }
     let(:request_last_page) do
       xhr :get, :list, job_type: 'my-company-all', page: 4
     end
-    let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs'}
+    let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs' }
     before(:each) do
       31.times.each do |i|
         title = i < 10 ? "Awesome job 0#{i}" : "Awesome job #{i}"
-        FactoryGirl.create(:job, title: title, company: bosh,
-                                 company_person: bosh_person)
+        FactoryBot.create(:job, title: title, company: bosh,
+                                company_person: bosh_person)
       end
       4.times.each do |i|
-        FactoryGirl.create(:job, title: "Awesome new job #{i}", company: dyson,
-                                 company_person: dyson_person)
+        FactoryBot.create(:job, title: "Awesome new job #{i}", company: dyson,
+                                company_person: dyson_person)
       end
     end
 
@@ -670,14 +674,14 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'GET #apply' do
     let!(:testfile_resume) { '/files/Janitor-Resume.doc' }
-    let!(:revoked_job) { FactoryGirl.create(:job, status: 'revoked') }
+    let!(:revoked_job) { FactoryBot.create(:job, status: 'revoked') }
     let!(:job_seeker) do
-      js = FactoryGirl.create(:job_seeker)
-      js.assign_case_manager(FactoryGirl.create(:case_manager, agency: agency), agency)
+      js = FactoryBot.create(:job_seeker)
+      js.assign_case_manager(FactoryBot.create(:case_manager, agency: agency), agency)
       js.assign_job_developer(job_developer, agency)
       js
     end
-    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
+    let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
     let(:request) { get :apply, job_id: bosh_job.id, user_id: job_seeker.id }
     # before(:each) { stub_cruncher_file_download testfile_resume }
 
@@ -749,7 +753,7 @@ RSpec.describe JobsController, type: :controller do
       end
       describe 'duplicated application' do
         before :each do
-          FactoryGirl.create(:job_application, job: bosh_job, job_seeker: job_seeker)
+          FactoryBot.create(:job_application, job: bosh_job, job_seeker: job_seeker)
           request
         end
         it 'shows flash[:alert]' do
@@ -789,7 +793,7 @@ RSpec.describe JobsController, type: :controller do
       end
       describe 'duplicated applications' do
         before :each do
-          FactoryGirl.create(:job_application, job: bosh_job, job_seeker: job_seeker)
+          FactoryBot.create(:job_application, job: bosh_job, job_seeker: job_seeker)
           request
         end
         it 'shows flash[:alert]' do
@@ -809,7 +813,7 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'PATCH #revoke' do
-    let!(:revoked_job) { FactoryGirl.create(:job, status: 'revoked', company: bosh) }
+    let!(:revoked_job) { FactoryBot.create(:job, status: 'revoked', company: bosh) }
     let(:request) { patch :revoke, id: bosh_job.id }
 
     context 'agency admin' do
@@ -892,10 +896,10 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #match_resume' do
     render_views
 
-    let(:job_seeker)  { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
-    let!(:resume)     { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let(:job)         { FactoryGirl.create(:job) }
+    let(:job_seeker)  { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
+    let!(:resume)     { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let(:job)         { FactoryBot.create(:job) }
     let(:stars_str)   do
       '<div class="stars"><i class="fa fa-star"' \
       ' aria-hidden="true"></i><i class="fa fa-star"' \
@@ -972,9 +976,9 @@ RSpec.describe JobsController, type: :controller do
           warden.set_user job_developer
           stub_cruncher_match_resume_and_job
           allow(controller).to receive(:get_matches).with(job_seeker_ids)
-            .and_return(results)
+                                                    .and_return(results)
           allow(described_class).to receive(:sort_by_score).with(results)
-            .and_return(sorted_results)
+                                                           .and_return(sorted_results)
         end
 
         it 'calls sort_by_score' do
@@ -1020,7 +1024,7 @@ RSpec.describe JobsController, type: :controller do
 
       context 'case manager' do
         it_behaves_like 'unauthorized request' do
-          let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+          let(:user) { FactoryBot.create(:case_manager, agency: agency) }
         end
       end
 
@@ -1032,34 +1036,34 @@ RSpec.describe JobsController, type: :controller do
 
       context 'company contact' do
         it_behaves_like 'unauthorized request' do
-          let(:user) { FactoryGirl.create(:company_contact, company: bosh) }
+          let(:user) { FactoryBot.create(:company_contact, company: bosh) }
         end
       end
 
       context 'job seeker' do
         it_behaves_like 'unauthorized request' do
-          let(:user) { FactoryGirl.create(:job_seeker) }
+          let(:user) { FactoryBot.create(:job_seeker) }
         end
       end
     end
   end
 
   describe 'GET #match_job_seekers' do
-    let(:cmpy_contact) { FactoryGirl.create(:company_contact) }
+    let(:cmpy_contact) { FactoryBot.create(:company_contact) }
     8.times do |n|
-      let("js#{n + 1}".to_sym) { FactoryGirl.create(:job_seeker) }
+      let("js#{n + 1}".to_sym) { FactoryBot.create(:job_seeker) }
     end
 
     context 'happy path' do
       before(:each) do
-        FactoryGirl.create(:resume, job_seeker: js1)
-        FactoryGirl.create(:resume, job_seeker: js2)
-        FactoryGirl.create(:resume, job_seeker: js3)
-        FactoryGirl.create(:resume, job_seeker: js4)
-        FactoryGirl.create(:resume, job_seeker: js5)
-        FactoryGirl.create(:resume, job_seeker: js6)
-        FactoryGirl.create(:resume, job_seeker: js7)
-        FactoryGirl.create(:resume, job_seeker: js8)
+        FactoryBot.create(:resume, job_seeker: js1)
+        FactoryBot.create(:resume, job_seeker: js2)
+        FactoryBot.create(:resume, job_seeker: js3)
+        FactoryBot.create(:resume, job_seeker: js4)
+        FactoryBot.create(:resume, job_seeker: js5)
+        FactoryBot.create(:resume, job_seeker: js6)
+        FactoryBot.create(:resume, job_seeker: js7)
+        FactoryBot.create(:resume, job_seeker: js8)
 
         bosh_job.apply js2
         bosh_job.apply js5
@@ -1110,7 +1114,7 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'sets flash and redirects if job seeker not found' do
         8.times do
-          FactoryGirl.create(:resume)
+          FactoryBot.create(:resume)
         end
         job_seeker = Resume.find(7).job_seeker
         job_seeker.delete # use 'delete' to prevent destroying associated objects
@@ -1125,7 +1129,7 @@ RSpec.describe JobsController, type: :controller do
 
     context 'authorization' do
       let(:request) { get :match_job_seekers, id: bosh_job.id }
-      let(:user)    { FactoryGirl.create(:company_contact) }
+      let(:user)    { FactoryBot.create(:company_contact) }
 
       describe 'visitor' do
         it_behaves_like 'unauthorized', 'visitor'

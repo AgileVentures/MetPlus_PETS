@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe NotifyEmailJob, type: :job do
-  let(:agency) { FactoryGirl.create(:agency) }
+  let(:agency) { FactoryBot.create(:agency) }
 
   before(:each) do
     Delayed::Worker.delay_jobs = true
     3.times do
-      FactoryGirl.create(:agency_person, agency: agency)
+      FactoryBot.create(:agency_person, agency: agency)
     end
   end
 

@@ -2,20 +2,20 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe ApplicationHelper, type: :helper do
-  let(:company)         { FactoryGirl.create(:company) }
-  let(:company_admin)   { FactoryGirl.create(:company_admin, company: company) }
+  let(:company)         { FactoryBot.create(:company) }
+  let(:company_admin)   { FactoryBot.create(:company_admin, company: company) }
   let(:company_contact) do
-    FactoryGirl.create(:company_contact, company: company)
+    FactoryBot.create(:company_contact, company: company)
   end
-  let(:agency)          { FactoryGirl.create(:agency) }
-  let(:case_manager)    { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:job_developer)   { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:agency_admin)    { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_seeker)      { FactoryGirl.create(:job_seeker) }
-  let(:job)             { FactoryGirl.create(:job, company: company) }
+  let(:agency)          { FactoryBot.create(:agency) }
+  let(:case_manager)    { FactoryBot.create(:case_manager, agency: agency) }
+  let(:job_developer)   { FactoryBot.create(:job_developer, agency: agency) }
+  let(:agency_admin)    { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_seeker)      { FactoryBot.create(:job_seeker) }
+  let(:job)             { FactoryBot.create(:job, company: company) }
   let(:job_app)         do
-    FactoryGirl.build(:job_application, job: job,
-                                        job_seeker: job_seeker, status: :active)
+    FactoryBot.build(:job_application, job: job,
+                                       job_seeker: job_seeker, status: :active)
   end
 
   context 'flash_to_css method' do
@@ -38,7 +38,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
   context 'single_line_address method' do
     it 'returns string for address' do
-      address = FactoryGirl.build(:address, state: 'MI')
+      address = FactoryBot.build(:address, state: 'MI')
       expect(single_line_address(address))
         .to eq "#{address.street}, #{address.city}, MI #{address.zipcode}"
     end
@@ -152,7 +152,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     describe 'agency person' do
-      let(:agency_person) { FactoryGirl.create(:agency_person) }
+      let(:agency_person) { FactoryBot.create(:agency_person) }
 
       it 'Status 0 should be Invited' do
         agency_person.status = 0

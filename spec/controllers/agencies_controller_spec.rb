@@ -1,12 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AgenciesController, type: :controller do
+  let!(:agency)       { FactoryBot.create(:agency) }
+  let(:agency_admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
 
-  let!(:agency)       { FactoryGirl.create(:agency) }
-  let(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-
-  describe "GET #edit" do
+  describe 'GET #edit' do
     context 'success' do
       before(:each) do
         sign_in agency_admin
@@ -18,30 +17,31 @@ RSpec.describe AgenciesController, type: :controller do
       it 'renders edit template' do
         expect(response).to render_template('edit')
       end
-      it "returns http success" do
+      it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
     end
-    context "as Job Developer" do
+    context 'as Job Developer' do
       before(:each) do
         sign_in job_developer
         get :edit, id: agency
       end
-      it "redirect" do
+      it 'redirect' do
         expect(response).to have_http_status 302
       end
       it 'sets flash message' do
-        expect(flash[:alert]).to eq "You are not authorized to edit #{agency.name} agency."
+        expect(flash[:alert])
+          .to eq "You are not authorized to edit #{agency.name} agency."
       end
     end
   end
 
-  describe "PATCH #update" do
+  describe 'PATCH #update' do
     context 'valid attributes' do
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency),
-                     id: agency
+        patch :update, agency: FactoryBot.attributes_for(:agency),
+                       id: agency
       end
       it 'assigns @agency for updating' do
         expect(assigns(:agency)).to eq agency
@@ -50,7 +50,7 @@ RSpec.describe AgenciesController, type: :controller do
         expect(response).to have_http_status 302
       end
       it 'sets flash message' do
-        expect(flash[:notice]).to eq "Agency was successfully updated."
+        expect(flash[:notice]).to eq 'Agency was successfully updated.'
       end
       it 'redirects to agency admin home' do
         expect(response).to redirect_to(agency_admin_home_path)
@@ -61,8 +61,11 @@ RSpec.describe AgenciesController, type: :controller do
 
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency,
-                        phone: '', website: 'nodomain'), id: agency
+        patch :update, agency: FactoryBot.attributes_for(
+          :agency,
+          phone: '',
+          website: 'nodomain'
+        ), id: agency
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
@@ -70,7 +73,7 @@ RSpec.describe AgenciesController, type: :controller do
       it 'renders partial for errors' do
         expect(response).to render_template(partial: 'shared/_error_messages')
       end
-      it "returns http success" do
+      it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
     end
@@ -86,8 +89,8 @@ RSpec.describe AgenciesController, type: :controller do
       it 'does not authorize non-admin user' do
         sign_in job_developer
         get :edit, id: agency.id
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit #{agency.name} agency."
+        expect(flash[:alert])
+          .to eq "You are not authorized to edit #{agency.name} agency."
       end
     end
 
@@ -95,17 +98,16 @@ RSpec.describe AgenciesController, type: :controller do
       it 'authorizes agency_admin' do
         expect(subject).to_not receive(:user_not_authorized)
         sign_in agency_admin
-        patch :update, agency: FactoryGirl.attributes_for(:agency),
-                     id: agency
+        patch :update, agency: FactoryBot.attributes_for(:agency),
+                       id: agency
       end
       it 'does not authorize non-admin user' do
         sign_in job_developer
-        patch :update, agency: FactoryGirl.attributes_for(:agency),
-                     id: agency
-        expect(flash[:alert]).
-          to eq "You are not authorized to edit #{agency.name} agency."
+        patch :update, agency: FactoryBot.attributes_for(:agency),
+                       id: agency
+        expect(flash[:alert])
+          .to eq "You are not authorized to edit #{agency.name} agency."
       end
     end
   end
-
 end

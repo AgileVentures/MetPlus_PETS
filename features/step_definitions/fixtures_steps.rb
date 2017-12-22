@@ -1,6 +1,6 @@
 Given(/^the following (.+) records:$/) do |factory, table|
   table.hashes.each do |hash|
-    FactoryGirl.create(factory, hash)
+    FactoryBot.create(factory, hash)
   end
 end
 
@@ -37,7 +37,6 @@ Given(/^the following agency people exist:$/) do |table|
   table.hashes.each do |hash|
     agency_name = hash.delete 'agency'
     hash['agency_id'] = Agency.find_by_name(agency_name).id
-
 
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
@@ -107,7 +106,7 @@ end
 
 Given(/^the following jobseeker(?:s?) exist:$/) do |table|
   table.hashes.each do |hash|
-    jobseeker = hash.delete 'jobseeker'
+    hash.delete 'jobseeker'
     hash['actable_type'] = 'JobSeeker'
     hash['password_confirmation'] = hash['password']
     hash['confirmed_at'] = Time.now
@@ -115,7 +114,7 @@ Given(/^the following jobseeker(?:s?) exist:$/) do |table|
     job_seeker_status = JobSeekerStatus.find_by_short_description(seeker_status)
     jobseeker = JobSeeker.new(hash)
     jobseeker.job_seeker_status = job_seeker_status
-    jobseeker.address = FactoryGirl.create(:address)
+    jobseeker.address = FactoryBot.create(:address)
     jobseeker.save!
   end
 end
@@ -136,32 +135,31 @@ end
 
 Given(/^the following tasks exist:$/) do |table|
   table.hashes.each do |hash|
-
     owner = hash.delete 'owner'
     targets = hash.delete 'targets'
     hash['task_type'] = hash['task_type'].to_sym
     hash['status'] = Task::STATUS[hash['status'].to_sym]
-    hash['deferred_date'] = Date.parse(hash.delete 'deferred_date')
+    hash['deferred_date'] = Date.parse(hash.delete('deferred_date'))
 
-    task = FactoryGirl.build(:task, hash)
+    task = FactoryBot.build(:task, hash)
 
     if owner =~ /,/
       agency = Agency.find_by_name(owner.split(/,/)[0])
       role = owner.split(/,/)[1]
       if agency.nil?
         company = Company.find_by_name(owner.split(/,/)[0])
-        task.task_owner = {:company => {company: company, role: role.to_sym}}
+        task.task_owner = { company: { company: company, role: role.to_sym } }
       else
-        task.task_owner = {:agency => {agency: agency, role: role.to_sym}}
+        task.task_owner = { agency: { agency: agency, role: role.to_sym } }
       end
     else
-      task.task_owner = {:user => User.find_by_email(owner).pets_user}
+      task.task_owner = { user: User.find_by_email(owner).pets_user }
     end
-    if targets =~ /@/
-      task.target = User.find_by_email targets
-    else
-      task.target = Company.find_by_name targets
-    end
+    task.target = if targets =~ /@/
+                    User.find_by_email targets
+                  else
+                    Company.find_by_name targets
+                  end
     task.save!
   end
 end
@@ -169,12 +167,11 @@ end
 Given(/^the following resumes exist:$/) do |table|
   table.hashes.each do |hash|
     job_seeker = JobSeeker.find_by(email: hash[:job_seeker])
-    resume = FactoryGirl.create(:resume,
-                                file_name: hash[:file_name],
-                                job_seeker: job_seeker)
+    FactoryBot.create(:resume,
+                      file_name: hash[:file_name],
+                      job_seeker: job_seeker)
   end
 end
-
 
 Given(/^the following jobs exist:$/) do |table|
   table.hashes.each do |hash|
@@ -191,9 +188,11 @@ Given(/^the following jobs exist:$/) do |table|
     job.company_person = User.find_by_email(creator_email).pets_user if
       creator_email
 
-    job.address = FactoryGirl.create(:address,
-                                     city: city,
-                                     location: job.company) unless city.blank?
+    unless city.blank?
+      job.address = FactoryBot.create(:address,
+                                      city: city,
+                                      location: job.company)
+    end
 
     job.save!
 
@@ -218,8 +217,8 @@ Given(/^the following jobs exist:$/) do |table|
   end
 end
 
-And /^I create the following jobs$/ do |table|
-  step "the following jobs exist:", table
+And(/^I create the following jobs$/) do |table|
+  step 'the following jobs exist:', table
 end
 
 Given(/^the following job applications exist:$/) do |table|
@@ -227,40 +226,39 @@ Given(/^the following job applications exist:$/) do |table|
     job = Job.find_by_title(hash['job title'])
     job_seeker = User.find_by_email(hash['job seeker']).actable
 
-    unless hash[:status]
-      JobApplication.create!(job: job, job_seeker: job_seeker)
+    if hash[:status]
+      FactoryBot.create(:job_application, job: job, job_seeker: job_seeker,
+                                          status: hash[:status])
     else
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker,
-                         status: hash[:status])
+      JobApplication.create!(job: job, job_seeker: job_seeker)
     end
   end
 end
 
-
 Given(/^the default settings are present$/) do
   [
-    { :short_description => 'Unemployed Seeking',
-      :description => 'A jobseeker Without any work and looking for a job.'},
-    { :short_description => 'Employed Looking',
-      :description => 'A jobseeker with a job and looking for a job.'},
-    { :short_description => 'Employed Not Looking',
-      :description => 'A jobseeker with a job and not looking for a job for now.'}
+    { short_description: 'Unemployed Seeking',
+      description: 'A jobseeker Without any work and looking for a job.' },
+    { short_description: 'Employed Looking',
+      description: 'A jobseeker with a job and looking for a job.' },
+    { short_description: 'Employed Not Looking',
+      description: 'A jobseeker with a job and not looking for a job for now.' }
   ].each do |values|
-    FactoryGirl.create(:job_seeker_status, values)
+    FactoryBot.create(:job_seeker_status, values)
   end
-  step "the following agency roles exist:", table(%{
+  step 'the following agency roles exist:', table(%(
     | role  |
     | AA    |
     | CM    |
     | JD    |
-  })
-  step "the following agencies exist:", table(%{
+  ))
+  step 'the following agencies exist:', table(%(
   | name    | website     | phone        | email                  | fax          |
   | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
-  })
-  step "the following company roles exist:", table(%{
+  ))
+  step 'the following company roles exist:', table(%(
     | role  |
     | CA    |
     | CC    |
-  })
+  ))
 end
