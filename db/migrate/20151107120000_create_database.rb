@@ -18,7 +18,8 @@ class CreateDatabase < ActiveRecord::Migration
       t.string :first_name
       t.string :last_name
       t.string :phone
-      t.actable
+      t.integer :actable_id
+      t.string :actable_type
 
       ## Database authenticatable
       # t.string :email,              null: false, default: ""
