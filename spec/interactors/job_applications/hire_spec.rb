@@ -15,7 +15,7 @@ RSpec.describe JobApplications::Hire do
     end
 
     context 'when application is not accepted' do
-      let(:job_application) { FactoryGirl.build(:not_accepted_job_application) }
+      let(:job_application) { FactoryBot.build(:not_accepted_job_application) }
       it 'raises JobNotActive exception' do
         expect do
           subject.call(job_application)
@@ -24,7 +24,7 @@ RSpec.describe JobApplications::Hire do
     end
 
     context 'when application is accepted' do
-      let(:job_application) { FactoryGirl.build(:job_application, status: :accepted) }
+      let(:job_application) { FactoryBot.build(:job_application, status: :accepted) }
       it 'raises JobNotActive exception' do
         expect do
           subject.call(job_application)
@@ -33,18 +33,18 @@ RSpec.describe JobApplications::Hire do
     end
 
     context 'when application is active' do
-      let(:company) { FactoryGirl.create(:company) }
-      let(:job) { FactoryGirl.create(:job, company: company) }
+      let(:company) { FactoryBot.create(:company) }
+      let(:job) { FactoryBot.create(:job, company: company) }
 
       let!(:jane_application) do
-        jane = FactoryGirl.create(:job_seeker, first_name: 'Jane')
-        job_application = FactoryGirl.create(:job_application, job_seeker: jane, job: job)
+        jane = FactoryBot.create(:job_seeker, first_name: 'Jane')
+        job_application = FactoryBot.create(:job_application, job_seeker: jane, job: job)
         TestTaskHelper.new_review_job_application_task(job_application, company)
         job_application
       end
       let!(:joe_application) do
-        joe = FactoryGirl.create(:job_seeker, first_name: 'Joe')
-        job_application = FactoryGirl.create(:job_application, job_seeker: joe, job: job)
+        joe = FactoryBot.create(:job_seeker, first_name: 'Joe')
+        job_application = FactoryBot.create(:job_application, job_seeker: joe, job: job)
         TestTaskHelper.new_review_job_application_task(job_application, company)
         job_application
       end
@@ -73,7 +73,7 @@ RSpec.describe JobApplications::Hire do
       end
 
       context 'when the job seeker as a job developer associated' do
-        let(:job_developer) { FactoryGirl.build(:job_developer) }
+        let(:job_developer) { FactoryBot.build(:job_developer) }
         before(:each) do
           allow(jane_application.job_seeker)
             .to receive(:job_developer).and_return(job_developer)
