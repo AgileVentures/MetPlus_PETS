@@ -40,8 +40,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of :last_name }
     it {
       should_not allow_value('asd', '123456', '123 1231  1234', '1    123 123 1234',
-                              ' 123 123 1234', '(234 1234 1234',
-                              '786) 1243 3578').for(:phone)
+                             ' 123 123 1234', '(234 1234 1234',
+                             '786) 1243 3578').for(:phone)
     }
 
     describe 'Phone number format check' do

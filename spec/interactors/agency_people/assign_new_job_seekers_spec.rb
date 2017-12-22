@@ -1,5 +1,6 @@
 require 'rails_helper'
-RSpec.describe AgencyPeople::AssignNewJobSeekers do
+
+RSpec.describe AgencyPeople::AssignNewJobSeekers, type: :interactor do
   describe '#call' do
     let!(:agency)       { FactoryBot.create(:agency) }
     let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }

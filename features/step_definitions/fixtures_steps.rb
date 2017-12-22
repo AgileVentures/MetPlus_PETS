@@ -184,8 +184,7 @@ Given(/^the following jobs exist:$/) do |table|
     job = Job.new(hash.merge(company_job_id: 'JOBID'))
 
     job.company = Company.find_by_name company_name
-    job.company_person = User.find_by_email(creator_email).pets_user if
-      creator_email
+    job.company_person = User.find_by_email(creator_email).pets_user if creator_email
 
     unless city.blank?
       job.address = FactoryBot.create(:address,

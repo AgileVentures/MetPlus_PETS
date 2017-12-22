@@ -15,6 +15,7 @@ module ActAsUser
 
   def assign_attributes(new_attributes)
     self.user = User.new if self.user.nil?
+    password = new_attributes.delete('password')
     model_attributes = new_attributes.select do |key, value|
       has_attribute? key
     end
@@ -22,8 +23,8 @@ module ActAsUser
       self.user.has_attribute? key
     end
     super(model_attributes)
-    self.user = User.new if self.user.nil?
     self.user.assign_attributes(user_model_attributes)
+    self.password = password
   end
 
   def is_a?(clazz)
