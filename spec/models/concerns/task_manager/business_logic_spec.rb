@@ -8,14 +8,14 @@ include ServiceStubHelpers::Cruncher
 RSpec.describe TaskManager::BusinessLogic do
   describe 'No Case Manager Assigned to Job Seeker' do
     before :each do
-      @job_seeker = FactoryGirl.create(:job_seeker)
-      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      @agency = FactoryGirl.create(:agency)
+      @job_seeker = FactoryBot.create(:job_seeker)
+      @aa_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency = FactoryBot.create(:agency)
 
-      @agency_admin = FactoryGirl.create(:agency_person, agency: @agency,
-                                                         agency_roles: [@aa_role])
-      @case_mgr1 = FactoryGirl.create(:case_manager, agency: @agency)
-      @case_mgr2 = FactoryGirl.create(:case_manager, agency: @agency)
+      @agency_admin = FactoryBot.create(:agency_person, agency: @agency,
+                                                        agency_roles: [@aa_role])
+      @case_mgr1 = FactoryBot.create(:case_manager, agency: @agency)
+      @case_mgr2 = FactoryBot.create(:case_manager, agency: @agency)
     end
     describe '#new_js_unassigned_cm_task' do
       subject { TaskTester.new_js_unassigned_cm_task @job_seeker, @agency }
@@ -29,14 +29,14 @@ RSpec.describe TaskManager::BusinessLogic do
   end
   describe 'No Job Developer Assigned to Job Seeker' do
     before :each do
-      @job_seeker = FactoryGirl.create(:job_seeker)
-      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      @agency = FactoryGirl.create(:agency)
+      @job_seeker = FactoryBot.create(:job_seeker)
+      @aa_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency = FactoryBot.create(:agency)
 
-      @agency_admin = FactoryGirl.create(:agency_person, agency: @agency,
-                                                         agency_roles: [@aa_role])
-      @job_dev1  = FactoryGirl.create(:job_developer, agency: @agency)
-      @job_dev2  = FactoryGirl.create(:job_developer, agency: @agency)
+      @agency_admin = FactoryBot.create(:agency_person, agency: @agency,
+                                                        agency_roles: [@aa_role])
+      @job_dev1  = FactoryBot.create(:job_developer, agency: @agency)
+      @job_dev2  = FactoryBot.create(:job_developer, agency: @agency)
     end
     describe '#new_js_unassigned_jd_task' do
       subject { TaskTester.new_js_unassigned_jd_task @job_seeker, @agency }
@@ -50,16 +50,16 @@ RSpec.describe TaskManager::BusinessLogic do
   end
   describe 'Job Seeker registration' do
     before :each do
-      @job_seeker = FactoryGirl.create(:job_seeker)
-      @aa_role = FactoryGirl.create(:agency_role, role: AgencyRole::ROLE[:AA])
-      @agency = FactoryGirl.create(:agency)
+      @job_seeker = FactoryBot.create(:job_seeker)
+      @aa_role = FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA])
+      @agency = FactoryBot.create(:agency)
 
-      @agency_admin = FactoryGirl.create(:agency_person, agency: @agency,
-                                                         agency_roles: [@aa_role])
-      @case_mgr1 = FactoryGirl.create(:case_manager, agency: @agency)
-      @case_mgr2 = FactoryGirl.create(:case_manager, agency: @agency)
-      @job_dev1  = FactoryGirl.create(:job_developer, agency: @agency)
-      @job_dev2  = FactoryGirl.create(:job_developer, agency: @agency)
+      @agency_admin = FactoryBot.create(:agency_person, agency: @agency,
+                                                        agency_roles: [@aa_role])
+      @case_mgr1 = FactoryBot.create(:case_manager, agency: @agency)
+      @case_mgr2 = FactoryBot.create(:case_manager, agency: @agency)
+      @job_dev1  = FactoryBot.create(:job_developer, agency: @agency)
+      @job_dev2  = FactoryBot.create(:job_developer, agency: @agency)
     end
     describe '#new_js_registration_task' do
       subject { TaskTester.new_js_registration_task @job_seeker, @agency }
@@ -92,10 +92,10 @@ RSpec.describe TaskManager::BusinessLogic do
     end
   end
   describe 'Review company registration' do
-    let(:agency)         { FactoryGirl.create(:agency) }
-    let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
-    let!(:agency_admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-    let!(:agency_admin2) { FactoryGirl.create(:agency_admin, agency: agency) }
+    let(:agency)         { FactoryBot.create(:agency) }
+    let(:company)        { FactoryBot.create(:company, agencies: [agency]) }
+    let!(:agency_admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+    let!(:agency_admin2) { FactoryBot.create(:agency_admin, agency: agency) }
 
     describe '#new_review_company_registration_task' do
       subject { TaskTester.new_review_company_registration_task company, agency }
@@ -114,17 +114,17 @@ RSpec.describe TaskManager::BusinessLogic do
   end
 
   describe 'Review job application' do
-    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
-    let(:company)        { FactoryGirl.create(:company) }
-    let(:company_admin)  { FactoryGirl.create(:company_admin, company: company) }
-    let(:company_cc1)    { FactoryGirl.create(:company_contact, company: company) }
-    let(:company_cc2)    { FactoryGirl.create(:company_contact, company: company) }
+    let(:job_seeker)     { FactoryBot.create(:job_seeker) }
+    let(:company)        { FactoryBot.create(:company) }
+    let(:company_admin)  { FactoryBot.create(:company_admin, company: company) }
+    let(:company_cc1)    { FactoryBot.create(:company_contact, company: company) }
+    let(:company_cc2)    { FactoryBot.create(:company_contact, company: company) }
     let(:job)            do
-      FactoryGirl.create(:job, company: company,
-                               company_person: company_admin)
+      FactoryBot.create(:job, company: company,
+                              company_person: company_admin)
     end
     let(:job_application) do
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+      FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
     end
 
     describe '#new_review_job_application_task' do
@@ -145,16 +145,16 @@ RSpec.describe TaskManager::BusinessLogic do
   end
 
   describe 'Company interested in job seeker' do
-    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let!(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-    let!(:jd1)          { FactoryGirl.create(:job_developer, agency: agency) }
-    let!(:jd2)          { FactoryGirl.create(:job_developer, agency: agency) }
-    let!(:jd3)          { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:company)       { FactoryGirl.create(:company) }
-    let(:job)           { FactoryGirl.create(:job, company: company) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let!(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+    let!(:jd1)          { FactoryBot.create(:job_developer, agency: agency) }
+    let!(:jd2)          { FactoryBot.create(:job_developer, agency: agency) }
+    let!(:jd3)          { FactoryBot.create(:job_developer, agency: agency) }
+    let(:company)       { FactoryBot.create(:company) }
+    let(:job)           { FactoryBot.create(:job, company: company) }
     let(:job_application) do
-      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+      FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
     end
 
     describe '#new_company_interest_task' do

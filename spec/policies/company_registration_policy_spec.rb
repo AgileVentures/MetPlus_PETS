@@ -3,27 +3,27 @@ require 'rails_helper'
 describe CompanyRegistrationPolicy do
   let(:subject) { described_class }
 
-  let(:agency)               { FactoryGirl.create(:agency) }
-  let(:agency_admin)         { FactoryGirl.create(:agency_admin, agency: agency) }
+  let(:agency)               { FactoryBot.create(:agency) }
+  let(:agency_admin)         { FactoryBot.create(:agency_admin, agency: agency) }
 
-  let(:agency_metplus)       { FactoryGirl.create(:agency, name: 'Metplus') }
-  let(:metplus_admin)        { FactoryGirl.create(:agency_admin, agency: agency_metplus) }
+  let(:agency_metplus)       { FactoryBot.create(:agency, name: 'Metplus') }
+  let(:metplus_admin)        { FactoryBot.create(:agency_admin, agency: agency_metplus) }
 
-  let(:company)              { FactoryGirl.create(:company, agencies: [agency]) }
+  let(:company)              { FactoryBot.create(:company, agencies: [agency]) }
   let(:company_registration) { CompanyRegistration.new(company) }
   let(:company_bayer) do
-    FactoryGirl.create(:company,
-                       name: 'Bayer-Raynor',
-                       agencies: [agency_metplus])
+    FactoryBot.create(:company,
+                      name: 'Bayer-Raynor',
+                      agencies: [agency_metplus])
   end
-  let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:bayer_admin)   { FactoryGirl.create(:company_admin, company: company_bayer) }
+  let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+  let(:bayer_admin)   { FactoryBot.create(:company_admin, company: company_bayer) }
 
-  let(:jd) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:cm) { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:cc) { FactoryGirl.create(:company_contact) }
-  let(:cp) { FactoryGirl.create(:company_person) }
-  let(:js) { FactoryGirl.create(:job_seeker) }
+  let(:jd) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:cm) { FactoryBot.create(:case_manager, agency: agency) }
+  let(:cc) { FactoryBot.create(:company_contact) }
+  let(:cp) { FactoryBot.create(:company_person) }
+  let(:js) { FactoryBot.create(:job_seeker) }
 
   permissions :show? do
     it 'allows agency admin associated with the company' do

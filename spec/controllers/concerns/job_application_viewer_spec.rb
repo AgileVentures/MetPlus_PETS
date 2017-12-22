@@ -7,18 +7,18 @@ end
 
 RSpec.describe TestJobApplicationsViewerClass do
   describe '#display_job_application' do
-    let!(:agency) { FactoryGirl.create(:agency) }
-    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
-    let(:company1) { FactoryGirl.create(:company, agencies: [agency]) }
-    let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-    let(:job_seeker1) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker2) { FactoryGirl.create(:job_seeker) }
-    let(:job_seeker3) { FactoryGirl.create(:job_seeker) }
-    let(:job) { FactoryGirl.create(:job, company: company) }
-    let(:job1) { FactoryGirl.create(:job, company: company) }
-    let(:job2) { FactoryGirl.create(:job, company: company) }
-    let(:company1_job1) { FactoryGirl.create(:job, company: company1) }
+    let!(:agency) { FactoryBot.create(:agency) }
+    let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:company) { FactoryBot.create(:company, agencies: [agency]) }
+    let(:company1) { FactoryBot.create(:company, agencies: [agency]) }
+    let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker3) { FactoryBot.create(:job_seeker) }
+    let(:job) { FactoryBot.create(:job, company: company) }
+    let(:job1) { FactoryBot.create(:job, company: company) }
+    let(:job2) { FactoryBot.create(:job, company: company) }
+    let(:company1_job1) { FactoryBot.create(:job, company: company1) }
 
     let!(:stub) do
       stub_cruncher_authenticate
@@ -33,7 +33,7 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When Job Seeker did not apply to the company' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: company1_job1
@@ -48,7 +48,7 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When Job Seeker applied to one Job' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
@@ -65,17 +65,17 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When JS applied to multiple jobs in different companies' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
           )
-          @job_application1 = FactoryGirl.create(
+          @job_application1 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job1
           )
-          @job_application2 = FactoryGirl.create(
+          @job_application2 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job2
@@ -122,7 +122,7 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When applied to one job' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
@@ -139,17 +139,17 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When applied to multiple jobs' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
           )
-          @job_application1 = FactoryGirl.create(
+          @job_application1 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job1
           )
-          @job_application2 = FactoryGirl.create(
+          @job_application2 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: company1_job1
@@ -204,7 +204,7 @@ RSpec.describe TestJobApplicationsViewerClass do
       context 'When 1 Job Seeker applied' do
         before(:each) do
           job_seeker1.assign_job_developer(job_developer, agency)
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
@@ -223,17 +223,17 @@ RSpec.describe TestJobApplicationsViewerClass do
         before(:each) do
           job_seeker1.assign_job_developer(job_developer, agency)
           job_seeker2.assign_job_developer(job_developer, agency)
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
           )
-          @job_application1 = FactoryGirl.create(
+          @job_application1 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker2,
             job: job
           )
-          @job_application2 = FactoryGirl.create(
+          @job_application2 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker3,
             job: job
@@ -282,7 +282,7 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When 1 Job Seeker applied' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
@@ -299,17 +299,17 @@ RSpec.describe TestJobApplicationsViewerClass do
 
       context 'When 2 Job Seekers applied' do
         before(:each) do
-          @job_application = FactoryGirl.create(
+          @job_application = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker1,
             job: job
           )
-          @job_application1 = FactoryGirl.create(
+          @job_application1 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker2,
             job: job
           )
-          @job_application2 = FactoryGirl.create(
+          @job_application2 = FactoryBot.create(
             :job_application,
             job_seeker: job_seeker3,
             job: job1

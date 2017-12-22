@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence :email do |n|
     "unique#{n}@gmail.com"
   end

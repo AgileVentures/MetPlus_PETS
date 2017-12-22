@@ -7,12 +7,12 @@ end
 
 RSpec.describe Companies::ApproveCompanyRegistration do
   describe '#call' do
-    let!(:agency) { FactoryGirl.create(:agency) }
+    let!(:agency) { FactoryBot.create(:agency) }
     let!(:company) do
-      FactoryGirl.create(:company, id: 100, status: 'pending_registration')
+      FactoryBot.create(:company, id: 100, status: 'pending_registration')
     end
     let!(:company_person) do
-      FactoryGirl.create(:pending_first_company_admin, company: company)
+      FactoryBot.create(:pending_first_company_admin, company: company)
     end
 
     context 'when the company is approved with success' do

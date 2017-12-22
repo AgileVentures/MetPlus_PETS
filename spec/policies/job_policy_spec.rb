@@ -5,23 +5,23 @@ RSpec.describe JobPolicy do
   subject { described_class }
 
   let(:visitor) { nil }
-  let(:agency)  { FactoryGirl.create(:agency) }
-  let!(:bosh) { FactoryGirl.create(:company, name: 'Bosh', agencies: [agency]) }
-  let!(:bosh_mich) { FactoryGirl.create(:address, location: bosh) }
-  let(:bosh_job) { FactoryGirl.create(:job, company: bosh, address: bosh_mich) }
-  let(:revoked_job) { FactoryGirl.create(:job, status: 'revoked') }
-  let(:widget_job) { FactoryGirl.create(:job) }
+  let(:agency)  { FactoryBot.create(:agency) }
+  let!(:bosh) { FactoryBot.create(:company, name: 'Bosh', agencies: [agency]) }
+  let!(:bosh_mich) { FactoryBot.create(:address, location: bosh) }
+  let(:bosh_job) { FactoryBot.create(:job, company: bosh, address: bosh_mich) }
+  let(:revoked_job) { FactoryBot.create(:job, status: 'revoked') }
+  let(:widget_job) { FactoryBot.create(:job) }
 
-  let(:bosh_contact) { FactoryGirl.create(:company_contact, company: bosh) }
-  let(:bosh_admin) { FactoryGirl.create(:company_admin, company: bosh) }
-  let(:widget_contact) { FactoryGirl.create(:company_contact) }
-  let(:widget_admin) { FactoryGirl.create(:company_admin) }
+  let(:bosh_contact) { FactoryBot.create(:company_contact, company: bosh) }
+  let(:bosh_admin) { FactoryBot.create(:company_admin, company: bosh) }
+  let(:widget_contact) { FactoryBot.create(:company_contact) }
+  let(:widget_admin) { FactoryBot.create(:company_admin) }
 
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:case_manager) { FactoryBot.create(:case_manager, agency: agency) }
 
-  let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+  let(:job_seeker) { FactoryBot.create(:job_seeker) }
 
   before(:each) do
     stub_cruncher_authenticate

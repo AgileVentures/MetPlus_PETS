@@ -6,7 +6,7 @@ RSpec.describe JobLicense, type: :model do
     it 'should have a valid factory' do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      expect(FactoryGirl.build(:job_license)).to be_valid
+      expect(FactoryBot.build(:job_license)).to be_valid
     end
   end
 

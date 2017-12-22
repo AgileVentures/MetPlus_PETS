@@ -3,26 +3,28 @@ require 'rails_helper'
 RSpec.describe CompanyPersonPolicy do
   subject { described_class }
 
-  let(:agency) { FactoryGirl.create(:agency, name: 'Metplus') }
-  let(:another_agency) { FactoryGirl.create(:agency) }
-  let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
-  let!(:company_bayer) { FactoryGirl.create(:company, name: 'Bayer-Raynor',
-                            agencies: [another_agency]) }
+  let(:agency) { FactoryBot.create(:agency, name: 'Metplus') }
+  let(:another_agency) { FactoryBot.create(:agency) }
+  let(:company) { FactoryBot.create(:company, agencies: [agency]) }
+  let!(:company_bayer) do
+    FactoryBot.create(:company, name: 'Bayer-Raynor',
+                                agencies: [another_agency])
+  end
 
-  let(:cp) { FactoryGirl.create(:company_person, company: company) }
-  let(:ca) { FactoryGirl.create(:company_admin, company: company) }
-  let(:cc)     { FactoryGirl.create(:company_contact) }
+  let(:cp) { FactoryBot.create(:company_person, company: company) }
+  let(:ca) { FactoryBot.create(:company_admin, company: company) }
+  let(:cc)     { FactoryBot.create(:company_contact) }
 
-  let(:admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:jd) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:cm) { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:ap) { FactoryGirl.create(:agency_person, agency: agency) }
+  let(:admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:jd) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:cm) { FactoryBot.create(:case_manager, agency: agency) }
+  let(:ap) { FactoryBot.create(:agency_person, agency: agency) }
 
-  let(:ca_bayer) { FactoryGirl.create(:company_admin, company: company_bayer) }
-  let(:admin_bayer) { FactoryGirl.create(:agency_admin, agency: another_agency) }
-  let(:ap_bayer) { FactoryGirl.create(:agency_person, agency: another_agency) }
+  let(:ca_bayer) { FactoryBot.create(:company_admin, company: company_bayer) }
+  let(:admin_bayer) { FactoryBot.create(:agency_admin, agency: another_agency) }
+  let(:ap_bayer) { FactoryBot.create(:agency_person, agency: another_agency) }
 
-  let(:js) { FactoryGirl.create(:job_seeker) }
+  let(:js) { FactoryBot.create(:job_seeker) }
 
   permissions :edit?, :update?, :destroy? do
     it 'grants access to company admin of the same company' do
@@ -112,5 +114,4 @@ RSpec.describe CompanyPersonPolicy do
       expect(subject).to permit(cp, cp)
     end
   end
-
 end

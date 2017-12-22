@@ -2,56 +2,56 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.shared_examples 'unauthorized company people' do
-  let(:company) { FactoryGirl.create(:company) }
+  let(:company) { FactoryBot.create(:company) }
 
   context 'company admin' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:company_admin, company: company) }
+      let(:user) { FactoryBot.create(:company_admin, company: company) }
     end
   end
 
   context 'company contact' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:company_contact, company: company) }
+      let(:user) { FactoryBot.create(:company_contact, company: company) }
     end
   end
 end
 
-RSpec.shared_examples'unauthorized agency people and jobseeker' do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:company) { FactoryGirl.create(:company) }
+RSpec.shared_examples 'unauthorized agency people and jobseeker' do
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:company) { FactoryBot.create(:company) }
 
   context 'Case manager' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:case_manager, agency: agency) }
+      let(:user) { FactoryBot.create(:case_manager, agency: agency) }
     end
   end
 
   context 'Job developer' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:job_developer, agency: agency) }
+      let(:user) { FactoryBot.create(:job_developer, agency: agency) }
     end
   end
 
   context 'Job seeker' do
     it_behaves_like 'unauthorized request' do
-      let(:user) { FactoryGirl.create(:job_seeker) }
+      let(:user) { FactoryBot.create(:job_seeker) }
     end
   end
 end
 
 RSpec.describe CompaniesController, type: :controller do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:admin) { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:company) { FactoryBot.create(:company, agencies: [agency]) }
   let(:company_with_jobs) do
-    FactoryGirl.create(:company, agencies: [agency], jobs: [FactoryGirl.create(:job)])
+    FactoryBot.create(:company, agencies: [agency], jobs: [FactoryBot.create(:job)])
   end
-  let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
-  let(:company_contact) { FactoryGirl.create(:company_contact, company: company) }
-  let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:cm)     { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:js)     { FactoryGirl.create(:job_seeker) }
+  let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
+  let(:company_contact) { FactoryBot.create(:company_contact, company: company) }
+  let(:jd)     { FactoryBot.create(:job_developer, agency: agency) }
+  let(:cm)     { FactoryBot.create(:case_manager, agency: agency) }
+  let(:js)     { FactoryBot.create(:job_seeker) }
 
   describe 'GET #show' do
     before(:each) do
@@ -128,10 +128,10 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe 'GET #list_people' do
-    let!(:cp1) { FactoryGirl.create(:company_admin,   company: company) }
-    let!(:cp2) { FactoryGirl.create(:company_contact, company: company) }
-    let!(:cp3) { FactoryGirl.create(:company_contact, company: company) }
-    let!(:cp4) { FactoryGirl.create(:company_contact, company: company) }
+    let!(:cp1) { FactoryBot.create(:company_admin,   company: company) }
+    let!(:cp2) { FactoryBot.create(:company_contact, company: company) }
+    let!(:cp3) { FactoryBot.create(:company_contact, company: company) }
+    let!(:cp4) { FactoryBot.create(:company_contact, company: company) }
 
     before(:each) do
       sign_in cp1

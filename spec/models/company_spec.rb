@@ -4,7 +4,7 @@ include ServiceStubHelpers::Cruncher
 RSpec.describe Company, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:company)).to be_valid
+      expect(FactoryBot.build(:company)).to be_valid
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Company, type: :model do
 
   describe 'Validation' do
     describe 'EIN' do
-      subject { FactoryGirl.build(:company) }
+      subject { FactoryBot.build(:company) }
       it do
         should_not allow_value('asd', '123456', '123-456789',
                                '12-34567891', '00-0000000',
@@ -46,13 +46,14 @@ RSpec.describe Company, type: :model do
         is_expected.to validate_presence_of(:ein).with_message('is missing')
       end
       it do
-        is_expected.to validate_uniqueness_of(:ein).case_insensitive
+        is_expected.to validate_uniqueness_of(:ein)
+          .case_insensitive
           .with_message('has already been registered')
       end
     end
 
     describe 'phone' do
-      subject { FactoryGirl.build(:company) }
+      subject { FactoryBot.build(:company) }
       it do
         should_not allow_value('asd', '123456', '123 1231  1234',
                                '1    123 123 1234', ' 123 123 1234',
@@ -67,7 +68,7 @@ RSpec.describe Company, type: :model do
     end
 
     describe 'fax' do
-      subject { FactoryGirl.build(:company) }
+      subject { FactoryBot.build(:company) }
       it do
         should_not allow_value('asd', '123456', '123 1231  1234',
                                '1    123 123 1234', ' 123 123 1234',
@@ -82,7 +83,7 @@ RSpec.describe Company, type: :model do
     end
 
     describe 'Email' do
-      let!(:company) { FactoryGirl.build(:company) }
+      let!(:company) { FactoryBot.build(:company) }
       it do
         stub_email_validate_error
         company.email = 'asd'
@@ -94,7 +95,7 @@ RSpec.describe Company, type: :model do
     end
 
     describe 'Website' do
-      subject { FactoryGirl.build(:company) }
+      subject { FactoryBot.build(:company) }
       it do
         should_not allow_value('asd', 'ftp://company.com', 'http:',
                                'http://', 'https', 'https:', 'https://',
@@ -111,7 +112,7 @@ RSpec.describe Company, type: :model do
     end
 
     describe 'Name check' do
-      subject { FactoryGirl.build(:company) }
+      subject { FactoryBot.build(:company) }
       it { is_expected.to validate_presence_of :name }
     end
 
@@ -159,58 +160,58 @@ RSpec.describe Company, type: :model do
       stub_cruncher_job_update
     end
 
-    let(:company1) { FactoryGirl.create(:company) }
-    let(:company2) { FactoryGirl.create(:company, name: 'Gadgets, Inc.') }
-    let!(:company3) { FactoryGirl.create(:company, name: 'Things, Inc.') }
-    let!(:company4) { FactoryGirl.create(:company, name: 'Widgets, Inc.') }
-    let!(:company5) { FactoryGirl.create(:company, name: 'Acme, Inc.') }
+    let(:company1) { FactoryBot.create(:company) }
+    let(:company2) { FactoryBot.create(:company, name: 'Gadgets, Inc.') }
+    let!(:company3) { FactoryBot.create(:company, name: 'Things, Inc.') }
+    let!(:company4) { FactoryBot.create(:company, name: 'Widgets, Inc.') }
+    let!(:company5) { FactoryBot.create(:company, name: 'Acme, Inc.') }
     let!(:company6) do
-      FactoryGirl.create(:company, name: 'InActive, Inc.',
-                                   status: 'inactive')
+      FactoryBot.create(:company, name: 'InActive, Inc.',
+                                  status: 'inactive')
     end
 
-    let(:cmpy1_person) { FactoryGirl.create(:company_contact, company: company1) }
-    let(:cmpy2_person) { FactoryGirl.create(:company_contact, company: company2) }
-    let(:cmpy4_person) { FactoryGirl.create(:company_contact, company: company4) }
-    let(:cmpy5_person) { FactoryGirl.create(:company_contact, company: company5) }
-    let(:cmpy6_person) { FactoryGirl.create(:company_contact, company: company6) }
+    let(:cmpy1_person) { FactoryBot.create(:company_contact, company: company1) }
+    let(:cmpy2_person) { FactoryBot.create(:company_contact, company: company2) }
+    let(:cmpy4_person) { FactoryBot.create(:company_contact, company: company4) }
+    let(:cmpy5_person) { FactoryBot.create(:company_contact, company: company5) }
+    let(:cmpy6_person) { FactoryBot.create(:company_contact, company: company6) }
 
     let!(:job1) do
-      FactoryGirl.create(:job, company: company1,
-                               company_person: cmpy1_person)
+      FactoryBot.create(:job, company: company1,
+                              company_person: cmpy1_person)
     end
     let!(:job2) do
-      FactoryGirl.create(:job, company: company1,
-                               company_person: cmpy1_person)
+      FactoryBot.create(:job, company: company1,
+                              company_person: cmpy1_person)
     end
     let!(:job3) do
-      FactoryGirl.create(:job, company: company2,
-                               company_person: cmpy2_person)
+      FactoryBot.create(:job, company: company2,
+                              company_person: cmpy2_person)
     end
     let!(:job4) do
-      FactoryGirl.create(:job, company: company2,
-                               company_person: cmpy2_person)
+      FactoryBot.create(:job, company: company2,
+                              company_person: cmpy2_person)
     end
     let!(:job5) do
-      FactoryGirl.create(:job, company: company4,
-                               company_person: cmpy4_person,
-                               status: :filled)
+      FactoryBot.create(:job, company: company4,
+                              company_person: cmpy4_person,
+                              status: :filled)
     end
     let!(:job6) do
-      FactoryGirl.create(:job, company: company5,
-                               company_person: cmpy5_person,
-                               status: :revoked)
+      FactoryBot.create(:job, company: company5,
+                              company_person: cmpy5_person,
+                              status: :revoked)
     end
     let!(:job7) do
-      FactoryGirl.create(:job, company: company6,
-                               company_person: cmpy6_person)
+      FactoryBot.create(:job, company: company6,
+                              company_person: cmpy6_person)
     end
 
-    let!(:cmpy1_admin1) { FactoryGirl.create(:company_admin, company: company1) }
-    let!(:cmpy1_admin2) { FactoryGirl.create(:company_admin, company: company1) }
-    let!(:cmpy2_admin1) { FactoryGirl.create(:company_admin, company: company2) }
-    let!(:cmpy2_admin2) { FactoryGirl.create(:company_admin, company: company2) }
-    let!(:cmpy3_admin)  { FactoryGirl.create(:company_admin, company: company3) }
+    let!(:cmpy1_admin1) { FactoryBot.create(:company_admin, company: company1) }
+    let!(:cmpy1_admin2) { FactoryBot.create(:company_admin, company: company1) }
+    let!(:cmpy2_admin1) { FactoryBot.create(:company_admin, company: company2) }
+    let!(:cmpy2_admin2) { FactoryBot.create(:company_admin, company: company2) }
+    let!(:cmpy3_admin)  { FactoryBot.create(:company_admin, company: company3) }
 
     describe '.all_active_with_jobs' do
       it 'returns all active companies with job(s)' do

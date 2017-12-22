@@ -18,7 +18,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'rubygems'
-require 'factory_girl'
+require 'factory_bot'
 require 'email-spec'
 require 'codeclimate-test-reporter'
 require 'webmock/rspec'
@@ -113,7 +113,7 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
   config.example_status_persistence_file_path = 'spec/examples.txt'
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation, pre_count: true, reset_ids: true)

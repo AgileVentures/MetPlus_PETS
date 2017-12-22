@@ -2,33 +2,33 @@ require 'rails_helper'
 include CompanyPeopleViewer
 
 RSpec.describe CompanyPeopleController, type: :controller do
-  let(:agency)         { FactoryGirl.create(:agency, name: 'Metplus') }
-  let(:another_agency) { FactoryGirl.create(:agency) }
-  let(:company)        { FactoryGirl.create(:company, agencies: [agency]) }
+  let(:agency)         { FactoryBot.create(:agency, name: 'Metplus') }
+  let(:another_agency) { FactoryBot.create(:agency) }
+  let(:company)        { FactoryBot.create(:company, agencies: [agency]) }
   let!(:comp_bayer) do
-    FactoryGirl.create(:company, name: 'Bayer-Raynor',
-                                 agencies: [another_agency])
+    FactoryBot.create(:company, name: 'Bayer-Raynor',
+                                agencies: [another_agency])
   end
-  let(:company_person) { FactoryGirl.create(:company_person, company: company) }
-  let(:company_admin) { FactoryGirl.create(:company_admin, company: company) }
+  let(:company_person) { FactoryBot.create(:company_person, company: company) }
+  let(:company_admin) { FactoryBot.create(:company_admin, company: company) }
   let(:company_contact) do
-    FactoryGirl.create(:company_contact, company: company)
+    FactoryBot.create(:company_contact, company: company)
   end
-  let(:agency_admin)   { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:case_manager)   { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:agency_person) { FactoryGirl.create(:agency_person, agency: agency) }
-  let(:ca_bayer) { FactoryGirl.create(:company_admin, company: comp_bayer) }
-  let(:cc_bayer) { FactoryGirl.create(:company_contact, company: comp_bayer) }
+  let(:agency_admin)   { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_developer)  { FactoryBot.create(:job_developer, agency: agency) }
+  let(:case_manager)   { FactoryBot.create(:case_manager, agency: agency) }
+  let(:agency_person) { FactoryBot.create(:agency_person, agency: agency) }
+  let(:ca_bayer) { FactoryBot.create(:company_admin, company: comp_bayer) }
+  let(:cc_bayer) { FactoryBot.create(:company_contact, company: comp_bayer) }
   let(:admin_bayer) do
-    FactoryGirl.create(:agency_admin, agency: another_agency)
+    FactoryBot.create(:agency_admin, agency: another_agency)
   end
-  let(:job_seeker) { FactoryGirl.create(:job_seeker) }
+  let(:job_seeker) { FactoryBot.create(:job_seeker) }
 
   describe 'GET #show' do
     context 'company admin' do
       before(:each) do
-        @company_admin = FactoryGirl.create(:company_admin)
+        @company_admin = FactoryBot.create(:company_admin)
         sign_in @company_admin
         get :show, id: @company_admin
       end
@@ -41,7 +41,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     end
     context 'company contact' do
       before(:each) do
-        @company_contact = FactoryGirl.create(:company_contact)
+        @company_contact = FactoryBot.create(:company_contact)
         sign_in @company_contact
         get :show, id: @company_contact
       end
@@ -58,7 +58,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       context 'company admin' do
         before(:each) do
-          @company_admin = FactoryGirl.create(:company_admin)
+          @company_admin = FactoryBot.create(:company_admin)
           sign_in @company_admin
           get :edit_profile, id: @company_admin
         end
@@ -72,7 +72,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
       context 'company contact' do
         before(:each) do
-          @company_contact = FactoryGirl.create(:company_contact)
+          @company_contact = FactoryBot.create(:company_contact)
           sign_in @company_contact
           get :edit_profile, id: @company_contact
         end
@@ -226,15 +226,16 @@ RSpec.describe CompanyPeopleController, type: :controller do
         before(:each) do
           sign_in company_person
           company_person.company_roles <<
-            FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])
+            FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])
           company_person.save
           patch :update_profile,
                 id: company_person,
-                company_person: FactoryGirl.attributes_for(:user)
+                company_person: FactoryBot.attributes_for(:user)
         end
 
         it 'sets flash message' do
-          expect(flash[:warning]).to eq 'Please check your inbox to update your email address.'
+          expect(flash[:warning])
+            .to eq 'Please check your inbox to update your email address.'
         end
         it 'returns redirect status' do
           expect(response).to have_http_status(:redirect)
@@ -246,20 +247,20 @@ RSpec.describe CompanyPeopleController, type: :controller do
       context 'valid attributes without password change' do
         before(:each) do
           @company_person =
-            FactoryGirl.create(:company_admin,
-                               password: 'testing.....',
-                               password_confirmation: 'testing.....')
+            FactoryBot.create(:company_admin,
+                              password: 'testing.....',
+                              password_confirmation: 'testing.....')
           @password = @company_person.encrypted_password
           sign_in @company_person
           patch :update_profile,
                 company_person:
-                  FactoryGirl.attributes_for(:company_person,
-                                             first_name: 'John',
-                                             last_name: 'Smith',
-                                             phone: '780-890-8976',
-                                             title: 'Line Manager',
-                                             password: '',
-                                             password_confirmation: ''),
+                  FactoryBot.attributes_for(:company_person,
+                                            first_name: 'John',
+                                            last_name: 'Smith',
+                                            phone: '780-890-8976',
+                                            title: 'Line Manager',
+                                            password: '',
+                                            password_confirmation: ''),
                 id: @company_person
           @company_person.reload
         end

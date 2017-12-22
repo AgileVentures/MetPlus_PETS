@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence :code do |n|
     "BR00#{n}"
   end
@@ -8,5 +8,4 @@ FactoryGirl.define do
     address
     code
   end
-
 end

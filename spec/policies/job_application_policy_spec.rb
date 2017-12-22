@@ -1,17 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe JobApplicationPolicy do
-  let(:company) { FactoryGirl.create(:company) }
-  let(:company2) { FactoryGirl.create(:company) }
-  let(:company_admin1) { FactoryGirl.create(:company_admin, company: company) }
-  let(:company_admin2) { FactoryGirl.create(:company_admin, company: company2) }
+  let(:company) { FactoryBot.create(:company) }
+  let(:company2) { FactoryBot.create(:company) }
+  let(:company_admin1) { FactoryBot.create(:company_admin, company: company) }
+  let(:company_admin2) { FactoryBot.create(:company_admin, company: company2) }
   let(:company_contact) do
-    FactoryGirl.create(:company_contact,
-                       company: company)
+    FactoryBot.create(:company_contact,
+                      company: company)
   end
   let(:company_contact2) do
-    FactoryGirl.create(:company_contact,
-                       company: company2)
+    FactoryBot.create(:company_contact,
+                      company: company2)
   end
 
   before(:each) do
@@ -19,16 +19,16 @@ RSpec.describe JobApplicationPolicy do
     stub_cruncher_job_create
   end
 
-  let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-  let(:job) { FactoryGirl.create(:job, company: company) }
+  let(:job_seeker) { FactoryBot.create(:job_seeker) }
+  let(:job) { FactoryBot.create(:job, company: company) }
   let(:job_application) do
-    FactoryGirl.create(:job_application, job: job,
-                                         job_seeker: job_seeker)
+    FactoryBot.create(:job_application, job: job,
+                                        job_seeker: job_seeker)
   end
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:agency_admin) { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:case_manager) { FactoryGirl.create(:case_manager, agency: agency) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+  let(:case_manager) { FactoryBot.create(:case_manager, agency: agency) }
 
   permissions :accept?, :reject?, :show? do
     it 'allows access if user is a company admin/contact' do

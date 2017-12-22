@@ -6,14 +6,14 @@ class TestConcernJobsViewerClass < ApplicationController
 end
 
 RSpec.describe TestConcernJobsViewerClass do
-  let(:company) { FactoryGirl.create(:company) }
-  let(:cmpy_person1) { FactoryGirl.create(:company_contact, company: company) }
-  let(:job1) { FactoryGirl.create(:job, title: 'Software Developer', company: company) }
-  let(:job2) { FactoryGirl.create(:job, title: 'Software Tester', company: company) }
+  let(:company) { FactoryBot.create(:company) }
+  let(:cmpy_person1) { FactoryBot.create(:company_contact, company: company) }
+  let(:job1) { FactoryBot.create(:job, title: 'Software Developer', company: company) }
+  let(:job2) { FactoryBot.create(:job, title: 'Software Tester', company: company) }
   let(:job3) do
-    FactoryGirl.create(:job, title: 'Business Analyst',
-                             company: company,
-                             created_at: Date.new(2010, 1, 1))
+    FactoryBot.create(:job, title: 'Business Analyst',
+                            company: company,
+                            created_at: Date.new(2010, 1, 1))
   end
   let(:job_fields) { TestConcernJobsViewerClass::FIELDS_IN_JOB_TYPE }
 

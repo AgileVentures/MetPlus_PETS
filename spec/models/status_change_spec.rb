@@ -6,7 +6,7 @@ class TestEntity < ActiveRecord::Base
   # of the enum :status field in the DB
   self.table_name = 'job_applications'
 
-  enum status: [:hello, :goodbye, :still_here]
+  enum status: %i[hello goodbye still_here]
 
   has_many :status_changes, as: :entity, dependent: :destroy
 end
@@ -14,7 +14,7 @@ end
 RSpec.describe StatusChange, type: :model do
   describe 'Fixtures' do
     it 'should have a valid factory' do
-      expect(FactoryGirl.build(:status_change)).to be_valid
+      expect(FactoryBot.build(:status_change)).to be_valid
     end
   end
 
@@ -30,11 +30,15 @@ RSpec.describe StatusChange, type: :model do
 
   describe 'Validations' do
     it { is_expected.to validate_presence_of(:status_change_to) }
-    it { is_expected.to validate_numericality_of(:status_change_to).
-                  only_integer.is_greater_than_or_equal_to(0) }
+    it {
+      is_expected.to validate_numericality_of(:status_change_to)
+        .only_integer.is_greater_than_or_equal_to(0)
+    }
 
-    it { is_expected.to validate_numericality_of(:status_change_from).
-                  only_integer.is_greater_than_or_equal_to(0).allow_nil }
+    it {
+      is_expected.to validate_numericality_of(:status_change_from)
+        .only_integer.is_greater_than_or_equal_to(0).allow_nil
+    }
   end
 
   describe 'Class methods' do
@@ -42,8 +46,8 @@ RSpec.describe StatusChange, type: :model do
     let(:entity2) { TestEntity.create }
 
     it 'adds a status change record for an entity' do
-      expect{ StatusChange.update_status_history(entity1, :hello) }.
-            to change(StatusChange, :count).by 1
+      expect { StatusChange.update_status_history(entity1, :hello) }
+        .to change(StatusChange, :count).by 1
       expect(entity1.status_changes.count).to eq 1
     end
 
@@ -56,25 +60,25 @@ RSpec.describe StatusChange, type: :model do
       sleep(1)
       StatusChange.update_status_history(entity2, :still_here)
 
-      expect(StatusChange.status_change_time(entity1, :hello)).
-          to eq StatusChange.first.created_at
+      expect(StatusChange.status_change_time(entity1, :hello))
+        .to eq StatusChange.first.created_at
 
-      expect(StatusChange.status_change_time(entity1, :goodbye)).
-          to eq StatusChange.third.created_at
+      expect(StatusChange.status_change_time(entity1, :goodbye))
+        .to eq StatusChange.third.created_at
 
-      expect(StatusChange.status_change_time(entity2, :hello)).
-          to eq StatusChange.second.created_at
-      expect(StatusChange.status_change_time(entity2, :still_here)).
-          to eq StatusChange.last.created_at
+      expect(StatusChange.status_change_time(entity2, :hello))
+        .to eq StatusChange.second.created_at
+      expect(StatusChange.status_change_time(entity2, :still_here))
+        .to eq StatusChange.last.created_at
     end
 
     it 'returns an array of times for multiple occurences of status' do
-      t1 = StatusChange.update_status_history(entity1, :hello).
-                      last.created_at
-      t2 = StatusChange.update_status_history(entity1, :goodbye).
-                      last.created_at
-      t3 = StatusChange.update_status_history(entity1, :hello).
-                      last.created_at
+      t1 = StatusChange.update_status_history(entity1, :hello)
+                       .last.created_at
+      StatusChange.update_status_history(entity1, :goodbye)
+                  .last.created_at
+      t3 = StatusChange.update_status_history(entity1, :hello)
+                       .last.created_at
 
       change_times = StatusChange.status_change_time(entity1, :hello, :all)
 
@@ -85,9 +89,8 @@ RSpec.describe StatusChange, type: :model do
       StatusChange.update_status_history(entity1, :hello)
       StatusChange.update_status_history(entity1, :good_bye)
 
-      expect {StatusChange.status_change_time(entity1, :hello, :unknown)}.
-                  to raise_error(ArgumentError, "Invalid 'which' argument")
+      expect { StatusChange.status_change_time(entity1, :hello, :unknown) }
+        .to raise_error(ArgumentError, "Invalid 'which' argument")
     end
   end
-
 end

@@ -1,19 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe CompanyPolicy do
-  let(:agency) { FactoryGirl.create(:agency) }
-  let(:admin)  { FactoryGirl.create(:agency_admin, agency: agency) }
-  let(:jd)     { FactoryGirl.create(:job_developer, agency: agency) }
-  let(:agency2) { FactoryGirl.create(:agency) }
-  let(:admin2)  { FactoryGirl.create(:agency_admin, agency: agency2) }
-  let(:cm) { FactoryGirl.create(:case_manager, agency: agency) }
-  let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
-  let(:ca)     { FactoryGirl.create(:company_admin, company: company) }
-  let(:cc)     { FactoryGirl.create(:company_contact, company: company) }
-  let(:company2) { FactoryGirl.create(:company, agencies: [agency]) }
-  let(:ca2)     { FactoryGirl.create(:company_admin, company: company2) }
-  let(:cc2)     { FactoryGirl.create(:company_contact, company: company2) }
-  let(:js) { FactoryGirl.create(:job_seeker) }
+  let(:agency) { FactoryBot.create(:agency) }
+  let(:admin)  { FactoryBot.create(:agency_admin, agency: agency) }
+  let(:jd)     { FactoryBot.create(:job_developer, agency: agency) }
+  let(:agency2) { FactoryBot.create(:agency) }
+  let(:admin2)  { FactoryBot.create(:agency_admin, agency: agency2) }
+  let(:cm) { FactoryBot.create(:case_manager, agency: agency) }
+  let(:company) { FactoryBot.create(:company, agencies: [agency]) }
+  let(:ca)     { FactoryBot.create(:company_admin, company: company) }
+  let(:cc)     { FactoryBot.create(:company_contact, company: company) }
+  let(:company2) { FactoryBot.create(:company, agencies: [agency]) }
+  let(:ca2)     { FactoryBot.create(:company_admin, company: company2) }
+  let(:cc2)     { FactoryBot.create(:company_contact, company: company2) }
+  let(:js) { FactoryBot.create(:job_seeker) }
 
   permissions :edit?, :update?, :show? do
     it 'denies access to job developer' do

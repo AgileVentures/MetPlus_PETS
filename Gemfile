@@ -1,20 +1,15 @@
 source 'https://rubygems.org'
 
-
-
 ruby '2.3.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
-#gem 'rails', '4.2.0'
+gem 'rails', '4.2.10'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0.7'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 gem 'haml'
 
@@ -43,22 +38,12 @@ gem 'figaro'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 
-# gem 'ajax_pagination'
-
 ## Authorization gem
 gem "pundit"
 
 gem 'pusher'
 
 gem 'js_cookie_rails'
-
-# gem 'nokogiri', '~> 1.6', '>= 1.6.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 gem 'active_record-acts_as'
 
@@ -92,10 +77,10 @@ group :development, :test do
   gem 'byebug'
 
   # RSPEC testing
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails', '~> 3.7'
 
   # Factory girl to add factories
-  gem 'factory_girl_rails', '~> 4.0'
+  gem 'factory_bot_rails'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -117,7 +102,7 @@ group :test do
   gem 'simplecov', :require => false
 end
 
-gem 'airbrake', '~> 5.4'
+gem 'airbrake', '~> 7.1'
 group :production do
   gem 'rails_12factor'
   gem 'puma'

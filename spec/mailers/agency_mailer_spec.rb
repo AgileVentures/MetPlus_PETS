@@ -3,9 +3,9 @@ include ServiceStubHelpers::Cruncher
 
 RSpec.describe AgencyMailer, type: :mailer do
   describe 'Job Seeker registered' do
-    let!(:agency) { FactoryGirl.create(:agency) }
-    let!(:agency_person) { FactoryGirl.create(:agency_person, agency: agency) }
-    let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
+    let!(:agency) { FactoryBot.create(:agency) }
+    let!(:agency_person) { FactoryBot.create(:agency_person, agency: agency) }
+    let!(:job_seeker) { FactoryBot.create(:job_seeker) }
     let(:mail) do
       AgencyMailer.job_seeker_registered(agency_person.email,
                                          job_seeker)
@@ -27,9 +27,9 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Company registered' do
-    let!(:agency) { FactoryGirl.create(:agency) }
-    let!(:agency_person) { FactoryGirl.create(:agency_person, agency: agency) }
-    let!(:company) { FactoryGirl.create(:company) }
+    let!(:agency) { FactoryBot.create(:agency) }
+    let!(:agency_person) { FactoryBot.create(:agency_person, agency: agency) }
+    let!(:company) { FactoryBot.create(:company) }
     let(:mail) do
       AgencyMailer.company_registered(agency_person.email,
                                       company)
@@ -50,14 +50,14 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job seeker applied to job' do
-    let!(:agency_person) { FactoryGirl.create(:agency_admin) }
-    let!(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let!(:resume) { FactoryGirl.create(:resume, job_seeker: job_seeker) }
-    let!(:company) { FactoryGirl.create(:company) }
-    let(:company_person) { FactoryGirl.create(:company_person, company: company) }
+    let!(:agency_person) { FactoryBot.create(:agency_admin) }
+    let!(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let!(:company) { FactoryBot.create(:company) }
+    let(:company_person) { FactoryBot.create(:company_person, company: company) }
     let(:job)            do
-      FactoryGirl.create(:job, company: company,
-                               company_person: company_person)
+      FactoryBot.create(:job, company: company,
+                              company_person: company_person)
     end
     let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
     let(:application) do
@@ -92,10 +92,10 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job Application accepted' do
-    let(:job) { FactoryGirl.create(:job) }
-    let(:job_developer) { FactoryGirl.create(:job_developer) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:app) { FactoryGirl.create(:job_application, job_seeker: job_seeker, job: job) }
+    let(:job) { FactoryBot.create(:job) }
+    let(:job_developer) { FactoryBot.create(:job_developer) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let(:app) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
     let(:mail) { AgencyMailer.job_application_accepted(job_developer.email, app) }
 
     before :each do
@@ -117,10 +117,10 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job Application rejected' do
-    let(:job) { FactoryGirl.create(:job) }
-    let(:job_developer) { FactoryGirl.create(:job_developer) }
-    let(:job_seeker) { FactoryGirl.create(:job_seeker) }
-    let(:app) { FactoryGirl.create(:job_application, job_seeker: job_seeker, job: job) }
+    let(:job) { FactoryBot.create(:job) }
+    let(:job_developer) { FactoryBot.create(:job_developer) }
+    let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    let(:app) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
     let(:mail) { AgencyMailer.job_application_rejected(job_developer.email, app) }
 
     before :each do
@@ -142,8 +142,8 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job seeker assigned to job developer' do
-    let(:job_developer) { FactoryGirl.create(:job_developer) }
-    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:job_developer) { FactoryBot.create(:job_developer) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
 
     let(:mail) do
       AgencyMailer.job_seeker_assigned_jd(job_developer.email,
@@ -165,8 +165,8 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job seeker assigned to case manager' do
-    let(:case_manager)  { FactoryGirl.create(:case_manager) }
-    let(:job_seeker)    { FactoryGirl.create(:job_seeker) }
+    let(:case_manager)  { FactoryBot.create(:case_manager) }
+    let(:job_seeker)    { FactoryBot.create(:job_seeker) }
 
     let(:mail) do
       AgencyMailer.job_seeker_assigned_cm(case_manager.email,
@@ -188,8 +188,8 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'New job posted' do
-    let(:job)           { FactoryGirl.create(:job) }
-    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:job)           { FactoryBot.create(:job) }
+    let(:job_developer) { FactoryBot.create(:job_developer) }
 
     let(:mail) do
       AgencyMailer.job_posted(job_developer.email, job)
@@ -216,8 +216,8 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job revoked' do
-    let(:job)           { FactoryGirl.create(:job) }
-    let(:job_developer) { FactoryGirl.create(:job_developer) }
+    let(:job)           { FactoryBot.create(:job) }
+    let(:job_developer) { FactoryBot.create(:job_developer) }
 
     let(:mail) do
       allow(Pusher).to receive(:trigger)
@@ -240,11 +240,11 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Job Developer not assigned to JS applies to job' do
-    let(:agency)        { FactoryGirl.create(:agency) }
-    let(:job_developer) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:job_developer1) { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
-    let(:job)            { FactoryGirl.create(:job) }
+    let(:agency)        { FactoryBot.create(:agency) }
+    let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:job_developer1) { FactoryBot.create(:job_developer, agency: agency) }
+    let(:job_seeker)     { FactoryBot.create(:job_seeker) }
+    let(:job)            { FactoryBot.create(:job) }
     let(:mail) do
       AgencyMailer.job_applied_by_other_job_developer(job_seeker,
                                                       job_developer,
@@ -277,11 +277,11 @@ RSpec.describe AgencyMailer, type: :mailer do
   end
 
   describe 'Company interested in job seeker' do
-    let(:agency)         { FactoryGirl.create(:agency) }
-    let(:job_developer)  { FactoryGirl.create(:job_developer, agency: agency) }
-    let(:job_seeker)     { FactoryGirl.create(:job_seeker) }
-    let(:job)            { FactoryGirl.create(:job) }
-    let(:company_person) { FactoryGirl.create(:company_person) }
+    let(:agency)         { FactoryBot.create(:agency) }
+    let(:job_developer)  { FactoryBot.create(:job_developer, agency: agency) }
+    let(:job_seeker)     { FactoryBot.create(:job_seeker) }
+    let(:job)            { FactoryBot.create(:job) }
+    let(:company_person) { FactoryBot.create(:company_person) }
     let(:mail) do
       AgencyMailer.company_interest_in_job_seeker(job_developer.email,
                                                   company_person,

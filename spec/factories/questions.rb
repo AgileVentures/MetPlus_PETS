@@ -1,6 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :question do
-    question_text "MyString"
+    question_text 'MyString'
   end
-
 end

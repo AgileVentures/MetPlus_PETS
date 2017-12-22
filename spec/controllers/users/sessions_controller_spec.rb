@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::SessionsController, type: :controller do
-  let(:user) { FactoryGirl.create(:job_seeker) }
+  let(:user) { FactoryBot.create(:job_seeker) }
   before(:each) do
     @request.env['devise.mapping'] = Devise.mappings[:user]
   end

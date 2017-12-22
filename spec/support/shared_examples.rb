@@ -66,15 +66,15 @@ end
 
 module Helpers
   def assign_role(role)
-    let(:agency) { FactoryGirl.create(:agency) }
-    let(:company) { FactoryGirl.create(:company, agencies: [agency]) }
+    let(:agency) { FactoryBot.create(:agency) }
+    let(:company) { FactoryBot.create(:company, agencies: [agency]) }
     case role
     when 'job_seeker'
-      let(:person) { FactoryGirl.create(:job_seeker) }
+      let(:person) { FactoryBot.create(:job_seeker) }
     when 'company_person', 'company_admin', 'company_contact'
-      let(:person) { FactoryGirl.send(:create, role.to_sym, company: company) }
+      let(:person) { FactoryBot.send(:create, role.to_sym, company: company) }
     when 'agency_person', 'job_developer', 'case_manager', 'agency_admin'
-      let(:person) { FactoryGirl.send(:create, role.to_sym, agency: agency) }
+      let(:person) { FactoryBot.send(:create, role.to_sym, agency: agency) }
     else
       let(:person) { nil }
     end
