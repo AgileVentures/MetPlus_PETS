@@ -105,12 +105,16 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     context 'authenticated' do
       describe 'authorized access' do
+        let(:hire_mock) { double(JobApplications::Hire) }
         before(:each) do
           sign_in company_admin
+          allow(JobApplications::Hire).to receive(:new)
+            .and_return(hire_mock)
         end
 
         context 'inactive job application' do
           before(:each) do
+            allow(hire_mock).to receive(:call).and_raise(JobApplications::JobNotActive)
             patch :accept, id: inactive_application
           end
 
@@ -122,11 +126,15 @@ RSpec.describe JobApplicationsController, type: :controller do
           it 'redirect to the specific job show page' do
             expect(response).to redirect_to(job_url(inactive_application.job))
           end
+
+          it 'calls interactor with the job application' do
+            expect(hire_mock).to have_received(:call).with(inactive_application)
+          end
         end
 
         context 'valid job application accepted' do
           before(:each) do
-            expect_any_instance_of(JobApplication).to receive(:accept)
+            allow(hire_mock).to receive(:call)
             request
           end
 
@@ -136,6 +144,10 @@ RSpec.describe JobApplicationsController, type: :controller do
 
           it 'redirect to the specific job show page' do
             expect(response).to redirect_to(job_url(valid_application.job))
+          end
+
+          it 'calls interactor with the job application' do
+            expect(hire_mock).to have_received(:call).with(valid_application)
           end
         end
       end
@@ -158,12 +170,17 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     context 'authenticated' do
       describe 'authorized access' do
+        let(:reject_mock) { double(JobApplications::Reject) }
+
         before(:each) do
           sign_in company_admin
+          allow(JobApplications::Reject).to receive(:new)
+            .and_return(reject_mock)
         end
 
         context 'inactive job application' do
           before(:each) do
+            allow(reject_mock).to receive(:call).and_raise(JobApplications::JobNotActive)
             patch :reject, id: inactive_application
           end
 
@@ -175,17 +192,16 @@ RSpec.describe JobApplicationsController, type: :controller do
           it 'redirect to the specific job application show page' do
             expect(response).to redirect_to(application_path(inactive_application))
           end
+
+          it 'calls interactor with the job application' do
+            expect(reject_mock).to have_received(:call).with(inactive_application, nil)
+          end
         end
 
         context 'valid job application rejected' do
           before(:each) do
-            expect_any_instance_of(JobApplication).to receive(:reject)
+            allow(reject_mock).to receive(:call)
             request
-          end
-
-          it 'stores rejection in db' do
-            app = JobApplication.find(valid_application.id)
-            expect(app.reason_for_rejection).to eq 'Skills did not match'
           end
 
           it 'show a flash message of type notice' do
@@ -194,6 +210,11 @@ RSpec.describe JobApplicationsController, type: :controller do
 
           it 'redirect to the specific job application show page' do
             expect(response).to redirect_to(job_url(valid_application.job))
+          end
+
+          it 'calls interactor with the job application' do
+            expect(reject_mock)
+              .to have_received(:call).with(valid_application, 'Skills did not match')
           end
         end
       end
