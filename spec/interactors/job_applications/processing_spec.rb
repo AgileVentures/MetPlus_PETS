@@ -7,11 +7,11 @@ class TestTaskHelper
 end
 
 RSpec.describe JobApplications::Processing do
-  let!(:agency)       { FactoryGirl.build(:agency) }
-  let(:job_developer) { FactoryGirl.build(:job_developer, agency: agency) }
-  let(:company)       { FactoryGirl.build(:company) }
-  let(:hr_jane)       { FactoryGirl.create(:company_person, company: company) }
-  let(:job_seeker)    { FactoryGirl.build(:job_seeker) }
+  let!(:agency)       { FactoryBot.build(:agency) }
+  let(:job_developer) { FactoryBot.build(:job_developer, agency: agency) }
+  let(:company)       { FactoryBot.build(:company) }
+  let(:hr_jane)       { FactoryBot.create(:company_person, company: company) }
+  let(:job_seeker)    { FactoryBot.build(:job_seeker) }
   let(:service)       { JobSeekers::AssignAgencyPerson.new }
 
   describe 'call' do
@@ -23,7 +23,7 @@ RSpec.describe JobApplications::Processing do
 
     context 'when job application is not active' do
       it 'throws an exception' do
-        job_application = FactoryGirl.build(:job_application, status: :processing)
+        job_application = FactoryBot.build(:job_application, status: :processing)
         expect do
           subject.call(job_application, hr_jane)
         end.to raise_error(JobApplications::JobNotActive)
@@ -31,9 +31,9 @@ RSpec.describe JobApplications::Processing do
     end
 
     context 'when job application is active' do
-      let(:job_seeker) { FactoryGirl.build(:job_seeker) }
+      let(:job_seeker) { FactoryBot.build(:job_seeker) }
       let(:job_application) do
-        FactoryGirl.build(:job_application, job_seeker: job_seeker, status: :active)
+        FactoryBot.build(:job_application, job_seeker: job_seeker, status: :active)
       end
 
       it 'change the status of the application to processing' do
@@ -68,7 +68,7 @@ RSpec.describe JobApplications::Processing do
 
         context 'is already assigned to the "HR John"' do
           it 'change the assigned person to Jane' do
-            hr_john = FactoryGirl.create(:company_person, company: company)
+            hr_john = FactoryBot.create(:company_person, company: company)
             task = TestTaskHelper.new_review_job_application_task(
               job_application,
               company
@@ -84,7 +84,7 @@ RSpec.describe JobApplications::Processing do
       end
 
       context 'when the job seeker as a job developer assigned' do
-        let(:job_developer) { FactoryGirl.build(:job_developer) }
+        let(:job_developer) { FactoryBot.build(:job_developer) }
         before(:each) do
           allow(job_seeker).to receive(:job_developer).and_return(job_developer)
           subject.call(job_application, hr_jane)
