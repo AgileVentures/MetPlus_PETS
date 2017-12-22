@@ -30,12 +30,10 @@ class JobApplicationsController < ApplicationController
   end
 
   def process_application
-    if @job_application.active?
-      @job_application.process
-      @job_dev = @job_application.job_seeker.job_developer
-      Event.create(:APP_PROCESSING, @job_application) if @job_dev
+    begin
+      JobApplications::Processing.new.call(@job_application, current_user)
       flash[:info] = 'Job application processing.'
-    else
+    rescue JobApplications::JobNotActive
       flash[:alert] = 'Invalid action on inactive job application.'
     end
     redirect_to job_url(@job_application.job)

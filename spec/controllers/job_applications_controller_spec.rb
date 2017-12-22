@@ -213,12 +213,17 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     context 'authenticated' do
       describe 'authorized access' do
+        let(:application_process_mock) { double(JobApplications::Processing) }
         before(:each) do
           sign_in company_admin
+          allow(JobApplications::Processing).to receive(:new)
+            .and_return(application_process_mock)
         end
 
         context 'inactive job application' do
           before(:each) do
+            allow(application_process_mock)
+              .to receive(:call).and_raise(JobApplications::JobNotActive)
             patch :process_application, id: inactive_application
           end
 
@@ -230,11 +235,17 @@ RSpec.describe JobApplicationsController, type: :controller do
           it 'redirect to the specific job show page' do
             expect(response).to redirect_to(job_url(inactive_application.job))
           end
+
+          it 'interator to have been called' do
+            expect(application_process_mock)
+              .to have_received(:call)
+              .with(inactive_application, company_admin.user)
+          end
         end
 
         context 'valid job application started processing' do
           before(:each) do
-            expect_any_instance_of(JobApplication).to receive(:process)
+            allow(application_process_mock).to receive(:call)
             request
           end
 
@@ -244,6 +255,12 @@ RSpec.describe JobApplicationsController, type: :controller do
 
           it 'redirect to the specific job show page' do
             expect(response).to redirect_to(job_url(valid_application.job))
+          end
+
+          it 'interator to have been called' do
+            expect(application_process_mock)
+              .to have_received(:call)
+              .with(valid_application, company_admin.user)
           end
         end
       end
