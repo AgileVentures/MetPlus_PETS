@@ -36,21 +36,6 @@ FactoryBot.define do
     end
   end
 
-  factory :pending_first_company_admin, class: CompanyPerson do
-    company
-    address
-    user
-    title 'Admin'
-    status 'company_pending'
-    approved false
-    company_roles do
-      [CompanyRole.find_by_role(CompanyRole::ROLE[:CC]) ||
-        FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CC]),
-       CompanyRole.find_by_role(CompanyRole::ROLE[:CA]) ||
-         FactoryGirl.create(:company_role, role: CompanyRole::ROLE[:CA])]
-    end
-  end
-
   factory :company_admin, class: CompanyPerson do
     company
     address
