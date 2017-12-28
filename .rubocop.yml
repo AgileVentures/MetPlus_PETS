@@ -21,7 +21,7 @@ Metrics/LineLength:
   Max: 90
 Metrics/BlockLength:
   Enabled: true
-  Exclude: 
+  Exclude:
     - spec/**/*
     - features/step_definitions/*
 Metrics/ModuleLength:
@@ -33,4 +33,4 @@ Metrics/MethodLength:
   Enabled: true
   Exclude: 
     - spec/**/*
-    - features/step_definitions/*    
+    - features/step_definitions/*

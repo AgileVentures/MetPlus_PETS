@@ -126,6 +126,9 @@ RSpec.describe TaskManager::BusinessLogic do
     let(:job_application) do
       FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
     end
+    let(:job_application) do
+      FactoryGirl.create(:job_application, job: job, job_seeker: job_seeker)
+    end
 
     describe '#new_review_job_application_task' do
       before(:each) do

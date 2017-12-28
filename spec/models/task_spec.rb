@@ -403,7 +403,6 @@ RSpec.describe Task, type: :model do
         deferred_date: Date.today + 1,
         task_owner: { agency: { agency: @agency, role: :CM } }
       )
-
       @task_aa = FactoryBot.create(:task, task_owner: { user: @agency_admin1 })
       @task_aa_future = FactoryBot.create(
         :task,
@@ -519,7 +518,6 @@ RSpec.describe Task, type: :model do
         :company_person,
         company: @company, company_roles: [@ca_role]
       )
-
       @task_js_new = FactoryBot.create(:task, task_owner: { user: @job_seeker })
       @task_js_new.assign @job_seeker
       @task_js_closed = FactoryBot.create(
@@ -696,7 +694,6 @@ RSpec.describe Task, type: :model do
         agency: @agency,
         agency_roles: [@cm_role]
       )
-
       @agency_admin = FactoryBot.create(
         :agency_person,
         agency: @agency,
