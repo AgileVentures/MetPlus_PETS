@@ -20,11 +20,11 @@ RSpec.describe Company, type: :model do
     it { is_expected.to have_many :skills }
   end
   describe 'When company is destroyed ' do
-    let(:company_person1) {FactoryBot.create(:company_contact, company: company)}
-    let(:company_person2) {FactoryBot.create(:company_contact, company: company)}
-    let(:company_person3) {FactoryBot.create(:company_admin, company: company)}
-    let(:address1)        {FactoryBot.create(:address)}
-    let(:address2)        {FactoryBot.create(:address)}
+    let(:company_person1) { FactoryBot.create(:company_contact, company: company)}
+    let(:company_person2) { FactoryBot.create(:company_contact, company: company)}
+    let(:company_person3) { FactoryBot.create(:company_admin, company: company)}
+    let(:address1)        { FactoryBot.create(:address)}
+    let(:address2)        { FactoryBot.create(:address)}
     let(:company)         { FactoryBot.create(:company) }
     let(:company1)        { FactoryBot.create(:company, status: :pending_registration) }
     it 'company_people association with dependent::destroy deletes record ' do

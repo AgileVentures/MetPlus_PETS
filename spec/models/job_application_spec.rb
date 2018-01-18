@@ -26,7 +26,7 @@ RSpec.describe JobApplication, type: :model do
     it { is_expected.to have_many(:questions).dependent(:destroy) }
   end
   describe 'When job_application is destroyed' do
-    let(:job_application) 		 { FactoryBot.create(:job_application) }
+    let(:job_application)      { FactoryBot.create(:job_application) }
     let(:question)             { FactoryBot.create(:question) }
     let(:application_question) { FactoryBot.create(:application_question, job_application: job_application, question: question) }
     it 'questions :through association with dependent::destroy deletes record'	do
