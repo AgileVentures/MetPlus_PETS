@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pry'
 
 RSpec.describe AgencyPerson, type: :model do
   describe 'Fixtures' do
@@ -25,6 +24,8 @@ RSpec.describe AgencyPerson, type: :model do
 		 let(:aa_person1) { FactoryBot.build(:agency_person, agency: agency) }
 		 let(:aa_person2) { FactoryBot.build(:agency_person, agency: agency, status: 'invited') }
 		 let(:role) 			{ FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
+		 let(:job_seeker) { FactoryBot.create(:job_seeker) }
+		 let(:agency_relation) 	{ FactoryBot.create(:agency_relation, agency_person: aa_person1, job_seeker: job_seeker, agency_role: role) }
 
 		 before(:each) do
 		 	  aa_person1.agency_roles << role		
@@ -40,17 +41,13 @@ RSpec.describe AgencyPerson, type: :model do
 			 expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
 		 end
 
-		 it 'status_changes removes instance from base class, StatusChange' do
-		 	  count = aa_person2.status_changes.count
-		 	  before_destroy_count = StatusChange.count						
-		 	  aa_person2.destroy
-		 	  after_destroy_count = StatusChange.count
-		 	  expect(before_destroy_count-count).to eq(after_destroy_count)	
-		    #expect(aa_person2.status_changes.count).to eq(1)
-		  end
-		 it 'job_seeker association with dependent::destroy deletes record' 
-		 it 'job_seeker removes instance from base class, JobSeeker' 
-		end
+		 it 'job_seeker :through association with dependent::destroy deletes record' do
+		   expect(agency_relation).to be_valid	
+			 rel_id = aa_person1.agency_relations.first.id
+			 aa_person1.destroy
+			 expect{AgencyRelation.find(rel_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		 end
+	end
 
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }

@@ -71,10 +71,6 @@ group :development do
 end
 
 group :development, :test do
-	#Erika
-	gem 'pry'				
-	gem 'pry-nav'
-
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 

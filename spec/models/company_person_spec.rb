@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pry'
 
 describe CompanyPerson, type: :model do
   it 'should have a valid factory' do
@@ -73,23 +72,16 @@ describe CompanyPerson, type: :model do
 
 	describe 'When company_person is destroyed ' do
 		let(:company_person) { FactoryBot.create(:pending_first_company_admin) }
-		before(:each) { company_person.active }
 
 		it 'status_changes association with dependent::destroy deletes record ' do
+			company_person.active
 			status_changes = company_person.status_changes
 			expect(status_changes).to_not eq(nil) 
-			first_status_change = company_person.status_changes.first.id
+			status_change_id = company_person.status_changes.first.id
 			company_person.destroy
-			expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
+			expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
 	  end
 
-		it 'status_changes removes instance from base class, StatusChange' do
-			count = company_person.status_changes.count 	
-			before_destroy_count = StatusChange.count
-			company_person.destroy
-			after_destroy_count = StatusChange.count
-			expect(before_destroy_count - count).to eq(after_destroy_count)
-		end
 	end
 
 

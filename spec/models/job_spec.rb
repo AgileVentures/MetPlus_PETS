@@ -59,36 +59,41 @@ RSpec.describe Job, type: :model do
 		!let(:job_skill) { FactoryBot.create(:job_skill, job: job, skill: skill) }
 		!let(:job_seeker) { FactoryBot.create(:job_seeker) }
 		!let(:job_application) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
-		#not deleting skill record. misunderstanding the :through association
-		it 'skills association with dependent::destroy deletes record ' do
-			job_skill.skill = skill
-						expect(job.skills.first).to eq(skill)
-			expect(job.skills.count).to eq(1)
-			first_skill = job.skills.first.id
-			job.destroy
-			
-			expect{Skill.find(first_skill)}.to raise_error(ActiveRecord::RecordNotFound)
-		end
-		it 'job_seeker association with dependent::destroy deletes record ' do
-						expect(job_application).to be_valid	
-						expect(job_application.job).to eq(job)	
-						expect(job_application.job_seeker).to eq(job_seeker)	
-						first_job_seeker = job_application.job_seeker.id
-						job_id = job_seeker.id
-						job.destroy
-						expect{Job.find(job_id)}.to raise_error(ActiveRecord::RecordNotFound)
-						expect{JobSeeker.find(first_job_seeker)}.to raise_error(ActiveRecord::RecordNotFound)
+		!let(:license) { FactoryBot.create(:license) }
+		!let(:job_license) { FactoryBot.create(:job_license, job: job, license: license) }
+		!let(:question) { FactoryBot.create(:question) }
+		!let(:job_question) { FactoryBot.create(:job_question, job: job, question: question) }
 
+		it 'skills :through association with dependent::destroy deletes record ' do
+			expect(job_skill).to be_valid
+			job_skill_id = job.job_skills.first.id
+			job.destroy
+			expect{JobSkill.find(job_skill_id)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
-		it 'licenses association with dependent::destroy deletes record '
-		it 'questions association with dependent::destroy deletes record '
+		it 'job_seeker :through association with dependent::destroy deletes record ' do
+		  expect(job_application).to be_valid	
+		  job_app_id = job.job_applications.first.id 
+		  job.destroy
+		  expect{JobApplication.find(job_app_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
+		it 'licenses :through association with dependent::destroy deletes record ' do
+		  expect(job_license).to be_valid
+		  job_license_id = job.licenses.first.id
+		  job.destroy
+		  expect{JobLicense.find(job_license_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
+		it 'questions :through association with dependent::destroy deletes record ' do
+						expect(job_question).to be_valid	
+						job_question_id = job.job_questions.first.id
+						job.destroy
+						expect{JobQuestion.find(job_question_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
 		it 'status_changes association with dependent::destroy deletes record ' do
 			expect(job.status_changes.count).to eq(1)
 			expect(job.status).to eq('active')
-			first_status_change = job.status_changes.first.id
+			status_change_id = job.status_changes.first.id
 			job.destroy
-			expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
-
+			expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
 
 	end

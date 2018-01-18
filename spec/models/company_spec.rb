@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pry'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe Company, type: :model do

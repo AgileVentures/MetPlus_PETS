@@ -20,7 +20,15 @@ RSpec.describe License, type: :model do
   end
 
 	describe 'When a license is destroyed' do
-		it 'jobs association with dependent::destroy deletes record'
+	  let(:license) { FactoryBot.create(:license) }
+		let(:job) 		{ FactoryBot.create(:job) }
+		let(:job_license) { FactoryBot.create(:job_license, job: job, license: license)}
+		it 'jobs :through association with dependent::destroy deletes record' do
+			expect(job_license).to be_valid
+			job_lcsn_id = license.job_licenses.first.id
+			license.destroy
+			expect{JobLicense.find(job_lcsn_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
 	end
 
   describe 'Abbr' do

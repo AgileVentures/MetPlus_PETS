@@ -15,7 +15,15 @@ RSpec.describe Skill, type: :model do
   end
 
 	describe 'When a skill is destroyed' do
-		it 'jobs association with dependent::destroy deletes record'
+	  let(:job) { FactoryBot.create(:job) }
+	  let(:skill) { FactoryBot.create(:skill) }
+	  let(:job_skill) { FactoryBot.create(:job_skill, job: job, skill: skill) }
+		it 'jobs :through association with dependent::destroy deletes record' do
+			expect(job_skill).to be_valid
+			job_skill_id = skill.job_skills.first.id
+			skill.destroy
+			expect{JobSkill.find(job_skill_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
 	end
 
   describe 'Validations' do
