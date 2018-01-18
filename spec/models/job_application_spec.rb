@@ -29,7 +29,6 @@ RSpec.describe JobApplication, type: :model do
 		let(:job_application) { FactoryBot.create(:job_application) }
 		let(:question) { FactoryBot.create(:question) }
 		let(:application_question) { FactoryBot.create(:application_question, job_application: job_application, question: question) }
-
 	  it 'questions :through association with dependent::destroy deletes record'	do
 		  expect(application_question).to be_valid
 		  application_question_id = job_application.application_questions.first.id

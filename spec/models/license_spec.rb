@@ -20,8 +20,8 @@ RSpec.describe License, type: :model do
   end
 
 	describe 'When a license is destroyed' do
-	  let(:license) { FactoryBot.create(:license) }
-		let(:job) 		{ FactoryBot.create(:job) }
+	  let(:license) 		{ FactoryBot.create(:license) }
+		let(:job) 				{ FactoryBot.create(:job) }
 		let(:job_license) { FactoryBot.create(:job_license, job: job, license: license)}
 		it 'jobs :through association with dependent::destroy deletes record' do
 			expect(job_license).to be_valid

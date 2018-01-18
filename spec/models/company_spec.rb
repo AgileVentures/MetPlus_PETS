@@ -27,7 +27,6 @@ RSpec.describe Company, type: :model do
 		let(:address2) {FactoryBot.create(:address)}
 		let(:company) { FactoryBot.create(:company) }
 		let(:company1) { FactoryBot.create(:company, status: :pending_registration) }
-
 		it 'company_people association with dependent::destroy deletes record ' do
 		  [company_person1, company_person2, company_person3].each {|e| company.company_people << e}	
 			expect(company.company_people.count).to eq(3) 
@@ -35,7 +34,6 @@ RSpec.describe Company, type: :model do
 			company.destroy
 			expect{CompanyPerson.find(first_company_person)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
-
 		it 'addresses association with dependent::destroy deletes record ' do
 		  [address1, address2].each {|e| company.addresses << e}
 		  expect(company.addresses.count).to eq(2)
@@ -43,7 +41,6 @@ RSpec.describe Company, type: :model do
 			company.destroy
 			expect{Address.find(first_company_address)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
-
 		it 'status_changes association with dependent::destroy deletes record ' do
 			company1.active
 			expect(company1.status_changes.count).to eq(1) 
@@ -52,9 +49,7 @@ RSpec.describe Company, type: :model do
 			company1.destroy
 			expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
-		
 	end
-
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :name }

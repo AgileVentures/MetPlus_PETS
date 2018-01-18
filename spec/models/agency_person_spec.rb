@@ -26,21 +26,18 @@ RSpec.describe AgencyPerson, type: :model do
 		 let(:role) 			{ FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
 		 let(:job_seeker) { FactoryBot.create(:job_seeker) }
 		 let(:agency_relation) 	{ FactoryBot.create(:agency_relation, agency_person: aa_person1, job_seeker: job_seeker, agency_role: role) }
-
 		 before(:each) do
-		 	  aa_person1.agency_roles << role		
-		 	  aa_person1.save
-		 	  aa_person2.agency_roles << role		
-		 	  aa_person2.save
-		    aa_person2.active
+		 	 aa_person1.agency_roles << role		
+		 	 aa_person1.save
+		 	 aa_person2.agency_roles << role		
+		 	 aa_person2.save
+		   aa_person2.active
 		 end		
-
 		 it 'status_changes association with dependent::destroy deletes record' do
 			 first_status_change = aa_person2.status_changes.first.id	
 			 aa_person2.destroy
 			 expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
 		 end
-
 		 it 'job_seeker :through association with dependent::destroy deletes record' do
 		   expect(agency_relation).to be_valid	
 			 rel_id = aa_person1.agency_relations.first.id

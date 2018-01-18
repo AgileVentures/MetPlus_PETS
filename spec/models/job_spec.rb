@@ -63,7 +63,6 @@ RSpec.describe Job, type: :model do
 		!let(:job_license) { FactoryBot.create(:job_license, job: job, license: license) }
 		!let(:question) { FactoryBot.create(:question) }
 		!let(:job_question) { FactoryBot.create(:job_question, job: job, question: question) }
-
 		it 'skills :through association with dependent::destroy deletes record ' do
 			expect(job_skill).to be_valid
 			job_skill_id = job.job_skills.first.id
@@ -83,10 +82,10 @@ RSpec.describe Job, type: :model do
 		  expect{JobLicense.find(job_license_id)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
 		it 'questions :through association with dependent::destroy deletes record ' do
-						expect(job_question).to be_valid	
-						job_question_id = job.job_questions.first.id
-						job.destroy
-						expect{JobQuestion.find(job_question_id)}.to raise_error(ActiveRecord::RecordNotFound)
+		  expect(job_question).to be_valid	
+		  job_question_id = job.job_questions.first.id
+		  job.destroy
+		  expect{JobQuestion.find(job_question_id)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
 		it 'status_changes association with dependent::destroy deletes record ' do
 			expect(job.status_changes.count).to eq(1)
@@ -95,7 +94,6 @@ RSpec.describe Job, type: :model do
 			job.destroy
 			expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
 		end
-
 	end
 
   describe 'Database schema' do
