@@ -23,10 +23,10 @@ RSpec.describe Company, type: :model do
     let(:company_person1) {FactoryBot.create(:company_contact, company: company)}
     let(:company_person2) {FactoryBot.create(:company_contact, company: company)}
     let(:company_person3) {FactoryBot.create(:company_admin, company: company)}
-    let(:address1) {FactoryBot.create(:address)}
-    let(:address2) {FactoryBot.create(:address)}
-    let(:company) { FactoryBot.create(:company) }
-    let(:company1) { FactoryBot.create(:company, status: :pending_registration) }
+    let(:address1)        {FactoryBot.create(:address)}
+    let(:address2)        {FactoryBot.create(:address)}
+    let(:company)         { FactoryBot.create(:company) }
+    let(:company1)        { FactoryBot.create(:company, status: :pending_registration) }
     it 'company_people association with dependent::destroy deletes record ' do
       [company_person1, company_person2, company_person3].each {|e| company.company_people << e}	
       expect(company.company_people.count).to eq(3) 

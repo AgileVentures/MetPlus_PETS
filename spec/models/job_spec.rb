@@ -54,15 +54,15 @@ RSpec.describe Job, type: :model do
   end
 
   describe 'When a job is destroyed' do
-    !let(:job) { FactoryBot.create(:job)}
-    !let(:skill) {FactoryBot.create(:skill)}
-    !let(:job_skill) { FactoryBot.create(:job_skill, job: job, skill: skill) }
-    !let(:job_seeker) { FactoryBot.create(:job_seeker) }
+    !let(:job)             { FactoryBot.create(:job)}
+    !let(:skill)           { FactoryBot.create(:skill)}
+    !let(:job_skill)       { FactoryBot.create(:job_skill, job: job, skill: skill) }
+    !let(:job_seeker)      { FactoryBot.create(:job_seeker) }
     !let(:job_application) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
-    !let(:license) { FactoryBot.create(:license) }
-    !let(:job_license) { FactoryBot.create(:job_license, job: job, license: license) }
-    !let(:question) { FactoryBot.create(:question) }
-    !let(:job_question) { FactoryBot.create(:job_question, job: job, question: question) }
+    !let(:license)         { FactoryBot.create(:license) }
+    !let(:job_license)     { FactoryBot.create(:job_license, job: job, license: license) }
+    !let(:question)        { FactoryBot.create(:question) }
+    !let(:job_question)    { FactoryBot.create(:job_question, job: job, question: question) }
     it 'skills :through association with dependent::destroy deletes record ' do
       expect(job_skill).to be_valid
       job_skill_id = job.job_skills.first.id

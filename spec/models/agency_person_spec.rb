@@ -20,12 +20,12 @@ RSpec.describe AgencyPerson, type: :model do
   end
 
   describe 'When agency_person is destroyed' do
-    let(:agency) 		{ FactoryBot.create(:agency) }
-    let(:aa_person1) { FactoryBot.build(:agency_person, agency: agency) }
-    let(:aa_person2) { FactoryBot.build(:agency_person, agency: agency, status: 'invited') }
-    let(:role) 			{ FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
-    let(:job_seeker) { FactoryBot.create(:job_seeker) }
-    let(:agency_relation) 	{ FactoryBot.create(:agency_relation, agency_person: aa_person1, job_seeker: job_seeker, agency_role: role) }
+    let(:agency)          { FactoryBot.create(:agency) }
+    let(:aa_person1)      { FactoryBot.build(:agency_person, agency: agency) }
+    let(:aa_person2)      { FactoryBot.build(:agency_person, agency: agency, status: 'invited') }
+    let(:role) 			      { FactoryBot.create(:agency_role, role: AgencyRole::ROLE[:AA]) }
+    let(:job_seeker)      { FactoryBot.create(:job_seeker) }
+    let(:agency_relation) { FactoryBot.create(:agency_relation, agency_person: aa_person1, job_seeker: job_seeker, agency_role: role) }
     before(:each) do
       aa_person1.agency_roles << role		
       aa_person1.save

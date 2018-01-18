@@ -25,10 +25,10 @@ RSpec.describe Question, type: :model do
   end
 	
   describe 'When a question is destroyed' do
-    let(:question) 						 { FactoryBot.create(:question) }
-    let(:job) 		 						 { FactoryBot.create(:job) }
-    let(:job_question) 				 { FactoryBot.create(:job_question, question: question, job: job)}
-    let(:job_application) 		 { FactoryBot.create(:job_application) }
+    let(:question)             { FactoryBot.create(:question) }
+    let(:job)                  { FactoryBot.create(:job) }
+    let(:job_question)         { FactoryBot.create(:job_question, question: question, job: job)}
+    let(:job_application)      { FactoryBot.create(:job_application) }
     let(:application_question) { FactoryBot.create(:application_question, question: question, job_application: job_application) }
     it 'jobs :through association with dependent::destroy deletes record' do
       expect(job_question).to	be_valid

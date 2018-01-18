@@ -28,12 +28,12 @@ describe JobSeeker, type: :model do
   end
 
   describe 'When job_seeker is destroyed' do
-    let!(:job_seeker) 		 { FactoryBot.create(:job_seeker) }					 
-    let!(:resume)		 		   { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let!(:job_seeker)      { FactoryBot.create(:job_seeker) }					 
+    let!(:resume)          { FactoryBot.create(:resume, job_seeker: job_seeker) }
     let!(:job_developer)   { FactoryBot.create(:job_developer) }
-    let!(:role) 					 { FactoryBot.create(:agency_role) } 
+    let!(:role)            { FactoryBot.create(:agency_role) } 
     let!(:agency_relation) { FactoryBot.create(:agency_relation, agency_person: job_developer, job_seeker: job_seeker, agency_role: role ) }
-    let!(:job) 						 { FactoryBot.create(:job) }
+    let!(:job)             { FactoryBot.create(:job) }
     let!(:job_application) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
     it 'resumes association with dependent::destroy deletes record' do
       expect(job_seeker.resumes.count).to eq(1)
