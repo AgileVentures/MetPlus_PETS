@@ -14,6 +14,10 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to belong_to(:organization) }
   end
 
+	describe 'When a skill is destroyed' do
+		it 'jobs association with dependent::destroy deletes record'
+	end
+
   describe 'Validations' do
     subject { FactoryBot.build(:skill) }
 

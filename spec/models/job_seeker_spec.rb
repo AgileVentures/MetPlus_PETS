@@ -27,6 +27,25 @@ describe JobSeeker, type: :model do
     it { should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth) }
   end
 
+	describe 'When job_seeker is destroyed' do
+		let(:job_seeker) { FactoryBot.create(:job_seeker) }					 
+		let!(:resume)		 { FactoryBot.create(:resume, job_seeker: job_seeker) }
+	  it 'resumes association with dependent::destroy deletes record' do
+		  expect(job_seeker.resumes.count).to eq(1)
+		  first_resume = job_seeker.resumes.first.id 
+			job_seeker.destroy
+			expect{Resume.find(first_resume)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
+	  it 'address association with dependent::destroy deletes record' do
+		  expect(job_seeker.address).to be_valid 
+			address = job_seeker.address.id
+			job_seeker.destroy
+			expect{Address.find(address)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
+	  it 'agency_people association with dependent::destroy deletes record'
+	  it 'jobs association with dependent::destroy deletes record'
+	end
+
   describe 'job applications' do
     let!(:job_seeker) { FactoryBot.create(:job_seeker) }
     let!(:resume)     { FactoryBot.create(:resume, job_seeker: job_seeker) }

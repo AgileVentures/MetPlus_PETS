@@ -23,4 +23,9 @@ RSpec.describe Question, type: :model do
         .through(:application_questions).dependent(:destroy)
     }
   end
+	
+	describe 'When a question is destroyed' do
+		it 'jobs association with dependent::destroy deletes record'
+		it 'job_application association with dependent::destroy deletes record'
+	end
 end

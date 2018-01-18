@@ -19,6 +19,10 @@ RSpec.describe License, type: :model do
     it { is_expected.to have_many(:jobs).through(:job_licenses).dependent(:destroy) }
   end
 
+	describe 'When a license is destroyed' do
+		it 'jobs association with dependent::destroy deletes record'
+	end
+
   describe 'Abbr' do
     it { is_expected.to validate_presence_of(:abbr) }
     it 'validates uniqueness of abbreviation' do

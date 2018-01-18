@@ -25,6 +25,17 @@ RSpec.describe JobApplication, type: :model do
     it { is_expected.to have_many(:application_questions) }
     it { is_expected.to have_many(:questions).dependent(:destroy) }
   end
+	describe 'When job_application is destroyed' do
+		let(:job_app) { FactoryBot.create(:job_application) }
+
+	  it 'questions association with dependent::destroy deletes record'	
+	  it 'status_changes association with dependent::destroy deletes record' do
+			expect(job_app.status_changes.count).to eq(1) 
+			first_status_change = job_app.status_changes.first.id
+			job_app.destroy
+			expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
+	end
   describe 'Validations' do
     it { is_expected.to validate_uniqueness_of(:job_seeker_id).scoped_to(:job_id) }
     let(:job_seeker) { FactoryBot.create(:job_seeker) }

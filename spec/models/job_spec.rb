@@ -53,6 +53,46 @@ RSpec.describe Job, type: :model do
     it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
   end
 
+	describe 'When a job is destroyed' do
+	  !let(:job) { FactoryBot.create(:job)}
+		!let(:skill) {FactoryBot.create(:skill)}
+		!let(:job_skill) { FactoryBot.create(:job_skill, job: job, skill: skill) }
+		!let(:job_seeker) { FactoryBot.create(:job_seeker) }
+		!let(:job_application) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
+		#not deleting skill record. misunderstanding the :through association
+		it 'skills association with dependent::destroy deletes record ' do
+			job_skill.skill = skill
+						expect(job.skills.first).to eq(skill)
+			expect(job.skills.count).to eq(1)
+			first_skill = job.skills.first.id
+			job.destroy
+			
+			expect{Skill.find(first_skill)}.to raise_error(ActiveRecord::RecordNotFound)
+		end
+		it 'job_seeker association with dependent::destroy deletes record ' do
+						expect(job_application).to be_valid	
+						expect(job_application.job).to eq(job)	
+						expect(job_application.job_seeker).to eq(job_seeker)	
+						first_job_seeker = job_application.job_seeker.id
+						job_id = job_seeker.id
+						job.destroy
+						expect{Job.find(job_id)}.to raise_error(ActiveRecord::RecordNotFound)
+						expect{JobSeeker.find(first_job_seeker)}.to raise_error(ActiveRecord::RecordNotFound)
+
+		end
+		it 'licenses association with dependent::destroy deletes record '
+		it 'questions association with dependent::destroy deletes record '
+		it 'status_changes association with dependent::destroy deletes record ' do
+			expect(job.status_changes.count).to eq(1)
+			expect(job.status).to eq('active')
+			first_status_change = job.status_changes.first.id
+			job.destroy
+			expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
+
+		end
+
+	end
+
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :title }
