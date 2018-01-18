@@ -70,17 +70,17 @@ describe CompanyPerson, type: :model do
     }
   end
 
-	describe 'When company_person is destroyed ' do
-		let(:company_person) { FactoryBot.create(:pending_first_company_admin) }
-		it 'status_changes association with dependent::destroy deletes record ' do
+  describe 'When company_person is destroyed ' do
+    let(:company_person) { FactoryBot.create(:pending_first_company_admin) }
+    it 'status_changes association with dependent::destroy deletes record ' do
       company_person.active
-			status_changes = company_person.status_changes
-			expect(status_changes).to_not eq(nil) 
-			status_change_id = company_person.status_changes.first.id
-			company_person.destroy
-			expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
-	  end
-	end
+      status_changes = company_person.status_changes
+      expect(status_changes).to_not eq(nil) 
+      status_change_id = company_person.status_changes.first.id
+      company_person.destroy
+      expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 
   describe 'check model restrictions' do
     it { should validate_presence_of(:email) }
