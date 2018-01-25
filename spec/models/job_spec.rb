@@ -22,12 +22,11 @@ RSpec.describe Job, type: :model do
     it { is_expected.to belong_to :job_category }
     it { is_expected.to belong_to :education }
     it { is_expected.to have_many(:job_skills) }
-    it { is_expected.to have_many(:skills).dependent(:destroy) }
     it do
       is_expected.to accept_nested_attributes_for(:job_skills)
         .allow_destroy(true)
     end
-    it { is_expected.to have_many(:skills).through(:job_skills) }
+    it { is_expected.to have_many(:skills).through(:job_skills).dependent(:destroy) }
     it do
       is_expected.to have_many(:required_skills).through(:job_skills)
         .conditions(job_skills: { required: true })
@@ -39,61 +38,18 @@ RSpec.describe Job, type: :model do
         .source(:skill).class_name('Skill')
     end
     it { is_expected.to have_many(:job_applications) }
-    it { is_expected.to have_many(:job_seekers).through(:job_applications) }
-    it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_many(:job_seekers).through(:job_applications).dependent(:destroy) }
+    it { is_expected.to have_many(:status_changes).dependent(:destroy) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
     it { is_expected.to have_and_belong_to_many(:job_shifts) }
     it { is_expected.to have_many(:job_licenses) }
-    it { is_expected.to have_many(:licenses).through(:job_licenses) }
+    it { is_expected.to have_many(:licenses).through(:job_licenses).dependent(:destroy) }
     it { is_expected.to accept_nested_attributes_for(:job_licenses).allow_destroy(true) }
     it { is_expected.to have_many(:job_questions) }
     it do
       is_expected.to have_many(:questions).through(:job_questions).dependent(:destroy)
     end
     it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
-  end
-
-  describe 'When a job is destroyed' do
-    !let(:job)             { FactoryBot.create(:job)}
-    !let(:skill)           { FactoryBot.create(:skill)}
-    !let(:job_skill)       { FactoryBot.create(:job_skill, job: job, skill: skill) }
-    !let(:job_seeker)      { FactoryBot.create(:job_seeker) }
-    !let(:job_application) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
-    !let(:license)         { FactoryBot.create(:license) }
-    !let(:job_license)     { FactoryBot.create(:job_license, job: job, license: license) }
-    !let(:question)        { FactoryBot.create(:question) }
-    !let(:job_question)    { FactoryBot.create(:job_question, job: job, question: question) }
-    it 'skills :through association with dependent::destroy deletes record ' do
-      expect(job_skill).to be_valid
-      job_skill_id = job.job_skills.first.id
-      job.destroy
-      expect{JobSkill.find(job_skill_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'job_seeker :through association with dependent::destroy deletes record ' do
-      expect(job_application).to be_valid	
-      job_app_id = job.job_applications.first.id 
-      job.destroy
-      expect{JobApplication.find(job_app_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'licenses :through association with dependent::destroy deletes record ' do
-      expect(job_license).to be_valid
-      job_license_id = job.licenses.first.id
-      job.destroy
-      expect{JobLicense.find(job_license_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'questions :through association with dependent::destroy deletes record ' do
-      expect(job_question).to be_valid	
-      job_question_id = job.job_questions.first.id
-      job.destroy
-      expect{JobQuestion.find(job_question_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'status_changes association with dependent::destroy deletes record ' do
-      expect(job.status_changes.count).to eq(1)
-      expect(job.status).to eq('active')
-      status_change_id = job.status_changes.first.id
-      job.destroy
-      expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
   end
 
   describe 'Database schema' do

@@ -9,47 +9,17 @@ RSpec.describe Company, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_many :company_people }
-    it { is_expected.to have_many :addresses }
+    it { is_expected.to have_many(:company_people).dependent(:destroy) } 
+    it { is_expected.to have_many(:addresses).dependent(:destroy) }
     it { is_expected.to have_many :jobs }
     it { is_expected.to have_and_belong_to_many :agencies }
     it do
       is_expected.to accept_nested_attributes_for(:addresses).allow_destroy(true)
     end
-    it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_many(:status_changes).dependent(:destroy) }
     it { is_expected.to have_many :skills }
   end
-  describe 'When company is destroyed ' do
-    let(:company_person1) { FactoryBot.create(:company_contact, company: company)}
-    let(:company_person2) { FactoryBot.create(:company_contact, company: company)}
-    let(:company_person3) { FactoryBot.create(:company_admin, company: company)}
-    let(:address1)        { FactoryBot.create(:address)}
-    let(:address2)        { FactoryBot.create(:address)}
-    let(:company)         { FactoryBot.create(:company) }
-    let(:company1)        { FactoryBot.create(:company, status: :pending_registration) }
-    it 'company_people association with dependent::destroy deletes record ' do
-      [company_person1, company_person2, company_person3].each {|e| company.company_people << e}	
-      expect(company.company_people.count).to eq(3) 
-      first_company_person = company.company_people.first.id
-      company.destroy
-      expect{CompanyPerson.find(first_company_person)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'addresses association with dependent::destroy deletes record ' do
-      [address1, address2].each {|e| company.addresses << e}
-      expect(company.addresses.count).to eq(2)
-      first_company_address = company.addresses.first.id
-      company.destroy
-      expect{Address.find(first_company_address)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'status_changes association with dependent::destroy deletes record ' do
-      company1.active
-      expect(company1.status_changes.count).to eq(1) 
-      status_changes = company1.status_changes
-      first_status_change = company1.status_changes.first.id
-      company1.destroy
-      expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
+
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :name }

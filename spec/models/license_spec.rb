@@ -19,18 +19,6 @@ RSpec.describe License, type: :model do
     it { is_expected.to have_many(:jobs).through(:job_licenses).dependent(:destroy) }
   end
 
-  describe 'When a license is destroyed' do
-    let(:license)     { FactoryBot.create(:license) }
-    let(:job)         { FactoryBot.create(:job) }
-    let(:job_license) { FactoryBot.create(:job_license, job: job, license: license)}
-    it 'jobs :through association with dependent::destroy deletes record' do
-      expect(job_license).to be_valid
-      job_lcsn_id = license.job_licenses.first.id
-      license.destroy
-      expect{JobLicense.find(job_lcsn_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
-
   describe 'Abbr' do
     it { is_expected.to validate_presence_of(:abbr) }
     it 'validates uniqueness of abbreviation' do

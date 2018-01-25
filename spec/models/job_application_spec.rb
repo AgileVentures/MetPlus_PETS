@@ -21,27 +21,11 @@ RSpec.describe JobApplication, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :job_seeker }
     it { is_expected.to belong_to :job }
-    it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_many(:status_changes).dependent(:destroy) }
     it { is_expected.to have_many(:application_questions) }
-    it { is_expected.to have_many(:questions).dependent(:destroy) }
+    it { is_expected.to have_many(:questions).through(:application_questions).dependent(:destroy) }
   end
-  describe 'When job_application is destroyed' do
-    let(:job_application)      { FactoryBot.create(:job_application) }
-    let(:question)             { FactoryBot.create(:question) }
-    let(:application_question) { FactoryBot.create(:application_question, job_application: job_application, question: question) }
-    it 'questions :through association with dependent::destroy deletes record'	do
-      expect(application_question).to be_valid
-      application_question_id = job_application.application_questions.first.id
-      job_application.destroy
-      expect{ApplicationQuestion.find(application_question_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'status_changes association with dependent::destroy deletes record' do
-      expect(job_application.status_changes.count).to eq(1) 
-      first_status_change = job_application.status_changes.first.id
-      job_application.destroy
-      expect{StatusChange.find(first_status_change)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
+
   describe 'Validations' do
     it { is_expected.to validate_uniqueness_of(:job_seeker_id).scoped_to(:job_id) }
     let(:job_seeker) { FactoryBot.create(:job_seeker) }

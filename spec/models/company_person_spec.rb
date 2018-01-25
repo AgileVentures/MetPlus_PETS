@@ -68,20 +68,10 @@ describe CompanyPerson, type: :model do
       is_expected.to have_and_belong_to_many(:company_roles)
         .join_table('company_people_roles')
     }
+    it { is_expected.to have_many(:status_changes).dependent(:destroy) }
   end
 
-  describe 'When company_person is destroyed ' do
-    let(:company_person) { FactoryBot.create(:pending_first_company_admin) }
-    it 'status_changes association with dependent::destroy deletes record ' do
-      company_person.active
-      status_changes = company_person.status_changes
-      expect(status_changes).to_not eq(nil) 
-      status_change_id = company_person.status_changes.first.id
-      company_person.destroy
-      expect{StatusChange.find(status_change_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
-
+  
   describe 'check model restrictions' do
     it { should validate_presence_of(:email) }
     it { should_not allow_value('abc', 'abc@abc', 'abcdefghjjkll').for(:email) }

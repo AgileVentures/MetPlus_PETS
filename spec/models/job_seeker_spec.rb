@@ -17,48 +17,15 @@ describe JobSeeker, type: :model do
   describe 'check model restrictions' do
     it { is_expected.to validate_presence_of(:year_of_birth) }
     it { is_expected.to validate_presence_of(:job_seeker_status) }
-    it { is_expected.to have_many(:agency_people).through(:agency_relations) }
+    it { is_expected.to have_many(:agency_people).through(:agency_relations).dependent(:destroy) }
     it { is_expected.to have_many(:job_applications) }
-    it { is_expected.to have_many(:jobs).through(:job_applications) }
-    it { is_expected.to have_one(:address) }
+    it { is_expected.to have_many(:jobs).through(:job_applications).dependent(:destroy) }
+    it { is_expected.to have_many(:resumes).dependent(:destroy) }
+    it { is_expected.to have_one(:address).dependent(:destroy) }
     it { is_expected.to belong_to(:job_seeker_status) }
 
     it { should allow_value('1987', '2000', '2014').for(:year_of_birth) }
     it { should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth) }
-  end
-
-  describe 'When job_seeker is destroyed' do
-    let!(:job_seeker)      { FactoryBot.create(:job_seeker) }					 
-    let!(:resume)          { FactoryBot.create(:resume, job_seeker: job_seeker) }
-    let!(:job_developer)   { FactoryBot.create(:job_developer) }
-    let!(:role)            { FactoryBot.create(:agency_role) } 
-    let!(:agency_relation) { FactoryBot.create(:agency_relation, agency_person: job_developer, job_seeker: job_seeker, agency_role: role ) }
-    let!(:job)             { FactoryBot.create(:job) }
-    let!(:job_application) { FactoryBot.create(:job_application, job_seeker: job_seeker, job: job) }
-    it 'resumes association with dependent::destroy deletes record' do
-      expect(job_seeker.resumes.count).to eq(1)
-      first_resume = job_seeker.resumes.first.id 
-      job_seeker.destroy
-      expect{Resume.find(first_resume)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'address association with dependent::destroy deletes record' do
-      expect(job_seeker.address).to be_valid 
-      address = job_seeker.address.id
-      job_seeker.destroy
-      expect{Address.find(address)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'agency_people :through association with dependent::destroy deletes record' do
-      expect(agency_relation).to be_valid 
-      agency_rel_id = job_seeker.agency_relations.first.id
-      job_seeker.destroy
-      expect{AgencyRelation.find(agency_rel_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    it 'jobs :through association with dependent::destroy deletes record' do
-      expect(job_application).to be_valid
-      job_app_id = job_seeker.job_applications.first.id
-      job_seeker.destroy
-      expect{JobApplication.find(job_app_id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
   end
 
   describe 'job applications' do
