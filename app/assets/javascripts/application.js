@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require js.cookie
+//= require analytics
 //= require_self
 //= require cocoon
 //= require_tree .
