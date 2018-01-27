@@ -68,6 +68,7 @@ describe CompanyPerson, type: :model do
       is_expected.to have_and_belong_to_many(:company_roles)
         .join_table('company_people_roles')
     }
+    it { is_expected.to have_many(:status_changes).dependent(:destroy) }
   end
 
   describe 'check model restrictions' do
