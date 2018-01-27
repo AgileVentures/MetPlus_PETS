@@ -9,7 +9,7 @@ RSpec.describe Company, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_many(:company_people).dependent(:destroy) } 
+    it { is_expected.to have_many(:company_people).dependent(:destroy) }
     it { is_expected.to have_many(:addresses).dependent(:destroy) }
     it { is_expected.to have_many :jobs }
     it { is_expected.to have_and_belong_to_many :agencies }

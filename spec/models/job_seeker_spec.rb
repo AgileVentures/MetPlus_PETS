@@ -17,7 +17,10 @@ describe JobSeeker, type: :model do
   describe 'check model restrictions' do
     it { is_expected.to validate_presence_of(:year_of_birth) }
     it { is_expected.to validate_presence_of(:job_seeker_status) }
-    it { is_expected.to have_many(:agency_people).through(:agency_relations).dependent(:destroy) }
+    it { 
+      is_expected.to have_many(:agency_people)
+        .through(:agency_relations).dependent(:destroy) 
+    }
     it { is_expected.to have_many(:job_applications) }
     it { is_expected.to have_many(:jobs).through(:job_applications).dependent(:destroy) }
     it { is_expected.to have_many(:resumes).dependent(:destroy) }

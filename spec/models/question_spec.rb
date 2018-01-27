@@ -23,5 +23,4 @@ RSpec.describe Question, type: :model do
         .through(:application_questions).dependent(:destroy)
     }
   end
-	
 end
