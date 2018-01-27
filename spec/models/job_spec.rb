@@ -38,9 +38,9 @@ RSpec.describe Job, type: :model do
         .source(:skill).class_name('Skill')
     end
     it { is_expected.to have_many(:job_applications) }
-    it { 
+    it {
       is_expected.to have_many(:job_seekers)
-        .through(:job_applications).dependent(:destroy) 
+      .through(:job_applications).dependent(:destroy)
     }
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
     it { is_expected.to have_and_belong_to_many(:job_types) }
