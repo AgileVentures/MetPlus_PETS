@@ -17,7 +17,7 @@ RSpec.describe AgencyPerson, type: :model do
     }
     it {
       is_expected.to have_many(:job_seekers)
-      .through(:agency_relations).dependent(:destroy)
+        .through(:agency_relations).dependent(:destroy)
     }
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
   end

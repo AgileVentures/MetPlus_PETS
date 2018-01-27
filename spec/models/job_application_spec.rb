@@ -25,7 +25,7 @@ RSpec.describe JobApplication, type: :model do
     it { is_expected.to have_many(:application_questions) }
     it {
       is_expected.to have_many(:questions)
-      .through(:application_questions).dependent(:destroy)
+        .through(:application_questions).dependent(:destroy)
     }
   end
 
