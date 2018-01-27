@@ -17,10 +17,14 @@ describe JobSeeker, type: :model do
   describe 'check model restrictions' do
     it { is_expected.to validate_presence_of(:year_of_birth) }
     it { is_expected.to validate_presence_of(:job_seeker_status) }
-    it { is_expected.to have_many(:agency_people).through(:agency_relations) }
+    it {
+      is_expected.to have_many(:agency_people)
+        .through(:agency_relations).dependent(:destroy)
+    }
     it { is_expected.to have_many(:job_applications) }
-    it { is_expected.to have_many(:jobs).through(:job_applications) }
-    it { is_expected.to have_one(:address) }
+    it { is_expected.to have_many(:jobs).through(:job_applications).dependent(:destroy) }
+    it { is_expected.to have_many(:resumes).dependent(:destroy) }
+    it { is_expected.to have_one(:address).dependent(:destroy) }
     it { is_expected.to belong_to(:job_seeker_status) }
 
     it { should allow_value('1987', '2000', '2014').for(:year_of_birth) }

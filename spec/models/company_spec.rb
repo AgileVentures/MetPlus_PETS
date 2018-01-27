@@ -9,14 +9,14 @@ RSpec.describe Company, type: :model do
   end
 
   describe 'Associations' do
-    it { is_expected.to have_many :company_people }
-    it { is_expected.to have_many :addresses }
+    it { is_expected.to have_many(:company_people).dependent(:destroy) }
+    it { is_expected.to have_many(:addresses).dependent(:destroy) }
     it { is_expected.to have_many :jobs }
     it { is_expected.to have_and_belong_to_many :agencies }
     it do
       is_expected.to accept_nested_attributes_for(:addresses).allow_destroy(true)
     end
-    it { is_expected.to have_many(:status_changes) }
+    it { is_expected.to have_many(:status_changes).dependent(:destroy) }
     it { is_expected.to have_many :skills }
   end
 

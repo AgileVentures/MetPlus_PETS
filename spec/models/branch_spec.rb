@@ -15,7 +15,7 @@ RSpec.describe Branch, type: :model do
 
   describe 'Associations' do
     it { is_expected.to belong_to :agency }
-    it { is_expected.to have_one  :address }
+    it { is_expected.to have_one(:address).dependent(:destroy) }
     it { is_expected.to have_many :agency_people }
   end
 
