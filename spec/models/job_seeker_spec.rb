@@ -29,6 +29,35 @@ describe JobSeeker, type: :model do
 
     it { should allow_value('1987', '2000', '2014').for(:year_of_birth) }
     it { should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth) }
+    describe 'dependent: :destroy' do
+      let(:js) { FactoryBot.create(:job_seeker) }
+      let(:resume) { FactoryBot.create(:resume, job_seeker: js) }
+      let(:ar) do
+        FactoryBot.create(:agency_relation,
+                          agency_person: FactoryBot.create(:job_developer),
+                          job_seeker: js)
+      end
+      let(:job) { FactoryBot.create(:job) }
+      let(:ja) { FactoryBot.create(:job_application, job: job, job_seeker: js) }
+      it 'resumes' do
+        resume = js.resumes.first
+        js.destroy
+        expect(Resume.all).not_to include(resume)
+      end
+      it 'address' do
+        address = js.address
+        js.destroy
+        expect(Address.all).not_to include(address)
+      end
+      it 'join associated with agency_people' do
+        ar.job_seeker.destroy
+        expect(AgencyRelation.all).not_to include(ar)
+      end
+      it 'join associated with job' do
+        ja.job_seeker.destroy
+        expect(JobApplication.all).not_to include(ja)
+      end
+    end
   end
 
   describe 'job applications' do
