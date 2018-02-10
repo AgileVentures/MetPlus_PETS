@@ -53,6 +53,44 @@ RSpec.describe Job, type: :model do
       is_expected.to have_many(:questions).through(:job_questions).dependent(:destroy)
     end
     it { is_expected.to accept_nested_attributes_for(:job_questions).allow_destroy(true) }
+    describe 'dependent: :destroy' do
+      f = ->(obj) { FactoryBot.create(obj) }
+      let(:j) { f[:job] }
+      let(:job_skill) { FactoryBot.create(:job_skill, job: j, skill: f[:skill]) }
+      let(:ja) { FactoryBot.create(:job_application, job: j, job_seeker: f[:job_seeker]) }
+      let(:jl) { FactoryBot.create(:job_license, job: j, license: f[:license]) }
+      let(:jq) { FactoryBot.create(:job_question, job: j, question: f[:question]) }
+      it 'destroys status_changes with association when job is destroyed' do
+        statuses = j.status_changes
+        expect { j.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+      it 'destroys skills with join association when job is destroyed' do
+        skills = job_skill.job.skills
+        expect { j.destroy }.to \
+          change { skills.count }.from(1).to(0).and \
+            change { JobSkill.count }.by(-1)
+      end
+      it 'destroys job_seekers with join association when job is destroyed' do
+        job_seekers = ja.job.job_seekers
+        expect { j.destroy }.to \
+          change { job_seekers.count }.from(1).to(0).and \
+            change { JobApplication.count }.by(-1)
+      end
+      it 'destroys licenses with join association when job is destroyed' do
+        licenses = jl.job.licenses
+        expect { j.destroy }.to \
+          change { licenses.count }.from(1).to(0).and \
+            change { JobLicense.count }.by(-1)
+      end
+      it 'destroys questions with join association when job is destroyed' do
+        questions = jq.job.questions
+        expect { j.destroy }.to \
+          change { questions.count }.from(1).to(0).and \
+            change { JobQuestion.count }.by(-1)
+      end
+    end
   end
 
   describe 'Database schema' do

@@ -12,6 +12,19 @@ RSpec.describe Skill, type: :model do
     it { is_expected.to have_many(:job_skills) }
     it { is_expected.to have_many(:jobs).through(:job_skills).dependent(:destroy) }
     it { is_expected.to belong_to(:organization) }
+    describe 'dependent: :destroy' do
+      let(:job_skill) do
+        FactoryBot.create(:job_skill,
+                          job: FactoryBot.create(:job),
+                          skill: FactoryBot.create(:skill))
+      end
+      it 'destroys jobs with join association when skill is destroyed' do
+        jobs = job_skill.skill.jobs
+        expect { job_skill.skill.destroy }.to \
+          change { jobs.count }.from(1).to(0).and \
+            change { JobSkill.count }.by(-1)
+      end
+    end
   end
 
   describe 'Validations' do

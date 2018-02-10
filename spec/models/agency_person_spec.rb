@@ -20,6 +20,29 @@ RSpec.describe AgencyPerson, type: :model do
         .through(:agency_relations).dependent(:destroy)
     }
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
+    describe 'dependent: :destroy' do
+      let(:agency_relation) do
+        FactoryBot.create(:agency_relation,
+                          agency_person: FactoryBot.create(:agency_person),
+                          job_seeker: FactoryBot.create(:job_seeker),
+                          agency_role: FactoryBot.create(:agency_role))
+      end
+      let(:agency) { FactoryBot.create(:agency) }
+      let(:ap) { FactoryBot.create(:agency_admin, status: 'invited', agency: agency) }
+      it 'destroys job_seekers with join association when agency person is destroyed' do
+        js = agency_relation.agency_person.job_seekers
+        expect { agency_relation.agency_person.destroy }.to \
+          change { js.count }.from(1).to(0).and \
+            change { AgencyRelation.count }.by(-1)
+      end
+      it 'destroys status_changes with association when agency person is destroyed' do
+        ap.active
+        statuses = ap.status_changes
+        expect { ap.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+    end
   end
 
   describe 'Database schema' do

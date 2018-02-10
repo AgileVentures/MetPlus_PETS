@@ -18,6 +18,30 @@ RSpec.describe Company, type: :model do
     end
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
     it { is_expected.to have_many :skills }
+    describe 'dependent: :destroy' do
+      let(:company) { FactoryBot.create(:company, status: :pending_registration) }
+      let(:address) { FactoryBot.create(:address) }
+      let(:company_person) { FactoryBot.create(:company_admin, company: company) }
+      it 'destroys company_people with association when company is destroyed' do
+        company_person
+        expect { company.destroy }.to \
+          change { company.company_people.count }.from(1).to(0).and \
+            change { CompanyPerson.count }.by(-1)
+      end
+      it 'destroys addresses with association when company is destroyed' do
+        company.addresses << address
+        expect { company.destroy }.to \
+          change { company.addresses.count }.from(1).to(0).and \
+            change { Address.count }.by(-1)
+      end
+      it 'destroys status_changes with association when company is destroyed' do
+        company.active
+        statuses = company.status_changes
+        expect { company.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+    end
   end
 
   describe 'Database schema' do
