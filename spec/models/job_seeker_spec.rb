@@ -39,23 +39,30 @@ describe JobSeeker, type: :model do
       end
       let(:job) { FactoryBot.create(:job) }
       let(:ja) { FactoryBot.create(:job_application, job: job, job_seeker: js) }
-      it 'resumes' do
-        resume = js.resumes.first
-        js.destroy
-        expect(Resume.all).not_to include(resume)
+      it 'destroys resumes with association when job_seeker is destroyed' do
+        resume
+        resumes = js.resumes
+        expect { js.destroy }.to \
+          change { resumes.count }.from(1).to(0).and \
+            change { Resume.count }.by(-1)
       end
-      it 'address' do
-        address = js.address
-        js.destroy
-        expect(Address.all).not_to include(address)
+      it 'destroys addresses with association when job_seeker is destroyed' do
+        address = js.address.id
+        expect { js.destroy }.to \
+          change { Address.exists?(address) }.from(true).to(false).and \
+            change { Address.count }.by(-1)
       end
-      it 'join associated with agency_people' do
-        ar.job_seeker.destroy
-        expect(AgencyRelation.all).not_to include(ar)
+      it 'destroys agency_people with join association when job_seeker is destroyed' do
+        agency_people = ar.job_seeker.agency_people
+        expect { js.destroy }.to \
+          change { agency_people.count }.from(1).to(0).and \
+            change { AgencyRelation.count }.by(-1)
       end
-      it 'join associated with job' do
-        ja.job_seeker.destroy
-        expect(JobApplication.all).not_to include(ja)
+      it 'destroys jobs with join association when job_seeker is destroyed' do
+        jobs = ja.job_seeker.jobs
+        expect { js.destroy }.to \
+          change { jobs.count }.from(1).to(0).and \
+            change { JobApplication.count }.by(-1)
       end
     end
   end

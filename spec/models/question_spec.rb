@@ -22,5 +22,27 @@ RSpec.describe Question, type: :model do
       is_expected.to have_many(:job_applications)
         .through(:application_questions).dependent(:destroy)
     }
+    describe 'dependent: :destroy' do
+      f = ->(obj) { FactoryBot.create(obj) }
+      let(:q) { f[:question] }
+      let(:jq) { FactoryBot.create(:job_question, job: f[:job], question: q) }
+      let(:aq) do
+        FactoryBot.create(:application_question,
+                          job_application: f[:job_application],
+                          question: q)
+      end
+      it 'destroys jobs with join association when question is destroyed' do
+        jobs = jq.question.jobs
+        expect { jq.question.destroy }.to \
+          change { jobs.count }.from(1).to(0).and \
+            change { JobQuestion.count }.by(-1)
+      end
+      it 'destroys job_applications with join association when question is destroyed' do
+        job_applications = aq.question.job_applications
+        expect { aq.question.destroy }.to \
+          change { job_applications.count }.from(1).to(0).and \
+            change { ApplicationQuestion.count }.by(-1)
+      end
+    end
   end
 end

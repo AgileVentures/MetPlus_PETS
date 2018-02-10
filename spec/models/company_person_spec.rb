@@ -69,6 +69,25 @@ describe CompanyPerson, type: :model do
         .join_table('company_people_roles')
     }
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
+    describe 'dependent: :destroy and dependent: :nullify' do
+      let(:company_person) { FactoryBot.create(:pending_first_company_admin) }
+      let(:job) { FactoryBot.create(:job) }
+      it 'destroys status_changes with association when company_person is destroyed' do
+        company_person.active
+        statuses = company_person.status_changes
+        expect { company_person.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+      it 'nullifys job\'s foreign key when company_person is destroyed' do
+        company_person = job.company_person
+        foreign = job.company_person_id
+        expect { company_person.destroy }.to \
+          change { Job.find_by(company_person_id: foreign).nil? } \
+          .from(false).to(true).and \
+            change { Job.count }.by(0)
+      end
+    end
   end
 
   describe 'check model restrictions' do
