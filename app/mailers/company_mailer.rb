@@ -36,7 +36,7 @@ class CompanyMailer < ApplicationMailer
     if @has_resume
       # On windows, unlinking a file before closing fails
       # For more, see http://docs.cs.up.ac.za/programming/ruby/ruby_2_2_0_stdlib/libdoc/tempfile/rdoc/Tempfile.html#method-i-unlink-label-Unlink-before-close
-      resume_temp_file.close(unlink_now=true)
+      resume_temp_file.close(true)
     end
   end
 
