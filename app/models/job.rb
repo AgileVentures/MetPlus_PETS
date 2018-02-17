@@ -109,7 +109,7 @@ class Job < ActiveRecord::Base
 
     if job_application.save!
       resume = nil
-      resume = job_seeker.resumes[0].id if !job_seeker.resumes.empty?
+      resume = job_seeker.resumes[0].id unless job_seeker.resumes.empty?
       # Send mail to the company with the attached resume
       CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
                       .perform_later(Event::EVT_TYPE[:JS_APPLY],
