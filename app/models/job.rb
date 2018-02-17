@@ -108,14 +108,15 @@ class Job < ActiveRecord::Base
     end
 
     if job_application.save!
-
+      resume = nil
+      resume = job_seeker.resumes[0].id if job_seeker.resumes.length > 0
       # Send mail to the company with the attached resume
       CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
                       .perform_later(Event::EVT_TYPE[:JS_APPLY],
                                      company,
                                      nil,
                                      application: job_application,
-                                     resume_id: job_seeker.resumes[0].id)
+                                     resume_id: resume)
       yield(job_application, self, job_seeker) if block_given?
       job_application
     end

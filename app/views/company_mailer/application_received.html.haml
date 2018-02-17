@@ -7,7 +7,10 @@
   = link_to @job_seeker.full_name(last_name_first: false), job_seeker_url(@job_seeker)
 
 %p
+- if @has_resume
   Please find the resume of the applicant attached with this email.
+- else
+  No resume was provided
 
 - questions = @job_application.application_questions
 

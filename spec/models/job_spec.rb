@@ -271,11 +271,21 @@ RSpec.describe Job, type: :model do
         expect(job.last_application_by_job_seeker(job_seeker2))
           .to eq second_appl
       end
+
       it 'application with answers to job questions' do
         application = job.apply(job_seeker, question_answers)
         expect(application.application_questions.count).to eq 2
         expect(application.application_questions.first.answer).to be true
         expect(application.application_questions.second.answer).to be false
+      end
+
+      it 'application with job seeker wit no resume' do
+        num_applications = job.number_applicants
+        job_seeker.resumes = []
+        job.apply(job_seeker)
+        job.reload
+        expect(job.job_seekers).to eq [job_seeker]
+        expect(job.number_applicants).to be(num_applications + 1)
       end
     end
   end
