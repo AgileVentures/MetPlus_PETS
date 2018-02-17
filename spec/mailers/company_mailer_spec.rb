@@ -66,8 +66,7 @@ RSpec.describe CompanyMailer, type: :mailer do
 
     describe 'when the Job Seeker as a resume' do
       let(:mail) do
-        CompanyMailer.application_received(company,
-                                          job_application, resume.id)
+        CompanyMailer.application_received(company, job_application, resume.id)
       end
 
       it 'renders the headers' do
@@ -83,7 +82,8 @@ RSpec.describe CompanyMailer, type: :mailer do
 
       it 'renders information the Job Seeker did send resume' do
         expect(mail)
-          .to have_body_text('Please find the resume of the applicant attached with this email')
+          .to have_body_text('Please find the resume of the applicant attached '\
+                             'with this email')
       end
 
       it 'renders links for job title and job seeker' do
@@ -99,8 +99,7 @@ RSpec.describe CompanyMailer, type: :mailer do
 
     describe 'when the Job Seeker as no resume' do
       let(:mail) do
-        CompanyMailer.application_received(company,
-                                          job_application, nil)
+        CompanyMailer.application_received(company, job_application, nil)
       end
 
       it 'renders the headers' do
