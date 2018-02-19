@@ -44,7 +44,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryBot.create(:agency_admin, agency: agency)
-        sign_in aa
+        warden.set_user aa
       end
       it 'creates new skill for valid parameters' do
         expect { xhr :post, :create, skill: skill_params }
@@ -66,7 +66,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company admin' do
       before :each do
         ca = FactoryBot.create(:company_admin, company: company)
-        sign_in ca
+        warden.set_user ca
       end
 
       it 'creates new skill for valid parameters' do
@@ -89,7 +89,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company contact' do
       before :each do
         cc = FactoryBot.create(:company_contact, company: company)
-        sign_in cc
+        warden.set_user cc
       end
       it 'creates new skill for valid parameters' do
         expect { xhr :post, :create, skill: skill_params_company }
@@ -117,7 +117,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryBot.create(:agency_admin, agency: agency)
-        sign_in aa
+        warden.set_user aa
       end
       context 'skill found' do
         before(:each) do
@@ -147,7 +147,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company admin' do
       before :each do
         ca = FactoryBot.create(:company_admin, company: company)
-        sign_in ca
+        warden.set_user ca
       end
       context 'skill found' do
         before(:each) do
@@ -177,7 +177,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company contact' do
       before :each do
         cc = FactoryBot.create(:company_contact, company: company)
-        sign_in cc
+        warden.set_user cc
       end
       context 'skill found' do
         before(:each) do
@@ -213,7 +213,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryBot.create(:agency_admin, agency: agency)
-        sign_in aa
+        warden.set_user aa
       end
       it 'returns success for valid parameters' do
         xhr :patch, :update, id: skill, skill: skill_params
@@ -230,7 +230,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company admin' do
       before :each do
         ca = FactoryBot.create(:company_admin, company: company)
-        sign_in ca
+        warden.set_user ca
       end
       it 'returns success for valid parameters' do
         xhr :patch, :update, id: company_skill, skill: skill_params
@@ -247,7 +247,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company contact' do
       before :each do
         cc = FactoryBot.create(:company_contact, company: company)
-        sign_in cc
+        warden.set_user cc
       end
       it 'returns success for valid parameters' do
         xhr :patch, :update, id: company_skill, skill: skill_params
@@ -275,7 +275,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - agency admin' do
       before :each do
         aa = FactoryBot.create(:agency_admin, agency: agency)
-        sign_in aa
+        warden.set_user aa
       end
 
       let!(:job_skill) { FactoryBot.create(:job_skill, skill: skill) }
@@ -307,7 +307,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company admin' do
       before :each do
         ca = FactoryBot.create(:company_admin, company: company)
-        sign_in ca
+        warden.set_user ca
       end
 
       let!(:job_skill) { FactoryBot.create(:job_skill, skill: company_skill) }
@@ -340,7 +340,7 @@ RSpec.describe SkillsController, type: :controller do
     context 'authorized access - company contact' do
       before :each do
         cc = FactoryBot.create(:company_contact, company: company)
-        sign_in cc
+        warden.set_user cc
       end
 
       let!(:job_skill) { FactoryBot.create(:job_skill, skill: company_skill) }

@@ -77,7 +77,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     context 'authenticated' do
       describe 'authorized access' do
         before do
-          sign_in company_admin
+          warden.set_user company_admin
           request
         end
 
@@ -107,7 +107,7 @@ RSpec.describe JobApplicationsController, type: :controller do
       describe 'authorized access' do
         let(:hire_mock) { double(JobApplications::Hire) }
         before(:each) do
-          sign_in company_admin
+          warden.set_user company_admin
           allow(JobApplications::Hire).to receive(:new)
             .and_return(hire_mock)
         end
@@ -173,7 +173,7 @@ RSpec.describe JobApplicationsController, type: :controller do
         let(:reject_mock) { double(JobApplications::Reject) }
 
         before(:each) do
-          sign_in company_admin
+          warden.set_user company_admin
           allow(JobApplications::Reject).to receive(:new)
             .and_return(reject_mock)
         end
@@ -236,7 +236,7 @@ RSpec.describe JobApplicationsController, type: :controller do
       describe 'authorized access' do
         let(:application_process_mock) { double(JobApplications::Processing) }
         before(:each) do
-          sign_in company_admin
+          warden.set_user company_admin
           allow(JobApplications::Processing).to receive(:new)
             .and_return(application_process_mock)
         end

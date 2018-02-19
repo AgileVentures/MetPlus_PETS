@@ -35,7 +35,7 @@ RSpec.describe LicensesController, type: :controller do
   describe 'POST #create' do
     context 'authorized access - agency admin' do
       before :each do
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
       it 'creates new license for valid parameters' do
         expect { xhr :post, :create, license: license_params }
@@ -62,7 +62,7 @@ RSpec.describe LicensesController, type: :controller do
   describe 'GET #show' do
     context 'authorized access - agency admin' do
       before :each do
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
 
       context 'license found' do
@@ -98,7 +98,7 @@ RSpec.describe LicensesController, type: :controller do
   describe 'PATCH #update' do
     context 'authorized access - agency admin' do
       before :each do
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
       it 'returns success for valid parameters' do
         xhr :patch, :update, id: license, license: license_params
@@ -125,7 +125,7 @@ RSpec.describe LicensesController, type: :controller do
 
     context 'authorized access - agency admin' do
       before :each do
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
 
       let!(:job_license) { FactoryBot.create(:job_license, license: license) }

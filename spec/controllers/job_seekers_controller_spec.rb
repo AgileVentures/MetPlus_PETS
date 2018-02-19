@@ -283,7 +283,7 @@ RSpec.describe JobSeekersController, type: :controller do
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
-        sign_in owner
+        warden.set_user owner
       end
       it 'updates email address' do
         patch :update, id: owner, job_seeker: FactoryBot
@@ -397,7 +397,7 @@ RSpec.describe JobSeekersController, type: :controller do
     context ' related case manager ' do
       let(:password) { owner.encrypted_password }
       before(:each) do
-        sign_in owner_case_manager
+        warden.set_user owner_case_manager
       end
       context 'valid attributes' do
         it 'locates the requested @jobseeker' do
@@ -456,7 +456,7 @@ RSpec.describe JobSeekersController, type: :controller do
     context ' related job_developer ' do
       let(:password) { owner.encrypted_password }
       before(:each) do
-        sign_in owner_job_developer
+        warden.set_user owner_job_developer
       end
       context 'valid attributes' do
         it 'locates the requested @jobseeker' do
@@ -555,7 +555,7 @@ RSpec.describe JobSeekersController, type: :controller do
         stub_cruncher_authenticate
         stub_cruncher_file_upload
 
-        sign_in owner
+        warden.set_user owner
         request
       end
       it 'assigns jobseeker and current_resume for view' do
@@ -590,7 +590,7 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'owner' do
       before :each do
-        sign_in owner
+        warden.set_user owner
         request
       end
       it 'renders homepage template' do
@@ -610,9 +610,9 @@ RSpec.describe JobSeekersController, type: :controller do
         @newjob.assign_attributes(created_at: Time.now)
         @oldjob = FactoryBot.create(:job)
         @oldjob.update_attributes(created_at: Time.now - 2.weeks)
-        owner.assign_attributes(last_sign_in_at: (Time.now - 1.week))
-        expect(Job.new_jobs(owner.last_sign_in_at)).to include(@newjob)
-        expect(Job.new_jobs(owner.last_sign_in_at)).not_to include(@oldjob)
+        owner.assign_attributes(last_warden.set_user_at: (Time.now - 1.week))
+        expect(Job.new_jobs(owner.last_warden.set_user_at)).to include(@newjob)
+        expect(Job.new_jobs(owner.last_warden.set_user_at)).not_to include(@oldjob)
       end
     end
   end
@@ -635,7 +635,7 @@ RSpec.describe JobSeekersController, type: :controller do
       it_behaves_like 'unauthorized to js controller', 'job_seeker'
     end
     it 'renders the index template' do
-      sign_in FactoryBot.create(:agency_admin)
+      warden.set_user FactoryBot.create(:agency_admin)
       request
       expect(response.body).to render_template 'index'
     end
@@ -661,7 +661,7 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'owner' do
       before(:each) do
-        sign_in owner
+        warden.set_user owner
         request
       end
       # the job seeker should not be able to see their show page
@@ -703,7 +703,7 @@ RSpec.describe JobSeekersController, type: :controller do
     end
     context 'related job_developer' do
       it "it renders job seeker's info partial" do
-        sign_in owner_job_developer
+        warden.set_user owner_job_developer
         request
         expect(response).to render_template(partial: '_info')
       end
@@ -739,7 +739,7 @@ RSpec.describe JobSeekersController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      sign_in jobseeker
+      warden.set_user jobseeker
     end
     context 'User without a resume' do
       before(:each) do
@@ -815,7 +815,7 @@ RSpec.describe JobSeekersController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
-      sign_in company_admin
+      warden.set_user company_admin
     end
 
     let(:company)       { FactoryBot.create(:company) }

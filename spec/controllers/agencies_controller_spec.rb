@@ -8,7 +8,7 @@ RSpec.describe AgenciesController, type: :controller do
   describe 'GET #edit' do
     context 'success' do
       before(:each) do
-        sign_in agency_admin
+        warden.set_user agency_admin
         get :edit, id: agency
       end
       it 'assigns agency for form' do
@@ -23,7 +23,7 @@ RSpec.describe AgenciesController, type: :controller do
     end
     context 'as Job Developer' do
       before(:each) do
-        sign_in job_developer
+        warden.set_user job_developer
         get :edit, id: agency
       end
       it 'redirect' do
@@ -39,7 +39,7 @@ RSpec.describe AgenciesController, type: :controller do
   describe 'PATCH #update' do
     context 'valid attributes' do
       before(:each) do
-        sign_in agency_admin
+        warden.set_user agency_admin
         patch :update, agency: FactoryBot.attributes_for(:agency),
                        id: agency
       end
@@ -60,7 +60,7 @@ RSpec.describe AgenciesController, type: :controller do
       render_views
 
       before(:each) do
-        sign_in agency_admin
+        warden.set_user agency_admin
         patch :update, agency: FactoryBot.attributes_for(
           :agency,
           phone: '',
@@ -83,11 +83,11 @@ RSpec.describe AgenciesController, type: :controller do
     context '.edit' do
       it 'authorizes agency_admin' do
         expect(subject).to_not receive(:user_not_authorized)
-        sign_in agency_admin
+        warden.set_user agency_admin
         get :edit, id: agency.id
       end
       it 'does not authorize non-admin user' do
-        sign_in job_developer
+        warden.set_user job_developer
         get :edit, id: agency.id
         expect(flash[:alert])
           .to eq "You are not authorized to edit #{agency.name} agency."
@@ -97,12 +97,12 @@ RSpec.describe AgenciesController, type: :controller do
     context '.update' do
       it 'authorizes agency_admin' do
         expect(subject).to_not receive(:user_not_authorized)
-        sign_in agency_admin
+        warden.set_user agency_admin
         patch :update, agency: FactoryBot.attributes_for(:agency),
                        id: agency
       end
       it 'does not authorize non-admin user' do
-        sign_in job_developer
+        warden.set_user job_developer
         patch :update, agency: FactoryBot.attributes_for(:agency),
                        id: agency
         expect(flash[:alert])

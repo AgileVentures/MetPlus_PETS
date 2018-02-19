@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.shared_examples 'authorized show request' do
   before do
-    # Use `warden.set_user user` instead of `sign_in user` cause the latter
+    # Use `warden.set_user user` instead of `warden.set_user user` cause the latter
     # doesn't set pets_user for some weird reason
     warden.set_user user
     request
@@ -180,7 +180,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let(:request) { delete :destroy, id: company }
     context 'authorized access' do
       before do
-        sign_in agency_admin
+        warden.set_user agency_admin
         request
       end
       it 'sets flash message' do
@@ -211,7 +211,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     context 'authorized access' do
       before(:each) do
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
 
       it 'delete company person(s)' do
@@ -355,7 +355,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         3.times do
           FactoryBot.create(:agency_person, agency: agency)
         end
-        sign_in agency_admin
+        warden.set_user agency_admin
         allow(Companies::ApproveCompanyRegistration)
           .to receive(:new).and_return(use_case_mock)
         allow(use_case_mock)
@@ -420,7 +420,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         allow(use_case_mock)
           .to receive(:call)
         post :create, company: registration_params
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
 
       context 'after denial' do
@@ -494,7 +494,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           FactoryBot.create(:agency_person, agency: agency)
         end
         post :create, company: registration_params
-        sign_in agency_admin
+        warden.set_user agency_admin
       end
 
       it 'updates person and address but does not add person or address' do

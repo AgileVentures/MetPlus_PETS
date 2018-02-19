@@ -55,7 +55,7 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'GET #show' do
     before(:each) do
-      sign_in company_admin
+      warden.set_user company_admin
       get :show, id: company
     end
     it 'assigns @company for view' do
@@ -71,7 +71,7 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'GET #edit' do
     before(:each) do
-      sign_in company_admin
+      warden.set_user company_admin
       get :edit, id: company
     end
     it 'assigns @company for form' do
@@ -90,7 +90,7 @@ RSpec.describe CompaniesController, type: :controller do
       before(:each) do
         stub_cruncher_authenticate
         stub_cruncher_job_create
-        sign_in admin
+        warden.set_user admin
         delete :destroy, id: company_with_jobs
       end
 
@@ -109,7 +109,7 @@ RSpec.describe CompaniesController, type: :controller do
 
     context 'company with no jobs' do
       before(:each) do
-        sign_in admin
+        warden.set_user admin
         delete :destroy, id: company
       end
 
@@ -134,7 +134,7 @@ RSpec.describe CompaniesController, type: :controller do
     let!(:cp4) { FactoryBot.create(:company_contact, company: company) }
 
     before(:each) do
-      sign_in cp1
+      warden.set_user cp1
       xhr :get, :list_people, id: company
     end
     it 'assigns @people to collection of all company people' do
@@ -155,7 +155,7 @@ RSpec.describe CompaniesController, type: :controller do
     end
 
     before(:each) do
-      sign_in company_admin
+      warden.set_user company_admin
     end
 
     context 'valid attributes' do

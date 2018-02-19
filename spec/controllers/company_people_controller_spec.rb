@@ -29,7 +29,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     context 'company admin' do
       before(:each) do
         @company_admin = FactoryBot.create(:company_admin)
-        sign_in @company_admin
+        warden.set_user @company_admin
         get :show, id: @company_admin
       end
       it 'renders show template' do
@@ -42,7 +42,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     context 'company contact' do
       before(:each) do
         @company_contact = FactoryBot.create(:company_contact)
-        sign_in @company_contact
+        warden.set_user @company_contact
         get :show, id: @company_contact
       end
       it 'renders show template' do
@@ -59,7 +59,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       context 'company admin' do
         before(:each) do
           @company_admin = FactoryBot.create(:company_admin)
-          sign_in @company_admin
+          warden.set_user @company_admin
           get :edit_profile, id: @company_admin
         end
         it 'renders edit_profile template' do
@@ -73,7 +73,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       context 'company contact' do
         before(:each) do
           @company_contact = FactoryBot.create(:company_contact)
-          sign_in @company_contact
+          warden.set_user @company_contact
           get :edit_profile, id: @company_contact
         end
 
@@ -140,7 +140,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'GET #home' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_person
+        warden.set_user company_person
         get :home, id: company_person
       end
 
@@ -163,7 +163,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     describe 'xhr response - skills' do
       before(:each) do
-        sign_in company_person
+        warden.set_user company_person
         xhr :get, :home, id: company_person, data_type: 'skills'
       end
 
@@ -174,7 +174,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
     describe 'xhr response - licenses' do
       before(:each) do
-        sign_in company_person
+        warden.set_user company_person
         xhr :get, :home, id: company_person, data_type: 'licenses'
       end
 
@@ -224,7 +224,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       context 'valid attributes' do
         before(:each) do
-          sign_in company_person
+          warden.set_user company_person
           company_person.company_roles <<
             FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])
           company_person.save
@@ -251,7 +251,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
                               password: 'testing.....',
                               password_confirmation: 'testing.....')
           @password = @company_person.encrypted_password
-          sign_in @company_person
+          warden.set_user @company_person
           patch :update_profile,
                 company_person:
                   FactoryBot.attributes_for(:company_person,
@@ -365,7 +365,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'GET #show' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_admin
+        warden.set_user company_admin
         get :show, id: company_admin
       end
 
@@ -381,7 +381,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'GET #edit' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_admin
+        warden.set_user company_admin
         get :edit, id: company_admin
       end
 
@@ -397,7 +397,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
   describe 'PATCH #destroy' do
     describe 'authorized access' do
       before(:each) do
-        sign_in company_admin
+        warden.set_user company_admin
         patch :destroy, id: company_person
       end
 
@@ -421,7 +421,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       before(:each) do
         updated_fields = company_admin.attributes
                                       .merge(company_admin.user.attributes)
-        sign_in company_admin
+        warden.set_user company_admin
         patch :update, id: company_admin, company_person: updated_fields
       end
 
@@ -443,7 +443,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         updated_fields = company_admin.attributes
                                       .merge(company_admin.user.attributes)
         updated_fields[:company_role_ids] = []
-        sign_in company_admin
+        warden.set_user company_admin
         patch :update, id: company_admin, company_person: updated_fields
       end
 
