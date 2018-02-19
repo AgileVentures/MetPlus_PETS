@@ -610,9 +610,9 @@ RSpec.describe JobSeekersController, type: :controller do
         @newjob.assign_attributes(created_at: Time.now)
         @oldjob = FactoryBot.create(:job)
         @oldjob.update_attributes(created_at: Time.now - 2.weeks)
-        owner.assign_attributes(last_warden.set_user_at: (Time.now - 1.week))
-        expect(Job.new_jobs(owner.last_warden.set_user_at)).to include(@newjob)
-        expect(Job.new_jobs(owner.last_warden.set_user_at)).not_to include(@oldjob)
+        last_login_time = Time.now - 1.week
+        expect(Job.new_jobs(last_login_time)).to include(@newjob)
+        expect(Job.new_jobs(last_login_time)).not_to include(@oldjob)
       end
     end
   end
