@@ -30,8 +30,8 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'devise',           '~> 3.5.2'
-gem 'devise_invitable', '~> 1.5.2'
+gem 'devise',           '~> 4.4.1'
+gem 'devise_invitable', '~> 1.7.3'
 
 gem 'figaro'
 
