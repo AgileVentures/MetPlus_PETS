@@ -56,10 +56,13 @@
         %td Job Shifts:
         %td= job.job_shifts.map(&:shift).join(', ')
 
-    - unless job.job_licenses.empty?
+    - unless job.job_licenses.empty? and job.additional_licenses.nil?
       %tr
         %td Licenses Required:
-        %td= job.licenses.map(&:license_description).join(', ')
+        %td
+          = job.licenses.map(&:license_description).join(', ')
+          ,
+          = job.additional_licenses
 
     - unless job.job_questions.empty?
       %tr
