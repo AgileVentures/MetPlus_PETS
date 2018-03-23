@@ -229,11 +229,18 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
+
         it 'redirects to the job show view' do
           request
           expect(response).to redirect_to(job_path(Job.last))
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \
                                        'has been created successfully.'
+        end
+        context 'when additional licenses are present' do
+          it 'saves the additional license' do
+            post :create, job: valid_params.merge(additional_licenses: 'Some additional licenses text')
+            expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
+          end
         end
       end
 
@@ -489,6 +496,16 @@ RSpec.describe JobsController, type: :controller do
           expect(flash[:info]).to eq "#{valid_params[:title]} "\
                                      'has been updated successfully.'
         end
+
+        context 'when additional licenses are present' do
+          it 'saves the additional license' do
+            patch :update, id: job_wo_skill.id,
+                           job: valid_params.merge(
+                             additional_licenses: 'Some additional licenses text'
+                           )
+            expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
+          end
+        end
       end
       describe 'unsuccessful update' do
         it 'remain job & job skill count' do
@@ -584,7 +601,7 @@ RSpec.describe JobsController, type: :controller do
         # Next line added to ensure the query is done and that the
         # paginate is also called
         request_first_page
-        assigns(:jobs).each {}
+        assigns(:jobs).each{}
         expect(assigns(:jobs).all.size).to be 10
         expect(assigns(:jobs).first.title).to eq 'Awesome job 00'
         expect(assigns(:jobs).last.title).to eq 'Awesome job 09'
@@ -605,7 +622,7 @@ RSpec.describe JobsController, type: :controller do
         # Next line added to ensure the query is done and that the
         # paginate is also called
         request_last_page
-        assigns(:jobs).each {}
+        assigns(:jobs).each{}
         expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
         expect(assigns(:jobs).size).to eq 1
       end
@@ -626,7 +643,7 @@ RSpec.describe JobsController, type: :controller do
       it 'check jobs' do
         # Next line added to ensure the query is done and that the
         # paginate is also called
-        assigns(:jobs).each {}
+        assigns(:jobs).each{}
         expect(assigns(:jobs).all.size).to be 4
         expect(assigns(:jobs).first.title).to eq 'Awesome new job 0'
         expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'

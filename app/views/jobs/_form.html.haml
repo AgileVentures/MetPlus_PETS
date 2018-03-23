@@ -143,6 +143,12 @@
       .links
         = link_to_add_association 'Add License', f, :job_licenses,
             render_options: { locals: { all_licenses: all_licenses } }
+      %br
+      %br
+      = f.label :additional_licenses, 'Additional Licenses:',
+                style: 'margin-left: 10px;'
+      &nbsp;
+      = f.text_field :additional_licenses, size: 90
 
 .form-group
   .col-sm-3.control-label
