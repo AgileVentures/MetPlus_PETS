@@ -416,6 +416,7 @@ class JobsController < ApplicationController
                                 :pay_period, :max_salary, :min_salary,
                                 :education_info, :education_id,
                                 :additional_licenses,
+                                :additional_skills,
                                 job_type_ids: [], job_shift_ids: [],
                                 job_skills_attributes: [:id, :_destroy,
                                                         :skill_id, :required,

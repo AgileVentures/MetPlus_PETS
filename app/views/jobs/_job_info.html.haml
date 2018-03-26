@@ -106,3 +106,9 @@
                       = job_skill.min_years if job_skill.min_years
                     %td
                       = job_skill.max_years if job_skill.max_years
+    - unless job.additional_skills.nil?
+      %tr
+        %td Other Skills:
+        %td
+          %i
+            = job.additional_skills

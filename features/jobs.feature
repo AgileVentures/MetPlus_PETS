@@ -135,11 +135,13 @@ Feature: Manage Jobs
     Then I click the "Edit Job" link
     And I select another license
     And I fill in "Additional Licenses:" with "Some different license"
+    And I fill in "Additional Skills:" with "Some different skills"
     And I press "Update"
     And the job "cab-driver" should have 2 licenses
     And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
     And I should see "LLPC (LIMITED LICENSE PROFESSIONAL COUNSELOR)"
     And I should see "Some different license"
+    And I should see "Some different skills"
 
     Then I click the "Edit Job" link
     Then I wait for 1 second
