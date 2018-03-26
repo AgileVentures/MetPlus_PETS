@@ -244,6 +244,14 @@ RSpec.describe JobsController, type: :controller do
             expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
           end
         end
+        context 'when additional skills are present' do
+          it 'saves the additional skills' do
+            post :create, job: valid_params.merge(
+              additional_skills: 'Some additional skills text'
+            )
+            expect(Job.first.additional_skills).to eq 'Some additional skills text'
+          end
+        end
       end
 
       describe 'create job with new address' do
@@ -506,6 +514,16 @@ RSpec.describe JobsController, type: :controller do
                              additional_licenses: 'Some additional licenses text'
                            )
             expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
+          end
+        end
+
+        context 'when additional skills are present' do
+          it 'saves the additional skill' do
+            patch :update, id: job_wo_skill.id,
+                           job: valid_params.merge(
+                             additional_skills: 'Some additional skills text'
+                           )
+            expect(Job.first.additional_skills).to eq 'Some additional skills text'
           end
         end
       end
