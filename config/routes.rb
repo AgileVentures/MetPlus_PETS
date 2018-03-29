@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   get '/.well-known/acme-challenge/:id' => 'certbot_ssl_challenge#letsencrypt'
 
   devise_for :users, path_names: { sign_up: 'new', sign_out: 'logout',
