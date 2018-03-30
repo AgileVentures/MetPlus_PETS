@@ -91,11 +91,12 @@ RSpec.describe CompaniesController, type: :controller do
         stub_cruncher_authenticate
         stub_cruncher_job_create
         sign_in admin
-        delete :destroy, id: company_with_jobs
-      end
+        subject.destroy_company_iterator = double
 
-      it 'does not delete the company' do
-        expect(assigns(:company).destroyed?).to eq(false)
+        expect(subject.destroy_company_iterator).to receive(:call)
+          .with(company_with_jobs.id.to_s)
+          .and_raise(Companies::AsJobs, company_with_jobs)
+        delete :destroy, id: company_with_jobs
       end
 
       it 'shows the alert' do
@@ -110,11 +111,13 @@ RSpec.describe CompaniesController, type: :controller do
     context 'company with no jobs' do
       before(:each) do
         sign_in admin
-        delete :destroy, id: company
-      end
 
-      it 'deletes the company' do
-        expect(assigns(:company).destroyed?).to eq(true)
+        subject.destroy_company_iterator = double
+        expect(subject.destroy_company_iterator).to receive(:call)
+          .with(company.id.to_s)
+          .and_return(company)
+
+        delete :destroy, id: company
       end
 
       it 'shows the flash notice message' do
