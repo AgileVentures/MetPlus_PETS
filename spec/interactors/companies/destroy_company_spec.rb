@@ -1,9 +1,5 @@
 require 'rails_helper'
 
-# expect(subject).to receive(:is_authorized!)
-# .with(agency_person, 'edit')
-# .and_raise(Authorization::NotAuthorizedError)
-
 RSpec.describe Companies::DestroyCompany do
   describe '#call' do
     let(:company) { double }
@@ -32,7 +28,7 @@ RSpec.describe Companies::DestroyCompany do
       end
 
       before(:each) do
-        expect(subject).to receive(:is_authorized!)
+        expect(subject).to receive(:authorized!)
           .with(company_with_jobs, 'destroy')
           .and_raise(Authorization::NotAuthorizedError)
         company_with_jobs.id = 1
@@ -56,7 +52,7 @@ RSpec.describe Companies::DestroyCompany do
       end
 
       before(:each) do
-        expect(subject).to receive(:is_authorized!)
+        expect(subject).to receive(:authorized!)
           .with(company_with_jobs, 'destroy')
         company_with_jobs.id = 1
         allow(subject.query).to receive(:find_by_id).and_return(company_with_jobs)
@@ -76,7 +72,7 @@ RSpec.describe Companies::DestroyCompany do
       end
 
       before(:each) do
-        expect(subject).to receive(:is_authorized!)
+        expect(subject).to receive(:authorized!)
           .with(company, 'destroy')
         allow(subject.query).to receive(:find_by_id).and_return(company)
       end

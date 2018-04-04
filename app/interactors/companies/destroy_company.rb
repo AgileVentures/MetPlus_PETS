@@ -14,7 +14,7 @@ module Companies
     def call(id)
       company = @query.find_by_id(id)
       @action_description = "#{action} #{company.name} agency"
-      is_authorized!(company, @action)
+      authorized!(company, @action)
 
       company.inactive
       company
