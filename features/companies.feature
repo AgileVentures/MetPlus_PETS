@@ -37,5 +37,10 @@ Feature: Company
     And I click the "Admin" link
     And I click the "Agency and Partner Companies" link
     And I click the "Companies" link
+    And I click the "Widgets Inc." link
     Then I click and accept the "Delete Company" button
-    And I should see "Widgets Inc. .+Inactive"
+    And I should see "Company 'Widgets Inc.' deleted"
+    And I click the "Admin" link
+    And I click the "Agency and Partner Companies" link
+    And I click the "Companies" link
+    And I should see "Widgets Inc. No Address Inactive"

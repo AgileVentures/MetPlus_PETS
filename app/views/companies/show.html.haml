@@ -30,7 +30,7 @@
 
 .col-sm-4.col-sm-offset-5
   - if @admin_aa
-    = link_to('Delete Company', company_path(@company),
+    = button_to('Delete Company', company_path(@company),
               method: :delete,
               data: { confirm: "Delete company #{@company.name}?" },
               class: 'btn btn-danger btn-sm pull-right')
