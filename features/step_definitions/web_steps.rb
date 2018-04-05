@@ -170,9 +170,6 @@ And(/^show me the page$/) do
 end
 
 When(/^(?:I|they) click and accept the "([^"]*)" button$/) do |button_text|
-  # accept_confirm(wait: 8) do
-  #   click_button button_text
-  # end
   page.driver.accept_modal(:confirm, wait: 8) do
     click_button button_text
   end

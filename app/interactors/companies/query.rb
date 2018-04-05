@@ -8,5 +8,10 @@ module Companies
       company.destroy
       company
     end
+
+    def save!(company)
+      company.save!
+      company
+    end
   end
 end

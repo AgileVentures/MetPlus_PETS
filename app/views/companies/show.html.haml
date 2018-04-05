@@ -29,7 +29,7 @@
 %br
 
 .col-sm-4.col-sm-offset-5
-  - if @admin_aa && @company.has_no_jobs?
+  - if @admin_aa
     = link_to('Delete Company', company_path(@company),
               method: :delete,
               data: { confirm: "Delete company #{@company.name}?" },
