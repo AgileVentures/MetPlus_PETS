@@ -62,9 +62,10 @@ RSpec.describe Companies::DestroyCompany do
         allow(subject.query).to receive(:find_by_id).and_return(company_with_jobs)
       end
 
-      it 'does not delete the company' do
-        expect(subject.query).not_to receive(:destroy)
-        expect { subject.call(1) }.to raise_error(Companies::AsJobs)
+      it 'does update the company status to inactive' do
+        expect(company_with_jobs).to receive(:inactive)
+        result = subject.call(1)
+        expect(result).to eq(company_with_jobs)
       end
     end
 
@@ -78,12 +79,10 @@ RSpec.describe Companies::DestroyCompany do
         expect(subject).to receive(:is_authorized!)
           .with(company, 'destroy')
         allow(subject.query).to receive(:find_by_id).and_return(company)
-        expect(subject.query).to receive(:destroy)
-          .with(company)
-          .and_return(company)
       end
 
-      it 'deletes the company' do
+      it 'does udpdate the company status to inactive' do
+        expect(company).to receive(:inactive)
         result = subject.call(1)
         expect(result).to eq(company)
       end

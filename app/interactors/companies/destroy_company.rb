@@ -16,9 +16,8 @@ module Companies
       @action_description = "#{action} #{company.name} agency"
       is_authorized!(company, @action)
 
-      raise Companies::AsJobs, company if company.jobs.exists?
-
-      @query.destroy(company)
+      company.inactive
+      company
     end
   end
 end

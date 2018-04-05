@@ -41,6 +41,11 @@ class Company < ActiveRecord::Base
     StatusChange.update_status_history(self, :registration_denied)
   end
 
+  def inactive
+    inactive!
+    StatusChange.update_status_history(self, :inactive)
+  end
+
   def has_no_jobs?
     !jobs.exists?
   end

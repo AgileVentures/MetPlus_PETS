@@ -18,13 +18,9 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
-    begin
-      company = @destroy_company_iterator.call(params[:id])
-      flash[:notice] = "Company '#{company.name}' deleted."
-      redirect_to root_path
-    rescue Companies::AsJobs => exception
-      redirect_to(exception.company, alert: 'Company cannot be deleted')
-    end
+    company = @destroy_company_iterator.call(params[:id])
+    flash[:notice] = "Company '#{company.name}' deleted."
+    redirect_to root_path
   end
 
   def edit
@@ -84,13 +80,13 @@ class CompaniesController < ApplicationController
                                     :website, :ein, :description,
                                     :job_email,
                                     company_people_attributes:
-                                  [:id, :first_name, :last_name, :phone, :email,
-                                   :password, :password_confirmation],
+                                  %i[id first_name last_name phone email
+                                     password password_confirmation],
                                     addresses_attributes:
-                             [:id, :street, :city, :zipcode, :state, :_destroy])
+                             %i[id street city zipcode state _destroy])
   end
 
   def initialize_use_cases
-    @destroy_company_iterator = Companies::DestroyCompany.new (current_user) if @destroy_company_iterator.nil?
+    @destroy_company_iterator = Companies::DestroyCompany.new current_user if @destroy_company_iterator.nil?
   end
 end
