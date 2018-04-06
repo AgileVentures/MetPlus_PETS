@@ -4,7 +4,6 @@ Feature: Number of openings on a specific job
   So that I can hire multiple people for the same position
 
 Background: Company person is logged in
-  
    Given I am logged in as company person
    
  Scenario: Company person should see a drop down of available positions when creating a job
@@ -20,7 +19,7 @@ Background: Company person is logged in
 
  Scenario: number of available positions should decrease when a job seeker is accepted
    When I accept a Job Seeker for a Job with 2 opportunities
-   And I visit the job application page
+   And I go to the "Developper" job page
    Then I see '1 of 2 Positions available'
    And the task to review the Job Application just accepted, should be closed
 
