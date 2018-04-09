@@ -143,3 +143,8 @@ And(/^I should not see "([^\"]+)" in the search form$/) do |string|
     expect(has_text?(:visible, string)).to be false
   end
 end
+Then(/^I see '(\d+) of (\d+) Positions available'$/) do |arg1, arg2|
+  within('tr#available-positions')do
+    expect(page).to have_text arg1+' of '+arg2
+  end
+end
