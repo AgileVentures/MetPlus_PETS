@@ -87,6 +87,7 @@ class CompaniesController < ApplicationController
   end
 
   def initialize_use_cases
-    @destroy_company_iterator = Companies::DestroyCompany.new current_user if @destroy_company_iterator.nil?
+    @destroy_company_iterator = Companies::DestroyCompany.new current_user \
+      if @destroy_company_iterator.nil?
   end
 end
