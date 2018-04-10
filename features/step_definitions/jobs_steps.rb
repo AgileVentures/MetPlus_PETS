@@ -118,7 +118,7 @@ Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
 end
 
 Given(/^I am creating a Job$/) do
-  step %(I fill in "job_title" with "IT")
+  step %(I fill in "job_title" with "Developer")
   step %(I fill in "job_company_job_id" with "73")
   step %(I fill in "job_description" with "Development")
   fill_in 'job_new_address_attributes_street', with: '3661 West', visible: false
@@ -144,7 +144,7 @@ And(/^I should not see "([^\"]+)" in the search form$/) do |string|
   end
 end
 Then(/^I see '(\d+) of (\d+) Positions available'$/) do |arg1, arg2|
-  within('tr#available-positions')do
-    expect(page).to have_text arg1+' of '+arg2
+  within('tr#available-positions') do
+    expect(page).to have_text arg1 + ' of ' + arg2
   end
 end
