@@ -126,10 +126,6 @@ Given(/^I am creating a Job$/) do
   select('Alabama', from: 'job_new_address_attributes_state', visible: false)
 end
 
-Then(/^I see a drop down with (\d+) available positions selected$/) do |arg1|
-  find('.dropdown_menu', text: arg1)
-end
-
 When(/^I select (\d+) available positions from the dropdown$/) do |arg1|
   select(arg1, from: '.dropdown_menu')
 end

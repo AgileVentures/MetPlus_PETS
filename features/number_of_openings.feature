@@ -6,9 +6,10 @@ Feature: Number of openings on a specific job
 Background: Company person is logged in
    Given I am logged in as company person
    
- Scenario: Company person should see a drop down of available positions when creating a job
+ Scenario: Company person should see a text field of available positions when creating a job
    When I press "Post Job" within "all-jobs-pane"
-   Then I see a drop down with 1 available positions selected
+   Then I should see "Available Positions:"
+   And The field 'job_available_positions' should have the value '1'
 
  Scenario: should see the number of selected positions
    Given I press "Post Job" within "all-jobs-pane"
