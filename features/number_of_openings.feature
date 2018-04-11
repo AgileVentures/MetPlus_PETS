@@ -8,8 +8,7 @@ Background: Company person is logged in
    
  Scenario: Company person should see a text field of available positions when creating a job
    When I press "Post Job" within "all-jobs-pane"
-   Then I should see "Available Positions:"
-   And The field 'job_available_positions' should have the value '1'
+   Then I sould see a text field "Available Positions" with the value set to 1
 
  Scenario: should see the number of selected positions
    Given I press "Post Job" within "all-jobs-pane"
