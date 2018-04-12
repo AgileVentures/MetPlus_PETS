@@ -38,6 +38,9 @@
       %td Salary:
       %td= job_salary_details(job)
     %tr
+      %td Available positions:
+      %td= job.available_positions
+    %tr
       %td Job Details:
       %td= job.description
     - unless job.education.nil? && job.education_info.nil?
