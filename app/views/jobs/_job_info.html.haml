@@ -39,7 +39,9 @@
       %td= job_salary_details(job)
     %tr
       %td Available positions:
-      %td= job.available_positions
+      %td
+        = job.available_positions 
+        of #{positions} positions available
     %tr
       %td Job Details:
       %td= job.description
