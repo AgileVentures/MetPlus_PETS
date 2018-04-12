@@ -118,6 +118,7 @@ Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
 end
 
 Given(/^I am creating a Job$/) do
+  step %(I press "Post Job" within "all-jobs-pane")
   step %(I fill in "job_title" with "Developer")
   step %(I fill in "job_company_job_id" with "73")
   step %(I fill in "job_description" with "Development")
@@ -130,7 +131,7 @@ When(/^I select (\d+) available positions from the dropdown$/) do |arg1|
   select(arg1, from: '.dropdown_menu')
 end
 
-When(/^submit the create the new job$/) do
+When(/^I submit the new job$/) do
   step %(I press "Create")
 end
 

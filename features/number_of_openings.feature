@@ -10,12 +10,12 @@ Background: Company person is logged in
    When I press "Post Job" within "all-jobs-pane"
    Then I sould see a text field "Available Positions" with the value set to 1
 
- Scenario: should see the number of selected positions
-   Given I press "Post Job" within "all-jobs-pane"
-   And I am creating a Job
-   When I select 2 available positions from the dropdown
-   And submit the create the new job
-   Then I should see "2 of 2 Positions available"
+ Scenario: Should see the number of selected positions
+   Given I am creating a Job
+   And I fill in "Available Positions" with "2"
+   When I submit the new job
+   Then I should see "Available positions:"
+   And I should see "2 of 2 positions available"
 
  Scenario: number of available positions should decrease when a job seeker is accepted
    When I accept a Job Seeker for a Job with 2 opportunities
