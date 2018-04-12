@@ -91,18 +91,14 @@ And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
 
-When(/^I accept a Job Seeker for a Job with (\d+) opportunities$/) do |number|
-  company = Company.find_by_id(1)
-  company_person = CompanyPerson.find_by(email: 'companyperson@mail.com')
-  job_seeker = FactoryBot.create(:job_seeker)
-  job = FactoryBot.create(:job, company: company, company_person: company_person,
-                                                                                  title: 'Developer') # , available_positions: number)
-  job_application = FactoryBot.create(:job_application,
-                                                        job: job, job_seeker: job_seeker, id: 1)
-  Task.new_review_job_application_task job_application, company
-  step %{I go to the "Developer" job page}
+When(/^I accept "(.*?)" job seeker for "(.*?)" job with (\d+) opportunities$/) do |email, job, number|
+  job_seeker = JobSeeker.find_by(email: email)
+  job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
+  company = Company.find_by_name("Widgets Inc.")
+  Task.new_review_job_application_task job_app, company
+  step %{I go to the "#{job}" job page}
   step %{I should see "Applications for this Job"}
-  step %{I accept "#{job_seeker.email}" application for "#{job.title}"}
+  step %{I press "Accept"}
 end
 
 Then(/^the task to review the Job Application just accepted, should be closed$/) do

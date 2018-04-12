@@ -4,7 +4,37 @@ Feature: Number of openings on a specific job
   So that I can hire multiple people for the same position
 
 Background: Company person is logged in
-   Given I am logged in as company person
+   Given the default settings are present
+
+Given the following agency people exist:
+  | agency  | role  | first_name | last_name | email            | password  |
+  | MetPlus | JD    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+
+Given the following companies exist:
+  | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+  | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
+
+Given the following company people exist:
+  | company      | role  | first_name | last_name | email            | password  | phone        |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
+
+Given the following jobs exist:
+  | title               | company_job_id  | description                 | company      | creator          | available_positions |
+  | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com | 2                  |
+
+Given the following jobseekers exist:
+  | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
+  | John      | Seeker   | john.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+
+Given the following resumes exist:
+  | file_name          | job_seeker            |
+  | Janitor-Resume.doc | john.seeker@gmail.com |
+
+Given the following job applications exist:
+  | job title          | job seeker             |
+  | software developer | john.seeker@gmail.com |
+
+Given I login as "carter@ymail.com" with password "qwerty123"
    
  Scenario: Company person should see a text field of available positions when creating a job
    When I press "Post Job" within "all-jobs-pane"
@@ -17,9 +47,9 @@ Background: Company person is logged in
    Then I should see "Available positions:"
    And I should see "2 of 2 positions available"
 
- Scenario: number of available positions should decrease when a job seeker is accepted
-   When I accept a Job Seeker for a Job with 2 opportunities
-   And I go to the "Developer" job page
+ Scenario: Number of available positions should decrease when a job seeker is accepted
+   When I accept "john.seeker@gmail.com" job seeker for "software developer" job with 2 opportunities
+   And I go to the "software developer" job page
    Then I see '1 of 2 Positions available'
    And the task to review the Job Application just accepted, should be closed
 

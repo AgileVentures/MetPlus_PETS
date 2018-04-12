@@ -1,4 +1,5 @@
 And(/^I (?:login|am logged in) as "([^"]*)" with password "([^"]*)"$/) do |email, password|
+  step %(I am on the home page)
   step %(I click the "Log In" link)
   step %(I fill in "user_email" with "#{email}")
   step %(I fill in "user_password" with "#{password}")
