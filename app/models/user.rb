@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
   end
 
   def can_login?
-    return true
+    true
   end
 
   def pets_user
