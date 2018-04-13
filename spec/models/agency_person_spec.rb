@@ -174,34 +174,34 @@ RSpec.describe AgencyPerson, type: :model do
   describe 'Identity check with' do
     let(:agency) { FactoryBot.create(:agency) }
     let(:agency1) { FactoryBot.create(:agency) }
-    describe '#is_job_developer?' do
+    describe '#job_developer?' do
       let(:person) { FactoryBot.create(:job_developer, agency: agency) }
       let(:person_other_agency) { FactoryBot.create(:job_developer, agency: agency1) }
       it 'correct' do
-        expect(person.is_job_developer?(agency)).to be true
+        expect(person.job_developer?(agency)).to be true
       end
       it 'incorrect' do
-        expect(person_other_agency.is_job_developer?(agency)).to be false
+        expect(person_other_agency.job_developer?(agency)).to be false
       end
     end
-    describe '#is_case_manager?' do
+    describe '#case_manager?' do
       let(:person) { FactoryBot.create(:case_manager, agency: agency) }
       let(:person_other_agency) { FactoryBot.create(:case_manager, agency: agency1) }
       it 'correct' do
-        expect(person.is_case_manager?(agency)).to be true
+        expect(person.case_manager?(agency)).to be true
       end
       it 'incorrect' do
-        expect(person_other_agency.is_case_manager?(agency)).to be false
+        expect(person_other_agency.case_manager?(agency)).to be false
       end
     end
-    describe '#is_agency_admin?' do
+    describe '#agency_admin?' do
       let(:person) { FactoryBot.create(:agency_admin, agency: agency) }
       let(:person_other_agency) { FactoryBot.create(:agency_admin, agency: agency1) }
       it 'correct' do
-        expect(person.is_agency_admin?(agency)).to be true
+        expect(person.agency_admin?(agency)).to be true
       end
       it 'incorrect' do
-        expect(person_other_agency.is_agency_admin?(agency)).to be false
+        expect(person_other_agency.agency_admin?(agency)).to be false
       end
     end
   end

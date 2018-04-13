@@ -1,6 +1,6 @@
 class AgencyPersonPolicy < ApplicationPolicy
   def update?
-    user.is_agency_admin? record.agency
+    user.agency_admin? record.agency
   end
 
   def destroy?
@@ -8,19 +8,19 @@ class AgencyPersonPolicy < ApplicationPolicy
   end
 
   def home?
-    user.is_agency_person? record.agency
+    user.agency_person? record.agency
   end
 
   def show?
-    user.is_agency_person? record.agency
+    user.agency_person? record.agency
   end
 
   def assign_job_seeker?
-    user.is_agency_person? record.agency
+    user.agency_person? record.agency
   end
 
   def list_js_cm?
-    user.is_agency_person? record.agency
+    user.agency_person? record.agency
   end
 
   def list_js_jd?
@@ -28,7 +28,7 @@ class AgencyPersonPolicy < ApplicationPolicy
   end
 
   def list_js_without_jd?
-    user.is_agency_person? record.agency
+    user.agency_person? record.agency
   end
 
   def list_js_without_cm?
@@ -36,7 +36,7 @@ class AgencyPersonPolicy < ApplicationPolicy
   end
 
   def update_profile?
-    user.is_agency_person? record.agency and user == record
+    user.agency_person? record.agency and user == record
   end
 
   def edit_profile?
@@ -44,7 +44,7 @@ class AgencyPersonPolicy < ApplicationPolicy
   end
 
   def my_profile?
-    user.is_agency_person? record.agency
+    user.agency_person? record.agency
   end
 
 end

@@ -29,13 +29,13 @@ def page_translator(name)
   when /'.+' edit profile/
     user = name.match(/'(.+)'/)
     user = User.find_by_email(user[1]).pets_user
-    return edit_job_seeker_path user if user.is_job_seeker?
+    return edit_job_seeker_path user if user.job_seeker?
     return edit_profile_company_person_path user if user.is_a? CompanyPerson
     return edit_profile_agency_person_path user if user.is_a? AgencyPerson
   when /'.+' profile/
     user = name.match(/'(.+)'/)
     user = User.find_by_email(user[1]).pets_user
-    return my_profile_job_seeker_path user if user.is_job_seeker?
+    return my_profile_job_seeker_path user if user.job_seeker?
     return my_profile_company_person_path user if user.is_a? CompanyPerson
     return my_profile_agency_person_path user if user.is_a? AgencyPerson
   when /agency '(.+)' edit/

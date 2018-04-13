@@ -25,7 +25,7 @@ class JobSeeker < ActiveRecord::Base
     job_seeker_status
   end
 
-  def is_job_seeker?
+  def job_seeker?
     true
   end
 
@@ -48,7 +48,7 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def assign_job_developer(job_developer, agency)
-    unless job_developer.is_job_developer? agency
+    unless job_developer.job_developer? agency
       raise "User #{job_developer.full_name} is not a Job Developer"
     end
     assign_agency_person(job_developer, :JD)
@@ -59,7 +59,7 @@ class JobSeeker < ActiveRecord::Base
   end
 
   def assign_case_manager(case_manager, agency)
-    unless case_manager.is_case_manager? agency
+    unless case_manager.case_manager? agency
       raise "User #{case_manager.full_name} is not a Case Manager"
     end
     assign_agency_person(case_manager, :CM)

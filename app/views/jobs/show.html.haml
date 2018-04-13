@@ -29,13 +29,13 @@
 
   #apply_job
   - if pets_user && @job.active?
-    - if User.is_job_developer?(pets_user)
+    - if User.job_developer?(pets_user)
       = link_to 'Click Here to Submit an Application for Job Seeker', '#',
                 class: 'col-sm-offset-4', id: 'jd-apply-button',
                 data: { toggle: 'modal', target: '#jdApplyJobModal' }
       = render partial: '/job_applications/jd_apply_job_modal', locals: { job: @job }
       = render partial: '/job_applications/preview_modal', locals: { job: @job }
-    - elsif pets_user.is_job_seeker?
+    - elsif pets_user.job_seeker?
       - if @job.last_application_by_job_seeker(pets_user)
         .panel.panel-primary.center-aligned-div
           .panel-body
@@ -59,7 +59,7 @@
     = render partial: 'job_applications/process_modal'
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-company-person', @job) } }
-  - if pets_user && User.is_job_developer?(pets_user)
+  - if pets_user && User.job_developer?(pets_user)
     %h3 Applications for this Job
     .pagination-div{ id: "applications-job",
                      data: { url: list_applications_path('job-job-developer', @job) } }

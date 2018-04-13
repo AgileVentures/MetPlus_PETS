@@ -102,8 +102,8 @@ class ApplicationController < ActionController::Base
     def determine_if_admin person
       # returns 1) true/false depending on whether or not person is agency admin,
       #         2) true/false depending on whether or not person is company admin
-      aa = person.is_agency_admin?(current_agency)
-      ca = aa ? false : person.is_company_admin?(@company)
+      aa = person.agency_admin?(current_agency)
+      ca = aa ? false : person.company_admin?(@company)
 
       return aa, ca
     end

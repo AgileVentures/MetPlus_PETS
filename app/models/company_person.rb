@@ -67,17 +67,17 @@ class CompanyPerson < ActiveRecord::Base
   end
 
 
-  def is_company_admin? company
+  def company_admin? company
     return false if self.company != company
     has_role?(:CA)
   end
 
-  def is_company_contact? company
+  def company_contact? company
     return false if self.company != company
     has_role?(:CC)
   end
 
-  def is_company_person? company
+  def company_person? company
     self.company == company
   end
 

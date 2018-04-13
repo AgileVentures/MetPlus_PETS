@@ -149,10 +149,10 @@ describe JobSeeker, type: :model do
       expect(JobSeeker.acting_as?(String)).to be false
     end
   end
-  describe '#is_job_seeker?' do
+  describe '#job_seeker?' do
     let(:person) { FactoryBot.create(:job_seeker) }
     it 'true' do
-      expect(person.is_job_seeker?).to be true
+      expect(person.job_seeker?).to be true
     end
   end
 

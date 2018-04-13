@@ -106,7 +106,7 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_agency_closed(user)
-    if user.is_agency_admin?(user.agency)
+    if user.agency_admin?(user.agency)
       closed_tasks.agency_tasks(user)
     else
       closed_tasks.user_tasks(user)
@@ -114,7 +114,7 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_company_open(user)
-    if user.is_company_admin?(user.company)
+    if user.company_admin?(user.company)
       open_tasks.company_person_tasks(user)
     else
       open_tasks.user_tasks(user)
@@ -130,7 +130,7 @@ class Task < ActiveRecord::Base
   end
 
   def self.find_by_company_closed(user)
-    if user.is_company_admin?(user.company)
+    if user.company_admin?(user.company)
       closed_tasks.company_tasks(user)
     else
       closed_tasks.user_tasks(user)

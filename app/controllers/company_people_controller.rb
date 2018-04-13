@@ -26,7 +26,7 @@ class CompanyPeopleController < ApplicationController
       else
         flash[:notice] = 'Your profile was updated successfully.'
       end
-      is_company_admin = @company_person.is_company_admin? @company_person.company
+      is_company_admin = @company_person.company_admin? @company_person.company
 
       redirect_to is_company_admin ?
         @company_person : home_company_person_path(@company_person)
