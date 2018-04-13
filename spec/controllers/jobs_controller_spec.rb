@@ -161,8 +161,8 @@ RSpec.describe JobsController, type: :controller do
       let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
       let!(:other_inc) do
         FactoryBot.create(:company, name: 'Other inc',
-          status:  'active',
-          agencies: [agency])
+                                    status:  'active',
+                                    agencies: [agency])
       end
 
       let!(:job_1_widget_company) { FactoryBot.create(:job, company: bosh) }
@@ -640,7 +640,7 @@ RSpec.describe JobsController, type: :controller do
         # Next line added to ensure the query is done and that the
         # paginate is also called
         request_first_page
-        assigns(:jobs).each {}
+        assigns(:jobs).each{}
         expect(assigns(:jobs).all.size).to be 10
         expect(assigns(:jobs).first.title).to eq 'Awesome job 00'
         expect(assigns(:jobs).last.title).to eq 'Awesome job 09'
@@ -661,7 +661,7 @@ RSpec.describe JobsController, type: :controller do
         # Next line added to ensure the query is done and that the
         # paginate is also called
         request_last_page
-        assigns(:jobs).each {}
+        assigns(:jobs).each{}
         expect(assigns(:jobs).first.title).to eq 'Awesome job 30'
         expect(assigns(:jobs).size).to eq 1
       end
@@ -682,7 +682,7 @@ RSpec.describe JobsController, type: :controller do
       it 'check jobs' do
         # Next line added to ensure the query is done and that the
         # paginate is also called
-        assigns(:jobs).each {}
+        assigns(:jobs).each{}
         expect(assigns(:jobs).all.size).to be 4
         expect(assigns(:jobs).first.title).to eq 'Awesome new job 0'
         expect(assigns(:jobs).last.title).to eq 'Awesome new job 3'
