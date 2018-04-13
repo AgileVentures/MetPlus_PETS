@@ -34,15 +34,11 @@ class User < ActiveRecord::Base
   end
 
   def self.company_admin?(user)
-    return false if user.nil?
-    return false unless user.actable_type == 'CompanyPerson'
-    user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
+    self.company_role?(user, :CA)
   end
 
   def self.company_contact?(user)
-    return false if user.nil?
-    return false unless user.actable_type == 'CompanyPerson'
-    user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CC]
+    self.company_role?(user, :CC)
   end
 
   def self.company_person?(user)
@@ -106,5 +102,11 @@ class User < ActiveRecord::Base
     else
       super
     end
+  end
+
+  def self.company_role?(user, role)
+    return false if user.nil?
+    return false unless user.actable_type == 'CompanyPerson'
+    user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[role]
   end
 end
