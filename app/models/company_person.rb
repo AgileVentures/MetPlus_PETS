@@ -81,6 +81,10 @@ class CompanyPerson < ActiveRecord::Base
     self.company == company
   end
 
+  def can_login?
+    company.active?
+  end
+
   private
   def has_role? role
     company_roles.pluck(:role).include?CompanyRole::ROLE[role]

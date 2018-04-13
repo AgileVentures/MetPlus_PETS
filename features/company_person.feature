@@ -26,9 +26,10 @@ Feature: Company Person
       | CC    |
 
     Given the following companies exist:
-      | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
-      | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
-      | MetPlus | Feature Inc. | feature.com | 555-222-3333 | corp@feature.com | corp@feature.com | 12-3456788 | active |
+      | agency  | name          | website      | phone        | email             | job_email         | ein        | status   |
+      | MetPlus | Widgets Inc.  | widgets.com  | 555-222-3333 | corp@ymail.com    | corp@ymail.com    | 12-3456789 | active   |
+      | MetPlus | Feature Inc.  | feature.com  | 555-222-3333 | corp@feature.com  | corp@feature.com  | 12-3456788 | active   |
+      | MetPlus | Inactive Inc. | inactive.com | 555-222-3333 | corp@inactive.com | corp@inactive.com | 12-3456787 | inactive |
 
     Given the following job skills exist:
     | name            | description             | organization |
@@ -44,10 +45,11 @@ Feature: Company Person
       | Feature Inc.  | 111 River Valley | Utah    | 12334   | New Jersey |
 
     Given the following company people exist:
-      | company      | role  | first_name | last_name | email            | password  | phone        |
-      | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
-      | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
-      | Feature Inc. | CA    | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
+      | company       | role  | first_name | last_name | email             | password  | phone        |
+      | Widgets Inc.  | CA    | John       | Smith     | carter@ymail.com  | qwerty123 | 555-222-3334 |
+      | Widgets Inc.  | CC    | Jane       | Smith     | jane@ymail.com    | qwerty123 | 555-222-3334 |
+      | Feature Inc.  | CA    | Charles    | Daniel    | ca@feature.com    | qwerty123 | 555-222-3334 |
+      | Inactive Inc. | CA    | Jean       | Xavier    | ca@inactive.com   | qwerty123 | 555-222-3334 |
 
     Given the following tasks exist:
       | task_type          | owner                | deferred_date | status      | targets               |
@@ -314,3 +316,8 @@ Feature: Company Person
 
     # attempt to delete job skill associated with a job
     And I should not see the "/skills/1" link
+
+  Scenario: Company person of inactive company cannot login
+    Given  I am on the home page
+    When I login as "ca@inactive.com" with password "qwerty123"
+    Then I should see "Your company is no longer active in PETS"
