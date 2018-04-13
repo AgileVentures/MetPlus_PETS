@@ -23,7 +23,11 @@ class User < ActiveRecord::Base
   #             How-To:-Require-admin-to-activate-account-before-sign_in
 
   def active_for_authentication?
-    super && approved?
+    super && approved? && pets_user.can_login?
+  end
+
+  def can_login?
+    return true
   end
 
   def inactive_message
@@ -31,6 +35,8 @@ class User < ActiveRecord::Base
       :signed_up_but_not_approved
     elsif !approved? && pets_user.try(:company_denied?)
       :not_approved
+    elsif pets_user.company&.try(:inactive?)
+      :company_no_longer_active
     else
       super
     end
