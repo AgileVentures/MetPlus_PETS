@@ -57,6 +57,10 @@ class JobsController < ApplicationController
                end
     @query = Job.ransack(search_params) # For form display of entered values
 
+    if current_user && User.is_company_person?(current_user)
+      q_params['company_id_in'] = current_user.pets_user.company.id
+    end
+
     @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)

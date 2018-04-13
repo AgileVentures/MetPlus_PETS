@@ -169,7 +169,7 @@ Scenario: Search by company
   And I should see "Job3"
   And I should see "Job4"
   
-  @javascript
+@javascript
 Scenario: Search by status
   Given I am on the home page
   And I click the "Jobs" link
@@ -194,3 +194,13 @@ Scenario: Search by status
   And I should not see "Job2"
   And I should not see "Job3"
   And I should not see "Job4"
+
+@javascript
+Scenario: Only list jobs of a specific
+  Given I am on the home page
+  And I login as "carter@ymail.com" with password "qwerty123"
+  And I click the "Jobs" link
+  Then I should not see "Job3"
+
+  And I click the "Show Search Form" link
+  And I should not see "Company" in the search form
