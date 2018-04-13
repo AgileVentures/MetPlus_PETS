@@ -4,53 +4,55 @@ class User < ActiveRecord::Base
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :confirmable,
          :validatable
-   actable
-   validates_presence_of :first_name
-   validates_presence_of :last_name
-   validates   :phone, :phone => true
-   validates   :email, :email => true
+  actable
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+  validates   :phone, phone: true
+  validates   :email, email: true
 
-   def self.is_job_seeker?(user)
-     user.actable_type == 'JobSeeker'
-   end
+  def self.job_seeker?(user)
+    user.actable_type == 'JobSeeker'
+  end
 
-   def self.is_job_developer?(user)
-      return false unless user.actable_type == "AgencyPerson"
-      user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:JD]
-   end
+  def self.job_developer?(user)
+    return false unless user.actable_type == 'AgencyPerson'
+    user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:JD]
+  end
 
-   def self.is_case_manager?(user)
-      return false unless user.actable_type == "AgencyPerson"
-      user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:CM]
-   end
+  def self.case_manager?(user)
+    return false unless user.actable_type == 'AgencyPerson'
+    user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:CM]
+  end
 
-    def self.is_agency_admin?(user)
-      return false unless user.actable_type == "AgencyPerson"
-      user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:AA]
-    end
+  def self.agency_admin?(user)
+    return false unless user.actable_type == 'AgencyPerson'
+    user.actable.agency_roles.pluck(:role).include? AgencyRole::ROLE[:AA]
+  end
 
-    def self.is_agency_person?(user)
-      is_job_developer?(user) || is_case_manager?(user) || is_agency_admin?(user)
-    end
+  def self.agency_person?(user)
+    job_developer?(user) || case_manager?(user) || agency_admin?(user)
+  end
 
-    def self.is_company_admin?(user)
-      return false unless user.actable_type == "CompanyPerson"
-      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
-    end
+  def self.company_admin?(user)
+    return false if user.nil?
+    return false unless user.actable_type == 'CompanyPerson'
+    user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
+  end
 
-    def self.is_company_contact?(user)
-      return false unless user.actable_type == "CompanyPerson"
-      user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CC]
-    end
+  def self.company_contact?(user)
+    return false if user.nil?
+    return false unless user.actable_type == 'CompanyPerson'
+    user.actable.company_roles.pluck(:role).include? CompanyRole::ROLE[:CC]
+  end
 
-    def self.is_company_person?(user)
-      is_company_contact?(user) || is_company_admin?(user)
-    end
+  def self.company_person?(user)
+    company_contact?(user) || company_admin?(user)
+  end
 
-    def full_name(order={:last_name_first => true})
-      return "#{last_name}, #{first_name}" if order[:last_name_first]
-      "#{first_name} #{last_name}"
-    end
+  def full_name(order = { last_name_first: true })
+    return "#{last_name}, #{first_name}" if order[:last_name_first]
+    "#{first_name} #{last_name}"
+  end
 
   # Devise controller method overrides ...
   # ...see: https://github.com/plataformatec/devise/wiki/
@@ -61,38 +63,38 @@ class User < ActiveRecord::Base
   end
 
   def pets_user
-    self.try(:actable).nil? ? self : self.actable
+    try(:actable).nil? ? self : actable
   end
 
-  def is_job_seeker?
+  def job_seeker?
     false
   end
 
-  def is_job_developer? agency
+  def job_developer?(_agency)
     false
   end
 
-  def is_case_manager? agency
+  def case_manager?(_agency)
     false
   end
 
-  def is_agency_admin? agency
+  def agency_admin?(_agency)
     false
   end
 
-  def is_agency_person? agency
+  def agency_person?(_agency)
     false
   end
 
-  def is_company_admin? company
+  def company_admin?(_company)
     false
   end
 
-  def is_company_contact? company
+  def company_contact?(_company)
     false
   end
 
-  def is_company_person? company
+  def company_person?(_company)
     false
   end
 
@@ -105,5 +107,4 @@ class User < ActiveRecord::Base
       super
     end
   end
-
 end

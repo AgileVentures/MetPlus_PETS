@@ -62,7 +62,7 @@
                                     agency_role: 'JD',
                                     preview_mode: preview_mode}
       %td
-    - if pets_user.is_agency_person? current_agency
+    - if pets_user.agency_person? current_agency
       %tr
         %td
           %strong Status

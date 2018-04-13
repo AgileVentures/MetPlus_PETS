@@ -35,7 +35,7 @@
           %strong Status:
         %td
           = @company_person.status
-          - if User.is_agency_admin?(pets_user) || User.is_company_admin?(pets_user)
+          - if User.agency_admin?(pets_user) || User.company_admin?(pets_user)
             = link_to '(Invite Again)',
               user_invitation_path(user: {email: @company_person.email,
                                   first_name: @company_person.first_name,
@@ -51,7 +51,7 @@
 
 .clearfix
 %br
-- if User.is_agency_admin?(pets_user) || User.is_company_admin?(pets_user)
+- if User.agency_admin?(pets_user) || User.company_admin?(pets_user)
   .col-sm-2.col-sm-offset-3
     = button_to 'Edit Person', edit_company_person_path(@company_person),
             method: :get, class: 'btn btn-primary'

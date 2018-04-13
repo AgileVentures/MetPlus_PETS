@@ -33,7 +33,7 @@ class JobSeekerPolicy < ApplicationPolicy
   def destroy?
     # account's owner
     # agency admin
-    user == record || user.is_agency_admin?(user.try(:agency))
+    user == record || user.agency_admin?(user.try(:agency))
   end
 
   def create?
@@ -87,7 +87,7 @@ class JobSeekerPolicy < ApplicationPolicy
 
   def download_resume?
     user.is_a?(AgencyPerson) ||
-      User.is_company_person?(user) &&
+      User.company_person?(user) &&
         record.job_applications.where(job: user.company.jobs.active).exists?
   end
 end

@@ -57,7 +57,7 @@ class JobsController < ApplicationController
                end
     @query = Job.ransack(search_params) # For form display of entered values
 
-    if current_user && User.is_company_person?(current_user)
+    if current_user && User.company_person?(current_user)
       q_params['company_id_in'] = current_user.pets_user.company.id
     end
 
@@ -354,7 +354,7 @@ class JobsController < ApplicationController
   private
 
   def set_job_seekers
-    return unless pets_user && pets_user.is_job_developer?(current_agency)
+    return unless pets_user && pets_user.job_developer?(current_agency)
     @job_seekers = pets_user.job_seekers
   end
 

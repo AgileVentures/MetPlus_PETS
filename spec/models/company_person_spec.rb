@@ -120,29 +120,29 @@ describe CompanyPerson, type: :model do
     end
   end
 
-  describe '#is_company_contact?' do
+  describe '#company_contact?' do
     let(:company) { FactoryBot.create(:company) }
     let(:company1) { FactoryBot.create(:company) }
     let(:person) { FactoryBot.create(:company_contact, company: company) }
     let(:person_other_company) { FactoryBot.create(:company_contact, company: company1) }
     it 'correct' do
-      expect(person.is_company_contact?(company)).to be true
+      expect(person.company_contact?(company)).to be true
     end
     it 'incorrect' do
-      expect(person_other_company.is_company_contact?(company)).to be false
+      expect(person_other_company.company_contact?(company)).to be false
     end
   end
 
-  describe '#is_company_admin?' do
+  describe '#company_admin?' do
     let(:company) { FactoryBot.create(:company) }
     let(:company1) { FactoryBot.create(:company) }
     let(:person) { FactoryBot.create(:company_admin, company: company) }
     let(:person_other_company) { FactoryBot.create(:company_admin, company: company1) }
     it 'correct' do
-      expect(person.is_company_admin?(company)).to be true
+      expect(person.company_admin?(company)).to be true
     end
     it 'incorrect' do
-      expect(person_other_company.is_company_admin?(company)).to be false
+      expect(person_other_company.company_admin?(company)).to be false
     end
   end
 

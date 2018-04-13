@@ -24,7 +24,7 @@ module JobSeekers
     def assign_job_developer_to_job_seeker(job_seeker, job_developer, is_self_assign)
       obj = Struct.new(:job_seeker, :agency_person)
 
-      unless job_developer.is_job_developer? job_developer.agency
+      unless job_developer.job_developer? job_developer.agency
         raise NotAJobDeveloper, ''
       end
       job_seeker.assign_job_developer job_developer, job_developer.agency
@@ -38,7 +38,7 @@ module JobSeekers
     def assign_case_manager_to_job_seeker(job_seeker, case_manager, is_self_assign)
       obj = Struct.new(:job_seeker, :agency_person)
 
-      raise NotACaseManager, '' unless case_manager.is_case_manager? case_manager.agency
+      raise NotACaseManager, '' unless case_manager.case_manager? case_manager.agency
       job_seeker.assign_case_manager case_manager, case_manager.agency
       if is_self_assign
         Event.create(:CM_SELF_ASSIGN_JS, obj.new(job_seeker, case_manager))

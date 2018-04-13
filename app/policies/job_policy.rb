@@ -10,7 +10,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def new?
-    User.is_job_developer?(user) || User.is_agency_admin?(user) ||
+    User.job_developer?(user) || User.agency_admin?(user) ||
       user.is_a?(CompanyPerson)
   end
 
@@ -19,7 +19,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def edit?
-    User.is_job_developer?(user) || User.is_agency_admin?(user) ||
+    User.job_developer?(user) || User.agency_admin?(user) ||
       correct_company_person?
   end
 
@@ -36,8 +36,8 @@ class JobPolicy < ApplicationPolicy
   end
 
   def show?
-    user.nil? || user.is_a?(JobSeeker) || User.is_job_developer?(user) ||
-      User.is_agency_admin?(user) || correct_company_person?
+    user.nil? || user.is_a?(JobSeeker) || User.job_developer?(user) ||
+      User.agency_admin?(user) || correct_company_person?
   end
 
   def apply?
@@ -45,7 +45,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def revoke?
-    User.is_job_developer?(user) || correct_company_person?
+    User.job_developer?(user) || correct_company_person?
   end
 
   def notify_job_developer?
@@ -53,7 +53,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def match_jd_job_seekers?
-    user && User.is_job_developer?(user)
+    user && User.job_developer?(user)
   end
 
   private

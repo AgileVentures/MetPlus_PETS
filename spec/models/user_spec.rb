@@ -121,32 +121,32 @@ RSpec.describe User, type: :model do
       @cm_and_jd.save
     end
     it 'job seeker' do
-      expect(User.is_job_seeker?(@job_seeker.user)).to be true
-      expect(User.is_job_seeker?(@job_developer.user)).not_to be true
-      expect(User.is_job_seeker?(@case_manager.user)).not_to be true
-      expect(User.is_job_seeker?(@agency_admin.user)).not_to be true
+      expect(User.job_seeker?(@job_seeker.user)).to be true
+      expect(User.job_seeker?(@job_developer.user)).not_to be true
+      expect(User.job_seeker?(@case_manager.user)).not_to be true
+      expect(User.job_seeker?(@agency_admin.user)).not_to be true
     end
     it 'job developer' do
-      expect(User.is_job_developer?(@job_developer.user)).to be true
-      expect(User.is_job_developer?(@job_seeker.user)).not_to be true
-      expect(User.is_job_developer?(@case_manager.user)).not_to be true
-      expect(User.is_job_developer?(@agency_admin.user)).not_to be true
+      expect(User.job_developer?(@job_developer.user)).to be true
+      expect(User.job_developer?(@job_seeker.user)).not_to be true
+      expect(User.job_developer?(@case_manager.user)).not_to be true
+      expect(User.job_developer?(@agency_admin.user)).not_to be true
     end
     it 'case manager' do
-      expect(User.is_case_manager?(@case_manager.user)).to be true
-      expect(User.is_case_manager?(@job_seeker.user)).not_to be true
-      expect(User.is_case_manager?(@job_developer.user)).not_to be true
-      expect(User.is_case_manager?(@agency_admin.user)).not_to be true
+      expect(User.case_manager?(@case_manager.user)).to be true
+      expect(User.case_manager?(@job_seeker.user)).not_to be true
+      expect(User.case_manager?(@job_developer.user)).not_to be true
+      expect(User.case_manager?(@agency_admin.user)).not_to be true
     end
     it 'agency admin' do
-      expect(User.is_agency_admin?(@agency_admin.user)).to be true
-      expect(User.is_agency_admin?(@case_manager.user)).not_to be true
-      expect(User.is_agency_admin?(@job_developer.user)).not_to be true
-      expect(User.is_agency_admin?(@job_seeker.user)).not_to be true
+      expect(User.agency_admin?(@agency_admin.user)).to be true
+      expect(User.agency_admin?(@case_manager.user)).not_to be true
+      expect(User.agency_admin?(@job_developer.user)).not_to be true
+      expect(User.agency_admin?(@job_seeker.user)).not_to be true
     end
     it 'case manager is also a job developer' do
-      expect(User.is_case_manager?(@cm_and_jd.user)).to be true
-      expect(User.is_job_developer?(@cm_and_jd.user)).to be true
+      expect(User.case_manager?(@cm_and_jd.user)).to be true
+      expect(User.job_developer?(@cm_and_jd.user)).to be true
     end
   end
 
@@ -164,12 +164,21 @@ RSpec.describe User, type: :model do
       @company_admin.save
     end
     it 'company admin' do
-      expect(User.is_company_admin?(@company_admin.user)).to be true
-      expect(User.is_company_admin?(@company_contact.user)).not_to be true
+      expect(User.company_admin?(@company_admin.user)).to be true
+      expect(User.company_admin?(@company_contact.user)).not_to be true
     end
     it 'company contact' do
-      expect(User.is_company_contact?(@company_contact.user)).to be true
-      expect(User.is_company_contact?(@company_admin.user)).not_to be true
+      expect(User.company_contact?(@company_contact.user)).to be true
+      expect(User.company_contact?(@company_admin.user)).not_to be true
+    end
+
+    context 'when user is nil' do
+      it 'company admin' do
+        expect(User.company_admin?(nil)).not_to be true
+      end
+      it 'company contact' do
+        expect(User.company_contact?(nil)).not_to be true
+      end
     end
   end
   describe '#full_name' do
@@ -231,52 +240,52 @@ RSpec.describe User, type: :model do
       expect(user.pets_user).to be_a CompanyPerson
     end
   end
-  describe '#is_job_developer?' do
+  describe '#job_developer?' do
     let(:agency) { FactoryBot.create(:agency) }
     let(:person) { FactoryBot.create(:job_developer, agency: agency) }
     let(:user) { User.find_by_id person.user.id }
     it 'false' do
-      expect(user.is_job_developer?(agency)).to be false
+      expect(user.job_developer?(agency)).to be false
     end
   end
-  describe '#is_case_manager?' do
+  describe '#case_manager?' do
     let(:agency) { FactoryBot.create(:agency) }
     let(:person) { FactoryBot.create(:case_manager, agency: agency) }
     let(:user) { User.find_by_id person.user.id }
     it 'false' do
-      expect(user.is_case_manager?(agency)).to be false
+      expect(user.case_manager?(agency)).to be false
     end
   end
-  describe '#is_agency_admin?' do
+  describe '#agency_admin?' do
     let(:agency) { FactoryBot.create(:agency) }
     let(:person) { FactoryBot.create(:agency_admin, agency: agency) }
     let(:user) { User.find_by_id person.user.id }
     it 'false' do
-      expect(user.is_agency_admin?(agency)).to be false
+      expect(user.agency_admin?(agency)).to be false
     end
   end
-  describe '#is_job_seeker?' do
+  describe '#job_seeker?' do
     let(:agency) { FactoryBot.create(:agency) }
     let(:person) { FactoryBot.create(:job_seeker) }
     let(:user) { User.find_by_id person.user.id }
     it 'false' do
-      expect(user.is_job_seeker?).to be false
+      expect(user.job_seeker?).to be false
     end
   end
-  describe '#is_company_contact?' do
+  describe '#company_contact?' do
     let(:company) { FactoryBot.create(:company) }
     let(:person) { FactoryBot.create(:company_contact, company: company) }
     let(:user) { User.find_by_id person.user.id }
     it 'false' do
-      expect(user.is_company_contact?(company)).to be false
+      expect(user.company_contact?(company)).to be false
     end
   end
-  describe '#is_company_admin?' do
+  describe '#company_admin?' do
     let(:company) { FactoryBot.create(:company) }
     let(:person) { FactoryBot.create(:company_admin, company: company) }
     let(:user) { User.find_by_id person.user.id }
     it 'false' do
-      expect(user.is_company_admin?(company)).to be false
+      expect(user.company_admin?(company)).to be false
     end
   end
 end

@@ -121,22 +121,22 @@ class AgencyPerson < ActiveRecord::Base
     seekers
   end
 
-  def is_job_developer? agency
+  def job_developer? agency
     return false if self.agency != agency
     has_role?(:JD)
   end
 
-  def is_case_manager? agency
+  def case_manager? agency
     return false if self.agency != agency
     has_role?(:CM)
   end
 
-  def is_agency_admin? agency
+  def agency_admin? agency
     return false if self.agency != agency
     has_role?(:AA)
   end
 
-  def is_agency_person? agency
+  def agency_person? agency
     self.agency == agency
   end
 

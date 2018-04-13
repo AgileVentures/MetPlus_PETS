@@ -5,33 +5,33 @@
     .panel.with-nav-tabs.panel-success.company-person-task-tabs
       .panel-heading
         %ul.nav.nav-tabs
-          - if @company_person.is_company_admin?(@company)
+          - if @company_person.company_admin?(@company)
             %li
               %a{ href:'tab1', data: { target: '.tasks #tab1', toggle: 'pill' } }
                 Unassigned Tasks
           %li.active.in
             %a{ href: '#tab2', data: { target: '.tasks #tab2', toggle: 'pill' } }
               Your Open Tasks
-          - if @company_person.is_company_admin?(@company)
+          - if @company_person.company_admin?(@company)
             %li
               %a{ href:'tab3', data: { target: '.tasks #tab3', toggle: 'pill' } }
                 All Open Tasks
           %li
             %a{ href:'tab4', data: { target: '.tasks #tab4', toggle: 'pill' } }
-              - if @company_person.is_company_admin?(@company)
+              - if @company_person.company_admin?(@company)
                 All Closed Tasks
               - else
                 Your Closed Tasks
       .panel-body
         .tab-content
-          - if @company_person.is_company_admin?(@company)
+          - if @company_person.company_admin?(@company)
             .tab-pane#tab1
               = render partial: 'tasks/tasks_structure',
                        :locals => {task_type: @company_new}
           .tab-pane.active#tab2
             = render partial: 'tasks/tasks_structure',
                        :locals => {task_type: @task_type}
-          - if @company_person.is_company_admin?(@company)
+          - if @company_person.company_admin?(@company)
             .tab-pane#tab3
               = render partial: 'tasks/tasks_structure',
                        :locals => {task_type: @company_all}
@@ -71,7 +71,7 @@
                          data: { url: list_jobs_path(@job_type) } }
 
       .tab-pane.fade#all-on-pets-pane
-        - if @company_person.is_company_admin? @company
+        - if @company_person.company_admin? @company
           = link_to 'Invite Colleague',
                      new_user_invitation_path(person_type: 'CompanyPerson',
                      org_id: pets_user.company.id),
