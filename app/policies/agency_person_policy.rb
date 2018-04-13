@@ -36,7 +36,7 @@ class AgencyPersonPolicy < ApplicationPolicy
   end
 
   def update_profile?
-    user.agency_person? record.agency && user == record
+    user.agency_person?(record.agency) && user == record
   end
 
   def edit_profile?
