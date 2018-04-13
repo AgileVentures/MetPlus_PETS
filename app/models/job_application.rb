@@ -12,6 +12,10 @@ class JobApplication < ActiveRecord::Base
   validates_uniqueness_of :job_seeker_id, scope: :job_id
   scope :for_job, ->(job) { joins(:job).where('job_id=?', job.id) }
 
+  scope :active_companies, lambda {
+    joins(:job).where(job: Job.find_by_company(Company.active))
+  }
+
   after_create do
     StatusChange.update_status_history(self, :active)
   end
