@@ -34,7 +34,8 @@ Given the following job applications exist:
   | job title          | job seeker             |
   | software developer | john.seeker@gmail.com |
 
-Given I login as "carter@ymail.com" with password "qwerty123"
+Given I am on the home page
+And I login as "carter@ymail.com" with password "qwerty123"
    
  Scenario: Company person should see a text field of available positions when creating a job
    When I press "Post Job" within "all-jobs-pane"
