@@ -26,8 +26,8 @@ class TaskPolicy < ApplicationPolicy
 
   def list_owners?
     return false if user.nil?
-    return true if not record.owner_agency.nil? and user.agency_admin?(record.owner_agency)
-    return true if not record.owner_company.nil? and user.company_admin?(record.owner_company)
+    return true if !record.owner_agency.nil? && user.agency_admin?(record.owner_agency)
+    return true if !record.owner_company.nil? && user.company_admin?(record.owner_company)
     false
   end
 end

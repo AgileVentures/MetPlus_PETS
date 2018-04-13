@@ -63,26 +63,26 @@ class CompanyPerson < ActiveRecord::Base
     # Is this person even an admin?
     return false unless company_roles.pluck(:role).include? CompanyRole::ROLE[:CA]
 
-    not other_company_admin?
+    !other_company_admin?
   end
 
-
-  def company_admin? company
+  def company_admin?(company)
     return false if self.company != company
     has_role?(:CA)
   end
 
-  def company_contact? company
+  def company_contact?(company)
     return false if self.company != company
     has_role?(:CC)
   end
 
-  def company_person? company
+  def company_person?(company)
     self.company == company
   end
 
   private
-  def has_role? role
+
+  def has_role?(role)
     company_roles.pluck(:role).include?CompanyRole::ROLE[role]
   end
 end

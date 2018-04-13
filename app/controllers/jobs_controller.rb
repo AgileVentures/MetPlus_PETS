@@ -354,7 +354,7 @@ class JobsController < ApplicationController
   private
 
   def set_job_seekers
-    return unless pets_user && pets_user.job_developer?(current_agency)
+    return unless pets_user&.job_developer?(current_agency)
     @job_seekers = pets_user.job_seekers
   end
 
