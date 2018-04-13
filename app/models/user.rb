@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   end
 
   def can_login?
-    return true
+    true
   end
 
   def inactive_message
