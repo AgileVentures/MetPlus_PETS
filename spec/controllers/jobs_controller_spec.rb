@@ -156,6 +156,25 @@ RSpec.describe JobsController, type: :controller do
         expect(assigns(:jobs)).to eq [joba]
       end
     end
+
+    context 'when company person is logged in' do
+      let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
+      let!(:other_inc) do
+        FactoryBot.create(:company, name: 'Other inc',
+          status:  'active',
+          agencies: [agency])
+      end
+
+      let!(:job_1_widget_company) { FactoryBot.create(:job, company: bosh) }
+      let!(:job_1_other_company) { FactoryBot.create(:job, company: other_inc) }
+      let!(:job_2_other_company) { FactoryBot.create(:job, company: other_inc) }
+
+      it 'show jobs only of the current company' do
+        sign_in bosh_person
+        get :index
+        expect(assigns(:jobs)).to eq [job_1_widget_company]
+      end
+    end
   end
 
   describe 'GET #new' do

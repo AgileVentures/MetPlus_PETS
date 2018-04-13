@@ -116,3 +116,9 @@ end
 Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
   expect(Job.find_by_title(title).licenses.count.to_s).to eq count
 end
+
+And(/^I should not see "([^\"]+)" in the search form$/) do |string|
+  within(:css, 'div#job_search_form') do
+    expect(has_text?(:visible, string)).to be false
+  end
+end
