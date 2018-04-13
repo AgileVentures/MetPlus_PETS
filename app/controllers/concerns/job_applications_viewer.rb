@@ -8,7 +8,8 @@ module JobApplicationsViewer
                                  .joins(:job)
                                  .where('jobs.company_id = ?', pets_user.company_id)
     when 'job_seeker-default'
-      collection = JobApplication.where(job_seeker: id).order(:id)
+      collection = JobApplication.active_companies
+                                 .where(job_seeker: id).order(:id)
     when 'job-job-developer'
       collection = JobApplication.order(:id)
                                  .where(job: id, job_seeker_id: AgencyRelation

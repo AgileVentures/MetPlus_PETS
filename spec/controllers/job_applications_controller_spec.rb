@@ -293,9 +293,11 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'GET #list' do
+    let(:company) { FactoryBot.create(:company) }
     let(:job1) { FactoryBot.create(:job) }
     let(:job2) { FactoryBot.create(:job) }
     let(:job3) { FactoryBot.create(:job) }
+    let!(:job4) { FactoryBot.create(:job, company: company) }
     let(:app1) do
       FactoryBot.create(:job_application, job: job1, job_seeker: job_seeker)
     end
@@ -305,9 +307,13 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:app3) do
       FactoryBot.create(:job_application, job: job3, job_seeker: job_seeker)
     end
-    let(:app4) do
+    let!(:app4) do
       FactoryBot.create(:job_application,
                         job: job3, job_seeker: FactoryBot.create(:job_seeker))
+    end
+    let!(:app5_inactive_company) do
+      company.inactive!
+      FactoryBot.create(:job_application, job: job4, job_seeker: job_seeker)
     end
 
     before(:each) do
@@ -316,7 +322,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     it 'assigns jobs for view' do
       expect(assigns(:job_applications)).to include(app1, app2, app3)
-      expect(assigns(:job_applications)).not_to include(app4)
+      expect(assigns(:job_applications)).not_to include(app4, app5_inactive_company)
     end
 
     it 'renders partial for applications' do
