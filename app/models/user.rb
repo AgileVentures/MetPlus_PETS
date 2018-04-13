@@ -34,11 +34,11 @@ class User < ActiveRecord::Base
   end
 
   def self.company_admin?(user)
-    self.company_role?(user, :CA)
+    company_role?(user, :CA)
   end
 
   def self.company_contact?(user)
-    self.company_role?(user, :CC)
+    company_role?(user, :CC)
   end
 
   def self.company_person?(user)
