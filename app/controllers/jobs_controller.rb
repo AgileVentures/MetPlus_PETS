@@ -81,7 +81,6 @@ class JobsController < ApplicationController
 
   def create
     save_params = job_params
-    @positions = params[:available_positions]
 
     # if new_address_params is not nil then user wants to create a new
     # job location (company address) and associate that with this job.
@@ -89,6 +88,7 @@ class JobsController < ApplicationController
 
     @job = Job.new(save_params)
     @job.build_address(new_address_params) if new_address_params
+    @job.remaining_positions = @job.available_positions
 
     if pets_user.is_a?(CompanyPerson)
       @job.company_id = pets_user.company.id
