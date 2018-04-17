@@ -138,6 +138,10 @@ class Job < ActiveRecord::Base
   def recent_for?(user)
     created_at > user.last_sign_in_at
   end
+  
+  def decrease_remaining_positions
+    
+  end
 
   private
 

@@ -8,6 +8,7 @@ class JobApplicationsController < ApplicationController
     begin
       JobApplications::Hire.new.call(@job_application)
       flash[:info] = 'Job application accepted.'
+      @job_application.job.decrease_remaining_positions
     rescue JobApplications::JobNotActive
       flash[:alert] = 'Invalid action on inactive job application.'
     end
