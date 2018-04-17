@@ -140,7 +140,7 @@ class Job < ActiveRecord::Base
   end
   
   def decrease_remaining_positions
-    
+    update_attributes(:remaining_positions, (remaining_positions - 1))
   end
 
   private
