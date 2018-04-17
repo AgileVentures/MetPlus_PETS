@@ -95,10 +95,9 @@ When(/^I accept "(.*?)" job seeker for "(.*?)" job with (\d+) opportunities$/) d
   job_seeker = JobSeeker.find_by(email: email)
   job_app = JobApplication.find_by(job: job, job_seeker: job_seeker)
   company = Company.find_by_name("Widgets Inc.")
-  Task.new_review_job_application_task job_app, company
-  step %{I go to the "#{job}" job page}
-  step %{I should see "Applications for this Job"}
-  step %{I press "Accept"}
+  Task.new_review_job_application_task job_app, company  
+  task = Task.find_by(job_application:  job_app)
+  task.status = 'Done'
 end
 
 Then(/^the task to review the Job Application just accepted, should be closed$/) do

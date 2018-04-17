@@ -19,8 +19,8 @@ Given the following company people exist:
   | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
 
 Given the following jobs exist:
-  | title               | company_job_id  | description                 | company      | creator          | available_positions |
-  | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com | 2                  |
+  | title               | company_job_id  | description                 | company      | creator          | available_positions | remaining_positions |
+  | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com | 2                   | 2                   |
 
 Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
@@ -51,7 +51,7 @@ And I login as "carter@ymail.com" with password "qwerty123"
  Scenario: Number of available positions should decrease when a job seeker is accepted
    When I accept "john.seeker@gmail.com" job seeker for "software developer" job with 2 opportunities
    And I go to the "software developer" job page
-   Then I see '1 of 2 Positions available'
+   Then I should see "1 of 2 Positions available"
    And the task to review the Job Application just accepted, should be closed
 
  Scenario: Reject applications if number of available positions reachs zero

@@ -127,10 +127,6 @@ Given(/^I am creating a Job$/) do
   select('Alabama', from: 'job_new_address_attributes_state', visible: false)
 end
 
-When(/^I select (\d+) available positions from the dropdown$/) do |arg1|
-  select(arg1, from: '.dropdown_menu')
-end
-
 When(/^I submit the new job$/) do
   step %(I press "Create")
 end
@@ -140,6 +136,7 @@ Then(/^I see '(\d+) of (\d+) Positions available'$/) do |arg1, arg2|
     expect(page).to have_text arg1 + ' of ' + arg2
   end
 end
+
 
 
 And(/^I should not see "([^\"]+)" in the search form$/) do |string|
