@@ -4,6 +4,7 @@ module JobApplications
     def call(job_application)
       raise JobNotActive, '' unless job_application.active? || job_application.processing?
       job_application.accept
+      decrease_remaining_positions(job_application.job)
 
       send_notification(job_application)
       close_all_tasks(job_application)
@@ -21,6 +22,11 @@ module JobApplications
         task = Task.job_application_target(current_job_application)
         task.first.force_close if task.count == 1
       end
+    end
+
+    def decrease_remaining_positions(job)
+      remaining_positions = job.remaining_positions - 1
+      job.update_attributes(remaining_positions: remaining_positions)
     end
   end
 end
