@@ -148,7 +148,8 @@ RSpec.describe JobApplication, type: :model do
       }
         .from('active').to('not_accepted')
     end
-    it 'updates the selected job status to be filled' do
+    it 'updates the selected job status to be filled when there are no remaining positions' do
+      active_job.remaining_positions = 0
       expect { application1.accept }.to change { application1.job.status }
         .from('active').to('filled')
     end
