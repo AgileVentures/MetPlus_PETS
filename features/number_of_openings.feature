@@ -11,12 +11,12 @@ Given the following agency people exist:
   | MetPlus | JD    | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
 Given the following companies exist:
-  | agency  | name         | website     | phone        | email            | job_email        | ein        | status |
+  | agency  | name         | website     | phone        | email          | job_email      | ein        | status |
   | MetPlus | Widgets Inc. | widgets.com | 555-222-3333 | corp@ymail.com | corp@ymail.com | 12-3456789 | active |
 
 Given the following company people exist:
   | company      | role  | first_name | last_name | email            | password  | phone        |
-  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com   | qwerty123 | 555-222-3334 |
+  | Widgets Inc. | CA    | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
 
 Given the following jobs exist:
   | title               | company_job_id  | description                 | company      | creator          | available_positions | remaining_positions |
@@ -24,15 +24,15 @@ Given the following jobs exist:
 
 Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
-  | John      | Seeker   | john.seeker@gmail.com    | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
+  | John      | Seeker   | john.seeker@gmail.com     | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
 
 Given the following resumes exist:
   | file_name          | job_seeker            |
   | Janitor-Resume.doc | john.seeker@gmail.com |
 
 Given the following job applications exist:
-  | job title          | job seeker             |
-  | software developer | john.seeker@gmail.com |
+  | job title          | job seeker             | status  | created_at          |
+  | software developer | john.seeker@gmail.com  | active  | 2018-04-19 20:34:06 |
 
 Given I am on the home page
 And I login as "carter@ymail.com" with password "qwerty123"
@@ -49,7 +49,7 @@ And I login as "carter@ymail.com" with password "qwerty123"
    And I should see "2 of 2 positions available"
 
  Scenario: Number of available positions should decrease when a job seeker is accepted
-   When I accept "john.seeker@gmail.com" job seeker for "software developer" job with 2 opportunities
+   When I accept job seeker for "software developer" job
    And I go to the "software developer" job page
    Then I should see "1 of 2 Positions available"
    And the task to review the Job Application just accepted, should be closed
