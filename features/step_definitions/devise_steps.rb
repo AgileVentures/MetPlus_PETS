@@ -15,8 +15,7 @@ Then(/^I log(?: ?)out$/) do
 end
 
 Given(/^I am logged in as company person$/) do
-  person = FactoryBot.create(:company_person,
-                                              email: 'companyperson@mail.com', company_id: 1)
+  person = FactoryBot.create(:company_person)
   step %(I am on the home page)
   step %(I login as "#{person.email}" with password "qwerty123")
   step %(I should be on the Company Person '#{person.email}' Home page)
