@@ -91,9 +91,10 @@ And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
 
-When(/^I accept job seeker for "(.*?)" job$/) do |job_title|
-  company = Company.find_by_name('Widgets Inc.')
+When(/^I accept a job seeker for "(.*?)" job with (\d+) opportunit(?:ies|y) left$/) do |job_title, remaining_positions|
   job = Job.find_by(title: job_title)
+  job.update_attributes(remaining_positions: remaining_positions)
+  company = Company.find_by_name('Widgets Inc.')
   job_seeker = FactoryBot.create(:job_seeker)
   job_app = JobApplication.create!(id: 12, job: job, job_seeker: job_seeker)
   Task.new_review_job_application_task job_app, company
