@@ -40,7 +40,7 @@ class JobApplication < ActiveRecord::Base
       application.not_accepted!
       StatusChange.update_status_history(application, :not_accepted)
     end
-    job.filled if job.remaining_positions <= 0
+    job.filled if job.remaining_positions < 2
   end
 
   def reject

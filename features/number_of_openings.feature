@@ -49,15 +49,16 @@ And I login as "carter@ymail.com" with password "qwerty123"
    And I should see "2 of 2 positions available"
 
  Scenario: Number of available positions should decrease when a job seeker is accepted
-   When I accept job seeker for "software developer" job
+   When I accept a job seeker for "software developer" job with 2 opportunities left
    And I go to the "software developer" job page
    Then I should not see "filled"
    And I should see "1 of 2 positions available"
    And the task to review the Job Application just accepted, should be closed
 
  Scenario: Reject applications if number of available positions reachs zero
-   When I accept a Job Seeker for a Job with only 1 opportunity left
-   Then I visit the job application page
-   And I see '0 of 2 Positions available'
+   When I accept a job seeker for "software developer" job with 1 opportunity left
+   And I go to the "software developer" job page
+   Then I should see "0 of 2 positions available"
+   And I should see "filled"
    And All the Job Seeker applications should have been rejected
    And all the tasks to review Job Applications for that job should be closed
