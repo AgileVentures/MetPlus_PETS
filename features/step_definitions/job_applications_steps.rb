@@ -105,3 +105,11 @@ Then(/^the task to review the Job Application just accepted, should be closed$/)
   task = Task.find_by(job_application: JobApplication.find(12))
   expect(task.status).to eq('Done')
 end
+
+Then(/^All other job seekers applications should have been rejected$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^All the tasks to review job applications for that job should be closed$/) do
+  pending # express the regexp above with the code you wish you had
+end

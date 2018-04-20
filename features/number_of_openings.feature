@@ -60,5 +60,5 @@ And I login as "carter@ymail.com" with password "qwerty123"
    And I go to the "software developer" job page
    Then I should see "0 of 2 positions available"
    And I should see "filled"
-   And All the Job Seeker applications should have been rejected
-   And all the tasks to review Job Applications for that job should be closed
+   And All other job seekers applications should have been rejected
+   And All the tasks to review job applications for that job should be closed
