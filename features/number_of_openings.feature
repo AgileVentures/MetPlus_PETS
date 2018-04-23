@@ -50,12 +50,12 @@ And I login as "carter@ymail.com" with password "qwerty123"
 
  @javascript
  Scenario: Number of available positions should decrease when a job seeker is accepted
-   When I accept "john.seeker@gmail.com" job seeker for "software developer" job with 2 opportunities left
+   When I accept "jane@ymail.com" job seeker for "software developer" job with 2 opportunities left
    And I go to the "software developer" job page
    Then I should not see "filled"
    And I should see "1 of 2 positions available"
-   And I should not see "Not Accepted"
-   And the task to review "john.seeker@gmail.com" job application just accepted, should be closed
+   Then I should not see "Not Accepted"
+   And the task to review "jane@ymail.com" application should be closed
 
  @javascript
  Scenario: Reject applications if number of available positions reachs zero
@@ -63,5 +63,5 @@ And I login as "carter@ymail.com" with password "qwerty123"
    And I go to the "software developer" job page
    Then I should see "0 of 2 positions available"
    And I should see "filled"
-   And I should see "jane@ymail.com" application for "software developer" changes to not_accepted
-   And All the tasks to review job applications for that job should be closed
+   Then I should see "john.seeker@gmail.com" application for "software developer" changes to not_accepted
+   And the task to review "john.seeker@gmail.com" application should be closed

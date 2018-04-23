@@ -101,13 +101,9 @@ When(/^I accept "(.*?)" job seeker for "(.*?)" job with (\d+) opportunit(?:ies|y
   JobApplications::Hire.new.call(job_app)
 end
 
-Then(/^the task to review "(.*?)" job application just accepted, should be closed$/) do |email|
+Then(/^the task to review "(.*?)" application should be closed$/) do |email|
   job_seeker = JobSeeker.find_by(email: email)
   job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
   task = Task.find_by(job_application: job_app)
   expect(task.status).to eq('Done')
-end
-
-Then(/^All the tasks to review job applications for that job should be closed$/) do
-  pending # express the regexp above with the code you wish you had
 end
