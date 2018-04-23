@@ -91,18 +91,20 @@ And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
 
-When(/^I accept a job seeker for "(.*?)" job with (\d+) opportunit(?:ies|y) left$/) do |job_title, remaining_positions|
+When(/^I accept "(.*?)" job seeker for "(.*?)" job with (\d+) opportunit(?:ies|y) left$/) do |email, job_title, remaining_positions|
   job = Job.find_by(title: job_title)
   job.update_attributes(remaining_positions: remaining_positions)
   company = Company.find_by_name('Widgets Inc.')
-  job_seeker = FactoryBot.create(:job_seeker)
-  job_app = JobApplication.create!(id: 12, job: job, job_seeker: job_seeker)
+  job_seeker = JobSeeker.find_by(email: email)
+  job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
   Task.new_review_job_application_task job_app, company
   JobApplications::Hire.new.call(job_app)
 end
 
-Then(/^the task to review the Job Application just accepted, should be closed$/) do
-  task = Task.find_by(job_application: JobApplication.find(12))
+Then(/^the task to review "(.*?)" job application just accepted, should be closed$/) do |email|
+  job_seeker = JobSeeker.find_by(email: email)
+  job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
+  task = Task.find_by(job_application: job_app)
   expect(task.status).to eq('Done')
 end
 

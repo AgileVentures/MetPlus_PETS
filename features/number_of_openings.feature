@@ -23,20 +23,21 @@ Given the following jobs exist:
   | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com | 2                   | 2                   |
 
 Given the following jobseekers exist:
-  | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
-  | John      | Seeker   | john.seeker@gmail.com     | 345-890-7890| password   |password             | 1990          |Unemployed Seeking |
-
+  | first_name| last_name| email                 | phone        | password  | year_of_birth | job_seeker_status  |
+  | John      | Seeker   | john.seeker@gmail.com | 345-890-7890 | password  | 1990          | Unemployed Seeking |
+  | June      | Seeker   | june@ymail.com        | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
 Given the following resumes exist:
   | file_name          | job_seeker            |
   | Janitor-Resume.doc | john.seeker@gmail.com |
 
 Given the following job applications exist:
-  | job title          | job seeker             | status  | created_at          |
-  | software developer | john.seeker@gmail.com  | active  | 2018-04-19 20:34:06 |
-
+  | job title          | job seeker            | status  |
+  | software developer | john.seeker@gmail.com | active  |
+  | software developer | june@ymail.com        | active  |
+ 
 Given I am on the home page
 And I login as "carter@ymail.com" with password "qwerty123"
-   
+
  Scenario: Company person should see a text field of available positions when creating a job
    When I press "Post Job" within "all-jobs-pane"
    Then I sould see a text field "Available Positions" with the value set to 1
@@ -49,14 +50,14 @@ And I login as "carter@ymail.com" with password "qwerty123"
    And I should see "2 of 2 positions available"
 
  Scenario: Number of available positions should decrease when a job seeker is accepted
-   When I accept a job seeker for "software developer" job with 2 opportunities left
+   When I accept "john.seeker@gmail.com" job seeker for "software developer" job with 2 opportunities left
    And I go to the "software developer" job page
    Then I should not see "filled"
    And I should see "1 of 2 positions available"
-   And the task to review the Job Application just accepted, should be closed
+   And the task to review "john.seeker@gmail.com" job application just accepted, should be closed
 
  Scenario: Reject applications if number of available positions reachs zero
-   When I accept a job seeker for "software developer" job with 1 opportunity left
+   When I accept "june@ymail.com" job seeker for "software developer" job with 1 opportunity left
    And I go to the "software developer" job page
    Then I should see "0 of 2 positions available"
    And I should see "filled"
