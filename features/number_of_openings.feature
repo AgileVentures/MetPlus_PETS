@@ -70,3 +70,11 @@ And I login as "carter@ymail.com" with password "qwerty123"
    And I should see "filled"
    Then I should see "john.seeker@gmail.com" application for "software developer" changes to not_accepted
    And the task to review "john.seeker@gmail.com" application should be closed
+
+ Scenario: Should update available positions field correctly after an edit
+   When I go to the "software developer" job page
+   And I press "Edit Job"
+   Then I sould see a text field "Available Positions" with the value set to 2
+   When I fill in "Available Positions" with "3"
+   And I press "Update"
+   Then I should see "3 of 3 positions available"
