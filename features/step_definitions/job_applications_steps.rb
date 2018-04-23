@@ -106,3 +106,11 @@ Then(/^the task to review "(.*?)" application should be closed$/) do |email|
   task = Task.find_by(job_application: job_app)
   expect(task.status).to eq('Done')
 end
+
+Given(/^tasks were created to review "(.*?)" and "(.*?)" job applications for "(.*?)" company$/) do |email1, email2, company|
+  company = Company.find_by_name(company)
+  job_app1 = JobApplication.find_by(job_seeker_id: JobSeeker.find_by(email: email1).id)
+  Task.new_review_job_application_task job_app1, company
+  job_app2 = JobApplication.find_by(job_seeker_id: JobSeeker.find_by(email: email2).id)
+  Task.new_review_job_application_task job_app2, company
+end
