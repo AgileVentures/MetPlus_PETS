@@ -108,10 +108,6 @@ Then(/^the task to review "(.*?)" job application just accepted, should be close
   expect(task.status).to eq('Done')
 end
 
-Then(/^All other job seekers applications should have been rejected$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
 Then(/^All the tasks to review job applications for that job should be closed$/) do
   pending # express the regexp above with the code you wish you had
 end

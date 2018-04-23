@@ -23,17 +23,16 @@ Given the following jobs exist:
   | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com | 2                   | 2                   |
 
 Given the following jobseekers exist:
-  | first_name| last_name| email                 | phone        | password  | year_of_birth | job_seeker_status  |
-  | John      | Seeker   | john.seeker@gmail.com | 345-890-7890 | password  | 1990          | Unemployed Seeking |
-  | June      | Seeker   | june@ymail.com        | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
-Given the following resumes exist:
-  | file_name          | job_seeker            |
-  | Janitor-Resume.doc | john.seeker@gmail.com |
+  | first_name | last_name | email                 | phone        | password  | year_of_birth | job_seeker_status  |
+  | John       | Seeker    | john.seeker@gmail.com | 345-890-7890 | password  | 1990          | Unemployed Seeking |
+  | June       | Seeker    | june@ymail.com        | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
+  | Jane       | Seeker    | jane@ymail.com        | 345-890-7890 | qwerty123 | 1990          | Unemployed Seeking |
 
 Given the following job applications exist:
   | job title          | job seeker            | status  |
   | software developer | john.seeker@gmail.com | active  |
   | software developer | june@ymail.com        | active  |
+  | software developer | jane@ymail.com        | active  |
  
 Given I am on the home page
 And I login as "carter@ymail.com" with password "qwerty123"
@@ -49,17 +48,20 @@ And I login as "carter@ymail.com" with password "qwerty123"
    Then I should see "Available positions:"
    And I should see "2 of 2 positions available"
 
+ @javascript
  Scenario: Number of available positions should decrease when a job seeker is accepted
    When I accept "john.seeker@gmail.com" job seeker for "software developer" job with 2 opportunities left
    And I go to the "software developer" job page
    Then I should not see "filled"
    And I should see "1 of 2 positions available"
+   And I should not see "Not Accepted"
    And the task to review "john.seeker@gmail.com" job application just accepted, should be closed
 
+ @javascript
  Scenario: Reject applications if number of available positions reachs zero
    When I accept "june@ymail.com" job seeker for "software developer" job with 1 opportunity left
    And I go to the "software developer" job page
    Then I should see "0 of 2 positions available"
    And I should see "filled"
-   And All other job seekers applications should have been rejected
+   And I should see "jane@ymail.com" application for "software developer" changes to not_accepted
    And All the tasks to review job applications for that job should be closed
