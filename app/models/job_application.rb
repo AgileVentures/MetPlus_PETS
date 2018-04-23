@@ -35,7 +35,7 @@ class JobApplication < ActiveRecord::Base
   def accept
     accepted!
     StatusChange.update_status_history(self, :accepted)
-    reject_applications = job.job_applications.where.not(id: id)
+    reject_applications = job.job_applications.where.not(status: 1)
     reject_applications.each do |application|
       application.not_accepted!
       StatusChange.update_status_history(application, :not_accepted)
