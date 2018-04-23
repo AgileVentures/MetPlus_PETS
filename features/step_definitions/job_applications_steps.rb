@@ -97,7 +97,6 @@ When(/^I accept "(.*?)" job seeker for "(.*?)" job with (\d+) opportunit(?:ies|y
   company = Company.find_by_name('Widgets Inc.')
   job_seeker = JobSeeker.find_by(email: email)
   job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
-  Task.new_review_job_application_task job_app, company
   JobApplications::Hire.new.call(job_app)
 end
 

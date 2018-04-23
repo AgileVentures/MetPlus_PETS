@@ -34,6 +34,11 @@ Given the following job applications exist:
   | software developer | june@ymail.com        | active  |
   | software developer | jane@ymail.com        | active  |
  
+Given the following tasks exist:
+      | task_type          | owner              | deferred_date | status      | targets               |
+      | job_application    | carter@ymail.com   | 2018-04-23    | ASSIGNED    | jane@ymail.com        |
+      | job_application    | carter@ymail.com   | 2018-04-23    | ASSIGNED    | john.seeker@gmail.com |
+
 Given I am on the home page
 And I login as "carter@ymail.com" with password "qwerty123"
 
