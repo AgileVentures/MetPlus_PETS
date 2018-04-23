@@ -140,6 +140,7 @@ class JobsController < ApplicationController
     # if new_address_params is not nil then user wants to create a new
     # job location (company address) and associate that with this job.
     new_address_params = update_params.delete(:new_address_attributes)
+    @job.remaining_positions = @job.available_positions
 
     if new_address_params
       @job.build_address(new_address_params)
