@@ -96,6 +96,14 @@ RSpec.describe JobApplications::Hire do
           expect(Event).not_to have_received(:create)
         end
       end
+
+      it 'decreases remaining positions by 1 when application is accepted' do
+        job = FactoryBot.create(:job, remaining_positions: 3)
+        job_seeker = FactoryBot.create(:job_seeker)
+        job_application =  FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
+        subject.call(job_application)
+        expect(job.remaining_positions).to eq(2)
+      end
     end
   end
 end
