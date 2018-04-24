@@ -100,17 +100,29 @@ And(/^I accept the confirm dialog/) do
   accept_confirm
 end
 
-Then(/^I select (a|another) licenses?$/) do |prefix|
-  step %(I click the "Add License" link)
-  within(:css, 'div#licenses') do
-    first('.select-license').find(:xpath, 'option[2]').select_option
+Then(/^I select (a|another) (license|question)?$/) do |prefix, domain|
+  step %(I click the "Add #{domain.capitalize}" link)
+  within(:css, "div##{domain}s") do
+    first(".select-#{domain}").find(:xpath, 'option[2]').select_option
   end
   if prefix == 'another'
-    step %(I click the "Add License" link)
-    within(:css, 'div#licenses') do
-      all('.select-license')[1].find(:xpath, 'option[3]').select_option
+    step %(I click the "Add #{domain.capitalize}" link)
+    within(:css, "div##{domain}s") do
+      all(".select-#{domain}")[1].find(:xpath, 'option[3]').select_option
     end
   end
+end
+
+And(/^I answer (first|another) application question with (Yes|No)/) do |prefix, answer|
+  indexes = {
+    'Yes': { 'first': 1, 'another': 4 },
+    'No': { 'first': 2, 'another': 5 }
+  }
+  index = indexes[answer.to_sym][prefix.to_sym]
+  button = within(:css, 'div#job-apply-modal-id') do
+    find('.edit_job').all('.radio-inline')[index]
+  end
+  button.choose(answer)
 end
 
 Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
