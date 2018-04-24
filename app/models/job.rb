@@ -53,7 +53,7 @@ class Job < ActiveRecord::Base
                             allow_blank: true,
                             greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 20
-
+  validates_numericality_of  :available_positions, greater_than: 0
   validates_presence_of :pay_period, message: 'must be specified',
     if: Proc.new { |j| j.min_salary.present? }
 
