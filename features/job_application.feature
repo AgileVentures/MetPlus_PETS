@@ -23,8 +23,20 @@ Given the following company people exist:
   | Widgets Inc. | CC    | Jane       | Smith     | jane@ymail.com | qwerty123 | 555-222-3334 |
 
 Given the following jobs exist:
-  | title               | company_job_id  | description                 | company      | creator        |
+  | title               | company_job_id  | description                 | company      | creator          |
   | software developer  | KRK01K          | internship position with pay| Widgets Inc. | carter@ymail.com |
+  | editor              | T01KS           | This will be edited         | Widgets Inc. | jane@ymail.com   |
+
+Given the following question records:
+  | question_text                                         |
+  | Are you authorized to work in the US?                 |
+  | Are you willing to have a background check performed? |
+  | Are you willing to take a drug test?                  |
+
+Given the following job_question records:
+  | job_id | question_id |
+  | 2      | 1           |
+  | 2      | 3           |
 
 Given the following jobseekers exist:
   | first_name| last_name| email                     | phone       | password   |password_confirmation| year_of_birth |job_seeker_status |
@@ -152,3 +164,27 @@ Given the following job applications exist:
     Then I should see button "Download Resume"
     And I click the "Download Resume" button
     Then I should get a download with the filename "Janitor-Resume.doc"
+
+  @javascript
+  Scenario: Having applicant answer questions during the application process
+    Then I am in Seeker's browser
+    Given I am on the home page
+    And I login as "john.seeker@gmail.com" with password "password"
+    Then I should see "Signed in successfully"
+    Then I click the "Jobs" link
+    And I should see "editor"
+    Then I click the "editor" link
+    And I wait for 5 second
+    Then I click the "Click Here To Apply Online" link
+    And I wait for 1 second
+    And I should see "Job Application"
+    Then I press "Close"
+    Then I click the "Click Here To Apply Online" link
+    And I wait for 1 second
+    And I should see "Job Application"
+    And I should not see "Apply Now"
+    And I answer first application question with Yes
+    And I answer another application question with No
+    Then I click the "Apply Now" button
+    And I wait 4 seconds
+    And I should see "Congratulations, you were able to apply with success"
