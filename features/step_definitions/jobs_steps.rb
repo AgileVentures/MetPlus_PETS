@@ -139,6 +139,12 @@ end
 
 
 
+When(/^I fill in job details$/) do
+  fill_in 'job_new_address_attributes_street', with: '3661 West', visible: false
+  fill_in 'job_new_address_attributes_city', with: 'J', visible: false
+  select('Alabama', from: 'job_new_address_attributes_state', visible: false)
+end
+
 And(/^I should not see "([^\"]+)" in the search form$/) do |string|
   within(:css, 'div#job_search_form') do
     expect(has_text?(:visible, string)).to be false
