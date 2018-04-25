@@ -35,7 +35,7 @@ Background: Company person is logged in
     | software developer | june@ymail.com        | active  |
     | software developer | jane@ymail.com        | active  |
 
-  Given tasks exist to review "john.seeker@gmail.com" and "jane@ymail.com" job applications for "Widgets Inc."
+  Given tasks exist for "john.seeker@gmail.com" and "jane@ymail.com" applications to "Widgets Inc."
   Given I am on the home page
   And I login as "carter@ymail.com" with password "qwerty123"
 
@@ -52,7 +52,7 @@ Background: Company person is logged in
 
   @javascript
   Scenario: Number of available positions should decrease when a job seeker is accepted
-    When I accept "jane@ymail.com" for "software developer" job with 2 opportunities left
+    When I accept "jane@ymail.com" for "software developer" with 2 opportunities left
     And I go to the "software developer" job page
     Then I should not see "filled"
     And I should see "1 of 2 positions available"
@@ -61,7 +61,7 @@ Background: Company person is logged in
 
   @javascript
   Scenario: Reject applications if number of available positions reachs zero
-    When I accept "june@ymail.com" for "software developer" job with 1 opportunity left
+    When I accept "june@ymail.com" for "software developer" with 1 opportunity left
     And I go to the "software developer" job page
     Then I should see "0 of 2 positions available"
     And I should see "filled"
