@@ -3,7 +3,7 @@ Feature: Number of openings on a specific job
   I want to be able to create a job opening
   So that I can hire multiple people for the same position
 
-Background: Company person is logged in
+Background: Data has been added to the database and company person is logged in
   
   Given the default settings are present
 
