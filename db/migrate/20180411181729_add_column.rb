@@ -1,4 +1,3 @@
 class AddColumn < ActiveRecord::Migration
-  def change
-  end
+  def change; end
 end
