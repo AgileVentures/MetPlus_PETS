@@ -94,7 +94,6 @@ end
 When(/^I accept "(.*?)" for "(.*?)" job with (\d+) opportunit(?:ies|y) left$/) do |email, job_title, remaining_positions|
   job = Job.find_by(title: job_title)
   job.update_attributes(remaining_positions: remaining_positions)
-  company = Company.find_by_name('Widgets Inc.')
   job_seeker = JobSeeker.find_by(email: email)
   job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
   JobApplications::Hire.new.call(job_app)
