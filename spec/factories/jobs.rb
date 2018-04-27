@@ -7,5 +7,7 @@ FactoryBot.define do
     address
     company_job_id 'KRKE12'
     status :active
+    available_positions 1
+    remaining_positions 1
   end
 end

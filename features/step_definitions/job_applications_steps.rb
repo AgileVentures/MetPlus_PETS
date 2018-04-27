@@ -90,3 +90,28 @@ end
 And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
+
+When(/^I accept "(.*?)" for "(.*?)" with (\d+) opportunit(?:ies|y) left$/) do
+  |email, job, positions|
+  job = Job.find_by(title: job)
+  job.update_attributes(remaining_positions: positions)
+  job_seeker = JobSeeker.find_by(email: email)
+  job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
+  JobApplications::Hire.new.call(job_app)
+end
+
+Then(/^the task to review "(.*?)" application should be closed$/) do |email|
+  job_seeker = JobSeeker.find_by(email: email)
+  job_app = JobApplication.find_by(job_seeker_id: job_seeker.id)
+  task = Task.find_by(job_application: job_app)
+  expect(task.status).to eq('Done')
+end
+
+Given(/^tasks exist for "(.*?)" and "(.*?)" applications to "(.*?)"$/) do
+  |js1, js2, company|
+  company = Company.find_by_name(company)
+  job_app1 = JobApplication.find_by(job_seeker_id: JobSeeker.find_by(email: js1).id)
+  Task.new_review_job_application_task job_app1, company
+  job_app2 = JobApplication.find_by(job_seeker_id: JobSeeker.find_by(email: js2).id)
+  Task.new_review_job_application_task job_app2, company
+end

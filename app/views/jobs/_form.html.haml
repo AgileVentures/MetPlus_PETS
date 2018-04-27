@@ -83,7 +83,13 @@
       = b.label(style: ('margin-left: 20px;' unless b.text == 'Hourly')) do
         = b.radio_button + ' ' + b.text
 %br
-
+.form-group
+  .col-sm-3.control-label
+    = f.label :available_positions, 'Available Positions', class: 'control-label'
+  .col-sm-1
+    = f.text_field :available_positions,
+                    class: 'form-control', value: @job.available_positions
+%br
 .form-group
   .col-sm-3.control-label
     = f.label :description

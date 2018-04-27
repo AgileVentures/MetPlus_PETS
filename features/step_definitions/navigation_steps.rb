@@ -51,6 +51,9 @@ def page_translator(name)
     else
       return activate_user_path user
     end
+  when /"(.+)" job/
+    job_title = name.match(/"(.+)"/)
+    job_path id: Job.find_by_title(job_title[1]).id
   end
 end
 
