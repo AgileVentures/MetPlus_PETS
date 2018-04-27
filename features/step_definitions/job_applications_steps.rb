@@ -90,3 +90,14 @@ end
 And(/^I input "([^"]*)" as the reason for rejection$/) do |reason|
   step %(I fill in "reason_text" with "#{reason}")
 end
+
+When(/^I accept a Job Seeker for a Job with (\d+) opportunities$/) do |number|
+  company = FactoryBot.create(:company)
+  job = FactoryBot.create(:job, company_id: company.id, available_positions: number)  
+  user = FactoryBot.create(:user)
+  job_seeker = FactoryBot.create(:job_seeker, user: user)
+  job_application = FactoryBot.create(:job_application, job: job, job_seeker: job_seeker)
+  step %{I go to the job "#{job.title}" page}
+  step %{I accept "#{user.email}" application for "#{job.title}"}
+end
+

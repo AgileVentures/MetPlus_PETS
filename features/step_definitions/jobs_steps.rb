@@ -117,6 +117,27 @@ Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
   expect(Job.find_by_title(title).licenses.count.to_s).to eq count
 end
 
+Given(/^I am creating a Job$/) do
+  step %(I fill in "job_title" with "IT")
+  step %(I fill in "job_company_job_id" with "73")
+  step %(I fill in "job_description" with "Development")
+  fill_in 'job_new_address_attributes_street', with: '3661 West', visible: false
+  fill_in 'job_new_address_attributes_city', with: 'J', visible: false
+  select('Alabama', from: 'job_new_address_attributes_state', visible: false)
+end
+
+Then(/^I see a drop down with (\d+) available positions selected$/) do |arg1|
+  find('.dropdown_menu', text: arg1)
+end
+
+When(/^I select (\d+) available positions from the dropdown$/) do |arg1|
+  select(arg1, from: '.dropdown_menu')
+end
+
+When(/^submit the create the new job$/) do
+  step %(I press "Create")
+end
+
 And(/^I should not see "([^\"]+)" in the search form$/) do |string|
   within(:css, 'div#job_search_form') do
     expect(has_text?(:visible, string)).to be false

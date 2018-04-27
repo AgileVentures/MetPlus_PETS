@@ -285,3 +285,9 @@ end
 When(/^(?:I|they) select radio button "([^"]*)"$/) do |label_text|
   find(:xpath, "//label[contains(.,'#{label_text}')]/input[@type='radio']").click
 end
+
+When(/^I press "(.*?)" within "(.*?)"$/) do |text, field|
+  within("##{field}") do
+    step %(I press "#{text}")
+  end
+end
