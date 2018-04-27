@@ -131,14 +131,6 @@ When(/^I submit the new job$/) do
   step %(I press "Create")
 end
 
-Then(/^I see '(\d+) of (\d+) Positions available'$/) do |arg1, arg2|
-  within('tr#available-positions') do
-    expect(page).to have_text arg1 + ' of ' + arg2
-  end
-end
-
-
-
 When(/^I fill in job details$/) do
   fill_in 'job_new_address_attributes_street', with: '3661 West', visible: false
   fill_in 'job_new_address_attributes_city', with: 'J', visible: false
@@ -148,10 +140,5 @@ end
 And(/^I should not see "([^\"]+)" in the search form$/) do |string|
   within(:css, 'div#job_search_form') do
     expect(has_text?(:visible, string)).to be false
-  end
-end
-Then(/^I see '(\d+) of (\d+) Positions available'$/) do |arg1, arg2|
-  within('tr#available-positions') do
-    expect(page).to have_text arg1 + ' of ' + arg2
   end
 end
