@@ -5,7 +5,7 @@ module Companies
     attr_accessor :query
 
     def initialize(current_user, query_object = nil, job_application_query_object = nil,
-      reject_iterator = nil)
+                   reject_iterator = nil)
       @query = query_object
       @job_application_query_object = job_application_query_object
       @query = Companies::Query.new if @query.nil?
