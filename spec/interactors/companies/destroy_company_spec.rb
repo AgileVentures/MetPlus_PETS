@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-include ServiceStubHelpers::Cruncher
-
 RSpec.describe Companies::DestroyCompany do
+  include ServiceStubHelpers::Cruncher
+
   describe '#call' do
     let(:company) { double }
     let(:company_query_stub) { double }
@@ -10,7 +10,8 @@ RSpec.describe Companies::DestroyCompany do
     let(:reject_iterator) { double(JobApplications::Reject) }
     let(:subject) do
       Companies::DestroyCompany.new(
-        double, company_query_stub, job_application_query, reject_iterator)
+        double, company_query_stub, job_application_query, reject_iterator
+      )
     end
     context 'cannot find company' do
       before(:each) do
