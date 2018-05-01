@@ -50,4 +50,8 @@ class JobApplication < ActiveRecord::Base
   def process
     processing!
   end
+
+  def self.find_by_company(company)
+    joins(:job).where(job: Job.find_by_company(company))
+  end
 end

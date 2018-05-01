@@ -211,4 +211,31 @@ RSpec.describe JobApplication, type: :model do
       end.to change { application1.status }.from('active').to('processing')
     end
   end
+
+  describe 'find_by_company_id' do
+    let(:widgetCompany) { FactoryBot.create(:company) }
+    let(:steelCompany) { FactoryBot.create(:company) }
+    let(:job1) { FactoryBot.create(:job, company: widgetCompany) }
+    let(:job2) { FactoryBot.create(:job, company: widgetCompany) }
+    let(:job3) { FactoryBot.create(:job, company: steelCompany) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
+    let(:application1) do
+      FactoryBot.create(:job_application,
+                        job: job1, job_seeker: job_seeker1)
+    end
+    let(:application2) do
+      FactoryBot.create(:job_application,
+                        job: job2, job_seeker: job_seeker2)
+    end
+    let(:application3) do
+      FactoryBot.create(:job_application,
+                        job: job3, job_seeker: job_seeker2)
+    end
+
+    it 'updates the selected application status to be rejected' do
+      applications = JobApplication.find_by_company(widgetCompany)
+      expect(applications).to match_array([application1, application2])
+    end
+  end
 end
