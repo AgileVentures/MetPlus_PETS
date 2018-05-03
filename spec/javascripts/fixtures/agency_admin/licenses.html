@@ -1,0 +1,179 @@
+<div class='row'>
+    <div class='col-sm-10 col-sm-offset-1 agency-admin-container'>
+      <ul class='nav nav-pills'>
+        <li class='active'>
+          <a data-toggle='pill' href='#job-specialties-pane'>Job Specialties</a>
+        </li>
+        <li>
+          <a data-toggle='pill' href='#job-skills-pane'>Job Skills</a>
+        </li>
+        <li>
+          <a data-toggle='pill' href='#licenses-pane'>Licenses</a>
+        </li>
+      </ul>
+      <div class='tab-content tab-content-margin'>
+        <div class='tab-pane fade' id='job-licenses-pane'>
+          <div class='col-xs-12 text-right'>
+            <button class='btn btn-primary btn-sm table_action_button' data-target='#add_license' data-toggle='modal' id='add-job-license-modal-btn'>
+              Add License
+            </button>
+          </div>
+          <div class='col-xs-12 pad-0'></div>
+          <div id='licenses_table'>
+            <table class='table table-hover'>
+              <thead>
+                <tr>
+                  <th>
+                    <strong>Abbreviation</strong>
+                  </th>
+                  <th>
+                    <strong>Title</strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/licenses/1">Communication</a>
+                  </td>
+                  <td>
+                    FULL APPROVED SCHOOL SOCIAL WORKER
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/licenses/1"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/licenses/5">Keen To Learn</a>
+                  </td>
+                  <td>
+                    LICENSED BACHELOR SOCIAL WORKER
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/licenses/5"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/licenses/3">Prioritise Workload</a>
+                  </td>
+                  <td>
+                    LIMITED LICENSE BACHELOR SOCIAL WORKER
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/licenses/3"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/licenses/4">Problem Solving</a>
+                  </td>
+                  <td>
+                    LIMITED LICENSE MASTER SOCIAL WORKER
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/licenses/4"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a rel="nofollow" data-method="edit" href="/licenses/2">Teamwork</a>
+                  </td>
+                  <td>
+                    LIMITED LICENSE PROFESSIONAL COUNSELOR
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/licenses/2"><span class='glyphicon glyphicon-trash'></span>
+                    &nbsp; Delete
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <div class='clearfix'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='modal fade' id='add_license'>
+    <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+          <h4 class='modal-title'>
+            Add License
+          </h4>
+        </div>
+        <div class='modal-body'>
+          <div id='add_license_errors'></div>
+          <div class='form-group'>
+            <label class='control-label' for='add_license_attr1'>
+              Abbreviation:
+            </label>
+            <textarea class='form-control' id='add_license_attr1'></textarea>
+          </div>
+          <div class='form-group'>
+            <label class='control-label' for='add_license_attr2'>
+              Title:
+            </label>
+            <textarea class='form-control' id='add_license_attr2'></textarea>
+          </div>
+        </div>
+        <div class='modal-footer'>
+          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+          <button class='btn btn-primary' id='add_license_button' type='button'>
+            Add License
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='modal fade' id='update_license'>
+    <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+          <h4 class='modal-title'>
+            Update License
+          </h4>
+        </div>
+        <div class='modal-body'>
+          <div id='update_license_errors'></div>
+          <div class='form-group'>
+            <label class='control-label' for='update_license_attr1'>
+              Abbreviation:
+            </label>
+            <textarea class='form-control' id='update_license_attr1'></textarea>
+          </div>
+          <div class='form-group'>
+            <label class='control-label' for='update_license_attr2'>
+              Title:
+            </label>
+            <textarea class='form-control' id='update_license_attr2'></textarea>
+          </div>
+        </div>
+        <div class='modal-footer'>
+          <button class='btn btn-default' data-dismiss='modal' type='button'>Cancel</button>
+          <button class='btn btn-primary' id='update_license_button' type='button'>
+            Update License
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

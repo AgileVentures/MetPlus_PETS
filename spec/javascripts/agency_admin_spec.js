@@ -246,3 +246,18 @@ describe('Skills', function () {
     });
   });
 });
+describe('License', function(){
+  beforeEach(function () {
+    loadFixtures('agency_admin/licenses.html');
+  });
+  describe('Add license', function(){
+    beforeEach(function(){
+      $('#add_license_button').click(AgencyData.add_license);
+    });
+    it('calls ajax to add license', function() {
+      spyOn($, 'ajax');
+      $('#add_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+  });
+});
