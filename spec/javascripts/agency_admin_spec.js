@@ -259,5 +259,19 @@ describe('License', function(){
       $('#add_license_button').trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
+    it('retrieves data fields from modal', function () {
+      // Populate data fields in modal
+      $('#add_license_attr1').val('New License');
+      $('#add_license_attr2').val('New License Abbreviation');
+  
+      var user_data = {'license[abbr]': 'New License',
+                       'license[title]': 'New License Abbreviation'};
+  
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        expect(ajaxArgs.data).toEqual(user_data);
+      });
+      $('#add_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
   });
 });
