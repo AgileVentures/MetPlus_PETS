@@ -6,7 +6,7 @@ MetPlus is a non-profit that aim to help the people of Detroit, and hopefully Mi
 Public Employment Tracking System – P.E.T.S.
 --------------------------------------------
 
-[www.petsworkforce.com](www.petsworkforce.com)
+[www.petsworkforce.com](http://www.petsworkforce.com)
 
 <a href="https://github.com/AgileVentures/MetPlus_PETS/wiki/Project-Overview">Project Overview</a><br>
 The PETS system is a web platform where the Job Seekers and the Companies can find each other. The platform will try to match all the skills of the Job Seekers and the skills needed by the Companies creating a pool of possible Jobs or Candidates...<a href="https://github.com/AgileVentures/MetPlus_PETS/wiki/Project-Overview">Read more</a>
