@@ -290,4 +290,16 @@ describe('License', function(){
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+  describe('Edit license', function () {
+    beforeEach(function () {
+      $('#licenses_table').on('click',
+                    "a[href^='/licenses/'][data-method='edit']",
+                                  AgencyData.edit_license);
+    });
+    it('retrieves license attributes via ajax', function () {
+      spyOn($, 'ajax');
+      $("a[href^='/licenses/'][data-method='edit']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+  });
 });
