@@ -311,5 +311,19 @@ describe('License', function(){
       $('#update_license_button').trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
+    it('retrieves data fields from modal', function () {
+      // Populate data fields in modal
+      $('#update_license_attr1').val('Update license');
+      $('#update_license_attr2').val('Abbreviation');
+
+      var user_data = {'license[abbr]': 'Update license',
+                       'license[title]': 'Abbreviation'};
+
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        expect(ajaxArgs.data).toEqual(user_data);
+      });
+      $('#update_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
   });
 });
