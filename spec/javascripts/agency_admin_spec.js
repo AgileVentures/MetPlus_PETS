@@ -273,5 +273,13 @@ describe('License', function(){
       $('#add_license_button').trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
+    it('ajax success: calls function to add license to page', function () {
+      spyOn(AgencyData, 'change_job_property_success');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.success('data', '200');
+      });
+      $('#add_license_button').trigger('click');
+      expect(AgencyData.change_job_property_success).toHaveBeenCalled();
+    });
   });
 });
