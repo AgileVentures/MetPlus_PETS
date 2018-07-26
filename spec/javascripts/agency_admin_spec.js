@@ -302,4 +302,14 @@ describe('License', function(){
       expect($.ajax).toHaveBeenCalled();
     });
   });
+  describe('Update license', function () {
+    beforeEach(function () {
+      $('#update_license_button').click(AgencyData.update_license);
+    });
+    it('calls ajax to update license', function() {
+      spyOn($, 'ajax');
+      $('#update_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+  });
 });
