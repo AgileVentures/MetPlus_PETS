@@ -281,5 +281,13 @@ describe('License', function(){
       $('#add_license_button').trigger('click');
       expect(AgencyData.change_job_property_success).toHaveBeenCalled();
     });
+    it('ajax error: calls function to handle errors', function () {
+      spyOn(ManageData, 'change_data_error');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.error('xhrObj', 'error', 'Unprocessable Entity');
+      });
+      $('#add_license_button').trigger('click');
+      expect(ManageData.change_data_error).toHaveBeenCalled();
+    });
   });
 });
