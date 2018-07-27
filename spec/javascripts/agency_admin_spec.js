@@ -325,5 +325,21 @@ describe('License', function(){
       $('#update_license_button').trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
+    it('ajax success: calls function to update license on page', function () {
+      spyOn(AgencyData, 'change_job_property_success');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.success('data', '200');
+      });
+      $('#update_license_button').trigger('click');
+      expect(AgencyData.change_job_property_success).toHaveBeenCalled();
+    });
+    it('ajax error: calls function to handle errors', function () {
+      spyOn(ManageData, 'change_data_error');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.error('xhrObj', 'error', 'Unprocessable Entity');
+      });
+      $('#update_license_button').trigger('click');
+      expect(ManageData.change_data_error).toHaveBeenCalled();
+    });
   });
 });
