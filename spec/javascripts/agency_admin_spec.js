@@ -353,5 +353,12 @@ describe('License', function(){
       $("a[data-method='delete']").trigger('click');
       expect($.ajax).toHaveBeenCalled();
     });
+    it('uses correct URL in ajax call', function() {
+      spyOn($, 'ajax');
+      $("a[data-method='delete']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+      expect($.ajax.calls.mostRecent().args[0]['url']).
+                           toEqual('/licenses/2');
+    });
   });
 });
