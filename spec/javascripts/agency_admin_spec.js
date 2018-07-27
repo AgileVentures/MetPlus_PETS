@@ -342,4 +342,16 @@ describe('License', function(){
       expect(ManageData.change_data_error).toHaveBeenCalled();
     });
   });
+  describe('delete license', function () {
+    beforeEach(function () {
+      $('#licenses_table').on('click',
+                    "a[data-method='delete']",
+                                  AgencyData.delete_license);
+    });
+    it('calls ajax to delete license', function() {
+      spyOn($, 'ajax');
+      $("a[data-method='delete']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+  });
 });
