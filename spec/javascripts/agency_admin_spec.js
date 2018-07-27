@@ -360,5 +360,13 @@ describe('License', function(){
       expect($.ajax.calls.mostRecent().args[0]['url']).
                            toEqual('/licenses/2');
     });
+    it('ajax success: calls function to update page', function () {
+      spyOn(ManageData, 'get_updated_data');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.success('data', '200');
+      });
+      $("a[data-method='delete']").trigger('click');
+      expect(ManageData.get_updated_data).toHaveBeenCalled();
+    });
   });
 });
