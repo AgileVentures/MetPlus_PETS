@@ -4,7 +4,7 @@ Style/StringLiterals:
 AllCops:
   Exclude:
     - 'tmp/**/*'
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.3
 Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
@@ -27,16 +27,16 @@ Metrics/LineLength:
   Max: 90
 Metrics/BlockLength:
   Enabled: true
-  Exclude:
+  Exclude: 
     - spec/**/*
     - features/step_definitions/*
 Metrics/ModuleLength:
   Enabled: true
-  Exclude:
+  Exclude: 
     - spec/**/*
     - features/step_definitions/*
 Metrics/MethodLength:
   Enabled: true
-  Exclude:
+  Exclude: 
     - spec/**/*
-    - features/step_definitions/*
+    - features/step_definitions/*    
