@@ -315,7 +315,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
     last_name = FFaker::Name.last_name
     phone = "(#{(1..9).to_a.sample(3).join})-#{(1..9).to_a.sample(3)
       .join}-#{(1..9).to_a.sample(4).join}"
-    year_of_birth = 2016 - r.rand(100)
+    year_of_birth = Date.today.year - r.rand(16..65)
     job_seeker_status = jobseekerstatus[r.rand(3)]
 
     job_seeker = JobSeeker.create(first_name: first_name,
