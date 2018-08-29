@@ -28,7 +28,9 @@ describe JobSeeker, type: :model do
     it { is_expected.to belong_to(:job_seeker_status) }
 
     it { should allow_value('1987', Date.today.year - 16).for(:year_of_birth) }
-    it { should_not allow_value('1911', '899', '1890', 'salem', '2017').for(:year_of_birth) }
+    it do
+      should_not allow_value('1911', '899', '1890', 'salem', '2017').for(:year_of_birth)
+    end
     describe 'dependent: :destroy' do
       let(:js) { FactoryBot.create(:job_seeker) }
       let(:resume) { FactoryBot.create(:resume, job_seeker: js) }
