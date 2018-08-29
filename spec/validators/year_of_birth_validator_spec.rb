@@ -1,9 +1,8 @@
 require 'rails_helper'
 require 'support/validator_helper'
-include ValidatorHelper
 
-RSpec.describe YearOfBirthValidator do
-  let(:model) { ValidatorHelper.test_model_class }
+RSpec.describe YearOfBirthValidator, :include_validator_helpers do
+  let(:model) { test_model_class }
   let(:record) { model.new }
 
   before(:each) do
