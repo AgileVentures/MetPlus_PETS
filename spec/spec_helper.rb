@@ -147,4 +147,6 @@ RSpec.configure do |config|
   config.include(EmailSpec::Matchers)
 
   config.pattern = '**/*_spec.rb'
+
+  config.include ValidatorHelper, :include_validator_helpers
 end
