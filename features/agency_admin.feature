@@ -76,7 +76,7 @@ Scenario: edit agency information
   And I click the "Agency and Partner Companies" link
   Then "pets_admin@metplus.org" should be visible
   Then I click the "Edit Agency" button
-  Then I should see "MetPlus"
+  Then I should see "METPLUS"
   And I fill in "Name" with "MetPlus Two"
   And I click "Update Agency" button
   Then I should see "Agency was successfully updated."

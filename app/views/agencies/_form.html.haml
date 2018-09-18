@@ -9,6 +9,11 @@
       = text_field :agency, :name, size: 30, class: 'form-control'
 
   .form-group
+    = label :agency, :display_name, 'Display name', class: 'control-label col-sm-2'
+    .col-sm-6
+      = text_field :agency, :display_name, size: 30, class: 'form-control'
+
+  .form-group
     = label :agency, :website, 'Website', class: 'control-label col-sm-2'
     .col-sm-6
       = text_field :agency, :website, size: 30, class: 'form-control'
