@@ -253,8 +253,8 @@ Given(/^the default settings are present$/) do
     | JD    |
   ))
   step 'the following agencies exist:', table(%(
-  | name    | website     | phone        | email                  | fax          |
-  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
+  | name    | website     | phone        | email                  | fax          | display_name |
+  | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 | METPLUS      |
   ))
   step 'the following company roles exist:', table(%(
     | role  |

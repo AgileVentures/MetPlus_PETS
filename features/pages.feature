@@ -2,7 +2,10 @@ Feature: a user clicking contact is verified by a recaptcha
 
   As prospective user of PETS
   I want to make contact and send a message
-  
+
+Background:
+  Given the default settings are present
+
 @selenium
 Scenario: make contact and check the recaptcha
   Given I am on the home page
