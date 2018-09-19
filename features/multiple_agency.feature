@@ -21,3 +21,10 @@ Feature: Support multiple agencies
     And I click "Update Agency" button
     Then I am on the home page
     And I should see "METS|PLUS &#x1f680;"
+
+  Scenario: Displays Agency name when display name is blank
+    When I go to the agency 'MetPlus' edit page
+    And I fill in "Display name" with ""
+    And I click "Update Agency" button
+    Then I am on the home page
+    And I should see "MetPlus"
