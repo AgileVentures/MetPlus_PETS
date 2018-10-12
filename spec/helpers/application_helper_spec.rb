@@ -49,6 +49,12 @@ RSpec.describe ApplicationHelper, type: :helper do
   end
 
   context '#full_title' do
+    metplus_agency = FactoryBot.build(:agency, name: 'MetPlus')
+    ApplicationHelper.class_eval do
+      define_method :current_agency do
+        metplus_agency
+      end
+    end
     it 'base title' do
       expect(helper.full_title).to eq('MetPlus')
     end
