@@ -28,3 +28,8 @@ Feature: Support multiple agencies
     And I click "Update Agency" button
     Then I am on the home page
     And I should see "MetPlus"
+
+  Scenario: Agency name is displayed in the page title
+    When I am on the home page
+    Then I should see "MetPlus" in the title
+
