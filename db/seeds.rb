@@ -317,7 +317,6 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
       .join}-#{(1..9).to_a.sample(4).join}"
     year_of_birth = 2016 - r.rand(100)
     job_seeker_status = jobseekerstatus[r.rand(3)]
-
     job_seeker = JobSeeker.create(first_name: first_name,
                                   last_name: last_name,
                                   email: create_email("#{first_name}#{last_name}"),
@@ -334,14 +333,15 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
     Task.new_review_job_application_task job_application, known_company
 
     # Add resume to some job seekers
-    next unless job_seeker.id <= 15
-    resume = Resume.create(
-      file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
-      file_name: 'Admin-Assistant-Resume.pdf',
-      job_seeker_id: job_seeker.id
-    )
+    unless job_seeker.nil? || job_seeker.id >= 15
+      resume = Resume.create(
+        file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
+        file_name: 'Admin-Assistant-Resume.pdf',
+        job_seeker_id: job_seeker.id
+      )
+    end
   end
-
+  
   js2 = JobSeeker.create(first_name: 'Mary', last_name: 'McCaffrey',
                          email: 'marymacpets@gmail.com', password: 'qwerty123',
                          year_of_birth: '1970', phone: '111-222-3333',
