@@ -12,6 +12,10 @@ class JobApplication < ActiveRecord::Base
   validates_uniqueness_of :job_seeker_id, scope: :job_id
   scope :for_job, ->(job) { joins(:job).where('job_id=?', job.id) }
 
+  scope :active_companies, lambda {
+    joins(:job).where(job: Job.find_by_company(Company.active))
+  }
+
   after_create do
     StatusChange.update_status_history(self, :active)
   end
@@ -31,12 +35,14 @@ class JobApplication < ActiveRecord::Base
   def accept
     accepted!
     StatusChange.update_status_history(self, :accepted)
-    reject_applications = job.job_applications.where.not(id: id)
-    reject_applications.each do |application|
-      application.not_accepted!
-      StatusChange.update_status_history(application, :not_accepted)
+    reject_applications = job.job_applications.where.not(status: 1)
+    if job.remaining_positions <= 1
+      reject_applications.each do |application|
+        application.not_accepted!
+        StatusChange.update_status_history(application, :not_accepted)
+      end
+      job.filled
     end
-    job.filled
   end
 
   def reject
@@ -45,5 +51,9 @@ class JobApplication < ActiveRecord::Base
 
   def process
     processing!
+  end
+
+  def self.find_by_company(company)
+    joins(:job).where(job: Job.find_by_company(company))
   end
 end

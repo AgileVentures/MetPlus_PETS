@@ -52,6 +52,11 @@ Feature: Manage Jobs
       | LMSW  | LICENSED MASTER SOCIAL WORKER          |
       | LLPC  | LIMITED LICENSE PROFESSIONAL COUNSELOR |
 
+    Given the following question records:
+      | question_text                                         |
+      | Are you authorized to work in the US?                 |
+      | Are you willing to have a background check performed? |
+      | Are you willing to take a drug test?                  |
 
     Given the following education records:
       | level             | rank |
@@ -82,20 +87,24 @@ Feature: Manage Jobs
     When I click the first "Post Job" link
     And I wait 1 second
     And I fill in the fields:
-      | Title          | cashier                            |
-      | Company Job ID | KARK12                             |
-      | Description    | At least two years work experience |
+      | Title               | cashier                            |
+      | Company Job ID      | KARK12                             |
+      | Description         | At least two years work experience |
+      | Additional Licenses | Some other license                 |
     And I select "Day" in select list "Shift"
     And  I select "16 Fall Detroit, Michigan 02074" in select list "Job Location"
     And I select "Full Time" in select list "Job Type"
     And I select "Part Time" in select list "Job Type"
     And I select "Morning" in select list "Shift"
-    Then I select a license
+    And I select a license
+    And I select a question
+    And I select another question
     And I press "new-job-submit"
     Then I should see "cashier has been created successfully."
     And the job "cashier" should have 1 license
-    And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
-
+    And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER) , Some other license"
+    And I should see "Are you authorized to work in the US?"
+    And I should see "Are you willing to have a background check performed?"
 
   @javascript
   Scenario: Updating a job successfully
@@ -107,6 +116,7 @@ Feature: Manage Jobs
       | Company Job ID       | KRT123                            |
       | Description          | Atleast two years work experience |
       | Language Proficiency | Must speak fluent english         |
+      | Additional Licenses  | Yet another license               |
     And  I select "19 Winter Detroit, Michigan 02094" in select list "Job Location"
     And I select "Contract" in select list "Job Type"
     And I select "Part Time" in select list "Job Type"
@@ -116,6 +126,7 @@ Feature: Manage Jobs
     And I choose the "Monthly" radio button
     Then I select a license
     And I press "Update"
+    And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
     Then I should see "cab-driver has been updated successfully."
     And the job "cab-driver" should have 1 license
     And I should see "Part Time, Contract"
@@ -130,18 +141,24 @@ Feature: Manage Jobs
     And I should see "Associates Degree"
     And I should see "also need XYZ training"
 
+    And I should see "Yet another license"
     Then I click the "Edit Job" link
     And I select another license
+    And I fill in "Additional Licenses:" with "Some different license"
+    And I fill in "Additional Skills:" with "Some different skills"
     And I press "Update"
     And the job "cab-driver" should have 2 licenses
     And I should see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
     And I should see "LLPC (LIMITED LICENSE PROFESSIONAL COUNSELOR)"
+    And I should see "Some different license"
+    And I should see "Some different skills"
 
     Then I click the "Edit Job" link
     Then I wait for 1 second
     And I click the first "remove license" link
     And I press "Update"
     And the job "cab-driver" should have 1 license
+    And I should not see "LLMSW (LIMITED LICENSE MASTER SOCIAL WORKER)"
     And I should see "LLPC (LIMITED LICENSE PROFESSIONAL COUNSELOR)"
 
     Then I go to the Company Person 'jane@ymail.com' Home page

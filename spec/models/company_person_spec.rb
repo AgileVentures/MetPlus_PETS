@@ -69,6 +69,26 @@ describe CompanyPerson, type: :model do
         .join_table('company_people_roles')
     }
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
+
+    describe 'dependent: :destroy and dependent: :nullify' do
+      let(:company_person) { FactoryBot.create(:pending_first_company_admin) }
+      let(:job) { FactoryBot.create(:job) }
+      it 'destroys status_changes with association when company_person is destroyed' do
+        company_person.active
+        statuses = company_person.status_changes
+        expect { company_person.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+      it 'nullifys job\'s foreign key when company_person is destroyed' do
+        company_person = job.company_person
+        foreign = job.company_person_id
+        expect { company_person.destroy }.to \
+          change { Job.find_by(company_person_id: foreign).nil? } \
+          .from(false).to(true).and \
+            change { Job.count }.by(0)
+      end
+    end
   end
 
   describe 'check model restrictions' do
@@ -101,29 +121,29 @@ describe CompanyPerson, type: :model do
     end
   end
 
-  describe '#is_company_contact?' do
+  describe '#company_contact?' do
     let(:company) { FactoryBot.create(:company) }
     let(:company1) { FactoryBot.create(:company) }
     let(:person) { FactoryBot.create(:company_contact, company: company) }
     let(:person_other_company) { FactoryBot.create(:company_contact, company: company1) }
     it 'correct' do
-      expect(person.is_company_contact?(company)).to be true
+      expect(person.company_contact?(company)).to be true
     end
     it 'incorrect' do
-      expect(person_other_company.is_company_contact?(company)).to be false
+      expect(person_other_company.company_contact?(company)).to be false
     end
   end
 
-  describe '#is_company_admin?' do
+  describe '#company_admin?' do
     let(:company) { FactoryBot.create(:company) }
     let(:company1) { FactoryBot.create(:company) }
     let(:person) { FactoryBot.create(:company_admin, company: company) }
     let(:person_other_company) { FactoryBot.create(:company_admin, company: company1) }
     it 'correct' do
-      expect(person.is_company_admin?(company)).to be true
+      expect(person.company_admin?(company)).to be true
     end
     it 'incorrect' do
-      expect(person_other_company.is_company_admin?(company)).to be false
+      expect(person_other_company.company_admin?(company)).to be false
     end
   end
 

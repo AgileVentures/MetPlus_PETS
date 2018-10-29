@@ -20,6 +20,7 @@ en:
       signed_up_but_not_approved: >
         You have successfully signed up but your account cannot be used
         until your company registration is approved.
+      company_no_longer_active: "Your company is no longer active in PETS"
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"

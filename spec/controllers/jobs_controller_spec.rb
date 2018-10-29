@@ -156,6 +156,25 @@ RSpec.describe JobsController, type: :controller do
         expect(assigns(:jobs)).to eq [joba]
       end
     end
+
+    context 'when company person is logged in' do
+      let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
+      let!(:other_inc) do
+        FactoryBot.create(:company, name: 'Other inc',
+                                    status:  'active',
+                                    agencies: [agency])
+      end
+
+      let!(:job_1_widget_company) { FactoryBot.create(:job, company: bosh) }
+      let!(:job_1_other_company) { FactoryBot.create(:job, company: other_inc) }
+      let!(:job_2_other_company) { FactoryBot.create(:job, company: other_inc) }
+
+      it 'show jobs only of the current company' do
+        sign_in bosh_person
+        get :index
+        expect(assigns(:jobs)).to eq [job_1_widget_company]
+      end
+    end
   end
 
   describe 'GET #new' do
@@ -229,11 +248,28 @@ RSpec.describe JobsController, type: :controller do
           expect { post :create, job: valid_params }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
+
         it 'redirects to the job show view' do
           request
           expect(response).to redirect_to(job_path(Job.last))
           expect(flash[:notice]).to eq "#{valid_params[:title]} " \
                                        'has been created successfully.'
+        end
+        context 'when additional licenses are present' do
+          it 'saves the additional license' do
+            post :create, job: valid_params.merge(
+              additional_licenses: 'Some additional licenses text'
+            )
+            expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
+          end
+        end
+        context 'when additional skills are present' do
+          it 'saves the additional skills' do
+            post :create, job: valid_params.merge(
+              additional_skills: 'Some additional skills text'
+            )
+            expect(Job.first.additional_skills).to eq 'Some additional skills text'
+          end
         end
       end
 
@@ -489,6 +525,26 @@ RSpec.describe JobsController, type: :controller do
           expect(flash[:info]).to eq "#{valid_params[:title]} "\
                                      'has been updated successfully.'
         end
+
+        context 'when additional licenses are present' do
+          it 'saves the additional license' do
+            patch :update, id: job_wo_skill.id,
+                           job: valid_params.merge(
+                             additional_licenses: 'Some additional licenses text'
+                           )
+            expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
+          end
+        end
+
+        context 'when additional skills are present' do
+          it 'saves the additional skill' do
+            patch :update, id: job_wo_skill.id,
+                           job: valid_params.merge(
+                             additional_skills: 'Some additional skills text'
+                           )
+            expect(Job.first.additional_skills).to eq 'Some additional skills text'
+          end
+        end
       end
       describe 'unsuccessful update' do
         it 'remain job & job skill count' do
@@ -622,7 +678,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       it { expect(response).to have_http_status(:ok) }
-      it {  expect(response).to render_template('jobs/_list_jobs') }
+      it { expect(response).to render_template('jobs/_list_jobs') }
       it 'check jobs' do
         # Next line added to ensure the query is done and that the
         # paginate is also called

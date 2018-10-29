@@ -86,44 +86,23 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    context 'company with jobs' do
-      before(:each) do
-        stub_cruncher_authenticate
-        stub_cruncher_job_create
-        sign_in admin
-        delete :destroy, id: company_with_jobs
-      end
+    before(:each) do
+      sign_in admin
 
-      it 'does not delete the company' do
-        expect(assigns(:company).destroyed?).to eq(false)
-      end
+      subject.destroy_company_iterator = double
+      expect(subject.destroy_company_iterator).to receive(:call)
+        .with(company.id.to_s)
+        .and_return(company)
 
-      it 'shows the alert' do
-        expect(flash[:alert]).to eq('Company cannot be deleted')
-      end
-
-      it 'redirects to the company page' do
-        expect(response).to redirect_to company_with_jobs
-      end
+      delete :destroy, id: company
     end
 
-    context 'company with no jobs' do
-      before(:each) do
-        sign_in admin
-        delete :destroy, id: company
-      end
+    it 'shows the flash notice message' do
+      expect(flash[:notice]).to eq("Company '#{company.name}' deleted.")
+    end
 
-      it 'deletes the company' do
-        expect(assigns(:company).destroyed?).to eq(true)
-      end
-
-      it 'shows the flash notice message' do
-        expect(flash[:notice]).to eq("Company '#{company.name}' deleted.")
-      end
-
-      it 'redirects to root path' do
-        expect(response).to redirect_to root_path
-      end
+    it 'redirects to root path' do
+      expect(response).to redirect_to root_path
     end
   end
 

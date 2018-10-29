@@ -20,6 +20,30 @@ RSpec.describe AgencyPerson, type: :model do
         .through(:agency_relations).dependent(:destroy)
     }
     it { is_expected.to have_many(:status_changes).dependent(:destroy) }
+
+    describe 'dependent: :destroy' do
+      let(:agency_relation) do
+        FactoryBot.create(:agency_relation,
+                          agency_person: FactoryBot.create(:agency_person),
+                          job_seeker: FactoryBot.create(:job_seeker),
+                          agency_role: FactoryBot.create(:agency_role))
+      end
+      let(:agency) { FactoryBot.create(:agency) }
+      let(:ap) { FactoryBot.create(:agency_admin, status: 'invited', agency: agency) }
+      it 'destroys job_seekers with join association when agency person is destroyed' do
+        js = agency_relation.agency_person.job_seekers
+        expect { agency_relation.agency_person.destroy }.to \
+          change { js.count }.from(1).to(0).and \
+            change { AgencyRelation.count }.by(-1)
+      end
+      it 'destroys status_changes with association when agency person is destroyed' do
+        ap.active
+        statuses = ap.status_changes
+        expect { ap.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+    end
   end
 
   describe 'Database schema' do
@@ -151,34 +175,34 @@ RSpec.describe AgencyPerson, type: :model do
   describe 'Identity check with' do
     let(:agency) { FactoryBot.create(:agency) }
     let(:agency1) { FactoryBot.create(:agency) }
-    describe '#is_job_developer?' do
+    describe '#job_developer?' do
       let(:person) { FactoryBot.create(:job_developer, agency: agency) }
       let(:person_other_agency) { FactoryBot.create(:job_developer, agency: agency1) }
       it 'correct' do
-        expect(person.is_job_developer?(agency)).to be true
+        expect(person.job_developer?(agency)).to be true
       end
       it 'incorrect' do
-        expect(person_other_agency.is_job_developer?(agency)).to be false
+        expect(person_other_agency.job_developer?(agency)).to be false
       end
     end
-    describe '#is_case_manager?' do
+    describe '#case_manager?' do
       let(:person) { FactoryBot.create(:case_manager, agency: agency) }
       let(:person_other_agency) { FactoryBot.create(:case_manager, agency: agency1) }
       it 'correct' do
-        expect(person.is_case_manager?(agency)).to be true
+        expect(person.case_manager?(agency)).to be true
       end
       it 'incorrect' do
-        expect(person_other_agency.is_case_manager?(agency)).to be false
+        expect(person_other_agency.case_manager?(agency)).to be false
       end
     end
-    describe '#is_agency_admin?' do
+    describe '#agency_admin?' do
       let(:person) { FactoryBot.create(:agency_admin, agency: agency) }
       let(:person_other_agency) { FactoryBot.create(:agency_admin, agency: agency1) }
       it 'correct' do
-        expect(person.is_agency_admin?(agency)).to be true
+        expect(person.agency_admin?(agency)).to be true
       end
       it 'incorrect' do
-        expect(person_other_agency.is_agency_admin?(agency)).to be false
+        expect(person_other_agency.agency_admin?(agency)).to be false
       end
     end
   end

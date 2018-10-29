@@ -1,6 +1,6 @@
 class SkillPolicy < ApplicationPolicy
   def create?
-    User.is_agency_admin?(user) || User.is_company_person?(user)
+    User.agency_admin?(user) || User.company_person?(user)
   end
   def show?
     create?

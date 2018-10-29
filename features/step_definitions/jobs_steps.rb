@@ -100,19 +100,57 @@ And(/^I accept the confirm dialog/) do
   accept_confirm
 end
 
-Then(/^I select (a|another) licenses?$/) do |prefix|
-  step %(I click the "Add License" link)
-  within(:css, 'div#licenses') do
-    first('.select-license').find(:xpath, 'option[2]').select_option
+Then(/^I select (a|another) (license|question)?$/) do |prefix, domain|
+  step %(I click the "Add #{domain.capitalize}" link)
+  within(:css, "div##{domain}s") do
+    first(".select-#{domain}").find(:xpath, 'option[2]').select_option
   end
   if prefix == 'another'
-    step %(I click the "Add License" link)
-    within(:css, 'div#licenses') do
-      all('.select-license')[1].find(:xpath, 'option[3]').select_option
+    step %(I click the "Add #{domain.capitalize}" link)
+    within(:css, "div##{domain}s") do
+      all(".select-#{domain}")[1].find(:xpath, 'option[3]').select_option
     end
   end
 end
 
+And(/^I answer (first|another) application question with (Yes|No)/) do |prefix, answer|
+  indexes = {
+    'Yes': { 'first': 1, 'another': 4 },
+    'No': { 'first': 2, 'another': 5 }
+  }
+  index = indexes[answer.to_sym][prefix.to_sym]
+  button = within(:css, 'div#job-apply-modal-id') do
+    find('.edit_job').all('.radio-inline')[index]
+  end
+  button.choose(answer)
+end
+
 Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
   expect(Job.find_by_title(title).licenses.count.to_s).to eq count
+end
+
+Given(/^I am creating a Job$/) do
+  step %(I press "Post Job" within "all-jobs-pane")
+  step %(I fill in "job_title" with "Developer")
+  step %(I fill in "job_company_job_id" with "73")
+  step %(I fill in "job_description" with "Development")
+  fill_in 'job_new_address_attributes_street', with: '3661 West', visible: false
+  fill_in 'job_new_address_attributes_city', with: 'J', visible: false
+  select('Alabama', from: 'job_new_address_attributes_state', visible: false)
+end
+
+When(/^I submit the new job$/) do
+  step %(I press "Create")
+end
+
+When(/^I fill in job details$/) do
+  fill_in 'job_new_address_attributes_street', with: '3661 West', visible: false
+  fill_in 'job_new_address_attributes_city', with: 'J', visible: false
+  select('Alabama', from: 'job_new_address_attributes_state', visible: false)
+end
+
+And(/^I should not see "([^\"]+)" in the search form$/) do |string|
+  within(:css, 'div#job_search_form') do
+    expect(has_text?(:visible, string)).to be false
+  end
 end

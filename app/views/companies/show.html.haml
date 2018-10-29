@@ -29,8 +29,8 @@
 %br
 
 .col-sm-4.col-sm-offset-5
-  - if @admin_aa && @company.has_no_jobs?
-    = link_to('Delete Company', company_path(@company),
+  - if @admin_aa
+    = button_to('Delete Company', company_path(@company),
               method: :delete,
               data: { confirm: "Delete company #{@company.name}?" },
               class: 'btn btn-danger btn-sm pull-right')

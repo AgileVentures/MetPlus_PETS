@@ -17,6 +17,19 @@ RSpec.describe License, type: :model do
   describe 'Associations' do
     it { is_expected.to have_many(:job_licenses) }
     it { is_expected.to have_many(:jobs).through(:job_licenses).dependent(:destroy) }
+    describe 'dependent: :destroy' do
+      let(:jl) do
+        FactoryBot.create(:job_license,
+                          job: FactoryBot.create(:job),
+                          license: FactoryBot.create(:license))
+      end
+      it 'destroys jobs with join association when license is destroyed' do
+        jobs = jl.license.jobs
+        expect { jl.license.destroy }.to \
+          change { jobs.count }.from(1).to(0).and \
+            change { JobLicense.count }.by(-1)
+      end
+    end
   end
 
   describe 'Abbr' do

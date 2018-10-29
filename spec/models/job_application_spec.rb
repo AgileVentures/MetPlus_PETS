@@ -27,6 +27,26 @@ RSpec.describe JobApplication, type: :model do
       is_expected.to have_many(:questions)
         .through(:application_questions).dependent(:destroy)
     }
+
+    describe 'dependent: :destroy' do
+      let(:aq) do
+        FactoryBot.create(:application_question,
+                          job_application: FactoryBot.create(:job_application),
+                          question: FactoryBot.create(:question))
+      end
+      it 'destroys questions with join association when job_application is destroyed' do
+        questions = aq.job_application.questions
+        expect { aq.job_application.destroy }.to \
+          change { questions.count }.from(1).to(0).and \
+            change { ApplicationQuestion.count }.by(-1)
+      end
+      it 'destroys status_changes with association when job_application is destroyed' do
+        statuses = aq.job_application.status_changes
+        expect { aq.job_application.destroy }.to \
+          change { statuses.count }.from(1).to(0).and \
+            change { StatusChange.count }.by(-1)
+      end
+    end
   end
 
   describe 'Validations' do
@@ -190,6 +210,33 @@ RSpec.describe JobApplication, type: :model do
       expect do
         application1.process
       end.to change { application1.status }.from('active').to('processing')
+    end
+  end
+
+  describe 'find_by_company_id' do
+    let(:widgetCompany) { FactoryBot.create(:company) }
+    let(:steelCompany) { FactoryBot.create(:company) }
+    let(:job1) { FactoryBot.create(:job, company: widgetCompany) }
+    let(:job2) { FactoryBot.create(:job, company: widgetCompany) }
+    let(:job3) { FactoryBot.create(:job, company: steelCompany) }
+    let(:job_seeker1) { FactoryBot.create(:job_seeker) }
+    let(:job_seeker2) { FactoryBot.create(:job_seeker) }
+    let(:application1) do
+      FactoryBot.create(:job_application,
+                        job: job1, job_seeker: job_seeker1)
+    end
+    let(:application2) do
+      FactoryBot.create(:job_application,
+                        job: job2, job_seeker: job_seeker2)
+    end
+    let(:application3) do
+      FactoryBot.create(:job_application,
+                        job: job3, job_seeker: job_seeker2)
+    end
+
+    it 'updates the selected application status to be rejected' do
+      applications = JobApplication.find_by_company(widgetCompany)
+      expect(applications).to match_array([application1, application2])
     end
   end
 end

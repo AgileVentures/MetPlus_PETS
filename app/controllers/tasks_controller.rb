@@ -41,7 +41,7 @@ class TasksController < ApplicationController
     begin
       task.work_in_progress
     rescue Exception => e
-      return render json: {:message => e.message}, status: 500 if user.nil?
+      return render json: {:message => e.message}, status: 500
     end
     render json: {:message => 'Task work in progress'}
   end
@@ -54,7 +54,7 @@ class TasksController < ApplicationController
     begin
       task.complete
     rescue Exception => e
-      return render json: {:message => e.message}, status: 500 if user.nil?
+      return render json: {:message => e.message}, status: 500
     end
     render json: {:message => 'Task finished'}
   end

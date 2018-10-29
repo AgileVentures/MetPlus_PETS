@@ -57,6 +57,10 @@ class JobsController < ApplicationController
                end
     @query = Job.ransack(search_params) # For form display of entered values
 
+    if current_user && User.company_person?(current_user)
+      q_params['company_id_in'] = current_user.pets_user.company.id
+    end
+
     @jobs  = Job.ransack(q_params).result
                 .includes(:company)
                 .includes(:address)
@@ -84,6 +88,7 @@ class JobsController < ApplicationController
 
     @job = Job.new(save_params)
     @job.build_address(new_address_params) if new_address_params
+    @job.remaining_positions = @job.available_positions
 
     if pets_user.is_a?(CompanyPerson)
       @job.company_id = pets_user.company.id
@@ -135,6 +140,7 @@ class JobsController < ApplicationController
     # if new_address_params is not nil then user wants to create a new
     # job location (company address) and associate that with this job.
     new_address_params = update_params.delete(:new_address_attributes)
+    @job.remaining_positions = update_params[:available_positions]
 
     if new_address_params
       @job.build_address(new_address_params)
@@ -350,7 +356,7 @@ class JobsController < ApplicationController
   private
 
   def set_job_seekers
-    return unless pets_user && pets_user.is_job_developer?(current_agency)
+    return unless pets_user&.job_developer?(current_agency)
     @job_seekers = pets_user.job_seekers
   end
 
@@ -415,6 +421,9 @@ class JobsController < ApplicationController
                                 :company_person_id, :years_of_experience,
                                 :pay_period, :max_salary, :min_salary,
                                 :education_info, :education_id,
+                                :additional_licenses,
+                                :additional_skills,
+                                :available_positions,
                                 job_type_ids: [], job_shift_ids: [],
                                 job_skills_attributes: [:id, :_destroy,
                                                         :skill_id, :required,

@@ -53,7 +53,7 @@ class Job < ActiveRecord::Base
                             allow_blank: true,
                             greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 20
-
+  validates_numericality_of :available_positions, greater_than: 0
   validates_presence_of :pay_period, message: 'must be specified',
     if: Proc.new { |j| j.min_salary.present? }
 
@@ -108,14 +108,7 @@ class Job < ActiveRecord::Base
     end
 
     if job_application.save!
-
-      # Send mail to the company with the attached resume
-      CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
-                      .perform_later(Event::EVT_TYPE[:JS_APPLY],
-                                     company,
-                                     nil,
-                                     application: job_application,
-                                     resume_id: job_seeker.resumes[0].id)
+      send_application_email_to_company job_seeker, job_application
       yield(job_application, self, job_seeker) if block_given?
       job_application
     end
@@ -183,4 +176,15 @@ class Job < ActiveRecord::Base
     true
   end
 
+  def send_application_email_to_company(job_seeker, job_application)
+    resume = nil
+    resume = job_seeker.resumes[0].id unless job_seeker.resumes.empty?
+    # Send mail to the company with the attached resume
+    CompanyMailerJob.set(wait: Event.delay_seconds.seconds)
+                    .perform_later(Event::EVT_TYPE[:JS_APPLY],
+                                   company,
+                                   nil,
+                                   application: job_application,
+                                   resume_id: resume)
+  end
 end

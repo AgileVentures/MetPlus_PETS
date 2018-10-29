@@ -19,6 +19,6 @@ class JobApplicationPolicy < ApplicationPolicy
   private
 
   def correct_company_person?(user)
-    User.is_company_person?(user) && record.job.company == user.company
+    User.company_person?(user) && record.job.company == user.company
   end
 end

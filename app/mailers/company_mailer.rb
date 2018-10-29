@@ -21,18 +21,23 @@ class CompanyMailer < ApplicationMailer
     @job_application = job_application
     @job = @job_application.job
     @job_seeker = @job_application.job_seeker
+    @has_resume = !resume_id.nil?
 
-    # Download the resume from Cruncher
-    resume_temp_file = ResumeCruncher.download_resume(resume_id)
-    file_name = @job_seeker.resumes.first.file_name
-    attachments[file_name] = File.read(resume_temp_file.path)
+    if @has_resume
+      # Download the resume from Cruncher
+      resume_temp_file = ResumeCruncher.download_resume(resume_id)
+      file_name = @job_seeker.resumes.first.file_name
+      attachments[file_name] = File.read(resume_temp_file.path)
+    end
 
     mail(to: company.job_email, from: ENV['NOTIFICATION_EMAIL'],
          subject: 'Job Application received')
 
-    # On windows, unlinking a file before closing fails
-    # For more, see http://docs.cs.up.ac.za/programming/ruby/ruby_2_2_0_stdlib/libdoc/tempfile/rdoc/Tempfile.html#method-i-unlink-label-Unlink-before-close
-    resume_temp_file.close(unlink_now=true)
+    if @has_resume
+      # On windows, unlinking a file before closing fails
+      # For more, see http://docs.cs.up.ac.za/programming/ruby/ruby_2_2_0_stdlib/libdoc/tempfile/rdoc/Tempfile.html#method-i-unlink-label-Unlink-before-close
+      resume_temp_file.close(true)
+    end
   end
 
   private

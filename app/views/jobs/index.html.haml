@@ -65,15 +65,15 @@
                         :id, :name, {include_blank: true},
                         {multiple: true, size: 5, class: 'form-control',
                          style: 'width: 100%;'}
-
-    .form-group
-      = f.label :company_id_in, 'Company', class: 'control-label col-sm-3'
-      .col-sm-6
-        = f.collection_select :company_id_in,
-              Company.all_active_with_jobs,
-              :id, :name, {include_blank: true},
-              {multiple: true, size: 5,
-                class: 'form-control', style: 'width: 100%;'}
+    - if !current_user || !User.company_person?(current_user)
+      .form-group
+        = f.label :company_id_in, 'Company', class: 'control-label col-sm-3', id: 'search-company'
+        .col-sm-6
+          = f.collection_select :company_id_in,
+                Company.all_active_with_jobs,
+                :id, :name, {include_blank: true},
+                {multiple: true, size: 5,
+                  class: 'form-control', style: 'width: 100%;'}
 
     .form-group
       = f.label :status_in, 'Status', class: 'control-label col-sm-3'

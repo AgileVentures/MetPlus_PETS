@@ -83,7 +83,13 @@
       = b.label(style: ('margin-left: 20px;' unless b.text == 'Hourly')) do
         = b.radio_button + ' ' + b.text
 %br
-
+.form-group
+  .col-sm-3.control-label
+    = f.label :available_positions, 'Available Positions', class: 'control-label'
+  .col-sm-1
+    = f.text_field :available_positions,
+                    class: 'form-control', value: @job.available_positions
+%br
 .form-group
   .col-sm-3.control-label
     = f.label :description
@@ -132,6 +138,11 @@
       .links
         = link_to_add_association 'Add Job Skill', f, :job_skills,
             render_options: { locals: { company: company } }
+      %br
+      = f.label :additional_skills, 'Additional Skills:',
+                style: 'margin-left: 10px;'
+      &nbsp;
+      = f.text_field :additional_skills, size: 90
 
 .form-group
   .col-sm-3.control-label
@@ -143,6 +154,12 @@
       .links
         = link_to_add_association 'Add License', f, :job_licenses,
             render_options: { locals: { all_licenses: all_licenses } }
+      %br
+      %br
+      = f.label :additional_licenses, 'Additional Licenses:',
+                style: 'margin-left: 10px;'
+      &nbsp;
+      = f.text_field :additional_licenses, size: 90
 
 .form-group
   .col-sm-3.control-label

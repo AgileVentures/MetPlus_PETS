@@ -29,6 +29,42 @@ describe JobSeeker, type: :model do
 
     it { should allow_value('1987', '2000', '2014').for(:year_of_birth) }
     it { should_not allow_value('1911', '899', '1890', 'salem').for(:year_of_birth) }
+    describe 'dependent: :destroy' do
+      let(:js) { FactoryBot.create(:job_seeker) }
+      let(:resume) { FactoryBot.create(:resume, job_seeker: js) }
+      let(:ar) do
+        FactoryBot.create(:agency_relation,
+                          agency_person: FactoryBot.create(:job_developer),
+                          job_seeker: js)
+      end
+      let(:job) { FactoryBot.create(:job) }
+      let(:ja) { FactoryBot.create(:job_application, job: job, job_seeker: js) }
+      it 'destroys resumes with association when job_seeker is destroyed' do
+        resume
+        resumes = js.resumes
+        expect { js.destroy }.to \
+          change { resumes.count }.from(1).to(0).and \
+            change { Resume.count }.by(-1)
+      end
+      it 'destroys addresses with association when job_seeker is destroyed' do
+        address = js.address.id
+        expect { js.destroy }.to \
+          change { Address.exists?(address) }.from(true).to(false).and \
+            change { Address.count }.by(-1)
+      end
+      it 'destroys agency_people with join association when job_seeker is destroyed' do
+        agency_people = ar.job_seeker.agency_people
+        expect { js.destroy }.to \
+          change { agency_people.count }.from(1).to(0).and \
+            change { AgencyRelation.count }.by(-1)
+      end
+      it 'destroys jobs with join association when job_seeker is destroyed' do
+        jobs = ja.job_seeker.jobs
+        expect { js.destroy }.to \
+          change { jobs.count }.from(1).to(0).and \
+            change { JobApplication.count }.by(-1)
+      end
+    end
   end
 
   describe 'job applications' do
@@ -113,10 +149,10 @@ describe JobSeeker, type: :model do
       expect(JobSeeker.acting_as?(String)).to be false
     end
   end
-  describe '#is_job_seeker?' do
+  describe '#job_seeker?' do
     let(:person) { FactoryBot.create(:job_seeker) }
     it 'true' do
-      expect(person.is_job_seeker?).to be true
+      expect(person.job_seeker?).to be true
     end
   end
 

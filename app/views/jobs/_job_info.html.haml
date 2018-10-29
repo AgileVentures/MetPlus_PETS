@@ -29,14 +29,13 @@
         %td
           #{job.years_of_experience == 20 ? "#{job.years_of_experience} Or More Years" : pluralize(job.years_of_experience, 'Year')}
     %tr
-      %td Contact information:
-      %td
-        Contact: Place Holder
-        %br
-        Email: #{mail_to('placeholder@gmail.com')}
-    %tr
       %td Salary:
       %td= job_salary_details(job)
+    %tr
+      %td Available positions:
+      %td
+        = job.remaining_positions 
+        of #{job.available_positions} positions available
     %tr
       %td Job Details:
       %td= job.description
@@ -56,10 +55,13 @@
         %td Job Shifts:
         %td= job.job_shifts.map(&:shift).join(', ')
 
-    - unless job.job_licenses.empty?
+    - unless job.job_licenses.empty? and job.additional_licenses.nil?
       %tr
         %td Licenses Required:
-        %td= job.licenses.map(&:license_description).join(', ')
+        %td
+          = job.licenses.map(&:license_description).join(', ')
+          ,
+          = job.additional_licenses
 
     - unless job.job_questions.empty?
       %tr
@@ -103,3 +105,9 @@
                       = job_skill.min_years if job_skill.min_years
                     %td
                       = job_skill.max_years if job_skill.max_years
+    - unless job.additional_skills.nil?
+      %tr
+        %td Other Skills:
+        %td
+          %i
+            = job.additional_skills

@@ -3,9 +3,12 @@ class CompaniesController < ApplicationController
   include CompanyPeopleViewer
   include PaginationUtility
 
+  attr_accessor :destroy_company_iterator
+
   before_action :lookup_company
 
   before_action :user_logged!
+  before_action :initialize_use_cases
 
   def show
     self.action_description = 'show the company'
@@ -15,14 +18,8 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
-    self.action_description = 'destroy the company'
-    authorize @company
-    if @company.jobs.exists?
-      redirect_to(@company, alert: 'Company cannot be deleted') && return
-    end
-
-    @company.destroy
-    flash[:notice] = "Company '#{@company.name}' deleted."
+    company = @destroy_company_iterator.call(params[:id])
+    flash[:notice] = "Company '#{company.name}' deleted."
     redirect_to root_path
   end
 
@@ -83,9 +80,14 @@ class CompaniesController < ApplicationController
                                     :website, :ein, :description,
                                     :job_email,
                                     company_people_attributes:
-                                  [:id, :first_name, :last_name, :phone, :email,
-                                   :password, :password_confirmation],
+                                  %i[id first_name last_name phone email
+                                     password password_confirmation],
                                     addresses_attributes:
-                             [:id, :street, :city, :zipcode, :state, :_destroy])
+                             %i[id street city zipcode state _destroy])
+  end
+
+  def initialize_use_cases
+    @destroy_company_iterator = Companies::DestroyCompany.new current_user \
+      if @destroy_company_iterator.nil?
   end
 end

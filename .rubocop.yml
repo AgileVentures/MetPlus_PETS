@@ -17,6 +17,12 @@ Layout/DotPosition:
 Style/Documentation:
   Enabled: false
 
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+Style/MethodDefParentheses:
+  Enabled: true
+
 Metrics/LineLength:
   Max: 90
 Metrics/BlockLength:

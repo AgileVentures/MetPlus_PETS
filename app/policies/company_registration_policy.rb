@@ -26,11 +26,11 @@ class CompanyRegistrationPolicy < ApplicationPolicy
   private
 
   def company_admin?(user, record)
-    user.is_a?(CompanyPerson) && user.is_company_admin?(record.company)
+    user.is_a?(CompanyPerson) && user.company_admin?(record.company)
   end
 
   def agency_admin?(user, record)
-    User.is_agency_admin?(user) &&
+    User.agency_admin?(user) &&
       (agency_admin_related_to_company? user, record.company)
   end
 

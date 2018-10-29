@@ -1,6 +1,6 @@
 %h3 Tasks assigned to you
 = render partial: 'tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t1}
-- if pets_user.is_agency_admin?(pets_user.agency)
+- if pets_user.agency_admin?(pets_user.agency)
   %h3 Tasks unassigned
   = render partial: 'tasks_structure' , :locals => {all_tasks: @tasks_t1, task_type: @task_type_t2}
 %h3 Tasks completed by you
