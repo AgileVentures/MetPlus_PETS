@@ -1,24 +1,30 @@
--# partial for job applications
 - if job_applications.empty?
   %span{ style: 'padding-left: 10px;' } None
 - else
+  -#applications-list
   %table.table.table-hover
     %thead
       %tr
         - application_fields(application_type).each do |field|
           - case field
             - when :title
-              %th.strong Title
+              %th.strong
+                = sort_link(query, :job_title, {}, { class: 'applications-pagination', remote: true })
             - when :description
-              %th.strong Description
+              %th.strong
+                = "Description"
             - when :company
-              %th.strong Company
+              %th.strong
+                = sort_link(query, :job_company_name, 'Company', {}, { class: 'applications-pagination', remote: true })
             - when :applied_at
-              %th.strong Applied
+              %th.strong
+                = sort_link(query, :applied_at, 'Applied', {}, { class: 'applications-pagination', remote: true })
             - when :status
-              %th.strong Status
+              %th.strong
+                = sort_link(query, :status, {}, { class: 'applications-pagination', remote: true })
             - when :name
-              %th.strong Name
+              %th.strong
+                = sort_link(query, :name, {}, { class: 'applications-pagination', remote: true })
             - when :js_status
               %th.strong Job Seeker Status
             - when :action
@@ -39,6 +45,7 @@
                   = job_application.job.company.name
               - when :applied_at
                 %td
+                  -# TODO applied at - how to get it from db ????
                   - applied_at = job_application.status_change_time(:active)
                   #{time_ago_in_words(applied_at)} ago
               - when :status
@@ -81,7 +88,8 @@
                     = link_to "#{job_application.status}", '#',
                               class: "btn btn-default disabled"
 
-  = will_paginate job_applications, param_name: 'applications_page',
-                                    params: { controller: 'job_applications',
-                                              action: 'list',
-                                              type: application_type }
+  = render 'shared/paginate_footer',
+      entities: job_applications,
+      paginate_class: 'applications-pagination',
+      items_count: items_count,
+      url: list_applications_path(type: application_type)

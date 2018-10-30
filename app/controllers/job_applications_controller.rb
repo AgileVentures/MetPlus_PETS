@@ -1,6 +1,8 @@
 # Job applications controller
 class JobApplicationsController < ApplicationController
   include JobApplicationsViewer
+  include PaginationUtility
+
   before_action :user_logged!, except: :list
   before_action :find_application, except: :list
 
@@ -35,11 +37,17 @@ class JobApplicationsController < ApplicationController
 
   def list
     raise 'Unsupported request' unless request.xhr?
-    @job_applications = []
-    @job_applications = display_job_applications(params[:type], params[:entity_id], 5)
+    search_params, items_count, items_per_page = process_pagination_params('job_applications')
+    job_applications = display_job_applications(params[:type], params[:entity_id])
+    query = job_applications.ransack(search_params)
+    @job_applications = query.result.paginate(page: params[:page], per_page: items_per_page)
+    # ^ instance var not used directly in view but added for testing convenience
+
     render partial: 'jobs/applied_job_list',
            locals: { job_applications: @job_applications,
-                     application_type: params[:type] }
+                     application_type: params[:type],
+                     query: query,
+                     items_count: items_count}
   end
 
   private

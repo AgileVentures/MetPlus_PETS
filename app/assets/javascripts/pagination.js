@@ -227,4 +227,8 @@ $(document).ready(function () {
     $('body').on('ajax:success', '.jobs-pagination', function (e, data) {
       $('#jobs-list').html(data);
     });
+
+    $('body').on('ajax:success', '.applications-pagination', function (e, data) {
+      $('#applications-list').html(data);
+    });
 });

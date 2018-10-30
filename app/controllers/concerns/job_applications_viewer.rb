@@ -1,15 +1,15 @@
 module JobApplicationsViewer
   extend ActiveSupport::Concern
 
-  def display_job_applications(application_type, id, per_page = 10)
+  def display_job_applications(application_type, id)
     case application_type
+    when 'job_seeker-default'
+      collection = JobApplication.active_companies
+                                 .where(job_seeker: id)
     when 'job_seeker-company-person'
       collection = JobApplication.where(job_seeker: id).order(:id)
                                  .joins(:job)
                                  .where('jobs.company_id = ?', pets_user.company_id)
-    when 'job_seeker-default'
-      collection = JobApplication.active_companies
-                                 .where(job_seeker: id).order(:id)
     when 'job-job-developer'
       collection = JobApplication.order(:id)
                                  .where(job: id, job_seeker_id: AgencyRelation
@@ -21,8 +21,7 @@ module JobApplicationsViewer
                                  .includes(:job_seeker)
                                  .order(status: :asc, updated_at: :desc, id: :asc)
     end
-    return collection if collection.nil?
-    collection.paginate(page: params[:applications_page], per_page: per_page)
+    collection
   end
 
   FIELDS_IN_APPLICATION_TYPE = {
