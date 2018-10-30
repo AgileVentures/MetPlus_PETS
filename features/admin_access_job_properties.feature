@@ -25,5 +25,11 @@ Feature: Enable job developers to access the menu "Admin > Job Properties"
     Given I login as "jd@metplus.org" with password "qwerty123"
     Then I should see "Signed in successfully."
     And I should see "Admin"
+    And I click the "Admin" link
+    Then I should see "Job Properties"
+    Then I should not see "Agency and Partner Companies"
+    And I click the "Job Properties" link
+    Then I should be on the agency admin job properties page
+
 
     # I'm in UR code dude

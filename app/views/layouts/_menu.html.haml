@@ -15,15 +15,16 @@
           = link_to 'Contact', contact_path, id: 'contact'
         %li{:class => 'menu-item'}
           - if user_signed_in?
-            - if current_user_agency_admin?
+            - if current_user_agency_admin? || current_user_job_developer?
               %li{:class => 'menu-item dropdown'}
                 %a{href: '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown',
                         role: 'button', 'aria-haspopup' => 'true',
                          id: 'dd_menu', 'aria-expanded' => 'false'}
                   = ("Admin" + "<span class='caret'></span>").html_safe
                 %ul.dropdown-menu{'aria-labelledby' => 'dd_menu'}
-                  %li{ :class => "#{ yield(:agency_admin_active) }" }
-                    = link_to('Agency and Partner Companies', agency_admin_home_path)
+                  - if current_user_agency_admin?
+                    %li{ :class => "#{ yield(:agency_admin_active) }" }
+                      = link_to('Agency and Partner Companies', agency_admin_home_path)
                   %li{ :class => "#{ yield(:agency_admin_job_active) }" }
                     = link_to('Job Properties',                 |
                             agency_admin_job_properties_path)   |
