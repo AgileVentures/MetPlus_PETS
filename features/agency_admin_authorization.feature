@@ -20,7 +20,7 @@ Feature: Access agency admin when not a valid administrator
       | agency  | role  | first_name | last_name | email            | password  |
       | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
       | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
-
+    
     Given the following agency branches exist:
       | agency  | city    | street              | zipcode |  state   | code |
       | MetPlus | Detroit | 123 Main Street     | 48201   | Michigan | 001  |
