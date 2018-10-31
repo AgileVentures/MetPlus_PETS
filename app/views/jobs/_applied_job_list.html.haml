@@ -1,7 +1,7 @@
 - if job_applications.empty?
   %span{ style: 'padding-left: 10px;' } None
 - else
-  -#applications-list
+  #applications-list
   %table.table.table-hover
     %thead
       %tr
@@ -12,13 +12,13 @@
                 = sort_link(query, :job_title, {}, { class: 'applications-pagination', remote: true })
             - when :description
               %th.strong
-                = "Description"
+                = sort_link(query, :job_description, {}, { class: 'applications-pagination', remote: true })
             - when :company
               %th.strong
                 = sort_link(query, :job_company_name, 'Company', {}, { class: 'applications-pagination', remote: true })
             - when :applied_at
               %th.strong
-                = sort_link(query, :applied_at, 'Applied', {}, { class: 'applications-pagination', remote: true })
+                = sort_link(query, :created_at, 'Applied', {}, { class: 'applications-pagination', remote: true })
             - when :status
               %th.strong
                 = sort_link(query, :status, {}, { class: 'applications-pagination', remote: true })
