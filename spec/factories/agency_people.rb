@@ -3,14 +3,14 @@ FactoryBot.define do
     agency
     branch
     user
-    status 'active'
+    status { 'active' }
   end
 
   factory :agency_admin, class: AgencyPerson do
     agency
     branch
     user
-    status 'active'
+    status { 'active' }
     agency_roles do
       [
         AgencyRole.find_by_role(AgencyRole::ROLE[:AA]) ||
@@ -23,7 +23,7 @@ FactoryBot.define do
     agency
     branch
     user
-    status 'active'
+    status { 'active' }
     agency_roles do
       [
         AgencyRole.find_by_role(AgencyRole::ROLE[:JD]) ||
@@ -36,7 +36,7 @@ FactoryBot.define do
     agency
     branch
     user
-    status 'active'
+    status { 'active' }
     agency_roles do
       [
         AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) ||
@@ -49,7 +49,7 @@ FactoryBot.define do
     agency
     branch
     user
-    status 'active'
+    status { 'active' }
     agency_roles do
       [
         AgencyRole.find_by_role(AgencyRole::ROLE[:CM]) ||
