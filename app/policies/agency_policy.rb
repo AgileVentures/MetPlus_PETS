@@ -4,6 +4,7 @@ class AgencyPolicy < ApplicationPolicy
   end
 
   def update_job_properties?
-    record ? user.job_developer?(record) : false
+    access = user.job_developer?(record) || user.agency_admin?(record)
+    record ? access : false
   end
 end
