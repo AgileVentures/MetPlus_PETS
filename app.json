@@ -5,7 +5,7 @@
   ],
   "scripts": {
     "dokku": {
-      "postdeploy": "bundle exec rake db:migrate"
+      "postdeploy": "VERBOSE=true bundle exec rake db:migrate --trace"
     }
   }
 }
