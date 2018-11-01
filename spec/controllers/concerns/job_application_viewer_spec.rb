@@ -336,7 +336,7 @@ RSpec.describe TestJobApplicationsViewerClass do
           end
 
           it 'return first job application' do
-            expect(result).to include(@job_application1)
+            expect(result).to include(@job_application)
           end
         end
       end

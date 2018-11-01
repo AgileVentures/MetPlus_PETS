@@ -39,13 +39,8 @@ class JobApplicationsController < ApplicationController
     raise 'Unsupported request' unless request.xhr?
 
     search_params, items_count, items_per_page = process_pagination_params('job_applications')
-    require 'pp'
-    pp "1"* 100
-    pp default_sorting(params[:type])
-    pp search_params
-
     job_applications = display_job_applications(params[:type], params[:entity_id])
-    query = job_applications.ransack(search_params || default_sorting(params[:type]))
+    query = job_applications.order(updated_at: :asc).ransack(search_params)
     @job_applications = query.result.paginate(page: params[:page], per_page: items_per_page)
 
     render partial: 'jobs/applied_job_list',

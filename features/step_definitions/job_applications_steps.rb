@@ -59,7 +59,7 @@ end
 
 And(/^I should see "([^"]*)" application is listed (first|last)$/) do |email, position|
   job_seeker = User.find_by_email(email).actable
-  within(".pagination-div > table > tbody > tr:#{position}-child") do
+  within(".pagination-div > div > table > tbody > tr:#{position}-child") do
     expect(page).to have_content(job_seeker.first_name.to_s)
   end
 end
