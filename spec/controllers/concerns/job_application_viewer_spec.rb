@@ -103,8 +103,8 @@ RSpec.describe TestJobApplicationsViewerClass do
             expect(result.size).to be(1)
           end
 
-          it 'return first job application' do
-            expect(result).to include(@job_application)
+          it 'return last job application' do
+            expect(result).to include(@job_application2)
           end
         end
       end
@@ -180,7 +180,9 @@ RSpec.describe TestJobApplicationsViewerClass do
           end
 
           it 'return last job application' do
+
             expect(result).to include(@job_application2)
+            expect(result).to_not include(@job_application1)
           end
         end
       end
@@ -315,11 +317,8 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         context 'When no Application per page restriction is set' do
           it 'return 2 job applications' do
-            expect(subject
-              .display_job_applications('job-company-person',
-                                        job.id))
-              .to include(@job_application,
-                          @job_application1)
+            expect(subject.display_job_applications('job-company-person', job.id))
+              .to include(@job_application, @job_application1)
           end
         end
 
