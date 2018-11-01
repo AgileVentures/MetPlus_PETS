@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def full_title(page_title = '')
-    base_title = 'MetPlus'
+    base_title = current_agency.name
     page_title.empty? ? base_title : "#{page_title} | #{base_title}"
   end
 

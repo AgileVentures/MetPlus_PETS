@@ -1,7 +1,7 @@
 %nav{:class => 'menu navbar navbar-default navbar-fixed-top', data: {spy: "scroll"}}
   %div{:class => 'container'}
     %div{:class => 'navbar-header' }
-      =link_to 'MET|PLUS', root_path ,{class: 'navbar-brand'}
+      =link_to agency_display_name, root_path, {class: 'navbar-brand'}
     %div{:id=>'navbar', :class => 'navbar-collapse collapse'}
       %ul{:class => 'nav navbar-nav'}
         - if user_signed_in?

@@ -246,3 +246,127 @@ describe('Skills', function () {
     });
   });
 });
+describe('License', function(){
+  beforeEach(function () {
+    loadFixtures('agency_admin/licenses.html');
+  });
+  describe('Add license', function(){
+    beforeEach(function(){
+      $('#add_license_button').click(AgencyData.add_license);
+    });
+    it('calls ajax to add license', function() {
+      spyOn($, 'ajax');
+      $('#add_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+    it('retrieves data fields from modal', function () {
+      // Populate data fields in modal
+      $('#add_license_attr1').val('New License');
+      $('#add_license_attr2').val('New License Abbreviation');
+  
+      var userData = {'license[abbr]': 'New License',
+                       'license[title]': 'New License Abbreviation'};
+  
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        expect(ajaxArgs.data).toEqual(userData);
+      });
+      $('#add_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+    it('ajax success: calls function to add license to page', function () {
+      spyOn(AgencyData, 'change_job_property_success');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.success('data', '200');
+      });
+      $('#add_license_button').trigger('click');
+      expect(AgencyData.change_job_property_success).toHaveBeenCalled();
+    });
+    it('ajax error: calls function to handle errors', function () {
+      spyOn(ManageData, 'change_data_error');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.error('xhrObj', 'error', 'Unprocessable Entity');
+      });
+      $('#add_license_button').trigger('click');
+      expect(ManageData.change_data_error).toHaveBeenCalled();
+    });
+  });
+  describe('Edit license', function () {
+    beforeEach(function () {
+      $('#licenses_table').on('click',
+                    "a[href^='/licenses/'][data-method='edit']",
+                                  AgencyData.edit_license);
+    });
+    it('retrieves license attributes via ajax', function () {
+      spyOn($, 'ajax');
+      $("a[href^='/licenses/'][data-method='edit']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+  });
+  describe('Update license', function () {
+    beforeEach(function () {
+      $('#update_license_button').click(AgencyData.update_license);
+    });
+    it('calls ajax to update license', function() {
+      spyOn($, 'ajax');
+      $('#update_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+    it('retrieves data fields from modal', function () {
+      // Populate data fields in modal
+      $('#update_license_attr1').val('Update license');
+      $('#update_license_attr2').val('Abbreviation');
+
+      var userData = {'license[abbr]': 'Update license',
+                       'license[title]': 'Abbreviation'};
+
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        expect(ajaxArgs.data).toEqual(userData);
+      });
+      $('#update_license_button').trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+    it('ajax success: calls function to update license on page', function () {
+      spyOn(AgencyData, 'change_job_property_success');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.success('data', '200');
+      });
+      $('#update_license_button').trigger('click');
+      expect(AgencyData.change_job_property_success).toHaveBeenCalled();
+    });
+    it('ajax error: calls function to handle errors', function () {
+      spyOn(ManageData, 'change_data_error');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.error('xhrObj', 'error', 'Unprocessable Entity');
+      });
+      $('#update_license_button').trigger('click');
+      expect(ManageData.change_data_error).toHaveBeenCalled();
+    });
+  });
+  describe('delete license', function () {
+    beforeEach(function () {
+      $('#licenses_table').on('click',
+                    "a[data-method='delete']",
+                                  AgencyData.delete_license);
+    });
+    it('calls ajax to delete license', function() {
+      spyOn($, 'ajax');
+      $("a[data-method='delete']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+    });
+    it('uses correct URL in ajax call', function() {
+      spyOn($, 'ajax');
+      $("a[data-method='delete']").trigger('click');
+      expect($.ajax).toHaveBeenCalled();
+      expect($.ajax.calls.mostRecent().args[0]['url']).
+                           toEqual('/licenses/2');
+    });
+    it('ajax success: calls function to update page', function () {
+      spyOn(ManageData, 'get_updated_data');
+      spyOn($, 'ajax').and.callFake(function(ajaxArgs) {
+        ajaxArgs.success('data', '200');
+      });
+      $("a[data-method='delete']").trigger('click');
+      expect(ManageData.get_updated_data).toHaveBeenCalled();
+    });
+  });
+});
