@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :job_shift do
-    shift 'Morning'
+    shift { 'Morning' }
   end
 end

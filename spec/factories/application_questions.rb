@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :application_question do
     job_application
     question
-    answer false
+    answer { false }
   end
 end
