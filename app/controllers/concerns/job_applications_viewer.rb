@@ -17,7 +17,7 @@ module JobApplicationsViewer
       collection = JobApplication.where(job: id)
                                  .includes(:job_seeker)
     end
-    collection
+    collection.order(default_sorting(application_type))
   end
 
   FIELDS_IN_APPLICATION_TYPE = {
@@ -32,10 +32,10 @@ module JobApplicationsViewer
   end
 
   DEFAULT_SORTING = {
-    'job_seeker-default': { 's': 'id asc' },
-    'job_seeker-company-person': { 's': 'id asc' },
-    'job-job-developer': { 's': 'status asc' },
-    'job-company-person': { 's': 'updated_at desc' }
+    'job_seeker-default': { id: :asc },
+    'job_seeker-company-person': { id: :asc },
+    'job-job-developer': { id: :asc, status: :asc },
+    'job-company-person': { status: :asc, updated_at: :desc }
   }.freeze
 
   def default_sorting(application_type)
