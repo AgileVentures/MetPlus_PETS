@@ -230,6 +230,5 @@ $(document).ready(function () {
 
     $('body').on('ajax:success', '.applications-pagination', function (e, data) {
       $('div[id^="applications-"]').html(data);
-//$('#applications-list').html(data);
     });
 });

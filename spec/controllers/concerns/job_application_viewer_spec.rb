@@ -42,7 +42,8 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         it 'return empty list' do
           expect(subject
-            .display_job_applications('job_seeker-company-person', job_seeker1.id)).to eq([])
+            .display_job_applications('job_seeker-company-person',
+                                      job_seeker1.id)).to eq([])
         end
       end
 

@@ -1,7 +1,7 @@
-#applications-list
-  - if job_applications.empty?
-    %span{ style: 'padding-left: 10px;' } None
-  - else
+- if job_applications.empty?
+  %p No job applications
+- else
+  #applications-list
     %table.table.table-hover
       %thead
         %tr
@@ -52,7 +52,6 @@
                     = job_application.job.company.name
                 - when :applied_at
                   %td
-                    -# TODO applied at - how to get it from db ????
                     - applied_at = job_application.status_change_time(:active)
                     #{time_ago_in_words(applied_at)} ago
                 - when :status
@@ -92,12 +91,11 @@
                                         "job-companyJobId" => "#{job_application.job.company_job_id}",
                                         "action" => "#rejectModal" }
                     - else
-                      = link_to "#{job_application.status}", '#',
-                                class: "btn btn-default disabled"
-  
+                      = link_to "#{job_application.status}", '#', class: "btn btn-default disabled"
+
     = render 'shared/paginate_footer',
         entities: job_applications,
         paginate_class: 'applications-pagination',
         items_count: items_count,
         url: list_applications_path(type: application_type)
-  
+
