@@ -52,28 +52,28 @@ end
 agency = Agency.find_or_create_by!(name: 'MetPlus', website: 'metplus.org',
                                    phone: '111 222 3333', fax: '333 444 5555',
                                    email: 'pets@metplus.org',
-                                   description: 'Public Employment Tracking System – 
-                                                (P.E.T.S) is a web cross-platform 
+                                   description: 'Public Employment Tracking System –
+                                                (P.E.T.S) is a web cross-platform
                                                  software that provides an intuitive
                                                  closed system employment-related search
-                                                 and connect process where job seekers 
+                                                 and connect process where job seekers
                                                  and employers can locate each other
-                                                 based on required attributes while 
-                                                 providing various complementing 
-                                                 features. <br>PETS facilitates a 
-                                                 controlled containment of an employment 
+                                                 based on required attributes while
+                                                 providing various complementing
+                                                 features. <br>PETS facilitates a
+                                                 controlled containment of an employment
                                                  opportunities while managing the systems
                                                  registered users with real time tracking
-                                                 and interactions between all users by 
-                                                 creating comprehensive reports that 
-                                                 provide answers and solutions in the 
+                                                 and interactions between all users by
+                                                 creating comprehensive reports that
+                                                 provide answers and solutions in the
                                                  employment placement environment.<br>
                                                  Our vision is being able to interconnect
-                                                 job seekers, employers, job developers 
-                                                 and case managers while utilizing the 
-                                                 PETS system which will in return 
-                                                 effectively increase the communication 
-                                                 flow between all workforce parties 
+                                                 job seekers, employers, job developers
+                                                 and case managers while utilizing the
+                                                 PETS system which will in return
+                                                 effectively increase the communication
+                                                 flow between all workforce parties
                                                  through the PETS System while decreasing
                                                  the chances of pertinent information or
                                                  potential job seekers from falling
@@ -356,6 +356,7 @@ if Rails.env.development? || Rails.env.staging? || ENV['HEROKU_ENV'] == 'STAGING
 
     # Add resume to some job seekers
     next unless job_seeker.id <= 15
+
     resume = Resume.create(
       file: File.new('spec/fixtures/files/Admin-Assistant-Resume.pdf'),
       file_name: 'Admin-Assistant-Resume.pdf',
