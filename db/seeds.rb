@@ -52,20 +52,33 @@ end
 agency = Agency.find_or_create_by!(name: 'MetPlus', website: 'metplus.org',
                                    phone: '111 222 3333', fax: '333 444 5555',
                                    email: 'pets@metplus.org',
-                                   description: 'Public Employment Tracking System – (P.E.T.S) is a web cross-platform 
-                                                 software that provides an intuitive closed system employment-related 
-                                                 search and connect process where job seekers and employers can locate 
-                                                 each other based on required attributes while providing various complementing 
-                                                 features. <br>PETS facilitates a controlled containment of an employment 
-                                                 opportunities while managing the systems registered users with real time 
-                                                 tracking and interactions between all users by creating comprehensive reports 
-                                                 that provide answers and solutions in the employment placement environment.<br>
-                                                 Our vision is being able to interconnect job seekers, employers, job developers and 
-                                                 case managers while utilizing the PETS system which will in return effectively increase 
-                                                 the communication flow between all workforce parties through the PETS System while decreasing 
-                                                 the chances of pertinent information or potential job seekers from falling between the cracks 
-                                                 of the employment placement process.'
-                                    )
+                                   description: 'Public Employment Tracking System – 
+                                                (P.E.T.S) is a web cross-platform 
+                                                 software that provides an intuitive
+                                                 closed system employment-related search
+                                                 and connect process where job seekers 
+                                                 and employers can locate each other
+                                                 based on required attributes while 
+                                                 providing various complementing 
+                                                 features. <br>PETS facilitates a 
+                                                 controlled containment of an employment 
+                                                 opportunities while managing the systems
+                                                 registered users with real time tracking
+                                                 and interactions between all users by 
+                                                 creating comprehensive reports that 
+                                                 provide answers and solutions in the 
+                                                 employment placement environment.<br>
+                                                 Our vision is being able to interconnect
+                                                 job seekers, employers, job developers 
+                                                 and case managers while utilizing the 
+                                                 PETS system which will in return 
+                                                 effectively increase the communication 
+                                                 flow between all workforce parties 
+                                                 through the PETS System while decreasing
+                                                 the chances of pertinent information or
+                                                 potential job seekers from falling
+                                                 between the cracks of the employment
+                                                  placement process.')
 puts '  Default agency: MetPlus'
 
 # Create default Job Shifts
