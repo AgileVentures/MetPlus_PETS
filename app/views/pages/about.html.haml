@@ -9,7 +9,9 @@
       .row
         .col-sm-7.col-md-8.col-lg-9
           %h1 About Us
-          %p Michigan Employment & Training Plus, (MET|PLUS) is a workforce development and philanthropic human services non-profit organization that strives to assist Michigan jobseekers with invaluable training, job development and job placement services which will put them on a career path to success. We also provide services to employers and work hard to ensure a match between available job opportunities and qualified job seekers.
+          %p
+            .agency_description
+              != current_agency.description
           %h3 Mission Statement
           %p Our mission is to partner with communities, employers, employees and job seekers to educate, employ, train and help build a solid Michigan working economy through workforce vocational and skill training.
           %h3 Vision Statement
