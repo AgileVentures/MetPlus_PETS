@@ -51,7 +51,7 @@ Feature: Reject a job application
     Then I reject "jane@mail.com" application for "hr manager"
     And I should see an "reject" confirmation
     And I click the "Reject" button
-    And I should see "Please enter a reason for rejecting this application."
+    And I should see "Please provide the reason for rejection"
     And I input "Skillset not matching" as the reason for rejection
     Then I click the "Reject" button
     And I should see "jane@mail.com" application is listed last

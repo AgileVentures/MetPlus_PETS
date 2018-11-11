@@ -1,87 +1,101 @@
--# partial for job applications
 - if job_applications.empty?
-  %span{ style: 'padding-left: 10px;' } None
+  %p No job applications
 - else
-  %table.table.table-hover
-    %thead
-      %tr
-        - application_fields(application_type).each do |field|
-          - case field
-            - when :title
-              %th.strong Title
-            - when :description
-              %th.strong Description
-            - when :company
-              %th.strong Company
-            - when :applied_at
-              %th.strong Applied
-            - when :status
-              %th.strong Status
-            - when :name
-              %th.strong Name
-            - when :js_status
-              %th.strong Job Seeker Status
-            - when :action
-              %th.strong Action
-    %tbody
-      - job_applications.each do |job_application|
-        %tr{ id: "applications-#{job_application.id}", class: "application-#{job_application.status}" }
+  #applications-list
+    %table.table.table-hover
+      %thead
+        %tr
           - application_fields(application_type).each do |field|
             - case field
               - when :title
-                %td
-                  = link_to job_application.job.title, job_path(job_application.job)
+                %th.strong
+                  = sort_link(query, :job_title, {},
+                    { class: 'applications-pagination', remote: true })
               - when :description
-                %td
-                  = truncate(job_application.job.description, length: 200)
+                %th.strong
+                  = sort_link(query, :job_description, {},
+                    { class: 'applications-pagination', remote: true })
               - when :company
-                %td
-                  = job_application.job.company.name
+                %th.strong
+                  = sort_link(query, :job_company_name, 'Company', {},
+                    { class: 'applications-pagination', remote: true })
               - when :applied_at
-                %td
-                  - applied_at = job_application.status_change_time(:active)
-                  #{time_ago_in_words(applied_at)} ago
+                %th.strong
+                  = sort_link(query, :created_at, 'Applied', {},
+                    { class: 'applications-pagination', remote: true })
               - when :status
-                %td
-                  = status_desc(job_application)
+                %th.strong
+                  = sort_link(query, :status, {},
+                    { class: 'applications-pagination', remote: true })
               - when :name
-                %td
-                  = link_to job_application.job_seeker.full_name,
-                            job_seeker_path(job_application.job_seeker)
+                %th.strong
+                  = sort_link(query, :name, {},
+                    { class: 'applications-pagination', remote: true })
               - when :js_status
-                %td
-                  = job_application.job_seeker.job_seeker_status.short_description
+                %th.strong Job Seeker Status
               - when :action
-                %td
-                  - if job_application.active? || status_desc(job_application) == "Processing"
-                    = link_to "Accept", '#', class: "action_link btn btn-success",
-                              id: "accept_link",
-                              data: { "application-id" => "#{job_application.id}",
-                                      "job-title" => "#{job_application.job.title}",
-                                      "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
-                                      "job-companyJobId" => "#{job_application.job.company_job_id}",
-                                      "action" => "#acceptModal" }
-                    - unless status_desc(job_application) == "Processing"
-                      = link_to "Process", "#", class: "action_link btn btn-info",
-                                id: "process_link",
+                %th.strong Action
+      %tbody
+        - job_applications.each do |job_application|
+          %tr{ id: "applications-#{job_application.id}",
+            class: "application-#{job_application.status}" }
+            - application_fields(application_type).each do |field|
+              - case field
+                - when :title
+                  %td
+                    = link_to job_application.job.title, job_path(job_application.job)
+                - when :description
+                  %td
+                    = truncate(job_application.job.description, length: 200)
+                - when :company
+                  %td
+                    = job_application.job.company.name
+                - when :applied_at
+                  %td
+                    - applied_at = job_application.status_change_time(:active)
+                    #{time_ago_in_words(applied_at)} ago
+                - when :status
+                  %td
+                    = status_desc(job_application)
+                - when :name
+                  %td
+                    = link_to job_application.job_seeker.full_name,
+                              job_seeker_path(job_application.job_seeker)
+                - when :js_status
+                  %td
+                    = job_application.job_seeker.job_seeker_status.short_description
+                - when :action
+                  %td
+                    - if job_application.active? || status_desc(job_application) == "Processing"
+                      = link_to "Accept", '#', class: "action_link btn btn-success",
+                                id: "accept_link",
                                 data: { "application-id" => "#{job_application.id}",
                                         "job-title" => "#{job_application.job.title}",
                                         "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
                                         "job-companyJobId" => "#{job_application.job.company_job_id}",
-                                        "action" => "#processModal" }
-                    = link_to "Reject", '#', class: "action_link btn btn-warning",
-                              id: "reject_link",
-                              data: { "application-id" => "#{job_application.id}",
-                                      "job-id" => "#{job_application.job.id}",
-                                      "job-title" => "#{job_application.job.title}",
-                                      "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
-                                      "job-companyJobId" => "#{job_application.job.company_job_id}",
-                                      "action" => "#rejectModal" }
-                  - else
-                    = link_to "#{job_application.status}", '#',
-                              class: "btn btn-default disabled"
+                                        "action" => "#acceptModal" }
+                      - unless status_desc(job_application) == "Processing"
+                        = link_to "Process", "#", class: "action_link btn btn-info",
+                                  id: "process_link",
+                                  data: { "application-id" => "#{job_application.id}",
+                                          "job-title" => "#{job_application.job.title}",
+                                          "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
+                                          "job-companyJobId" => "#{job_application.job.company_job_id}",
+                                          "action" => "#processModal" }
+                      = link_to "Reject", '#', class: "action_link btn btn-warning",
+                                id: "reject_link",
+                                data: { "application-id" => "#{job_application.id}",
+                                        "job-id" => "#{job_application.job.id}",
+                                        "job-title" => "#{job_application.job.title}",
+                                        "jobSeeker" => "#{job_application.job_seeker.full_name(last_name_first: false)}",
+                                        "job-companyJobId" => "#{job_application.job.company_job_id}",
+                                        "action" => "#rejectModal" }
+                    - else
+                      = link_to "#{job_application.status}", '#', class: "btn btn-default disabled"
 
-  = will_paginate job_applications, param_name: 'applications_page',
-                                    params: { controller: 'job_applications',
-                                              action: 'list',
-                                              type: application_type }
+    = render 'shared/paginate_footer',
+        entities: job_applications,
+        paginate_class: 'applications-pagination',
+        items_count: items_count,
+        url: list_applications_path(type: application_type)
+

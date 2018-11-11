@@ -78,6 +78,12 @@ Then(/^(?:I|they)\sshould(\snot)?\ssee\s"([^"]*)"\s
   end
 end
 
+Then(/^page should have "([^"]*)" before "([^"]*)"$/) do |to_search, last|
+  expect(page.body).to have_text to_search
+  regex = /#{Regexp.quote(to_search.to_s)}.+#{Regexp.quote(last.to_s)}/m
+  expect(page.text).to match regex
+end
+
 Then(/^I wait(?: for)? (\d+) second(?:s)?$/) do |seconds|
   sleep seconds.to_i.seconds
 end
@@ -294,4 +300,11 @@ end
 
 Then(/^I sould see a text field "(.*?)" with the value set to (\d+)$/) do |name, value|
   find_field(name, with: value)
+end
+Then(/^I should( not)? see a link pointing to "([^"]*)"$/) do |negation, link|
+  if negation
+    expect(page).to_not have_selector(:css, "a[href$='#{link}']")
+  else
+    expect(page).to have_selector(:css, "a[href$='#{link}']")
+  end
 end
