@@ -40,8 +40,12 @@ class JobApplicationsController < ApplicationController
 
     search_params, items_count, per_page = process_pagination_params('job_applications')
     job_applications = display_job_applications(params[:type], params[:entity_id])
-    query = job_applications.ransack(search_params)
-    @job_applications = query.result.paginate(page: params[:page], per_page: per_page)
+    @job_applications = if job_applications.nil?
+                          job_applications
+                        else
+                          query = job_applications.ransack(search_params)
+                          query.result.paginate(page: params[:page], per_page: per_page)
+                        end
 
     render partial: 'jobs/applied_job_list',
            locals: { job_applications: @job_applications,
