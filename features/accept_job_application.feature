@@ -53,8 +53,8 @@ Background: data is added to database
     And I should see an "accept" confirmation
     Then I click the "Accept" confirmation
     And I wait 1 second
-    And I should see "jane@ymail.com" application is listed first
     And I should see "jane@ymail.com" application for "hr manager" changes to accepted
+    And I should see "jane@ymail.com" application is listed first
     And other applications for "hr manager" change to not accepted
     And I should see "hr manager" job changes to status filled
 

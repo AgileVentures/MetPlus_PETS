@@ -41,8 +41,9 @@ RSpec.describe TestJobApplicationsViewerClass do
         end
 
         it 'return empty list' do
-          expect(subject.display_job_applications('job_seeker-company-person',
-                                                  job_seeker1.id)).to eq([])
+          expect(subject
+            .display_job_applications('job_seeker-company-person',
+                                      job_seeker1.id)).to eq([])
         end
       end
 
@@ -85,8 +86,7 @@ RSpec.describe TestJobApplicationsViewerClass do
         context 'When no Application per page restriction is set' do
           it 'return 3 job applications' do
             expect(subject
-              .display_job_applications('job_seeker-company-person',
-                                        job_seeker1.id))
+              .display_job_applications('job_seeker-company-person', job_seeker1.id))
               .to include(@job_application,
                           @job_application1,
                           @job_application2)
@@ -95,9 +95,8 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         context 'When restrict 1 Applications per page' do
           let(:result) do
-            subject.display_job_applications('job_seeker-company-person',
-                                             job_seeker1.id,
-                                             1)
+            subject.display_job_applications('job_seeker-company-person', job_seeker1.id)
+                   .paginate(page: 1, per_page: 1)
           end
 
           it 'return 1 job application' do
@@ -115,8 +114,7 @@ RSpec.describe TestJobApplicationsViewerClass do
       context 'When never applied' do
         it 'return empty list' do
           expect(subject
-            .display_job_applications('job_seeker-default',
-                                      job_seeker1.id)).to eq([])
+            .display_job_applications('job_seeker-default', job_seeker1.id)).to eq([])
         end
       end
 
@@ -131,8 +129,7 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         it 'return one job application' do
           expect(subject
-            .display_job_applications('job_seeker-default',
-                                      job_seeker1.id))
+            .display_job_applications('job_seeker-default', job_seeker1.id))
             .to eq([@job_application])
         end
       end
@@ -158,8 +155,7 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         context 'When no Application per page restriction is set' do
           it 'return 3 job applications' do
-            expect(subject.display_job_applications('job_seeker-default',
-                                                    job_seeker1.id))
+            expect(subject.display_job_applications('job_seeker-default', job_seeker1.id))
               .to include(@job_application,
                           @job_application1,
                           @job_application2)
@@ -168,9 +164,8 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         context 'When restrincting 1 applications per page' do
           let(:result) do
-            subject.display_job_applications('job_seeker-default',
-                                             job_seeker1.id,
-                                             1)
+            subject.display_job_applications('job_seeker-default', job_seeker1.id)
+                   .paginate(page: 1, per_page: 1)
           end
 
           it 'return 1 job application' do
@@ -196,8 +191,7 @@ RSpec.describe TestJobApplicationsViewerClass do
       context 'When no Job Seeker applicated' do
         it 'return empty list' do
           expect(subject
-            .display_job_applications('job-job-developer',
-                                      job.id)).to eq([])
+            .display_job_applications('job-job-developer', job.id)).to eq([])
         end
       end
 
@@ -243,8 +237,7 @@ RSpec.describe TestJobApplicationsViewerClass do
         context 'When no Application per page restriction is set' do
           it 'return 2 job applications' do
             expect(subject
-              .display_job_applications('job-job-developer',
-                                        job.id))
+              .display_job_applications('job-job-developer', job.id))
               .to include(@job_application,
                           @job_application1)
           end
@@ -252,9 +245,8 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         context 'When restricting 1 applications per page' do
           let(:result) do
-            subject.display_job_applications('job-job-developer',
-                                             job.id,
-                                             1)
+            subject.display_job_applications('job-job-developer', job.id)
+                   .paginate(page: 1, per_page: 1)
           end
           it 'return 1 job application' do
             expect(result.size).to be(1)
@@ -319,8 +311,7 @@ RSpec.describe TestJobApplicationsViewerClass do
         context 'When no Application per page restriction is set' do
           it 'return 2 job applications' do
             expect(subject
-              .display_job_applications('job-company-person',
-                                        job.id))
+              .display_job_applications('job-company-person', job.id))
               .to include(@job_application,
                           @job_application1)
           end
@@ -328,9 +319,8 @@ RSpec.describe TestJobApplicationsViewerClass do
 
         context 'When restricting 1 applications per page' do
           let(:result) do
-            subject.display_job_applications('job-company-person',
-                                             job.id,
-                                             1)
+            subject.display_job_applications('job-company-person', job.id)
+                   .paginate(page: 1, per_page: 1)
           end
           it 'return 1 job application' do
             expect(result.size).to be(1)
