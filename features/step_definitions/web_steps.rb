@@ -12,11 +12,12 @@ def search_text(text)
     expect(page).to have_content text
   end
 end
+
 Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   if not_see
-    assert_no_text(string)
+    expect(page).to have_no_content string
   else
-    assert_text(string)
+    expect(page).to have_content string
   end
 end
 

@@ -50,7 +50,6 @@ Feature: Apply to a job
     Then I should see "Signed in successfully"
     Then I click the first "Home" link
     And I should see "Your Applications"
-
     And I should see a link pointing to "job_title+asc"
     And I should see a link pointing to "description+asc"
     And I should see a link pointing to "job_company_name+asc"
