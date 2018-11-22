@@ -302,7 +302,9 @@ end
 Then(/^I sould see a text field "(.*?)" with the value set to (\d+)$/) do |name, value|
   find_field(name, with: value)
 end
-Then(/^I should( not)? see a link pointing to "([^"]*)"$/) do |negation, link|
+
+Then(/^I should( not)? see a link "([^"]*)" pointing to "([^"]*)"$/) do |negation, link_name, link|
+  find_link(link_name)
   if negation
     expect(page).to_not have_selector(:css, "a[href$='#{link}']")
   else
