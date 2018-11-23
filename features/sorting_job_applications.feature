@@ -42,7 +42,7 @@ Feature: Apply to a job
       | editor             | john.seeker@gmail.com |
       | developer          | john.seeker@gmail.com |
 
-  @javascript
+  @javascript @intermittent-ci-js-fail
   Scenario: Job seeker applies to job
 
     Given I am on the home page
@@ -50,63 +50,62 @@ Feature: Apply to a job
     Then I should see "Signed in successfully"
     Then I click the first "Home" link
     And I should see "Your Applications"
-
-    And I should see a link pointing to "job_title+asc"
-    And I should see a link pointing to "description+asc"
-    And I should see a link pointing to "job_company_name+asc"
-    And I should see a link pointing to "created_at+asc"
-    And I should not see a link pointing to "job_title+desc"
-    And I should not see a link pointing to "description+desc"
-    And I should not see a link pointing to "job_company_name+desc"
-    And I should not see a link pointing to "created_at+desc"
+    And I should see a link "Title" pointing to "job_title+asc"
+    And I should see a link "Description" pointing to "description+asc"
+    And I should see a link "Company" pointing to "job_company_name+asc"
+    And I should see a link "Applied" pointing to "created_at+asc"
+    And I should not see a link "Title" pointing to "job_title+desc"
+    And I should not see a link "Description" pointing to "description+desc"
+    And I should not see a link "Company" pointing to "job_company_name+desc"
+    And I should not see a link "Applied" pointing to "created_at+desc"
 
     Then I click the "Title" link
     And I wait for 1 second
-    And I should see a link pointing to "job_title+desc"
-    And I should not see a link pointing to "job_title+asc"
+    And I should see a link "Title" pointing to "job_title+desc"
+    And I should not see a link "Title" pointing to "job_title+asc"
     And page should have "developer" before "editor"
     Then I click the "Title" link
     And I wait for 1 second
-    And I should see a link pointing to "job_title+asc"
-    And I should not see a link pointing to "job_title+desc"
+    And I should see a link "Title" pointing to "job_title+asc"
+    And I should not see a link "Title" pointing to "job_title+desc"
     And page should have "editor" before "developer"
 
     Then I click the "Description" link
     And I wait for 1 second
-    And I should see a link pointing to "description+desc"
-    And I should not see a link pointing to "description+asc"
+    And I should see a link "Description" pointing to "description+desc"
+    And I should not see a link "Description" pointing to "description+asc"
     And page should have "full time" before "internship"
     Then I click the "Description" link
     And I wait for 1 second
-    And I should see a link pointing to "description+asc"
-    And I should not see a link pointing to "description+desc"
+    And I should see a link "Description" pointing to "description+asc"
+    And I should not see a link "Description" pointing to "description+desc"
     And page should have "internship" before "full time"
 
     Then I click the "Company" link
     And I wait for 1 second
-    And I should see a link pointing to "job_company_name+desc"
-    And I should not see a link pointing to "job_company_name+asc"
+    And I should see a link "Company" pointing to "job_company_name+desc"
+    And I should not see a link "Company" pointing to "job_company_name+asc"
     And page should have "ACME" before "Widgets"
     Then I click the "Company" link
     And I wait for 1 second
-    And I should see a link pointing to "job_company_name+asc"
-    And I should not see a link pointing to "job_company_name+desc"
+    And I should see a link "Company" pointing to "job_company_name+asc"
+    And I should not see a link "Company" pointing to "job_company_name+desc"
     And page should have "Widgets" before "ACME"
 
     Then I click the "Applied" link
     And I wait for 1 second
-    And I should see a link pointing to "created_at+desc"
-    And I should not see a link pointing to "created_at+asc"
+    And I should see a link "Applied" pointing to "created_at+desc"
+    And I should not see a link "Applied" pointing to "created_at+asc"
     Then I click the "Applied" link
     And I wait for 1 second
-    And I should see a link pointing to "created_at+asc"
-    And I should not see a link pointing to "created_at+desc"
+    And I should see a link "Applied" pointing to "created_at+asc"
+    And I should not see a link "Applied" pointing to "created_at+desc"
 
     Then I click the "Status" link
     And I wait for 1 second
-    And I should see a link pointing to "status+desc"
-    And I should not see a link pointing to "status+asc"
+    And I should see a link "Status" pointing to "status+desc"
+    And I should not see a link "Status" pointing to "status+asc"
     Then I click the "Status" link
     And I wait for 1 second
-    And I should see a link pointing to "status+asc"
-    And I should not see a link pointing to "status+desc"
+    And I should see a link "Status" pointing to "status+asc"
+    And I should not see a link "Status" pointing to "status+desc"
