@@ -42,7 +42,7 @@ Feature: Apply to a job
       | editor             | john.seeker@gmail.com |
       | developer          | john.seeker@gmail.com |
 
-  @javascript
+  @javascript @intermittent-ci-js-fail
   Scenario: Job seeker applies to job
 
     Given I am on the home page

@@ -122,6 +122,7 @@ Feature: Company Person
     And I should not see button "Edit Person"
     And I should not see button "Delete Person"
 
+    @intermittent-ci-js-fail
   Scenario: company admin login and edit profile from home page
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"

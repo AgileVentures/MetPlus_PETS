@@ -36,7 +36,7 @@ begin
     task :all => [:ok, :wip]
     
     desc 'Run all features, record any failures'
-    Cucumber::Rake::Task.new({first_try: 'test:prepare'}, 'run all features and record failures') do |t|
+    Cucumber::Rake::Task.new({ first_try: 'test:prepare' }, 'run all features and record failures') do |t|
       t.binary = vendored_cucumber_bin
       t.cucumber_opts = '--tags ~@intermittent-ci-js-fail'
       t.fork = true # You may get faster startup if you set this to false
@@ -44,7 +44,7 @@ begin
     end
 
     desc 'Run failures if any exist'
-    Cucumber::Rake::Task.new({second_try: 'test:prepare'}, 'rerun any recorded failures') do |t|
+    Cucumber::Rake::Task.new({ second_try: 'test:prepare' }, 'rerun any recorded failures') do |t|
       t.binary = vendored_cucumber_bin
       t.cucumber_opts = '--tags ~@intermittent-ci-js-fail'
       t.fork = true # You may get faster startup if you set this to false
