@@ -12,11 +12,12 @@ def search_text(text)
     expect(page).to have_content text
   end
 end
+
 Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   if not_see
-    assert_no_text(string)
+    expect(page).to have_no_content string
   else
-    assert_text(string)
+    expect(page).to have_content string
   end
 end
 
@@ -301,10 +302,13 @@ end
 Then(/^I sould see a text field "(.*?)" with the value set to (\d+)$/) do |name, value|
   find_field(name, with: value)
 end
-Then(/^I should( not)? see a link pointing to "([^"]*)"$/) do |negation, link|
-  if negation
-    expect(page).to_not have_selector(:css, "a[href$='#{link}']")
-  else
-    expect(page).to have_selector(:css, "a[href$='#{link}']")
-  end
+
+Then(/^I should see a link "([^"]*)" pointing to "([^"]*)"$/) do |link_name, link|
+  find_link(link_name)
+  expect(page).to have_selector(:css, "a[href$='#{link}']")
+end
+
+Then(/^I should not see a link "([^"]*)" pointing to "([^"]*)"$/) do |link_name, link|
+  find_link(link_name)
+  expect(find_link(link_name)).to have_no_selector(:css, "a[href$='#{link}']")
 end
