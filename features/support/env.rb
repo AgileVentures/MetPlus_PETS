@@ -89,3 +89,9 @@ Capybara.register_driver :selenium do |app|
     args: ['headless']
   )
 end
+
+# To be used in conjunction with rerun option, so that we don't return a failing
+# exit code until the second try fails
+at_exit do
+  exit 0 if ENV['NEVER_FAIL'] == 'true'
+end
