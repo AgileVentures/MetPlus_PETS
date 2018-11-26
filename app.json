@@ -5,7 +5,6 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "bundle exec rake db:drop db:create db:migrate db:seed",
       "postdeploy": "VERBOSE=true bundle exec rake db:migrate --trace"
     }
   }
