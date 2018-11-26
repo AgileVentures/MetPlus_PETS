@@ -5,8 +5,8 @@
   ],
   "scripts": {
     "dokku": {
-      "predeploy": "bundle exec rake db:migrate db:reset",
-      "postdeploy": "VERBOSE=true bundle exec rake db:migrate --trace"
+      "predeploy": "bundle exec rake db:migrate",
+      "postdeploy": "VERBOSE=true bundle exec rake db:reset --trace"
     }
   }
 }
