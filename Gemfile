@@ -86,7 +86,7 @@ group :development, :test do
   gem 'jasmine'
   gem 'jasmine-jquery-rails'
 
-  gem 'phantomjs', :require => 'phantomjs/poltergeist'
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
 end
 
 group :test do
