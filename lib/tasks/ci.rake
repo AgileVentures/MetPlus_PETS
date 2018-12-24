@@ -1,4 +1,4 @@
-if Rails.env.test?
+unless (Rails.env.production? or Rails.env.staging?)
   require 'rspec/core/rake_task'
   require 'cucumber/rake/task'
 
