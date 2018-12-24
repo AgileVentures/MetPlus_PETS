@@ -20,7 +20,7 @@ Learn about our project workflow process <a href="https://github.com/AgileVentur
 See the whole wiki: <a href="https://github.com/AgileVentures/MetPlus_PETS/wiki">https://github.com/AgileVentures/MetPlus_PETS/wiki</a>
 
 ==========================
- - Semaphore [![Build Status](https://semaphoreci.com/api/v1/joaopapereira/metplus_pets-2/branches/master/badge.svg)](https://semaphoreci.com/joaopapereira/metplus_pets-2) / [![Build Status](https://semaphoreci.com/api/v1/joaopapereira/metplus_pets-2/branches/development/badge.svg)](https://semaphoreci.com/joaopapereira/metplus_pets-2)
+ - Semaphore [![Build Status](https://semaphoreci.com/api/v1/agileventures/metplus_pets-2/branches/master/badge.svg)](https://semaphoreci.com/agileventures/metplus_pets-2) / [![Build Status](https://semaphoreci.com/api/v1/agileventures/metplus_pets-2/branches/development/shields_badge.svg)](https://semaphoreci.com/agileventures/metplus_pets-2)
  - Code Climate [![Code Climate](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/gpa.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS)
  - Test Coverage [![Test Coverage](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/badges/coverage.svg)](https://codeclimate.com/github/AgileVentures/MetPlus_PETS/coverage)
  - Waffle [![Stories in Progress](https://badge.waffle.io/AgileVentures/MetPlus_tracker.png?label=in%20progress&title=In%20Progress)](http://waffle.io/AgileVentures/MetPlus_tracker)
