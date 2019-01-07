@@ -382,6 +382,7 @@ DEPENDENCIES
   launchy
   mailgun_rails
   pg
+  phantomjs
   poltergeist
   puma
   pundit
