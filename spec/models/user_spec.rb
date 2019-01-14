@@ -288,4 +288,56 @@ RSpec.describe User, type: :model do
       expect(user.company_admin?(company)).to be false
     end
   end
+  describe '#inactive_message' do
+    context 'as a inactive job seeker' do
+      let(:agency) { FactoryBot.create(:agency) }
+      let(:person) { FactoryBot.create(:job_seeker) }
+
+      it 'returns inactive' do
+        expect(person.inactive_message).to be :inactive
+      end
+    end
+    context 'as a inactive case manager' do
+      let(:agency) { FactoryBot.create(:agency) }
+      let(:person) { FactoryBot.create(:case_manager, agency: agency) }
+
+      it 'returns inactive' do
+        expect(person.inactive_message).to be :inactive
+      end
+    end
+    context 'as a inactive job developer' do
+      let(:agency) { FactoryBot.create(:agency) }
+      let(:person) { FactoryBot.create(:job_developer, agency: agency) }
+
+      it 'returns inactive' do
+        expect(person.inactive_message).to be :inactive
+      end
+    end
+    context 'as a company person' do
+      context 'from an inactive company' do
+        let(:company) { FactoryBot.create(:inactive_company) }
+        let(:person) { FactoryBot.create(:pending_first_company_admin, company: company) }
+        it 'returns signed_up_but_not_approved' do
+          expect(person.inactive_message).to be :signed_up_but_not_approved
+        end
+      end
+      context 'from a company that was denied access to PETS' do
+        let(:company) { FactoryBot.create(:company) }
+        let(:person) do
+          FactoryBot.create(:pending_first_company_admin,
+                            company: company, status: 'company_denied')
+        end
+        it 'returns not_approved' do
+          expect(person.inactive_message).to be :not_approved
+        end
+      end
+      context 'from a company that is no longer active' do
+        let(:company) { FactoryBot.create(:inactive_company) }
+        let(:person) { FactoryBot.create(:company_contact, company: company) }
+        it 'returns company_no_longer_active' do
+          expect(person.inactive_message).to be :company_no_longer_active
+        end
+      end
+    end
+  end
 end

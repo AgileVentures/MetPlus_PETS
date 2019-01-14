@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
       :signed_up_but_not_approved
     elsif !approved? && pets_user.try(:company_denied?)
       :not_approved
-    elsif pets_user.company&.try(:inactive?)
+    elsif pets_user.respond_to?('company') && pets_user.company&.try(:inactive?)
       :company_no_longer_active
     else
       super

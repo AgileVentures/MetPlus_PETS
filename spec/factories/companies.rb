@@ -15,4 +15,16 @@ FactoryBot.define do
     status  { 'active' }
     agencies { [FactoryBot.create(:agency)] }
   end
+
+  factory :inactive_company, class: Company do
+    name { 'The Company, Inc.' }
+    ein
+    phone  { '789 789 7890' }
+    fax    { '987 987 9870' }
+    email { 'contact@company.ymail.com' }
+    job_email { 'jobs@company.ymail.com' }
+    website { 'http://www.thecompany.com' }
+    status  { 'inactive' }
+    agencies { [FactoryBot.create(:agency)] }
+  end
 end
