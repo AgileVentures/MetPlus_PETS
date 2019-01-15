@@ -75,7 +75,7 @@ group :development, :test do
   gem 'byebug'
 
   # RSPEC testing
-  gem 'rspec-rails', '~> 3.7'
+  gem 'rspec-rails', '~> 3.8'
 
   # Factory girl to add factories
   gem 'factory_bot_rails'
