@@ -28,7 +28,7 @@ group :doc do
 end
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.12'
 
 gem 'devise',           '~> 3.5.2'
 gem 'devise_invitable', '~> 1.5.2'
