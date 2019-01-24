@@ -57,7 +57,7 @@ Given the following job applications exist:
   | job title          | job seeker             |
   | software developer | jane.seeker@gmail.com |
 
-  @javascript
+  @javascript @intermittent-ci-js-fail
   Scenario: Job seeker applies to job
     When I am in Job Developer's browser
     Given I am on the home page

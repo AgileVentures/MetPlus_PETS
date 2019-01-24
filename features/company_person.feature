@@ -6,24 +6,24 @@ Feature: Company Person
 
   Background:
     Given the following agency roles exist:
-      | role  |
-      | AA    |
-      | CM    |
-      | JD    |
+      | role |
+      | AA   |
+      | CM   |
+      | JD   |
 
     Given the following agencies exist:
       | name    | website     | phone        | email                  | fax          |
       | MetPlus | metplus.org | 555-111-2222 | pets_admin@metplus.org | 617-555-1212 |
 
     Given the following agency people exist:
-      | agency  | role  | first_name | last_name | email            | password  |
-      | MetPlus | AA    | John       | Smith     | aa@metplus.org   | qwerty123 |
-      | MetPlus | CM    | Jane       | Jones     | jane@metplus.org | qwerty123 |
+      | agency  | role | first_name | last_name | email            | password  |
+      | MetPlus | AA   | John       | Smith     | aa@metplus.org   | qwerty123 |
+      | MetPlus | CM   | Jane       | Jones     | jane@metplus.org | qwerty123 |
 
     Given the following company roles exist:
-      | role  |
-      | CA    |
-      | CC    |
+      | role |
+      | CA   |
+      | CC   |
 
     Given the following companies exist:
       | agency  | name          | website      | phone        | email             | job_email         | ein        | status   |
@@ -32,32 +32,32 @@ Feature: Company Person
       | MetPlus | Inactive Inc. | inactive.com | 555-222-3333 | corp@inactive.com | corp@inactive.com | 12-3456787 | inactive |
 
     Given the following job skills exist:
-    | name            | description             | organization |
-    | Web Research    | Hic deleniti explicabo. | Widgets Inc. |
-    | Visual Analysis | Incidunt aut magni.     | Widgets Inc. |
+      | name            | description             | organization |
+      | Web Research    | Hic deleniti explicabo. | Widgets Inc. |
+      | Visual Analysis | Incidunt aut magni.     | Widgets Inc. |
 
 
     Given the following company addresses exist:
-      | company       | street           | city    | zipcode | state      |
-      | Widgets Inc.  | 12 Main Street   | Detroit | 02034   | Michigan   |
-      | Widgets Inc.  | 14 Main Street   | Detroit | 02034   | Michigan   |
-      | Feature Inc.  | 100 River Valley | Utah    | 12334   | New Jersey |
-      | Feature Inc.  | 111 River Valley | Utah    | 12334   | New Jersey |
+      | company      | street           | city    | zipcode | state      |
+      | Widgets Inc. | 12 Main Street   | Detroit | 02034   | Michigan   |
+      | Widgets Inc. | 14 Main Street   | Detroit | 02034   | Michigan   |
+      | Feature Inc. | 100 River Valley | Utah    | 12334   | New Jersey |
+      | Feature Inc. | 111 River Valley | Utah    | 12334   | New Jersey |
 
     Given the following company people exist:
-      | company       | role  | first_name | last_name | email             | password  | phone        |
-      | Widgets Inc.  | CA    | John       | Smith     | carter@ymail.com  | qwerty123 | 555-222-3334 |
-      | Widgets Inc.  | CC    | Jane       | Smith     | jane@ymail.com    | qwerty123 | 555-222-3334 |
-      | Feature Inc.  | CA    | Charles    | Daniel    | ca@feature.com    | qwerty123 | 555-222-3334 |
-      | Inactive Inc. | CA    | Jean       | Xavier    | ca@inactive.com   | qwerty123 | 555-222-3334 |
+      | company       | role | first_name | last_name | email            | password  | phone        |
+      | Widgets Inc.  | CA   | John       | Smith     | carter@ymail.com | qwerty123 | 555-222-3334 |
+      | Widgets Inc.  | CC   | Jane       | Smith     | jane@ymail.com   | qwerty123 | 555-222-3334 |
+      | Feature Inc.  | CA   | Charles    | Daniel    | ca@feature.com   | qwerty123 | 555-222-3334 |
+      | Inactive Inc. | CA   | Jean       | Xavier    | ca@inactive.com  | qwerty123 | 555-222-3334 |
 
     Given the following tasks exist:
-      | task_type          | owner                | deferred_date | status      | targets               |
-      | job_application    | jane@ymail.com     | 2016-03-10    | ASSIGNED    | john-seeker@gmail.com |
+      | task_type       | owner          | deferred_date | status   | targets               |
+      | job_application | jane@ymail.com | 2016-03-10    | ASSIGNED | john-seeker@gmail.com |
 
     Given the following jobs exist:
-    | title         | company_job_id  | description | company      | creator          | skills    |
-    | Web dev       | KRK01K          | internship  | Widgets Inc. | jane@ymail.com | Web Research |
+      | title   | company_job_id | description | company      | creator        | skills       |
+      | Web dev | KRK01K         | internship  | Widgets Inc. | jane@ymail.com | Web Research |
 
   Scenario: company admin edits company info
     Given I am on the home page
@@ -122,7 +122,7 @@ Feature: Company Person
     And I should not see button "Edit Person"
     And I should not see button "Delete Person"
 
-    @intermittent-ci-js-fail
+  @intermittent-ci-js-fail
   Scenario: company admin login and edit profile from home page
     Given I am on the home page
     And I login as "carter@ymail.com" with password "qwerty123"
