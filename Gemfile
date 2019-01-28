@@ -3,13 +3,13 @@ source 'https://rubygems.org'
 ruby '2.3.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.10'
+gem 'rails', '4.2.11'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.7'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails', '~> 4.2.2'
 
 gem 'haml'
 
@@ -21,14 +21,14 @@ gem 'turbolinks'
 gem 'jquery-turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder', '~> 2.8'
 # bundle exec rake doc:rails generates the API under doc/api.
 group :doc do
-  gem 'sdoc', '~> 0.4.0'
+  gem 'sdoc', '~> 1.0.0'
 end
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.12'
 
 gem 'devise',           '~> 3.5.2'
 gem 'devise_invitable', '~> 1.5.2'
@@ -67,7 +67,7 @@ group :development do
   gem 'haml-rails'
   gem 'bullet'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '~> 3.3'
 end
 
 group :development, :test do
@@ -75,7 +75,7 @@ group :development, :test do
   gem 'byebug'
 
   # RSPEC testing
-  gem 'rspec-rails', '~> 3.7'
+  gem 'rspec-rails', '~> 3.8'
 
   # Factory girl to add factories
   gem 'factory_bot_rails'
@@ -85,6 +85,8 @@ group :development, :test do
 
   gem 'jasmine'
   gem 'jasmine-jquery-rails'
+
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
 end
 
 group :test do

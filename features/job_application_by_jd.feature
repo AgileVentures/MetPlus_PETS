@@ -104,20 +104,20 @@ Background: data is added to database
     Then I find "Seeker, June" from my job seekers list and proceed with the application
     And I should see "* Job Seeker cannot be empty"
 
-  @javascript
-  Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
-    When I am in Job Seeker's browser
-    Given I am on the home page
-    And I login as "john.seeker@gmail.com" with password "password"
-    Then I apply to "software developer" from Jobs link
-    And I wait 4 seconds
-    And I should see "Congratulations, you were able to apply with success"
+  # @javascript # not relevant now job seekers cannot apply for jobs personally
+  # Scenario: Job developer cannot re-apply to the same job when the job has been applied by job seeker
+  #   When I am in Job Seeker's browser
+  #   Given I am on the home page
+  #   And I login as "john.seeker@gmail.com" with password "password"
+  #   Then I apply to "software developer" from Jobs link
+  #   And I wait 4 seconds
+  #   And I should see "Congratulations, you were able to apply with success"
 
-    Then I am in Job Developer's browser
-    Given I am on the home page
-    And I login as "jane@metplus.org" with password "qwerty123"
-    Then I apply to "software developer" for my job seeker: "Seeker, John"
-    And I should see "John Seeker has already applied to this job"
+  #   Then I am in Job Developer's browser
+  #   Given I am on the home page
+  #   And I login as "jane@metplus.org" with password "qwerty123"
+  #   Then I apply to "software developer" for my job seeker: "Seeker, John"
+  #   And I should see "John Seeker has already applied to this job"
 
   @javascript
   Scenario: Job developer cannot apply for his job seeker without consent given

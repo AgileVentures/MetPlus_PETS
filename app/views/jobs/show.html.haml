@@ -45,11 +45,6 @@
               If you want the employer to see a revised version of your résumé
               = link_to 'edit your profile', edit_job_seeker_path(pets_user)
               and upload the revised résumé.
-      - else
-        = link_to "Click Here To Apply Online", '#', class: "col-sm-offset-4",
-                  data: { :toggle => 'modal',
-                          :target => '#applyJobModal' }
-        = render partial: 'apply_modal', :locals => { :job => @job }
 
   .clearfix
   - if pets_user.is_a?(CompanyPerson)

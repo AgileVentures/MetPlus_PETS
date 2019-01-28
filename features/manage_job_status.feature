@@ -83,4 +83,4 @@ Background: data is added to database
     And I should not see "Revoked" next to "hr manager"
     Then I click the "hr manager" link to job show page
     And I should see the job status is "active"
-    And I should see "Click Here To Apply Online"
+    And I should not see "Click Here To Apply Online"
