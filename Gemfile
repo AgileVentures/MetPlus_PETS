@@ -102,7 +102,7 @@ group :test do
   gem 'simplecov', :require => false
 end
 
-gem 'airbrake', '~> 7.1'
+gem 'airbrake', '~> 8.0'
 group :production do
   gem 'rails_12factor'
   gem 'puma'
