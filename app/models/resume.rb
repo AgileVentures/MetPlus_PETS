@@ -1,4 +1,4 @@
-class Resume < ActiveRecord::Base
+class Resume < ApplicationRecord
   belongs_to :job_seeker
 
   attr_accessor :file  # File uploaded from form
@@ -20,9 +20,11 @@ class Resume < ActiveRecord::Base
   end
 
   # Valid MIME types for résumé files: pdf, doc, docx, pages
-  MIMETYPES = ['application/pdf', 'application/msword',
+  MIMETYPES = [
+    'application/pdf', 'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/x-iwork-pages-sffpages']
+    'application/x-iwork-pages-sffpages'
+  ]
 
   def initialize(file: nil, file_name: nil, job_seeker_id: nil)
     super

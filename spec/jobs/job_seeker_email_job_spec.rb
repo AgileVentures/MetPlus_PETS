@@ -22,7 +22,7 @@ RSpec.describe JobSeekerEmailJob, type: :job do
                        .perform_later(Event::EVT_TYPE[:JD_ASSIGNED_JS],
                                       job_seeker, job_developer)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(JobSeekerEmailJob)
   end
 
   it 'case manager assigned to job seeker event' do
@@ -31,7 +31,7 @@ RSpec.describe JobSeekerEmailJob, type: :job do
                        .perform_later(Event::EVT_TYPE[:CM_ASSIGNED_JS],
                                       job_seeker, case_manager)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(JobSeekerEmailJob)
   end
 
   before do
@@ -45,6 +45,6 @@ RSpec.describe JobSeekerEmailJob, type: :job do
                        .perform_later(Event::EVT_TYPE[:JD_APPLY],
                                       job_seeker, job_developer, job)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(JobSeekerEmailJob)
   end
 end

@@ -68,7 +68,7 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:request) { get :show, id: valid_application }
+    let(:request) { get :show, params: { id: valid_application } }
 
     context 'unauthenticated' do
       it_behaves_like 'unauthenticated request'
@@ -97,7 +97,7 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'PATCH #accept' do
-    let(:request) { patch :accept, id: valid_application }
+    let(:request) { patch :accept, params: { id: valid_application } }
 
     context 'unauthenticated' do
       it_behaves_like 'unauthenticated request'
@@ -115,7 +115,7 @@ RSpec.describe JobApplicationsController, type: :controller do
         context 'inactive job application' do
           before(:each) do
             allow(hire_mock).to receive(:call).and_raise(JobApplications::JobNotActive)
-            patch :accept, id: inactive_application
+            patch :accept, params: { id: inactive_application }
           end
 
           it 'show a flash message of type alert' do
@@ -160,8 +160,8 @@ RSpec.describe JobApplicationsController, type: :controller do
 
   describe 'PATCH #reject' do
     let(:request) do
-      patch :reject, id: valid_application,
-                     reason_for_rejection: 'Skills did not match'
+      patch :reject, params: { id: valid_application,
+                               reason_for_rejection: 'Skills did not match' }
     end
 
     context 'unauthenticated' do
@@ -181,7 +181,7 @@ RSpec.describe JobApplicationsController, type: :controller do
         context 'inactive job application' do
           before(:each) do
             allow(reject_mock).to receive(:call).and_raise(JobApplications::JobNotActive)
-            patch :reject, id: inactive_application
+            patch :reject, params: { id: inactive_application }
           end
 
           it 'show a flash message of type alert' do
@@ -226,7 +226,7 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe 'PATCH #process_application' do
-    let(:request) { patch :process_application, id: valid_application }
+    let(:request) { patch :process_application, params: { id: valid_application } }
 
     context 'unauthenticated' do
       it_behaves_like 'unauthenticated request'
@@ -245,7 +245,7 @@ RSpec.describe JobApplicationsController, type: :controller do
           before(:each) do
             allow(application_process_mock)
               .to receive(:call).and_raise(JobApplications::JobNotActive)
-            patch :process_application, id: inactive_application
+            patch :process_application, params: { id: inactive_application }
           end
 
           it 'show a flash message of type alert' do
@@ -317,7 +317,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
 
     before(:each) do
-      xhr :get, :list, type: 'job_seeker-default', entity_id: job_seeker
+      get :list, params: { type: 'job_seeker-default', entity_id: job_seeker }, xhr: true
     end
 
     it 'assigns jobs for view' do

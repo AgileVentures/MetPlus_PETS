@@ -2,6 +2,16 @@ require 'rails_helper'
 include ServiceStubHelpers::EmailValidator
 
 RSpec.describe User, type: :model do
+  before :all do
+    WebMock.disable_net_connect!(allow_localhost: true)
+  end
+  after :all do
+    WebMock.allow_net_connect!
+  end
+
+  before :each do
+    stub_email_validate_valid
+  end
   describe 'Fixtures' do
     it 'should have a valid factory' do
       expect(FactoryBot.create(:user)).to be_valid
@@ -83,7 +93,6 @@ RSpec.describe User, type: :model do
 
       it 'adds an error to object when validation fails' do
         stub_email_validate_invalid
-
         # Turn on mailgun validation so the stub is effective
         ENV['MAILGUN_EMAIL_VALIDATION'] = 'yes'
 

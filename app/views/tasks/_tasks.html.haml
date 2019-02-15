@@ -68,7 +68,7 @@
   .row.text-center
     = will_paginate all_tasks, param_name: 'tasks_page', :params => {:controller => 'tasks', :action => 'tasks', :task_type => task_type}
 
-%script{:type=>"text/javascript"}
+:javascript
   $(document).ready( function() {
-  =  "TaskManagerHolder('tasks-#{task_type}', '#{task_type}')"
+    TaskManagerHolder('tasks-#{task_type}', '#{task_type}')
   } );

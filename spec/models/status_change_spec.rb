@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-class TestEntity < ActiveRecord::Base
+class TestEntity < ApplicationRecord
   # This class allows for testing of StatusChange.  It is piggy-backing
   # on the job_applications table since the tests require the instantiation
   # of the enum :status field in the DB

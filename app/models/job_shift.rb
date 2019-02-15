@@ -1,4 +1,4 @@
-class JobShift < ActiveRecord::Base
+class JobShift < ApplicationRecord
   has_and_belongs_to_many :jobs
 
   validates_presence_of :shift

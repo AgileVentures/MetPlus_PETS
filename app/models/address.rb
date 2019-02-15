@@ -1,4 +1,4 @@
-class Address < ActiveRecord::Base
+class Address < ApplicationRecord
   belongs_to :location, polymorphic: true
   has_many :company_people
   validates_presence_of :street

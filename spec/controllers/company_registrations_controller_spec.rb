@@ -121,7 +121,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:request) { get :show, id: company }
+    let(:request) { get(:show, id: company) }
     context 'authorized access' do
       context 'agency admin' do
         it_behaves_like 'authorized show request' do
@@ -300,8 +300,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     it 'sends registration-pending email' do
       # one email is sent to company registrant,
       # one email is sent to all agency people
-      expect { post :create, company: registration_params }
-        .to change(all_emails, :count).by(+2)
+      expect { post :create, params: { company: registration_params } }
+        .to have_enqueued_job(CompanyMailerJob).and have_enqueued_job(NotifyEmailJob)
     end
 
     context 'invalid attributes' do
@@ -484,8 +484,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let(:company_id) { Company.find_by_name(prior_name).id }
     let(:request) do
       patch :update,
-            company: registration_params,
-            id: Company.last.id
+            params:{
+              company: registration_params,
+              id: Company.last.id
+            }
     end
 
     context 'authorized access' do
@@ -600,8 +602,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         it 'cannot be set to empty' do
           previous_parameters[:job_email] = ''
           patch :update,
-                company: previous_parameters,
-                id: company_id
+                params: {
+                  company: previous_parameters,
+                  id: company_id
+                }
           company = Company.find company_id
           expect(company.job_email).to eq registration_params[:job_email]
         end
@@ -609,8 +613,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         it 'can be changed to another valid address' do
           previous_parameters[:job_email] = 'jobs@real.com'
           patch :update,
-                company: previous_parameters,
-                id: company_id
+                params: {
+                  company: previous_parameters,
+                  id: company_id
+                }
           company = Company.find company_id
           expect(company.job_email).to eq 'jobs@real.com'
         end

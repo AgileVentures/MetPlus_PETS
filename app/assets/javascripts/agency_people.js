@@ -30,4 +30,4 @@ var AssignAgencyPerson = {
   }
 };
 
-$(AssignAgencyPerson.setup);
+$( document ).on('turbolinks:load', AssignAgencyPerson.setup);

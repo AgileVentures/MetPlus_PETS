@@ -1,4 +1,4 @@
-class Agency < ActiveRecord::Base
+class Agency < ApplicationRecord
   has_many :agency_people
   has_many :branches
   has_and_belongs_to_many :companies

@@ -56,10 +56,8 @@ class ApplicationController < ActionController::Base
     end
 
     def configure_permitted_parameters
-      [:first_name,:last_name, :phone].each do |field|
-        devise_parameter_sanitizer.for(:account_update)<<field
-        devise_parameter_sanitizer.for(:sign_up)<<field
-      end
+      devise_parameter_sanitizer.permit(:account_update, keys: [:first_name,:last_name, :phone])
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name,:last_name, :phone])
     end
 
     def user_logged!

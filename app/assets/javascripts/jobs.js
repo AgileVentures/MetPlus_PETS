@@ -59,7 +59,7 @@ var ContactJobDeveloper = {
   }
 };
 
-$(function () {
+$( document ).on('turbolinks:load', function() {
   $('#toggle_search_form').click(ManageData.toggle);
   $(document).on('change', '#job_company_id', function() {
     $.ajax({url: '/jobs/update_addresses',
@@ -86,8 +86,8 @@ $(function () {
     $('#revokeModal').find('#title').html('job title: ' + title);
     $('#revokeModal').find('#company_job_id').html('company job id: ' + companyJobId);
     $('#revokeModal').find('#confirm_revoke').attr('href','/jobs/' + id + '/revoke');
-    $('#revokeModal').modal();
-
+    $('#revokeModal').modal('show');
+    return false;
   });
 
   $('#q_address_city_in').select2();
@@ -107,6 +107,7 @@ $(function () {
 
   $('#match-resumes-link').click(function () {
     $('#match-resumes-modal-form').modal();
+    return false;
   });
 
   // To remove the alert after the user has selected a job seeker from dropdown
@@ -128,7 +129,7 @@ $(function () {
                     " and may take a while. Do you want to proceed?");
   });
 
-  $('body').on('ajax:success', '.jobs_pagination', function (e, data) {
+  $('body').on('ajax:success', '.pagination', function (e, data) {
     $('#searched-job-list').html(data);
   });
 
@@ -139,25 +140,25 @@ $(function () {
     $('.new_address_field').prop('disabled', true);
   };
 
-  $('#toggle-address-fields').click(function () {
+  $('#toggle-address-fields').click(function (event) {
     // toggle new address fields (visible, not visible) on job form
     var toggleId = $('#new-address-subform');  // element to be toggled
 
     // Disabled input fields will not be sent to the server
-
     if ($(toggleId).is(':visible') === true) {
 
-      $(toggleId).hide(800);
+      $(toggleId).addClass('hidden');
       $('.new_address_field').prop('disabled', true);
       $(this).text('Create new location');
 
     } else {
 
-      $(toggleId).show(800);
+      $(toggleId).removeClass('hidden');
       $('.new_address_field').prop('disabled', false);
       $(this).text('Cancel new location');
 
     }
+    return false;
   });
 
   // Job questions radio boxes in job apply modal ("Yes", "No")
@@ -168,6 +169,8 @@ $(function () {
         $('.job-question-rb').filter(':checked').length) {
           $('#modal-apply-id').prop('disabled', false);
         }
+
+    return false;
   });
 
 });

@@ -31,7 +31,7 @@ RSpec.describe CompanyMailerJob, type: :job do
                                      company,
                                      company_person)
     end
-      .to change(Delayed::Job, :count).by 1
+      .to have_enqueued_job(CompanyMailerJob)
   end
 
   it 'company registration approved event' do
@@ -41,7 +41,7 @@ RSpec.describe CompanyMailerJob, type: :job do
                                      company,
                                      company_person)
     end
-      .to change(Delayed::Job, :count).by 1
+      .to have_enqueued_job(CompanyMailerJob)
   end
 
   it 'company registration denied event' do
@@ -55,12 +55,13 @@ RSpec.describe CompanyMailerJob, type: :job do
                                      company_person,
                                      reason: obj.reason)
     end
-      .to change(Delayed::Job, :count).by 1
+      .to have_enqueued_job(CompanyMailerJob)
   end
 
   it 'job application received event' do
     stub_cruncher_authenticate
     stub_cruncher_job_create
+    stub_cruncher_file_upload
 
     resume_file_path = File.new("#{Rails.root}/spec/fixtures/files/#{resume.file_name}")
                            .path
@@ -71,6 +72,6 @@ RSpec.describe CompanyMailerJob, type: :job do
                                      application: job_application,
                                      resume_file_path: resume_file_path)
     end
-      .to change(Delayed::Job, :count).by 1
+      .to have_enqueued_job(CompanyMailerJob)
   end
 end

@@ -1,4 +1,4 @@
-class JobSeeker < ActiveRecord::Base
+class JobSeeker < ApplicationRecord
   acts_as :user
   has_many :resumes, dependent: :destroy
 

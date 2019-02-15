@@ -9,12 +9,6 @@ RSpec.describe Job, type: :model do
   let!(:job_seeker2_resume) { FactoryBot.create(:resume, job_seeker: job_seeker2) }
   let!(:test_file) { '../fixtures/files/Admin-Assistant-Resume.pdf' }
 
-  describe 'Fixtures' do
-    it 'should have a valid factory' do
-      expect(FactoryBot.build(:job)).to be_valid
-    end
-  end
-
   describe 'Associations' do
     it { is_expected.to belong_to :company }
     it { is_expected.to belong_to :company_person }
@@ -297,7 +291,8 @@ RSpec.describe Job, type: :model do
     it 'succeeds with all parameters' do
       stub_cruncher_job_create
 
-      job = FactoryBot.build(:job)
+      company = FactoryBot.create(:company)
+      job = FactoryBot.build(:job, company: company)
 
       expect(job.save).to be true
       expect(Job.count).to eq 1
@@ -305,8 +300,8 @@ RSpec.describe Job, type: :model do
 
     it 'fails with invalid model parameters' do
       stub_cruncher_job_create
-
-      job = FactoryBot.build(:job, title: nil)
+      company = FactoryBot.create(:company)
+      job = FactoryBot.build(:job, title: nil, company: company)
 
       expect(job.save).to be false
       expect(job.errors.full_messages).to include("Title can't be blank")
@@ -317,7 +312,8 @@ RSpec.describe Job, type: :model do
       stub_cruncher_job_create_fail('JOB_ID_EXISTS')
       stub_cruncher_job_update_fail('JOB_NOT_FOUND')
 
-      job = FactoryBot.build(:job)
+      company = FactoryBot.create(:company)
+      job = FactoryBot.build(:job, company: company)
 
       expect(job.save).to be false
       expect(Job.count).to eq 0
@@ -329,7 +325,8 @@ RSpec.describe Job, type: :model do
       stub_cruncher_authenticate_error
       CruncherService.auth_token = nil # reset class var auth_token
 
-      job = FactoryBot.build(:job)
+      company = FactoryBot.create(:company)
+      job = FactoryBot.build(:job, company: company)
 
       expect(job.save).to be false
       expect(Job.count).to eq 0

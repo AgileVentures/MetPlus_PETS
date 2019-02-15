@@ -188,4 +188,4 @@ var PusherControl = {
   }
 };
 
-$(PusherControl.setup);
+$( document ).on('turbolinks:load', PusherControl.setup);

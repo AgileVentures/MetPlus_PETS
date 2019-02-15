@@ -40,5 +40,5 @@
     = render 'layouts/footer'
     = content_for :scripts
 
-  %script
-    $(document).ready(function(){$('[data-toggle="tooltip"]').tooltip(); });
+  :javascript
+    $( document ).on('turbolinks:load', function() {$('[data-toggle="tooltip"]').tooltip(); });

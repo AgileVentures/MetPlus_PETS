@@ -1,4 +1,4 @@
-class CompanyRole < ActiveRecord::Base
+class CompanyRole < ApplicationRecord
 	validates_presence_of :role 
   validates_length_of   :role, maximum: 40
 	has_and_belongs_to_many :company_people, 

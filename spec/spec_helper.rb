@@ -20,7 +20,7 @@
 require 'rubygems'
 require 'factory_bot'
 require 'email-spec'
-require 'codeclimate-test-reporter'
+require 'simplecov'
 require 'webmock/rspec'
 require 'pundit/rspec'
 
@@ -35,7 +35,7 @@ include ServiceStubHelpers::RecaptchaValidator
 #  This allows non-mocked external service calls to proceed:
 WebMock.allow_net_connect!
 
-CodeClimate::TestReporter.start
+SimpleCov.start
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

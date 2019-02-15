@@ -9,15 +9,15 @@ end
 
 def search_text(text)
   wait_until do
-    expect(page).to have_content text
+    expect(page).to have_content(text, normalize_ws: true)
   end
 end
 
 Then(/^(?:I|they) should( not)? see "([^"]*)"$/) do |not_see, string|
   if not_see
-    expect(page).to have_no_content string
+    expect(page).to_not have_text(string, normalize_ws: true)
   else
-    expect(page).to have_content string
+    expect(page).to have_text(string, normalize_ws: true)
   end
 end
 
@@ -62,9 +62,9 @@ Then(/^I\sshould(\snot)?\ssee\s"([^"]*)"\s
   expect(page.body).to have_text to_search
   regex = /#{Regexp.quote(to_search.to_s)}.+#{Regexp.quote(last.to_s)}/
   if not_see
-    expect(page.text).not_to match regex
+    expect(page.text).not_to have_text(regex, normalize_ws: true)
   else
-    expect(page.text).to match regex
+    expect(page.text).to have_text(regex, normalize_ws: true)
   end
 end
 
@@ -73,16 +73,16 @@ Then(/^(?:I|they)\sshould(\snot)?\ssee\s"([^"]*)"\s
   expect(page.body).to have_text to_search
   regex = /#{Regexp.quote(first.to_s)}.+#{Regexp.quote(to_search.to_s)}/
   if not_see
-    expect(page.text).not_to match regex
+    expect(page.text).not_to have_text(regex, normalize_ws: true)
   else
-    expect(page.text).to match regex
+    expect(page.text).to have_text(regex, normalize_ws: true)
   end
 end
 
 Then(/^page should have "([^"]*)" before "([^"]*)"$/) do |to_search, last|
   expect(page.body).to have_text to_search
   regex = /#{Regexp.quote(to_search.to_s)}.+#{Regexp.quote(last.to_s)}/m
-  expect(page.text).to match regex
+  expect(page.text).to have_text(regex, normalize_ws: true)
 end
 
 Then(/^I wait(?: for)? (\d+) second(?:s)?$/) do |seconds|

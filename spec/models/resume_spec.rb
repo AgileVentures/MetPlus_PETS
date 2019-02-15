@@ -2,12 +2,6 @@ require 'rails_helper'
 include ServiceStubHelpers::Cruncher
 
 RSpec.describe Resume, type: :model do
-  describe 'Fixtures' do
-    it 'should have a valid factory' do
-      expect(FactoryBot.build(:resume)).to be_valid
-    end
-  end
-
   describe 'Database schema' do
     it { is_expected.to have_db_column :id }
     it { is_expected.to have_db_column :file_name }

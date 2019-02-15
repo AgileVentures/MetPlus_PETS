@@ -30,7 +30,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       before(:each) do
         @company_admin = FactoryBot.create(:company_admin)
         sign_in @company_admin
-        get :show, id: @company_admin
+        get :show, params: { id: @company_admin }
       end
       it 'renders show template' do
         expect(response).to render_template('show')
@@ -43,7 +43,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       before(:each) do
         @company_contact = FactoryBot.create(:company_contact)
         sign_in @company_contact
-        get :show, id: @company_contact
+        get :show, params: { id: @company_contact }
       end
       it 'renders show template' do
         expect(response).to render_template('show')
@@ -60,7 +60,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         before(:each) do
           @company_admin = FactoryBot.create(:company_admin)
           sign_in @company_admin
-          get :edit_profile, id: @company_admin
+          get :edit_profile, params: { id: @company_admin }
         end
         it 'renders edit_profile template' do
           expect(response).to render_template 'edit_profile'
@@ -74,7 +74,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         before(:each) do
           @company_contact = FactoryBot.create(:company_contact)
           sign_in @company_contact
-          get :edit_profile, id: @company_contact
+          get :edit_profile, params: { id: @company_contact }
         end
 
         it 'renders edit_profile template' do
@@ -89,17 +89,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'unauthorized access' do
       context 'not logged in' do
         context 'company_admin' do
-          let(:request) { get :edit_profile, id: company_admin }
+          let(:request) { get :edit_profile, params: { id: company_admin } }
           it_behaves_like 'unauthenticated request'
         end
         context 'company_contact' do
-          let(:request) { get :edit_profile, id: company_contact }
+          let(:request) { get :edit_profile, params: { id: company_contact } }
           it_behaves_like 'unauthenticated request'
         end
       end
 
       context 'Agency people' do
-        let(:request) { get :edit_profile, id: company_person }
+        let(:request) { get :edit_profile, params: { id: company_person } }
 
         it_behaves_like 'unauthorized request' do
           let(:user) { agency_admin }
@@ -113,7 +113,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
 
       context 'Job Seeker' do
-        let(:request) { get :edit_profile, id: company_person }
+        let(:request) { get :edit_profile, params: { id: company_person } }
 
         it_behaves_like 'unauthorized request' do
           let(:user) { job_seeker }
@@ -121,7 +121,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
 
       context 'Company admin' do
-        let(:request) { get :edit_profile, id: company_contact }
+        let(:request) { get :edit_profile, params: { id: company_contact } }
 
         it_behaves_like 'unauthorized request' do
           let(:user) { company_admin }
@@ -129,7 +129,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
 
       context 'Company contact' do
-        let(:request) { get :edit_profile, id: company_admin }
+        let(:request) { get :edit_profile, params: { id: company_admin } }
         it_behaves_like 'unauthorized request' do
           let(:user) { company_contact }
         end
@@ -141,7 +141,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       before(:each) do
         sign_in company_person
-        get :home, id: company_person
+        get :home, params: { id: company_person }
       end
 
       it 'instance vars for view' do
@@ -164,7 +164,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'xhr response - skills' do
       before(:each) do
         sign_in company_person
-        xhr :get, :home, id: company_person, data_type: 'skills'
+        get :home, params: { id: company_person, data_type: 'skills' }, xhr: true
       end
 
       it 'renders shared partial for skills display' do
@@ -175,7 +175,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'xhr response - licenses' do
       before(:each) do
         sign_in company_person
-        xhr :get, :home, id: company_person, data_type: 'licenses'
+        get :home, params: { id: company_person, data_type: 'licenses' }, xhr: true
       end
 
       it 'renders shared partial for licenses display' do
@@ -184,7 +184,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     end
 
     describe 'unauthorized access' do
-      let(:request) { get :home, id: company_person }
+      let(:request) { get :home, params: { id: company_person } }
 
       context 'job developer' do
         it_behaves_like 'unauthorized request' do
@@ -228,9 +228,10 @@ RSpec.describe CompanyPeopleController, type: :controller do
           company_person.company_roles <<
             FactoryBot.create(:company_role, role: CompanyRole::ROLE[:CA])
           company_person.save
-          patch :update_profile,
-                id: company_person,
-                company_person: FactoryBot.attributes_for(:user)
+          patch :update_profile, params: { id: company_person,
+                                           company_person: FactoryBot.attributes_for(
+                                             :user
+                                           ) }
         end
 
         it 'sets flash message' do
@@ -252,16 +253,17 @@ RSpec.describe CompanyPeopleController, type: :controller do
                               password_confirmation: 'testing.....')
           @password = @company_person.encrypted_password
           sign_in @company_person
-          patch :update_profile,
-                company_person:
-                  FactoryBot.attributes_for(:company_person,
-                                            first_name: 'John',
-                                            last_name: 'Smith',
-                                            phone: '780-890-8976',
-                                            title: 'Line Manager',
-                                            password: '',
-                                            password_confirmation: ''),
-                id: @company_person
+          patch :update_profile, params: {
+            company_person:
+              FactoryBot.attributes_for(:company_person,
+                                        first_name: 'John',
+                                        last_name: 'Smith',
+                                        phone: '780-890-8976',
+                                        title: 'Line Manager',
+                                        password: '',
+                                        password_confirmation: ''),
+            id: @company_person
+          }
           @company_person.reload
         end
         it 'sets a title' do
@@ -291,18 +293,18 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'unauthorized access' do
       context 'not logged in' do
         context 'company_admin' do
-          let(:request) { patch :update_profile, id: company_admin }
+          let(:request) { patch :update_profile, params: { id: company_admin } }
           it_behaves_like 'unauthenticated request'
         end
         context 'company_contact' do
-          let(:request) { patch :update_profile, id: company_contact }
+          let(:request) { patch :update_profile, params: { id: company_contact } }
           it_behaves_like 'unauthenticated request'
         end
       end
 
       context 'Agency people' do
         context 'company_admin' do
-          let(:request) { patch :update_profile, id: company_admin }
+          let(:request) { patch :update_profile, params: { id: company_admin } }
           it_behaves_like 'unauthorized request' do
             let(:user) { agency_admin }
           end
@@ -315,7 +317,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         end
 
         context 'company_contact' do
-          let(:request) { patch :update_profile, id: company_contact }
+          let(:request) { patch :update_profile, params: { id: company_contact } }
           it_behaves_like 'unauthorized request' do
             let(:user) { agency_admin }
           end
@@ -330,7 +332,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
 
       context 'Job Seeker' do
         context 'Company admin' do
-          let(:request) { patch :update_profile, id: company_admin }
+          let(:request) { patch :update_profile, params: { id: company_admin } }
 
           it_behaves_like 'unauthorized request' do
             let(:user) { job_seeker }
@@ -338,7 +340,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
         end
 
         context 'Company contact' do
-          let(:request) { patch :update_profile, id: company_contact }
+          let(:request) { patch :update_profile, params: { id: company_contact } }
 
           it_behaves_like 'unauthorized request' do
             let(:user) { job_seeker }
@@ -347,14 +349,14 @@ RSpec.describe CompanyPeopleController, type: :controller do
       end
 
       context 'Company admin' do
-        let(:request) { patch :update_profile, id: company_contact }
+        let(:request) { patch :update_profile, params: { id: company_contact } }
         it_behaves_like 'unauthorized request' do
           let(:user) { company_admin }
         end
       end
 
       context 'Company contact' do
-        let(:request) { patch :update_profile, id: company_admin }
+        let(:request) { patch :update_profile, params: { id: company_admin } }
         it_behaves_like 'unauthorized request' do
           let(:user) { company_contact }
         end
@@ -366,7 +368,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       before(:each) do
         sign_in company_admin
-        get :show, id: company_admin
+        get :show, params: { id: company_admin }
       end
 
       it 'renders show template' do
@@ -382,7 +384,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       before(:each) do
         sign_in company_admin
-        get :edit, id: company_admin
+        get :edit, params: { id: company_admin }
       end
 
       it 'renders show template' do
@@ -398,7 +400,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
     describe 'authorized access' do
       before(:each) do
         sign_in company_admin
-        patch :destroy, id: company_person
+        patch :destroy, params: { id: company_person }
       end
 
       it 'sets flash message' do
@@ -421,8 +423,9 @@ RSpec.describe CompanyPeopleController, type: :controller do
       before(:each) do
         updated_fields = company_admin.attributes
                                       .merge(company_admin.user.attributes)
+        updated_fields[:company_role_ids] = company_admin.company_roles.pluck(:id)
         sign_in company_admin
-        patch :update, id: company_admin, company_person: updated_fields
+        patch :update, params: { id: company_admin, company_person: updated_fields }
       end
 
       it 'sets flash message' do
@@ -444,7 +447,7 @@ RSpec.describe CompanyPeopleController, type: :controller do
                                       .merge(company_admin.user.attributes)
         updated_fields[:company_role_ids] = []
         sign_in company_admin
-        patch :update, id: company_admin, company_person: updated_fields
+        patch :update, params: { id: company_admin, company_person: updated_fields }
       end
 
       it 'adds sole company admin error to error hash' do

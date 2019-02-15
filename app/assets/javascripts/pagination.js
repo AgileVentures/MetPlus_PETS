@@ -207,7 +207,7 @@ var PaginationManager = {
     }
 };
 
-$(document).ready(function () {
+$( document ).on('turbolinks:load', function() {
     PaginationManager.setupAll('pagination-div');
 
     // Callbacks for alternative pagination mechanism:

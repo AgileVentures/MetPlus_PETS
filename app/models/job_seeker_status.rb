@@ -1,4 +1,4 @@
-class JobSeekerStatus < ActiveRecord::Base
+class JobSeekerStatus < ApplicationRecord
 
   validates_presence_of :description, :short_description
 

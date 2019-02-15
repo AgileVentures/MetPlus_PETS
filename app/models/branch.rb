@@ -1,4 +1,4 @@
-class Branch < ActiveRecord::Base
+class Branch < ApplicationRecord
   belongs_to :agency
   
   has_one    :address, as: :location, dependent: :destroy

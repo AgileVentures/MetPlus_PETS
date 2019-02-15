@@ -1,4 +1,4 @@
-class Question < ActiveRecord::Base
+class Question < ApplicationRecord
   has_many :job_questions
   has_many :jobs, through: :job_questions, dependent: :destroy
 

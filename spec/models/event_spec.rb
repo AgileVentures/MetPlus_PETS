@@ -75,12 +75,12 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email' do
       expect { Event.create(:JS_REGISTER, job_seeker) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(NotifyEmailJob)
     end
 
     it 'creates two tasks' do
       expect { Event.create(:JS_REGISTER, job_seeker) }
-        .to change(Task, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
   end
 
@@ -96,7 +96,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email to company person and agency people' do
       expect { Event.create(:COMP_REGISTER, company) }
-        .to change(all_emails, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
 
     it 'creates one task' do
@@ -108,7 +108,7 @@ RSpec.describe Event, type: :model do
   describe 'company_registration_approved event' do
     it 'sends approval notification email to company person' do
       expect { Event.create(:COMP_APPROVED, company) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(CompanyMailerJob)
     end
   end
 
@@ -118,7 +118,7 @@ RSpec.describe Event, type: :model do
       obj.company = company
       obj.reason = 'We are unable to accept new partners at this time'
       expect { Event.create(:COMP_DENIED, obj) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(CompanyMailerJob)
     end
   end
 
@@ -146,7 +146,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email and application received email' do
       expect { Event.create(:JS_APPLY, application) }
-        .to change(all_emails, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
 
     it 'creates one task' do
@@ -180,7 +180,7 @@ RSpec.describe Event, type: :model do
 
       it 'sends email to the JS, Company Person and the Primary JD' do
         expect { Event.create(:JD_APPLY, application_diff_jd) }
-          .to change(all_emails, :count).by(+4)
+          .to have_enqueued_job(NotifyEmailJob)
       end
 
       it 'triggers a Pusher message to Company Person' do
@@ -209,7 +209,8 @@ RSpec.describe Event, type: :model do
 
       it 'sends event notification email to Job seeker' do
         expect { Event.create(:JD_APPLY, application_wo_cp) }
-          .to change(all_emails, :count).by(+2)
+          .to have_enqueued_job(CompanyMailerJob)
+          .and have_enqueued_job(JobSeekerEmailJob)
       end
 
       it 'creates one task' do
@@ -243,7 +244,7 @@ RSpec.describe Event, type: :model do
 
       it 'sends event notification email to Job seeker and company person' do
         expect { Event.create(:JD_APPLY, application) }
-          .to change(all_emails, :count).by(+3)
+          .to have_enqueued_job(NotifyEmailJob)
       end
 
       it 'creates one task' do
@@ -284,8 +285,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends a notification email to job developer and case manager' do
       expect { Event.create(:APP_ACCEPTED, application) }
-        .to change(all_emails, :count).by(+2)
-      expect(all_emails.last.to.count).to eq 2
+        .to have_enqueued_job(NotifyEmailJob)
     end
 
     context 'case manager and job developer is same person' do
@@ -297,15 +297,13 @@ RSpec.describe Event, type: :model do
       end
       it 'sends two emails if jd and cm is not for the same js' do
         expect { Event.create(:APP_ACCEPTED, application) }
-          .to change(all_emails, :count).by(+2)
-        expect(all_emails.last.to.count).to eq 2
+          .to have_enqueued_job(NotifyEmailJob)
       end
       it 'sends one email' do
         # assign the same job developer as job_seeker case manager
         job_seeker.assign_case_manager job_developer, agency
         expect { Event.create(:APP_ACCEPTED, application) }
-          .to change(all_emails, :count).by(+2)
-        expect(all_emails.last.to.count).to eq 1
+          .to have_enqueued_job(NotifyEmailJob)
       end
       it 'sends one notification' do
         # assign the same job developer as job_seeker case manager
@@ -348,7 +346,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends a notification email to job developer and case manager' do
       expect { Event.create(:APP_REJECTED, application) }
-        .to change(all_emails, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
 
     context 'case manager and job developer is same person' do
@@ -361,14 +359,12 @@ RSpec.describe Event, type: :model do
 
       it 'sends two emails if jd and cm is not for the same js' do
         expect { Event.create(:APP_REJECTED, application) }
-          .to change(all_emails, :count).by(+2)
-        expect(all_emails.last.to.count).to eq 2
+          .to have_enqueued_job(NotifyEmailJob)
       end
       it 'sends one email' do
         job_seeker.assign_case_manager job_developer, agency
         expect { Event.create(:APP_REJECTED, application) }
-          .to change(all_emails, :count).by(+2)
-        expect(all_emails.last.to.count).to eq 1
+          .to have_enqueued_job(NotifyEmailJob)
       end
       it 'sends one notification' do
         job_seeker.assign_case_manager job_developer, agency
@@ -395,7 +391,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification emails to job developer and job seeker' do
       expect { Event.create(:JD_ASSIGNED_JS, evt_obj_jd) }
-        .to change(all_emails, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
   end
 
@@ -416,7 +412,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification emails to case manager and job seeker' do
       expect { Event.create(:CM_ASSIGNED_JS, evt_obj_cm) }
-        .to change(all_emails, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
   end
 
@@ -434,7 +430,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email' do
       expect { Event.create(:JOB_POSTED, evt_obj_jobpost) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(NotifyEmailJob)
     end
   end
 
@@ -451,7 +447,7 @@ RSpec.describe Event, type: :model do
     end
     it 'sends mass event notification email' do
       expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(NotifyEmailJob)
     end
     it 'triggers mass Pusher message to js' do
       application
@@ -477,7 +473,7 @@ RSpec.describe Event, type: :model do
     it 'sends mass event notification email' do
       application
       expect { Event.create(:JOB_REVOKED, evt_obj_jobpost) }
-        .to change(all_emails, :count).by(+2)
+        .to have_enqueued_job(NotifyEmailJob)
     end
   end
 
@@ -495,7 +491,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email to job seeker' do
       expect { Event.create(:JD_SELF_ASSIGN_JS, evt_obj_jd) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(JobSeekerEmailJob)
     end
   end
 
@@ -513,7 +509,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email to job seeker' do
       expect { Event.create(:CM_SELF_ASSIGN_JS, evt_obj_jd) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(JobSeekerEmailJob)
     end
   end
 
@@ -535,7 +531,7 @@ RSpec.describe Event, type: :model do
 
     it 'sends event notification email to job developer' do
       expect { Event.create(:CP_INTEREST_IN_JS, evt_obj_cp_interest) }
-        .to change(all_emails, :count).by(+1)
+        .to have_enqueued_job(NotifyEmailJob)
     end
 
     it 'creates task' do

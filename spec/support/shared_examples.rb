@@ -9,7 +9,7 @@ RSpec.shared_examples 'unauthorized request' do
   end
 
   it 'redirects to the home page' do
-    expect(response).to redirect_to(root_path)
+    expect(request).to redirect_to(root_path)
   end
 
   it 'sets the flash' do
@@ -114,32 +114,4 @@ end
 RSpec.shared_examples 'return success and render' do |action|
   it { expect(response).to have_http_status(:success) }
   it { expect(response).to render_template action.to_s }
-end
-
-RSpec.shared_examples 'accepts invitation' do |role|
-  include ApplicationHelper
-  assign_role(role)
-  before(:each) do
-    @request.env['devise.mapping'] = Devise.mappings[:user]
-    user = person.user
-    user.invite! do |u|
-      u.skip_invitation = true
-    end
-    invite_token = user.raw_invitation_token
-    post :update,
-         user: { invitation_token: invite_token,
-                 password: 'qwerty123',
-                 password_confirmation: 'qwerty123' }
-    person.reload
-  end
-  it "accepts #{role} invitation token and sets to active" do
-    expect(person.active?).to be true
-  end
-  it "redirects to #{role} home page" do
-    if person.is_a? AgencyPerson
-      expect(response).to redirect_to(home_agency_person_path(person.user))
-    else
-      expect(response).to redirect_to(home_company_person_path(person.user))
-    end
-  end
 end

@@ -1,10 +1,11 @@
 class EmailValidator < ActiveModel::EachValidator
+  def self.use_mailgun?
+    ENV['MAILGUN_EMAIL_VALIDATION'] == 'yes'
+  end
+
   def validate_each(object, attribute, value)
-
-    if ENV['MAILGUN_EMAIL_VALIDATION'] == 'yes'
-
+    if EmailValidator.use_mailgun?
       valid_check = EmailValidateService.validate_email(value)
-
       if valid_check[:status] == 'SUCCESS'
 
         return if valid_check[:valid]
@@ -13,7 +14,7 @@ class EmailValidator < ActiveModel::EachValidator
           object.errors[attribute] << (options[:message] || 'is not a valid address')
         else
           object.errors[attribute] <<
-                "is not valid (did you mean ... #{valid_check[:did_you_mean]}?)"
+            "is not valid (did you mean ... #{valid_check[:did_you_mean]}?)"
         end
 
       else

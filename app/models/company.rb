@@ -1,4 +1,4 @@
-class Company < ActiveRecord::Base
+class Company < ApplicationRecord
   has_many :company_people, dependent: :destroy
   accepts_nested_attributes_for :company_people
 
@@ -53,7 +53,7 @@ class Company < ActiveRecord::Base
   ransacker :status, formatter: proc { |v| statuses[v] }
 
   def self.all_active_with_jobs
-    Company.active.order(:name).joins(:jobs).uniq.all
+    Company.active.order(:name).joins(:jobs).distinct.all
   end
 
   def self.company_admins(company)

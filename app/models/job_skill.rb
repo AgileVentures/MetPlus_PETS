@@ -1,4 +1,4 @@
-class JobSkill < ActiveRecord::Base
+class JobSkill < ApplicationRecord
   belongs_to :job, inverse_of: :job_skills
   belongs_to :skill, counter_cache: :jobs_count
 

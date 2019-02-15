@@ -1,4 +1,4 @@
-class Job < ActiveRecord::Base
+class Job < ApplicationRecord
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person

@@ -2,7 +2,7 @@ Then(/^I press the (.+) button of the task (\d+)$/) do |button, task|
   step %(I click the "#{button}-#{task}" link)
 end
 
-Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are)( not)? present/) do |tasks, _, not_see|
+Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are)( not)? present/) do |tasks, not_see|
   tasks.split(/,/).each do |task_id|
     error = false
     begin
@@ -15,7 +15,7 @@ Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are)( not)? present/) do |tasks, _, n
   end
 end
 
-Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are) hidden/) do |tasks, _|
+Then(/^the (?:task|tasks) ((\d+,?)+) (?:is|are) hidden/) do |tasks|
   tasks.split(/,/).each do |task_id|
     begin
       find("#task-#{task_id}", visible: false)

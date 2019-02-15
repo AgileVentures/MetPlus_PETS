@@ -26,12 +26,18 @@ module Users
       def company_role?(user, role)
         return false if user.nil?
         return false unless user.type == 'CompanyPerson'
-        user.pets_user.company_roles.pluck(:role).include? CompanyRole::ROLE[role]
+
+        !user.pets_user.company_roles.filter do |company_role|
+          company_role.role == CompanyRole::ROLE[role]
+        end.empty?
       end
 
       def agency_role?(user, role)
         return false unless user.type == 'AgencyPerson'
-        user.pets_user.agency_roles.pluck(:role).include? AgencyRole::ROLE[role]
+
+        !user.pets_user.agency_roles.filter do |agency_role|
+          agency_role.role == AgencyRole::ROLE[role]
+        end.empty?
       end
     end
 

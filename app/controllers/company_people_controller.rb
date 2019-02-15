@@ -36,7 +36,9 @@ class CompanyPeopleController < ApplicationController
   end
 
   def update
-    if @company_person.update_attributes(company_person_params)
+    cp_params = company_person_params
+    cp_params[:company_role_ids] = [] if cp_params[:company_role_ids].nil?
+    if @company_person.update_attributes(cp_params)
       flash[:notice] = 'Company person was successfully updated.'
       redirect_to company_person_path(@company_person)
     else

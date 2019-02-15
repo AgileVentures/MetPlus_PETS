@@ -1,4 +1,4 @@
-class NotifyEmailJob < ActiveJob::Base
+class NotifyEmailJob < ApplicationJob
   queue_as :default
 
   def perform(email_addresses, evt_type, *evt_obj)

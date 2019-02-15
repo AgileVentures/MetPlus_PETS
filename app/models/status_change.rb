@@ -1,4 +1,4 @@
-class StatusChange < ActiveRecord::Base
+class StatusChange < ApplicationRecord
   belongs_to :entity, polymorphic: true
 
   validates_presence_of :status_change_to

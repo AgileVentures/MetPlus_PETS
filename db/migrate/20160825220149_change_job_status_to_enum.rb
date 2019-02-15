@@ -1,7 +1,7 @@
 class ChangeJobStatusToEnum < ActiveRecord::Migration
   def change
     begin
-      if ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
+      if ApplicationRecord.connection.instance_of? ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
         execute "ALTER TABLE jobs ALTER status DROP DEFAULT;"
         change_column :jobs, :status, 'integer USING CAST(status AS integer)', default: 0, null: false
       else

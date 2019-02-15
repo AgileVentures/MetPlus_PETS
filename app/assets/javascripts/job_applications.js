@@ -72,6 +72,7 @@ var handlers = {
                     $("#jdApplyJobModal").modal('hide');
                 } catch(err) {}
                 handler.load_preview();
+                return false;
             });
         });
 
@@ -82,7 +83,7 @@ var handlers = {
 
 };
 
-$(function() {
+$( document ).on('turbolinks:load', function() {
     $('.pagination-div, #application-show-links').on('click', '.action_link', function() {
         var id = $(this).attr('data-application-id');
         var title = $(this).attr('data-job-title');
@@ -108,7 +109,7 @@ $(function() {
 
             $('#job_reject_errors').hide(); // Hide error div in modal
         }
-        $(action).modal();
+        $(action).modal('show');
         event.preventDefault();
     });
     handlers.setup();
@@ -187,4 +188,4 @@ var RejectAppln = {
                 RejectAppln.check_for_reason);
     }
 };
-$(RejectAppln.setup);
+$( document ).on('turbolinks:load', RejectAppln.setup);

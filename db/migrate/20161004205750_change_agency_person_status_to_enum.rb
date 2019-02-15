@@ -1,7 +1,7 @@
 class ChangeAgencyPersonStatusToEnum < ActiveRecord::Migration
   def change
     begin
-      if ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
+      if ApplicationRecord.connection.instance_of? ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
         execute "ALTER TABLE agency_people ALTER status DROP DEFAULT"
         execute "UPDATE agency_people SET status='0' where status='Invited'"
         execute "UPDATE agency_people SET status='1' where status='Active'"

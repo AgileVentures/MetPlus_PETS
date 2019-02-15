@@ -117,7 +117,7 @@ Scenario: attempt login after registration is deleted
   And I wait 1 second
   Then I am on the home page
   And I login as "hughjobs@ymail.com" with password "qwerty123"
-  Then I should see "Invalid email or password."
+  Then I should see "Invalid Email or password."
 
 @javascript
 Scenario: company registration denial

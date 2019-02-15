@@ -12,7 +12,7 @@ class CruncherService
   end
 
   def self.upload_file(file, file_name, file_id)
-    mime_type = MIME::Types.type_for(URI.escape(file_name))
+    mime_type = MIME::Types.type_for(CGI.escape(file_name))
 
     raise "Invalid MIME type for file: #{file_name}" if mime_type.empty?
     raise "Unsupported file type for: #{file_name}" unless
@@ -25,8 +25,7 @@ class CruncherService
                                  'name' => file_name,
                                  'userId' => file_id },
                                'Accept' => 'application/json',
-                               'X-Auth-Token' => auth_token,
-                               'Content-Type' => mime_type.first.content_type)
+                               'X-Auth-Token' => auth_token)
 
       return JSON.parse(result)['resultCode'] == 'SUCCESS'
 

@@ -1,4 +1,4 @@
-class AgencyPerson < ActiveRecord::Base
+class AgencyPerson < ApplicationRecord
   acts_as :user
 
   belongs_to :agency
@@ -49,7 +49,7 @@ class AgencyPerson < ActiveRecord::Base
     # If the JD role is set for this person we are OK
     agency_roles.each { |role| return if role.role == AgencyRole::ROLE[:JD] }
 
-    if !agency_relations.empty? && !agency_relations.in_role_of(:JD).empty?
+    if !agency_relations.empty? && !relations_with_role(:JD).empty?
       errors[:person] <<
         'cannot be assigned as Job Developer unless person has that role.'
     end
@@ -59,7 +59,7 @@ class AgencyPerson < ActiveRecord::Base
     # If the CM role is set for this person we are OK
     agency_roles.each { |role| return if role.role == AgencyRole::ROLE[:CM] }
 
-    if !agency_relations.empty? && !agency_relations.in_role_of(:CM).empty?
+    if !agency_relations.empty? && !relations_with_role(:CM).empty?
       errors[:person] <<
         'cannot be assigned as Case Manager unless person has that role.'
     end
@@ -139,5 +139,11 @@ class AgencyPerson < ActiveRecord::Base
 
   def has_role?(role)
     agency_roles.pluck(:role).include?AgencyRole::ROLE[role]
+  end
+
+  def relations_with_role(role_key)
+    agency_relations.filter do |rel|
+      rel.agency_role_id == AgencyRole.find_by_role(AgencyRole::ROLE[role_key]).id
+    end
   end
 end

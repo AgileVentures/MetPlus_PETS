@@ -1,4 +1,4 @@
-class CompanyMailerJob < ActiveJob::Base
+class CompanyMailerJob < ApplicationJob
   queue_as :default
 
   def perform(evt_type, company, company_person, options = { reason:nil, application: nil,

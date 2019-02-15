@@ -1,4 +1,4 @@
-class License < ActiveRecord::Base
+class License < ApplicationRecord
   has_many :job_licenses, inverse_of: :license
   has_many :jobs, through: :job_licenses, dependent: :destroy
 

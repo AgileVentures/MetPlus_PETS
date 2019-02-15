@@ -1,4 +1,4 @@
-class JobSeekerEmailJob < ActiveJob::Base
+class JobSeekerEmailJob < ApplicationJob
   queue_as :default
 
   def perform(evt_type, job_seeker, *args)

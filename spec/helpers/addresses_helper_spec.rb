@@ -20,7 +20,7 @@ RSpec.describe AddressesHelper, type: :helper do
     end
 
     it 'returns no-display style if address has no data' do
-      expect(address_subform_visibility(address_no_data)).to eq 'display:none;'
+      expect(address_subform_visibility(address_no_data)).to eq 'hidden'
     end
   end
 

@@ -737,9 +737,11 @@ RSpec.describe JobsController, type: :controller do
       js.assign_job_developer(job_developer, agency)
       js
     end
-    let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
-    let(:request) { get :apply, job_id: bosh_job.id, user_id: job_seeker.id }
-    # before(:each) { stub_cruncher_file_download testfile_resume }
+    let!(:resume) do
+      stub_cruncher_file_upload
+      FactoryBot.create(:resume, job_seeker: job_seeker)
+    end
+    let(:request) { get :apply, params: { job_id: bosh_job.id, user_id: job_seeker.id } }
 
     describe 'unknown job' do
       before :each do
@@ -954,7 +956,10 @@ RSpec.describe JobsController, type: :controller do
 
     let(:job_seeker)  { FactoryBot.create(:job_seeker) }
     let(:job_seeker2) { FactoryBot.create(:job_seeker) }
-    let!(:resume)     { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let!(:resume) do
+      stub_cruncher_file_upload
+      FactoryBot.create(:resume, job_seeker: job_seeker)
+    end
     let(:job)         { FactoryBot.create(:job) }
     let(:stars_str)   do
       '<div class="stars"><i class="fa fa-star"' \
