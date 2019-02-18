@@ -20,7 +20,7 @@ class CompanyPeopleController < ApplicationController
 
     person_params = handle_user_form_parameters company_person_params
     if @company_person.update_attributes(person_params)
-      sign_in :user, @company_person.user, bypass: true
+      bypass_sign_in(@company_person.user, scope: :user)
       if @company_person.user.unconfirmed_email?
         flash[:warning] = 'Please check your inbox to update your email address.'
       else

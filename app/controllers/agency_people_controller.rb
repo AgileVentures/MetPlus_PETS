@@ -143,7 +143,7 @@ class AgencyPeopleController < ApplicationController
 
     person_params = handle_user_form_parameters agency_person_params
     if @agency_person.update_attributes(person_params)
-      sign_in :user, @agency_person.user, bypass: true
+      bypass_sign_in(@agency_person.user, scope: :user)
 
       # Check if user attempted to update the email address
       if @agency_person.unconfirmed_email?

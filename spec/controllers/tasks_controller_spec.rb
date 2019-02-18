@@ -15,7 +15,7 @@ RSpec.describe TasksController, type: :controller do
         sign_in @jd1
       end
 
-      subject { xhr :patch, :assign, { id: @task.id }, format: :json }
+      subject { patch :assign, params: { id: @task.id }, format: :json, xhr: true }
       it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
@@ -29,7 +29,7 @@ RSpec.describe TasksController, type: :controller do
       end
 
       describe 'missing parameters' do
-        subject { xhr :patch, :assign, { id: 1 }, format: :json }
+        subject { patch :assign, params: { id: 1 }, format: :json, xhr: true }
         it 'returns error' do
           expect(subject).to have_http_status(403)
         end
@@ -42,7 +42,7 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'Cannot find task' do
         before do
-          xhr :patch, :assign, { id: -1, to: 100 }, format: :json
+          patch :assign, params: { id: -1, to: 100 }, format: :json, xhr: true
         end
 
         it 'returns error' do
@@ -65,7 +65,7 @@ RSpec.describe TasksController, type: :controller do
         end
 
         subject do
-          xhr :patch, :assign, { id: @task.id, to: 100 }, format: :json
+          patch :assign, params: { id: @task.id, to: 100 }, format: :json, xhr: true
         end
         it 'returns error' do
           expect(subject).to have_http_status(403)
@@ -87,7 +87,7 @@ RSpec.describe TasksController, type: :controller do
         end
 
         subject do
-          xhr :patch, :assign, { id: @task.id, to: @js.id }, format: :json
+          patch :assign, params: { id: @task.id, to: @js.id }, format: :json, xhr: true
         end
         it 'returns error' do
           expect(subject).to have_http_status(403)
@@ -103,7 +103,7 @@ RSpec.describe TasksController, type: :controller do
     describe 'unauthorized' do
       describe 'not logged in' do
         let(:request) do
-          xhr :patch, :assign, { id: @task.id, to: @js.id }, format: :json
+          patch :assign, params: { id: @task.id, to: @js.id }, format: :json, xhr: true
         end
         before :each do
           agency = FactoryBot.create(:agency)
@@ -128,7 +128,7 @@ RSpec.describe TasksController, type: :controller do
         sign_in @jd1
       end
 
-      subject { xhr :patch, :in_progress, { id: @task.id }, format: :json }
+      subject { patch :in_progress, params: { id: @task.id }, format: :json, xhr: true }
       it 'returns http success' do
         expect(subject).to have_http_status(:success)
       end
@@ -148,7 +148,7 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'Cannot find task' do
         before do
-          xhr :patch, :in_progress, { id: -1 }, format: :json
+          patch :in_progress, params: { id: -1 }, format: :json, xhr: true
         end
 
         it 'returns error' do
@@ -165,7 +165,7 @@ RSpec.describe TasksController, type: :controller do
     describe 'unauthorized' do
       describe 'not the task owner' do
         let(:request) do
-          xhr :patch, :in_progress, { id: @task.id }, format: :json
+          patch :in_progress, params: { id: @task.id }, format: :json, xhr: true
         end
 
         before :each do
@@ -184,7 +184,7 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'not logged in' do
         let(:request) do
-          xhr :patch, :in_progress, { id: @task.id }, format: :json
+          patch :in_progress, params: { id: @task.id }, format: :json, xhr: true
         end
         before :each do
           agency = FactoryBot.create(:agency)
@@ -213,7 +213,7 @@ RSpec.describe TasksController, type: :controller do
         sign_in @jd1
       end
 
-      subject { xhr :patch, :done, { id: @task.id }, format: :json }
+      subject { patch :done, params: { id: @task.id }, format: :json, xhr: true }
       it 'returns http success' do
         expect(subject).to have_http_status(:success)
       end
@@ -233,7 +233,7 @@ RSpec.describe TasksController, type: :controller do
 
       describe 'Cannot find task' do
         before do
-          xhr :patch, :done, { id: -1 }, format: :json
+          patch :done, params: { id: -1 }, format: :json, xhr: true
         end
 
         it 'returns error' do
@@ -249,7 +249,7 @@ RSpec.describe TasksController, type: :controller do
 
     describe 'unauthorized' do
       describe 'not the task owner' do
-        let(:request) { xhr :patch, :done, { id: @task.id }, format: :json }
+        let(:request) { patch :done, params: { id: @task.id }, format: :json, xhr: true }
         before :each do
           agency = FactoryBot.create(:agency)
           FactoryBot.create(:agency_admin, agency: agency)
@@ -266,7 +266,7 @@ RSpec.describe TasksController, type: :controller do
       end
 
       describe 'not logged in' do
-        let(:request) { xhr :patch, :done, { id: @task.id }, format: :json }
+        let(:request) { patch :done, params: { id: @task.id }, format: :json, xhr: true }
         before :each do
           agency = FactoryBot.create(:agency)
           @jd1 = FactoryBot.create(:job_developer, agency: agency)
@@ -283,7 +283,7 @@ RSpec.describe TasksController, type: :controller do
   describe 'GET #tasks' do
     describe 'unauthorized' do
       let(:request) do
-        xhr :get, :tasks, { task_type: 'mine-open' }, format: :json
+        get :tasks, params: { task_type: 'mine-open' }, format: :json, xhr: true
       end
       context 'not signed in' do
         it_behaves_like 'unauthenticated XHR request'
@@ -315,7 +315,7 @@ RSpec.describe TasksController, type: :controller do
           @task = Task.new_js_unassigned_jd_task js, agency
         end
 
-        subject { xhr :get, :list_owners, { id: @task.id }, format: :json }
+        subject { get :list_owners, params: { id: @task.id }, format: :json, xhr: true }
         it 'returns http success' do
           expect(subject).to have_http_status(:success)
         end
@@ -336,7 +336,7 @@ RSpec.describe TasksController, type: :controller do
       end
 
       describe 'unknown task' do
-        subject { xhr :get, :list_owners, { id: -1000 }, format: :json }
+        subject { get :list_owners, params: { id: -1000 }, format: :json, xhr: true }
         it 'returns http error' do
           expect(subject).to have_http_status(403)
         end
@@ -354,7 +354,7 @@ RSpec.describe TasksController, type: :controller do
           @task = Task.new_js_unassigned_cm_task js, agency
         end
 
-        subject { xhr :get, :list_owners, { id: @task.id }, format: :json }
+        subject { get :list_owners, params: { id: @task.id }, format: :json, xhr: true }
         it 'returns http success' do
           expect(subject).to have_http_status(403)
         end
@@ -375,7 +375,9 @@ RSpec.describe TasksController, type: :controller do
       let(:job_developer) { FactoryBot.create(:job_developer, agency: agency) }
       let(:case_manager) { FactoryBot.create(:case_manager, agency: agency) }
       let(:job_seeker) { FactoryBot.create(:job_seeker) }
-      let(:request) { xhr :get, :list_owners, { id: @task.id }, format: :json }
+      let(:request) do
+        get :list_owners, params: { id: @task.id }, format: :json, xhr: true
+      end
       before :each do
         @task = Task.new_js_unassigned_jd_task job_seeker, agency
       end

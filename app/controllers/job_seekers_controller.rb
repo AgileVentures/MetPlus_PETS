@@ -79,7 +79,7 @@ class JobSeekersController < ApplicationController
     end
 
     if models_saved
-      sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
+      bypass_sign_in(@jobseeker.user, scope: :user) if pets_user == @jobseeker
       if @jobseeker.user.unconfirmed_email?
         flash[:warning] = 'Please check your inbox to update your email address'
       else

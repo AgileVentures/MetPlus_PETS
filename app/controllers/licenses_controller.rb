@@ -7,7 +7,7 @@ class LicensesController < ApplicationController
     license = License.new(license_params)
     authorize license
     if license.save
-      render nothing: true
+      head :ok
     else
       render partial: 'shared/error_messages',
                       locals: {object: license}, status: 422
@@ -19,7 +19,7 @@ class LicensesController < ApplicationController
     begin
       license = License.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       render json: { abbr: license.abbr,
                      title: license.title,
@@ -32,10 +32,10 @@ class LicensesController < ApplicationController
     begin
       license = License.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       if license.update(license_params)
-        render nothing: true
+        head :ok
       else
         render partial: 'shared/error_messages',
                         locals: {object: license}, status: 422
@@ -48,7 +48,7 @@ class LicensesController < ApplicationController
     begin
       license = License.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       license.destroy
       render json: { license_count: License.count }

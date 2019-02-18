@@ -49,10 +49,10 @@ module Helpers
         'A message with a confirmation and link has been sent to your email address. ' \
         'Please follow the link to activate your account.'
       end
-      let(:request) { post :create, job_seeker: valid_attribute }
+      let(:request) { post :create, params: { job_seeker: valid_attribute } }
     when 'destroy'
       let(:message) { 'Jobseeker was deleted successfully.' }
-      let(:request) { delete :destroy, id: owner }
+      let(:request) { delete :destroy, params: { id: owner } }
     else
       let(:message) { nil }
     end
@@ -833,6 +833,7 @@ RSpec.describe JobSeekersController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      stub_cruncher_file_upload
       sign_in company_admin
     end
 

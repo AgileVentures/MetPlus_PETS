@@ -13,7 +13,7 @@ Before('@selenium') do
   Capybara.current_driver = :selenium
 end
 
-After('@javascript, @selenium_browser, @selenium') do
+After('@javascript or @selenium_browser or @selenium') do
   Capybara.reset_sessions!
   # force Chrome to quit after each scenario:
   page.driver.quit if Capybara.current_driver == :selenium ||

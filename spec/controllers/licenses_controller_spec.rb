@@ -38,24 +38,24 @@ RSpec.describe LicensesController, type: :controller do
         sign_in agency_admin
       end
       it 'creates new license for valid parameters' do
-        expect { xhr :post, :create, license: license_params }
+        expect { post :create, params: { license: license_params }, xhr: true }
           .to change(License, :count).by(+1)
       end
 
       it 'returns success for valid parameters' do
-        xhr :post, :create, license: license_params
+        post :create, params: { license: license_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :post, :create, license: { abbr: '', title: '' }
+        post :create, params: { license: { abbr: '', title: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
     end
 
     it_behaves_like 'LicensesController unauthorized access' do
-      let(:request) { xhr :post, :create, license: license_params }
+      let(:request) { post :create, params: { license: license_params }, xhr: true }
     end
   end
 
@@ -67,7 +67,7 @@ RSpec.describe LicensesController, type: :controller do
 
       context 'license found' do
         before(:each) do
-          xhr :get, :show, id: license
+          get :show, params: { id: license }, xhr: true
         end
 
         it 'renders json structure' do
@@ -84,14 +84,14 @@ RSpec.describe LicensesController, type: :controller do
 
       context 'license NOT found' do
         it 'returns http status not_found' do
-          xhr :get, :show, id: 0
+          get :show, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
     end
 
     it_behaves_like 'LicensesController unauthorized access' do
-      let(:request) { xhr :get, :show, id: license }
+      let(:request) { get :show, params: { id: license }, xhr: true }
     end
   end
 
@@ -101,19 +101,24 @@ RSpec.describe LicensesController, type: :controller do
         sign_in agency_admin
       end
       it 'returns success for valid parameters' do
-        xhr :patch, :update, id: license, license: license_params
+        patch :update, params: { id: license, license: license_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :patch, :update, id: license, license: { abbr: '', title: '' }
+        patch :update, params: {
+          id: license,
+          license: { abbr: '', title: '' },
+        }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
     end
 
     it_behaves_like 'LicensesController unauthorized access' do
-      let(:request) { xhr :patch, :update, id: license, license: license_params }
+      let(:request) do
+        patch :update, params: { id: license, license: license_params }, xhr: true
+      end
     end
   end
 
@@ -131,7 +136,7 @@ RSpec.describe LicensesController, type: :controller do
       let!(:job_license) { FactoryBot.create(:job_license, license: license) }
 
       context 'license found' do
-        let(:request) { xhr :delete, :destroy, id: license }
+        let(:request) { delete :destroy, params: { id: license }, xhr: true }
 
         it 'deletes license' do
           expect { request }.to change(License, :count).by(-1)
@@ -147,21 +152,21 @@ RSpec.describe LicensesController, type: :controller do
 
       context 'license NOT found' do
         it 'returns http status not_found' do
-          xhr :delete, :destroy, id: 0
+          delete :destroy, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
     end
 
     it_behaves_like 'LicensesController unauthorized access' do
-      let(:request) { xhr :delete, :destroy, id: 0 }
+      let(:request) { delete :destroy, params: { id: 0 }, xhr: true }
     end
   end
 
   describe 'Call action outside of XHR request' do
     it 'raises an exception' do
       license
-      expect { get :show, id: license }.to raise_error(RuntimeError)
+      expect { get :show, params: { id: license } }.to raise_error(RuntimeError)
     end
   end
 end

@@ -47,17 +47,17 @@ RSpec.describe SkillsController, type: :controller do
         sign_in aa
       end
       it 'creates new skill for valid parameters' do
-        expect { xhr :post, :create, skill: skill_params }
+        expect { post :create, params: { skill: skill_params }, xhr: true }
           .to change(Skill, :count).by(+1)
       end
 
       it 'returns success for valid parameters' do
-        xhr :post, :create, skill: skill_params
+        post :create, params: { skill: skill_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :post, :create, skill: { name: '', description: '' }
+        post :create, params: { skill: { name: '', description: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
@@ -70,17 +70,17 @@ RSpec.describe SkillsController, type: :controller do
       end
 
       it 'creates new skill for valid parameters' do
-        expect { xhr :post, :create, skill: skill_params_company }
+        expect { post :create, params: { skill: skill_params_company }, xhr: true }
           .to change(Skill, :count).by(+1)
       end
 
       it 'returns success for valid parameters' do
-        xhr :post, :create, skill: skill_params_company
+        post :create, params: { skill: skill_params_company }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :post, :create, skill: { name: '', description: '' }
+        post :create, params: { skill: { name: '', description: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
@@ -92,24 +92,24 @@ RSpec.describe SkillsController, type: :controller do
         sign_in cc
       end
       it 'creates new skill for valid parameters' do
-        expect { xhr :post, :create, skill: skill_params_company }
+        expect { post :create, params: { skill: skill_params_company }, xhr: true }
           .to change(Skill, :count).by(+1)
       end
 
       it 'returns success for valid parameters' do
-        xhr :post, :create, skill: skill_params_company
+        post :create, params: { skill: skill_params_company }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :post, :create, skill: { name: '', description: '' }
+        post :create, params: { skill: { name: '', description: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
     end
 
     it_behaves_like 'unauthorized access' do
-      let(:request) { xhr :post, :create, skill: skill_params }
+      let(:request) { post :create, params: { skill: skill_params }, xhr: true }
     end
   end
 
@@ -121,7 +121,7 @@ RSpec.describe SkillsController, type: :controller do
       end
       context 'skill found' do
         before(:each) do
-          xhr :get, :show, id: skill
+          get :show, params: { id: skill }, xhr: true
         end
 
         it 'renders json structure' do
@@ -138,7 +138,7 @@ RSpec.describe SkillsController, type: :controller do
 
       context 'skill NOT found' do
         it 'returns http status not_found' do
-          xhr :get, :show, id: 0
+          get :show, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -151,7 +151,7 @@ RSpec.describe SkillsController, type: :controller do
       end
       context 'skill found' do
         before(:each) do
-          xhr :get, :show, id: company_skill
+          get :show, params: { id: company_skill }, xhr: true
         end
 
         it 'renders json structure' do
@@ -168,7 +168,7 @@ RSpec.describe SkillsController, type: :controller do
 
       context 'skill NOT found' do
         it 'returns http status not_found' do
-          xhr :get, :show, id: 0
+          get :show, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -181,7 +181,7 @@ RSpec.describe SkillsController, type: :controller do
       end
       context 'skill found' do
         before(:each) do
-          xhr :get, :show, id: company_skill
+          get :show, params: { id: company_skill }, xhr: true
         end
 
         it 'renders json structure' do
@@ -198,14 +198,14 @@ RSpec.describe SkillsController, type: :controller do
 
       context 'skill NOT found' do
         it 'returns http status not_found' do
-          xhr :get, :show, id: 0
+          get :show, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
     end
 
     it_behaves_like 'unauthorized access' do
-      let(:request) { xhr :get, :show, id: skill }
+      let(:request) { get :show, params: { id: skill }, xhr: true }
     end
   end
 
@@ -216,12 +216,13 @@ RSpec.describe SkillsController, type: :controller do
         sign_in aa
       end
       it 'returns success for valid parameters' do
-        xhr :patch, :update, id: skill, skill: skill_params
+        patch :update, params: { id: skill, skill: skill_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :patch, :update, id: skill, skill: { name: '', description: '' }
+        patch :update,
+              params: { id: skill, skill: { name: '', description: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
@@ -233,12 +234,14 @@ RSpec.describe SkillsController, type: :controller do
         sign_in ca
       end
       it 'returns success for valid parameters' do
-        xhr :patch, :update, id: company_skill, skill: skill_params
+        patch :update, params: { id: company_skill, skill: skill_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :patch, :update, id: company_skill, skill: { name: '', description: '' }
+        patch :update,
+              params: { id: company_skill, skill: { name: '', description: '' } },
+              xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
@@ -250,19 +253,23 @@ RSpec.describe SkillsController, type: :controller do
         sign_in cc
       end
       it 'returns success for valid parameters' do
-        xhr :patch, :update, id: company_skill, skill: skill_params
+        patch :update, params: { id: company_skill, skill: skill_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :patch, :update, id: company_skill, skill: { name: '', description: '' }
+        patch :update,
+              params: { id: company_skill, skill: { name: '', description: '' } },
+              xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
     end
 
     it_behaves_like 'unauthorized access' do
-      let(:request) { xhr :patch, :update, id: skill, skill: skill_params }
+      let(:request) do
+        patch :update, params: { id: skill, skill: skill_params }, xhr: true
+      end
     end
   end
 
@@ -281,7 +288,7 @@ RSpec.describe SkillsController, type: :controller do
       let!(:job_skill) { FactoryBot.create(:job_skill, skill: skill) }
 
       context 'skill found' do
-        let(:request) { xhr :delete, :destroy, id: skill }
+        let(:request) { delete :destroy, params: { id: skill }, xhr: true }
         it 'deletes skill' do
           expect { request }
             .to change(Skill, :count).by(-1)
@@ -298,7 +305,7 @@ RSpec.describe SkillsController, type: :controller do
 
       context 'skill NOT found' do
         it 'returns http status not_found' do
-          xhr :delete, :destroy, id: 0
+          delete :destroy, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -313,7 +320,7 @@ RSpec.describe SkillsController, type: :controller do
       let!(:job_skill) { FactoryBot.create(:job_skill, skill: company_skill) }
 
       context 'skill found' do
-        let(:request) { xhr :delete, :destroy, id: company_skill }
+        let(:request) { delete :destroy, params: { id: company_skill }, xhr: true }
 
         it 'deletes skill' do
           expect { request }
@@ -331,7 +338,7 @@ RSpec.describe SkillsController, type: :controller do
 
       context 'skill NOT found' do
         it 'returns http status not_found' do
-          xhr :delete, :destroy, id: 0
+          delete :destroy, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -346,7 +353,7 @@ RSpec.describe SkillsController, type: :controller do
       let!(:job_skill) { FactoryBot.create(:job_skill, skill: company_skill) }
 
       context 'skill found' do
-        let(:request) { xhr :delete, :destroy, id: company_skill }
+        let(:request) { delete :destroy, params: { id: company_skill }, xhr: true }
 
         it 'deletes skill' do
           expect { request }
@@ -364,14 +371,14 @@ RSpec.describe SkillsController, type: :controller do
 
       context 'skill NOT found' do
         it 'returns http status not_found' do
-          xhr :delete, :destroy, id: 0
+          delete :destroy, params: { id: 0 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
     end
 
     it_behaves_like 'unauthorized access' do
-      let(:request) { xhr :delete, :destroy, id: 0 }
+      let(:request) { delete :destroy, params: { id: 0 }, xhr: true }
     end
   end
 
@@ -379,7 +386,7 @@ RSpec.describe SkillsController, type: :controller do
     let!(:skill)  { FactoryBot.create(:skill) }
 
     it 'raises an exception' do
-      expect { get :show, id: skill }.to raise_error(RuntimeError)
+      expect { get :show, params: { id: skill } }.to raise_error(RuntimeError)
     end
   end
 end
