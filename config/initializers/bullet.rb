@@ -1,5 +1,5 @@
 if defined? Bullet
-  Bullet.enable = true
+  Bullet.enable = false
   Bullet.alert = true
   Bullet.add_whitelist type: :unused_eager_loading,
                  class_name: 'Agency',
