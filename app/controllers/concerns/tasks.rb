@@ -25,6 +25,7 @@ module Tasks
     end
 
     return collection if collection.nil?
+
     collection.paginate(page: params[:tasks_page], per_page: per_page)
   end
 end

@@ -44,7 +44,7 @@ class SkillsController < ApplicationController
         head :ok
       else
         render partial: 'shared/error_messages',
-               locals: {object: skill}, status: 422
+               locals: { object: skill }, status: 422
       end
     end
   end

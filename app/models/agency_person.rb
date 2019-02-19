@@ -98,8 +98,8 @@ class AgencyPerson < ApplicationRecord
     role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:JD]).id
 
     seekers = []
-    agency_relations.includes(:job_seeker).
-                  where(agency_role_id: role_id).each do |relation|
+    agency_relations.includes(:job_seeker)
+                    .where(agency_role_id: role_id).each do |relation|
       seekers << relation.job_seeker.id
     end
     seekers
@@ -109,8 +109,8 @@ class AgencyPerson < ApplicationRecord
     role_id = AgencyRole.find_by_role(AgencyRole::ROLE[:CM]).id
 
     seekers = []
-    agency_relations.includes(:job_seeker).
-                  where(agency_role_id: role_id).each do |relation|
+    agency_relations.includes(:job_seeker)
+                    .where(agency_role_id: role_id).each do |relation|
       seekers << relation.job_seeker.id
     end
     seekers
@@ -118,16 +118,19 @@ class AgencyPerson < ApplicationRecord
 
   def job_developer?(agency)
     return false if self.agency != agency
+
     has_role?(:JD)
   end
 
   def case_manager?(agency)
     return false if self.agency != agency
+
     has_role?(:CM)
   end
 
   def agency_admin?(agency)
     return false if self.agency != agency
+
     has_role?(:AA)
   end
 
@@ -138,7 +141,7 @@ class AgencyPerson < ApplicationRecord
   private
 
   def has_role?(role)
-    agency_roles.pluck(:role).include?AgencyRole::ROLE[role]
+    agency_roles.pluck(:role).include? AgencyRole::ROLE[role]
   end
 
   def relations_with_role(role_key)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Event
   include ActiveModel::Model
   require 'agency_person' # provide visibility to AR model methods
@@ -11,20 +12,20 @@ class Event
     @@delay ||= 10
   end
 
-  EVT_TYPE = { JS_REGISTER:   'js_registered',
+  EVT_TYPE = { JS_REGISTER: 'js_registered',
                COMP_REGISTER: 'company_registered',
                COMP_APPROVED: 'company_registration_approved',
-               COMP_DENIED:   'company_registration_denied',
-               JS_APPLY:      'jobseeker_applied',
-               JD_APPLY:      'job_applied_by_job_developer',
+               COMP_DENIED: 'company_registration_denied',
+               JS_APPLY: 'jobseeker_applied',
+               JD_APPLY: 'job_applied_by_job_developer',
                OTHER_JD_APPLY: 'job_applied_by_other_job_developer',
-               APP_ACCEPTED:  'job_application_accepted',
-               APP_REJECTED:  'job_application_rejected',
+               APP_ACCEPTED: 'job_application_accepted',
+               APP_REJECTED: 'job_application_rejected',
                APP_PROCESSING: 'job_application_processing',
-               JOB_POSTED:    'job_posted',
-               JOB_REVOKED:   'job_revoked',
-               JD_ASSIGNED_JS:    'jobseeker_assigned_jd',
-               CM_ASSIGNED_JS:    'jobseeker_assigned_cm',
+               JOB_POSTED: 'job_posted',
+               JOB_REVOKED: 'job_revoked',
+               JD_ASSIGNED_JS: 'jobseeker_assigned_jd',
+               CM_ASSIGNED_JS: 'jobseeker_assigned_cm',
                JD_SELF_ASSIGN_JS: 'jd_self_assigned_js',
                CM_SELF_ASSIGN_JS: 'cm_self_assigned_js',
                CP_INTEREST_IN_JS: 'cp_interest_in_js' }.freeze
@@ -142,8 +143,8 @@ class Event
     unless notify_list.empty?
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JS_APPLY],
-                     job_id:  evt_obj.job.id,
-                     js_id:   evt_obj.job_seeker.id,
+                     job_id: evt_obj.job.id,
+                     js_id: evt_obj.job_seeker.id,
                      js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                      notify_list: notify_list[0])
       NotifyEmailJob.set(wait: delay_seconds.seconds)
@@ -176,22 +177,22 @@ class Event
                                     job_developer, evt_obj.job)
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:OTHER_JD_APPLY],
-                     job_id:  evt_obj.job.id,
+                     job_id: evt_obj.job.id,
                      js_user_id: evt_obj.job_seeker.user.id,
                      jd_id: job_developer.id,
                      jd_name: job_developer.full_name(last_name_first: false))
     else
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JD_APPLY],
-                     job_id:  evt_obj.job.id,
+                     job_id: evt_obj.job.id,
                      js_user_id: evt_obj.job_seeker.user.id)
     end
 
     if evt_obj.job.company_person
       Pusher.trigger('pusher_control',
                      EVT_TYPE[:JS_APPLY],
-                     job_id:  evt_obj.job.id,
-                     js_id:   evt_obj.job_seeker.id,
+                     job_id: evt_obj.job.id,
+                     js_id: evt_obj.job_seeker.id,
                      js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                      notify_list: [evt_obj.job.company_person.user.id])
 
@@ -224,7 +225,7 @@ class Event
           EVT_TYPE[:APP_ACCEPTED],
           id: evt_obj.id,
           ap_user_id: job_developer.user.id,
-          job_title:   evt_obj.job.title,
+          job_title: evt_obj.job.title,
           js_name: job_seeker.full_name(last_name_first: false)
         )
       end
@@ -237,7 +238,7 @@ class Event
         EVT_TYPE[:APP_ACCEPTED],
         id: evt_obj.id,
         ap_user_id: case_manager.user.id,
-        job_title:   evt_obj.job.title,
+        job_title: evt_obj.job.title,
         js_name: job_seeker.full_name(last_name_first: false)
       )
     end
@@ -270,7 +271,7 @@ class Event
           EVT_TYPE[:APP_PROCESSING],
           id: evt_obj.id,
           ap_user_id: job_developer.user.id,
-          job_title:   evt_obj.job.title,
+          job_title: evt_obj.job.title,
           js_name: job_seeker.full_name(last_name_first: false)
         )
       end
@@ -283,7 +284,7 @@ class Event
         EVT_TYPE[:APP_PROCESSING],
         id: evt_obj.id,
         ap_user_id: case_manager.user.id,
-        job_title:   evt_obj.job.title,
+        job_title: evt_obj.job.title,
         js_name: job_seeker.full_name(last_name_first: false)
       )
     end
@@ -315,7 +316,7 @@ class Event
           EVT_TYPE[:APP_REJECTED],
           id: evt_obj.id,
           ap_user_id: job_developer.user.id,
-          job_title:   evt_obj.job.title,
+          job_title: evt_obj.job.title,
           js_name: job_seeker.full_name(last_name_first: false)
         )
       end
@@ -328,7 +329,7 @@ class Event
         EVT_TYPE[:APP_REJECTED],
         id: evt_obj.id,
         ap_user_id: case_manager.user.id,
-        job_title:   evt_obj.job.title,
+        job_title: evt_obj.job.title,
         js_name: job_seeker.full_name(last_name_first: false)
       )
     end
@@ -351,7 +352,7 @@ class Event
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JD_ASSIGNED_JS],
-                   js_id:   evt_obj.job_seeker.id,
+                   js_id: evt_obj.job_seeker.id,
                    js_user_id: evt_obj.job_seeker.user.id,
                    js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                    jd_name: evt_obj.agency_person.full_name(last_name_first: false),
@@ -410,7 +411,7 @@ class Event
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:CM_ASSIGNED_JS],
-                   js_id:      evt_obj.job_seeker.id,
+                   js_id: evt_obj.job_seeker.id,
                    js_user_id: evt_obj.job_seeker.user.id,
                    js_name: evt_obj.job_seeker.full_name(last_name_first: false),
                    cm_name: evt_obj.agency_person.full_name(last_name_first: false),
@@ -441,10 +442,10 @@ class Event
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JOB_POSTED],
-                   job_id:       evt_obj.job.id,
-                   job_title:    evt_obj.job.title,
+                   job_id: evt_obj.job.id,
+                   job_title: evt_obj.job.title,
                    company_name: evt_obj.job.company.name,
-                   notify_list:  jd_ids)
+                   notify_list: jd_ids)
 
     NotifyEmailJob.set(wait: delay_seconds.seconds)
                   .perform_later(jd_emails,
@@ -465,10 +466,10 @@ class Event
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JOB_REVOKED],
-                   job_id:       evt_obj.job.id,
-                   job_title:    evt_obj.job.title,
+                   job_id: evt_obj.job.id,
+                   job_title: evt_obj.job.title,
                    company_name: evt_obj.job.company.name,
-                   notify_list:  jd_ids)
+                   notify_list: jd_ids)
 
     NotifyEmailJob.set(wait: delay_seconds.seconds)
                   .perform_later(jd_emails,
@@ -484,10 +485,10 @@ class Event
 
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:JOB_REVOKED],
-                   job_id:       evt_obj.job.id,
-                   job_title:    evt_obj.job.title,
+                   job_id: evt_obj.job.id,
+                   job_title: evt_obj.job.title,
                    company_name: evt_obj.job.company.name,
-                   notify_list:  js_ids)
+                   notify_list: js_ids)
 
     js_list.each do |js|
       JobSeekerEmailJob.set(wait: delay_seconds.seconds)
@@ -505,12 +506,12 @@ class Event
     Pusher.trigger('pusher_control',
                    EVT_TYPE[:CP_INTEREST_IN_JS],
                    jd_user_id: evt_obj.job_developer.user.id,
-                   cp_id:      evt_obj.company_person.id,
-                   cp_name:    evt_obj.company_person.full_name(last_name_first: false),
-                   job_id:     evt_obj.job.id,
-                   job_title:  evt_obj.job.title,
-                   js_id:      evt_obj.job_seeker.id,
-                   js_name:    evt_obj.job_seeker.full_name(last_name_first: false))
+                   cp_id: evt_obj.company_person.id,
+                   cp_name: evt_obj.company_person.full_name(last_name_first: false),
+                   job_id: evt_obj.job.id,
+                   job_title: evt_obj.job.title,
+                   js_id: evt_obj.job_seeker.id,
+                   js_name: evt_obj.job_seeker.full_name(last_name_first: false))
 
     NotifyEmailJob.set(wait: delay_seconds.seconds)
                   .perform_later([evt_obj.job_developer.email],

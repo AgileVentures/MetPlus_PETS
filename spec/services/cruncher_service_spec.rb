@@ -22,8 +22,8 @@ RSpec.describe CruncherService, type: :request do
   let(:upload_result) do
     RestClient.post(CruncherService.service_url +
                     '/resume/upload',
-                    { 'file'   => fixture_file_upload(testfile_pdf),
-                      'name'   => testfile_pdf,
+                    { 'file' => fixture_file_upload(testfile_pdf),
+                      'name' => testfile_pdf,
                       'userId' => 'test_id' },
                     'Accept' => 'application/json',
                     'X-Auth-Token' => JSON.parse(auth_result)['token'],
@@ -33,8 +33,8 @@ RSpec.describe CruncherService, type: :request do
   let(:job_result) do
     RestClient.post(CruncherService.service_url +
                     '/job/create',
-                    { 'jobId'   => 10,
-                      'title'   => 'Software Engineer',
+                    { 'jobId' => 10,
+                      'title' => 'Software Engineer',
                       'description' => 'description of the job' },
                     'Accept' => 'application/json',
                     'X-Auth-Token' => JSON.parse(auth_result)['token'])
@@ -43,8 +43,8 @@ RSpec.describe CruncherService, type: :request do
   let(:job_update_result) do
     RestClient.patch(CruncherService.service_url +
                      '/job/10/update',
-                     { 'jobId'   => 10,
-                       'title'   => 'Software Engineer',
+                     { 'jobId' => 10,
+                       'title' => 'Software Engineer',
                        'description' => 'revised description of the job' },
                      'Accept' => 'application/json',
                      'X-Auth-Token' => JSON.parse(auth_result)['token'])

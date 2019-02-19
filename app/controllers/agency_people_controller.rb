@@ -156,7 +156,6 @@ class AgencyPeopleController < ApplicationController
     else
       render :edit_profile
     end
-
   end
 
   def destroy
@@ -215,7 +214,6 @@ class AgencyPeopleController < ApplicationController
   end
 
   def list_js_without_jd
-
     raise 'Unsupported request' if not request.xhr?
 
     agency_person = AgencyPerson.find(params[:id])
@@ -236,7 +234,6 @@ class AgencyPeopleController < ApplicationController
   end
 
   def list_js_without_cm
-
     raise 'Unsupported request' if not request.xhr?
 
     agency_person = AgencyPerson.find(params[:id])
@@ -259,11 +256,12 @@ class AgencyPeopleController < ApplicationController
   # my job_seeker list as a logged-in job developer
   def my_js_as_jd
     raise 'Unsupported request' if not request.xhr?
+
     term = params[:q] || {}
     term = term[:term] || ''
     term = term.downcase
-    my_js = pets_user.job_seekers.consent.select { |js| js.job_developer == pets_user }.
-            sort { |a, b| a.full_name <=> b.full_name }
+    my_js = pets_user.job_seekers.consent.select { |js| js.job_developer == pets_user }
+                     .sort { |a, b| a.full_name <=> b.full_name }
     if my_js.blank?
       render json: { message: 'You do not have job seekers!' }, status: 403
     else

@@ -182,8 +182,8 @@ RSpec.describe PeopleInvitationsController, type: :controller do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
         post :create, params: { user: user_hash },
-             # following arg is session variables
-             person_type: 'CompanyPerson', org_id: company.id
+                      # following arg is session variables
+                      person_type: 'CompanyPerson', org_id: company.id
       end
 
       it 'sets flash message' do
@@ -254,8 +254,8 @@ RSpec.describe PeopleInvitationsController, type: :controller do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
         post :create, params: { user: user_hash },
-             # following arg is session variables
-             person_type: 'CompanyPerson', org_id: company.id
+                      # following arg is session variables
+                      person_type: 'CompanyPerson', org_id: company.id
       end
 
       it 'renders new template' do

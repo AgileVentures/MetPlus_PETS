@@ -123,7 +123,7 @@ RSpec.describe AgencyAdminController, type: :controller do
     it 'renders partial for job skills' do
       get :job_properties, params: { skills_page: 1,
                                      data_type: 'skills' },
-                                     xhr: true
+                           xhr: true
       expect(response).to render_template(partial: 'shared/_job_skills')
       expect(response).to have_http_status(:success)
     end
@@ -131,7 +131,7 @@ RSpec.describe AgencyAdminController, type: :controller do
       expect do
         get :job_properties, params: { skills_page: 1,
                                        data_type: 'xxxxx' },
-                                       xhr: true
+                             xhr: true
       end.to raise_error 'Do not recognize data type: xxxxx'
     end
   end

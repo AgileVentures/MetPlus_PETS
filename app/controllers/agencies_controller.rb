@@ -1,5 +1,4 @@
 class AgenciesController < ApplicationController
-
   before_action :user_logged!
 
   def edit
@@ -27,5 +26,4 @@ class AgenciesController < ApplicationController
     params.require(:agency).permit(:name, :display_name, :website, :phone, :fax,
                                    :email, :description)
   end
-
 end

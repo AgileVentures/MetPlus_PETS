@@ -10,7 +10,6 @@ module PaginationUtility
   DEFAULT_ITEMS_SELECTION = 10.freeze # Default items-per-page setting
 
   def process_pagination_params(entity)
-
     # This method is used in controller actions involved in pagination of
     # collection tables (e.g., companies, jobs, etc.).
 
@@ -31,11 +30,10 @@ module PaginationUtility
     # and per-page items selection.  These are persisted across action
     # invocations.
 
-
     entity_items_selection = (entity + '_items_selection').to_sym
     entity_search_criteria = (entity + '_search_criteria').to_sym
 
-    if params[:items_count]  # << user has selected a per-page items count
+    if params[:items_count] # << user has selected a per-page items count
       items_count = params[:items_count]
       items_selection = items_count == 'All' ? 'All' : items_count.to_i
 
@@ -63,6 +61,6 @@ module PaginationUtility
 
     items_per_page = items_selection == 'All' ? ALL_ITEMS : items_selection
 
-    [ search_params, items_selection, items_per_page ]
+    [search_params, items_selection, items_per_page]
   end
 end

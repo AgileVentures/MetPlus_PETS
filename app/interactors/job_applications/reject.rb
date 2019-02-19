@@ -3,6 +3,7 @@ module JobApplications
   class Reject
     def call(job_application, reason)
       raise JobNotActive, '' unless job_application.active? || job_application.processing?
+
       job_application.reason_for_rejection = reason
       job_application.save
       job_application.reject

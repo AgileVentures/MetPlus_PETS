@@ -104,7 +104,7 @@ RSpec.describe JobsController, type: :controller do
       let!(:joba) do
         FactoryBot.create(:job,
                           company: FactoryBot.create(:company, name: 'Active inc',
-                                                               status:  'active',
+                                                               status: 'active',
                                                                agencies: [agency]))
       end
       let!(:job_skilla) do
@@ -116,7 +116,7 @@ RSpec.describe JobsController, type: :controller do
         FactoryBot.create(:job,
                           company: FactoryBot.create(:company,
                                                      name: 'Pending inc',
-                                                     status:  'pending_registration',
+                                                     status: 'pending_registration',
                                                      agencies: [agency]))
       end
       let!(:job_skillp) do
@@ -128,7 +128,7 @@ RSpec.describe JobsController, type: :controller do
         FactoryBot.create(:job,
                           company: FactoryBot.create(:company,
                                                      name: 'Inact inc',
-                                                     status:  'inactive',
+                                                     status: 'inactive',
                                                      agencies: [agency]))
       end
       let!(:job_skilli) do
@@ -165,7 +165,7 @@ RSpec.describe JobsController, type: :controller do
       let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
       let!(:other_inc) do
         FactoryBot.create(:company, name: 'Other inc',
-                                    status:  'active',
+                                    status: 'active',
                                     agencies: [agency])
       end
 

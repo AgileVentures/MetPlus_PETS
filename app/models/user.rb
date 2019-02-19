@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
   def full_name(order = { last_name_first: true })
     return "#{last_name}, #{first_name}" if order[:last_name_first]
+
     "#{first_name} #{last_name}"
   end
 

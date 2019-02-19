@@ -1,5 +1,4 @@
 class LicensesController < ApplicationController
-
   before_action :confirm_xhr
   before_action :user_logged!
 
@@ -10,7 +9,7 @@ class LicensesController < ApplicationController
       head :ok
     else
       render partial: 'shared/error_messages',
-                      locals: {object: license}, status: 422
+             locals: { object: license }, status: 422
     end
   end
 
@@ -38,7 +37,7 @@ class LicensesController < ApplicationController
         head :ok
       else
         render partial: 'shared/error_messages',
-                        locals: {object: license}, status: 422
+               locals: { object: license }, status: 422
       end
     end
   end

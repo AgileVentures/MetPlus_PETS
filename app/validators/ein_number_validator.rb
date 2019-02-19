@@ -5,7 +5,7 @@ class EinNumberValidator < ActiveModel::EachValidator
     elsif value.gsub('-', '').to_i == 0
       object.errors[attribute] << (options[:message] || 'is not a valid number')
     elsif not value.match /^\d{2}\-?\d{7}$/
-        object.errors[attribute] << (options[:message] || 'has incorrect format')
+      object.errors[attribute] << (options[:message] || 'has incorrect format')
     end
   end
 end

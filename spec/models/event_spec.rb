@@ -133,8 +133,8 @@ RSpec.describe Event, type: :model do
       expect(Pusher).to have_received(:trigger).with(
         'pusher_control',
         'jobseeker_applied',
-        job_id:  job.id,
-        js_id:   job_seeker.id,
+        job_id: job.id,
+        js_id: job_seeker.id,
         js_name: job_seeker.full_name(last_name_first: false),
         notify_list: [
           job_seeker.case_manager.user.id,
@@ -167,7 +167,7 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger)
           .with('pusher_control',
                 'job_applied_by_other_job_developer',
-                job_id:  job.id,
+                job_id: job.id,
                 js_user_id: job_seeker.user.id,
                 jd_id: job_developer1.id,
                 jd_name: job_developer1.full_name(last_name_first: false))
@@ -188,8 +188,8 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger).with(
           'pusher_control',
           'jobseeker_applied',
-          job_id:  job.id,
-          js_id:   job_seeker.id,
+          job_id: job.id,
+          js_id: job_seeker.id,
           js_name: job_seeker.full_name(last_name_first: false),
           notify_list: [company_person.user.id]
         )
@@ -202,8 +202,8 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger).with(
           'pusher_control',
           'job_applied_by_job_developer',
-          job_id:  job_wo_cp.id,
-          js_user_id:   job_seeker.user.id
+          job_id: job_wo_cp.id,
+          js_user_id: job_seeker.user.id
         )
       end
 
@@ -225,8 +225,8 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger).with(
           'pusher_control',
           'job_applied_by_job_developer',
-          job_id:  job.id,
-          js_user_id:   job_seeker.user.id
+          job_id: job.id,
+          js_user_id: job_seeker.user.id
         )
       end
 
@@ -235,8 +235,8 @@ RSpec.describe Event, type: :model do
         expect(Pusher).to have_received(:trigger).with(
           'pusher_control',
           'jobseeker_applied',
-          job_id:  job.id,
-          js_id:   job_seeker.id,
+          job_id: job.id,
+          js_id: job_seeker.id,
           js_name: job_seeker.full_name(last_name_first: false),
           notify_list: [company_person.user.id]
         )
@@ -380,7 +380,7 @@ RSpec.describe Event, type: :model do
       expect(Pusher).to have_received(:trigger).with(
         'pusher_control',
         'jobseeker_assigned_jd',
-        js_id:   job_seeker.id,
+        js_id: job_seeker.id,
         js_user_id: job_seeker.user.id,
         js_name: job_seeker.full_name(last_name_first: false),
         jd_name: job_developer.full_name(last_name_first: false),
@@ -401,7 +401,7 @@ RSpec.describe Event, type: :model do
       expect(Pusher).to have_received(:trigger).with(
         'pusher_control',
         'jobseeker_assigned_cm',
-        js_id:   job_seeker.id,
+        js_id: job_seeker.id,
         js_user_id: job_seeker.user.id,
         js_name: job_seeker.full_name(last_name_first: false),
         cm_name: case_manager.full_name(last_name_first: false),
@@ -422,7 +422,7 @@ RSpec.describe Event, type: :model do
       expect(Pusher).to have_received(:trigger)
         .with('pusher_control',
               'job_posted',
-              job_id:    job.id,
+              job_id: job.id,
               job_title: job.title,
               company_name: company.name,
               notify_list: [job_developer.user.id, job_developer1.user.id])
@@ -520,12 +520,12 @@ RSpec.describe Event, type: :model do
         'pusher_control',
         'cp_interest_in_js',
         jd_user_id: job_developer.user.id,
-        cp_id:      company_person.id,
-        cp_name:    company_person.full_name(last_name_first: false),
-        job_id:     job.id,
-        job_title:  job.title,
-        js_id:      job_seeker.id,
-        js_name:    job_seeker.full_name(last_name_first: false)
+        cp_id: company_person.id,
+        cp_name: company_person.full_name(last_name_first: false),
+        job_id: job.id,
+        job_title: job.title,
+        js_id: job_seeker.id,
+        js_name: job_seeker.full_name(last_name_first: false)
       )
     end
 

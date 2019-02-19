@@ -95,6 +95,7 @@ module TaskManager
     ## Assign the current task to a specific person
     def assign(person)
       raise ArgumentError, 'Task need to be in created state' if status != STATUS[:NEW]
+
       send("assign_#{task_type}".to_sym, self, person.pets_user)
     end
 
@@ -107,6 +108,7 @@ module TaskManager
       if status != STATUS[:ASSIGNED]
         raise ArgumentError, 'Task need to be in assigned state'
       end
+
       send("wip_#{task_type}".to_sym, self)
     end
 
@@ -115,6 +117,7 @@ module TaskManager
       if status != STATUS[:WIP]
         raise ArgumentError, 'Task need to be in work in progress state'
       end
+
       send("done_#{task_type}".to_sym, self)
     end
 

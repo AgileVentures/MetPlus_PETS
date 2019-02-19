@@ -14,6 +14,6 @@ class License < ApplicationRecord
   end
 
   def has_job?
-  	jobs.exists?
+    jobs.exists?
   end
 end

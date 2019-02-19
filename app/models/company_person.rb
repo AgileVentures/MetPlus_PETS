@@ -68,11 +68,13 @@ class CompanyPerson < ApplicationRecord
 
   def company_admin?(company)
     return false if self.company != company
+
     has_role?(:CA)
   end
 
   def company_contact?(company)
     return false if self.company != company
+
     has_role?(:CC)
   end
 
@@ -87,6 +89,6 @@ class CompanyPerson < ApplicationRecord
   private
 
   def has_role?(role)
-    company_roles.pluck(:role).include?CompanyRole::ROLE[role]
+    company_roles.pluck(:role).include? CompanyRole::ROLE[role]
   end
 end

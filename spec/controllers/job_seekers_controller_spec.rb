@@ -147,7 +147,8 @@ RSpec.describe JobSeekersController, type: :controller do
   describe 'POST #create' do
     let(:request) do
       post :create, params: {
-        job_seeker: FactoryBot.attributes_for(:job_seeker) }
+        job_seeker: FactoryBot.attributes_for(:job_seeker)
+      }
     end
     context 'visitor' do
       it_behaves_like 'authorized to create / destroy job seeker', 'visitor', 'create'
@@ -239,11 +240,11 @@ RSpec.describe JobSeekersController, type: :controller do
                        resume: fixture_file_upload('files/Janitor-Resume.doc')
         ).merge(FactoryBot.attributes_for(
                   :user, first_name: 'John', last_name: 'Smith', phone: '890-789-9087'
-        )).merge(FactoryBot.attributes_for(
-                   :job_seeker_status, description: 'MyText'
-        )).merge(FactoryBot.attributes_for(
-                   :address, zipcode: '12345131231231231231236'
-        ))
+                )).merge(FactoryBot.attributes_for(
+                           :job_seeker_status, description: 'MyText'
+                         )).merge(FactoryBot.attributes_for(
+                                    :address, zipcode: '12345131231231231231236'
+                                  ))
         post :create, params: { job_seeker: js1_hash }
       end
       it 'renders new template' do

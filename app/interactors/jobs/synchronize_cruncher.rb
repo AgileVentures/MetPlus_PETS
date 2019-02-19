@@ -9,6 +9,7 @@ module Jobs
     def call
       job_query.all.each do |job|
         next if job_cruncher.update_job(job.id, job.title, job.description)
+
         job_cruncher.create_job(job.id, job.title, job.description)
       end
     end
