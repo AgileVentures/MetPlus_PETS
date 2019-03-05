@@ -76,6 +76,7 @@ Background: data is added to database
     And I should see "hr assistant" job changes to status filled
 
   @javascript
+  @email
   Scenario: job developer accept notification when job application accepted
     When I am in Job Developer's browser
     Given I am on the home page

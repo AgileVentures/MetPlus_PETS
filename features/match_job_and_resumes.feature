@@ -59,6 +59,7 @@ Feature: Match a Job to a Job Seeker's Résumé
      | john.seeker@gmail.com | mike@metplus.org   | JD   |
      | jane.seeker@gmail.com | joseph@metplus.org | JD   |
 
+  @email
   @javascript
   Scenario: match job to my resume(s)
 

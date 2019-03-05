@@ -20,3 +20,10 @@ After('@javascript or @selenium_browser or @selenium') do
                       Capybara.current_driver == :selenium_browser
   Capybara.current_driver = :rack_test
 end
+
+World( ActiveJob::TestHelper )
+Around('@email') do |_scenario, block|
+  perform_enqueued_jobs do
+    block.call
+  end
+end

@@ -208,6 +208,7 @@ Scenario: delete agency objects
   Then I click and accept the "Delete Person" button
   Then I should see "Person 'Jane Jones' deleted."
 
+@email
 Scenario: assign job seeker to agency person
   # case manager
   And I click the "Agency and Partner Companies" link
@@ -247,6 +248,7 @@ Scenario: assign job seeker to agency person
   Then they should see "Sam Seeker" after "Name"
 
 @javascript
+@email
 Scenario: manage job properties
   # add job specialty
   And I click the "Job Properties" link

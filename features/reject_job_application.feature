@@ -57,6 +57,7 @@ Feature: Reject a job application
     And I should see "jane@mail.com" application is listed last
     And I should see "jane@mail.com" application for "hr manager" changes to not_accepted
 
+  @email
   @javascript
   Scenario: job developer reject notification when job application rejected
     When I am in Job Developer's browser
