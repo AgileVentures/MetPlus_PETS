@@ -24,7 +24,7 @@
           - if job_match[2]
             = link_to(job_match[0].full_name, job_seeker_path(job_match[0]))
           - else
-            %i Not Available
+            = job_match[0].full_name
         %td
           - address = job_match[0].address
           = "#{address.city}, #{address.state}" if address
