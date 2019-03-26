@@ -5,7 +5,7 @@ module PaginationUtility
   # uses the will_paginate gem for listing a collection.  That has to be a number.
   # This particular number is used when the user selects "All" in the
   # items-per-page selection.
-  ALL_ITEMS = 10_000.freeze
+  ALL_ITEMS = 10_000
 
   DEFAULT_ITEMS_SELECTION = 10.freeze # Default items-per-page setting
 
@@ -51,8 +51,10 @@ module PaginationUtility
       params.delete(:items_count)
 
     else
-      items_selection = session[entity_items_selection] ?
-        session[entity_items_selection] : DEFAULT_ITEMS_SELECTION
+      items_selection = DEFAULT_ITEMS_SELECTION
+      if session[entity_items_selection]
+        items_selection = session[entity_items_selection]
+      end
 
       session[entity_search_criteria] = params[:q].to_json
 

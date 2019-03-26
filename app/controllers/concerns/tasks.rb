@@ -1,7 +1,8 @@
 module Tasks
   extend ActiveSupport::Concern
 
-  def display_tasks task_type, per_page = 10
+  # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+  def display_tasks(task_type, per_page = 10)
     collection = nil
     case task_type
     when 'mine-open'
@@ -28,4 +29,5 @@ module Tasks
 
     collection.paginate(page: params[:tasks_page], per_page: per_page)
   end
+  # rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
 end
