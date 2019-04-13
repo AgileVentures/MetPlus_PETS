@@ -17,11 +17,11 @@ module JobApplications
         :job_application,
         job_application
       )
-      if tasks.count == 1
-        task = tasks.first
-        task.force_assign(company_person) if task.status == Task::STATUS[:ASSIGNED]
-        task.assign(company_person) if task.status == Task::STATUS[:NEW]
-      end
+      return unless tasks.count == 1
+
+      task = tasks.first
+      task.force_assign(company_person) if task.status == Task::STATUS[:ASSIGNED]
+      task.assign(company_person) if task.status == Task::STATUS[:NEW]
     end
   end
 end

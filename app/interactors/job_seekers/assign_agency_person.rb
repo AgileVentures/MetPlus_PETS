@@ -24,9 +24,7 @@ module JobSeekers
     def assign_job_developer_to_job_seeker(job_seeker, job_developer, is_self_assign)
       obj = Struct.new(:job_seeker, :agency_person)
 
-      unless job_developer.job_developer? job_developer.agency
-        raise NotAJobDeveloper, ''
-      end
+      raise NotAJobDeveloper, '' unless job_developer.job_developer? job_developer.agency
 
       job_seeker.assign_job_developer job_developer, job_developer.agency
       if is_self_assign
