@@ -739,6 +739,7 @@ RSpec.describe JobSeekersController, type: :controller do
     before(:each) do
       stub_cruncher_authenticate
       stub_cruncher_job_create
+      stub_cruncher_file_upload
       sign_in jobseeker
     end
     context 'User without a resume' do

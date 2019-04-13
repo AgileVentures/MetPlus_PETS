@@ -36,7 +36,7 @@ class ResumeCruncher
 
     match_results = CruncherService.match_resumes(job_id)
 
-    process_match_results match_results, 'resumeId'
+    process_match_results match_results, 'userId'
   end
 
   def self.match_resume_and_job(resume_id, job_id)

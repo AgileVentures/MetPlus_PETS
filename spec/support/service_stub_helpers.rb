@@ -9,25 +9,25 @@ module ServiceStubHelpers
       JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'resumes' => { 'matcher1' =>
-                                   [{ 'resumeId' => '2', 'stars' => 2.0 },
-                                    { 'resumeId' => '7', 'stars' => 4.9 },
-                                    { 'resumeId' => '5', 'stars' => 3.6 }],
+                                   [{ 'userId' => '2', 'stars' => 2.0 },
+                                    { 'userId' => '7', 'stars' => 4.9 },
+                                    { 'userId' => '5', 'stars' => 3.6 }],
                                    'matcher2' =>
-                                   [{ 'resumeId' => '8', 'stars' => 1.8 },
-                                    { 'resumeId' => '5', 'stars' => 3.8 },
-                                    { 'resumeId' => '6', 'stars' => 1.7 }] })
+                                   [{ 'userId' => '8', 'stars' => 1.8 },
+                                    { 'userId' => '5', 'stars' => 3.8 },
+                                    { 'userId' => '6', 'stars' => 1.7 }] })
 
     JSON_MATCHED_JOBS =
       JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'jobs' => { 'matcher1' =>
-                                [{ 'jobId' => '2', 'stars' => 3.8 },
-                                 { 'jobId' => '3', 'stars' => 4.7 },
-                                 { 'jobId' => '6', 'stars' => 3.2 }],
+                                [{ 'id' => '2', 'stars' => 3.8 },
+                                 { 'id' => '3', 'stars' => 4.7 },
+                                 { 'id' => '6', 'stars' => 3.2 }],
                                 'matcher2' =>
-                                [{ 'jobId' => '8', 'stars' => 2.8 },
-                                 { 'jobId' => '9', 'stars' => 2.9 },
-                                 { 'jobId' => '6', 'stars' => 3.4 }] })
+                                [{ 'id' => '8', 'stars' => 2.8 },
+                                 { 'id' => '9', 'stars' => 2.9 },
+                                 { 'id' => '6', 'stars' => 3.4 }] })
 
     JSON_MATCHED_RESUME_AND_JOB =
       JSON.generate('resultCode' => 'SUCCESS',
