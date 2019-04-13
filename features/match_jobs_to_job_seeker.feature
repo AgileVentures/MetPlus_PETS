@@ -49,7 +49,7 @@ Scenario: Access job seeker job matching page
   Then I press the Job Match button for 'john.seeker@gmail.com'
   And I wait 5 seconds
   And I should be on the Job Seeker 'john.seeker@gmail.com' job match page
-  And I should see "2.6 / 5.0" in the same table row as "c++ developer"
+  And I should see "4.1 / 5.0" in the same table row as "c++ developer"
 
   # Job seeker has no résumé
   And I click the "Hello, Jane" link
