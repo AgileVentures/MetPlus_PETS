@@ -35,8 +35,7 @@ class ResumeCruncher
     # Resume (ID) 8 matched job with a score of 4.7, resume 5 with 3.3, etc.
 
     match_results = CruncherService.match_resumes(job_id)
-
-    process_match_results match_results, 'userId'
+    process_match_results match_results, 'resumeId'
   end
 
   def self.match_resume_and_job(resume_id, job_id)

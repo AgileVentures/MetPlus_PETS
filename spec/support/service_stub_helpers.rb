@@ -9,13 +9,13 @@ module ServiceStubHelpers
       JSON.generate('resultCode' => 'SUCCESS',
                     'message' => 'Success',
                     'resumes' => { 'matcher1' =>
-                                   [{ 'userId' => '2', 'stars' => 2.0 },
-                                    { 'userId' => '7', 'stars' => 4.9 },
-                                    { 'userId' => '5', 'stars' => 3.6 }],
+                                   [{ 'resumeId' => '2', 'stars' => 2.0 },
+                                    { 'resumeId' => '7', 'stars' => 4.9 },
+                                    { 'resumeId' => '5', 'stars' => 3.6 }],
                                    'matcher2' =>
-                                   [{ 'userId' => '8', 'stars' => 1.8 },
-                                    { 'userId' => '5', 'stars' => 3.8 },
-                                    { 'userId' => '6', 'stars' => 1.7 }] })
+                                   [{ 'resumeId' => '8', 'stars' => 1.8 },
+                                    { 'resumeId' => '5', 'stars' => 3.8 },
+                                    { 'resumeId' => '6', 'stars' => 1.7 }] })
 
     JSON_MATCHED_JOBS =
       JSON.generate('resultCode' => 'SUCCESS',

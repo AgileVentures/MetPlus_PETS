@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: mongo
+    ports:
+      - 27018:27017
+    environment:
+      - MONGO_INITDB_DATABASE=resumeCruncher
+    volumes:
+      # if you wish to setup additional user accounts specific per DB or with different roles you can use following entry point
+      - "$PWD/cruncher/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+  cruncher:
+    image: agileventures/metplus-cruncher:master
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - PORT=8080
+      - MONGODB_URI=mongodb://cruncher_user:cruncher_password@db:27017/resumeCruncher
+      - APP_USERNAME=cruncher_user
+      - APP_PASSWORD=cruncher_password
