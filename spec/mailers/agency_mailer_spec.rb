@@ -52,7 +52,7 @@ RSpec.describe AgencyMailer, type: :mailer do
   describe 'Job seeker applied to job' do
     let!(:agency_person) { FactoryBot.create(:agency_admin) }
     let!(:job_seeker) { FactoryBot.create(:job_seeker) }
-    let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
     let!(:company) { FactoryBot.create(:company) }
     let(:company_person) { FactoryBot.create(:company_person, company: company) }
     let(:job)            do
@@ -73,6 +73,8 @@ RSpec.describe AgencyMailer, type: :mailer do
       stub_cruncher_authenticate
       stub_cruncher_job_create
       stub_cruncher_file_download test_file
+      stub_cruncher_file_upload
+      resume
     end
 
     it 'renders the headers' do
