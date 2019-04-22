@@ -110,8 +110,8 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    devise_invitable (1.5.5)
-      actionmailer (>= 3.2.6, < 5)
+    devise_invitable (1.6.1)
+      actionmailer (>= 3.2.6)
       devise (>= 3.2.0)
     diff-lcs (1.3)
     docile (1.3.1)
@@ -256,8 +256,9 @@ GEM
       ffi (>= 0.5.0, < 2)
     rbtree3 (0.5.0)
     rdoc (6.1.1)
-    responders (2.1.1)
-      railties (>= 4.2.0, < 5.1)
+    responders (2.4.1)
+      actionpack (>= 4.2.0, < 6.0)
+      railties (>= 4.2.0, < 6.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -327,7 +328,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     uniform_notifier (1.12.1)
-    warden (1.2.4)
+    warden (1.2.7)
       rack (>= 1.0)
     web-console (3.3.0)
       activemodel (>= 4.2)
@@ -360,7 +361,7 @@ DEPENDENCIES
   database_cleaner
   delayed_job_active_record
   devise (~> 3.5.2)
-  devise_invitable (~> 1.5.2)
+  devise_invitable (~> 1.6.1)
   email_spec
   factory_bot_rails
   faker
