@@ -1,6 +1,6 @@
 Before('@javascript') do
   # Currently, poltergeist is preferred for headless tests
-  Capybara.current_driver = :poltergeist
+  Capybara.current_driver = :selenium_chrome_headless
 end
 
 Before('@selenium_browser') do

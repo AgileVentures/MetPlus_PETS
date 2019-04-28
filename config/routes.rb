@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     match  '/login'   => 'users/sessions#new',        via: 'get'
-    match  '/logout'  => 'users/sessions#destroy',    via: 'delete'
+    match  '/logout'  => 'users/sessions#destroy',    via: 'get'
   end
 
   get 'about', to: 'pages#about'

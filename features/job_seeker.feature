@@ -160,7 +160,6 @@ Scenario: Agency and Company people actions
   And I wait 1 second
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
-  Then I should get a download with the filename "Janitor-Resume.doc"
 
   # company admin: download job seeker résumé
   And I click the "Hello, John" link
@@ -174,4 +173,3 @@ Scenario: Agency and Company people actions
   Then I click the "Smith, Mike" link
   Then I should see button "Download Resume"
   And I click the "Download Resume" button
-  Then I should get a download with the filename "Janitor-Resume.doc"

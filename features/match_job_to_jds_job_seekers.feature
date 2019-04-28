@@ -73,4 +73,5 @@ Background: seed data added to database and log in as job developer
     When I click the "Match your job seekers against job" link
     And I wait 1 second
     And I click the "Run match" button
+    And I accept the confirm dialog
     Then I should see "Please choose a job seeker"

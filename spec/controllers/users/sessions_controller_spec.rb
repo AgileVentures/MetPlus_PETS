@@ -43,7 +43,7 @@ RSpec.describe Users::SessionsController, type: :controller do
   end
   describe 'user logs out' do
     it "should route '/logout' correctly" do
-      expect(delete: 'logout').to route_to(controller: 'users/sessions',
+      expect(get: 'logout').to route_to(controller: 'users/sessions',
                                            action: 'destroy')
     end
   end

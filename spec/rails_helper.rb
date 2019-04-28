@@ -8,10 +8,11 @@ require 'rspec/rails'
 require 'byebug'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
-require 'capybara/poltergeist'
+# require 'capybara/poltergeist'
+require 'selenium-webdriver'
 require 'devise'
 require 'support/service_stub_helpers'
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :selenium_chrome_headless
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

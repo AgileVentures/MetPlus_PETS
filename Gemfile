@@ -11,6 +11,8 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2.2'
 
+gem 'webpacker', '~> 4.x'
+
 gem 'haml'
 
 # Use jquery as the JavaScript library
@@ -30,7 +32,7 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.12'
 
-gem 'devise',           '~> 4.6.0'
+gem 'devise', '~> 4.6.0'
 gem 'devise_invitable', '~> 1.7.5'
 
 gem 'figaro'
@@ -88,7 +90,7 @@ group :development, :test do
   gem 'jasmine'
   gem 'jasmine-jquery-rails'
 
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
+  # gem 'phantomjs', require: 'phantomjs/poltergeist'
 end
 
 group :test do
@@ -96,7 +98,7 @@ group :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers', require: false
   gem 'email_spec'
-  gem 'poltergeist'
+  # gem 'poltergeist'
   gem 'codeclimate-test-reporter'
   gem 'launchy'
   gem 'selenium-webdriver' # Enables running cuke tests with browser (see env.rb)
