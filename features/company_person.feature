@@ -104,6 +104,7 @@ Feature: Company Person
     And I should see button "Edit Person"
     And I should see button "Delete Person"
     And I click "Delete Person" button
+    Then I accept the confirm dialog
     And I should see "Person 'Jane Smith' deleted."
 
   Scenario: company contact cannot edit company nor invite person_type
