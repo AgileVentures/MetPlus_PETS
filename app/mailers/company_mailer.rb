@@ -1,5 +1,4 @@
 class CompanyMailer < ApplicationMailer
-
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
@@ -42,7 +41,7 @@ class CompanyMailer < ApplicationMailer
 
   private
 
-  def send_company_mail(company, company_person, email_text=nil)
+  def send_company_mail(company, company_person, email_text = nil)
     @company_person = company_person
     @company = company
     @agency  = company.agencies[0]

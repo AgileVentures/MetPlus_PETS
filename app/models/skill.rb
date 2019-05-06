@@ -1,5 +1,4 @@
-class Skill < ActiveRecord::Base
-
+class Skill < ApplicationRecord
   validates_presence_of   :name
   validates_uniqueness_of :name, case_sensitive: false
 
@@ -11,7 +10,6 @@ class Skill < ActiveRecord::Base
   belongs_to :organization, polymorphic: true
 
   def has_job?
-  	jobs.any?
+    jobs.any?
   end
-
 end

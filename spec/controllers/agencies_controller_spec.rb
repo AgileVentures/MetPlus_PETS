@@ -9,7 +9,7 @@ RSpec.describe AgenciesController, type: :controller do
     context 'success' do
       before(:each) do
         sign_in agency_admin
-        get :edit, id: agency
+        get :edit, params: { id: agency }
       end
       it 'assigns agency for form' do
         expect(assigns(:agency)).to eq agency
@@ -24,7 +24,7 @@ RSpec.describe AgenciesController, type: :controller do
     context 'as Job Developer' do
       before(:each) do
         sign_in job_developer
-        get :edit, id: agency
+        get :edit, params: { id: agency }
       end
       it 'redirect' do
         expect(response).to have_http_status 302
@@ -40,8 +40,8 @@ RSpec.describe AgenciesController, type: :controller do
     context 'valid attributes' do
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryBot.attributes_for(:agency),
-                       id: agency
+        patch :update, params: { agency: FactoryBot.attributes_for(:agency),
+                                 id: agency }
       end
       it 'assigns @agency for updating' do
         expect(assigns(:agency)).to eq agency
@@ -61,11 +61,11 @@ RSpec.describe AgenciesController, type: :controller do
 
       before(:each) do
         sign_in agency_admin
-        patch :update, agency: FactoryBot.attributes_for(
+        patch :update, params: { agency: FactoryBot.attributes_for(
           :agency,
           phone: '',
           website: 'nodomain'
-        ), id: agency
+        ), id: agency }
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
@@ -84,11 +84,11 @@ RSpec.describe AgenciesController, type: :controller do
       it 'authorizes agency_admin' do
         expect(subject).to_not receive(:user_not_authorized)
         sign_in agency_admin
-        get :edit, id: agency.id
+        get :edit, params: { id: agency.id }
       end
       it 'does not authorize non-admin user' do
         sign_in job_developer
-        get :edit, id: agency.id
+        get :edit, params: { id: agency.id }
         expect(flash[:alert])
           .to eq "You are not authorized to edit #{agency.name} agency."
       end
@@ -98,13 +98,13 @@ RSpec.describe AgenciesController, type: :controller do
       it 'authorizes agency_admin' do
         expect(subject).to_not receive(:user_not_authorized)
         sign_in agency_admin
-        patch :update, agency: FactoryBot.attributes_for(:agency),
-                       id: agency
+        patch :update, params: { agency: FactoryBot.attributes_for(:agency),
+                                 id: agency }
       end
       it 'does not authorize non-admin user' do
         sign_in job_developer
-        patch :update, agency: FactoryBot.attributes_for(:agency),
-                       id: agency
+        patch :update, params: { agency: FactoryBot.attributes_for(:agency),
+                                 id: agency }
         expect(flash[:alert])
           .to eq "You are not authorized to edit #{agency.name} agency."
       end

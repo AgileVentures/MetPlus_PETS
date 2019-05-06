@@ -48,6 +48,7 @@ class CompaniesController < ApplicationController
 
   def list_people
     raise 'Unsupported request' unless request.xhr?
+
     self.action_description = 'view the people'
     authorize @company
 

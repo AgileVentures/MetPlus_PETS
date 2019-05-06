@@ -35,6 +35,7 @@ class CompanyMailerPreview < ActionMailer::Preview
     job_application = nil
     JobApplication.includes(:job_seeker, :application_questions, :job).each do |ja|
       next if ja.job_seeker.resumes.empty?
+
       job_application = ja
       break
     end

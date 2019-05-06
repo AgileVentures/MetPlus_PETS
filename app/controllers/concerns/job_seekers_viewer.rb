@@ -1,7 +1,7 @@
 module JobSeekersViewer
   extend ActiveSupport::Concern
 
-  def display_job_seekers people_type, agency_person, per_page = 5
+  def display_job_seekers(people_type, agency_person, per_page = 5)
     collection = nil
     case people_type
     when 'jobseeker-cm'
@@ -24,32 +24,30 @@ module JobSeekersViewer
     return collection if collection.nil?
 
     collection.paginate(page: params[:jobseekers_page], per_page: per_page)
-
   end
 
   FIELDS_IN_PEOPLE_TYPE = {
-       'jobseeker-cm': [:full_name, :job_seeker_status_short_description,
-                        :last_sign_in_at, :match_rating],
+    'jobseeker-cm': %i[full_name job_seeker_status_short_description
+                       last_sign_in_at match_rating],
 
-       'jobseeker-jd': [:full_name, :job_seeker_status_short_description,
-                        :last_sign_in_at, :match_rating],
-       'jobseeker-without-jd':
-[:full_name, :job_seeker_status_short_description,:last_sign_in_at],
-       'jobseeker-without-cm':
-[:full_name, :job_seeker_status_short_description,:last_sign_in_at]
+    'jobseeker-jd': %i[full_name job_seeker_status_short_description
+                       last_sign_in_at match_rating],
+    'jobseeker-without-jd': %i[full_name job_seeker_status_short_description
+                               last_sign_in_at],
+    'jobseeker-without-cm': %i[full_name job_seeker_status_short_description
+                               last_sign_in_at]
 
+  }.freeze
 
-
-}
-
-  def job_seeker_fields people_type
-      FIELDS_IN_PEOPLE_TYPE[people_type.to_sym] || []
+  def job_seeker_fields(people_type)
+    FIELDS_IN_PEOPLE_TYPE[people_type.to_sym] || []
   end
 
-  #make helper methods visible to views
-  def self.included m
-    return unless m < ActionController::Base
-    #make helper methods visible to views
-    m.helper_method :job_seeker_fields
+  # make helper methods visible to views
+  def self.included(mod)
+    return unless mod < ActionController::Base
+
+    # make helper methods visible to views
+    mod.helper_method :job_seeker_fields
   end
 end

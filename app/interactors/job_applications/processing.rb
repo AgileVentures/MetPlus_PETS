@@ -3,6 +3,7 @@ module JobApplications
   class Processing
     def call(job_application, company_person)
       raise JobNotActive, 'Job is not active' unless job_application.active?
+
       job_application.process
       job_developer = job_application.job_seeker.job_developer
       Event.create(:APP_PROCESSING, job_application) if job_developer
@@ -16,11 +17,11 @@ module JobApplications
         :job_application,
         job_application
       )
-      if tasks.count == 1
-        task = tasks.first
-        task.force_assign(company_person) if task.status == Task::STATUS[:ASSIGNED]
-        task.assign(company_person) if task.status == Task::STATUS[:NEW]
-      end
+      return unless tasks.count == 1
+
+      task = tasks.first
+      task.force_assign(company_person) if task.status == Task::STATUS[:ASSIGNED]
+      task.assign(company_person) if task.status == Task::STATUS[:NEW]
     end
   end
 end

@@ -1,4 +1,4 @@
-class Agency < ActiveRecord::Base
+class Agency < ApplicationRecord
   has_many :agency_people
   has_many :branches
   has_and_belongs_to_many :companies
@@ -17,6 +17,7 @@ class Agency < ActiveRecord::Base
 
   def self.this_agency(user)
     return nil unless user.actable.is_a? AgencyPerson
+
     user.actable.agency
   end
 
@@ -24,7 +25,7 @@ class Agency < ActiveRecord::Base
     users = []
     agency_people.each do |person|
       users << person if person.agency_roles &&
-          person.agency_roles.pluck(:role).include?(role)
+                         person.agency_roles.pluck(:role).include?(role)
     end
 
     users
@@ -49,6 +50,4 @@ class Agency < ActiveRecord::Base
   def self.find_users_with_role(agency, role)
     agency.agency_people_on_role role
   end
-
-
 end

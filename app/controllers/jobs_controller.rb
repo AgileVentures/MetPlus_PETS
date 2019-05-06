@@ -61,10 +61,10 @@ class JobsController < ApplicationController
       q_params['company_id_in'] = current_user.pets_user.company.id
     end
 
-    @jobs  = Job.ransack(q_params).result
-                .includes(:company)
-                .includes(:address)
-                .page(params[:page]).per_page(items_per_page)
+    @jobs = Job.ransack(q_params).result
+               .includes(:company)
+               .includes(:address)
+               .page(params[:page]).per_page(items_per_page)
 
     render partial: 'searched_job_list' if request.xhr?
   end
@@ -314,6 +314,7 @@ class JobsController < ApplicationController
         job_seeker = Resume.find(item[0]).job_seeker
         raise "Couldn't find JobSeeker for Resume with 'id' = #{item[0]}" \
           unless job_seeker
+
         [job_seeker, item[1], job_seeker.applied_to_job?(@job)]
       end
     rescue RuntimeError, ActiveRecord::RecordNotFound => exc
@@ -357,6 +358,7 @@ class JobsController < ApplicationController
 
   def set_job_seekers
     return unless pets_user&.job_developer?(current_agency)
+
     @job_seekers = pets_user.job_seekers
   end
 

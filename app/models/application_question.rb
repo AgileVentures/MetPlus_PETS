@@ -1,4 +1,4 @@
-class ApplicationQuestion < ActiveRecord::Base
+class ApplicationQuestion < ApplicationRecord
   belongs_to :job_application
   belongs_to :question
 

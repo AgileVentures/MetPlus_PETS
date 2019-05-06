@@ -11,11 +11,13 @@
 #   - dist/**/*.js
 #
 src_files:
+  - ../spec/javascripts/helpers/pusher.js
   - assets/application.js
   - https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js
   - https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.7/moment-timezone-with-data.min.js
-  - https://code.jquery.com/jquery-2.2.4.min.js
-  - https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js
+  - https://code.jquery.com/jquery-3.3.1.min.js
+  - https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.min.js
 
 
 # stylesheets

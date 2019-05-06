@@ -8,10 +8,11 @@ require 'rspec/rails'
 require 'byebug'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
-require 'capybara/poltergeist'
+# require 'capybara/poltergeist'
+require 'selenium-webdriver'
 require 'devise'
 require 'support/service_stub_helpers'
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :selenium_chrome_headless
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -71,5 +72,5 @@ Shoulda::Matchers.configure do |config|
 end
 # Make the devise controllers and views available to spec
 RSpec.configure do |config|
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 end

@@ -103,7 +103,7 @@ class CompanyRegistrationsController < ApplicationController
 
     if request.xhr?
       render partial: 'companies/company_status',
-            locals: { company: @company, admin_aa: true }
+             locals: { company: @company, admin_aa: true }
     end
   end
 

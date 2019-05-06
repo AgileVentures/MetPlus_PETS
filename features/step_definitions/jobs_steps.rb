@@ -35,10 +35,10 @@ Then(/^I should see the job status is "([^"]*)"$/) do |status|
 end
 
 Then(/^I should see a "([^"]*)" confirmation$/) do |action|
-  expect(page).to have_content("Are you sure you want
-  to #{action} the following job:
-  job title:  #{@job.title}
-  company job id: #{@job.company_job_id}")
+  expect(page).to have_content('Are you sure you want ' \
+  "to #{action} the following job: " \
+  "job title: #{@job.title} " \
+  "company job id: #{@job.company_job_id} ", normalize_ws: true)
 end
 
 Then(/^I should( not)? see "Revoke" link on the page$/) do |negate|
@@ -126,7 +126,7 @@ And(/^I answer (first|another) application question with (Yes|No)/) do |prefix, 
 end
 
 Then(/^the job "(.*?)" should have (\d+) licenses?$/) do |title, count|
-  expect(Job.find_by_title(title).licenses.count.to_s).to eq count
+  expect(Job.find_by_title(title).licenses.count).to eq count
 end
 
 Given(/^I am creating a Job$/) do

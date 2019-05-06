@@ -1,4 +1,4 @@
-class JobSeeker < ActiveRecord::Base
+class JobSeeker < ApplicationRecord
   acts_as :user
   has_many :resumes, dependent: :destroy
 
@@ -51,6 +51,7 @@ class JobSeeker < ActiveRecord::Base
     unless job_developer.job_developer? agency
       raise "User #{job_developer.full_name} is not a Job Developer"
     end
+
     assign_agency_person(job_developer, :JD)
   end
 
@@ -62,6 +63,7 @@ class JobSeeker < ActiveRecord::Base
     unless case_manager.case_manager? agency
       raise "User #{case_manager.full_name} is not a Case Manager"
     end
+
     assign_agency_person(case_manager, :CM)
   end
 

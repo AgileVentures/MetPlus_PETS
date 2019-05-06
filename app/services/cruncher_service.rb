@@ -11,12 +11,16 @@ class CruncherService
     CRUNCHER_URL
   end
 
-  def self.upload_file(file, file_name, file_id)
-    mime_type = MIME::Types.type_for(URI.escape(file_name))
+  def self.file_supported?(file_name)
+    mime_type = MIME::Types.type_for(CGI.escape(file_name))
 
     raise "Invalid MIME type for file: #{file_name}" if mime_type.empty?
     raise "Unsupported file type for: #{file_name}" unless
               Resume::MIMETYPES.include? mime_type.first.content_type
+  end
+
+  def self.upload_file(file, file_name, file_id)
+    file_supported? file_name
 
     retry_upload = true
     begin
@@ -25,11 +29,9 @@ class CruncherService
                                  'name' => file_name,
                                  'userId' => file_id },
                                'Accept' => 'application/json',
-                               'X-Auth-Token' => auth_token,
-                               'Content-Type' => mime_type.first.content_type)
+                               'X-Auth-Token' => auth_token)
 
       return JSON.parse(result)['resultCode'] == 'SUCCESS'
-
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
@@ -66,7 +68,6 @@ class CruncherService
       tempfile.close
 
       return tempfile
-
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
@@ -82,14 +83,13 @@ class CruncherService
     retry_create = true
     begin
       result = RestClient.post(service_url + '/job/create',
-                               { 'jobId'   => job_id,
-                                 'title'   => title,
+                               { 'jobId' => job_id,
+                                 'title' => title,
                                  'description' => description },
                                'Accept' => 'application/json',
                                'X-Auth-Token' => auth_token)
 
       return JSON.parse(result)['resultCode'] == 'SUCCESS'
-
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
@@ -105,14 +105,13 @@ class CruncherService
     retry_update = true
     begin
       result = RestClient.patch(service_url + "/job/#{job_id}/update",
-                                { 'jobId'   => job_id,
-                                  'title'   => title,
+                                { 'jobId' => job_id,
+                                  'title' => title,
                                   'description' => description },
                                 'Accept' => 'application/json',
                                 'X-Auth-Token' => auth_token)
 
       return JSON.parse(result)['resultCode'] == 'SUCCESS'
-
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
@@ -138,12 +137,10 @@ class CruncherService
     retry_match = true
 
     begin
-      result = RestClient.get(service_url +
-                          "/resume/#{resume_id}/compare/#{job_id}",
+      result = RestClient.get(service_url + "/resume/#{resume_id}/compare/#{job_id}",
                               'X-Auth-Token': auth_token)
 
       return { status: 'SUCCESS', stars: JSON.parse(result)['stars'] }
-
     rescue RestClient::Unauthorized # most likely expired token
       # Retry and force refresh of cached auth_token
       self.auth_token = nil
@@ -152,7 +149,6 @@ class CruncherService
         retry
       end
       raise
-
     rescue RestClient::ResourceNotFound => e
       return { status: 'ERROR', message: JSON.parse(e.response)['message'] }
     end
@@ -173,13 +169,9 @@ class CruncherService
 
       result_hash = JSON.parse(result)
 
-      # Set matching jobs to nil if resume couldn't be found
-      matching_jobs = nil
+      return result_hash['jobs'] if result_hash['resultCode'] == 'SUCCESS'
 
-      if result_hash['resultCode'] == 'SUCCESS'
-        # May or may not contain jobs matching the resume
-        matching_jobs = result_hash['jobs']
-      end
+      return nil
     rescue RestClient::Unauthorized
       self.auth_token = nil
       if retry_search
@@ -188,7 +180,6 @@ class CruncherService
       end
       raise
     end
-    matching_jobs
   end
 
   def self.match_resumes(job_id)
@@ -200,13 +191,9 @@ class CruncherService
 
       result_hash = JSON.parse(result)
 
-      # Set matching resumes to nil if job couldn't be found
-      matching_resumes = nil
+      return result_hash['resumes'] if result_hash['resultCode'] == 'SUCCESS'
 
-      if result_hash['resultCode'] == 'SUCCESS'
-        matching_resumes = result_hash['resumes']
-      end
-
+      return nil
     rescue RestClient::Unauthorized
       if retry_match
         self.auth_token = nil
@@ -215,18 +202,19 @@ class CruncherService
       end
       raise
     end
-    matching_resumes
   end
 
   def self.auth_token
     return @@auth_token if @@auth_token
+
     begin
       result = RestClient.post(service_url + '/authenticate', {},
                                'X-Auth-Username' => ENV['CRUNCHER_SERVICE_USERNAME'],
                                'X-Auth-Password' => ENV['CRUNCHER_SERVICE_PASSWORD'])
-    rescue Exception => e
+    rescue StandardError => e
       raise 'Invalid credentials for Cruncher access' if
                     e.class == RestClient::Unauthorized
+
       raise
     end
 

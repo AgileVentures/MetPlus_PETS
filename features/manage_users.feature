@@ -127,35 +127,3 @@ Scenario: Resend confirmation email - sad path
   And I click the "Resend confirmation instructions" button
   Then I should see "1 error prevented resending a confirmation email:"
   And I should see "Email was already confirmed, please try signing in"
-
-  @javascript
-  Scenario: Do not remember user on login
-    Given I am on the home page
-    Then I click the "Log In" link
-    And I fill in "user_email" with "mike.smith@gmail.com"
-    And I fill in "user_password" with "password"
-    And I click "Log in" button
-    Then I should not be remembered
-
-  @javascript
-  Scenario: Remember user on log in
-    Given I am on the home page
-    Then I click the "Log In" link
-    And I fill in "user_email" with "mike.smith@gmail.com"
-    And I fill in "user_password" with "password"
-    And I check "user_remember_me"
-    And I click "Log in" button
-    Then I should be remembered
-
-  @javascript
-  Scenario: User logs out
-    Given I am on the home page
-    Then I click the "Log In" link
-    And I fill in "user_email" with "mike.smith@gmail.com"
-    And I fill in "user_password" with "password"
-    And I check "user_remember_me"
-    And I click "Log in" button
-    Then I click the "dd_menu" link
-    And I log out
-    Then I wait for 1 second
-    Then I should be logged out

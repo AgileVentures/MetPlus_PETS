@@ -1,3 +1,3 @@
-class Education < ActiveRecord::Base
+class Education < ApplicationRecord
   has_many :jobs
 end

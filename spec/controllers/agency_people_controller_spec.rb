@@ -20,7 +20,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       adam.assign_job_developer(jd_person, agency)
       bob.assign_case_manager(cm_person, agency)
       sign_in jd_person
-      get :home, id: jd_person
+      get :home, params: { id: jd_person }
     end
 
     it 'assigns @agency_person for view' do
@@ -39,7 +39,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         adam.assign_job_developer(jd_person, agency)
         bob.assign_case_manager(cm_person, agency)
         sign_in jd_person
-        get :home, id: jd_person
+        get :home, params: { id: jd_person }
       end
 
       it "returns job developer's jobseekers" do
@@ -56,7 +56,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         adam.assign_job_developer(jd_person, agency)
         bob.assign_case_manager(cm_person, agency)
         sign_in cm_person
-        get :home, id: cm_person
+        get :home, params: { id: cm_person }
       end
 
       it "returns case_manager's jobseekers" do
@@ -72,7 +72,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
   describe 'GET #show' do
     before(:each) do
       sign_in jd_person
-      get :show, id: jd_person.id
+      get :show, params: { id: jd_person.id }
     end
 
     it 'assigns @agency_person for view' do
@@ -89,7 +89,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
   describe 'GET #edit' do
     before(:each) do
       sign_in aa_person
-      get :edit, id: jd_person
+      get :edit, params: { id: jd_person }
     end
 
     it 'assigns @agency_person for form' do
@@ -123,8 +123,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
         person_hash[:as_jd_job_seeker_ids] = []
         person_hash[:as_cm_job_seeker_ids] = []
         sign_in aa_person
-        patch :update, id: aa_person,
-                       agency_person: person_hash
+        patch :update, params: { id: aa_person,
+                                 agency_person: person_hash }
       end
       it 'assigns @agency_person for updating' do
         expect(assigns(:agency_person)).to eq aa_person
@@ -142,29 +142,6 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
     end
 
-    context 'remove admin role for sole agency admin' do
-      render_views
-
-      before(:each) do
-        person_hash = aa_person.attributes.merge(aa_person.user.attributes)
-        person_hash[:agency_role_ids] = []
-        person_hash[:as_jd_job_seeker_ids] = []
-        person_hash[:as_cm_job_seeker_ids] = []
-        sign_in aa_person
-        patch :update, id: aa_person, agency_person: person_hash
-      end
-
-      it 'renders edit template' do
-        expect(response).to render_template('edit')
-      end
-      it 'renders partial for errors' do
-        expect(response).to render_template(partial: 'shared/_error_messages')
-      end
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
-      end
-    end
-
     context 'assign as job developer fails when not in that role' do
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
@@ -175,7 +152,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         allow(assign_agency_person_mock)
           .to receive(:call)
           .and_raise(JobSeekers::AssignAgencyPerson::NotAJobDeveloper)
-        patch :update, id: aa_person, agency_person: person_hash
+        patch :update, params: { id: aa_person, agency_person: person_hash }
       end
 
       it 'sets model error message' do
@@ -202,7 +179,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         allow(assign_agency_person_mock)
           .to receive(:call)
           .and_raise(JobSeekers::AssignAgencyPerson::NotACaseManager)
-        patch :update, id: aa_person, agency_person: person_hash
+        patch :update, params: { id: aa_person, agency_person: person_hash }
       end
 
       it 'sets model error message' do
@@ -231,7 +208,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       before(:each) do
         allow(Pusher).to receive(:trigger)
         sign_in aa_person
-        patch :update, id: jd_person, agency_person: person_hash
+        patch :update, params: { id: jd_person, agency_person: person_hash }
       end
 
       it 'calls interactor to assign the JD' do
@@ -251,7 +228,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       before(:each) do
         sign_in aa_person
-        patch :update, id: cm_person, agency_person: person_hash
+        patch :update, params: { id: cm_person, agency_person: person_hash }
       end
 
       it 'calls interactor to assign the Case Manager' do
@@ -278,9 +255,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
         allow(Pusher).to receive(:trigger)
         sign_in aa_person
         unless example.metadata[:skip_before]
-          xhr :patch, :assign_job_seeker, id: jd_person.id,
-                                          job_seeker_id: adam.id,
-                                          agency_role: 'JD'
+          patch :assign_job_seeker, params: { id: jd_person.id,
+                                              job_seeker_id: adam.id,
+                                              agency_role: 'JD' },
+                                    xhr: true
         end
       end
 
@@ -305,9 +283,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
           allow(assign_agency_person_mock)
             .to receive(:call)
             .and_raise(JobSeekers::AssignAgencyPerson::NotAJobDeveloper)
-          xhr :patch, :assign_job_seeker, id: cm_person.id,
-                                          job_seeker_id: adam.id,
-                                          agency_role: 'JD'
+          patch :assign_job_seeker, params: { id: cm_person.id,
+                                              job_seeker_id: adam.id,
+                                              agency_role: 'JD' },
+                                    xhr: true
 
           expect(response).to have_http_status(:forbidden)
         end
@@ -319,9 +298,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
         allow(Pusher).to receive(:trigger)
         sign_in aa_person
         unless example.metadata[:skip_before]
-          xhr :patch, :assign_job_seeker, id: cm_person.id,
-                                          job_seeker_id: adam.id,
-                                          agency_role: 'CM'
+          patch :assign_job_seeker, params: { id: cm_person.id,
+                                              job_seeker_id: adam.id,
+                                              agency_role: 'CM' },
+                                    xhr: true
         end
       end
 
@@ -345,9 +325,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
           allow(assign_agency_person_mock)
             .to receive(:call)
             .and_raise(JobSeekers::AssignAgencyPerson::NotACaseManager)
-          xhr :patch, :assign_job_seeker, id: jd_person.id,
-                                          job_seeker_id: adam.id,
-                                          agency_role: 'CM'
+          patch :assign_job_seeker, params: { id: jd_person.id,
+                                              job_seeker_id: adam.id,
+                                              agency_role: 'CM' },
+                                    xhr: true
           expect(response).to have_http_status(:forbidden)
         end
       end
@@ -361,9 +342,10 @@ RSpec.describe AgencyPeopleController, type: :controller do
           .and_raise(JobSeekers::AssignAgencyPerson::InvalidRole)
 
         sign_in aa_person
-        xhr :patch, :assign_job_seeker, id: cm_person.id,
-                                        job_seeker_id: adam.id,
-                                        agency_role: 'AA'
+        patch :assign_job_seeker, params: { id: cm_person.id,
+                                            job_seeker_id: adam.id,
+                                            agency_role: 'AA' },
+                                  xhr: true
 
         expect(response).to have_http_status(:bad_request)
       end
@@ -373,7 +355,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
   describe 'GET #destroy' do
     before(:each) do
       sign_in aa_person
-      get :destroy, id: cm_person.id
+      get :destroy, params: { id: cm_person.id }
     end
 
     it 'sets flash message' do
@@ -389,7 +371,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
   describe 'GET #edit_profile' do
     before(:each) do
       sign_in jd_person
-      get :edit_profile, id: jd_person
+      get :edit_profile, params: { id: jd_person }
     end
 
     it 'assigns @agency_person for form' do
@@ -410,8 +392,8 @@ RSpec.describe AgencyPeopleController, type: :controller do
       before(:each) do
         person_hash = aa_person.attributes.merge(aa_person.user.attributes)
         sign_in aa_person
-        patch :update_profile, id: aa_person,
-                               agency_person: person_hash
+        patch :update_profile, params: { id: aa_person,
+                                         agency_person: person_hash }
       end
 
       it 'sets flash message' do
@@ -432,7 +414,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         @password = aa_person.encrypted_password
         sign_in aa_person
         patch :update_profile,
-              agency_person:
+              params: { agency_person:
                 FactoryBot.attributes_for(:agency_person,
                                           password: '',
                                           password_confirmation: '')
@@ -440,7 +422,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
                                                            first_name: 'John',
                                                            last_name: 'Smith',
                                                            phone: '780-890-8976')),
-              id: aa_person
+                        id: aa_person }
         aa_person.reload
       end
 
@@ -475,8 +457,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
     before(:each) do
       sign_in cm_person
       adam.assign_case_manager(cm_person, cm_person.agency)
-      xhr :get, :list_js_cm, id: cm_person.id,
-                             people_type: 'jobseeker-cm'
+      get :list_js_cm, params: { id: cm_person.id,
+                                 people_type: 'jobseeker-cm' },
+                       xhr: true
     end
 
     it 'assigns @people to collection of job seekers for case manager' do
@@ -496,8 +479,9 @@ RSpec.describe AgencyPeopleController, type: :controller do
     before(:each) do
       sign_in jd_person
       adam.assign_job_developer(jd_person, jd_person.agency)
-      xhr :get, :list_js_jd, id: jd_person.id,
-                             people_type: 'jobseeker-jd'
+      get :list_js_jd, params: { id: jd_person.id,
+                                 people_type: 'jobseeker-jd' },
+                       xhr: true
     end
 
     it 'assigns @people to collection of job seekers for casemanager' do
@@ -539,7 +523,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
       end
 
       it 'returns http success' do
-        xhr :get, :my_js_as_jd, id: @jd_cm.id, format: :json
+        get :my_js_as_jd, params: { id: @jd_cm.id }, format: :json, xhr: true
         expect(response).to have_http_status(:success)
       end
 
@@ -548,7 +532,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
           FactoryBot.create(:resume, job_seeker: js)
         end
 
-        xhr :get, :my_js_as_jd, id: @jd_cm.id, format: :json
+        get :my_js_as_jd, params: { id: @jd_cm.id }, format: :json, xhr: true
         expect(JSON.parse(response.body))
           .to eq('results' =>
             [
@@ -564,7 +548,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         end
 
         @js1.update_attribute(:consent, false)
-        xhr :get, :my_js_as_jd, id: @jd_cm.id, format: :json
+        get :my_js_as_jd, params: { id: @jd_cm.id }, format: :json, xhr: true
         expect(JSON.parse(response.body))
           .to eq('results' =>
             [
@@ -575,7 +559,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
 
       it 'disables application for his job seekers without resume' do
         FactoryBot.create(:resume, job_seeker: @js1)
-        xhr :get, :my_js_as_jd, id: @jd_cm.id, format: :json
+        get :my_js_as_jd, params: { id: @jd_cm.id }, format: :json, xhr: true
         expect(JSON.parse(response.body))
           .to eq('results' =>
             [
@@ -592,7 +576,7 @@ RSpec.describe AgencyPeopleController, type: :controller do
         @js1 = FactoryBot.create(:job_seeker)
         @js2 = FactoryBot.create(:job_seeker)
         sign_in @job_developer1
-        xhr :get, :my_js_as_jd, id: @job_developer1.id, format: :json
+        get :my_js_as_jd, params: { id: @job_developer1.id }, format: :json, xhr: true
       end
 
       it 'returns http success' do
@@ -611,11 +595,11 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(jd_person)
-        get :show, id: cm_person.id
+        get :show, params: { id: cm_person.id }
       end
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(adam)
-        get :show, id: cm_person.id
+        get :show, params: { id: cm_person.id }
         expect(flash[:alert])
           .to eq 'You are not authorized to show an agency person.'
       end
@@ -625,12 +609,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency admin' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(aa_person)
-        get :edit, id: cm_person.id
+        get :edit, params: { id: cm_person.id }
       end
 
       it 'does not authorize non-agency admin' do
         allow(controller).to receive(:current_user).and_return(jd_person)
-        get :edit, id: cm_person.id
+        get :edit, params: { id: cm_person.id }
         expect(flash[:alert])
           .to eq 'You are not authorized to edit an agency person.'
       end
@@ -648,12 +632,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency admin' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(aa_person)
-        get :update, id: cm_person.id, agency_person: person_hash
+        get :update, params: { id: cm_person.id, agency_person: person_hash }
       end
 
       it 'does not authorize non-agency admin' do
         allow(controller).to receive(:current_user).and_return(jd_person)
-        get :update, id: cm_person.id, agency_person: person_hash
+        get :update, params: { id: cm_person.id, agency_person: person_hash }
         expect(flash[:alert])
           .to eq 'You are not authorized to edit an agency person.'
       end
@@ -663,12 +647,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        get :home, id: cm_person.id
+        get :home, params: { id: cm_person.id }
       end
 
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(bob)
-        get :home, id: cm_person.id
+        get :home, params: { id: cm_person.id }
         expect(flash[:alert])
           .to eq 'You are not authorized to go to agency person home page.'
       end
@@ -678,14 +662,14 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        patch :assign_job_seeker, id: cm_person.id, job_seeker_id: bob.id,
-                                  agency_role: 'JD'
+        patch :assign_job_seeker, params: { id: cm_person.id, job_seeker_id: bob.id,
+                                            agency_role: 'JD' }
       end
 
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(charles)
-        patch :assign_job_seeker, id: cm_person.id, job_seeker_id: bob.id,
-                                  agency_role: 'JD'
+        patch :assign_job_seeker, params: { id: cm_person.id, job_seeker_id: bob.id,
+                                            agency_role: 'JD' }
         expect(flash[:alert])
           .to eq 'You are not authorized to assign a job seeker.'
       end
@@ -695,12 +679,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person for himself' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        get :edit_profile, id: cm_person.id
+        get :edit_profile, params: { id: cm_person.id }
       end
 
       it 'does not authorize agency person to edit other agency person' do
         allow(controller).to receive(:current_user).and_return(jd_person)
-        get :edit_profile, id: cm_person.id
+        get :edit_profile, params: { id: cm_person.id }
         expect(flash[:alert])
           .to eq "You are not authorized to edit agency person's profile."
       end
@@ -710,14 +694,14 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person for himself' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        patch :update_profile, id: cm_person.id,
-                               agency_person: attributes_for(:agency_person)
+        patch :update_profile, params: { id: cm_person.id,
+                                         agency_person: attributes_for(:agency_person) }
       end
 
       it 'does not authorize agency person to update other agency person' do
         allow(controller).to receive(:current_user).and_return(jd_person)
-        patch :update_profile, id: cm_person.id,
-                               agency_person: attributes_for(:agency_person)
+        patch :update_profile, params: { id: cm_person.id,
+                                         agency_person: attributes_for(:agency_person) }
         expect(flash[:alert])
           .to eq "You are not authorized to edit agency person's profile."
       end
@@ -727,12 +711,12 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency admin' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(aa_person)
-        patch :destroy, id: cm_person.id
+        patch :destroy, params: { id: cm_person.id }
       end
 
       it 'does not authorize non-admin agency person' do
         allow(controller).to receive(:current_user).and_return(jd_person)
-        patch :destroy, id: cm_person.id
+        patch :destroy, params: { id: cm_person.id }
         expect(flash[:alert])
           .to eq 'You are not authorized to destroy agency person.'
       end
@@ -742,12 +726,14 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        xhr :get, :list_js_cm, id: cm_person.id, people_type: 'jobseeker-cm'
+        get :list_js_cm, params: { id: cm_person.id, people_type: 'jobseeker-cm' },
+                         xhr: true
       end
 
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(bob)
-        xhr :get, :list_js_cm, id: cm_person.id, people_type: 'jobseeker-cm'
+        get :list_js_cm, params: { id: cm_person.id, people_type: 'jobseeker-cm' },
+                         xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -759,12 +745,14 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(jd_person)
-        xhr :get, :list_js_jd, id: jd_person.id, people_type: 'jobseeker-jd'
+        get :list_js_jd, params: { id: jd_person.id, people_type: 'jobseeker-jd' },
+                         xhr: true
       end
 
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(bob)
-        xhr :get, :list_js_jd, id: jd_person.id, people_type: 'jobseeker-cm'
+        get :list_js_jd, params: { id: jd_person.id, people_type: 'jobseeker-cm' },
+                         xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -776,14 +764,16 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        xhr :get, :list_js_without_cm, id: cm_person.id,
-                                       people_type: 'jobseeker-without-cm'
+        get :list_js_without_cm, params: { id: cm_person.id,
+                                           people_type: 'jobseeker-without-cm' },
+                                 xhr: true
       end
 
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(bob)
-        xhr :get, :list_js_without_cm, id: cm_person.id,
-                                       people_type: 'jobseeker-without-cm'
+        get :list_js_without_cm, params: { id: cm_person.id,
+                                           people_type: 'jobseeker-without-cm' },
+                                 xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -795,14 +785,16 @@ RSpec.describe AgencyPeopleController, type: :controller do
       it 'authorizes agency person' do
         expect(subject).to_not receive(:user_not_authorized)
         allow(controller).to receive(:current_user).and_return(cm_person)
-        xhr :get, :list_js_without_jd, id: cm_person.id,
-                                       people_type: 'jobseeker-without-jd'
+        get :list_js_without_jd, params: { id: cm_person.id,
+                                           people_type: 'jobseeker-without-jd' },
+                                 xhr: true
       end
 
       it 'does not authorize non-agency person' do
         allow(controller).to receive(:current_user).and_return(bob)
-        xhr :get, :list_js_without_jd, id: cm_person.id,
-                                       people_type: 'jobseeker-without-jd'
+        get :list_js_without_jd, params: { id: cm_person.id,
+                                           people_type: 'jobseeker-without-jd' },
+                                 xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>

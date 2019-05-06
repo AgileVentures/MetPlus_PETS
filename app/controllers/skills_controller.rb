@@ -11,7 +11,7 @@ class SkillsController < ApplicationController
     skill.organization = Company.find(company_id) if company_id
     authorize skill
     if skill.save
-      render nothing: true
+      head :ok
     else
       render partial: 'shared/error_messages',
              locals: { object: skill }, status: 422
@@ -23,7 +23,7 @@ class SkillsController < ApplicationController
     begin
       skill = Skill.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       render json: { name: skill.name,
                      description: skill.description,
@@ -36,15 +36,15 @@ class SkillsController < ApplicationController
     begin
       skill = Skill.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       update_params = skill_params
       update_params.delete('company_id')
       if skill.update(update_params)
-        render nothing: true
+        head :ok
       else
         render partial: 'shared/error_messages',
-                        locals: {object: skill}, status: 422
+               locals: { object: skill }, status: 422
       end
     end
   end
@@ -54,7 +54,7 @@ class SkillsController < ApplicationController
     begin
       skill = Skill.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       skill.destroy
       render json: { skill_count: Skill.count }
@@ -70,5 +70,4 @@ class SkillsController < ApplicationController
   def confirm_xhr
     raise 'Not an XHR request' unless request.xhr?
   end
-
 end

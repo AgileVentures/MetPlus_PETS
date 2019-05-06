@@ -46,5 +46,4 @@ class AgencyPersonPolicy < ApplicationPolicy
   def my_profile?
     user.agency_person? record.agency
   end
-
 end

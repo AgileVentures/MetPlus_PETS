@@ -6,24 +6,22 @@
     %title= full_title(yield(:title))
     = csrf_meta_tags
     %link(href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet")
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'
-    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css'
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css'
     = stylesheet_link_tag "application", :media => "all", 'data-turbolinks-track' => true
     -# pusher should be loaded before the application js files - pusher.js depends on this
     = javascript_include_tag '//js.pusher.com/3.0/pusher.min.js'
     = javascript_include_tag "application", 'data-turbolinks-track' => true
-    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
-    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/jquery.noty.min.js'
-    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/layouts/bottomLeft.min.js'
-    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/layouts/bottomRight.min.js'
-    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/themes/default.js'
-    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.8/themes/bootstrap.min.js'
+    = javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'
+    = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.full.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js'
     = javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.7/moment-timezone-with-data.min.js'
+    = javascript_pack_tag 'match_job_with_resume'
     = favicon_link_tag 'PETS_Logo.jpg'
   %body
     %a{:href => '#top'}
@@ -40,5 +38,5 @@
     = render 'layouts/footer'
     = content_for :scripts
 
-  %script
-    $(document).ready(function(){$('[data-toggle="tooltip"]').tooltip(); });
+  :javascript
+    $( document ).on('turbolinks:load', function() {$('[data-toggle="tooltip"]').tooltip(); });

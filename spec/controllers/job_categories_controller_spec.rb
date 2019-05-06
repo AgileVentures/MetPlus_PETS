@@ -44,23 +44,23 @@ RSpec.describe JobCategoriesController, type: :controller do
         sign_in aa
       end
       it 'creates new job category for valid parameters' do
-        expect { xhr :post, :create, job_category: jobcat_params }
+        expect { post :create, params: { job_category: jobcat_params }, xhr: true }
           .to change(JobCategory, :count).by(+1)
       end
 
       it 'returns success for valid parameters' do
-        xhr :post, :create, job_category: jobcat_params
+        post :create, params: { job_category: jobcat_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :post, :create, job_category: { name: '', description: '' }
+        post :create, params: { job_category: { name: '', description: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
     end
     it_behaves_like 'unauthorized non-agency-admin people' do
-      let(:request) { xhr :post, :create, job_category: jobcat_params }
+      let(:request) { post :create, params: { job_category: jobcat_params }, xhr: true }
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe JobCategoriesController, type: :controller do
       end
       context 'job category found' do
         before(:each) do
-          xhr :get, :show, id: category
+          get :show, params: { id: category }, xhr: true
         end
 
         it 'renders json structure' do
@@ -91,14 +91,14 @@ RSpec.describe JobCategoriesController, type: :controller do
 
       context 'job category NOT found' do
         it 'returns http status not_found' do
-          xhr :get, :show, id: 0
+          get :show, params: { id: -1 }
           expect(response).to have_http_status(:not_found)
         end
       end
     end
 
     it_behaves_like 'unauthorized non-agency-admin people' do
-      let(:request) { xhr :get, :show, id: category }
+      let(:request) { get :show, params: { id: 0 }, xhr: true }
     end
   end
 
@@ -114,22 +114,21 @@ RSpec.describe JobCategoriesController, type: :controller do
       end
 
       it 'returns success for valid parameters' do
-        xhr :patch, :update, id: category, job_category: jobcat_params
+        patch :update, params: { id: category, job_category: jobcat_params }, xhr: true
         expect(response).to have_http_status(:success)
       end
 
       it 'returns errors and error status for invalid parameters' do
-        xhr :patch,
-            :update,
-            id: category,
-            job_category: { name: '', description: '' }
+        patch :update,
+              params: { id: category,
+                        job_category: { name: '', description: '' } }, xhr: true
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template('shared/_error_messages')
       end
     end
     it_behaves_like 'unauthorized non-agency-admin people' do
       let(:request) do
-        xhr :patch, :update, id: category, job_category: jobcat_params
+        patch :update, params: { id: category, job_category: jobcat_params }, xhr: true
       end
     end
   end
@@ -145,24 +144,24 @@ RSpec.describe JobCategoriesController, type: :controller do
       end
       context 'job category found' do
         it 'deletes job category' do
-          expect { xhr :delete, :destroy, id: category }
+          expect { delete :destroy, params: { id: category }, xhr: true }
             .to change(JobCategory, :count).by(-1)
         end
         it 'returns http success' do
-          xhr :delete, :destroy, id: category
+          delete :destroy, params: { id: category }, xhr: true
           expect(response).to have_http_status(:success)
         end
       end
 
       context 'job category NOT found' do
         it 'returns http status not_found' do
-          xhr :delete, :destroy, id: 0
+          delete :destroy, params: { id: -1 }, xhr: true
           expect(response).to have_http_status(:not_found)
         end
       end
     end
     it_behaves_like 'unauthorized non-agency-admin people' do
-      let(:request) { xhr :delete, :destroy, id: category }
+      let(:request) { delete :destroy, params: { id: category }, xhr: true }
     end
   end
 end

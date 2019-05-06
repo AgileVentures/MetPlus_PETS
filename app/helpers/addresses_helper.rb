@@ -4,7 +4,8 @@ module AddressesHelper
   end
 
   def address_subform_visibility(address)
-    return 'display:none;' unless address_has_data?(address)
+    return 'hidden' unless address_has_data?(address)
+
     nil
   end
 

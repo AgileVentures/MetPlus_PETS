@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     match  '/login'   => 'users/sessions#new',        via: 'get'
-    match  '/logout'  => 'users/sessions#destroy',    via: 'delete'
+    match  '/logout'  => 'users/sessions#destroy',    via: 'get'
   end
 
   get 'about', to: 'pages#about'
@@ -97,8 +97,8 @@ Rails.application.routes.draw do
 
   # ----------------------- Agency Admin -------------------------------------
   # Agency admin maintains agency information
-  get 'agency_admin/home',           path: '/agency_admin/home'
-  get 'agency_admin/job_properties', path: '/agency_admin/job_properties'
+  get 'agency_admin/home',           :as => '/agency_admin/home', to: 'agency_admin#home'
+  get 'agency_admin/job_properties', :as => '/agency_admin/job_properties', to: 'agency_admin#job_properties'
   # --------------------------------------------------------------------------
 
   # ----------------------- Job Categories  ----------------------------------
@@ -126,9 +126,9 @@ Rails.application.routes.draw do
 
   root 'main#index'
 
-  get 'agency/home',  path: '/agency/:id'
+  get 'agency/:id',  :as => 'agency/home', to: 'agency_admin#home'
 
-  get 'company/home', path: '/company/:id'
+  get 'company/:id', :as => 'company/home', to: 'company_people#home'
 
   # ------------------------------ Jobs ----------------------------------------
   get 'jobs/list/:job_type'         => 'jobs#list',   as: :list_jobs
@@ -166,84 +166,8 @@ Rails.application.routes.draw do
     get 'my_profile', on: :member, as: :my_profile
   end
 
-  get 'job_seekers/:id/preview_info' => 'job_seekers#preview_info'
-  get 'job_seekers/:id(/download_resume/:resume_id)' =>
+  get 'job_seekers/:id/preview_info', to: 'job_seekers#preview_info'
+  get 'job_seekers/:id(/download_resume/:resume_id)', to:
     'job_seekers#download_resume',
       as: :download_resume
-  # --------------------------------------------------------------------------
-
-  # The priority is based upon order of creation: first created -> highest priority.
-
-  # ----------------------- end of customizations ------------------------------
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  #   resources :main
-  #   resources :user do
-  #     collection do
-  #       post 'login'
-  #       get 'login'
-  #       get 'recover'
-  #     end
-  #     member do
-  #       get 'activate' => 'user#activate', as: :activate
-  #     end
-  #     #member do
-  #     #  get 'new'
-  #     #  post 'create'
-  #     #  get 'edit'
-  #     #  get 'show'
-  #     #end
-  #   end
-  #   resources :jobseeker, controller: 'user'
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
 end

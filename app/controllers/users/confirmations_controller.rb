@@ -23,8 +23,8 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
         # (this error will happen if the user clicks the link in the
         #  comnfirmation email more than once)
         user.errors.clear if user.errors.messages[:email] &&
-                (user.errors.messages[:email][0] ==
-                  t("errors.messages.already_confirmed"))
+                             (user.errors.messages[:email][0] ==
+                               t("errors.messages.already_confirmed"))
       end
     end
   end

@@ -1,4 +1,4 @@
-class JobApplication < ActiveRecord::Base
+class JobApplication < ApplicationRecord
   belongs_to :job_seeker
   belongs_to :job
   enum status: %i[active accepted not_accepted processing]

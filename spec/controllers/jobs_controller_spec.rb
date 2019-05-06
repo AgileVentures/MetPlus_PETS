@@ -87,8 +87,10 @@ RSpec.describe JobsController, type: :controller do
       end
       before(:each) do
         get :index,
-            q: { 'title_cont_any': 'customer manager',
-                 'description_cont_any': 'responsive service' }
+            params: {
+              q: { 'title_cont_any': 'customer manager',
+                   'description_cont_any': 'responsive service' }
+            }
       end
       it_behaves_like 'return success and render', 'index'
       it { expect(assigns(:title_words)).to match %w[customer manager] }
@@ -102,7 +104,7 @@ RSpec.describe JobsController, type: :controller do
       let!(:joba) do
         FactoryBot.create(:job,
                           company: FactoryBot.create(:company, name: 'Active inc',
-                                                               status:  'active',
+                                                               status: 'active',
                                                                agencies: [agency]))
       end
       let!(:job_skilla) do
@@ -114,7 +116,7 @@ RSpec.describe JobsController, type: :controller do
         FactoryBot.create(:job,
                           company: FactoryBot.create(:company,
                                                      name: 'Pending inc',
-                                                     status:  'pending_registration',
+                                                     status: 'pending_registration',
                                                      agencies: [agency]))
       end
       let!(:job_skillp) do
@@ -126,7 +128,7 @@ RSpec.describe JobsController, type: :controller do
         FactoryBot.create(:job,
                           company: FactoryBot.create(:company,
                                                      name: 'Inact inc',
-                                                     status:  'inactive',
+                                                     status: 'inactive',
                                                      agencies: [agency]))
       end
       let!(:job_skilli) do
@@ -152,7 +154,9 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'Search on skill only returns active company jobs' do
         get :index,
-            q: { 'skills_id_in': [skill_s.id.to_s] }
+            params: {
+              q: { 'skills_id_in': [skill_s.id.to_s] }
+            }
         expect(assigns(:jobs)).to eq [joba]
       end
     end
@@ -161,7 +165,7 @@ RSpec.describe JobsController, type: :controller do
       let!(:skill_s) { FactoryBot.create(:skill, name: 'Search Skill') }
       let!(:other_inc) do
         FactoryBot.create(:company, name: 'Other inc',
-                                    status:  'active',
+                                    status: 'active',
                                     agencies: [agency])
       end
 
@@ -180,7 +184,7 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #new' do
     let(:widget) { FactoryBot.create(:company, name: 'Widget', agencies: [agency]) }
     let!(:dyson) { FactoryBot.create(:company, name: 'Dyson', agencies: [agency]) }
-    let(:request) { get :new, company_id: widget.id }
+    let(:request) { get :new, params: { company_id: widget.id } }
 
     context 'job developer' do
       before(:each) do
@@ -210,13 +214,13 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:request) { post :create, job: valid_params }
+    let(:request) { post :create, params: { job: valid_params } }
 
     context 'job developer' do
       before(:each) { warden.set_user job_developer }
       describe 'successful POST #create' do
         it 'change job & job skill count by 1' do
-          expect { post :create, job: valid_params }
+          expect { post :create, params: { job: valid_params } }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
         it 'redirects to the job show view' do
@@ -228,11 +232,11 @@ RSpec.describe JobsController, type: :controller do
       end
       describe 'unsuccessful POST #create' do
         it 'does not change job & job skills count' do
-          expect { post :create, job: valid_params.merge(title: ' ') }
+          expect { post :create, params: { job: valid_params.merge(title: ' ') } }
             .to change(Job, :count).by(0).and change(Job, :count).by(0)
         end
         it 'return success and render new' do
-          post :create, job: valid_params.merge(title: ' ')
+          post :create, params: { job: valid_params.merge(title: ' ') }
           expect(response).to have_http_status(:success)
           expect(response).to render_template 'new'
         end
@@ -245,7 +249,7 @@ RSpec.describe JobsController, type: :controller do
       before(:each) { warden.set_user bosh_person }
       describe 'successful POST #create' do
         it 'changes job & job skill count by 1' do
-          expect { post :create, job: valid_params }
+          expect { post :create, params: { job: valid_params } }
             .to change(Job, :count).by(1).and change(JobSkill, :count).by(1)
         end
 
@@ -257,17 +261,21 @@ RSpec.describe JobsController, type: :controller do
         end
         context 'when additional licenses are present' do
           it 'saves the additional license' do
-            post :create, job: valid_params.merge(
-              additional_licenses: 'Some additional licenses text'
-            )
+            post :create, params: {
+              job: valid_params.merge(
+                additional_licenses: 'Some additional licenses text'
+              )
+            }
             expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
           end
         end
         context 'when additional skills are present' do
           it 'saves the additional skills' do
-            post :create, job: valid_params.merge(
-              additional_skills: 'Some additional skills text'
-            )
+            post :create, params: {
+              job: valid_params.merge(
+                additional_skills: 'Some additional skills text'
+              )
+            }
             expect(Job.first.additional_skills).to eq 'Some additional skills text'
           end
         end
@@ -275,32 +283,36 @@ RSpec.describe JobsController, type: :controller do
 
       describe 'create job with new address' do
         it 'changes Address count by 1' do
-          expect { post :create, job: valid_params.merge(new_address_params) }
+          expect { post :create, params: { job: valid_params.merge(new_address_params) } }
             .to change(Address, :count).by(1)
         end
       end
 
       describe 'create job with new license' do
         it 'changes JobLicense count by 1' do
-          expect { post :create, job: valid_params.merge(new_license_params) }
+          expect { post :create, params: { job: valid_params.merge(new_license_params) } }
             .to change(JobLicense, :count).by(1)
         end
       end
 
       describe 'create job with new question' do
         it 'changes JobQuestion count by 1' do
-          expect { post :create, job: valid_params.merge(new_question_params) }
+          expect do
+            post :create, params: {
+              job: valid_params.merge(new_question_params)
+            }
+          end
             .to change(JobQuestion, :count).by(1)
         end
       end
 
       describe 'unsuccessful POST #create' do
         it 'does not change job & job skill count' do
-          expect { post :create, job: valid_params.merge(title: ' ') }
+          expect { post :create, params: { job: valid_params.merge(title: ' ') } }
             .to change(Job, :count).by(0).and change(Job, :count).by(0)
         end
         it 'return success and render new' do
-          post :create, job: valid_params.merge(title: ' ')
+          post :create, params: { job: valid_params.merge(title: ' ') }
           expect(response).to have_http_status(:success)
           expect(response).to render_template 'new'
         end
@@ -315,7 +327,7 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:request) { get :show, id: bosh_job }
+    let(:request) { get :show, params: { id: bosh_job } }
     let(:job_seeker) { FactoryBot.create(:job_seeker) }
 
     context 'agency admin' do
@@ -366,7 +378,7 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    let(:request) { get :edit, id: bosh_job }
+    let(:request) { get :edit, params: { id: bosh_job } }
 
     context 'agency admin' do
       before(:each) do
@@ -407,7 +419,7 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let(:request) { patch :update, id: job_wo_skill, job: valid_params }
+    let(:request) { patch :update, params: { id: job_wo_skill, job: valid_params } }
     let!(:job_wo_skill) { FactoryBot.create(:job, company: bosh, address: bosh_mich) }
     let!(:job_w_skill) { FactoryBot.create(:job, company: bosh, address: bosh_mich) }
     let!(:job_skill) { FactoryBot.create(:job_skill, job: job_w_skill, skill: skill) }
@@ -416,14 +428,16 @@ RSpec.describe JobsController, type: :controller do
       before(:each) { warden.set_user agency_admin }
       describe 'successful update' do
         it 'add job_skill: remain job count, increase 1 job_skill' do
-          expect { patch :update, id: job_wo_skill, job: valid_params }
+          expect { patch :update, params: { id: job_wo_skill, job: valid_params } }
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(1)
         end
         it 'remove job_skill: remain job count, decrease 1 job_skill' do
           expect do
-            patch :update, id: job_w_skill.id,
-                           job: valid_params.merge(job_skills_attributes: { '0' =>
+            patch :update, params: {
+              id: job_w_skill.id,
+              job: valid_params.merge(job_skills_attributes: { '0' =>
                         { id: job_skill.id.to_s, _destroy: '1' } })
+            }
           end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(-1)
         end
@@ -436,11 +450,15 @@ RSpec.describe JobsController, type: :controller do
       end
       describe 'unsuccessful update' do
         it 'remain job & job skill count' do
-          expect { patch :update, id: job_wo_skill, job: valid_params.merge(title: ' ') }
+          expect do
+            patch :update, params: {
+              id: job_wo_skill, job: valid_params.merge(title: ' ')
+            }
+          end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(0)
         end
         it 'return success and render edit' do
-          patch :update, id: job_wo_skill, job: valid_params.merge(title: ' ')
+          patch :update, params: { id: job_wo_skill, job: valid_params.merge(title: ' ') }
           expect(response).to have_http_status(:success)
           expect(response).to render_template 'edit'
         end
@@ -450,14 +468,16 @@ RSpec.describe JobsController, type: :controller do
       before(:each) { warden.set_user job_developer }
       describe 'successful update' do
         it 'add job_skill: remain job count, increase 1 job_skill' do
-          expect { patch :update, id: job_wo_skill, job: valid_params }
+          expect { patch :update, params: { id: job_wo_skill, job: valid_params } }
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(1)
         end
         it 'remove job_skill: remain job count, decrease 1 job_skill' do
           expect do
-            patch :update, id: job_w_skill.id,
-                           job: valid_params.merge(job_skills_attributes: { '0' =>
+            patch :update, params: {
+              id: job_w_skill.id,
+              job: valid_params.merge(job_skills_attributes: { '0' =>
                         { id: job_skill.id.to_s, _destroy: '1' } })
+            }
           end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(-1)
         end
@@ -470,11 +490,15 @@ RSpec.describe JobsController, type: :controller do
       end
       describe 'unsuccessful update' do
         it 'remain job & job skill count' do
-          expect { patch :update, id: job_wo_skill, job: valid_params.merge(title: ' ') }
+          expect do
+            patch :update, params: {
+              id: job_wo_skill, job: valid_params.merge(title: ' ')
+            }
+          end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(0)
         end
         it 'return success and render edit' do
-          patch :update, id: job_wo_skill, job: valid_params.merge(title: ' ')
+          patch :update, params: { id: job_wo_skill, job: valid_params.merge(title: ' ') }
           expect(response).to have_http_status(:success)
           expect(response).to render_template 'edit'
         end
@@ -487,14 +511,16 @@ RSpec.describe JobsController, type: :controller do
       before(:each) { warden.set_user bosh_person }
       describe 'successful update' do
         it 'add job_skill: remain job count, increase 1 job_skill' do
-          expect { patch :update, id: job_wo_skill, job: valid_params }
+          expect { patch :update, params: { id: job_wo_skill, job: valid_params } }
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(1)
         end
         it 'remove job_skill: remain job count, decrease 1 job_skill' do
           expect do
-            patch :update, id: job_w_skill.id,
-                           job: valid_params.merge(job_skills_attributes: { '0' =>
+            patch :update, params: {
+              id: job_w_skill.id,
+              job: valid_params.merge(job_skills_attributes: { '0' =>
                         { id: job_skill.id.to_s, _destroy: '1' } })
+            }
           end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(-1)
         end
@@ -502,8 +528,10 @@ RSpec.describe JobsController, type: :controller do
         describe 'updates job with new license' do
           it 'changes JobLicense count by 1' do
             expect do
-              patch :update, id: job_wo_skill.id,
-                             job: valid_params.merge(new_license_params)
+              patch :update, params: {
+                id: job_wo_skill.id,
+                job: valid_params.merge(new_license_params)
+              }
             end
               .to change(JobLicense, :count).by(1)
           end
@@ -512,8 +540,10 @@ RSpec.describe JobsController, type: :controller do
         describe 'updates job with new question' do
           it 'changes JobQuestion count by 1' do
             expect do
-              patch :update, id: job_wo_skill.id,
-                             job: valid_params.merge(new_question_params)
+              patch :update, params: {
+                id: job_wo_skill.id,
+                job: valid_params.merge(new_question_params)
+              }
             end
               .to change(JobQuestion, :count).by(1)
           end
@@ -528,31 +558,41 @@ RSpec.describe JobsController, type: :controller do
 
         context 'when additional licenses are present' do
           it 'saves the additional license' do
-            patch :update, id: job_wo_skill.id,
-                           job: valid_params.merge(
-                             additional_licenses: 'Some additional licenses text'
-                           )
+            patch :update, params: {
+              id: job_wo_skill.id,
+              job: valid_params.merge(
+                additional_licenses: 'Some additional licenses text'
+              )
+            }
             expect(Job.first.additional_licenses).to eq 'Some additional licenses text'
           end
         end
 
         context 'when additional skills are present' do
           it 'saves the additional skill' do
-            patch :update, id: job_wo_skill.id,
-                           job: valid_params.merge(
-                             additional_skills: 'Some additional skills text'
-                           )
+            patch :update, params: {
+              id: job_wo_skill.id,
+              job: valid_params.merge(
+                additional_skills: 'Some additional skills text'
+              )
+            }
             expect(Job.first.additional_skills).to eq 'Some additional skills text'
           end
         end
       end
       describe 'unsuccessful update' do
         it 'remain job & job skill count' do
-          expect { patch :update, id: job_wo_skill, job: valid_params.merge(title: ' ') }
+          expect do
+            patch :update, params: {
+              id: job_wo_skill, job: valid_params.merge(title: ' ')
+            }
+          end
             .to change { Job.count }.by(0).and change { JobSkill.count }.by(0)
         end
         it 'return success and render edit' do
-          patch :update, id: job_wo_skill, job: valid_params.merge(title: ' ')
+          patch :update, params: {
+            id: job_wo_skill, job: valid_params.merge(title: ' ')
+          }
           expect(response).to have_http_status(:success)
           expect(response).to render_template 'edit'
         end
@@ -572,7 +612,7 @@ RSpec.describe JobsController, type: :controller do
   describe 'DESTROY #delete' do
     let!(:job_w_skill) { FactoryBot.create(:job, company: bosh) }
     let!(:job_skill) { FactoryBot.create(:job_skill, job: job_w_skill, skill: skill) }
-    let(:request) { delete :destroy, id: job_w_skill }
+    let(:request) { delete :destroy, params: { id: job_w_skill } }
 
     context 'agency admin' do
       it_behaves_like 'unauthorized', 'agency_admin'
@@ -586,7 +626,12 @@ RSpec.describe JobsController, type: :controller do
     context 'correct company person' do
       before(:each) { warden.set_user bosh_person }
       it 'destroys job and associated job_skill' do
-        expect { delete :destroy, id: job_w_skill }.to change(Job, :count).by(-1)
+        expect do
+          delete :destroy, params: {
+            id: job_w_skill
+          }
+        end
+          .to change(Job, :count).by(-1)
       end
       it 'redirects to jobs path & flash[:alert]' do
         request
@@ -608,11 +653,15 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #list' do
     let!(:dyson) { FactoryBot.create(:company, name: 'Dyson', agencies: [agency]) }
     let!(:dyson_person) { FactoryBot.create(:company_person, company: dyson) }
-    let(:request_first_page) { xhr :get, :list, job_type: 'my-company-all' }
-    let(:request_last_page) do
-      xhr :get, :list, job_type: 'my-company-all', page: 4
+    let(:request_first_page) do
+      get :list, params: { job_type: 'my-company-all' }, xhr: true
     end
-    let(:request_recent_jobs) { xhr :get, :list, job_type: 'recent-jobs' }
+    let(:request_last_page) do
+      get :list, params: { job_type: 'my-company-all', page: 4 }, xhr: true
+    end
+    let(:request_recent_jobs) do
+      get :list, params: { job_type: 'recent-jobs' }, xhr: true
+    end
     before(:each) do
       31.times.each do |i|
         title = i < 10 ? "Awesome job 0#{i}" : "Awesome job #{i}"
@@ -714,7 +763,7 @@ RSpec.describe JobsController, type: :controller do
     render_views
     before(:each) do
       warden.set_user agency_admin
-      xhr :get, :update_addresses, company_id: bosh.id
+      get :update_addresses, params: { company_id: bosh.id }, xhr: true
     end
     it 'returns success status' do
       expect(response).to have_http_status(:ok)
@@ -737,14 +786,16 @@ RSpec.describe JobsController, type: :controller do
       js.assign_job_developer(job_developer, agency)
       js
     end
-    let!(:resume) { FactoryBot.create(:resume, job_seeker: job_seeker) }
-    let(:request) { get :apply, job_id: bosh_job.id, user_id: job_seeker.id }
-    # before(:each) { stub_cruncher_file_download testfile_resume }
+    let!(:resume) do
+      stub_cruncher_file_upload
+      FactoryBot.create(:resume, job_seeker: job_seeker)
+    end
+    let(:request) { get :apply, params: { job_id: bosh_job.id, user_id: job_seeker.id } }
 
     describe 'unknown job' do
       before :each do
         warden.set_user job_seeker
-        get :apply, job_id: 1000, user_id: job_seeker.id
+        get :apply, params: { job_id: 1000, user_id: job_seeker.id }
       end
       it { expect(response).to redirect_to(action: 'index') }
       it 'check set flash' do
@@ -755,7 +806,7 @@ RSpec.describe JobsController, type: :controller do
     describe 'not active job' do
       before :each do
         warden.set_user job_seeker
-        get :apply, job_id: revoked_job.id, user_id: job_seeker.id
+        get :apply, params: { job_id: revoked_job.id, user_id: job_seeker.id }
       end
       it 'check set flash' do
         expect(flash[:alert]).to eq 'You are not authorized to apply. '\
@@ -765,7 +816,7 @@ RSpec.describe JobsController, type: :controller do
     describe 'unknown job seeker' do
       before :each do
         warden.set_user job_developer
-        get :apply, job_id: bosh_job.id, user_id: 10_000
+        get :apply, params: { job_id: bosh_job.id, user_id: 10_000 }
       end
       it { expect(response).to redirect_to(action: 'show', id: bosh_job.id) }
       it 'check set flash' do
@@ -870,7 +921,7 @@ RSpec.describe JobsController, type: :controller do
 
   describe 'PATCH #revoke' do
     let!(:revoked_job) { FactoryBot.create(:job, status: 'revoked', company: bosh) }
-    let(:request) { patch :revoke, id: bosh_job.id }
+    let(:request) { patch :revoke, params: { id: bosh_job.id } }
 
     context 'agency admin' do
       it_behaves_like 'unauthorized', 'agency_admin'
@@ -897,7 +948,7 @@ RSpec.describe JobsController, type: :controller do
       context 'revoked job' do
         before :each do
           warden.set_user job_developer
-          patch :revoke, id: revoked_job.id
+          patch :revoke, params: { id: revoked_job.id }
         end
         it 'flash[:alert]' do
           expect(flash[:alert]).to be_present.and eq 'Only active job can be revoked.'
@@ -930,7 +981,7 @@ RSpec.describe JobsController, type: :controller do
       context 'revoked job' do
         before :each do
           warden.set_user job_developer
-          patch :revoke, id: revoked_job.id
+          patch :revoke, params: { id: revoked_job.id }
         end
         it 'flash[:alert]' do
           expect(flash[:alert]).to be_present.and eq 'Only active job can be revoked.'
@@ -954,7 +1005,10 @@ RSpec.describe JobsController, type: :controller do
 
     let(:job_seeker)  { FactoryBot.create(:job_seeker) }
     let(:job_seeker2) { FactoryBot.create(:job_seeker) }
-    let!(:resume)     { FactoryBot.create(:resume, job_seeker: job_seeker) }
+    let!(:resume) do
+      stub_cruncher_file_upload
+      FactoryBot.create(:resume, job_seeker: job_seeker)
+    end
     let(:job)         { FactoryBot.create(:job) }
     let(:stars_str)   do
       '<div class="stars"><i class="fa fa-star"' \
@@ -965,11 +1019,16 @@ RSpec.describe JobsController, type: :controller do
       " aria-hidden=\"true\"></i></div>\n<br>\n3.4 stars\n"
     end
 
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_file_upload
+    end
+
     context 'happy path' do
       before(:each) do
         warden.set_user job_seeker
         stub_cruncher_match_resume_and_job
-        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+        get :match_resume, params: { id: job.id, job_seeker_id: job_seeker.id }, xhr: true
       end
 
       it 'returns success status' do
@@ -985,7 +1044,8 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_seeker2
         stub_cruncher_match_resume_and_job
 
-        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker2.id
+        get :match_resume, params: { id: job.id, job_seeker_id: job_seeker2.id },
+                           xhr: true
 
         expect(JSON.parse(response.body)['status']).to eq 404
         expect(JSON.parse(response.body)['message']).to eq 'No résumé on file'
@@ -995,7 +1055,7 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_seeker
         stub_cruncher_match_resume_and_job_error(:no_job, job.id)
 
-        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+        get :match_resume, params: { id: job.id, job_seeker_id: job_seeker.id }, xhr: true
 
         expect(JSON.parse(response.body)['status']).to eq 404
         expect(JSON.parse(response.body)['message'])
@@ -1006,7 +1066,7 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user job_seeker
         stub_cruncher_match_resume_and_job_error(:no_resume, resume.id)
 
-        xhr :get, :match_resume, id: job.id, job_seeker_id: job_seeker.id
+        get :match_resume, params: { id: job.id, job_seeker_id: job_seeker.id }, xhr: true
 
         expect(JSON.parse(response.body)['status']).to eq 404
         expect(JSON.parse(response.body)['message'])
@@ -1018,9 +1078,14 @@ RSpec.describe JobsController, type: :controller do
   describe 'GET #match_jd_job_seekers' do
     let(:job_seeker_ids) { [1, 2, 3, 4] }
     let(:request) do
-      get :match_jd_job_seekers,
-          id: bosh_job.id,
-          job_seeker_ids: job_seeker_ids
+      get :match_jd_job_seekers, params: {
+        id: bosh_job.id,
+        job_seeker_ids: job_seeker_ids
+      }
+    end
+
+    before(:each) do
+      stub_cruncher_file_upload
     end
 
     context 'happy path' do
@@ -1054,7 +1119,7 @@ RSpec.describe JobsController, type: :controller do
       end
 
       context 'nil job-seeker ids' do
-        let(:request) { get :match_jd_job_seekers, id: bosh_job.id }
+        let(:request) { get :match_jd_job_seekers, params: { id: bosh_job.id } }
 
         before do
           warden.set_user job_developer
@@ -1110,6 +1175,11 @@ RSpec.describe JobsController, type: :controller do
       let("js#{n + 1}".to_sym) { FactoryBot.create(:job_seeker) }
     end
 
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_file_upload
+    end
+
     context 'happy path' do
       before(:each) do
         FactoryBot.create(:resume, job_seeker: js1)
@@ -1126,7 +1196,7 @@ RSpec.describe JobsController, type: :controller do
         bosh_job.apply js8
 
         warden.set_user bosh_person
-        get :match_job_seekers, id: bosh_job.id
+        get :match_job_seekers, params: { id: bosh_job.id }
       end
 
       it 'starts and stops spinner' do
@@ -1155,14 +1225,14 @@ RSpec.describe JobsController, type: :controller do
       end
       it 'sets flash and redirects if job ID not found' do
         stub_cruncher_match_resumes_fail('JOB_NOT_FOUND')
-        get :match_job_seekers, id: bosh_job.id
+        get :match_job_seekers, params: { id: bosh_job.id }
 
         expect(flash[:alert])
           .to eq 'No matching job seekers found.'
         expect(response).to redirect_to(job_path(bosh_job.id))
       end
       it 'sets flash and redirects if resume not found' do
-        get :match_job_seekers, id: bosh_job.id
+        get :match_job_seekers, params: { id: bosh_job.id }
 
         expect(flash[:alert])
           .to eq "Error: Couldn't find Resume with 'id'=7"
@@ -1175,7 +1245,7 @@ RSpec.describe JobsController, type: :controller do
         job_seeker = Resume.find(7).job_seeker
         job_seeker.delete # use 'delete' to prevent destroying associated objects
 
-        get :match_job_seekers, id: bosh_job.id
+        get :match_job_seekers, params: { id: bosh_job.id }
 
         expect(flash[:alert])
           .to eq "Error: Couldn't find JobSeeker for Resume with 'id' = 7"
@@ -1184,7 +1254,7 @@ RSpec.describe JobsController, type: :controller do
     end
 
     context 'authorization' do
-      let(:request) { get :match_job_seekers, id: bosh_job.id }
+      let(:request) { get :match_job_seekers, params: { id: bosh_job.id } }
       let(:user)    { FactoryBot.create(:company_contact) }
 
       describe 'visitor' do
@@ -1203,14 +1273,20 @@ RSpec.describe JobsController, type: :controller do
   end
 
   describe 'GET #notify_job_developer' do
+    before(:each) do
+      stub_cruncher_authenticate
+      stub_cruncher_file_upload
+    end
     context 'happy path' do
       before(:each) do
         allow(Event).to receive(:create).and_call_original
         warden.set_user bosh_person
-        xhr :get, :notify_job_developer, id: bosh_job.id,
-                                         job_developer_id: job_developer.id,
-                                         company_person_id: bosh_person.id,
-                                         job_seeker_id: job_seeker.id
+        get :notify_job_developer, params: {
+          id: bosh_job.id,
+          job_developer_id: job_developer.id,
+          company_person_id: bosh_person.id,
+          job_seeker_id: job_seeker.id
+        }, xhr: true
       end
 
       it 'creates CP_INTEREST_IN_JS event' do
@@ -1228,31 +1304,39 @@ RSpec.describe JobsController, type: :controller do
         warden.set_user bosh_person
       end
       it 'returns 404 if company_person not found' do
-        xhr :get, :notify_job_developer, id: bosh_job.id,
-                                         job_developer_id: job_developer.id,
-                                         company_person_id: 0,
-                                         job_seeker_id: job_seeker.id
+        get :notify_job_developer, params: {
+          id: bosh_job.id,
+          job_developer_id: job_developer.id,
+          company_person_id: 0,
+          job_seeker_id: job_seeker.id
+        }, xhr: true
       end
       it 'returns 404 if job_developer not found' do
-        xhr :get, :notify_job_developer, id: bosh_job.id,
-                                         job_developer_id: 0,
-                                         company_person_id: bosh_person.id,
-                                         job_seeker_id: job_seeker.id
+        get :notify_job_developer, params: {
+          id: bosh_job.id,
+          job_developer_id: 0,
+          company_person_id: bosh_person.id,
+          job_seeker_id: job_seeker.id
+        }, xhr: true
       end
       it 'returns 404 if job_seeker not found' do
-        xhr :get, :notify_job_developer, id: bosh_job.id,
-                                         job_developer_id: job_developer.id,
-                                         company_person_id: bosh_person.id,
-                                         job_seeker_id: 0
+        get :notify_job_developer, params: {
+          id: bosh_job.id,
+          job_developer_id: job_developer.id,
+          company_person_id: bosh_person.id,
+          job_seeker_id: 0
+        }, xhr: true
       end
     end
 
     context 'authentication' do
       let(:request) do
-        xhr :get, :notify_job_developer, id: bosh_job.id,
-                                         job_developer_id: job_developer.id,
-                                         company_person_id: bosh_person.id,
-                                         job_seeker_id: job_seeker.id
+        get :notify_job_developer, params: {
+          id: bosh_job.id,
+          job_developer_id: job_developer.id,
+          company_person_id: bosh_person.id,
+          job_seeker_id: job_seeker.id
+        }, xhr: true
       end
 
       describe 'not logged in' do
@@ -1262,10 +1346,12 @@ RSpec.describe JobsController, type: :controller do
 
     context 'authorization' do
       let(:request) do
-        xhr :get, :notify_job_developer, id: bosh_job.id,
-                                         job_developer_id: job_developer.id,
-                                         company_person_id: bosh_person.id,
-                                         job_seeker_id: job_seeker.id
+        get :notify_job_developer, params: {
+          id: bosh_job.id,
+          job_developer_id: job_developer.id,
+          company_person_id: bosh_person.id,
+          job_seeker_id: job_seeker.id
+        }, xhr: true
       end
 
       describe 'job seeker' do

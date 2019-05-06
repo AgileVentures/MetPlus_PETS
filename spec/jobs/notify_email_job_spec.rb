@@ -21,7 +21,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:JS_REGISTER],
                                    name: 'Joe Newseeker', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'company registered event' do
@@ -31,7 +31,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:COMP_REGISTER],
                                    name: 'Newco', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'job seeker applied to job event' do
@@ -41,7 +41,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:JS_APPLY],
                                    name: 'Joe Newseeker', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'job application accepted event' do
@@ -51,7 +51,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:APP_ACCEPTED],
                                    name: 'Joe Newseeker', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'job application rejected event' do
@@ -61,7 +61,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:APP_REJECTED],
                                    name: 'Joe Newseeker', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'job seeker assigned to job developer event' do
@@ -71,7 +71,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:JD_ASSIGNED_JS],
                                    name: 'Joe Newseeker', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'job seeker assigned to case manager event' do
@@ -81,7 +81,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    Event::EVT_TYPE[:CM_ASSIGNED_JS],
                                    name: 'Joe Newseeker', id: 1)
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'new job posted' do
@@ -92,7 +92,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    job: { title: 'test job' },
                                    agency: { name: 'MetPlus' })
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'job revoked' do
@@ -103,7 +103,7 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    job: { title: 'test job' },
                                    agency: { name: 'MetPlus' })
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 
   it 'company interest in job seeker' do
@@ -115,6 +115,6 @@ RSpec.describe NotifyEmailJob, type: :job do
                                    company_person: { last_name: 'Jobs' },
                                    job_seeker: { last_name: 'Seeker' })
     end
-      .to change(Delayed::Job, :count).by(+1)
+      .to have_enqueued_job(NotifyEmailJob)
   end
 end

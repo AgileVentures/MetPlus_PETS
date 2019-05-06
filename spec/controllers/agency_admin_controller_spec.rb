@@ -85,20 +85,20 @@ RSpec.describe AgencyAdminController, type: :controller do
     end
 
     it 'renders partial for branches' do
-      xhr :get, :home, branches_page: 2, data_type: 'branches'
+      get :home, params: { branches_page: 2, data_type: 'branches' }, xhr: true
       expect(response).to render_template(partial: 'branches/_branches')
       expect(response).to have_http_status(:success)
     end
 
     it 'renders partial for people' do
-      xhr :get, :home, people_page: 2, data_type: 'people'
+      get :home, params: { people_page: 2, data_type: 'people' }, xhr: true
       expect(response)
         .to render_template(partial: 'agency_people/_agency_people')
       expect(response).to have_http_status(:success)
     end
 
     it 'renders partial for companies' do
-      xhr :get, :home, companies_page: 2, data_type: 'companies'
+      get :home, params: { companies_page: 2, data_type: 'companies' }, xhr: true
       expect(response).to render_template(partial: 'companies/_companies')
       expect(response).to have_http_status(:success)
     end
@@ -114,21 +114,24 @@ RSpec.describe AgencyAdminController, type: :controller do
     end
 
     it 'renders partial for job categories' do
-      xhr :get, :job_properties, job_categories_page: 2,
-                                 data_type: 'job_categories'
+      get :job_properties, params: { job_categories_page: 2,
+                                     data_type: 'job_categories' },
+                           xhr: true
       expect(response).to render_template(partial: '_job_specialties')
       expect(response).to have_http_status(:success)
     end
     it 'renders partial for job skills' do
-      xhr :get, :job_properties, skills_page: 1,
-                                 data_type: 'skills'
+      get :job_properties, params: { skills_page: 1,
+                                     data_type: 'skills' },
+                           xhr: true
       expect(response).to render_template(partial: 'shared/_job_skills')
       expect(response).to have_http_status(:success)
     end
     it 'raises data type error' do
       expect do
-        xhr :get, :job_properties, skills_page: 1,
-                                   data_type: 'xxxxx'
+        get :job_properties, params: { skills_page: 1,
+                                       data_type: 'xxxxx' },
+                             xhr: true
       end.to raise_error 'Do not recognize data type: xxxxx'
     end
   end

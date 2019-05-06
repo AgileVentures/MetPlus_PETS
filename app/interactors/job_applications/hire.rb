@@ -3,6 +3,7 @@ module JobApplications
   class Hire
     def call(job_application)
       raise JobNotActive, '' unless job_application.active? || job_application.processing?
+
       job_application.accept
       decrease_remaining_positions(job_application.job)
 

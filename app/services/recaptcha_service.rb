@@ -4,7 +4,7 @@ require 'json'
 class RecaptchaService
   # Ref: https://developers.google.com/recaptcha/docs/verify
   def self.verify(captcha_response, ip_address)
-    return false if (!captcha_response) || (captcha_response.empty?)
+    return false if !captcha_response || captcha_response.empty?
 
     result = request(captcha_response, ip_address)
     JSON.parse(result)['success']

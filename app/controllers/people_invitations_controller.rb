@@ -25,7 +25,7 @@ class PeopleInvitationsController < Devise::InvitationsController
         # If a person is already associated with this user, this means that
         # another invitation is being sent to that previously-invited person.
         redirect_path = (person.class == AgencyPerson ?
-                  agency_person_path(person.id) : company_person_path(person.id) )
+                  agency_person_path(person.id) : company_person_path(person.id))
         store_location_for user, redirect_path
       else
         # Otherwise, this is a first invitation for this user - associate a person
@@ -68,9 +68,10 @@ class PeopleInvitationsController < Devise::InvitationsController
     end
     user
   end
-  protected
-    def after_invite_path_for(resource)
-      stored_location_for(resource) || request.referer || root_path
-    end
 
+  protected
+
+  def after_invite_path_for(resource)
+    stored_location_for(resource) || request.referer || root_path
+  end
 end

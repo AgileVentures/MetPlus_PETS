@@ -1,0 +1,13 @@
+{
+  "presets": [
+    "./vendor/node_modules/babel-preset-react",
+    "./vendor/node_modules/babel-preset-es2015"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "./vendor/node_modules/babel-plugin-transform-es2015-modules-commonjs"
+      ]
+    }
+  }
+}

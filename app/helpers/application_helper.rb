@@ -11,7 +11,7 @@ module ApplicationHelper
     page_title.empty? ? base_title : "#{page_title} | #{base_title}"
   end
 
-  def flash_to_css key
+  def flash_to_css(key)
     bootstrap_alert_classes.fetch(key, "alert-#{key}")
   end
 
@@ -44,6 +44,7 @@ module ApplicationHelper
     return home_job_seeker_path person if person.job_seeker?
     return home_company_person_path person if person.is_a? CompanyPerson
     return home_agency_person_path person if person.is_a? AgencyPerson
+
     root_path
   end
 
@@ -51,19 +52,13 @@ module ApplicationHelper
     render_stars(rating)
   end
 
-  # def paginate(collection, params = {})
-  #   will_paginate collection, params.merge(renderer:
-  #     RemoteLinkPaginationHelper::BootstrapLinkRenderer)
-  # end
-
   # Returns a string of option tags for a 'select' element.
   # The select element allows the user to select the number of items to
   # appear on each pagination page.
-  ITEMS_COUNT = [ ['10', 10], ['25', 25], ['50', 50], ['All', 'All'] ].freeze
+  ITEMS_COUNT = [['10', 10], ['25', 25], ['50', 50], %w[All All]].freeze
 
-  def paginate_count_options(count=10)
+  def paginate_count_options(count = 10)
     # 'count' is the currently-selected items count.
     options_for_select(ITEMS_COUNT, count)
   end
-
 end

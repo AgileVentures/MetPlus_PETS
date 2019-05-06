@@ -20,8 +20,8 @@
         - if policy(@job).update?
           = link_to 'Edit Job', edit_job_path(@job), class: 'btn btn-default'
         - if @resume
-          = link_to 'Match against my Résumé', '#', id: 'match_my_resume',
-                  class: 'btn btn-primary', data: { job_id: @job.id, job_seeker_id: pets_user.id }
+          #match-resume-button
+            #resume-data{data: { job_id: @job.id, job_seeker_id: pets_user.id }}
 
   .clearfix
 

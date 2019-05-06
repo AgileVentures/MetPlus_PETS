@@ -1,4 +1,4 @@
-class Task < ActiveRecord::Base
+class Task < ApplicationRecord
   include TaskManager::TaskManager
   include TaskManager::BusinessLogic
 
@@ -65,6 +65,7 @@ class Task < ActiveRecord::Base
     elsif owner_a_company_and_as_a_company_role?
       return owner_company.people_on_role CompanyRole::ROLE[owner_company_role.to_sym]
     end
+
     nil
   end
 
@@ -158,6 +159,7 @@ class Task < ActiveRecord::Base
     return company unless company.nil?
     return job_application unless job_application.nil?
     return job unless job.nil?
+
     nil
   end
 
@@ -176,6 +178,7 @@ class Task < ActiveRecord::Base
 
   def person
     return nil if user.nil?
+
     user.pets_user
   end
 

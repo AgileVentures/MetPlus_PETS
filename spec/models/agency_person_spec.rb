@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AgencyPerson, type: :model do
-  describe 'Fixtures' do
-    it 'should have a valid factory' do
-      expect(FactoryBot.build(:agency_person)).to be_valid
-    end
-  end
-
   describe 'Associations' do
     it { is_expected.to belong_to :agency }
     it { is_expected.to belong_to :branch }

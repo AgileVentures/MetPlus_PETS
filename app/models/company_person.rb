@@ -1,4 +1,4 @@
-class CompanyPerson < ActiveRecord::Base
+class CompanyPerson < ApplicationRecord
   acts_as :user
   belongs_to :company
   belongs_to :address
@@ -49,7 +49,7 @@ class CompanyPerson < ActiveRecord::Base
     # If the CA role is set for this person we are OK
     company_roles.each { |role| return if role.role == CompanyRole::ROLE[:CA] }
 
-    errors[:company_admin] << 'cannot be unset for sole company admin.' unless
+    errors.add(:company_admin, 'cannot be unset for sole company admin.') unless
                       other_company_admin?
   end
 
@@ -68,11 +68,13 @@ class CompanyPerson < ActiveRecord::Base
 
   def company_admin?(company)
     return false if self.company != company
+
     has_role?(:CA)
   end
 
   def company_contact?(company)
     return false if self.company != company
+
     has_role?(:CC)
   end
 
@@ -87,6 +89,6 @@ class CompanyPerson < ActiveRecord::Base
   private
 
   def has_role?(role)
-    company_roles.pluck(:role).include?CompanyRole::ROLE[role]
+    company_roles.pluck(:role).include? CompanyRole::ROLE[role]
   end
 end

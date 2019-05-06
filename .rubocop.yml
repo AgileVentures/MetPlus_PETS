@@ -37,6 +37,7 @@ Metrics/ModuleLength:
     - features/step_definitions/*
 Metrics/MethodLength:
   Enabled: true
+  Max: 15
   Exclude: 
     - spec/**/*
     - features/step_definitions/*    

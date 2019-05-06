@@ -5,12 +5,11 @@ module PaginationUtility
   # uses the will_paginate gem for listing a collection.  That has to be a number.
   # This particular number is used when the user selects "All" in the
   # items-per-page selection.
-  ALL_ITEMS = 10_000.freeze
+  ALL_ITEMS = 10_000
 
   DEFAULT_ITEMS_SELECTION = 10.freeze # Default items-per-page setting
 
   def process_pagination_params(entity)
-
     # This method is used in controller actions involved in pagination of
     # collection tables (e.g., companies, jobs, etc.).
 
@@ -31,11 +30,10 @@ module PaginationUtility
     # and per-page items selection.  These are persisted across action
     # invocations.
 
-
     entity_items_selection = (entity + '_items_selection').to_sym
     entity_search_criteria = (entity + '_search_criteria').to_sym
 
-    if params[:items_count]  # << user has selected a per-page items count
+    if params[:items_count] # << user has selected a per-page items count
       items_count = params[:items_count]
       items_selection = items_count == 'All' ? 'All' : items_count.to_i
 
@@ -53,8 +51,10 @@ module PaginationUtility
       params.delete(:items_count)
 
     else
-      items_selection = session[entity_items_selection] ?
-        session[entity_items_selection] : DEFAULT_ITEMS_SELECTION
+      items_selection = DEFAULT_ITEMS_SELECTION
+      if session[entity_items_selection]
+        items_selection = session[entity_items_selection]
+      end
 
       session[entity_search_criteria] = params[:q].to_json
 
@@ -63,6 +63,6 @@ module PaginationUtility
 
     items_per_page = items_selection == 'All' ? ALL_ITEMS : items_selection
 
-    [ search_params, items_selection, items_per_page ]
+    [search_params, items_selection, items_per_page]
   end
 end

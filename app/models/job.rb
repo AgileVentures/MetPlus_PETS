@@ -1,4 +1,4 @@
-class Job < ActiveRecord::Base
+class Job < ApplicationRecord
   after_save :save_job_to_cruncher
   belongs_to :company
   belongs_to :company_person
@@ -39,7 +39,7 @@ class Job < ActiveRecord::Base
   has_many :job_questions, inverse_of: :job
   has_many :questions, through: :job_questions, dependent: :destroy
   accepts_nested_attributes_for :job_questions, allow_destroy: true,
-                                reject_if: :all_blank
+                                                reject_if: :all_blank
 
   YEARS_OF_EXPERIENCE_OPTIONS = (0..20).to_a.freeze
   validates_presence_of :title
@@ -55,15 +55,15 @@ class Job < ActiveRecord::Base
                             less_than_or_equal_to: 20
   validates_numericality_of :available_positions, greater_than: 0
   validates_presence_of :pay_period, message: 'must be specified',
-    if: Proc.new { |j| j.min_salary.present? }
+                                     if: Proc.new { |j| j.min_salary.present? }
 
   validates_numericality_of :min_salary, :max_salary, allow_blank: true,
-    less_than_or_equal_to: 999999.99
+                                                      less_than_or_equal_to: 999999.99
 
   validates_format_of :min_salary, :max_salary, allow_blank: true,
-    with: /\A\d{0,6}(\.\d{0,2})?\z/,
-    message: 'must match format NNNNNN.NN (up to 6 digits, optional decimal ' +
-             'point, optional digits for cents)'
+                                                with: /\A\d{0,6}(\.\d{0,2})?\z/,
+                                                message: 'must match format NNNNNN.NN (up to 6 digits, optional decimal ' +
+                                                         'point, optional digits for cents)'
 
   validate :max_salary_consistent_with_min_salary
 
@@ -104,7 +104,7 @@ class Job < ActiveRecord::Base
     # If job has questions to be answered by applicant:
     questions_answers&.each do |k, v|
       job_application.application_questions
-        .build(question_id: k, answer: (v == 'true'))
+                     .build(question_id: k, answer: (v == 'true'))
     end
 
     if job_application.save!

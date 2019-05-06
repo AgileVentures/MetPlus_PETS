@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include Users::RoleModule
   include Users::Types
 
@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
 
   def full_name(order = { last_name_first: true })
     return "#{last_name}, #{first_name}" if order[:last_name_first]
+
     "#{first_name} #{last_name}"
   end
 

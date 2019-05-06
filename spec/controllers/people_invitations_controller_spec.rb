@@ -9,7 +9,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        get :new, person_type: 'AgencyPerson', org_id: agency.id
+        get :new, params: { person_type: 'AgencyPerson', org_id: agency.id }
       end
       it 'sets session key for person_type' do
         expect(session[:person_type]).to eq 'AgencyPerson'
@@ -33,7 +33,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     it 'sends invitation email' do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in agency_admin
-      expect { post :create, user: FactoryBot.attributes_for(:user) }
+      expect { post :create, params: { user: FactoryBot.attributes_for(:user) } }
         .to change(all_emails, :count).by(+1)
     end
 
@@ -45,9 +45,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        post :create, { user: user_hash },
-             # following arg is session variables
-             person_type: 'AgencyPerson', org_id: agency.id
+        post :create, params: { user: user_hash }
       end
 
       it 'sets flash message' do
@@ -73,14 +71,14 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       it 'creates user once upon initial invite' do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        expect { 4.times { post :create, user: user_hash } }
+        expect { 4.times { post :create, params: { user: user_hash } } }
           .to change(User, :count).by(+1)
       end
 
       it 'resends invitation to same user' do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        expect { 4.times { post :create, user: user_hash } }
+        expect { 4.times { post :create, params: { user: user_hash } } }
           .to change(all_emails, :count).by(+4)
       end
     end
@@ -97,9 +95,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in agency_admin
-        post :create, { user: user_hash },
-             # following arg is session variables
-             person_type: 'AgencyPerson', org_id: agency.id
+        post :create, params: { user: user_hash }
       end
 
       it 'renders new template' do
@@ -129,7 +125,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        get :new, person_type: 'CompanyPerson', org_id: company.id
+        get :new, params: { person_type: 'CompanyPerson', org_id: company.id }
       end
       it 'sets session key for person_type' do
         expect(session[:person_type]).to eq 'CompanyPerson'
@@ -163,7 +159,7 @@ RSpec.describe PeopleInvitationsController, type: :controller do
     it 'sends invitation email' do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in company_admin
-      expect { post :create, user: FactoryBot.attributes_for(:user) }
+      expect { post :create, params: { user: FactoryBot.attributes_for(:user) } }
         .to change(all_emails, :count).by(+1)
     end
 
@@ -185,9 +181,9 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        post :create, { user: user_hash },
-             # following arg is session variables
-             person_type: 'CompanyPerson', org_id: company.id
+        post :create, params: { user: user_hash },
+                      # following arg is session variables
+                      person_type: 'CompanyPerson', org_id: company.id
       end
 
       it 'sets flash message' do
@@ -223,14 +219,14 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       it 'creates user once upon initial invite' do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        expect { 4.times { post :create, user: user_hash } }
+        expect { 4.times { post :create, params: { user: user_hash } } }
           .to change(User, :count).by(+1)
       end
 
       it 'resends invitation to same user' do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        expect { 4.times { post :create, user: user_hash } }
+        expect { 4.times { post :create, params: { user: user_hash } } }
           .to change(all_emails, :count).by(+4)
       end
     end
@@ -257,9 +253,9 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       before(:each) do
         @request.env['devise.mapping'] = Devise.mappings[:user]
         sign_in company_admin
-        post :create, { user: user_hash },
-             # following arg is session variables
-             person_type: 'CompanyPerson', org_id: company.id
+        post :create, params: { user: user_hash },
+                      # following arg is session variables
+                      person_type: 'CompanyPerson', org_id: company.id
       end
 
       it 'renders new template' do
@@ -268,29 +264,6 @@ RSpec.describe PeopleInvitationsController, type: :controller do
       it 'returns http success' do
         expect(response).to have_http_status(:success)
       end
-    end
-  end
-  describe 'GET #update' do
-    context 'AgencyPerson' do
-      let(:agency) { FactoryBot.create(:agency) }
-      let!(:agency_admin) { FactoryBot.create(:agency_admin, agency: agency) }
-      it_behaves_like 'accepts invitation', 'case_manager'
-      it_behaves_like 'accepts invitation', 'job_developer'
-    end
-    context 'Company Person' do
-      let(:company)       { FactoryBot.create(:company) }
-      let!(:ca_role)      do
-        FactoryBot.create(:company_role,
-                          role: CompanyRole::ROLE[:CA])
-      end
-      let!(:company_admin) do
-        ca = FactoryBot.create(:company_person, company: company)
-        ca.company_roles << ca_role
-        ca.save
-        ca
-      end
-      it_behaves_like 'accepts invitation', 'company_admin'
-      it_behaves_like 'accepts invitation', 'company_contact'
     end
   end
 end

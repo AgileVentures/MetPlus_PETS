@@ -6,11 +6,10 @@ And(/^I (accept|reject|process) "([^"]*)" application for "([^"]*)"$/) do |actio
 end
 
 And(/^I should see an "([^"]*)" confirmation$/) do |action|
-  expect(page).to have_content("Are you sure you want
-    to #{action} the following application:
-    Applicant's Name: #{@job_app.job_seeker.full_name(last_name_first: false)}
-    Job Title:  #{@job_app.job.title}
-    Company Job ID: #{@job_app.job.company_job_id}")
+  expect(page).to have_content("Are you sure you want to #{action} the following application:
+Applicant's Name: #{@job_app.job_seeker.full_name(last_name_first: false)}
+Job Title: #{@job_app.job.title}
+Company Job ID: #{@job_app.job.company_job_id}")
 end
 
 And(/^I click the "([^"]*)" confirmation$/) do |action|

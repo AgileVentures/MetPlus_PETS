@@ -22,4 +22,4 @@ var RegistrationDeny = {
   }
 };
 
-$(RegistrationDeny.setup);
+$( document ).on('turbolinks:load', RegistrationDeny.setup);

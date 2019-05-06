@@ -52,6 +52,7 @@ Background: seed data added to database
   | Password Confirmation          | qwerty123           |
   And  I select "Michigan" in select list "State"
 
+@email
 Scenario: company registration request
   And I click the "Create" button
   Then I should see "Thank you for your registration request."
@@ -66,6 +67,7 @@ Scenario: attempt login while registration is pending
   And I login as "hughjobs@ymail.com" with password "qwerty123"
   Then I should see "You have successfully signed up but your account cannot be used until your company registration is approved."
 
+@email
 Scenario: company registration approval
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -117,9 +119,10 @@ Scenario: attempt login after registration is deleted
   And I wait 1 second
   Then I am on the home page
   And I login as "hughjobs@ymail.com" with password "qwerty123"
-  Then I should see "Invalid email or password."
+  Then I should see "Invalid Email or password."
 
 @javascript
+@email
 Scenario: company registration denial
   And I click the "Create" button
   Given I am logged in as agency admin
@@ -189,6 +192,7 @@ Scenario: duplicate EIN for Company
   And I click the "Create" button
   Then I should see "Ein has already been registered"
 
+@email
 Scenario: edit Company Registration: change contact email and job email
   And I click the "Create" button
   Given I am logged in as agency admin

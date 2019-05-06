@@ -1,15 +1,14 @@
 class JobCategoriesController < ApplicationController
-
   before_action :user_logged!
 
   def create
     category = JobCategory.new(category_params)
     authorize category
     if category.save
-      render nothing: true
+      head :ok
     else
       render partial: 'shared/error_messages',
-                      locals: {object: category}, status: 422
+             locals: { object: category }, status: 422
     end
   end
 
@@ -18,7 +17,7 @@ class JobCategoriesController < ApplicationController
     begin
       category = JobCategory.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       render json: { name: category.name,
                      description: category.description,
@@ -31,13 +30,13 @@ class JobCategoriesController < ApplicationController
     begin
       category = JobCategory.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       if category.update(category_params)
-        render nothing: true
+        head :ok
       else
         render partial: 'shared/error_messages',
-                        locals: {object: category}, status: 422
+               locals: { object: category }, status: 422
       end
     end
   end
@@ -47,7 +46,7 @@ class JobCategoriesController < ApplicationController
     begin
       category = JobCategory.find(params[:id])
     rescue
-      render nothing: true, status: 404
+      head :not_found
     else
       category.delete
       render json: { job_category_count: JobCategory.count }

@@ -1,7 +1,7 @@
 class ChangeCompanyStatusToEnum < ActiveRecord::Migration
   def change
     begin
-      if ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
+      if ApplicationRecord.connection.instance_of? ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
         execute "ALTER TABLE companies ALTER status DROP DEFAULT"
         execute "UPDATE companies SET status='0' where status='Pending Registration'"
         execute "UPDATE companies SET status='1' where status='Active'"

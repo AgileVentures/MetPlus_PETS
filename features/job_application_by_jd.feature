@@ -42,6 +42,7 @@ Background: data is added to database
   | june.seeker@gmail.com | jane@metplus.org | JD   |
   | july.seeker@gmail.com | jane@metplus.org | CM   |
 
+  @email
   @javascript
   Scenario: Successful application for his job seeker
     When I am in Company Admin's browser

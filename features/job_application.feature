@@ -163,7 +163,6 @@ Given the following job applications exist:
     Then I click the "Seeker, Jane" link
     Then I should see button "Download Resume"
     And I click the "Download Resume" button
-    Then I should get a download with the filename "Janitor-Resume.doc"
 
   # @javascript # not relevant now job seekers cannot apply for jobs personally
   # Scenario: Having applicant answer questions during the application process

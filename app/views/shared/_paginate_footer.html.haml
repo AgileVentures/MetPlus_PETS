@@ -2,7 +2,6 @@
 
   .col-sm-8.col-sm-offset-2{ style: 'text-align: center;' }
     = will_paginate entities,
-                    renderer: RemoteLinkPaginationHelper::BootstrapLinkRenderer,
                     class: paginate_class
 
   .col-sm-2{ style: 'text-align: right;' }
@@ -13,6 +12,8 @@
 
     %span.glyphicon.glyphicon-info-sign{ title: 'Select number of items per page',
                                          data: {toggle: 'tooltip'} }
+:javascript
+  $('.pagination a').attr('data-remote', 'true');
 -#
   for background on will_paginate method args, see:
   https://github.com/yrgoldteeth/bootstrap-will_paginate (adds bootstrap-style

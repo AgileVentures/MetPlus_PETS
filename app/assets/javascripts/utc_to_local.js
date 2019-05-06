@@ -7,4 +7,4 @@ var utcToLocal = {
   }
 };
 
-$(utcToLocal.setup);
+$( document ).on('turbolinks:load', utcToLocal.setup);

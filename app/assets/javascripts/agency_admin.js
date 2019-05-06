@@ -421,7 +421,7 @@ var AgencyData = {
                                 AgencyData.delete_license);
   }
 };
-$(function () {
+$( document ).on('turbolinks:load', function() {
   AgencyData.setup_branches();
   AgencyData.setup_people();
   AgencyData.setup_companies();

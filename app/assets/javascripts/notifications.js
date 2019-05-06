@@ -5,11 +5,11 @@
 var Notification = {
     notify: function(text, type) {
         var closeWith = (/href ?=/.test(text) ? ['button'] : ['click']);
-        noty({text: text,
-            theme: 'bootstrapTheme',
+        new Noty({text: text,
+            theme: 'semanticui',
             layout: 'bottomRight',
             type: type,
-            closeWith: closeWith});
+            closeWith: closeWith}).show();
     },
     success_notification: function(text) {
         Notification.notify(text, 'success');

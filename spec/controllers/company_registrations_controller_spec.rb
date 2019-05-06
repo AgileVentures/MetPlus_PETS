@@ -121,7 +121,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:request) { get :show, id: company }
+    let(:request) { get(:show, params: { id: company }) }
     context 'authorized access' do
       context 'agency admin' do
         it_behaves_like 'authorized show request' do
@@ -177,7 +177,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:request) { delete :destroy, id: company }
+    let(:request) { delete :destroy, params: { id: company } }
     context 'authorized access' do
       before do
         sign_in agency_admin
@@ -207,7 +207,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       comp.save
       comp
     end
-    let(:request) { delete :destroy, id: test_company }
+    let(:request) { delete :destroy, params: { id: test_company } }
 
     context 'authorized access' do
       before(:each) do
@@ -252,7 +252,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
     context 'valid attributes' do
       before(:each) do
-        post :create, company: registration_params
+        post :create, params: { company: registration_params }
       end
 
       it 'sets User approved to false' do
@@ -300,8 +300,8 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     it 'sends registration-pending email' do
       # one email is sent to company registrant,
       # one email is sent to all agency people
-      expect { post :create, company: registration_params }
-        .to change(all_emails, :count).by(+2)
+      expect { post :create, params: { company: registration_params } }
+        .to have_enqueued_job(CompanyMailerJob).and have_enqueued_job(NotifyEmailJob)
     end
 
     context 'invalid attributes' do
@@ -310,7 +310,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
       before(:each) do
         registration_params[:name] = nil
         registration_params[:phone] = '222-333-12345'
-        post :create, company: registration_params
+        post :create, params: { company: registration_params }
       end
 
       it 'assigns model errors' do
@@ -346,7 +346,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                         role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
-      patch :approve, id: Company.last
+      patch :approve, params: { id: Company.last }
     end
 
     context 'authorized access' do
@@ -361,7 +361,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         allow(use_case_mock)
           .to receive(:call)
 
-        post :create, company: registration_params
+        post :create, params: { company: registration_params }
       end
 
       context 'after approval' do
@@ -406,7 +406,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
                         role: CompanyRole::ROLE[:CA])
     end
     let(:request) do
-      xhr :patch, :deny, id: Company.last, email_text: 'reason of denial'
+      patch :deny, params: { id: Company.last, email_text: 'reason of denial' }, xhr: true
     end
 
     context 'authorized access' do
@@ -419,7 +419,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           .to receive(:new).and_return(use_case_mock)
         allow(use_case_mock)
           .to receive(:call)
-        post :create, company: registration_params
+        post :create, params: { company: registration_params }
         sign_in agency_admin
       end
 
@@ -484,8 +484,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
     let(:company_id) { Company.find_by_name(prior_name).id }
     let(:request) do
       patch :update,
-            company: registration_params,
-            id: Company.last.id
+            params: {
+              company: registration_params,
+              id: Company.last.id
+            }
     end
 
     context 'authorized access' do
@@ -493,7 +495,7 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         3.times do
           FactoryBot.create(:agency_person, agency: agency)
         end
-        post :create, company: registration_params
+        post :create, params: { company: registration_params }
         sign_in agency_admin
       end
 
@@ -521,14 +523,18 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
           company.addresses[0].id
         expect do
           patch :update,
-                company: registration_params,
-                id: company.id
+                params: {
+                  company: registration_params,
+                  id: company.id
+                }
         end
           .to_not change(CompanyPerson, :count)
         expect do
           patch :update,
-                company: registration_params,
-                id: company.id
+                params: {
+                  company: registration_params,
+                  id: company.id
+                }
         end
           .to_not change(Address, :count)
 
@@ -578,14 +584,18 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
 
         expect do
           patch :update,
-                company: registration_params,
-                id: company.id
+                params: {
+                  company: registration_params,
+                  id: company.id
+                }
         end
           .to_not change(CompanyPerson, :count)
         expect do
           patch :update,
-                company: registration_params,
-                id: company.id
+                params: {
+                  company: registration_params,
+                  id: company.id
+                }
         end
           .to_not change(Address, :count)
 
@@ -600,8 +610,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         it 'cannot be set to empty' do
           previous_parameters[:job_email] = ''
           patch :update,
-                company: previous_parameters,
-                id: company_id
+                params: {
+                  company: previous_parameters,
+                  id: company_id
+                }
           company = Company.find company_id
           expect(company.job_email).to eq registration_params[:job_email]
         end
@@ -609,8 +621,10 @@ RSpec.describe CompanyRegistrationsController, type: :controller do
         it 'can be changed to another valid address' do
           previous_parameters[:job_email] = 'jobs@real.com'
           patch :update,
-                company: previous_parameters,
-                id: company_id
+                params: {
+                  company: previous_parameters,
+                  id: company_id
+                }
           company = Company.find company_id
           expect(company.job_email).to eq 'jobs@real.com'
         end

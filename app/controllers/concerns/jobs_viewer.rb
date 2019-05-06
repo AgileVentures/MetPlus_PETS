@@ -3,6 +3,7 @@ module JobsViewer
 
   def self.included(m)
     return unless m < ActionController::Base
+
     m.helper_method :job_fields
   end
 

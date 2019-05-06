@@ -127,6 +127,6 @@ var TaskModal = {
   }
 };
 
-$(document).ready(function () {
+$( document ).on('turbolinks:load', function() {
     TaskModal.setup();
 });

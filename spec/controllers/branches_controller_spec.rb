@@ -63,7 +63,7 @@ RSpec.describe BranchesController, type: :controller do
   describe 'GET #show' do
     before(:each) do
       sign_in admin
-      get :show, id: branch.id
+      get :show, params: { id: branch.id }
     end
     it 'assigns @branch for view' do
       expect(assigns(:branch)).to eq branch
@@ -83,9 +83,8 @@ RSpec.describe BranchesController, type: :controller do
     context 'valid attributes' do
       before(:each) do
         sign_in admin
-        post :create,
-             agency_id: agency,
-             branch: FactoryBot.attributes_for(:branch)
+        post :create, params: { agency_id: agency,
+                                branch: FactoryBot.attributes_for(:branch) }
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
@@ -109,7 +108,7 @@ RSpec.describe BranchesController, type: :controller do
         branch_hash = FactoryBot.attributes_for(:branch, code: branch1.code)
         branch_hash[:address_attributes] =
           FactoryBot.attributes_for(:address, zipcode: '123456')
-        post :create, agency_id: agency, branch: branch_hash
+        post :create, params: { agency_id: agency, branch: branch_hash }
       end
       it 'assigns @agency for branch association' do
         expect(assigns(:agency)).to eq agency
@@ -128,20 +127,20 @@ RSpec.describe BranchesController, type: :controller do
   describe 'GET #new' do
     before(:each) do
       sign_in admin
-      get :new, agency_id: agency
+      get :new, params: { agency_id: agency }
     end
     it 'assigns @agency for branch creation' do
       expect(assigns(:agency)).to eq agency
     end
     it 'returns http success' do
-      get :new, agency_id: agency
+      get :new, params: { agency_id: agency }
       expect(response).to have_http_status(:success)
     end
   end
   describe 'GET #edit' do
     before(:each) do
       sign_in admin
-      get :edit, id: branch.id
+      get :edit, params: { id: branch.id }
     end
     it 'assigns @branch for form' do
       expect(assigns(:branch)).to eq branch
@@ -159,8 +158,8 @@ RSpec.describe BranchesController, type: :controller do
     context 'valid attributes' do
       before(:each) do
         sign_in admin
-        patch :update, branch: FactoryBot.attributes_for(:branch),
-                       id: branch1.id
+        patch :update, params: { branch: FactoryBot.attributes_for(:branch),
+                                 id: branch1.id }
       end
       it 'assigns @branch for updating' do
         expect(assigns(:branch)).to eq branch1
@@ -186,7 +185,7 @@ RSpec.describe BranchesController, type: :controller do
         branch_hash[:address_attributes] =
           FactoryBot.attributes_for(:address, zipcode: '123456')
 
-        patch :update, branch: branch_hash, id: branch2.id
+        patch :update, params: { branch: branch_hash, id: branch2.id }
       end
       it 'renders edit template' do
         expect(response).to render_template('edit')
@@ -202,7 +201,7 @@ RSpec.describe BranchesController, type: :controller do
   describe 'DELETE #destroy' do
     before(:each) do
       sign_in admin
-      delete :destroy, id: branch.id
+      delete :destroy, params: { id: branch.id }
     end
     it 'sets flash message' do
       expect(flash[:notice]).to eq "Branch '#{branch.code}' deleted."
@@ -216,23 +215,22 @@ RSpec.describe BranchesController, type: :controller do
     context '#new' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        get :new, agency_id: agency
+        get :new, params: { agency_id: agency }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorizes all' do
-        let(:request) { get :new, agency_id: agency }
+        let(:request) { get :new, params: { agency_id: agency } }
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:request) { get :new, agency_id: agency }
+        let(:request) { get :new, params: { agency_id: agency } }
       end
     end
     context '#create' do
-      let(:request) { get :new, agency_id: agency }
+      let(:request) { get :new, params: { agency_id: agency } }
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        post :create,
-             agency_id: agency,
-             branch: FactoryBot.attributes_for(:branch)
+        post :create, params: { agency_id: agency,
+                                branch: FactoryBot.attributes_for(:branch) }
         expect(subject).to_not receive(:user_not_authorized)
       end
 
@@ -242,15 +240,13 @@ RSpec.describe BranchesController, type: :controller do
 
     context '#update' do
       let(:request) do
-        post :create,
-             agency_id: agency,
-             branch: FactoryBot.attributes_for(:branch)
+        post :create, params: { agency_id: agency,
+                                branch: FactoryBot.attributes_for(:branch) }
       end
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        patch :update,
-              id: branch.id,
-              branch: FactoryBot.attributes_for(:branch)
+        patch :update, params: { id: branch.id,
+                                 branch: FactoryBot.attributes_for(:branch) }
         expect(subject).to_not receive(:user_not_authorized)
       end
 
@@ -261,47 +257,47 @@ RSpec.describe BranchesController, type: :controller do
     context '#edit' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        get :edit, id: branch.id
+        get :edit, params: { id: branch.id }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorizes all' do
-        let(:request) { get :edit, id: branch.id }
+        let(:request) { get :edit, params: { id: branch.id } }
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:request) { get :edit, id: branch.id }
+        let(:request) { get :edit, params: { id: branch.id } }
       end
     end
     context '#destroy' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        delete :destroy, id: branch.id
+        delete :destroy, params: { id: branch.id }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorizes all' do
-        let(:request) { delete :destroy, id: branch.id }
+        let(:request) { delete :destroy, params: { id: branch.id } }
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:request) { delete :destroy, id: branch.id }
+        let(:request) { delete :destroy, params: { id: branch.id } }
       end
     end
     context '#show' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        get :show, id: branch.id
+        get :show, params: { id: branch.id }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes agency person job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
-        get :show, id: branch.id
+        get :show, params: { id: branch.id }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes agency person case manager' do
         allow(controller).to receive(:current_user).and_return(cm)
-        get :show, id: branch.id
+        get :show, params: { id: branch.id }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized all non-agency people' do
-        let(:request) { get :show, id: branch.id }
+        let(:request) { get :show, params: { id: branch.id } }
       end
     end
   end

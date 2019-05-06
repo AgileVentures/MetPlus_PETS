@@ -56,7 +56,7 @@ RSpec.describe CompaniesController, type: :controller do
   describe 'GET #show' do
     before(:each) do
       sign_in company_admin
-      get :show, id: company
+      get :show, params: { id: company }
     end
     it 'assigns @company for view' do
       expect(assigns(:company)).to eq company
@@ -72,7 +72,7 @@ RSpec.describe CompaniesController, type: :controller do
   describe 'GET #edit' do
     before(:each) do
       sign_in company_admin
-      get :edit, id: company
+      get :edit, params: { id: company }
     end
     it 'assigns @company for form' do
       expect(assigns(:company)).to eq company
@@ -94,7 +94,7 @@ RSpec.describe CompaniesController, type: :controller do
         .with(company.id.to_s)
         .and_return(company)
 
-      delete :destroy, id: company
+      delete :destroy, params: { id: company }
     end
 
     it 'shows the flash notice message' do
@@ -114,7 +114,7 @@ RSpec.describe CompaniesController, type: :controller do
 
     before(:each) do
       sign_in cp1
-      xhr :get, :list_people, id: company
+      get :list_people, params: { id: company }, xhr: true
     end
     it 'assigns @people to collection of all company people' do
       expect(assigns(:people)).to include cp1, cp2, cp3, cp4
@@ -139,7 +139,7 @@ RSpec.describe CompaniesController, type: :controller do
 
     context 'valid attributes' do
       it 'locates the requested company' do
-        patch :update, id: company, company: hash_params
+        patch :update, params: { id: company, company: hash_params }
         expect(assigns(:company)).to eq(company)
       end
 
@@ -151,7 +151,7 @@ RSpec.describe CompaniesController, type: :controller do
                           { '0' => attributes_for(:address),
                             '1' => attributes_for(:address) })
 
-        patch :update, id: company, company: params_hash
+        patch :update, params: { id: company, company: params_hash }
         company.reload
         expect(company.email).to eq('info@widgets.com')
         expect(company.fax).to eq('510 555-1212')
@@ -161,7 +161,7 @@ RSpec.describe CompaniesController, type: :controller do
       it 'deletes company address' do
         hash_params[:addresses_attributes]['0']['_destroy'] = true
 
-        patch :update, id: company, company: hash_params
+        patch :update, params: { id: company, company: hash_params }
         company.reload
         expect(company.addresses.count).to eq 0
       end
@@ -172,19 +172,19 @@ RSpec.describe CompaniesController, type: :controller do
     context '#edit' do
       it 'authorizes company admin' do
         allow(controller).to receive(:current_user).and_return(company_admin)
-        get :edit, id: company
+        get :edit, params: { id: company }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        get :edit, id: company
+        get :edit, params: { id: company }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:request) { get :edit, id: company }
+        let(:request) { get :edit, params: { id: company } }
       end
       it_behaves_like 'unauthorized request' do
-        let(:request) { get :edit, id: company }
+        let(:request) { get :edit, params: { id: company } }
         let(:user) { company_contact }
       end
     end
@@ -199,19 +199,19 @@ RSpec.describe CompaniesController, type: :controller do
       end
 
       it 'authorizes company admin' do
-        patch :update, id: company, company: params_hash
+        patch :update, params: { id: company, company: params_hash }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes agency admin' do
-        patch :update, id: company, company: params_hash
+        patch :update, params: { id: company, company: params_hash }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized agency people and jobseeker' do
         let(:request) do
-          patch :update, id: company, company: params_hash
+          patch :update, params: { id: company, company: params_hash }
         end
         it_behaves_like 'unauthorized request' do
-          let(:request) { patch :update, id: company, company: params_hash }
+          let(:request) { patch :update, params: { id: company, company: params_hash } }
           let(:user) { company_contact }
         end
       end
@@ -220,57 +220,57 @@ RSpec.describe CompaniesController, type: :controller do
     context '#show' do
       it 'authorizes company admin' do
         allow(controller).to receive(:current_user).and_return(company_admin)
-        get :show, id: company
+        get :show, params: { id: company }
         expect(subject).to_not receive(:user_not_authorized)
       end
 
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        get :show, id: company
+        get :show, params: { id: company }
         expect(subject).to_not receive(:user_not_authorized)
       end
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:request) { get :show, id: company }
+        let(:request) { get :show, params: { id: company } }
       end
       it_behaves_like 'unauthorized request' do
-        let(:request) { get :show, id: company }
+        let(:request) { get :show, params: { id: company } }
         let(:user) { company_contact }
       end
     end
     context '#destroy' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        delete :destroy, id: company
+        delete :destroy, params: { id: company }
         expect(subject).to_not receive(:user_not_authorized)
       end
 
       it_behaves_like 'unauthorized agency people and jobseeker' do
-        let(:request) { delete :destroy, id: company }
+        let(:request) { delete :destroy, params: { id: company } }
       end
 
       it_behaves_like 'unauthorized company people' do
-        let(:request) { delete :destroy, id: company }
+        let(:request) { delete :destroy, params: { id: company } }
       end
     end
     context '#list-people' do
       it 'authorizes agency admin' do
         allow(controller).to receive(:current_user).and_return(admin)
-        xhr :get, :list_people, id: company
+        get :list_people, params: { id: company }, xhr: true
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes company admin' do
         allow(controller).to receive(:current_user).and_return(company_admin)
-        xhr :get, :list_people, id: company
+        get :list_people, params: { id: company }, xhr: true
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'authorizes company contact' do
         allow(controller).to receive(:current_user).and_return(company_contact)
-        xhr :get, :list_people, id: company
+        get :list_people, params: { id: company }, xhr: true
         expect(subject).to_not receive(:user_not_authorized)
       end
       it 'denies access to job developer' do
         allow(controller).to receive(:current_user).and_return(jd)
-        xhr :get, :list_people, id: company
+        get :list_people, params: { id: company }, xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -278,7 +278,7 @@ RSpec.describe CompaniesController, type: :controller do
       end
       it 'denies access to case manager' do
         allow(controller).to receive(:current_user).and_return(cm)
-        xhr :get, :list_people, id: company
+        get :list_people, params: { id: company }, xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>
@@ -286,7 +286,7 @@ RSpec.describe CompaniesController, type: :controller do
       end
       it 'denies access to job seeker' do
         allow(controller).to receive(:current_user).and_return(js)
-        xhr :get, :list_people, id: company
+        get :list_people, params: { id: company }, xhr: true
         expect(response).to have_http_status 403
         expect(JSON.parse(response.body))
           .to eq('message' =>

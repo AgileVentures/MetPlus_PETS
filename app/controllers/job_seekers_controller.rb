@@ -79,7 +79,7 @@ class JobSeekersController < ApplicationController
     end
 
     if models_saved
-      sign_in :user, @jobseeker.user, bypass: true if pets_user == @jobseeker
+      bypass_sign_in(@jobseeker.user, scope: :user) if pets_user == @jobseeker
       if @jobseeker.user.unconfirmed_email?
         flash[:warning] = 'Please check your inbox to update your email address'
       else
@@ -116,6 +116,7 @@ class JobSeekersController < ApplicationController
 
   def preview_info
     raise 'Unsupported request' unless request.xhr?
+
     @jobseeker = JobSeeker.find(params[:id])
     authorize @jobseeker
     render partial: '/job_seekers/info', locals: { job_seeker: @jobseeker,
@@ -152,8 +153,8 @@ class JobSeekersController < ApplicationController
     resume = Resume.find(params[:resume_id])
     resume_file = ResumeCruncher.download_resume(resume.id)
     raise 'Resume not found in Cruncher' if resume_file.nil?
-    send_data resume_file.open.read, filename: resume.file_name
 
+    send_data resume_file.open.read, filename: resume.file_name
   rescue RuntimeError => e
     flash[:alert] = "Error: #{e}"
     redirect_back_or_default
@@ -175,6 +176,7 @@ class JobSeekersController < ApplicationController
   def address_is_empty?(jobseeker_params)
     address = jobseeker_params[:address_attributes]
     return true unless address
+
     address[:street].empty? && address[:city].empty? && address[:state].empty?
   end
 
