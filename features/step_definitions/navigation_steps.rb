@@ -54,6 +54,8 @@ def page_translator(name)
   when /"(.+)" job/
     job_title = name.match(/"(.+)"/)
     job_path id: Job.find_by_title(job_title[1]).id
+  when /agency admin job properties/
+    agency_admin_job_properties_path
   end
 end
 

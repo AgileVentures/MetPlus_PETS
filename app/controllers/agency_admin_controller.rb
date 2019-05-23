@@ -33,7 +33,7 @@ class AgencyAdminController < ApplicationController
   end
 
   def job_properties
-    check_authorization(Agency.this_agency(current_user))
+    check_authorization(Agency.this_agency(current_user), :update_job_properties?)
 
     if request.xhr?
       case params[:data_type]
@@ -81,9 +81,9 @@ class AgencyAdminController < ApplicationController
 
   private
 
-  def check_authorization(agency)
+  def check_authorization(agency, method = :update?)
     self.action_description= "administer #{agency.name} agency"
-    authorize agency, :update?
+    authorize agency, method
   end
 
 end
