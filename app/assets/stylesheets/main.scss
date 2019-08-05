@@ -8,6 +8,10 @@ $grey-color: #d9d9d9;
 $gold: #f2bc60;
 $light-grey: #ddd;
 
+input {
+  max-width: 100%;
+}
+
 .h4 {
   font-weight: bold;
   line-height: 3rem;
