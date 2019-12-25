@@ -198,7 +198,7 @@ GEM
     nokogiri (1.10.2)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
-    pg (0.18.4)
+    pg (1.2.0)
     phantomjs (2.1.1.0)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
