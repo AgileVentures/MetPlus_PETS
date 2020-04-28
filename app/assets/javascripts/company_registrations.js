@@ -21,6 +21,7 @@ var RegistrationDeny = {
     $('#send_button').click(RegistrationDeny.deny_action);
   }
   // add description for testing
+  // add another desc
 };
 
 $(RegistrationDeny.setup);
