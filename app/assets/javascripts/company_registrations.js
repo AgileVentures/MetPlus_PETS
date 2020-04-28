@@ -20,6 +20,7 @@ var RegistrationDeny = {
     // dialog box that is opened when the 'Deny' button is clicked.
     $('#send_button').click(RegistrationDeny.deny_action);
   }
+  // add description for testing
 };
 
 $(RegistrationDeny.setup);
